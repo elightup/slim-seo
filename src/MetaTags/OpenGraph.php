@@ -85,7 +85,7 @@ class OpenGraph {
 			'height' => 2,
 		];
 
-		return $thumbnail[ $keys[ $key ] ] ?? null;
+		return isset( $thumbnail[ $keys[ $key ] ] ) ? $thumbnail[ $keys[ $key ] ] : null;
 	}
 
 	private function get_description() {
