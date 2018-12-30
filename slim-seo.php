@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Slim SEO
- * Plugin URI:  https://elightup.com/wordpress-plugins/slim-seo/
+ * Plugin URI:  https://elightup.com/products/slim-seo/
  * Description: A lightweight SEO plugin for WordPress.
  * Author:      eLightUp
  * Author URI:  https://elightup.com

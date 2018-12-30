@@ -21,7 +21,7 @@ Currently there are many SEO plugins for WordPress in the market. But these plug
 
 At [eLightUp](https://elightup.com), we believe that SEO should be an integrated part of WordPress, where users don't need or need very little effort to configure for SEO. The main reason is that not everyone understands the terms of SEO and how to configure them optimally.
 
-So, we made [**Slim SEO**](https://elightup.com/wordpress-plugins/slim-seo/).
+So, we made [**Slim SEO**](https://elightup.com/products/slim-seo/).
 
 **Slim SEO** follow the philosophy of WordPress, decision over option. That means we provide an SEO plugin for WordPress where the configuration has been done automatically. Users do not need to care about their complex and semantic options.
 
@@ -29,7 +29,7 @@ So what does **Slim SEO** do?
 
 ### Slim SEO Features
 
-[**Slim SEO**](https://elightup.com/wordpress-plugins/slim-seo/) helps you do the following jobs automatically:
+[**Slim SEO**](https://elightup.com/products/slim-seo/) helps you do the following jobs automatically:
 
 #### 1. Optimize meta title tag
 
