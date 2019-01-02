@@ -38,6 +38,12 @@ When sharing posts on Twitter, **Slim SEO** automatically optimizes the article 
 
 **Slim SEO** automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
+### 6. Redirect attachment page to parent post page
+
+When you upload any file to WordPress, WordPress creates an attachment page for that file. This page provides very little information about the file and the page looks quite empty. As search engines already index the files, allowing attachment pages to be indexed make duplicated content and increase the bounce rate. It's better to disable the attachment pages.
+
+Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the parent posts. Users will see the real post with real content and thus, no empty pages and decrease the bounce rate.
+
 ## Who should use Slim SEO
 
 Everyone can use **Slim SEO**.
