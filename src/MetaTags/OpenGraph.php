@@ -93,7 +93,7 @@ class OpenGraph {
 	}
 
 	private function get_url() {
-		return is_singular() ? wp_get_canonical_url() : null;
+		return is_singular() ? get_permalink() : null;
 	}
 
 	private function get_locale() {
