@@ -22,3 +22,4 @@ $description = new SlimSEO\MetaTags\Description();
 new SlimSEO\MetaTags\OpenGraph( $title, $description );
 new SlimSEO\MetaTags\Twitter();
 new SlimSEO\Sitemaps\Router();
+new SlimSEO\AttachmentRedirect();
