@@ -3,10 +3,10 @@ namespace SlimSEO;
 
 class AttachmentRedirect {
 	public function __construct() {
-		add_action( 'template_redirect', [$this, 'redirect_attachment'] );
+		add_action( 'template_redirect', [ $this, 'redirect_attachment' ] );
 	}
 
-	public function redirect_attachment(){
+	public function redirect_attachment() {
 		if ( ! is_attachment() ) {
 			return;
 		}

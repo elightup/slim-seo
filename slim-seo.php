@@ -17,9 +17,9 @@ define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
 
 require __DIR__ . '/vendor/autoload.php';
 
-$title = new SlimSEO\MetaTags\Title();
-$description = new SlimSEO\MetaTags\Description();
-new SlimSEO\MetaTags\OpenGraph( $title, $description );
+$slim_seo_title = new SlimSEO\MetaTags\Title();
+$slim_seo_description = new SlimSEO\MetaTags\Description();
+new SlimSEO\MetaTags\OpenGraph( $slim_seo_title, $slim_seo_description );
 new SlimSEO\MetaTags\Twitter();
 new SlimSEO\Sitemaps\Router();
 new SlimSEO\AttachmentRedirect();
