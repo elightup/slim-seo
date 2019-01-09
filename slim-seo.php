@@ -21,5 +21,5 @@ $slim_seo_title = new SlimSEO\MetaTags\Title();
 $slim_seo_description = new SlimSEO\MetaTags\Description();
 new SlimSEO\MetaTags\OpenGraph( $slim_seo_title, $slim_seo_description );
 new SlimSEO\MetaTags\Twitter();
-new SlimSEO\Sitemaps\Router();
+new SlimSEO\Sitemaps\Manager();
 new SlimSEO\AttachmentRedirect();
