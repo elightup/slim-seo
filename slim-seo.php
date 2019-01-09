@@ -22,4 +22,7 @@ $slim_seo_description = new SlimSEO\MetaTags\Description();
 new SlimSEO\MetaTags\OpenGraph( $slim_seo_title, $slim_seo_description );
 new SlimSEO\MetaTags\Twitter();
 new SlimSEO\Sitemaps\Manager();
-new SlimSEO\AttachmentRedirect();
+new SlimSEO\ImagesAlt();
+if ( ! is_admin() ) {
+    new SlimSEO\AttachmentRedirect();
+}
