@@ -3,9 +3,9 @@ Contributors: elightup, rilwis
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.0.2
+Tested up to: 5.0.3
 Requires PHP: 5.6
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -58,6 +58,10 @@ When sharing posts on Twitter, **Slim SEO** automatically optimizes the article 
 When you upload any file to WordPress, WordPress creates an attachment page for that file. This page provides very little information about the file and the page looks quite empty. As search engines already index the files, allowing attachment pages to be indexed make duplicated content and increase the bounce rate. It's better to disable the attachment pages.
 
 Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the parent posts. Users will see the real post with real content and thus, no empty pages and decrease the bounce rate.
+
+### 7. Auto add missing 'alt' attribute for images
+
+The plugin automatically adds missing 'alt' attribute for images, including post thumbnails and images inserted in the post content.
 
 ### Who should use Slim SEO
 
@@ -126,6 +130,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.2.0 =
+- Added: Added sitemap URL to robots.txt
+- Added: Auto add missing alt attribute for images.
 
 = 1.1.0 =
 - Added: redirect attachment page to parent post.
