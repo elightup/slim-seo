@@ -6,7 +6,7 @@ class Breadcrumbs {
 		add_shortcode( 'slim_seo_breadcrumbs', [$this, 'output']);
 	}
 
-	public function output( $atts = '' ) {
+	public function output( $atts ) {
 		if ( is_front_page() ) {
 			return;
 		}
@@ -17,10 +17,10 @@ class Breadcrumbs {
 				'separator'         => '&raquo;',
 				'home_label'        => esc_html__( 'Home', 'slim-seo' ),
 				'home_class'        => 'home',
-				'before'            => '<div class="breadcrumbs">',
-				'after'             => '</div>',
-				'before_item'       => '<span class="breadcrumbs-item">',
-				'after_item'        => '</span>',
+				'before'            => '<nav class="breadcrumbs" aria-label="breadcrumbs">',
+				'after'             => '</nav>',
+				'before_item'       => '',
+				'after_item'        => '',
 				'taxonomy'          => 'category',
 				'display_last_item' => true,
 			)
@@ -35,13 +35,13 @@ class Breadcrumbs {
 
 		// HTML template for each item.
 		$item_tpl_link = $atts['before_item'] . '
-			<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<span class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
 			<a href="%s" itemprop="url"><span itemprop="title">%s</span></a>
 			</span>
 			' . $atts['after_item'];
 		$item_text_tpl = $atts['before_item'] . '
-			<span class="last-item" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-			<span itemprop="title">%s</span>
+			<span class="breadcrumb breadcrumb--last" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+			<span itemprop="title" aria-current="page">%s</span>
 			</span>
 			' . $atts['after_item'];
 
