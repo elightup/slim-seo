@@ -23,6 +23,7 @@ new SlimSEO\MetaTags\OpenGraph( $slim_seo_title, $slim_seo_description );
 new SlimSEO\MetaTags\Twitter();
 new SlimSEO\Sitemaps\Manager();
 new SlimSEO\ImagesAlt();
+new SlimSEO\Breadcrumbs();
 if ( ! is_admin() ) {
     new SlimSEO\AttachmentRedirect();
 }

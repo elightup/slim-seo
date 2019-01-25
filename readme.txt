@@ -59,9 +59,9 @@ When you upload any file to WordPress, WordPress creates an attachment page for 
 
 Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the parent posts. Users will see the real post with real content and thus, no empty pages and decrease the bounce rate.
 
-### 7. Auto add missing 'alt' attribute for images
+#### 7. Auto add missing alt attribute for images
 
-The plugin automatically adds missing 'alt' attribute for images, including post thumbnails and images inserted in the post content.
+The plugin automatically adds missing alt attribute for images, including post thumbnails and images inserted in the post content.
 
 ### Who should use Slim SEO
 
