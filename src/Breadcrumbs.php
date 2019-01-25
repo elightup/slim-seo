@@ -14,20 +14,19 @@ class Breadcrumbs {
 		$atts = wp_parse_args(
 			$atts,
 			array(
-				'separator'         => '&raquo;',
-				'home_label'        => __( 'Home', 'slim-seo' ),
-				'home_class'        => 'breadcrumb--first',
-				'before'            => '',
-				'after'             => '',
-				'before_item'       => '',
-				'after_item'        => '',
-				'taxonomy'          => 'category',
-				'display_last_item' => true,
+				'separator'       => '&raquo;',
+				'home_label'      => __( 'Home', 'slim-seo' ),
+				'before'          => '',
+				'after'           => '',
+				'before_item'     => '',
+				'after_item'      => '',
+				'taxonomy'        => 'category',
+				'display_current' => true,
 			)
 		);
 
-		$items = array();
-		$title = '';
+		$links   = array();
+		$current = '';
 
 		$output  = $atts['before'];
 		$output .= '<nav class="breadcrumbs" aria-label="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">';
@@ -48,18 +47,18 @@ class Breadcrumbs {
 
 		// Home.
 		$position = 1;
-		$items[]  = sprintf( $tpl_link, $atts['home_class'] ? " {$atts['home_class']}" : '', esc_url( home_url( '/' ) ), $atts['home_label'], $position++ );
+		$links[]  = sprintf( $tpl_link, 'breadcrumb--first', esc_url( home_url( '/' ) ), esc_html( $atts['home_label'] ), $position++ );
 
 		if ( is_home() && ! is_front_page() ) {
-			$page  = get_option( 'page_for_posts' );
-			$title = get_the_title( $page );
+			$page    = get_option( 'page_for_posts' );
+			$current = get_the_title( $page );
 		} elseif ( is_post_type_archive() ) {
 
 			// If is a custom post type archive.
 			$post_type = get_post_type();
 			if ( 'post' !== $post_type ) {
 				$post_type_object = get_post_type_object( $post_type );
-				$title            = $post_type_object->labels->name;
+				$current          = $post_type_object->labels->name;
 			}
 		} elseif ( is_single() ) {
 
@@ -68,7 +67,7 @@ class Breadcrumbs {
 			if ( 'post' !== $post_type ) {
 				$post_type_object       = get_post_type_object( $post_type );
 				$post_type_archive_link = get_post_type_archive_link( $post_type );
-				$items[]                = sprintf( $tpl_link, '', $post_type_archive_link, $post_type_object->labels->name, $position++ );
+				$links[]                = sprintf( $tpl_link, '', esc_url( $post_type_archive_link ), esc_html( $post_type_object->labels->name ), $position++ );
 			}
 
 			// Terms.
@@ -79,48 +78,50 @@ class Breadcrumbs {
 				$terms[] = $term->term_id;
 				foreach ( $terms as $term_id ) {
 					$term    = get_term( $term_id, $atts['taxonomy'] );
-					$items[] = sprintf( $tpl_link, '', get_term_link( $term, $atts['taxonomy'] ), $term->name, $position++ );
+					$links[] = sprintf( $tpl_link, '', esc_url( get_term_link( $term, $atts['taxonomy'] ) ), esc_html( $term->name ), $position++ );
 				}
 			}
 
-			$title = get_the_title();
+			$current = get_the_title();
 		} elseif ( is_page() ) {
 			$pages = $this->get_post_parents( get_queried_object_id() );
 			foreach ( $pages as $page ) {
-				$items[] = sprintf( $tpl_link, '', get_permalink( $page ), get_the_title( $page ), $position++ );
+				$links[] = sprintf( $tpl_link, '', esc_url( get_permalink( $page ) ), get_the_title( $page ), $position++ );
 			}
-			$title = get_the_title();
+			$current = get_the_title();
 		} elseif ( is_tax() || is_category() || is_tag() ) {
 			$current_term = get_queried_object();
 			$terms        = $this->get_term_parents( get_queried_object_id(), $current_term->taxonomy );
 			foreach ( $terms as $term_id ) {
 				$term    = get_term( $term_id, $current_term->taxonomy );
-				$items[] = sprintf( $tpl_link, '', get_category_link( $term_id ), $term->name, $position++ );
+				$links[] = sprintf( $tpl_link, '', esc_url( get_category_link( $term_id ) ), esc_html( $term->name ), $position++ );
 			}
-			$title = $current_term->name;
+			$current = $current_term->name;
 		} elseif ( is_search() ) {
 			/* translators: search query */
-			$title = sprintf( __( 'Search results for: %s', 'slim-seo' ), get_search_query() );
+			$current = sprintf( __( 'Search results for: %s', 'slim-seo' ), get_search_query() );
 		} elseif ( is_404() ) {
-			$title = __( 'Not Found', 'slim-seo' );
+			$current = __( 'Not Found', 'slim-seo' );
 		} elseif ( is_author() ) {
 			// Queue the first post, that way we know what author we're dealing with (if that is the case).
 			the_post();
-			$title = '<span class="vcard"><a class="url fn n" href="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '" title="' . esc_attr( get_the_author() ) . '" rel="me">' . get_the_author() . '</a></span>';
+			$current = get_the_author();
 			rewind_posts();
 		} elseif ( is_day() ) {
-			$title = get_the_date();
+			$current = get_the_date();
 		} elseif ( is_month() ) {
-			$title = get_the_date( 'F Y' );
+			$current = get_the_date( 'F Y' );
 		} elseif ( is_year() ) {
-			$title = get_the_date( 'Y' );
+			$current = get_the_date( 'Y' );
 		} else {
-			$title = __( 'Archives', 'slim-seo' );
+			$current = __( 'Archives', 'slim-seo' );
 		} // End if().
 
-		$items[] = sprintf( $tpl_text, $title );
+		if ( $atts['display_current'] ) {
+			$links[] = sprintf( $tpl_text, esc_html( $current ) );
+		}
 
-		$output .= implode( $atts['separator'], $items );
+		$output .= implode( $atts['separator'], $links );
 		$output .= '</nav>';
 		$output .= $atts['after'];
 
