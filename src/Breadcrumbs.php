@@ -107,10 +107,6 @@ class Breadcrumbs {
 
 		$this->add_post_type_archive_link();
 
-		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
-			return;
-		}
-
 		$ancestors = get_post_ancestors( null );
 		$ancestors = array_reverse( $ancestors );
 		foreach ( $ancestors as $ancestor ) {
