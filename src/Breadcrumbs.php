@@ -48,9 +48,8 @@ class Breadcrumbs {
 				'display_current' => true,
 				'label_home'      => __( 'Home', 'slim-seo' ),
 				// translators: search query.
-				'label_search'    => __( 'Search results for: %s', 'slim-seo' ),
-				'label_404'       => __( 'Not found', 'slim-seo' ),
-				'label_archive'   => __( 'Archive', 'slim-seo' ),
+				'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
+				'label_404'       => __( 'Page not found', 'slim-seo' ),
 			)
 		);
 		$this->args['separator'] = "<span class='breadcrumbs__separator'>{$this->args['separator']}</span>";
@@ -64,13 +63,13 @@ class Breadcrumbs {
 		// Home.
 		$this->add_link( home_url( '/' ), $this->args['label_home'] );
 
-		// Blog.
+		// Static blog page.
 		if ( is_home() ) {
-			$this->current = get_the_title( get_option( 'page_for_posts' ) );
+			$this->current = single_post_title( '', false );
 		}
 		// Post type archive.
 		elseif ( is_post_type_archive() ) {
-			$this->current = get_post_type_object( get_post_type() )->labels->name;
+			$this->current = post_type_archive_title( '', false );
 		}
 		// Single.
 		elseif ( is_single() ) {
@@ -82,9 +81,8 @@ class Breadcrumbs {
 		}
 		// Taxonomy archive.
 		elseif ( is_tax() || is_category() || is_tag() ) {
-			$term = get_queried_object();
-			$this->add_term_ancestors( $term );
-			$this->current = $term->name;
+			$this->add_term_ancestors( get_queried_object() );
+			$this->current = single_term_title( '', false );
 		}
 		// Search results.
 		elseif ( is_search() ) {
@@ -102,14 +100,10 @@ class Breadcrumbs {
 		elseif ( is_date() ) {
 			$this->add_date_links();
 		}
-		// General archive.
-		else {
-			$this->current = $this->args['label_archive'];
-		}
 	}
 
 	private function add_hierarchical_singular() {
-		$this->current = get_the_title();
+		$this->current = single_post_title( '', false );
 
 		$this->add_post_type_archive_link();
 
@@ -125,7 +119,7 @@ class Breadcrumbs {
 	}
 
 	private function add_singular_with_terms() {
-		$this->current = get_the_title();
+		$this->current = single_post_title( '', false );
 
 		$this->add_post_type_archive_link();
 
