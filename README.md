@@ -48,6 +48,10 @@ Without any configuration from users, **Slim SEO** will help you to disable the 
 
 The plugin automatically adds missing 'alt' attribute for images, including post thumbnails and images inserted in the post content.
 
+### 8. Breadcrumbs
+
+The plugin provides `[slim_seo_breadcrumbs]` shortcode that allows you to output a breadcrumb trail on your website easily. The plugin uses schema.org syntax which is compatible with Google Structured Data recommendation. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs) for details.
+
 ## Who should use Slim SEO
 
 Everyone can use **Slim SEO**.

@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.0.3
 Requires PHP: 5.6
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,6 +62,10 @@ Without any configuration from users, **Slim SEO** will help you to disable the 
 #### 7. Auto add missing alt attribute for images
 
 The plugin automatically adds missing alt attribute for images, including post thumbnails and images inserted in the post content.
+
+#### 8. Breadcrumbs
+
+The plugin provides `[slim_seo_breadcrumbs]` shortcode that allows you to output a breadcrumb trail on your website easily. The plugin uses schema.org syntax which is compatible with Google Structured Data recommendation. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs) for details.
 
 ### Who should use Slim SEO
 
@@ -130,6 +134,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.3.0 =
+- Added: Added breadcrumbs functionality. Use `[slim_seo_breadcrumbs]` shortcode to output in your template files. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs).
 
 = 1.2.0 =
 - Added: Added sitemap URL to robots.txt
