@@ -47,7 +47,7 @@ class PostType {
 		foreach ( $query->posts as $post ) {
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
-			echo "\t\t<lastmod>", date( 'c', strtotime( $post->post_modified_gmt ) ), "</lastmod>\n";
+			echo "\t\t<lastmod>", esc_html( date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 			echo "\t</url>\n";
 		}
 

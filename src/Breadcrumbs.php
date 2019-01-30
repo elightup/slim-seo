@@ -51,37 +51,22 @@ class Breadcrumbs {
 		// Home.
 		$this->add_link( home_url( '/' ), $this->args['label_home'] );
 
-		// Static blog page.
-		if ( is_home() ) {
+		if ( is_home() ) { // Static blog page.
 			$this->current = single_post_title( '', false );
-		}
-		// Post type archive.
-		elseif ( is_post_type_archive() ) {
+		} elseif ( is_post_type_archive() ) {
 			$this->current = post_type_archive_title( '', false );
-		}
-		// Singular.
-		elseif ( is_singular() ) {
+		} elseif ( is_singular() ) {
 			$this->add_singular();
-		}
-		// Taxonomy archive.
-		elseif ( is_tax() || is_category() || is_tag() ) {
+		} elseif ( is_tax() || is_category() || is_tag() ) { // Taxonomy archive.
 			$this->add_term_ancestors( get_queried_object() );
 			$this->current = single_term_title( '', false );
-		}
-		// Search results.
-		elseif ( is_search() ) {
+		} elseif ( is_search() ) {
 			$this->current = sprintf( $this->args['label_search'], get_search_query() );
-		}
-		// 404.
-		elseif ( is_404() ) {
+		} elseif ( is_404() ) {
 			$this->current = $this->args['label_404'];
-		}
-		// Author.
-		elseif ( is_author() ) {
+		} elseif ( is_author() ) {
 			$this->current = get_queried_object()->display_name;
-		}
-		// Date archive.
-		elseif ( is_date() ) {
+		} elseif ( is_date() ) {
 			$this->add_date_links();
 		}
 	}
@@ -117,14 +102,16 @@ class Breadcrumbs {
 
 		// For posts, check if there's a static page for Blog archive.
 		if ( 'post' === $post_type ) {
-			if ( 'page' === get_option( 'show_on_front' ) && $blog_page = get_option( 'page_for_posts' ) ) {
+			$blog_page = get_option( 'page_for_posts' );
+			if ( 'page' === get_option( 'show_on_front' ) && $blog_page ) {
 				$this->add_link( get_permalink( $blog_page ), get_the_title( $blog_page ) );
 			}
 			return;
 		}
 
 		$post_type_object = get_post_type_object( $post_type );
-		if ( $link = get_post_type_archive_link( $post_type ) ) {
+		$link             = get_post_type_archive_link( $post_type );
+		if ( $link ) {
 			$this->add_link( $link, $post_type_object->labels->name );
 		}
 	}

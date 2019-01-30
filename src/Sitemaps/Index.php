@@ -34,7 +34,7 @@ class Index {
 
 		$last_modified = date( 'c', strtotime( $query->posts[0]->post_modified_gmt ) );
 
-		echo "\t\t<lastmod>$last_modified</lastmod>\n";
+		echo "\t\t<lastmod>", esc_html( $last_modified ), "</lastmod>\n";
 		echo "\t</sitemap>\n";
 	}
 

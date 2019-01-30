@@ -31,7 +31,7 @@ class Manager {
 		header( 'X-Robots-Tag: noindex, follow', true );
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
-		echo '<?xml-stylesheet type="text/xsl" href="', SLIM_SEO_URL, 'src/Sitemaps/style.xsl"?>', "\n";
+		echo '<?xml-stylesheet type="text/xsl" href="', esc_url( SLIM_SEO_URL ), 'src/Sitemaps/style.xsl"?>', "\n";
 
 		if ( WP_DEBUG ) {
 			$timer_start  = microtime( true );
@@ -64,6 +64,6 @@ class Manager {
 	}
 
 	public function add_to_robots_txt() {
-		echo 'Sitemap: ', home_url( '/sitemap.xml' ), "\n";
+		echo 'Sitemap: ', esc_url( home_url( '/sitemap.xml' ) ), "\n";
 	}
 }
