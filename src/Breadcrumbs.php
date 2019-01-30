@@ -6,17 +6,9 @@ class Breadcrumbs {
 	private $items    = [];
 	private $current  = '';
 	private $position = 1;
-	private $tpl_link;
-	private $tpl_text;
 
 	public function __construct() {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'output' ] );
-
-		$this->tpl_link = '<span class="breadcrumb%s" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-				<a href="%s" itemprop="item"><span itemprop="name">%s</span></a>
-				<meta itemprop="position" content="%d">
-			</span>';
-		$this->tpl_text = '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>';
 	}
 
 	public function output( $atts ) {
@@ -28,11 +20,9 @@ class Breadcrumbs {
 		}
 		$this->add_current();
 
-		$output  = $this->args['before'];
-		$output .= sprintf( '<nav class="breadcrumbs" aria-label="%s" itemscope itemtype="http://schema.org/BreadcrumbList">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
+		$output  = sprintf( '<nav class="breadcrumbs" aria-label="%s" itemscope itemtype="http://schema.org/BreadcrumbList">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
 		$output .= implode( " {$this->args['separator']} ", $this->items );
 		$output .= '</nav>';
-		$output .= $this->args['after'];
 
 		return $output;
 	}
@@ -42,10 +32,8 @@ class Breadcrumbs {
 			$args,
 			array(
 				'separator'       => '&raquo;',
-				'before'          => '',
-				'after'           => '',
 				'taxonomy'        => 'category',
-				'display_current' => true,
+				'display_current' => 'true',
 				'label_home'      => __( 'Home', 'slim-seo' ),
 				// translators: search query.
 				'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
@@ -180,13 +168,17 @@ class Breadcrumbs {
 	}
 
 	private function add_link( $link, $text ) {
+		$template      = '<span class="breadcrumb%s" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+			<a href="%s" itemprop="item"><span itemprop="name">%s</span></a>
+			<meta itemprop="position" content="%d">
+		</span>';
 		$class         = 1 === $this->position ? ' breadcrumb--first' : '';
-		$this->items[] = sprintf( $this->tpl_link, $class, esc_url( $link ), esc_html( wp_strip_all_tags( $text ) ), $this->position++ );
+		$this->items[] = sprintf( $template, $class, esc_url( $link ), esc_html( wp_strip_all_tags( $text ) ), $this->position++ );
 	}
 
 	private function add_current() {
-		if ( $this->args['display_current'] ) {
-			$this->items[] = sprintf( $this->tpl_text, esc_html( wp_strip_all_tags( $this->current ) ) );
+		if ( 'true' === $this->args['display_current'] ) {
+			$this->items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', esc_html( wp_strip_all_tags( $this->current ) ) );
 		}
 	}
 }
