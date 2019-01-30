@@ -47,6 +47,7 @@ class Breadcrumbs {
 				'taxonomy'        => 'category',
 				'display_current' => true,
 				'label_home'      => __( 'Home', 'slim-seo' ),
+				// translators: search query.
 				'label_search'    => __( 'Search results for: %s', 'slim-seo' ),
 				'label_404'       => __( 'Not found', 'slim-seo' ),
 				'label_archive'   => __( 'Archive', 'slim-seo' ),
@@ -61,67 +62,32 @@ class Breadcrumbs {
 		}
 
 		// Home.
-		$this->add_link_item( home_url( '/' ), $this->args['label_home'] );
+		$this->add_link( home_url( '/' ), $this->args['label_home'] );
 
 		// Blog.
 		if ( is_home() ) {
-			$page          = get_option( 'page_for_posts' );
-			$this->current = get_the_title( $page );
+			$this->current = get_the_title( get_option( 'page_for_posts' ) );
 		}
 		// Post type archive.
 		elseif ( is_post_type_archive() ) {
-			$post_type = get_post_type();
-			if ( 'post' !== $post_type ) {
-				$post_type_object = get_post_type_object( $post_type );
-				$this->current    = $post_type_object->labels->name;
-			}
+			$this->current = get_post_type_object( get_post_type() )->labels->name;
 		}
 		// Single.
 		elseif ( is_single() ) {
-			// Add post type archive link.
-			$post_type = get_post_type();
-			if ( 'post' !== $post_type ) {
-				$post_type_object = get_post_type_object( $post_type );
-				$this->add_link_item( get_post_type_archive_link( $post_type ), $post_type_object->labels->name );
-			}
-
-			// Terms.
-			$terms = get_the_terms( get_the_ID(), $this->args['taxonomy'] );
-			if ( $terms && ! is_wp_error( $terms ) ) {
-				$term    = current( $terms );
-				$terms   = $this->get_term_parents( $term->term_id, $this->args['taxonomy'] );
-				$terms[] = $term->term_id;
-				foreach ( $terms as $term_id ) {
-					$term = get_term( $term_id, $this->args['taxonomy'] );
-					$this->add_link_item( get_term_link( $term, $this->args['taxonomy'] ), $term->name );
-				}
-			}
-
-			$this->current = get_the_title();
+			$this->add_singular_with_terms();
 		}
 		// Page.
 		elseif ( is_page() ) {
-			$pages = get_post_ancestors( null );
-			$pages = array_reverse( $pages );
-			foreach ( $pages as $page ) {
-				$this->add_link_item( get_permalink( $page ), get_the_title( $page ) );
-			}
-			$this->current = get_the_title();
+			$this->add_hierarchical_singular();
 		}
 		// Taxonomy archive.
 		elseif ( is_tax() || is_category() || is_tag() ) {
-			$current_term = get_queried_object();
-			$terms        = get_ancestors( get_queried_object_id(), $current_term->taxonomy, 'taxonomy' );
-			$terms        = array_reverse( $terms );
-			foreach ( $terms as $term_id ) {
-				$term = get_term( $term_id, $current_term->taxonomy );
-				$this->add_link_item( get_category_link( $term_id ), $term->name );
-			}
-			$this->current = $current_term->name;
+			$term = get_queried_object();
+			$this->add_term_ancestors( $term );
+			$this->current = $term->name;
 		}
 		// Search results.
 		elseif ( is_search() ) {
-			// translators: search query.
 			$this->current = sprintf( $this->args['label_search'], get_search_query() );
 		}
 		// 404.
@@ -130,10 +96,7 @@ class Breadcrumbs {
 		}
 		// Author.
 		elseif ( is_author() ) {
-			// Queue the first post, that way we know what author we're dealing with (if that is the case).
-			the_post();
-			$this->current = get_the_author();
-			rewind_posts();
+			$this->current = get_queried_object()->display_name;
 		}
 		// Day archive.
 		elseif ( is_day() ) {
@@ -153,7 +116,65 @@ class Breadcrumbs {
 		}
 	}
 
-	private function add_link_item( $link, $text ) {
+	private function add_hierarchical_singular() {
+		$this->current = get_the_title();
+
+		$this->add_post_type_archive_link();
+
+		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
+			return;
+		}
+
+		$ancestors = get_post_ancestors( null );
+		$ancestors = array_reverse( $ancestors );
+		foreach ( $ancestors as $ancestor ) {
+			$this->add_link( get_permalink( $ancestor ), get_the_title( $ancestor ) );
+		}
+	}
+
+	private function add_singular_with_terms() {
+		$this->current = get_the_title();
+
+		$this->add_post_type_archive_link();
+
+		// Terms.
+		$terms = get_the_terms( get_the_ID(), $this->args['taxonomy'] );
+		if ( ! is_array( $terms ) ) {
+			return;
+		}
+
+		// Parse only first term and add its ancestors.
+		$term = current( $terms );
+		$this->add_term_ancestors( $term );
+	}
+
+	private function add_post_type_archive_link() {
+		$post_type = get_post_type();
+
+		// For posts, check if there's a static page for Blog archive.
+		if ( 'post' === $post_type ) {
+			if ( 'page' === get_option( 'show_on_front' ) && $blog_page = get_option( 'page_for_posts' ) ) {
+				$this->add_link( get_permalink( $blog_page ), get_the_title( $blog_page ) );
+			}
+			return;
+		}
+
+		$post_type_object = get_post_type_object( $post_type );
+		if ( $link = get_post_type_archive_link( $post_type ) ) {
+			$this->add_link( $link, $post_type_object->labels->name );
+		}
+	}
+
+	private function add_term_ancestors( $term ) {
+		$ancestors = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
+		$ancestors = array_reverse( $ancestors );
+		foreach ( $ancestors as $ancestor_id ) {
+			$ancestor = get_term( $ancestor_id, $term->taxonomy );
+			$this->add_link( get_term_link( $ancestor ), $ancestor->name );
+		}
+	}
+
+	private function add_link( $link, $text ) {
 		$class         = 1 === $this->position ? ' breadcrumb--first' : '';
 		$this->items[] = sprintf( $this->tpl_link, $class, esc_url( $link ), esc_html( wp_strip_all_tags( $text ) ), $this->position++ );
 	}
