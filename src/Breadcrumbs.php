@@ -59,13 +59,9 @@ class Breadcrumbs {
 		elseif ( is_post_type_archive() ) {
 			$this->current = post_type_archive_title( '', false );
 		}
-		// Single.
-		elseif ( is_single() ) {
-			$this->add_singular_with_terms();
-		}
-		// Page.
-		elseif ( is_page() ) {
-			$this->add_hierarchical_singular();
+		// Singular.
+		elseif ( is_singular() ) {
+			$this->add_singular();
 		}
 		// Taxonomy archive.
 		elseif ( is_tax() || is_category() || is_tag() ) {
@@ -90,24 +86,22 @@ class Breadcrumbs {
 		}
 	}
 
-	private function add_hierarchical_singular() {
+	private function add_singular() {
 		$this->current = single_post_title( '', false );
 
 		$this->add_post_type_archive_link();
 
-		$ancestors = get_post_ancestors( null );
-		$ancestors = array_reverse( $ancestors );
-		foreach ( $ancestors as $ancestor ) {
-			$this->add_link( get_permalink( $ancestor ), get_the_title( $ancestor ) );
+		// If post type is hierarchical (like page), then output its ancestors.
+		if ( is_post_type_hierarchical( get_post_type() ) ) {
+			$ancestors = get_post_ancestors( null );
+			$ancestors = array_reverse( $ancestors );
+			foreach ( $ancestors as $ancestor ) {
+				$this->add_link( get_permalink( $ancestor ), get_the_title( $ancestor ) );
+			}
+			return;
 		}
-	}
 
-	private function add_singular_with_terms() {
-		$this->current = single_post_title( '', false );
-
-		$this->add_post_type_archive_link();
-
-		// Terms.
+		// For non-hierarchical post type (like post), output its terms.
 		$terms = get_the_terms( get_the_ID(), $this->args['taxonomy'] );
 		if ( ! is_array( $terms ) ) {
 			return;
