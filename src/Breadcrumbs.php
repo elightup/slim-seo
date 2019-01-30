@@ -98,17 +98,9 @@ class Breadcrumbs {
 		elseif ( is_author() ) {
 			$this->current = get_queried_object()->display_name;
 		}
-		// Day archive.
-		elseif ( is_day() ) {
-			$this->current = get_the_date();
-		}
-		// Month archive.
-		elseif ( is_month() ) {
-			$this->current = get_the_date( 'F Y' );
-		}
-		// Year archive.
-		elseif ( is_year() ) {
-			$this->current = get_the_date( 'Y' );
+		// Date archive.
+		elseif ( is_date() ) {
+			$this->add_date_links();
 		}
 		// General archive.
 		else {
@@ -172,6 +164,29 @@ class Breadcrumbs {
 			$ancestor = get_term( $ancestor_id, $term->taxonomy );
 			$this->add_link( get_term_link( $ancestor ), $ancestor->name );
 		}
+	}
+
+	private function add_date_links() {
+		$time        = strtotime( get_the_date( 'c' ) );
+		$year        = get_the_date( 'Y' );
+		$year_label  = date_i18n( 'Y', $time ); // Use date_i18n to show date in localized format.
+		$month       = get_the_date( 'm' );
+		$month_label = date_i18n( 'F', $time );
+
+		if ( is_year() ) {
+			$this->current = $year_label;
+			return;
+		}
+
+		if ( is_month() ) {
+			$this->add_link( get_year_link( $year ), $year_label );
+			$this->current = $month_label;
+			return;
+		}
+
+		$this->add_link( get_year_link( $year ), $year_label );
+		$this->add_link( get_month_link( $year, $month ), $month_label );
+		$this->current = date_i18n( 'd', $time );
 	}
 
 	private function add_link( $link, $text ) {
