@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.0.3
 Requires PHP: 5.6
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -53,11 +53,11 @@ When sharing posts on Twitter, **Slim SEO** automatically optimizes the article 
 
 **Slim SEO** automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
-#### 6. Redirect attachment page to parent post page
+#### 6. Redirect attachment page to the attachment file URL
 
 When you upload any file to WordPress, WordPress creates an attachment page for that file. This page provides very little information about the file and the page looks quite empty. As search engines already index the files, allowing attachment pages to be indexed make duplicated content and increase the bounce rate. It's better to disable the attachment pages.
 
-Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the parent posts. Users will see the real post with real content and thus, no empty pages and decrease the bounce rate.
+Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the file URL. Users will see the real file and thus, no empty pages.
 
 #### 7. Auto add missing alt attribute for images
 
@@ -134,6 +134,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.3.1 =
+- Changed: Redirect attachment page to the attachment URL (image or file URL) instead of parent post. This allows users to see the full-size image. Works when users insert a gallery into post and they want to see full-size images.
 
 = 1.3.0 =
 - Added: Added breadcrumbs functionality. Use `[slim_seo_breadcrumbs]` shortcode to output in your template files. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs).

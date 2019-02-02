@@ -11,13 +11,7 @@ class AttachmentRedirect {
 			return;
 		}
 
-		$parent = get_queried_object()->post_parent;
-		$to     = home_url( '/' );
-
-		if ( $parent && 'trash' !== get_post_status( $parent ) ) {
-			$to = get_permalink( $parent );
-		}
-
+		$to = wp_get_attachment_url( get_queried_object_id() );
 		wp_safe_redirect( esc_url( $to ), 301 );
 		die;
 	}

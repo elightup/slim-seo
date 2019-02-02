@@ -42,7 +42,7 @@ When sharing posts on Twitter, **Slim SEO** automatically optimizes the article 
 
 When you upload any file to WordPress, WordPress creates an attachment page for that file. This page provides very little information about the file and the page looks quite empty. As search engines already index the files, allowing attachment pages to be indexed make duplicated content and increase the bounce rate. It's better to disable the attachment pages.
 
-Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the parent posts. Users will see the real post with real content and thus, no empty pages and decrease the bounce rate.
+Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the file URL. Users will see the real file and thus, no empty pages.
 
 ### 7. Auto add missing 'alt' attribute for images
 
