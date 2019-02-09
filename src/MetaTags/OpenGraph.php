@@ -137,19 +137,12 @@ class OpenGraph {
 	}
 
 	private function output_tag( $property, $content ) {
-		if ( empty( $content ) ) {
+		if ( ! $content ) {
 			return;
 		}
-		if ( ! is_array( $content ) ) {
-			$this->output_single_tag( $property, $content );
-			return;
-		}
-		foreach ( $content as $single_content ) {
-			$this->output_single_tag( $property, $single_content );
-		}
-	}
-
-	private function output_single_tag( $property, $content ) {
-		echo '<meta property="', esc_attr( $property ), '" content="', esc_attr( $content ), '">', "\n";
+		$content = (array) $content;
+		array_walk( $content, function ( $value ) use ( $property ) {
+			echo '<meta property="', esc_attr( $property ), '" content="', esc_attr( $value ), '">', "\n";
+		} );
 	}
 }

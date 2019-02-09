@@ -12,6 +12,6 @@ class Twitter {
 	 * @link https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started
 	 */
 	public function output() {
-		echo '<meta name="twitter:card" content="summary_large_image">';
+		echo '<meta name="twitter:card" content="summary_large_image">', "\n";
 	}
 }
