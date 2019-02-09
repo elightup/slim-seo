@@ -28,6 +28,7 @@ if ( is_admin() ) {
 	new SlimSEO\Notification();
 } else {
     new SlimSEO\AttachmentRedirect();
+	new SlimSEO\Feed();
 }
 
 load_plugin_textdomain( 'slim-seo', false, basename( __DIR__ ) . '/languages/' );

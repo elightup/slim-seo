@@ -54,7 +54,7 @@ class Notification {
 
 	private function get_rss_message() {
 		if ( ! get_option( 'rss_use_excerpt' ) ) {
-			$this->messages[] = sprintf( __( 'Your RSS feed show full text. <a href="%s">Fix this &rarr;</a>', 'slim-seo' ), admin_url( 'options-reading.php' ) );
+			$this->messages[] = sprintf( __( 'Your RSS feed shows full text. <a href="%s">Fix this &rarr;</a>', 'slim-seo' ), admin_url( 'options-reading.php' ) );
 		}
 	}
 }
