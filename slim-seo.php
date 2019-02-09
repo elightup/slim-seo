@@ -24,7 +24,9 @@ new SlimSEO\MetaTags\Twitter();
 new SlimSEO\Sitemaps\Manager();
 new SlimSEO\ImagesAlt();
 new SlimSEO\Breadcrumbs();
-if ( ! is_admin() ) {
+if ( is_admin() ) {
+	new SlimSEO\Notification();
+} else {
     new SlimSEO\AttachmentRedirect();
 }
 

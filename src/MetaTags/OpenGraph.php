@@ -141,8 +141,8 @@ class OpenGraph {
 			return;
 		}
 		$content = (array) $content;
-		array_walk( $content, function ( $value ) use ( $property ) {
+		foreach ( $content as $value ) {
 			echo '<meta property="', esc_attr( $property ), '" content="', esc_attr( $value ), '">', "\n";
-		} );
+		}
 	}
 }
