@@ -31,4 +31,7 @@ if ( is_admin() ) {
 	new SlimSEO\Feed();
 }
 
+new SlimSEO\Activator( __FILE__ );
+new SlimSEO\Deactivator( __FILE__ );
+
 load_plugin_textdomain( 'slim-seo', false, basename( __DIR__ ) . '/languages/' );
