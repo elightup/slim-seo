@@ -1,3 +1,6 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/elightup/slim-seo/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/elightup/slim-seo/?branch=master)
+[![WordPress](https://img.shields.io/wordpress/v/slim-seo.svg)](http://wordpress.org/plugins/slim-seo/)
+
 # Slim SEO - A Lightweight SEO Plugin For WordPress
 
 Currently there are many SEO plugins for WordPress in the market. But these plugins often have too many options and are very complicated for ordinary users. Access to their configuration section, you will easily get lost in a maze of explanations and options that you sometimes don't understand. Besides, there are ads!
