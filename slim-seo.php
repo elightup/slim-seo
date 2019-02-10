@@ -29,6 +29,7 @@ if ( is_admin() ) {
 } else {
     new SlimSEO\AttachmentRedirect();
 	new SlimSEO\Feed();
+	new SlimSEO\JsonLd();
 }
 
 new SlimSEO\Activator( __FILE__ );

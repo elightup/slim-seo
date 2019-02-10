@@ -77,7 +77,7 @@ class Breadcrumbs {
 				'item'     => $link['url'],
 			];
 		}
-		echo '<script type="application/ld+json">', json_encode( $data, JSON_UNESCAPED_SLASHES ), '</script>', "\n";
+		JsonLd::output( $data );
 	}
 
 	private function parse() {
