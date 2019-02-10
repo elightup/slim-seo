@@ -1,4 +1,4 @@
-=== Slim SEO ===
+=== Slim SEO - Fast & Automated WordPress SEO Plugin ===
 Contributors: elightup, rilwis
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
