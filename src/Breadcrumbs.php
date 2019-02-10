@@ -3,47 +3,84 @@ namespace SlimSEO;
 
 class Breadcrumbs {
 	private $args;
-	private $items    = [];
-	private $current  = '';
-	private $position = 1;
+	private $links       = [];
+	private $current     = '';
+	private $is_rendered = false;
 
 	public function __construct() {
-		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'output' ] );
+		$this->args = array(
+			'separator'       => '&raquo;',
+			'taxonomy'        => 'category',
+			'display_current' => 'true',
+			'label_home'      => __( 'Home', 'slim-seo' ),
+			// translators: search query.
+			'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
+			'label_404'       => __( 'Page not found', 'slim-seo' ),
+		);
+
+		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
+		add_action( 'wp_footer', [ $this, 'output_json_ld' ] );
 	}
 
-	public function output( $atts ) {
-		$this->set_args( $atts );
-
-		$this->get_data();
-		if ( ! $this->items ) {
+	public function render_shortcode( $atts ) {
+		$this->args = wp_parse_args( $atts, $this->args );
+		$this->parse();
+		if ( ! $this->links ) {
 			return '';
 		}
-		$this->add_current();
 
-		$output  = sprintf( '<nav class="breadcrumbs" aria-label="%s" itemscope itemtype="http://schema.org/BreadcrumbList">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
-		$output .= implode( " {$this->args['separator']} ", $this->items );
+		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s" itemscope itemtype="http://schema.org/BreadcrumbList">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
+
+		// Links.
+		$items    = [];
+		$template = '<span class="breadcrumb%s" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+			<a href="%s" itemprop="item"><span itemprop="name">%s</span></a>
+			<meta itemprop="position" content="%d">
+			</span>';
+		foreach ( $this->links as $i => $item ) {
+			$class   = 0 === $i ? ' breadcrumb--first' : '';
+			$items[] = sprintf( $template, $class, esc_url( $item['url'] ), esc_html( wp_strip_all_tags( $item['text'] ) ), $i + 1 );
+		}
+
+		// Current page.
+		if ( 'true' === $this->args['display_current'] ) {
+			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', esc_html( wp_strip_all_tags( $this->current ) ) );
+		}
+
+		$output .= implode( " <span class='breadcrumbs__separator'>{$this->args['separator']}</span> ", $items );
 		$output .= '</nav>';
+
+		// Do not output JSON-LD in the footer.
+		$this->is_rendered = true;
 
 		return $output;
 	}
 
-	private function set_args( $args ) {
-		$this->args              = wp_parse_args(
-			$args,
-			array(
-				'separator'       => '&raquo;',
-				'taxonomy'        => 'category',
-				'display_current' => 'true',
-				'label_home'      => __( 'Home', 'slim-seo' ),
-				// translators: search query.
-				'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
-				'label_404'       => __( 'Page not found', 'slim-seo' ),
-			)
-		);
-		$this->args['separator'] = "<span class='breadcrumbs__separator'>{$this->args['separator']}</span>";
+	public function output_json_ld() {
+		if ( $this->is_rendered ) {
+			return;
+		}
+		$this->parse();
+		if ( ! $this->links ) {
+			return;
+		}
+		$data = [
+			'@context'        => 'https://schema.org',
+			'@type'           => 'BreadcrumbList',
+			'itemListElement' => [],
+		];
+		foreach ( $this->links as $i => $link ) {
+			$data['itemListElement'][] = [
+				'@type'    => 'ListItem',
+				'position' => ( $i + 1 ),
+				'name'     => $link['text'],
+				'item'     => $link['url'],
+			];
+		}
+		echo '<script type="application/ld+json">', json_encode( $data, JSON_UNESCAPED_SLASHES ), '</script>', "\n";
 	}
 
-	private function get_data() {
+	private function parse() {
 		if ( is_front_page() ) {
 			return;
 		}
@@ -148,18 +185,10 @@ class Breadcrumbs {
 		$this->current = date_i18n( 'd', $time );
 	}
 
-	private function add_link( $link, $text ) {
-		$template      = '<span class="breadcrumb%s" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-			<a href="%s" itemprop="item"><span itemprop="name">%s</span></a>
-			<meta itemprop="position" content="%d">
-		</span>';
-		$class         = 1 === $this->position ? ' breadcrumb--first' : '';
-		$this->items[] = sprintf( $template, $class, esc_url( $link ), esc_html( wp_strip_all_tags( $text ) ), $this->position++ );
-	}
-
-	private function add_current() {
-		if ( 'true' === $this->args['display_current'] ) {
-			$this->items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', esc_html( wp_strip_all_tags( $this->current ) ) );
-		}
+	private function add_link( $url, $text ) {
+		$this->links[] = [
+			'url'  => $url,
+			'text' => $text,
+		];
 	}
 }
