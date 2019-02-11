@@ -25,7 +25,7 @@ class Breadcrumbs {
 	public function render_shortcode( $atts ) {
 		$this->args = wp_parse_args( $atts, $this->args );
 		$this->parse();
-		if ( ! $this->links ) {
+		if ( empty( $this->links ) ) {
 			return '';
 		}
 
@@ -61,7 +61,7 @@ class Breadcrumbs {
 			return;
 		}
 		$this->parse();
-		if ( ! $this->links ) {
+		if ( empty( $this->links ) ) {
 			return;
 		}
 		$data = [

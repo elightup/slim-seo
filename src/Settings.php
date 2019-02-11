@@ -1,0 +1,207 @@
+<?php
+namespace SlimSEO;
+
+use SameerShelavale\PhpCountriesArray\CountriesArray;
+
+class Settings {
+	public function __construct() {
+		add_filter( 'mb_settings_pages', [ $this, 'add_settings_page' ] );
+		add_filter( 'rwmb_meta_boxes', [ $this, 'add_settings_fields' ] );
+	}
+
+	public function add_settings_page( $settings_pages ) {
+		$settings_pages[] = [
+			'id'          => 'slim-seo',
+			'option_name' => 'slim_seo',
+			'menu_title'  => __( 'Slim SEO', 'slim-seo' ),
+			'parent'      => 'options-general.php',
+			'capability'  => 'manage_options',
+			'style'       => 'no-boxes',
+			'columns'     => 1,
+			'tabs'        => [
+				'general' => esc_html__( 'General', 'slim-seo' ),
+				'social'  => esc_html__( 'Social', 'slim-seo' ),
+			],
+		];
+		return $settings_pages;
+	}
+
+	public function add_settings_fields( $meta_boxes ) {
+		$prefix       = 'knowledge_graph_';
+		$meta_boxes[] = [
+			'title'          => ' ',
+			'id'             => 'knowledge-graph',
+			'tab'            => 'general',
+			'settings_pages' => 'slim-seo',
+			'fields'         => [
+				[
+					'id'          => $prefix . 'type',
+					'name'        => esc_html__( 'This website represents', 'slim-seo' ),
+					'type'        => 'select_advanced',
+					'options'     => [
+						'organization' => __( 'An organization', 'slim-seo' ),
+						'person'       => __( 'A person', 'slim-seo' ),
+					],
+					'placeholder' => '---',
+				],
+				[
+					'id'          => $prefix . 'contact_points',
+					'type'        => 'group',
+					'name'        => esc_html__( 'Contact points', 'slim-seo' ),
+					'group_title' => esc_html__( 'Contact point {#}', 'slim-seo' ),
+					'clone'       => true,
+					'collapsible' => true,
+					'add_button'  => esc_html__( '+ Contact point', 'slim-seo' ),
+					'fields'      => [
+						[
+							'id'          => 'contact_type',
+							'name'        => esc_html__( 'Contact type', 'slim-seo' ),
+							'type'        => 'select_advanced',
+							'options'     => [
+								'customer support'    => __( 'Customer support', 'slim-seo' ),
+								'technical support'   => __( 'Technical support', 'slim-seo' ),
+								'billing support'     => __( 'Billing support', 'slim-seo' ),
+								'bill payment'        => __( 'Bill payment', 'slim-seo' ),
+								'sales'               => __( 'Sales', 'slim-seo' ),
+								'reservations'        => __( 'Reservations', 'slim-seo' ),
+								'credit card support' => __( 'Credit card support', 'slim-seo' ),
+								'emergency'           => __( 'Emergency', 'slim-seo' ),
+								'baggage tracking'    => __( 'Baggage tracking', 'slim-seo' ),
+								'roadside assistance' => __( 'Roadside assistance', 'slim-seo' ),
+								'package tracking'    => __( 'Package tracking', 'slim-seo' ),
+							],
+							'placeholder' => '---',
+						],
+						[
+							'id'          => 'telephone',
+							'name'        => esc_html__( 'Telephone', 'slim-seo' ),
+							'type'        => 'text',
+							'placeholder' => '+1-800-555-1212',
+							'desc'        => esc_html__( 'An internationalized version of the phone number, starting with the "+" symbol and country code.', 'slim-seo' ),
+						],
+						[
+							'id'          => 'area_served',
+							'name'        => esc_html__( 'Area served', 'slim-seo' ),
+							'type'        => 'select_advanced',
+							'multiple'    => true,
+							'options'     => CountriesArray::get( 'alpha2', 'name' ),
+							'placeholder' => '',
+							'desc'        => esc_html__( 'Leave empty to serve globally.', 'slim-seo' ),
+						],
+						[
+							'id'      => 'available_language',
+							'name'    => esc_html__( 'Available language', 'slim-seo' ),
+							'type'    => 'select_advanced',
+							'desc'    => esc_html__( 'If omitted, the language defaults to English.', 'slim-seo' ),
+							'options' => [
+								'Afrikaans',
+								'Albanian',
+								'Arabic',
+								'Armenian',
+								'Assamese',
+								'Azerbaijani',
+								'Basque',
+								'Belarusian',
+								'Bengali',
+								'Bosnian',
+								'Bulgarian',
+								'Catalan',
+								'Cebuano',
+								'Chinese',
+								'Croatian',
+								'Czech',
+								'Danish',
+								'Dutch',
+								'Dzongkha',
+								'English',
+								'Esperanto',
+								'Estonian',
+								'Finnish',
+								'French',
+								'Friulian',
+								'Galician',
+								'Georgian',
+								'German',
+								'Greek',
+								'Gujarati',
+								'Hazaragi',
+								'Hebrew',
+								'Hindi',
+								'Hungarian',
+								'Icelandic',
+								'Indonesian',
+								'Italian',
+								'Japanese',
+								'Javanese',
+								'Kabyle',
+								'Kazakh',
+								'Khmer',
+								'Korean',
+								'Kurdish',
+								'Lao',
+								'Latvian',
+								'Lithuanian',
+								'Macedonian',
+								'Malay',
+								'Malayalam',
+								'Marathi',
+								'Mongolian',
+								'Moroccan Arabic',
+								'Myanmar',
+								'Nepali',
+								'Norwegian',
+								'Occitan',
+								'Pashto',
+								'Persian',
+								'Polish',
+								'Portuguese',
+								'Punjabi',
+								'Rohingya',
+								'Romanian',
+								'Russian',
+								'Sakha',
+								'Saraiki',
+								'Scottish Gaelic',
+								'Serbian',
+								'Silesian',
+								'Sinhala',
+								'Slovak',
+								'Slovenian',
+								'South Azerbaijani',
+								'Spanish',
+								'Swedish',
+								'Tagalog',
+								'Tahitian',
+								'Tamil',
+								'Tatar',
+								'Telugu',
+								'Thai',
+								'Tibetan',
+								'Turkish',
+								'Uighur',
+								'Ukrainian',
+								'Urdu',
+								'Uzbek',
+								'Vietnamese',
+								'Welsh',
+							],
+						],
+						[
+							'id'          => 'option',
+							'name'        => esc_html__( 'Contact option', 'slim-seo' ),
+							'type'        => 'select_advanced',
+							'options'     => [
+								'TollFree'                 => __( 'Toll free', 'slim-seo' ),
+								'HearingImpairedSupported' => __( 'Hearing Impaired Supported', 'slim-seo' ),
+							],
+							'placeholder' => '---',
+						],
+					],
+				],
+			],
+		];
+
+		return $meta_boxes;
+	}
+
+}
