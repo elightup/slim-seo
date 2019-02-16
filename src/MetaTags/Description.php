@@ -14,17 +14,27 @@ class Description {
 	}
 
 	public function get_description() {
+		$description = '';
+
 		if ( is_front_page() ) {
-			return $this->get_home_description();
-		}
-		if ( is_tax() || is_category() || is_tag() ) {
-			return $this->get_term_description();
-		}
-		if ( is_home() || is_singular() ) {
-			return $this->get_singular_description();
+			$description = $this->get_home_description();
+		} elseif ( is_tax() || is_category() || is_tag() ) {
+			$description = $this->get_term_description();
+		} elseif ( is_home() || is_singular() ) {
+			$description = $this->get_singular_description();
 		}
 
-		return '';
+		return $this->normalize( $description );
+	}
+
+	private function normalize( $description ) {
+		$description = do_shortcode( $description );                  // Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
+		$description = wp_strip_all_tags( $description );             // No HTML tags.
+		$description = preg_replace( '/\s{2,}/', ' ', $description ); // Remove extra white spaces.
+		$description = trim( $description );
+		$description = wp_trim_words( $description, 60 );             // Recommended length for meta description is 300 characters (~ 60 words).
+
+		return $description;
 	}
 
 	private function get_home_description() {

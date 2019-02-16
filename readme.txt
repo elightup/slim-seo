@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.0.3
 Requires PHP: 5.6
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,49 +31,49 @@ So what does **Slim SEO** do?
 
 [**Slim SEO**](https://elightup.com/products/slim-seo/) helps you do the following jobs automatically:
 
-#### 1. Optimize meta title tag
+#### 1. Optimize meta tags
 
-The meta title tag is optimized and displayed automatically. You don't need to think about which character to use to separate the title parts, or where to put the site title (after or before the page title). All of these issues are solved by **Slim SEO** automatically and you don't need to configure anything.
+The meta title and meta description tag is optimized and displayed automatically.
 
-#### 2. Optimize meta description tag
+You don't need to think about which character to use to separate the title parts, or where to put the site title (after or before the page title).
 
 The meta description tag is automatically generated from the post excerpt or post content (in case you didn't enter post excerpt). For categories, post tags or custom taxonomies, their description will be used as meta description.
 
 All of these operations are automatically done by the **Slim SEO** plugin. And you don't need to configure anything.
 
-#### 3. Optimize Open Graph tags for sharing on Facebook
+#### 2. Optimize Open Graph and Twitter Cards tags
 
-**Slim SEO** automatically optimizes and displays Open Graph meta tags for your posts. Thus your posts will be displayed beautifully when sharing on Facebook.
-
-#### 4. Optimize for Twitter
+**Slim SEO** automatically optimizes and displays Open Graph and Twitter Cards meta tags for your posts. Thus your posts will be displayed beautifully when sharing on Facebook and Twitter.
 
 When sharing posts on Twitter, **Slim SEO** automatically optimizes the article to be displayed in a large card form, a beautiful and highly interactive style.
 
-#### 5. Create XML Sitemap
+#### 3. Create XML Sitemap
 
 **Slim SEO** automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
-#### 6. Redirect attachment page to the attachment file URL
+#### 4. Redirect attachment page to the attachment file URL
 
 When you upload any file to WordPress, WordPress creates an attachment page for that file. This page provides very little information about the file and the page looks quite empty. As search engines already index the files, allowing attachment pages to be indexed make duplicated content and increase the bounce rate. It's better to disable the attachment pages.
 
 Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the file URL. Users will see the real file and thus, no empty pages.
 
-#### 7. Auto add missing alt attribute for images
+#### 5. Auto add missing alt attribute for images
 
 The plugin automatically adds missing alt attribute for images, including post thumbnails and images inserted in the post content.
 
-#### 8. Breadcrumbs
+#### 6. Breadcrumbs
 
 The plugin provides `[slim_seo_breadcrumbs]` shortcode that allows you to output a breadcrumb trail on your website easily. The plugin uses schema.org syntax which is compatible with Google Structured Data recommendation. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs) for details.
+
+#### 7. Prevent content stealing from RSS feed
+
+With **Slim SEO**, all posts in your RSS feed have a backlink to your original posts. So if someone tries to steal your content from RSS feed, they'll link back to your post. Thus, Google and other search engines will understand which post is original and then increase your SEO ranking.
 
 ### Who should use Slim SEO
 
 Everyone can use **Slim SEO**.
 
 However, **Slim SEO** is perfecly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
-
-If you need advanced options for SEO, we recommend using the Yoast SEO plugin.
 
 == Installation ==
 
@@ -134,6 +134,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.4.0 =
+- Added: Added notification for SEO settings errors in the admin.
+- Added: Added link to original post in the feed.
+- Changed: Flushed rewrite rules on plugin activate/deactivate to make Sitemap URL works automatically.
+- Fixed: Fixed shortcodes in post content not parsed in meta description. Fixed for page builders like Divi.
 
 = 1.3.1 =
 - Changed: Redirect attachment page to the attachment URL (image or file URL) instead of parent post. This allows users to see the full-size image. Works when users insert a gallery into post and they want to see full-size images.
