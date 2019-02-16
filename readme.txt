@@ -9,11 +9,11 @@ Stable tag: 1.4.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A lightweight SEO plugin for WordPress.
+A Fast & Automated WordPress SEO Plugin
 
 == Description ==
 
-### A Lightweight SEO Plugin For WordPress
+### A Fast & Automated SEO Plugin For WordPress
 
 Currently there are many SEO plugins for WordPress in the market. But these plugins often have too many options and are very complicated for ordinary users. Access to their configuration section, you will easily get lost in a maze of explanations and options that you sometimes don't understand. Besides, there are ads!
 
