@@ -3,7 +3,15 @@ namespace SlimSEO\MetaTags;
 
 class Description {
 	public function __construct() {
+		add_action( 'init', [ $this, 'add_excerpt_to_pages' ] );
 		add_action( 'wp_head', [ $this, 'output' ] );
+	}
+
+	/**
+	 * Add excerpt to pages to let users customize meta description.
+	 */
+	public function add_excerpt_to_pages() {
+		add_post_type_support( 'page', 'excerpt' );
 	}
 
 	public function output() {
