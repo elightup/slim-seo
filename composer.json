@@ -1,25 +1,5 @@
 {
-	"repositories": [
-        {
-            "type": "composer",
-            "url": "https://wpackagist.org"
-        }
-    ],
-	"require": {
-		"wpackagist-plugin/meta-box": "dev-trunk",
-		"sameer-shelavale/php-countries-array": "^1.0"
-	},
-	"extra": {
-        "installer-paths": {
-            "vendor/meta-box/{$name}/": ["wpackagist-plugin/meta-box"]
-        }
-    },
     "autoload": {
-		"files": [
-			"vendor/meta-box/meta-box/meta-box.php",
-			"vendor/meta-box/mb-settings-page/mb-settings-page.php",
-			"vendor/meta-box/meta-box-group/meta-box-group.php"
-		],
         "psr-4": {
             "SlimSEO\\": "src/"
         }
