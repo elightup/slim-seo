@@ -27,7 +27,7 @@ new SlimSEO\Breadcrumbs();
 if ( is_admin() ) {
 	new SlimSEO\Notification();
 } else {
-    new SlimSEO\AttachmentRedirect();
+    new SlimSEO\AutoRedirection();
 	new SlimSEO\Feed();
 	new SlimSEO\JsonLd();
 }
