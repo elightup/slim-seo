@@ -11,6 +11,7 @@ class Robots {
 
 	public function output() {
 		$is_indexed = $this->is_indexed();
+		$is_indexed = apply_filters( 'slim_seo_robots_index', $is_indexed );
 		if ( ! $is_indexed ) {
 			wp_no_robots();
 		}

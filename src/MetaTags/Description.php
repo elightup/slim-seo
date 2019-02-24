@@ -32,7 +32,10 @@ class Description {
 			$description = $this->get_singular_description();
 		}
 
-		return $this->normalize( $description );
+		$description = apply_filters( 'slim_seo_meta_description', $description );
+		$description = $this->normalize( $description );
+
+		return $description;
 	}
 
 	private function normalize( $description ) {
