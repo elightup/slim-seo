@@ -21,10 +21,17 @@ class Robots {
 		if ( is_search() || is_404() ) {
 			return false;
 		}
+
 		// Do not index private posts.
 		if ( is_singular() && 'private' === get_queried_object()->post_status ) {
 			return false;
 		}
+
+		// Do not index pages with no content.
+		if ( ! is_front_page() && ! have_posts() ) {
+			return false;
+		}
+
 		return true;
 	}
 
