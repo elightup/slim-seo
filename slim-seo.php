@@ -31,6 +31,7 @@ if ( is_admin() ) {
 	new SlimSEO\Feed();
 	new SlimSEO\JsonLd();
 	new SlimSEO\MetaTags\Robots();
+	new SlimSEO\Cleaner();
 }
 
 new SlimSEO\Activator( __FILE__ );
