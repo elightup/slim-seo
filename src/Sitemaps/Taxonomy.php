@@ -8,15 +8,8 @@ class Taxonomy {
 		'hide_empty'             => true,
 		'fields'                 => 'ids',
 		'update_term_meta_cache' => false,
+		'number'                 => 500, // Maximum number of links in a sitemap. See https://support.google.com/webmasters/answer/75712
 	];
-
-	/**
-	 * Maximum number of links in sitemap Google recommends 500.
-	 *
-	 * @link https://support.google.com/webmasters/answer/75712
-	 * @var integer
-	 */
-	private $limit = 500;
 
 	public function __construct( $taxonomy ) {
 		$this->taxonomy = $taxonomy;
@@ -29,7 +22,6 @@ class Taxonomy {
 			self::$query_args,
 			[
 				'taxonomy' => $this->taxonomy,
-				'number'   => $this->limit,
 			]
 		);
 		$terms      = get_terms( $query_args );

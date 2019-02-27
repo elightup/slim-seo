@@ -16,15 +16,9 @@ class PostType {
 
 		'order'                  => 'DESC',
 		'orderyby'               => 'date',
-	];
 
-	/**
-	 * Maximum number of links in sitemap Google recommends 500.
-	 *
-	 * @link https://support.google.com/webmasters/answer/75712
-	 * @var integer
-	 */
-	private $limit = 500;
+		'posts_per_page'         => 500, // Maximum number of links in a sitemap. See https://support.google.com/webmasters/answer/75712
+	];
 
 	public function __construct( $post_type ) {
 		$this->post_type = $post_type;
@@ -38,8 +32,7 @@ class PostType {
 		$query_args = array_merge(
 			self::$query_args,
 			[
-				'post_type'      => $this->post_type,
-				'posts_per_page' => $this->limit,
+				'post_type' => $this->post_type,
 			]
 		);
 		$query      = new \WP_Query( $query_args );
