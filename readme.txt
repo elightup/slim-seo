@@ -3,9 +3,9 @@ Contributors: elightup, rilwis
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.0.3
+Tested up to: 5.1
 Requires PHP: 5.6
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -23,7 +23,7 @@ At [eLightUp](https://elightup.com), we believe that SEO should be an integrated
 
 So, we made [**Slim SEO**](https://elightup.com/products/slim-seo/).
 
-**Slim SEO** follow the philosophy of WordPress, decision over option. That means we provide an SEO plugin for WordPress where the configuration has been done automatically. Users do not need to care about their complex and semantic options.
+**Slim SEO** is a full-featured SEO plugin, that's done right! It provides a complete SEO solution for WordPress where the configuration has been done automatically. Users do not need to care about their complex and semantic options.
 
 So what does **Slim SEO** do?
 
@@ -31,43 +31,36 @@ So what does **Slim SEO** do?
 
 [**Slim SEO**](https://elightup.com/products/slim-seo/) helps you do the following jobs automatically:
 
-#### 1. Optimize meta tags
+#### 1. Meta Tags
 
-The meta title and meta description tag is optimized and displayed automatically.
+The following meta tags are auto-generated and optimized for the best SEO scores.
 
-You don't need to think about which character to use to separate the title parts, or where to put the site title (after or before the page title).
+- [Meta title tag](https://github.com/elightup/slim-seo/wiki/Meta-Title-Tag): display your title in a SEO-friendly way.
+- [Meta description tag](https://github.com/elightup/slim-seo/wiki/Meta-Description-Tag): auto generate from posts/pages excerpt or content.
+- [Meta robots tag](https://github.com/elightup/slim-seo/wiki/Meta-Robots-Tag): decide which pages are indexed and which ones not.
+- [Open Graph](https://github.com/elightup/slim-seo/wiki/Open-Graph): share your posts on Facebook beautifully.
+- [Twitter Card](https://github.com/elightup/slim-seo/wiki/Twitter-Card): share your posts on Twitter beautifully.
 
-The meta description tag is automatically generated from the post excerpt or post content (in case you didn't enter post excerpt). For categories, post tags or custom taxonomies, their description will be used as meta description.
-
-All of these operations are automatically done by the **Slim SEO** plugin. And you don't need to configure anything.
-
-#### 2. Optimize Open Graph and Twitter Cards tags
-
-**Slim SEO** automatically optimizes and displays Open Graph and Twitter Cards meta tags for your posts. Thus your posts will be displayed beautifully when sharing on Facebook and Twitter.
-
-When sharing posts on Twitter, **Slim SEO** automatically optimizes the article to be displayed in a large card form, a beautiful and highly interactive style.
-
-#### 3. Create XML Sitemap
+#### 2. [XML Sitemap](https://github.com/elightup/slim-seo/wiki/Sitemap)
 
 **Slim SEO** automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
-#### 4. Redirect attachment page to the attachment file URL
+#### 3. [Breadcrumbs](https://github.com/elightup/slim-seo/wiki/Breadcrumbs)
 
-When you upload any file to WordPress, WordPress creates an attachment page for that file. This page provides very little information about the file and the page looks quite empty. As search engines already index the files, allowing attachment pages to be indexed make duplicated content and increase the bounce rate. It's better to disable the attachment pages.
+The plugin allows you to output a breadcrumb trail on your website easily. It uses schema.org syntax which is compatible with Google Structured Data recommendation. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs) for details.
 
-Without any configuration from users, **Slim SEO** will help you to disable the attachment pages automatically and redirects them to the file URL. Users will see the real file and thus, no empty pages.
+#### 4. [JSON-LD Structured Data](https://github.com/elightup/slim-seo/wiki/JSON-LD)
 
-#### 5. Auto add missing alt attribute for images
+JSON-LD is a way that describes structured data for search engines. Based on the data provided, search engines can show the content in the search results page in a more appealing way.
 
-The plugin automatically adds missing alt attribute for images, including post thumbnails and images inserted in the post content.
+*Slim SEO* automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly.
 
-#### 6. Breadcrumbs
+#### 5. [Auto Redirection](https://github.com/elightup/slim-seo/wiki/Auto-Redirection)
 
-The plugin provides `[slim_seo_breadcrumbs]` shortcode that allows you to output a breadcrumb trail on your website easily. The plugin uses schema.org syntax which is compatible with Google Structured Data recommendation. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs) for details.
+- Auto redirect attachment page to the attachment file URL.
+- Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
 
-#### 7. Prevent content stealing from RSS feed
-
-With **Slim SEO**, all posts in your RSS feed have a backlink to your original posts. So if someone tries to steal your content from RSS feed, they'll link back to your post. Thus, Google and other search engines will understand which post is original and then increase your SEO ranking.
+To know more about *Slim SEO* features, please see the [Wiki](https://github.com/elightup/slim-seo/wiki).
 
 ### Who should use Slim SEO
 
@@ -134,6 +127,21 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.5.0 =
+- Added: Added excerpt to pages to let users customize meta description, especially for static homepage.
+- Added: Added support for [JSON-LD structured data](https://github.com/elightup/slim-seo/wiki/JSON-LD). Supported Website data (including search box) and Breadcrumbs.
+- Added: [Redirect author page](https://github.com/elightup/slim-seo/wiki/Auto-Redirection) to homepage if no posts or the website has only one user.
+- Added: Added support for [meta robots tag](https://github.com/elightup/slim-seo/wiki/Meta-Robots-Tag).
+	- Do not index the follow links:
+		- search results
+		- 404
+		- feed
+		- private posts
+		- page with no content
+	- Do not follow links:
+		- register
+		- login
 
 = 1.4.0 =
 - Added: Added notification for SEO settings errors in the admin.
