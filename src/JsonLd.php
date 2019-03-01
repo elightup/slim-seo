@@ -16,7 +16,6 @@ class JsonLd {
 			'@context'        => 'https://schema.org',
 			'@type'           => 'WebSite',
 			'url'             => esc_url( home_url( '/' ) ),
-			'name'            => get_bloginfo( 'name' ),
 			'potentialAction' => [
 				'@type'       => 'SearchAction',
 				'target'      => esc_url( home_url( '/' ) ) . '?s={search_term_string}',
