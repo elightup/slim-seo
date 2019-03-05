@@ -140,6 +140,14 @@ class OpenGraph {
 		if ( ! $content ) {
 			return;
 		}
+		$filter = 'slim_seo_og_' . strtr(
+			$property,
+			[
+				'og:' => '',
+				':'   => '_',
+			]
+		);
+		$content = apply_filters( $filter, $content );
 		$content = (array) $content;
 		foreach ( $content as $value ) {
 			echo '<meta property="', esc_attr( $property ), '" content="', esc_attr( $value ), '">', "\n";
