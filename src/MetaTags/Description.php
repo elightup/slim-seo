@@ -39,11 +39,8 @@ class Description {
 	}
 
 	private function normalize( $description ) {
-		$description = do_shortcode( $description );                  // Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
-		$description = wp_strip_all_tags( $description );             // No HTML tags.
-		$description = preg_replace( '/\s{2,}/', ' ', $description ); // Remove extra white spaces.
-		$description = trim( $description );
-		$description = wp_trim_words( $description, 60 );             // Recommended length for meta description is 300 characters (~ 60 words).
+		$description = Helper::normalize( $description );
+		$description = wp_trim_words( $description, 60 ); // Recommended length for meta description is 300 characters (~ 60 words).
 
 		return $description;
 	}
