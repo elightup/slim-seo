@@ -52,7 +52,7 @@ class PostType {
 			return;
 		}
 		echo "\t<url>\n";
-		echo "\t\t<loc>", esc_url( home_url() ), "</loc>\n";
+		echo "\t\t<loc>", esc_url( home_url( '/' ) ), "</loc>\n";
 		echo "\t</url>\n";
 	}
 }

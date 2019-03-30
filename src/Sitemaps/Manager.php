@@ -54,6 +54,6 @@ class Manager {
 	}
 
 	public function add_to_robots_txt() {
-		echo 'Sitemap: ', esc_url( home_url( '/sitemap.xml' ) ), "\n";
+		echo 'Sitemap: ', esc_url( home_url( 'sitemap.xml' ) ), "\n";
 	}
 }
