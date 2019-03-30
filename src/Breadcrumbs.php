@@ -77,7 +77,7 @@ class Breadcrumbs {
 				'item'     => $link['url'],
 			];
 		}
-		JsonLd::output( $data );
+		Schema::output( $data );
 	}
 
 	private function parse() {

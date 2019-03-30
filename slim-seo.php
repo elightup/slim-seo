@@ -29,7 +29,7 @@ if ( is_admin() ) {
 } else {
     new SlimSEO\AutoRedirection();
 	new SlimSEO\Feed();
-	new SlimSEO\JsonLd();
+	new SlimSEO\Schema();
 	new SlimSEO\MetaTags\Robots();
 	new SlimSEO\Cleaner();
 }

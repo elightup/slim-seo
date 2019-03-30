@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO;
 
-class JsonLd {
+class Schema {
 	public function __construct() {
 		// Output structured data types. Breadcrumbs are outputted in Breadcrumb class.
 		add_action( 'wp_footer', [ $this, 'output_sitelinks_searchbox' ] );
