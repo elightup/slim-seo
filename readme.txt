@@ -3,13 +3,13 @@ Contributors: elightup, rilwis
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.1
+Tested up to: 5.1.1
 Requires PHP: 5.6
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A Fast & Automated WordPress SEO Plugin
+A full-featured SEO plugin, that provides a complete SEO solution for WordPress where the configuration has been done automatically.
 
 == Description ==
 
@@ -127,6 +127,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.5.1 =
+- Changed: Removed preferred site name from JSON-LD as Google drops support for it.
+- Changed: Made notification dismissible.
 
 = 1.5.0 =
 - Added: Added excerpt to pages to let users customize meta description, especially for static homepage.
