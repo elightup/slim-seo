@@ -3,9 +3,9 @@ namespace SlimSEO;
 
 class Breadcrumbs {
 	private $args;
-	private $links       = [];
-	private $current     = '';
-	private $is_rendered = false;
+	private $links    = [];
+	private $current  = '';
+	private $rendered = false;
 
 	public function __construct() {
 		$this->args = array(
@@ -19,7 +19,6 @@ class Breadcrumbs {
 		);
 
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
-		add_action( 'wp_footer', [ $this, 'output_json_ld' ] );
 	}
 
 	public function render_shortcode( $atts ) {
@@ -51,36 +50,20 @@ class Breadcrumbs {
 		$output .= '</nav>';
 
 		// Do not output JSON-LD in the footer.
-		$this->is_rendered = true;
+		$this->rendered = true;
 
 		return $output;
 	}
 
-	public function output_json_ld() {
-		if ( $this->is_rendered ) {
-			return;
-		}
-		$this->parse();
-		if ( empty( $this->links ) ) {
-			return;
-		}
-		$data = [
-			'@context'        => 'https://schema.org',
-			'@type'           => 'BreadcrumbList',
-			'itemListElement' => [],
-		];
-		foreach ( $this->links as $i => $link ) {
-			$data['itemListElement'][] = [
-				'@type'    => 'ListItem',
-				'position' => ( $i + 1 ),
-				'name'     => $link['text'],
-				'item'     => $link['url'],
-			];
-		}
-		Schema::output( $data );
+	public function is_rendered() {
+		return $this->rendered;
 	}
 
-	private function parse() {
+	public function get_links() {
+		return $this->links;
+	}
+
+	public function parse() {
 		if ( is_front_page() ) {
 			return;
 		}

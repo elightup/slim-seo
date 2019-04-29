@@ -23,15 +23,18 @@ new SlimSEO\MetaTags\OpenGraph( $slim_seo_title, $slim_seo_description );
 new SlimSEO\MetaTags\Twitter();
 new SlimSEO\Sitemaps\Manager();
 new SlimSEO\ImagesAlt();
-new SlimSEO\Breadcrumbs();
+$slim_seo_breadcrumbs = new SlimSEO\Breadcrumbs();
 if ( is_admin() ) {
 	new SlimSEO\Notification();
 } else {
     new SlimSEO\AutoRedirection();
 	new SlimSEO\Feed();
-	new SlimSEO\Schema();
 	new SlimSEO\MetaTags\Robots();
 	new SlimSEO\Cleaner();
+
+	new SlimSEO\Schema\Manager();
+	new SlimSEO\Schema\Website();
+	new SlimSEO\Schema\Breadcrumbs( $slim_seo_breadcrumbs );
 }
 
 new SlimSEO\Activator( __FILE__ );
