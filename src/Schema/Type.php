@@ -3,24 +3,24 @@ namespace SlimSEO\Schema;
 
 abstract class Type {
 	public function __construct() {
-		add_action( 'slim_seo_schema', [ $this, 'add_schema' ] );
+		add_filter( 'slim_seo_schema_types', [ $this, 'add_schema' ] );
 	}
 
-	public function add_schema( $data ) {
+	public function add_schema( $types ) {
 		$type = $this->get_type();
 		if ( false === apply_filters( "slim_seo_schema_{$type}_enable", true ) ) {
-			return $data;
+			return $types;
 		}
 
 		$schema = $this->get_schema();
 		$schema = apply_filters( "slim_seo_schema_{$type}", $schema );
 		if ( null === $schema ) {
-			return $data;
+			return $types;
 		}
 
-		$data[ $type ] = $schema;
+		$types[ $type ] = $schema;
 
-		return $data;
+		return $types;
 	}
 
 	private function get_type() {
