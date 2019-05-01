@@ -6,8 +6,6 @@ class Breadcrumbs extends Type {
 
 	public function __construct( $source ) {
 		$this->source = $source;
-
-		parent::__construct();
 	}
 
 	public function get_schema() {
@@ -33,6 +31,7 @@ class Breadcrumbs extends Type {
 
 		return [
 			'@type'           => 'BreadcrumbList',
+			'@id'             => $this->get_id(),
 			'itemListElement' => $list,
 		];
 	}

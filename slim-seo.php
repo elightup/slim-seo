@@ -33,8 +33,9 @@ if ( is_admin() ) {
 	new SlimSEO\Cleaner();
 
 	new SlimSEO\Schema\Manager();
-	new SlimSEO\Schema\Website();
-	new SlimSEO\Schema\Breadcrumbs( $slim_seo_breadcrumbs );
+	( new SlimSEO\Schema\Website() )->register();
+	( new SlimSEO\Schema\WebPage( $slim_seo_title, $slim_seo_description ) )->register();
+	( new SlimSEO\Schema\Breadcrumbs( $slim_seo_breadcrumbs ) )->register();
 }
 
 new SlimSEO\Activator( __FILE__ );

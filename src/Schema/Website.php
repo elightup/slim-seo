@@ -2,12 +2,11 @@
 namespace SlimSEO\Schema;
 
 class Website extends Type {
-	protected function get_schema() {
+	public function get_schema() {
 		$schema = [
-			'@context' => 'https://schema.org',
 			'@type'    => 'WebSite',
-			'@id'      => esc_url( home_url( '/' ) ) . '#website',
-			'url'      => esc_url( home_url( '/' ) ),
+			'@id'      => $this->get_id( null, true ),
+			'url'      => $this->get_url( true ),
 			'name'     => get_bloginfo( 'name' ),
 		];
 
