@@ -105,11 +105,11 @@ class OpenGraph {
 	}
 
 	private function get_article_published_time() {
-		return is_singular() ? get_the_time( 'c' ): null;
+		return is_singular() ? date( 'c', strtotime( get_queried_object()->post_date_gmt ) ) : null;
 	}
 
 	private function get_article_modified_time() {
-		return is_singular() ? get_the_modified_time( 'c' ) : null;
+		return is_singular() ? date( 'c', strtotime( get_queried_object()->post_modified_gmt ) ) : null;
 	}
 
 	private function get_updated_time() {

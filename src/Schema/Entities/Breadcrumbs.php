@@ -1,12 +1,8 @@
 <?php
-namespace SlimSEO\Schema;
+namespace SlimSEO\Schema\Entities;
 
-class Breadcrumbs extends Type {
-	private $source;
-
-	public function __construct( $source ) {
-		$this->source = $source;
-	}
+class Breadcrumbs extends Base {
+	protected $source;
 
 	public function get_schema() {
 		if ( $this->source->is_rendered() ) {
@@ -31,7 +27,7 @@ class Breadcrumbs extends Type {
 
 		return [
 			'@type'           => 'BreadcrumbList',
-			'@id'             => $this->get_id(),
+			'@id'             => $this->id,
 			'itemListElement' => $list,
 		];
 	}

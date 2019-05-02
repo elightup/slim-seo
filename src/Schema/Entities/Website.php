@@ -1,12 +1,12 @@
 <?php
-namespace SlimSEO\Schema;
+namespace SlimSEO\Schema\Entities;
 
-class Website extends Type {
+class Website extends Base {
 	public function get_schema() {
 		$schema = [
 			'@type'    => 'WebSite',
-			'@id'      => $this->get_id( null, true ),
-			'url'      => $this->get_url( true ),
+			'@id'      => $this->id,
+			'url'      => $this->url,
 			'name'     => get_bloginfo( 'name' ),
 		];
 
