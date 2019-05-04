@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
-class Webpage extends Base {
+class WebPage extends Base {
 	protected $title;
 	protected $description;
 
