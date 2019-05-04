@@ -1,6 +1,5 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/elightup/slim-seo/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/elightup/slim-seo/?branch=master)
 [![Version](https://img.shields.io/wordpress/plugin/v/slim-seo.svg)](http://wordpress.org/plugins/slim-seo/)
-[![WordPress Version](https://img.shields.io/wordpress/v/slim-seo.svg)](http://wordpress.org/plugins/slim-seo/)
 
 # Slim SEO - A Fast & Automated SEO Plugin For WordPress
 
@@ -10,52 +9,52 @@ Currently there are many SEO plugins for WordPress in the market. But these plug
 
 At [eLightUp](https://elightup.com), we believe that SEO should be an integrated part of WordPress, where users don't need or need very little effort to configure for SEO. The main reason is that not everyone understands the terms of SEO and how to configure them optimally.
 
-So, we made [**Slim SEO**](https://elightup.com/products/slim-seo/).
+So, we made [**Slim SEO**](https://wpslimseo.com).
 
-**Slim SEO** is a full-featured SEO plugin, that's done right! It provides a complete SEO solution for WordPress where the configuration has been done automatically. Users do not need to care about their complex and semantic options.
+Slim SEO is a full-featured SEO plugin, that's done right! It provides a complete SEO solution for WordPress where the configuration has been done automatically. Users do not need to care about their complex and semantic options.
 
-So what does **Slim SEO** do?
+So what does Slim SEO do?
 
 ## Slim SEO Features
 
-[**Slim SEO**](https://elightup.com/products/slim-seo/) helps you do the following jobs automatically:
+Slim SEO helps you do the following jobs automatically:
 
 ### 1. Meta Tags
 
 The following meta tags are auto-generated and optimized for the best SEO scores.
 
-- [Meta title tag](https://github.com/elightup/slim-seo/wiki/Meta-Title-Tag): display your title in a SEO-friendly way.
-- [Meta description tag](https://github.com/elightup/slim-seo/wiki/Meta-Description-Tag): auto generate from posts/pages excerpt or content.
-- [Meta robots tag](https://github.com/elightup/slim-seo/wiki/Meta-Robots-Tag): decide which pages are indexed and which ones not.
-- [Open Graph](https://github.com/elightup/slim-seo/wiki/Open-Graph): share your posts on Facebook beautifully.
-- [Twitter Card](https://github.com/elightup/slim-seo/wiki/Twitter-Card): share your posts on Twitter beautifully.
+- [Meta title tag](https://wpslimseo.com/docs/meta-title-tag/): display your title in a SEO-friendly way.
+- [Meta description tag](https://wpslimseo.com/docs/meta-description-tag/): auto generate from posts/pages excerpt or content.
+- [Meta robots tag](https://wpslimseo.com/docs/meta-robots-tag/): decide which pages are indexed and which ones not.
+- [Facebook Open Graph Tags](https://wpslimseo.com/docs/facebook-open-graph-tags/): share your posts on Facebook beautifully.
+- [Twitter Card Tags](https://wpslimseo.com/docs/twitter-card-tags/): share your posts on Twitter beautifully.
 
-### 2. [XML Sitemap](https://github.com/elightup/slim-seo/wiki/Sitemap)
+### 2. [XML Sitemap](https://wpslimseo.com/docs/xml-sitemap/)
 
-**Slim SEO** automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
+Slim SEO automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
-### 3. [Breadcrumbs](https://github.com/elightup/slim-seo/wiki/Breadcrumbs)
+### 3. [Breadcrumbs](https://wpslimseo.com/docs/breadcrumbs/)
 
-The plugin allows you to output a breadcrumb trail on your website easily. It uses schema.org syntax which is compatible with Google Structured Data recommendation. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs) for details.
+The plugin allows you to output a breadcrumb trail on your website easily. It automatically fetches the information from the current post and output a hierarchy for you. You can also style the breadcrumbs to match your theme style.
 
-### 4. [JSON-LD Structured Data](https://github.com/elightup/slim-seo/wiki/JSON-LD)
+### 4. [Schema (Structured Data)](https://wpslimseo.com/docs/schema/)
 
-JSON-LD is a way that describes structured data for search engines. Based on the data provided, search engines can show the content in the search results page in a more appealing way.
+Schema is a way that describes structured data for search engines. Based on the data provided, search engines can show the content in the search results page in a more appealing way.
 
-*Slim SEO* automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly.
+Slim SEO automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-### 5. [Auto Redirection](https://github.com/elightup/slim-seo/wiki/Auto-Redirection)
+### 5. [Auto Redirection](https://wpslimseo.com/docs/auto-redirection/)
 
 - Auto redirect attachment page to the attachment file URL.
 - Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
 
-To know more about *Slim SEO* features, please see the [Wiki](https://github.com/elightup/slim-seo/wiki).
+To know more about Slim SEO features, please see the [homepage](https://wpslimseo.com).
 
-## Who should use Slim SEO
+## Who should use Slim SEO?
 
-Everyone can use **Slim SEO**.
+Everyone can use Slim SEO!
 
-However, **Slim SEO** is perfecly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
+However, Slim SEO is perfecly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
 
 ## Installation
 
