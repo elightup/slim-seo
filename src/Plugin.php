@@ -57,7 +57,7 @@ class Plugin {
 			$manager->add_entity( $thumbnail );
 		}
 
-		if ( is_single( 'post' ) ) {
+		if ( is_singular( 'post' ) ) {
 			$article = new Schema\Types\Article();
 			$article->post = get_queried_object();
 			$article->add_reference( 'isPartOf', $webpage );
