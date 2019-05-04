@@ -63,11 +63,11 @@ abstract class Base {
 		if ( null !== $this->parent ) {
 			$schema['isPartOf'] = [ '@id' => $this->parent->id ];
 		}
-		if ( ! empty( $this->children ) ) {
-			foreach ( $this->children as $name => $entity ) {
-				$schema[ $name ] = [ '@id' => $entity->id ];
-			}
+		foreach ( $this->children as $name => $entity ) {
+			$schema[ $name ] = [ '@id' => $entity->id ];
 		}
+
+		$schema = apply_filters( "slim_seo_schema_{$this->context}", $schema );
 
 		return $schema;
 	}

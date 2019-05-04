@@ -13,23 +13,19 @@ class Manager {
 			return;
 		}
 		$entities = apply_filters( 'slim_seo_schema_entities', $this->entities );
-		if ( empty( $entities ) ) {
+		$entities = array_filter( $entities, function( $entity ) {
+			return $entity->is_active();
+		} );
+
+		$graph = array_map( function( $entity ) {
+			return $entity->get_schema();
+		}, $entities );
+
+		$graph = array_values( array_filter( $graph ) );
+		if ( empty( $graph ) ) {
 			return;
 		}
-		$graph = [];
-		foreach ( $entities as $context => $entity ) {
-			if ( ! $entity->is_active() ) {
-				continue;
-			}
 
-			$schema = $entity->get_schema();
-			$schema = apply_filters( "slim_seo_schema_{$context}", $schema );
-			if ( null === $schema ) {
-				continue;
-			}
-
-			$graph[] = $schema;
-		}
 		$schema = [
 			'@context' => 'https://schema.org',
 			'@graph'   => $graph,
