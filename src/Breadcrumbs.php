@@ -110,8 +110,8 @@ class Breadcrumbs {
 
 		// Parse only first term and add its ancestors.
 		$term = reset( $terms );
-		$this->add_link( get_term_link( $term ), $term->name );
 		$this->add_term_ancestors( $term );
+		$this->add_link( get_term_link( $term ), $term->name );
 	}
 
 	private function add_post_type_archive_link() {
