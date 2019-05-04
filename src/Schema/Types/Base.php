@@ -67,6 +67,7 @@ abstract class Base {
 			$schema[ $name ] = [ '@id' => $entity->id ];
 		}
 
+		$schema = array_filter( $schema );
 		$schema = apply_filters( "slim_seo_schema_{$this->context}", $schema );
 
 		return $schema;

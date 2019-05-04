@@ -57,6 +57,24 @@ class Plugin {
 			$manager->add_entity( $thumbnail );
 		}
 
+		if ( is_single() ) {
+			$article = new Schema\Types\Article();
+			$article->post = get_queried_object();
+			$article->set_parent( $webpage );
+			$manager->add_entity( $article );
+
+			$author = new Schema\Types\Person( null, 'author' );
+			$author->user = wp_get_current_user();
+			$manager->add_entity( $author );
+
+			$article->add_child( 'author', $author );
+			$article->add_child( 'publisher', $author );
+
+			if ( has_post_thumbnail() ) {
+				$article->add_child( 'image', $thumbnail );
+			}
+		}
+
 		$manager->output();
 	}
 
