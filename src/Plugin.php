@@ -85,6 +85,23 @@ class Plugin {
 			}
 		}
 
+		if ( is_author() ) {
+			$author = new Schema\Types\Person( null, 'author' );
+			$author->user = get_queried_object();
+			$author->add_reference( 'mainEntityOfPage', $webpage );
+
+			$author_image = new Schema\Types\ImageObject();
+			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
+			$author_image->add_property( 'width', 96 );
+			$author_image->add_property( 'height', 96 );
+			$author_image->add_property( 'caption', $author->user->display_name );
+
+			$author->add_reference( 'image', $author_image );
+
+			$manager->add_entity( $author );
+			$manager->add_entity( $author_image );
+		}
+
 		$manager->output();
 	}
 

@@ -23,6 +23,10 @@ class Webpage extends Base {
 			$schema['@type'] = 'SearchResultsPage';
 		}
 
+		if ( is_author() ) {
+			$schema['@type'] = 'ProfilePage';
+		}
+
 		if ( is_singular() ) {
 			$schema['datePublished'] = date( 'c', strtotime( get_queried_object()->post_date_gmt ) );
 			$schema['dateModified']  = date( 'c', strtotime( get_queried_object()->post_modified_gmt ) );
