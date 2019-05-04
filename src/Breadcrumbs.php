@@ -3,9 +3,9 @@ namespace SlimSEO;
 
 class Breadcrumbs {
 	private $args;
-	private $links       = [];
-	private $current     = '';
-	private $is_rendered = false;
+	private $links     = [];
+	private $current   = '';
+	private $is_parsed = false;
 
 	public function __construct() {
 		$this->args = array(
@@ -19,7 +19,6 @@ class Breadcrumbs {
 		);
 
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
-		add_action( 'wp_footer', [ $this, 'output_json_ld' ] );
 	}
 
 	public function render_shortcode( $atts ) {
@@ -29,17 +28,14 @@ class Breadcrumbs {
 			return '';
 		}
 
-		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s" itemscope itemtype="http://schema.org/BreadcrumbList">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
+		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
 
 		// Links.
 		$items    = [];
-		$template = '<span class="breadcrumb%s" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-			<a href="%s" itemprop="item"><span itemprop="name">%s</span></a>
-			<meta itemprop="position" content="%d">
-			</span>';
+		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $this->links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
-			$items[] = sprintf( $template, $class, esc_url( $item['url'] ), esc_html( wp_strip_all_tags( $item['text'] ) ), $i + 1 );
+			$items[] = sprintf( $template, esc_url( $item['url'] ), $class, esc_html( wp_strip_all_tags( $item['text'] ) ), $i + 1 );
 		}
 
 		// Current page.
@@ -50,37 +46,18 @@ class Breadcrumbs {
 		$output .= implode( " <span class='breadcrumbs__separator'>{$this->args['separator']}</span> ", $items );
 		$output .= '</nav>';
 
-		// Do not output JSON-LD in the footer.
-		$this->is_rendered = true;
-
 		return $output;
 	}
 
-	public function output_json_ld() {
-		if ( $this->is_rendered ) {
-			return;
-		}
-		$this->parse();
-		if ( empty( $this->links ) ) {
-			return;
-		}
-		$data = [
-			'@context'        => 'https://schema.org',
-			'@type'           => 'BreadcrumbList',
-			'itemListElement' => [],
-		];
-		foreach ( $this->links as $i => $link ) {
-			$data['itemListElement'][] = [
-				'@type'    => 'ListItem',
-				'position' => ( $i + 1 ),
-				'name'     => $link['text'],
-				'item'     => $link['url'],
-			];
-		}
-		Schema::output( $data );
+	public function get_links() {
+		return $this->links;
 	}
 
-	private function parse() {
+	public function parse() {
+		if ( $this->is_parsed ) {
+			return;
+		}
+
 		if ( is_front_page() ) {
 			return;
 		}
@@ -106,6 +83,8 @@ class Breadcrumbs {
 		} elseif ( is_date() ) {
 			$this->add_date_links();
 		}
+
+		$this->is_parsed = true;
 	}
 
 	private function add_singular() {
@@ -130,7 +109,8 @@ class Breadcrumbs {
 		}
 
 		// Parse only first term and add its ancestors.
-		$term = current( $terms );
+		$term = reset( $terms );
+		$this->add_link( get_term_link( $term ), $term->name );
 		$this->add_term_ancestors( $term );
 	}
 
