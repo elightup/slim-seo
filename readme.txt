@@ -128,6 +128,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 2.0.1 =
+- Fixed: Output Article and Author for single posts only.
+
 = 2.0.0 =
 - Improved: Improved Schema markup. Use united schema output inside one `<script>` tag and add connections between entities. See [documentation](https://wpslimseo.com/docs/schema/) for details.
 

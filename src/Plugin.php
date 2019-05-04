@@ -57,7 +57,7 @@ class Plugin {
 			$manager->add_entity( $thumbnail );
 		}
 
-		if ( is_single() ) {
+		if ( is_single( 'post' ) ) {
 			$article = new Schema\Types\Article();
 			$article->post = get_queried_object();
 			$article->add_reference( 'isPartOf', $webpage );
@@ -65,7 +65,7 @@ class Plugin {
 			$manager->add_entity( $article );
 
 			$author = new Schema\Types\Person( null, 'author' );
-			$author->user = get_userdata( get_the_author_meta( 'ID' ) );
+			$author->user = get_userdata( $article->post->post_author );
 
 			$author_image = new Schema\Types\ImageObject();
 			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
