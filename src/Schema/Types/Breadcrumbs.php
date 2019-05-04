@@ -1,21 +1,22 @@
 <?php
-namespace SlimSEO\Schema\Entities;
+namespace SlimSEO\Schema\Types;
 
 class Breadcrumbs extends Base {
 	protected $source;
 
-	public function get_schema() {
-		if ( $this->source->is_rendered() ) {
-			return null;
+	public function is_active() {
+		if ( ! parent::is_active() ) {
+			return false;
 		}
 
 		$this->source->parse();
 		$links = $this->source->get_links();
-		if ( empty( $links ) ) {
-			return null;
-		}
+		return ! empty( $links );
+	}
 
-		$list = [];
+	public function generate_schema() {
+		$links = $this->source->get_links();
+		$list  = [];
 		foreach ( $links as $i => $link ) {
 			$list[] = [
 				'@type'    => 'ListItem',

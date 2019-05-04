@@ -18,7 +18,7 @@ class Manager {
 		}
 		$graph = [];
 		foreach ( $entities as $context => $entity ) {
-			if ( false === apply_filters( "slim_seo_schema_{$context}_enable", true ) ) {
+			if ( ! $entity->is_active() ) {
 				continue;
 			}
 

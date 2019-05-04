@@ -30,19 +30,32 @@ class Plugin {
 	public function register_schema_services() {
 		$manager = new Schema\Manager;
 
-		$website = new Schema\Entities\Website( home_url( '/' ) );
+		$website = new Schema\Types\Website( home_url( '/' ) );
 		$manager->add_entity( $website );
 
-		$breadcrumbs = new Schema\Entities\Breadcrumbs;
+		$search_action = new Schema\Types\SearchAction();
+		$website->add_child( 'potentialAction', $search_action );
+		$manager->add_entity( $search_action );
+
+		$breadcrumbs = new Schema\Types\Breadcrumbs;
 		$breadcrumbs->source = $this->breadcrumbs;
 		$manager->add_entity( $breadcrumbs );
 
-		$webpage = new Schema\Entities\WebPage;
+		$webpage = new Schema\Types\WebPage;
 		$webpage->title = $this->title;
 		$webpage->description = $this->description;
-		$webpage->parent = $website;
+		$webpage->set_parent( $website );
 		$webpage->add_child( 'breadcrumb', $breadcrumbs );
 		$manager->add_entity( $webpage );
+
+		if ( is_singular() && has_post_thumbnail() ) {
+			$thumbnail = new Schema\Types\ImageObject( null, 'thumbnail' );
+			$thumbnail->image_id = get_post_thumbnail_id();
+
+			$webpage->add_child( 'primaryImageOfPage', $thumbnail );
+			$webpage->add_child( 'image', $thumbnail );
+			$manager->add_entity( $thumbnail );
+		}
 
 		$manager->output();
 	}

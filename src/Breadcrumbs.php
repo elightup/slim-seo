@@ -3,9 +3,8 @@ namespace SlimSEO;
 
 class Breadcrumbs {
 	private $args;
-	private $links    = [];
-	private $current  = '';
-	private $rendered = false;
+	private $links   = [];
+	private $current = '';
 
 	public function __construct() {
 		$this->args = array(
@@ -28,17 +27,14 @@ class Breadcrumbs {
 			return '';
 		}
 
-		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s" itemscope itemtype="http://schema.org/BreadcrumbList">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
+		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
 
 		// Links.
 		$items    = [];
-		$template = '<span class="breadcrumb%s" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-			<a href="%s" itemprop="item"><span itemprop="name">%s</span></a>
-			<meta itemprop="position" content="%d">
-			</span>';
+		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $this->links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
-			$items[] = sprintf( $template, $class, esc_url( $item['url'] ), esc_html( wp_strip_all_tags( $item['text'] ) ), $i + 1 );
+			$items[] = sprintf( $template, esc_url( $item['url'] ), $class, esc_html( wp_strip_all_tags( $item['text'] ) ), $i + 1 );
 		}
 
 		// Current page.
@@ -49,14 +45,7 @@ class Breadcrumbs {
 		$output .= implode( " <span class='breadcrumbs__separator'>{$this->args['separator']}</span> ", $items );
 		$output .= '</nav>';
 
-		// Do not output JSON-LD in the footer.
-		$this->rendered = true;
-
 		return $output;
-	}
-
-	public function is_rendered() {
-		return $this->rendered;
 	}
 
 	public function get_links() {
