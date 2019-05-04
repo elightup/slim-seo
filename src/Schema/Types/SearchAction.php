@@ -2,7 +2,7 @@
 namespace SlimSEO\Schema\Types;
 
 class SearchAction extends Base {
-	public function generate_schema() {
+	public function generate() {
 		return [
 			'@type'       => 'SearchAction',
 			'@id'         => $this->id,

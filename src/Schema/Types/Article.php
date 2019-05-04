@@ -4,7 +4,7 @@ namespace SlimSEO\Schema\Types;
 class Article extends Base {
 	protected $post;
 
-	public function generate_schema() {
+	public function generate() {
 		$schema = [
 			'@type'         => 'Article',
 			'@id'           => $this->id,
@@ -14,10 +14,6 @@ class Article extends Base {
 			'dateModified'  => date( 'c', strtotime( get_queried_object()->post_modified_gmt ) ),
 			'commentCount'  => (int) $this->post->comment_count,
 		];
-
-		if ( $this->parent ) {
-			$schema['mainEntityOfPage'] = $this->parent->id;
-		}
 
 		$content = do_shortcode( $this->post->post_content );
 		$content = wp_strip_all_tags( $content );

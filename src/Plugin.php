@@ -34,7 +34,7 @@ class Plugin {
 		$manager->add_entity( $website );
 
 		$search_action = new Schema\Types\SearchAction();
-		$website->add_child( 'potentialAction', $search_action );
+		$website->add_reference( 'potentialAction', $search_action );
 		$manager->add_entity( $search_action );
 
 		$breadcrumbs = new Schema\Types\Breadcrumbs;
@@ -44,34 +44,44 @@ class Plugin {
 		$webpage = new Schema\Types\WebPage;
 		$webpage->title = $this->title;
 		$webpage->description = $this->description;
-		$webpage->set_parent( $website );
-		$webpage->add_child( 'breadcrumb', $breadcrumbs );
+		$webpage->add_reference( 'isPartOf', $website );
+		$webpage->add_reference( 'breadcrumb', $breadcrumbs );
 		$manager->add_entity( $webpage );
 
 		if ( is_singular() && has_post_thumbnail() ) {
 			$thumbnail = new Schema\Types\ImageObject( null, 'thumbnail' );
 			$thumbnail->image_id = get_post_thumbnail_id();
 
-			$webpage->add_child( 'primaryImageOfPage', $thumbnail );
-			$webpage->add_child( 'image', $thumbnail );
+			$webpage->add_reference( 'primaryImageOfPage', $thumbnail );
+			$webpage->add_reference( 'image', $thumbnail );
 			$manager->add_entity( $thumbnail );
 		}
 
 		if ( is_single() ) {
 			$article = new Schema\Types\Article();
 			$article->post = get_queried_object();
-			$article->set_parent( $webpage );
+			$article->add_reference( 'isPartOf', $webpage );
+			$article->add_property( 'mainEntityOfPage', $webpage->id );
 			$manager->add_entity( $article );
 
 			$author = new Schema\Types\Person( null, 'author' );
-			$author->user = wp_get_current_user();
-			$manager->add_entity( $author );
+			$author->user = get_userdata( get_the_author_meta( 'ID' ) );
 
-			$article->add_child( 'author', $author );
-			$article->add_child( 'publisher', $author );
+			$author_image = new Schema\Types\ImageObject();
+			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
+			$author_image->add_property( 'width', 96 );
+			$author_image->add_property( 'height', 96 );
+			$author_image->add_property( 'caption', $author->user->display_name );
+
+			$author->add_reference( 'image', $author_image );
+
+			$manager->add_entity( $author );
+			$manager->add_entity( $author_image );
+
+			$article->add_reference( 'author', $author );
 
 			if ( has_post_thumbnail() ) {
-				$article->add_child( 'image', $thumbnail );
+				$article->add_reference( 'image', $thumbnail );
 			}
 		}
 

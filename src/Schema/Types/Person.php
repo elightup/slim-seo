@@ -4,7 +4,7 @@ namespace SlimSEO\Schema\Types;
 class Person extends Base {
 	protected $user;
 
-	public function generate_schema() {
+	public function generate() {
 		$schema = [
 			'@type'      => 'Person',
 			'@id'        => $this->id,

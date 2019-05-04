@@ -5,8 +5,8 @@ abstract class Base {
 	protected $url;
 	protected $context;
 	protected $id;
-	protected $parent;
-	protected $children = [];
+	protected $properties = [];
+	protected $references = [];
 
 	public function __construct( $url = null, $context = null ) {
 		$this->url     = $url ?: $this->get_current_url();
@@ -45,25 +45,21 @@ abstract class Base {
 		return strtolower( $type );
 	}
 
-	public function set_parent( $entity ) {
+	public function add_reference( $name, $entity ) {
 		if ( $entity->is_active() ) {
-			$this->parent = $entity;
+			$this->references[ $name ] = $entity;
 		}
 	}
 
-	public function add_child( $name, $entity ) {
-		if ( $entity->is_active() ) {
-			$this->children[ $name ] = $entity;
-		}
+	public function add_property( $name, $value ) {
+		$this->properties[ $name ] = $value;
 	}
 
 	public function get_schema() {
-		$schema = $this->generate_schema();
+		$schema = $this->generate();
+		$schema = array_merge( $schema, $this->properties );
 
-		if ( null !== $this->parent ) {
-			$schema['isPartOf'] = [ '@id' => $this->parent->id ];
-		}
-		foreach ( $this->children as $name => $entity ) {
+		foreach ( $this->references as $name => $entity ) {
 			$schema[ $name ] = [ '@id' => $entity->id ];
 		}
 
@@ -73,5 +69,5 @@ abstract class Base {
 		return $schema;
 	}
 
-	abstract function generate_schema();
+	abstract function generate();
 }

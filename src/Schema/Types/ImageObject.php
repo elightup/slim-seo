@@ -6,21 +6,30 @@ class ImageObject extends Base {
 	protected $image;
 
 	public function is_active() {
-		if ( ! parent::is_active() ) {
-			return false;
+		$result = parent::is_active();
+		if ( ! $this->image_id || ! $result ) {
+			return $result;
 		}
 
 		$this->image = get_post( $this->image_id );
 		return null !== $this->image && get_attached_file( $this->image_id );
 	}
 
-	public function generate_schema() {
+	public function generate() {
 		$schema = [
-			'@type'   => 'ImageObject',
-			'@id'     => $this->id,
-			'caption' => $this->image->post_excerpt,
-			'url'     => wp_get_attachment_url( $this->image_id ),
+			'@type' => 'ImageObject',
+			'@id'   => $this->id,
 		];
+		if ( $this->image_id ) {
+			$info = wp_get_attachment_image_src( $this->image_id, 'full' );
+			$schema = array_merge( $schema, [
+				'caption' => $this->image->post_excerpt,
+				'url'     => $info[0],
+				'width'   => $info[1],
+				'height'  => $info[2],
+			] );
+		}
+
 		return $schema;
 	}
 }

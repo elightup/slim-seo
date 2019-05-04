@@ -14,7 +14,7 @@ class Breadcrumbs extends Base {
 		return ! empty( $links );
 	}
 
-	public function generate_schema() {
+	public function generate() {
 		$links = $this->source->get_links();
 		$list  = [];
 		foreach ( $links as $i => $link ) {
