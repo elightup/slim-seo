@@ -3,8 +3,9 @@ namespace SlimSEO;
 
 class Breadcrumbs {
 	private $args;
-	private $links   = [];
-	private $current = '';
+	private $links     = [];
+	private $current   = '';
+	private $is_parsed = false;
 
 	public function __construct() {
 		$this->args = array(
@@ -53,6 +54,10 @@ class Breadcrumbs {
 	}
 
 	public function parse() {
+		if ( $this->is_parsed ) {
+			return;
+		}
+
 		if ( is_front_page() ) {
 			return;
 		}
@@ -78,6 +83,8 @@ class Breadcrumbs {
 		} elseif ( is_date() ) {
 			$this->add_date_links();
 		}
+
+		$this->is_parsed = true;
 	}
 
 	private function add_singular() {
@@ -102,7 +109,8 @@ class Breadcrumbs {
 		}
 
 		// Parse only first term and add its ancestors.
-		$term = current( $terms );
+		$term = reset( $terms );
+		$this->add_link( get_term_link( $term ), $term->name );
 		$this->add_term_ancestors( $term );
 	}
 
