@@ -24,6 +24,8 @@ class Plugin {
 		$this->robots = new MetaTags\Robots;
 		$this->cleaner = new Cleaner;
 
+		$this->schema_disabler = new Schema\Disabler;
+
 		add_action( 'wp_footer', [ $this, 'register_schema_services' ] );
 	}
 
