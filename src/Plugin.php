@@ -23,6 +23,7 @@ class Plugin {
 		$this->feed = new Feed;
 		$this->robots = new MetaTags\Robots;
 		$this->cleaner = new Cleaner;
+		$this->woocommerce = new WooCommerce;
 
 		$this->schema_provider = new Schema\Provider( $this->title, $this->description, $this->breadcrumbs );
 		$this->schema_disabler = new Schema\Disabler;
