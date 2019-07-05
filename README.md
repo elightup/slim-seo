@@ -7,7 +7,7 @@ Currently there are many SEO plugins for WordPress in the market. But these plug
 
 **So how can an ordinary user use an SEO plugin?**
 
-At [eLightUp](https://elightup.com), we believe that SEO should be an integrated part of WordPress, where users don't need or need very little effort to configure for SEO. The main reason is that not everyone understands the terms of SEO and how to configure them optimally.
+SEO should be an integrated part of WordPress, where users don't need or need very little effort to configure for SEO. The main reason is that not everyone understands the terms of SEO and how to configure them optimally.
 
 So, we made [**Slim SEO**](https://wpslimseo.com).
 

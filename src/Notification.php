@@ -58,6 +58,7 @@ class Notification {
 			'permalink',
 			'visibility',
 			'rss',
+			'ssl',
 		];
 		foreach ( $sections as $section ) {
 			$getter = "get_{$section}_message";
@@ -80,6 +81,12 @@ class Notification {
 	private function get_rss_message() {
 		if ( ! get_option( 'rss_use_excerpt' ) ) {
 			$this->messages[] = sprintf( __( 'Your RSS feed shows full text. <a href="%s">Fix this &rarr;</a>', 'slim-seo' ), admin_url( 'options-reading.php' ) );
+		}
+	}
+
+	private function get_ssl_message() {
+		if ( ! is_ssl() ) {
+			$this->messages[] = sprintf( __( 'Your website does not use HTTPS. Please upgrade your host to fix this.', 'slim-seo' ), admin_url( 'options-reading.php' ) );
 		}
 	}
 }
