@@ -128,6 +128,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 2.0.3 =
+- Fixed: Fix no error notice on WooCommerce login page.
+- Added: Add SSL warning.
+
 = 2.0.2 =
 - Improved: Disable schema markup for Beaver Theme and Genesis.
 
