@@ -35,6 +35,21 @@ class Provider {
 		$webpage->add_reference( 'breadcrumb', $breadcrumbs );
 		$manager->add_entity( $webpage );
 
+		$organization = new Types\Organization( home_url( '/' ) );
+		$website->add_reference( 'publisher', $organization );
+		$manager->add_entity( $organization );
+
+		if ( current_theme_supports( 'custom-logo' ) && has_custom_logo() ) {
+			$logo_id = get_theme_mod( 'custom_logo' );
+
+			$logo = new Types\ImageObject( null, 'logo' );
+			$logo->image_id = $logo_id;
+
+			$organization->add_reference( 'logo', $logo );
+			$organization->add_reference( 'image', $logo );
+			$manager->add_entity( $logo );
+		}
+
 		if ( is_singular() && has_post_thumbnail() ) {
 			$thumbnail = new Types\ImageObject( null, 'thumbnail' );
 			$thumbnail->image_id = get_post_thumbnail_id();
@@ -48,7 +63,7 @@ class Provider {
 			$article = new Types\Article();
 			$article->post = get_queried_object();
 			$article->add_reference( 'isPartOf', $webpage );
-			$article->add_property( 'mainEntityOfPage', $webpage->id );
+			$article->add_reference( 'mainEntityOfPage', $webpage );
 			$manager->add_entity( $article );
 
 			$author = new Types\Person( null, 'author' );
@@ -70,6 +85,8 @@ class Provider {
 			if ( has_post_thumbnail() ) {
 				$article->add_reference( 'image', $thumbnail );
 			}
+
+			$article->add_reference( 'publisher', $organization );
 		}
 
 		if ( is_author() ) {
