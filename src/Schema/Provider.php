@@ -46,9 +46,11 @@ class Provider {
 		$website->add_reference( 'publisher', $organization );
 		$manager->add_entity( $organization );
 
+		$logo_id = get_option( 'site_icon' );
 		if ( current_theme_supports( 'custom-logo' ) && has_custom_logo() ) {
 			$logo_id = get_theme_mod( 'custom_logo' );
-
+		}
+		if ( $logo_id ) {
 			$logo = new Types\ImageObject( null, 'logo' );
 			$logo->image_id = $logo_id;
 
