@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: 2.0.3
+Stable tag: 2.1.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 2.1.0 =
+- Added: Add support for AMP
+- Added: Add image sitemap
+- Added: Add Organization schema
 
 = 2.0.3 =
 - Fixed: Fix no error notice on WooCommerce login page.
