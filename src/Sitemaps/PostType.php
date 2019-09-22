@@ -3,6 +3,7 @@ namespace SlimSEO\Sitemaps;
 
 class PostType {
 	private $post_type;
+	private $page;
 
 	public static $query_args = [
 		'post_status'            => 'publish',
@@ -20,8 +21,9 @@ class PostType {
 		'posts_per_page'         => 500, // Maximum number of links in a sitemap. See https://support.google.com/webmasters/answer/75712
 	];
 
-	public function __construct( $post_type ) {
+	public function __construct( $post_type, $page = 1 ) {
 		$this->post_type = $post_type;
+		$this->page      = $page;
 	}
 
 	public function output() {
@@ -33,6 +35,7 @@ class PostType {
 			self::$query_args,
 			[
 				'post_type' => $this->post_type,
+				'paged'     => $this->page,
 			]
 		);
 		$query      = new \WP_Query( $query_args );

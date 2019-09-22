@@ -21,7 +21,9 @@ class Index {
 			PostType::$query_args,
 			[
 				'post_type'      => $post_type,
-				'posts_per_page' => 1,
+				'posts_per_page' => 500,
+				'no_found_rows'  => false,
+				'fields'         => 'ids',
 			]
 		);
 		$query      = new \WP_Query( $query_args );
@@ -29,13 +31,12 @@ class Index {
 			return;
 		}
 
-		echo "\t<sitemap>\n";
-		echo "\t\t<loc>", esc_url( home_url( "sitemap-post-type-$post_type.xml" ) ), "</loc>\n";
-
-		$last_modified = date( 'c', strtotime( $query->posts[0]->post_modified_gmt ) );
-
-		echo "\t\t<lastmod>", esc_html( $last_modified ), "</lastmod>\n";
-		echo "\t</sitemap>\n";
+		for ( $i = 1; $i <= $query->max_num_pages; $i++ ) {
+			echo "\t<sitemap>\n";
+			$index = 1 === $i ? '' : "-$i";
+			echo "\t\t<loc>", esc_url( home_url( "sitemap-post-type-$post_type$index.xml" ) ), "</loc>\n";
+			echo "\t</sitemap>\n";
+		}
 	}
 
 	private function output_taxonomy_sitemaps() {

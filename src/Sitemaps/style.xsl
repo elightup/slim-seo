@@ -84,10 +84,9 @@
 
 		<xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) &gt; 0">
 			<div class="list">
-				<table>
+				<table width="100%">
 					<tr>
-						<th width="75%">Sitemap</th>
-						<th width="25%">Last Modified</th>
+						<th width="100%">Sitemap</th>
 					</tr>
 					<xsl:for-each select="sitemap:sitemapindex/sitemap:sitemap">
 						<xsl:variable name="sitemapURL">
@@ -96,9 +95,6 @@
 						<tr>
 							<td>
 								<a href="{$sitemapURL}"><xsl:value-of select="sitemap:loc"/></a>
-							</td>
-							<td>
-								<xsl:value-of select="concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)),concat(' ', substring(sitemap:lastmod,20,6)))"/>
 							</td>
 						</tr>
 					</xsl:for-each>

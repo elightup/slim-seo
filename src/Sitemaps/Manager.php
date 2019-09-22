@@ -40,7 +40,12 @@ class Manager {
 
 		if ( 0 === strpos( $type, 'post-type-' ) ) {
 			$post_type = substr( $type, 10 );
-			$sitemap   = new PostType( $post_type );
+			$page      = 1;
+			if ( preg_match( '/(.+)-(\d)$/', $post_type, $matches ) && post_type_exists( $matches[1] ) ) {
+				$post_type = $matches[1];
+				$page      = $matches[2];
+			}
+			$sitemap = new PostType( $post_type, $page );
 			$sitemap->output();
 		}
 
