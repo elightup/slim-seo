@@ -9,8 +9,8 @@ class Article extends Base {
 			'@id'           => $this->id,
 			'url'           => $this->url,
 			'headline'      => $post->post_title,
-			'datePublished' => date( 'c', strtotime( get_queried_object()->post_date_gmt ) ),
-			'dateModified'  => date( 'c', strtotime( get_queried_object()->post_modified_gmt ) ),
+			'datePublished' => date( 'c', strtotime( $post->post_date_gmt ) ),
+			'dateModified'  => date( 'c', strtotime( $post->post_modified_gmt ) ),
 			'commentCount'  => (int) $post->comment_count,
 		];
 

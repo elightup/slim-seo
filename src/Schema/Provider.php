@@ -75,7 +75,7 @@ class Provider {
 			$manager->add_entity( $article );
 
 			$author = new Types\Person( null, 'author' );
-			$author->user = get_userdata( $article->post->post_author );
+			$author->user = get_userdata( get_queried_object()->post_author );
 
 			$author_image = new Types\ImageObject( null, 'author_image' );
 			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
