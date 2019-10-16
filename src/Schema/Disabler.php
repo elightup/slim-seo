@@ -3,12 +3,13 @@ namespace SlimSEO\Schema;
 
 class Disabler {
 	public function __construct() {
-		$this->disable_beaver_theme_schema();
+		$this->disable_beaver_builder_schema();
 
 		add_action( 'init', [ $this, 'disable_genesis_schema' ] );
 	}
 
-	private function disable_beaver_theme_schema() {
+	private function disable_beaver_builder_schema() {
+		add_filter( 'fl_builder_disable_schema', '__return_true' );
 		add_filter( 'fl_theme_disable_schema', '__return_true' );
 	}
 
