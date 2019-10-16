@@ -70,7 +70,6 @@ class Provider {
 
 		if ( is_singular( 'post' ) ) {
 			$article = new Types\Article();
-			$article->post = get_queried_object();
 			$article->add_reference( 'isPartOf', $webpage );
 			$article->add_reference( 'mainEntityOfPage', $webpage );
 			$manager->add_entity( $article );
@@ -78,7 +77,7 @@ class Provider {
 			$author = new Types\Person( null, 'author' );
 			$author->user = get_userdata( $article->post->post_author );
 
-			$author_image = new Types\ImageObject();
+			$author_image = new Types\ImageObject( null, 'author_image' );
 			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
 			$author_image->add_property( 'width', 96 );
 			$author_image->add_property( 'height', 96 );
@@ -103,7 +102,7 @@ class Provider {
 			$author->user = get_queried_object();
 			$author->add_reference( 'mainEntityOfPage', $webpage );
 
-			$author_image = new Types\ImageObject();
+			$author_image = new Types\ImageObject( null, 'author_image' );
 			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
 			$author_image->add_property( 'width', 96 );
 			$author_image->add_property( 'height', 96 );
