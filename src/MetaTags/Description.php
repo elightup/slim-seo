@@ -55,7 +55,7 @@ class Description {
 	 * @return string
 	 */
 	private function get_singular_description() {
-		$data = get_post_meta( get_the_ID(), 'slim_seo', true );
+		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			return $data['description'];
 		}

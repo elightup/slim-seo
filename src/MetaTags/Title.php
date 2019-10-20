@@ -19,7 +19,7 @@ class Title {
 	public function filter_title( $title ) {
 		$custom_title = '';
 
-		if ( is_singular() ) {
+		if ( is_home() || is_singular() ) {
 			$custom_title = $this->get_singular_title();
 		}
 		if ( is_category() || is_tag() || is_tax() ) {
@@ -33,7 +33,7 @@ class Title {
 	}
 
 	private function get_singular_title() {
-		$data = get_post_meta( get_the_ID(), 'slim_seo', true );
+		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
 		return ! empty( $data['title'] ) ? $data['title'] : null;
 	}
 

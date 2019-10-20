@@ -35,7 +35,7 @@ class Robots {
 
 		// Singular.
 		if ( is_singular() ) {
-			$data = get_post_meta( get_the_ID(), 'slim_seo', true );
+			$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
 			if ( ! empty( $data['noindex'] ) ) {
 				return false;
 			}
