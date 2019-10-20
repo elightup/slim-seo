@@ -51,13 +51,12 @@ class Description {
 
 	/**
 	 * Get description from post excerpt and fallback to post content.
-	 * Recommended length for meta description is 300 characters (~ 60 words).
 	 *
 	 * @return string
 	 */
 	private function get_singular_description() {
 		$post = get_queried_object();
-		return $post->post_excerpt ? $post->post_excerpt : wp_trim_words( $post->post_content, 60 );
+		return $post->post_excerpt ? $post->post_excerpt : $post->post_content;
 	}
 
 	private function get_term_description() {
