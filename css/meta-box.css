@@ -1,0 +1,18 @@
+.ss-field {
+	display: flex;
+}
+.ss-label {
+	width: 25%;
+}
+.ss-text {
+	flex: 1;
+}
+
+/* Styles for 'side' meta box */
+#side-sortables .ss-field {
+	flex-direction: column;
+}
+#side-sortables .ss-label {
+	width: 100%;
+	margin-bottom: 3px;
+}
