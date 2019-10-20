@@ -29,7 +29,7 @@ class Base {
 				<label for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<input type="text" id="ss-description" name="slim_seo[description]" value="<?= esc_attr( $data['description'] ); ?>">
+				<textarea id="ss-description" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
 			</div>
 		</div>
 		<div class="ss-field ss-field-checkbox">

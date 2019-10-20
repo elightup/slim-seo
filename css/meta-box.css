@@ -11,7 +11,8 @@
 .ss-input {
 	flex: 1;
 }
-.ss-input input[type="text"] {
+.ss-input input[type="text"],
+.ss-input textarea {
 	width: 100%;
 }
 
@@ -33,6 +34,7 @@
 	.ss-label {
 		width: 25%;
 		margin-bottom: 0;
+		margin-right: 10px;
 	}
 	.ss-field-checkbox .ss-label {
 		order: 0;
@@ -45,6 +47,7 @@
 	#side-sortables .ss-label {
 		width: auto;
 		margin-bottom: 3px;
+		margin-right: 0;
 	}
 	#side-sortables .ss-field-checkbox {
 		flex-direction: row;
@@ -64,19 +67,23 @@
 @media (min-width: 782px) {
 	.term-php .ss-field {
 		flex-direction: row;
-		align-items: center;
 	}
 	.term-php .ss-label {
 		box-sizing: border-box;
 		width: 210px;
 		padding: 14px 10px 14px 0;
 		margin-bottom: 0;
+		margin-right: 0;
 	}
 	.term-php .ss-input {
 		padding: 9px 10px;
 	}
-	.term-php .ss-input input[type="text"] {
+	.term-php .ss-input input[type="text"],
+	.term-php .ss-input textarea {
 		width: 95%;
+	}
+	.term-php .ss-field-checkbox {
+		align-items: center;
 	}
 	.term-php .ss-field-checkbox .ss-label {
 		order: 0;
