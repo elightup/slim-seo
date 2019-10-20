@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags\Settings;
 class Post extends Base {
 	public function __construct() {
 		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
+		add_action( 'admin_print_styles-post-new.php', [ $this, 'enqueue' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
@@ -11,7 +12,7 @@ class Post extends Base {
 	public function add_meta_box() {
 		$post_types = $this->get_post_types();
 		foreach ( $post_types as $post_type ) {
-			add_meta_box( 'slim-seo', __( 'SEO', 'slim-seo' ), [ $this, 'render' ], $post_type, 'normal', 'high' );
+			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ $this, 'render' ], $post_type, 'normal', 'high' );
 		}
 	}
 

@@ -9,7 +9,8 @@ class Plugin {
 		$this->description = new MetaTags\Description;
 		$this->opengraph = new MetaTags\OpenGraph( $this->title, $this->description );
 		$this->twitter = new MetaTags\Twitter;
-		$this->meta_settings_post = new MetaTags\Settings\Post;
+		new MetaTags\Settings\Post;
+		new MetaTags\Settings\Term;
 
 		$this->sitemap_manager = new Sitemaps\Manager;
 		$this->image_alt = new ImagesAlt;

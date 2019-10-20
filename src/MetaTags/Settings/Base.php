@@ -16,20 +16,30 @@ class Base {
 		$data = $this->get_data();
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
-		<p class="ss-field">
-			<label class="ss-label" for="ss-title"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
-			<input type="text" class="ss-text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
-		</p>
-		<p class="ss-field">
-			<label class="ss-label" for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
-			<input type="text" class="ss-text" id="ss-description" name="slim_seo[description]" value="<?= esc_attr( $data['description'] ); ?>">
-		</p>
-		<p class="ss-field">
-			<label>
-				<input type="checkbox" name="slim_seo[noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
-				<?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?>
-			</label>
-		</p>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-title"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<input type="text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
+			</div>
+		</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<input type="text" id="ss-description" name="slim_seo[description]" value="<?= esc_attr( $data['description'] ); ?>">
+			</div>
+		</div>
+		<div class="ss-field ss-field-checkbox">
+			<div class="ss-label">
+				<label for="ss-noindex"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<input type="checkbox" id="ss-noindex" name="slim_seo[noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
+			</div>
+		</div>
 		<?php
 	}
 
