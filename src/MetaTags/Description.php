@@ -55,11 +55,21 @@ class Description {
 	 * @return string
 	 */
 	private function get_singular_description() {
+		$data = get_post_meta( get_the_ID(), 'slim_seo', true );
+		if ( ! empty( $data['description'] ) ) {
+			return $data['description'];
+		}
+
 		$post = get_queried_object();
 		return $post->post_excerpt ? $post->post_excerpt : $post->post_content;
 	}
 
 	private function get_term_description() {
+		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
+		if ( ! empty( $data['description'] ) ) {
+			return $data['description'];
+		}
+
 		return get_queried_object()->description;
 	}
 }

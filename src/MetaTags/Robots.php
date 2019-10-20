@@ -33,6 +33,22 @@ class Robots {
 			return false;
 		}
 
+		// Singular.
+		if ( is_singular() ) {
+			$data = get_post_meta( get_the_ID(), 'slim_seo', true );
+			if ( ! empty( $data['noindex'] ) ) {
+				return false;
+			}
+		}
+
+		// Term.
+		if ( is_category() || is_tag() || is_tax() ) {
+			$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
+			if ( ! empty( $data['noindex'] ) ) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
