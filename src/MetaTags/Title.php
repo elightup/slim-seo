@@ -26,7 +26,10 @@ class Title {
 			$custom_title = $this->get_term_title();
 		}
 
-		return $custom_title ?: $title;
+		$title = $custom_title ?: $title;
+		$title = apply_filters( 'slim_seo_meta_title', $title );
+
+		return $title;
 	}
 
 	private function get_singular_title() {
