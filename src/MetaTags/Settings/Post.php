@@ -2,6 +2,8 @@
 namespace SlimSEO\MetaTags\Settings;
 
 class Post extends Base {
+	protected $object_type = 'post';
+
 	public function __construct() {
 		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
 		add_action( 'admin_print_styles-post-new.php', [ $this, 'enqueue' ] );
@@ -23,17 +25,7 @@ class Post extends Base {
 		return $post_types;
 	}
 
-	public function save( $post_id ) {
-		$data = $this->get_form_data();
-		if ( null !== $data ) {
-			update_post_meta( $post_id, 'slim_seo', $data );
-		}
-	}
-
-	protected function get_data() {
-		$data = get_post_meta( get_the_ID(), 'slim_seo', true );
-		$data = $data ? $data : [];
-
-		return array_merge( $this->defaults, $data );
+	protected function get_object_id() {
+		return get_the_ID();
 	}
 }

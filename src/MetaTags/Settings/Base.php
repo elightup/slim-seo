@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
 
-class Base {
+abstract class Base {
 	protected $defaults = [
 		'title'       => '',
 		'description' => '',
@@ -43,13 +43,20 @@ class Base {
 		<?php
 	}
 
-	public function get_form_data() {
+	public function save( $object_id ) {
 		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) ) {
-			return null;
+			return;
 		}
 		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : [];
 		$data = array_map( 'sanitize_text_field', $data );
 
-		return $data;
+		update_metadata( $this->object_type, $object_id, 'slim_seo', $data );
+	}
+
+	protected function get_data() {
+		$data = get_metadata( $this->object_type, $this->get_object_id(), 'slim_seo', true );
+		$data = $data ? $data : [];
+
+		return array_merge( $this->defaults, $data );
 	}
 }

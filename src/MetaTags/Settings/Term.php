@@ -2,6 +2,8 @@
 namespace SlimSEO\MetaTags\Settings;
 
 class Term extends Base {
+	protected $object_type = 'post';
+
 	public function __construct() {
 		add_action( 'admin_print_styles-term.php', [ $this, 'enqueue' ] );
 
@@ -16,18 +18,7 @@ class Term extends Base {
 		return get_taxonomies( [ 'public' => true ] );
 	}
 
-	public function save( $term_id ) {
-		$data = $this->get_form_data();
-		if ( null !== $data ) {
-			update_term_meta( $term_id, 'slim_seo', $data );
-		}
-	}
-
-	protected function get_data() {
-		$term_id = filter_input( INPUT_GET, 'tag_ID', FILTER_SANITIZE_NUMBER_INT );
-		$data    = get_term_meta( $term_id, 'slim_seo', true );
-		$data    = $data ? $data : [];
-
-		return array_merge( $this->defaults, $data );
+	protected function get_object_id() {
+		return filter_input( INPUT_GET, 'tag_ID', FILTER_SANITIZE_NUMBER_INT );
 	}
 }
