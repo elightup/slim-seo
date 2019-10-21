@@ -17,6 +17,7 @@ class Plugin {
 		$this->breadcrumbs = new Breadcrumbs;
 
 		if ( is_admin() ) {
+			new Settings;
 			$this->notification = new Notification;
 			return;
 		}
@@ -29,6 +30,7 @@ class Plugin {
 
 		$this->schema_provider = new Schema\Provider( $this->title, $this->description, $this->breadcrumbs );
 		$this->schema_disabler = new Schema\Disabler;
+		new Code;
 	}
 
 	public function __get( $name ) {
