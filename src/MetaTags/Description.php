@@ -40,7 +40,7 @@ class Description {
 
 	private function normalize( $description ) {
 		$description = Helper::normalize( $description );
-		$description = wp_trim_words( $description, 60 ); // Recommended length for meta description is 300 characters (~ 60 words).
+		$description = wp_trim_words( $description, 32 ); // Recommended length for meta description is 160 characters (~ 32 words).
 
 		return $description;
 	}
