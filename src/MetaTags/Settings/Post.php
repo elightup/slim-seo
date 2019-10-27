@@ -2,9 +2,8 @@
 namespace SlimSEO\MetaTags\Settings;
 
 class Post extends Base {
-	protected $object_type = 'post';
-
 	public function __construct() {
+		$this->object_type = 'post';
 		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
 		add_action( 'admin_print_styles-post-new.php', [ $this, 'enqueue' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );

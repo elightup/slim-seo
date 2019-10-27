@@ -59,7 +59,7 @@
 /* Counter */
 .ss-count {
 	margin-top: -1px;
-	background-color: #f7f7f7;
+	background: #f7f7f7;
 	border: 1px solid #e5e5e5;
 	padding: 2px 5px;
 	font-size: 12px;
@@ -70,6 +70,12 @@
 .term-php .ss-label {
 	font-weight: bold;
 	font-size: 14px;
+}
+.term-php .ss-count {
+	background: #e5e5e5;
+	border-color: #ddd;
+	width: 95%;
+	box-sizing: border-box;
 }
 
 @media (min-width: 782px) {

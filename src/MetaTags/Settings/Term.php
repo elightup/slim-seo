@@ -2,9 +2,10 @@
 namespace SlimSEO\MetaTags\Settings;
 
 class Term extends Base {
-	protected $object_type = 'post';
-
 	public function __construct() {
+		$this->object_type = 'term';
+		$this->title       = __( 'Search Engine Optimization', 'slim-seo' );
+
 		add_action( 'admin_print_styles-term.php', [ $this, 'enqueue' ] );
 
 		$taxonomies = $this->get_taxonomies();

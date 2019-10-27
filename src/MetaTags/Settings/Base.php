@@ -2,6 +2,8 @@
 namespace SlimSEO\MetaTags\Settings;
 
 abstract class Base {
+	protected $object_type;
+	protected $title;
 	protected $defaults = [
 		'title'       => '',
 		'description' => '',
@@ -17,6 +19,11 @@ abstract class Base {
 		$data = $this->get_data();
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
+
+		<?php if ( $this->title ) : ?>
+			<h2><?= esc_html( $this->title ); ?></h2>
+		<?php endif; ?>
+
 		<div class="ss-field">
 			<div class="ss-label">
 				<label for="ss-title"><?php esc_html_e( 'Custom meta title', 'slim-seo' ); ?></label>
