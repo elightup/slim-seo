@@ -10,6 +10,7 @@ abstract class Base {
 
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], '3.0.0' );
+		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [], '3.0.0', true );
 	}
 
 	public function render() {
@@ -21,7 +22,12 @@ abstract class Base {
 				<label for="ss-title"><?php esc_html_e( 'Custom meta title', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<input type="text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
+				<input type="text" id="ss-title" class="ss-limit" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
+				<div class="ss-count">
+					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
+					<span class="ss-number">0</span>.
+					<?php esc_html_e( 'Maximum recommended length: 60 characters. ', 'slim-seo' ); ?>
+				</div>
 			</div>
 		</div>
 		<div class="ss-field">
@@ -29,7 +35,12 @@ abstract class Base {
 				<label for="ss-description"><?php esc_html_e( 'Custom meta description', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<textarea id="ss-description" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
+				<textarea id="ss-description" class="ss-limit" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
+				<div class="ss-count">
+					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
+					<span class="ss-number">0</span>.
+					<?php esc_html_e( 'Maximum recommended length: 160 characters. ', 'slim-seo' ); ?>
+				</div>
 			</div>
 		</div>
 		<div class="ss-field ss-field-checkbox">

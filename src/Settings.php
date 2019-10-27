@@ -8,8 +8,8 @@ class Settings {
 
 	public function add_menu() {
 		$page_hook = add_options_page(
-			__( 'Slim SEO', 'slim-seo' ),
-			__( 'Slim SEO', 'slim-seo' ),
+			__( 'SEO', 'slim-seo' ),
+			__( 'SEO', 'slim-seo' ),
 			'manage_options',
 			'slim-seo',
 			[ $this, 'render' ]
