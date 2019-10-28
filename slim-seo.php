@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
+define( 'SLIM_SEO_VER', '3.0.1' );
 
 require __DIR__ . '/vendor/autoload.php';
 
