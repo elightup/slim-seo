@@ -13,6 +13,9 @@ abstract class Base {
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [], SLIM_SEO_VER, true );
+		wp_localize_script( 'slim-seo-meta-box', 'ss', [
+			'site' => ['title' => get_bloginfo( 'name' )],
+		] );
 	}
 
 	public function render() {
