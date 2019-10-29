@@ -1,53 +1,75 @@
-( function ( window, document, ss ) {
+( function ( window, document, wp, ss ) {
 	function isBlockEditor() {
 		return document.body.classList.contains( 'block-editor-page' );
 	}
 
-	function stripHtml( string ) {
-		return string.replace( /<[^>]*>?/gm, '' );
+	function normalize( string ) {
+		return string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
+	}
+
+	class Input {
+		constructor( selector ) {
+			this.el = document.querySelector( selector );
+		}
+		getValue() {
+			return normalize( this.el.value );
+		}
+		addEventListener( callback ) {
+			this.el.addEventListener( 'input', callback );
+		}
+	}
+
+	class PostTitleInput extends Input {
+		getValue() {
+			var value = isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.getValue();
+			return value + ' - ' + ss.site.title;
+		}
+		addEventListener( callback ) {
+			isBlockEditor() ? wp.data.subscribe( callback ) : super.addEventListener( callback );
+		}
+	}
+
+	class PostExcerptInput extends Input {
+		getValue() {
+			return isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) ) : super.getValue();
+		}
+		addEventListener( callback ) {
+			isBlockEditor() ? wp.data.subscribe( callback ) : super.addEventListener( callback );
+		}
+	}
+
+	class PostContentInput extends Input {
+		getValue() {
+			return isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostContent() ) : super.getValue();
+		}
+		addEventListener( callback ) {
+			isBlockEditor() ? wp.data.subscribe( callback ) : super.addEventListener( callback );
+		}
 	}
 
 	class Field {
-		constructor( selector, ref, pattern ) {
-			this.el = document.querySelector( selector );
-			this.ref = document.querySelector( ref );
-			this.pattern = pattern;
+		constructor( input, ref ) {
+			this.input = input;
+			this.ref   = ref;
 
-			this.init();
+			this.updateCounter = this.updateCounter.bind( this );
+			this.updatePreview = this.updatePreview.bind( this );
 		}
-
-		getGeneratedValue() {
-			var value = '';
-			if ( ! isBlockEditor() ) {
-				value = this.ref.value;
-			}
-
-			return this.normalize( value );
-		}
-
-		normalize( value ) {
-			value = stripHtml( value );
-			value = this.pattern.replace( '{#}', value ).replace( '{site.title}', ss.site.title );
-			return value;
-		}
-
 		updatePreview() {
-			this.el.placeholder = this.getGeneratedValue();
+			this.input.el.placeholder = this.ref.getValue();
 		}
-
 		updateCounter() {
-			var value = this.el.value ? this.el.value : this.getGeneratedValue();
-			this.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
-		}
-
-		listenToChange() {
-			this.el.addEventListener( 'input', this.updateCounter.bind( this ) );
-			if ( ! isBlockEditor() ) {
-				this.ref.addEventListener( 'input', this.updatePreview.bind( this ) );
-				this.ref.addEventListener( 'input', this.updateCounter.bind( this ) );
+			var value = this.input.getValue();
+			if ( ! value ) {
+				value = this.ref.getValue();
 			}
+			this.input.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
 		}
-
+		listenToChange() {
+			this.input.addEventListener( this.updateCounter );
+			this.ref.addEventListener( this.updateCounter );
+			this.ref.addEventListener( this.updatePreview );
+		}
 		init() {
 			this.updatePreview();
 			this.updateCounter();
@@ -55,71 +77,50 @@
 		}
 	}
 
-	class PostDescription extends Field {
-		constructor( selector, ref, ref2, pattern ) {
-			super( selector, ref, pattern );
-			this.ref2 = document.querySelector( ref2 );
+	class PostDescriptionField extends Field {
+		constructor( input, ref, ref2 ) {
+			super( input, ref );
+			this.ref2 = ref2;
 		}
-
-		getGeneratedValue() {
-			if ( isBlockEditor() ) {
-				return '';
-			}
-			var value = stripHtml( this.ref.value );
+		updatePreview() {
+			var value = this.ref.getValue();
 			if ( ! value ) {
-				console.log( this.ref2 );
-				value = this.normalize( this.ref2.value );
+				value = this.ref2.getValue().substring( 0, 160 ); // Only truncate for post content.
 			}
-
-			return value;
+			this.input.el.placeholder = value;
 		}
-
-		normalize( value ) {
-			value = stripHtml( value );
-			value = this.pattern.replace( '{#}', value );
-			value = value.replace( /\s{2,}/, ' ' ); // Remove extra white spaces.
-			value = value.substring( 0, 160 );
-
-			return value;
+		updateCounter() {
+			var value = this.input.getValue();
+			if ( ! value ) {
+				value = this.ref.getValue();
+			}
+			if ( ! value ) {
+				value = this.ref2.getValue().substring( 0, 160 ); // Only truncate for post content.
+			}
+			this.input.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
 		}
-
 		listenToChange() {
-			this.el.addEventListener( 'input', this.updateCounter.bind( this ) );
-			if ( isBlockEditor() ) {
-				return;
-			}
-			this.ref.addEventListener( 'input', this.updatePreview.bind( this ) );
-			this.ref.addEventListener( 'input', this.updateCounter.bind( this ) );
-			this.ref2.addEventListener( 'input', this.updatePreview.bind( this ) );
-			this.ref2.addEventListener( 'input', this.updateCounter.bind( this ) );
-		}
-
-		init() {
-			super.init();
-
-			if ( ! window.tinymce ) {
-				console.log( 'No editor' );
-				return;
-			}
-
-			var editor = tinymce.get( 'content' );
-			console.info( editor );
-
-			editor.on( 'keyup change', function() {
-				editor.save();
-			} );
+			this.input.addEventListener( this.updateCounter );
+			this.ref.addEventListener( this.updateCounter );
+			this.ref.addEventListener( this.updatePreview );
+			this.ref2.addEventListener( this.updateCounter );
+			this.ref2.addEventListener( this.updatePreview );
 		}
 	}
 
 	// Post.
 	if ( document.body.classList.contains( 'post-new-php' ) || document.body.classList.contains( 'post-php' ) ) {
-		new Field( '#ss-title', '#title', '{#} - {site.title}' );
-		new PostDescription( '#ss-description', '#excerpt', '#content', '{#}' );
+		var postTitle = new Field( new Input( '#ss-title' ), new PostTitleInput( '#title' ) );
+		var postDescription = new PostDescriptionField( new Input( '#ss-description' ), new PostExcerptInput( '#excerpt' ), new PostContentInput( '#content' ) );
+		postTitle.init();
+		postDescription.init();
 	}
 
 	// Term.
 	if ( document.body.classList.contains( 'term-php' ) ) {
-		new Field( '#ss-title', '#name', '{#} - {site.title}' );
-		new Field( '#ss-description', '#description', '{#}' );
+		var termTitle = new Field( new Input( '#ss-title' ), new Input( '#name' ) );
+		var termDescription = new Field( new Input( '#ss-description' ), new Input( '#description' ) );
+		termTitle.init();
+		termDescription.init();
 	}
-} )( window, document, ss );
+} )( window, document, wp, ss );
