@@ -29,10 +29,10 @@ abstract class Base {
 
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-title"><?php esc_html_e( 'Custom meta title', 'slim-seo' ); ?></label>
+				<label for="ss-title"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<input type="text" id="ss-title" class="ss-limit" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
+				<input type="text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
 				<div class="ss-count">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
 					<span class="ss-number">0</span>.
@@ -42,10 +42,10 @@ abstract class Base {
 		</div>
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-description"><?php esc_html_e( 'Custom meta description', 'slim-seo' ); ?></label>
+				<label for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<textarea id="ss-description" class="ss-limit" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
+				<textarea id="ss-description" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
 				<div class="ss-count">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
 					<span class="ss-number">0</span>.
