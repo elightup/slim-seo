@@ -1,4 +1,4 @@
-( function ( window, document, wp, $, _, ss ) {
+( function ( window, document, wp, $, ss ) {
 	var contentEditor;
 
 	function isBlockEditor() {
@@ -143,4 +143,4 @@
 		termTitle.init();
 		termDescription.init();
 	}
-} )( window, document, wp, jQuery, _, ss );
+} )( window, document, wp, jQuery, ss );
