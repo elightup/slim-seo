@@ -1,4 +1,6 @@
-( function ( window, document, wp, ss ) {
+( function ( window, document, wp, $, _, ss ) {
+	var contentEditor;
+
 	function isBlockEditor() {
 		return document.body.classList.contains( 'block-editor-page' );
 	}
@@ -40,10 +42,25 @@
 
 	class PostContentInput extends Input {
 		getValue() {
-			return isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostContent() ) : super.getValue();
+			if ( isBlockEditor() ) {
+				return normalize( wp.data.select( 'core/editor' ).getEditedPostContent() );
+			}
+			return contentEditor && ! contentEditor.isHidden() ? normalize( contentEditor.getContent() ) : super.getValue();
 		}
 		addEventListener( callback ) {
-			isBlockEditor() ? wp.data.subscribe( callback ) : super.addEventListener( callback );
+			if ( isBlockEditor() ) {
+				wp.data.subscribe( callback );
+				return;
+			}
+			super.addEventListener( callback );
+
+			$( document ).on( 'tinymce-editor-init', function( event, editor ) {
+				if ( editor.id !== 'content' ) {
+					return;
+				}
+				contentEditor = editor;
+				editor.on( 'input', callback );
+			} );
 		}
 	}
 
@@ -52,8 +69,8 @@
 			this.input = input;
 			this.ref   = ref;
 
-			this.updateCounter = this.updateCounter.bind( this );
-			this.updatePreview = this.updatePreview.bind( this );
+			this.updateCounter = _.debounce( this.updateCounter.bind( this ), 200 );
+			this.updatePreview = _.debounce( this.updatePreview.bind( this ), 200 );
 		}
 		updatePreview() {
 			this.input.el.placeholder = this.ref.getValue();
@@ -123,4 +140,4 @@
 		termTitle.init();
 		termDescription.init();
 	}
-} )( window, document, wp, ss );
+} )( window, document, wp, jQuery, _, ss );
