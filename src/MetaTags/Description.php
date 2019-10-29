@@ -2,6 +2,8 @@
 namespace SlimSEO\MetaTags;
 
 class Description {
+	private $is_manual = false;
+
 	public function __construct() {
 		add_action( 'init', [ $this, 'add_excerpt_to_pages' ] );
 		add_action( 'wp_head', [ $this, 'output' ] );
@@ -40,9 +42,11 @@ class Description {
 
 	private function normalize( $description ) {
 		$description = Helper::normalize( $description );
-		$description = wp_trim_words( $description, 32 ); // Recommended length for meta description is 160 characters (~ 32 words).
+		return $this->is_manual ? $description : $this->truncate( $description );
+	}
 
-		return $description;
+	private function truncate( $string ) {
+		return function_exists( 'mb_substr' ) ? mb_substr( $string, 0, 160 ) : substr( $string, 0, 160 );
 	}
 
 	private function get_home_description() {
@@ -57,6 +61,7 @@ class Description {
 	private function get_singular_description() {
 		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
+			$this->is_manual = true;
 			return $data['description'];
 		}
 
@@ -67,6 +72,7 @@ class Description {
 	private function get_term_description() {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
+			$this->is_manual = true;
 			return $data['description'];
 		}
 
