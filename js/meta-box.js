@@ -12,10 +12,10 @@
 			this.el = document.querySelector( selector );
 		}
 		getValue() {
-			return normalize( this.el.value );
+			return this.el ? normalize( this.el.value ) : '';
 		}
 		addEventListener( callback ) {
-			this.el.addEventListener( 'input', callback );
+			this.el && this.el.addEventListener( 'input', callback );
 		}
 	}
 
