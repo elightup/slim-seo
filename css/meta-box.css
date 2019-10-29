@@ -64,6 +64,20 @@
 	padding: 2px 5px;
 	font-size: 12px;
 }
+.ss-count:before {
+	display: inline-block;
+	font: normal 14px/1 dashicons;
+	position: relative;
+	top: 2px;
+}
+.ss-success:before {
+	content: "\f12a";
+	color: #70d028;
+}
+.ss-warning:before {
+	content: "\f534";
+	color: #f56e28;
+}
 
 
 /* For terms */

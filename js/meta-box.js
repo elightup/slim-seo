@@ -65,9 +65,11 @@
 	}
 
 	class Field {
-		constructor( input, ref ) {
+		constructor( input, ref, min, max ) {
 			this.input = input;
 			this.ref   = ref;
+			this.min = min;
+			this.max = max;
 
 			this.updateCounter = _.debounce( this.updateCounter.bind( this ), 200 );
 			this.updatePreview = _.debounce( this.updatePreview.bind( this ), 200 );
@@ -76,11 +78,14 @@
 			this.input.el.placeholder = this.ref.getValue();
 		}
 		updateCounter() {
-			var value = this.input.getValue();
-			if ( ! value ) {
-				value = this.ref.getValue();
-			}
+			var value = this.input.getValue() || this.ref.getValue();
 			this.input.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
+			this.updateStatus( value );
+		}
+		updateStatus( value ) {
+			var isGood = value && value.length >= this.min && value.length <= this.max;
+			this.input.el.nextElementSibling.classList.remove( 'ss-success', 'ss-warning' );
+			this.input.el.nextElementSibling.classList.add( isGood ? 'ss-success' : 'ss-warning' );
 		}
 		listenToChange() {
 			this.input.addEventListener( this.updateCounter );
@@ -95,26 +100,18 @@
 	}
 
 	class PostDescriptionField extends Field {
-		constructor( input, ref, ref2 ) {
-			super( input, ref );
+		constructor( input, ref, ref2, min, max ) {
+			super( input, ref, min, max );
 			this.ref2 = ref2;
 		}
 		updatePreview() {
-			var value = this.ref.getValue();
-			if ( ! value ) {
-				value = this.ref2.getValue().substring( 0, 160 ); // Only truncate for post content.
-			}
+			var value = this.ref.getValue() || this.ref2.getValue().substring( 0, this.max ); // Only truncate for post content.
 			this.input.el.placeholder = value;
 		}
 		updateCounter() {
-			var value = this.input.getValue();
-			if ( ! value ) {
-				value = this.ref.getValue();
-			}
-			if ( ! value ) {
-				value = this.ref2.getValue().substring( 0, 160 ); // Only truncate for post content.
-			}
+			var value = this.input.getValue() || this.ref.getValue() || this.ref2.getValue().substring( 0, this.max ); // Only truncate for post content.
 			this.input.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
+			this.updateStatus( value );
 		}
 		listenToChange() {
 			this.input.addEventListener( this.updateCounter );
@@ -127,16 +124,16 @@
 
 	// Post.
 	if ( document.body.classList.contains( 'post-new-php' ) || document.body.classList.contains( 'post-php' ) ) {
-		var postTitle = new Field( new Input( '#ss-title' ), new PostTitleInput( '#title' ) );
-		var postDescription = new PostDescriptionField( new Input( '#ss-description' ), new PostExcerptInput( '#excerpt' ), new PostContentInput( '#content' ) );
+		var postTitle = new Field( new Input( '#ss-title' ), new PostTitleInput( '#title' ), 0, 60 );
+		var postDescription = new PostDescriptionField( new Input( '#ss-description' ), new PostExcerptInput( '#excerpt' ), new PostContentInput( '#content' ), 50, 160 );
 		postTitle.init();
 		postDescription.init();
 	}
 
 	// Term.
 	if ( document.body.classList.contains( 'term-php' ) ) {
-		var termTitle = new Field( new Input( '#ss-title' ), new Input( '#name' ) );
-		var termDescription = new Field( new Input( '#ss-description' ), new Input( '#description' ) );
+		var termTitle = new Field( new Input( '#ss-title' ), new Input( '#name' ), 0, 60 );
+		var termDescription = new Field( new Input( '#ss-description' ), new Input( '#description' ), 50, 160 );
 		termTitle.init();
 		termDescription.init();
 	}

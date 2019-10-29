@@ -36,7 +36,7 @@ abstract class Base {
 				<div class="ss-count">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
 					<span class="ss-number">0</span>.
-					<?php esc_html_e( 'Maximum recommended length: 60 characters. ', 'slim-seo' ); ?>
+					<?php esc_html_e( 'Recommended length: ≤ 60 characters. ', 'slim-seo' ); ?>
 				</div>
 			</div>
 		</div>
@@ -49,7 +49,7 @@ abstract class Base {
 				<div class="ss-count">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
 					<span class="ss-number">0</span>.
-					<?php esc_html_e( 'Maximum recommended length: 160 characters. ', 'slim-seo' ); ?>
+					<?php esc_html_e( 'Recommended length: 50-160 characters. ', 'slim-seo' ); ?>
 				</div>
 			</div>
 		</div>
