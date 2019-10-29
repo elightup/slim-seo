@@ -71,8 +71,8 @@
 			this.min = min;
 			this.max = max;
 
-			this.updateCounter = _.debounce( this.updateCounter.bind( this ), 200 );
-			this.updatePreview = _.debounce( this.updatePreview.bind( this ), 200 );
+			this.updateCounter = this.updateCounter.bind( this );
+			this.updatePreview = this.updatePreview.bind( this );
 		}
 		updatePreview() {
 			this.input.el.placeholder = this.ref.getValue();
@@ -84,8 +84,8 @@
 		}
 		updateStatus( value ) {
 			var isGood = value && value.length >= this.min && value.length <= this.max;
-			this.input.el.nextElementSibling.classList.remove( 'ss-success', 'ss-warning' );
-			this.input.el.nextElementSibling.classList.add( isGood ? 'ss-success' : 'ss-warning' );
+			this.input.el.parentNode.previousElementSibling.classList.remove( 'ss-success', 'ss-warning' );
+			this.input.el.parentNode.previousElementSibling.classList.add( isGood ? 'ss-success' : 'ss-warning' );
 		}
 		listenToChange() {
 			this.input.addEventListener( this.updateCounter );

@@ -64,17 +64,18 @@
 	padding: 2px 5px;
 	font-size: 12px;
 }
-.ss-count:before {
+.ss-success:after,
+.ss-warning:after {
 	display: inline-block;
 	font: normal 14px/1 dashicons;
 	position: relative;
-	top: 2px;
+	top: 4px;
 }
-.ss-success:before {
+.ss-success:after {
 	content: "\f12a";
 	color: #70d028;
 }
-.ss-warning:before {
+.ss-warning:after {
 	content: "\f534";
 	color: #f56e28;
 }
