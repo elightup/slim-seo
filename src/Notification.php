@@ -16,7 +16,7 @@ class Notification {
 	}
 
 	public function enqueue() {
-		wp_enqueue_script( 'slim-seo-notification', SLIM_SEO_URL . 'js/notification.js', ['jquery'], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-notification', SLIM_SEO_URL . 'js/notification.js', [], SLIM_SEO_VER, true );
 		wp_localize_script( 'slim-seo-notification', 'SlimSEONotification', [ 'nonce' => wp_create_nonce( 'dismiss' ) ] );
 	}
 
