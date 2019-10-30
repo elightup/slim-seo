@@ -1,5 +1,5 @@
 ( function ( window, document, wp, $, ss ) {
-	var contentEditor;
+	let contentEditor;
 
 	function isBlockEditor() {
 		return document.body.classList.contains( 'block-editor-page' );
@@ -13,7 +13,7 @@
 		constructor( selector ) {
 			this.el = document.querySelector( selector );
 		}
-		getValue() {
+		get value() {
 			return this.el ? normalize( this.el.value ) : '';
 		}
 		addEventListener( callback ) {
@@ -22,8 +22,8 @@
 	}
 
 	class PostTitleInput extends Input {
-		getValue() {
-			var value = isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.getValue();
+		get value() {
+			const value = isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.value;
 			return value + ' - ' + ss.site.title;
 		}
 		addEventListener( callback ) {
@@ -32,8 +32,8 @@
 	}
 
 	class PostExcerptInput extends Input {
-		getValue() {
-			return isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) ) : super.getValue();
+		get value() {
+			return isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) ) : super.value;
 		}
 		addEventListener( callback ) {
 			isBlockEditor() ? wp.data.subscribe( callback ) : super.addEventListener( callback );
@@ -41,11 +41,11 @@
 	}
 
 	class PostContentInput extends Input {
-		getValue() {
+		get value() {
 			if ( isBlockEditor() ) {
 				return normalize( wp.data.select( 'core/editor' ).getEditedPostContent() );
 			}
-			return contentEditor && ! contentEditor.isHidden() ? normalize( contentEditor.getContent() ) : super.getValue();
+			return contentEditor && ! contentEditor.isHidden() ? normalize( contentEditor.getContent() ) : super.value;
 		}
 		addEventListener( callback ) {
 			if ( isBlockEditor() ) {
@@ -65,8 +65,8 @@
 	}
 
 	class TermTitleInput extends Input {
-		getValue() {
-			return super.getValue() + ' - ' + ss.site.title;
+		get value() {
+			return super.value + ' - ' + ss.site.title;
 		}
 	}
 
@@ -81,20 +81,20 @@
 			this.updateCounter = this.updateCounter.bind( this );
 			this.updatePreview = this.updatePreview.bind( this );
 		}
-		getRefValue() {
-			var value = this.ref.getValue();
+		get generated() {
+			const value = this.ref.value;
 			return this.truncate ? value.substring( 0, this.max ) : value;
 		}
 		updatePreview() {
-			this.input.el.placeholder = this.getRefValue();
+			this.input.el.placeholder = this.generated;
 		}
 		updateCounter() {
-			var value = this.input.getValue() || this.getRefValue();
+			const value = this.input.value || this.generated;
 			this.input.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
 			this.updateStatus( value );
 		}
 		updateStatus( value ) {
-			var isGood = value && value.length >= this.min && value.length <= this.max;
+			const isGood = value && value.length >= this.min && value.length <= this.max;
 			this.input.el.parentNode.previousElementSibling.classList.remove( 'ss-success', 'ss-warning' );
 			this.input.el.parentNode.previousElementSibling.classList.add( isGood ? 'ss-success' : 'ss-warning' );
 		}
@@ -115,14 +115,12 @@
 			super( input, ref, min, max, truncate );
 			this.ref2 = ref2;
 		}
-		getRefValue() {
-			var value = this.ref.getValue() || this.ref2.getValue();
+		get generated() {
+			const value = this.ref.value || this.ref2.value;
 			return this.truncate ? value.substring( 0, this.max ) : value;
 		}
 		addEventListener() {
-			this.input.addEventListener( this.updateCounter );
-			this.ref.addEventListener( this.updateCounter );
-			this.ref.addEventListener( this.updatePreview );
+			super.addEventListener();
 			this.ref2.addEventListener( this.updateCounter );
 			this.ref2.addEventListener( this.updatePreview );
 		}
@@ -130,16 +128,16 @@
 
 	// Post.
 	if ( document.body.classList.contains( 'post-new-php' ) || document.body.classList.contains( 'post-php' ) ) {
-		var postTitle = new Field( new Input( '#ss-title' ), new PostTitleInput( '#title' ), 0, 60 );
-		var postDescription = new PostDescriptionField( new Input( '#ss-description' ), new PostExcerptInput( '#excerpt' ), new PostContentInput( '#content' ), 50, 160, true );
+		const postTitle = new Field( new Input( '#ss-title' ), new PostTitleInput( '#title' ), 0, 60 );
+		const postDescription = new PostDescriptionField( new Input( '#ss-description' ), new PostExcerptInput( '#excerpt' ), new PostContentInput( '#content' ), 50, 160, true );
 		postTitle.init();
 		postDescription.init();
 	}
 
 	// Term.
 	if ( document.body.classList.contains( 'term-php' ) ) {
-		var termTitle = new Field( new Input( '#ss-title' ), new TermTitleInput( '#name' ), 0, 60 );
-		var termDescription = new Field( new Input( '#ss-description' ), new Input( '#description' ), 50, 160, true );
+		const termTitle = new Field( new Input( '#ss-title' ), new TermTitleInput( '#name' ), 0, 60 );
+		const termDescription = new Field( new Input( '#ss-description' ), new Input( '#description' ), 50, 160, true );
 		termTitle.init();
 		termDescription.init();
 	}
