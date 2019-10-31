@@ -93,7 +93,17 @@ class OpenGraph {
 	}
 
 	private function get_url() {
-		return is_singular() ? get_permalink() : null;
+		if ( is_singular() ) {
+			return get_permalink();
+		}
+		$queried_object = get_queried_object();
+		if ( is_category() || is_tag() || is_tax() ) {
+			return get_term_link( $queried_object );
+		}
+		if ( is_post_type_archive() ) {
+			return get_post_type_archive_link( $queried_object->name );
+		}
+		return null;
 	}
 
 	private function get_locale() {
