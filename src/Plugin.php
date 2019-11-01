@@ -2,42 +2,33 @@
 namespace SlimSEO;
 
 class Plugin {
-	private $services = [];
+	public function __construct() {
+		$title = new MetaTags\Title;
+		$description = new MetaTags\Description;
 
-	public function register_services() {
-		$this->title = new MetaTags\Title;
-		$this->description = new MetaTags\Description;
-		$this->opengraph = new MetaTags\OpenGraph( $this->title, $this->description );
-		$this->twitter = new MetaTags\Twitter;
+		new MetaTags\OpenGraph( $title, $description );
+		new MetaTags\Twitter;
 		new MetaTags\Settings\Post;
 		new MetaTags\Settings\Term;
 
-		$this->sitemap_manager = new Sitemaps\Manager;
-		$this->image_alt = new ImagesAlt;
-		$this->breadcrumbs = new Breadcrumbs;
+		new Sitemaps\Manager;
+		new ImagesAlt;
+		$breadcrumbs = new Breadcrumbs;
 
 		if ( is_admin() ) {
 			new Settings;
-			$this->notification = new Notification;
+			new Notification;
 			return;
 		}
 
-		$this->auto_redirection = new AutoRedirection;
-		$this->feed = new Feed;
-		$this->robots = new MetaTags\Robots;
-		$this->cleaner = new Cleaner;
-		$this->woocommerce = new WooCommerce;
+		new AutoRedirection;
+		new Feed;
+		new MetaTags\Robots;
+		new Cleaner;
+		new WooCommerce;
 
-		$this->schema_provider = new Schema\Provider( $this->title, $this->description, $this->breadcrumbs );
-		$this->schema_disabler = new Schema\Disabler;
+		new Schema\Provider( $title, $description, $breadcrumbs );
+		new Schema\Disabler;
 		new Code;
-	}
-
-	public function __get( $name ) {
-		return isset( $this->services[ $name ] ) ? $this->services[ $name ] : null;
-	}
-
-	public function __set( $name, $service ) {
-		$this->services[ $name ] = $service;
 	}
 }
