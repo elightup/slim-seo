@@ -8,7 +8,7 @@ abstract class Base {
 	public $properties = [];
 	public $references = [];
 
-	public function __construct( $url = null, $context = null ) {
+	public function __construct( $context = null, $url = null ) {
 		$this->url     = $url ?: $this->get_current_url();
 		$this->context = $context ?: $this->get_type();
 		$this->id      = $this->url . '#' . $this->context;
@@ -18,7 +18,7 @@ abstract class Base {
 		return apply_filters( "slim_seo_schema_{$this->context}_enable", true );
 	}
 
-	public function get_current_url() {
+	private function get_current_url() {
 		global $wp;
 
 		$url = add_query_arg( [], $wp->request );
@@ -29,7 +29,7 @@ abstract class Base {
 		return $url;
 	}
 
-	public function get_type() {
+	private function get_type() {
 		$class = get_class( $this );
 		$pos   = strrpos( $class, '\\' );
 		$type  = substr( $class, $pos + 1 );

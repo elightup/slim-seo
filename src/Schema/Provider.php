@@ -24,10 +24,10 @@ class Provider {
 	public function output() {
 		$manager = new Manager;
 
-		$website = new Types\Website( home_url( '/' ) );
+		$website = new Types\Website( null, home_url( '/' ) );
 		$manager->add_entity( $website );
 
-		$search_action = new Types\SearchAction();
+		$search_action = new Types\SearchAction;
 		$website->add_reference( 'potentialAction', $search_action );
 		$manager->add_entity( $search_action );
 
@@ -42,7 +42,7 @@ class Provider {
 		$webpage->add_reference( 'breadcrumb', $breadcrumbs );
 		$manager->add_entity( $webpage );
 
-		$organization = new Types\Organization( home_url( '/' ) );
+		$organization = new Types\Organization( null, home_url( '/' ) );
 		$website->add_reference( 'publisher', $organization );
 		$manager->add_entity( $organization );
 
@@ -51,7 +51,7 @@ class Provider {
 			$logo_id = get_theme_mod( 'custom_logo' );
 		}
 		if ( $logo_id ) {
-			$logo = new Types\ImageObject( null, 'logo' );
+			$logo = new Types\ImageObject( 'logo' );
 			$logo->image_id = $logo_id;
 
 			$organization->add_reference( 'logo', $logo );
@@ -60,7 +60,7 @@ class Provider {
 		}
 
 		if ( is_singular() && has_post_thumbnail() ) {
-			$thumbnail = new Types\ImageObject( null, 'thumbnail' );
+			$thumbnail = new Types\ImageObject( 'thumbnail' );
 			$thumbnail->image_id = get_post_thumbnail_id();
 
 			$webpage->add_reference( 'primaryImageOfPage', $thumbnail );
@@ -69,15 +69,15 @@ class Provider {
 		}
 
 		if ( is_singular( 'post' ) ) {
-			$article = new Types\Article();
+			$article = new Types\Article;
 			$article->add_reference( 'isPartOf', $webpage );
 			$article->add_reference( 'mainEntityOfPage', $webpage );
 			$manager->add_entity( $article );
 
-			$author = new Types\Person( null, 'author' );
+			$author = new Types\Person( 'author' );
 			$author->user = get_userdata( get_queried_object()->post_author );
 
-			$author_image = new Types\ImageObject( null, 'author_image' );
+			$author_image = new Types\ImageObject( 'author_image' );
 			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
 			$author_image->add_property( 'width', 96 );
 			$author_image->add_property( 'height', 96 );
@@ -98,11 +98,11 @@ class Provider {
 		}
 
 		if ( is_author() ) {
-			$author = new Types\Person( null, 'author' );
+			$author = new Types\Person( 'author' );
 			$author->user = get_queried_object();
 			$author->add_reference( 'mainEntityOfPage', $webpage );
 
-			$author_image = new Types\ImageObject( null, 'author_image' );
+			$author_image = new Types\ImageObject( 'author_image' );
 			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
 			$author_image->add_property( 'width', 96 );
 			$author_image->add_property( 'height', 96 );
