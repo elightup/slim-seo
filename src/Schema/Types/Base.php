@@ -2,24 +2,16 @@
 namespace SlimSEO\Schema\Types;
 
 abstract class Base {
-	protected $url;
-	protected $context;
-	protected $id;
-	protected $properties = [];
-	protected $references = [];
+	public $url;
+	public $context;
+	public $id;
+	public $properties = [];
+	public $references = [];
 
 	public function __construct( $url = null, $context = null ) {
 		$this->url     = $url ?: $this->get_current_url();
 		$this->context = $context ?: $this->get_type();
 		$this->id      = $this->url . '#' . $this->context;
-	}
-
-	public function __set( $name, $value ) {
-		$this->$name = $value;
-	}
-
-	public function __get( $name ) {
-		return $this->$name;
 	}
 
 	public function is_active() {

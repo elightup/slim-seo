@@ -2,8 +2,8 @@
 namespace SlimSEO\Schema\Types;
 
 class ImageObject extends Base {
-	protected $image_id;
-	protected $image;
+	public $image_id;
+	public $image;
 
 	public function is_active() {
 		$result = parent::is_active();

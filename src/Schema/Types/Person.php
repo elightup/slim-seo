@@ -2,7 +2,7 @@
 namespace SlimSEO\Schema\Types;
 
 class Person extends Base {
-	protected $user;
+	public $user;
 
 	public function generate() {
 		$schema = [

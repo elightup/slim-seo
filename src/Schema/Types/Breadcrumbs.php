@@ -2,7 +2,7 @@
 namespace SlimSEO\Schema\Types;
 
 class Breadcrumbs extends Base {
-	protected $source;
+	public $source;
 
 	public function is_active() {
 		if ( ! parent::is_active() ) {

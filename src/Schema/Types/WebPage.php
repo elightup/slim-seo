@@ -2,8 +2,8 @@
 namespace SlimSEO\Schema\Types;
 
 class WebPage extends Base {
-	protected $title;
-	protected $description;
+	public $title;
+	public $description;
 
 	public function generate() {
 		$schema = [
