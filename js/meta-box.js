@@ -23,6 +23,9 @@
 
 	class PostTitleInput extends Input {
 		get value() {
+			if ( ss.isHome ) {
+				return ss.site.title + ' - ' + ss.site.description;
+			}
 			const value = isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.value;
 			return value + ' - ' + ss.site.title;
 		}
@@ -86,10 +89,11 @@
 			return this.truncate ? value.substring( 0, this.max ) : value;
 		}
 		updatePreview() {
-			this.input.el.placeholder = this.generated;
+			this.input.el.placeholder = _.unescape( this.generated );
 		}
 		updateCounter() {
-			const value = this.input.value || this.generated;
+			let value = this.input.value || this.generated;
+			value = _.unescape( value );
 			this.input.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
 			this.updateStatus( value );
 		}

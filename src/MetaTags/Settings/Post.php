@@ -10,6 +10,11 @@ class Post extends Base {
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
 
+	protected function get_script_params() {
+		$is_home = 'page' === get_option( 'show_on_front' ) && $this->get_object_id() == get_option( 'page_on_front' );
+		return ['isHome' => $is_home];
+	}
+
 	public function add_meta_box() {
 		$post_types = $this->get_post_types();
 		foreach ( $post_types as $post_type ) {
