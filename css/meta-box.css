@@ -1,3 +1,4 @@
+/* Field */
 .ss-field {
 	display: flex;
 	flex-direction: column;
@@ -15,6 +16,28 @@
 .ss-input textarea {
 	width: 100%;
 	margin: 0;
+}
+.ss-description {
+	margin-top: -1px;
+	background: #f7f7f7;
+	border: 1px solid #e5e5e5;
+	padding: 2px 5px;
+	font-size: 12px;
+}
+
+/* Input group */
+.ss-input-group {
+	flex: 1;
+	display: flex;
+}
+.ss-input-append {
+	white-space: nowrap;
+	border: none;
+	background: #ddd;
+	cursor: pointer;
+}
+.ss-input-append:hover {
+	background: #e5e5e5;
 }
 
 /* Checkbox field */
@@ -56,14 +79,7 @@
 	}
 }
 
-/* Counter */
-.ss-count {
-	margin-top: -1px;
-	background: #f7f7f7;
-	border: 1px solid #e5e5e5;
-	padding: 2px 5px;
-	font-size: 12px;
-}
+/* Status icon */
 .ss-success:after,
 .ss-warning:after {
 	display: inline-block;
@@ -80,16 +96,44 @@
 	color: #f56e28;
 }
 
+/* Toggle */
+.ss-toggle.ss-toggle {
+	margin: 12px 0;
+	text-decoration: none;
+}
+.ss-toggle.ss-toggle:hover {
+	background: none;
+}
+.ss-toggle .dashicons {
+	font-size: 12px;
+	height: 12px;
+	width: 12px;
+	vertical-align: baseline;
+	margin-left: 3px;
+	top: 2px;
+	position: relative;
+}
+.ss-toggle-item {
+	max-height: 0;
+    overflow-y: hidden;
+	transition: max-height 0.5s ease-in-out;
+}
+.ss-toggle.ss-active + .ss-toggle-item {
+	max-height: 999px;
+}
+.ss-toggle.ss-active .dashicons:before {
+	content: "\f343";
+}
+
 
 /* For terms */
 .term-php .ss-label {
 	font-weight: 600;
 	font-size: 14px;
 }
-.term-php .ss-count {
+.term-php .ss-description {
 	background: #e5e5e5;
 	border-color: #ddd;
-	width: 95%;
 	box-sizing: border-box;
 }
 
@@ -107,7 +151,9 @@
 		padding: 9px 10px;
 	}
 	.term-php .ss-input input[type="text"],
-	.term-php .ss-input textarea {
+	.term-php .ss-input textarea,
+	.term-php .ss-description,
+	.term-php .ss-input-group {
 		width: 95%;
 	}
 	.term-php .ss-field-checkbox {

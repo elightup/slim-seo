@@ -5,9 +5,11 @@ abstract class Base {
 	protected $object_type;
 	protected $title;
 	protected $defaults = [
-		'title'       => '',
-		'description' => '',
-		'noindex'     => 0,
+		'title'          => '',
+		'description'    => '',
+		'noindex'        => 0,
+		'facebook_image' => '',
+		'twitter_image'  => '',
 	];
 
 	public function enqueue() {
@@ -18,6 +20,7 @@ abstract class Base {
 				'title'       => get_bloginfo( 'name' ),
 				'description' => get_bloginfo( 'description' ),
 			],
+			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 		];
 		$params = array_merge( $params, $this->get_script_params() );
 		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
@@ -42,9 +45,9 @@ abstract class Base {
 			</div>
 			<div class="ss-input">
 				<input type="text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
-				<div class="ss-count">
+				<div class="ss-description">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
-					<span class="ss-number">0</span>.
+					<span class="ss-counter">0</span>.
 					<?php esc_html_e( 'Recommended length: ≤ 60 characters. ', 'slim-seo' ); ?>
 				</div>
 			</div>
@@ -55,9 +58,9 @@ abstract class Base {
 			</div>
 			<div class="ss-input">
 				<textarea id="ss-description" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
-				<div class="ss-count">
+				<div class="ss-description">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
-					<span class="ss-number">0</span>.
+					<span class="ss-counter">0</span>.
 					<?php esc_html_e( 'Recommended length: 50-160 characters. ', 'slim-seo' ); ?>
 				</div>
 			</div>
@@ -68,6 +71,37 @@ abstract class Base {
 			</div>
 			<div class="ss-input">
 				<input type="checkbox" id="ss-noindex" name="slim_seo[noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
+			</div>
+		</div>
+		<button class="button-link ss-toggle"><?php esc_html_e( 'Social Settings', 'slim-seo' ); ?><span class="dashicons dashicons-arrow-down-alt2"></span></button>
+		<div class="ss-toggle-item">
+			<div class="ss-field">
+				<div class="ss-label">
+					<label for="ss-facebook-image"><?php esc_html_e( 'Facebook image', 'slim-seo' ); ?></label>
+				</div>
+				<div class="ss-input">
+					<div class="ss-input-group">
+						<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
+						<button class="ss-select-image ss-input-append"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+					</div>
+					<div class="ss-description">
+						<?php esc_html_e( 'Recommended size: 1200 x 628 pixels.', 'slim-seo' ); ?>
+					</div>
+				</div>
+			</div>
+			<div class="ss-field">
+				<div class="ss-label">
+					<label for="ss-twitter-image"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
+				</div>
+				<div class="ss-input">
+					<div class="ss-input-group">
+						<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
+						<button class="ss-select-image ss-input-append"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+					</div>
+					<div class="ss-description">
+						<?php esc_html_e( 'Recommended size: 800 x 418 pixels.', 'slim-seo' ); ?>
+					</div>
+				</div>
 			</div>
 		</div>
 		<?php
