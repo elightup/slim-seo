@@ -121,7 +121,7 @@
 					return;
 				}
 				contentEditor = editor;
-				editor.on( 'input', callback );
+				editor.on( 'input keyup', callback );
 			} );
 		}
 	}

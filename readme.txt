@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.2.4
 Requires PHP: 5.6
-Stable tag: 3.0.2
+Stable tag: 3.1.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.1.0 =
+- Added: Add image settings for social networks
 
 = 3.0.2 =
 - Added: Add live preview for meta tags
