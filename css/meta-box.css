@@ -10,6 +10,9 @@
 	margin-bottom: 3px;
 	box-sizing: border-box;
 }
+.ss-label > label {
+	font-weight: 600;
+}
 .ss-input {
 	flex: 1;
 }
@@ -19,11 +22,11 @@
 	margin: 0;
 }
 .ss-description {
-	margin-top: -1px;
-	background: #f7f7f7;
-	border: 1px solid #e5e5e5;
-	padding: 2px 5px;
 	font-size: 12px;
+	font-style: italic;
+	color: #666;
+	margin-top: 3px;
+	box-sizing: border-box;
 }
 
 /* Select image button */
@@ -88,48 +91,29 @@
 	color: #f56e28;
 }
 
-/* Toggle */
-.ss-toggle.ss-toggle {
-	margin: 12px 0;
+/* Tabs */
+.ss-tab-nav {
+	margin: 12px 0 18px;
+}
+.ss-tab-nav > .button-link {
 	text-decoration: none;
 }
-.ss-toggle.ss-toggle:hover {
-	background: none;
-}
-.ss-toggle.ss-toggle:focus {
+.ss-tab-nav > .button-link:focus {
 	box-shadow: none;
 }
-.ss-toggle .dashicons {
-	font-size: 12px;
-	height: 12px;
-	width: 12px;
-	vertical-align: baseline;
-	margin-left: 3px;
-	top: 2px;
-	position: relative;
+.ss-tab-nav .ss-active {
+	font-weight: 600;
 }
-.ss-toggle-item {
-	max-height: 0;
-    overflow-y: hidden;
-	transition: max-height 0.5s ease-in-out;
+.ss-tab {
+	display: none;
 }
-.ss-toggle.ss-active + .ss-toggle-item {
-	max-height: 999px;
+.ss-tab.ss-active {
+	display: block;
 }
-.ss-toggle.ss-active .dashicons:before {
-	content: "\f343";
-}
-
 
 /* For terms */
 .term-php .ss-label {
-	font-weight: 600;
 	font-size: 14px;
-}
-.term-php .ss-description {
-	background: #e5e5e5;
-	border-color: #ddd;
-	box-sizing: border-box;
 }
 
 @media (min-width: 782px) {

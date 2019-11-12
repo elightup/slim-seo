@@ -9,15 +9,30 @@
 		return string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
 	}
 
-	function toggle() {
+	function toggleTabs() {
+		const tabButtons = document.querySelectorAll( '.ss-tab-nav > button' );
+		const tabs = document.querySelectorAll( '.ss-tab' );
+
 		function clickHandle( e ) {
 			e.preventDefault();
-			e.target.classList.toggle( 'ss-active' );
+
+			const target = e.target.getAttribute( 'data-tab' );
+
+			tabButtons.forEach( function( button ) {
+				button.classList.remove( 'ss-active' );
+			} );
+			tabs.forEach( function( tab ) {
+				tab.classList.remove( 'ss-active' );
+				if ( tab.classList.contains( target ) ) {
+					tab.classList.add( 'ss-active' );
+				}
+			} );
+
+			e.target.classList.add( 'ss-active' );
 		}
 
-		const toggles = document.querySelectorAll( '.ss-toggle' );
-		toggles.forEach( function( toggle ) {
-			toggle.addEventListener( 'click', clickHandle );
+		tabButtons.forEach( function( button ) {
+			button.addEventListener( 'click', clickHandle );
 		} );
 	}
 
@@ -43,7 +58,7 @@
 			// Handle selection.
 			frame.on( 'select', function () {
 				const url = frame.state().get( 'selection' ).first().toJSON().url;
-				e.target.previousElementSibling.previousElementSibling.value = url;
+				e.target.previousElementSibling.value = url;
 			} );
 		}
 
@@ -174,7 +189,7 @@
 		}
 	}
 
-	toggle();
+	toggleTabs();
 	openMediaPopup();
 
 	// Post.
