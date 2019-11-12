@@ -80,13 +80,11 @@ abstract class Base {
 					<label for="ss-facebook-image"><?php esc_html_e( 'Facebook image', 'slim-seo' ); ?></label>
 				</div>
 				<div class="ss-input">
-					<div class="ss-input-group">
-						<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
-						<button class="ss-select-image ss-input-append"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
-					</div>
+					<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
 					<div class="ss-description">
 						<?php esc_html_e( 'Recommended size: 1200 x 628 pixels.', 'slim-seo' ); ?>
 					</div>
+					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 			</div>
 			<div class="ss-field">
@@ -94,13 +92,11 @@ abstract class Base {
 					<label for="ss-twitter-image"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
 				</div>
 				<div class="ss-input">
-					<div class="ss-input-group">
-						<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
-						<button class="ss-select-image ss-input-append"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
-					</div>
+					<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
 					<div class="ss-description">
 						<?php esc_html_e( 'Recommended size: 800 x 418 pixels.', 'slim-seo' ); ?>
 					</div>
+					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 			</div>
 		</div>

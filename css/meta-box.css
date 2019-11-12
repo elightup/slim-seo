@@ -8,6 +8,7 @@
 }
 .ss-label {
 	margin-bottom: 3px;
+	box-sizing: border-box;
 }
 .ss-input {
 	flex: 1;
@@ -25,19 +26,9 @@
 	font-size: 12px;
 }
 
-/* Input group */
-.ss-input-group {
-	flex: 1;
-	display: flex;
-}
-.ss-input-append {
-	white-space: nowrap;
-	border: none;
-	background: #ddd;
-	cursor: pointer;
-}
-.ss-input-append:hover {
-	background: #e5e5e5;
+/* Select image button */
+.ss-select-image.ss-select-image {
+	margin-top: 5px;
 }
 
 /* Checkbox field */
@@ -57,6 +48,7 @@
 	}
 	.ss-label {
 		width: 25%;
+		max-width: 210px;
 		margin-bottom: 0;
 	}
 	.ss-field-checkbox .ss-label {
@@ -104,6 +96,9 @@
 .ss-toggle.ss-toggle:hover {
 	background: none;
 }
+.ss-toggle.ss-toggle:focus {
+	box-shadow: none;
+}
 .ss-toggle .dashicons {
 	font-size: 12px;
 	height: 12px;
@@ -142,7 +137,6 @@
 		flex-direction: row;
 	}
 	.term-php .ss-label {
-		box-sizing: border-box;
 		width: 210px;
 		padding: 14px 10px 14px 0;
 		margin-bottom: 0;
@@ -152,8 +146,7 @@
 	}
 	.term-php .ss-input input[type="text"],
 	.term-php .ss-input textarea,
-	.term-php .ss-description,
-	.term-php .ss-input-group {
+	.term-php .ss-description {
 		width: 95%;
 	}
 	.term-php .ss-field-checkbox {
