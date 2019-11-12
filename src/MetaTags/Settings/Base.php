@@ -115,12 +115,24 @@ abstract class Base {
 			return;
 		}
 		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : [];
-		$data = array_map( 'sanitize_text_field', $data );
+		$data = $this->sanitize( $data );
 
 		update_metadata( $this->object_type, $object_id, 'slim_seo', $data );
 	}
 
-	protected function get_data() {
+	private function sanitize( $data ) {
+		$data = array_merge( $this->defaults, $data );
+
+		$data['title']          = sanitize_text_field( $data['title'] );
+		$data['description']    = sanitize_text_field( $data['description'] );
+		$data['noindex']        = $data['noindex'] ? 1 : 0;
+		$data['facebook_image'] = sanitize_url( $data['facebook_image'] );
+		$data['twitter_image']  = sanitize_url( $data['twitter_image'] );
+
+		return array_filter( $data );
+	}
+
+	private function get_data() {
 		$data = get_metadata( $this->object_type, $this->get_object_id(), 'slim_seo', true );
 		$data = $data ? $data : [];
 
