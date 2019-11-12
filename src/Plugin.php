@@ -7,7 +7,7 @@ class Plugin {
 		$description = new MetaTags\Description;
 
 		new MetaTags\OpenGraph( $title, $description );
-		new MetaTags\Twitter;
+		new MetaTags\TwitterCards;
 		new MetaTags\Settings\Post;
 		new MetaTags\Settings\Term;
 

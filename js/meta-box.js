@@ -9,6 +9,65 @@
 		return string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
 	}
 
+	function toggleTabs() {
+		const tabButtons = document.querySelectorAll( '.ss-tab-nav > button' );
+		const tabs = document.querySelectorAll( '.ss-tab' );
+
+		function clickHandle( e ) {
+			e.preventDefault();
+
+			const target = e.target.getAttribute( 'data-tab' );
+
+			tabButtons.forEach( function( button ) {
+				button.classList.remove( 'ss-active' );
+			} );
+			tabs.forEach( function( tab ) {
+				tab.classList.remove( 'ss-active' );
+				if ( tab.classList.contains( target ) ) {
+					tab.classList.add( 'ss-active' );
+				}
+			} );
+
+			e.target.classList.add( 'ss-active' );
+		}
+
+		tabButtons.forEach( function( button ) {
+			button.addEventListener( 'click', clickHandle );
+		} );
+	}
+
+	function openMediaPopup() {
+		let frame;
+
+		function clickHandle( e ) {
+			e.preventDefault();
+
+			// Create a frame only if needed.
+			if ( ! frame ) {
+				frame = wp.media( {
+					multiple: false,
+					title: ss.mediaPopupTitle
+				} );
+			}
+
+			frame.open();
+
+			// Remove all attached 'select' event.
+			frame.off( 'select' );
+
+			// Handle selection.
+			frame.on( 'select', function () {
+				const url = frame.state().get( 'selection' ).first().toJSON().url;
+				e.target.previousElementSibling.value = url;
+			} );
+		}
+
+		const selectButtons = document.querySelectorAll( '.ss-select-image' );
+		selectButtons.forEach( function( button ) {
+			button.addEventListener( 'click', clickHandle );
+		} );
+	}
+
 	class Input {
 		constructor( selector ) {
 			this.el = document.querySelector( selector );
@@ -94,7 +153,7 @@
 		updateCounter() {
 			let value = this.input.value || this.generated;
 			value = _.unescape( value );
-			this.input.el.nextElementSibling.querySelector( '.ss-number' ).textContent = value.length;
+			this.input.el.nextElementSibling.querySelector( '.ss-counter' ).textContent = value.length;
 			this.updateStatus( value );
 		}
 		updateStatus( value ) {
@@ -129,6 +188,9 @@
 			this.ref2.addEventListener( this.updatePreview );
 		}
 	}
+
+	toggleTabs();
+	openMediaPopup();
 
 	// Post.
 	if ( document.body.classList.contains( 'post-new-php' ) || document.body.classList.contains( 'post-php' ) ) {

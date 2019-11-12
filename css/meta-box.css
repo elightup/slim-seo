@@ -1,3 +1,4 @@
+/* Field */
 .ss-field {
 	display: flex;
 	flex-direction: column;
@@ -7,6 +8,10 @@
 }
 .ss-label {
 	margin-bottom: 3px;
+	box-sizing: border-box;
+}
+.ss-label > label {
+	font-weight: 600;
 }
 .ss-input {
 	flex: 1;
@@ -15,6 +20,18 @@
 .ss-input textarea {
 	width: 100%;
 	margin: 0;
+}
+.ss-description {
+	font-size: 12px;
+	font-style: italic;
+	color: #666;
+	margin-top: 3px;
+	box-sizing: border-box;
+}
+
+/* Select image button */
+.ss-select-image.ss-select-image {
+	margin-top: 5px;
 }
 
 /* Checkbox field */
@@ -34,6 +51,7 @@
 	}
 	.ss-label {
 		width: 25%;
+		max-width: 210px;
 		margin-bottom: 0;
 	}
 	.ss-field-checkbox .ss-label {
@@ -56,14 +74,7 @@
 	}
 }
 
-/* Counter */
-.ss-count {
-	margin-top: -1px;
-	background: #f7f7f7;
-	border: 1px solid #e5e5e5;
-	padding: 2px 5px;
-	font-size: 12px;
-}
+/* Status icon */
 .ss-success:after,
 .ss-warning:after {
 	display: inline-block;
@@ -80,17 +91,29 @@
 	color: #f56e28;
 }
 
+/* Tabs */
+.ss-tab-nav {
+	margin: 12px 0 18px;
+}
+.ss-tab-nav > .button-link {
+	text-decoration: none;
+}
+.ss-tab-nav > .button-link:focus {
+	box-shadow: none;
+}
+.ss-tab-nav .ss-active {
+	font-weight: 600;
+}
+.ss-tab {
+	display: none;
+}
+.ss-tab.ss-active {
+	display: block;
+}
 
 /* For terms */
 .term-php .ss-label {
-	font-weight: 600;
 	font-size: 14px;
-}
-.term-php .ss-count {
-	background: #e5e5e5;
-	border-color: #ddd;
-	width: 95%;
-	box-sizing: border-box;
 }
 
 @media (min-width: 782px) {
@@ -98,7 +121,6 @@
 		flex-direction: row;
 	}
 	.term-php .ss-label {
-		box-sizing: border-box;
 		width: 210px;
 		padding: 14px 10px 14px 0;
 		margin-bottom: 0;
@@ -107,7 +129,8 @@
 		padding: 9px 10px;
 	}
 	.term-php .ss-input input[type="text"],
-	.term-php .ss-input textarea {
+	.term-php .ss-input textarea,
+	.term-php .ss-description {
 		width: 95%;
 	}
 	.term-php .ss-field-checkbox {

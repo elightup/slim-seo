@@ -32,13 +32,10 @@ class OpenGraph {
 			'article:tag',
 		];
 		foreach ( $properties as $property ) {
-			$getter = 'get_' . strtr(
-				$property,
-				[
-					'og:' => '',
-					':'   => '_',
-				]
-			);
+			$getter = 'get_' . strtr( $property, [
+				'og:' => '',
+				':'   => '_',
+			] );
 			$this->output_tag( $property, $this->$getter() );
 		}
 	}
@@ -52,15 +49,15 @@ class OpenGraph {
 	}
 
 	private function get_image() {
-		return $this->get_thumbnail_attribute( 'src' );
+		return $this->get_image_attribute( 'src' );
 	}
 
 	private function get_image_width() {
-		return $this->get_thumbnail_attribute( 'width' );
+		return $this->get_image_attribute( 'width' );
 	}
 
 	private function get_image_height() {
-		return $this->get_thumbnail_attribute( 'height' );
+		return $this->get_image_attribute( 'height' );
 	}
 
 	private function get_image_alt() {
@@ -70,13 +67,13 @@ class OpenGraph {
 		return get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true );
 	}
 
-	private function get_thumbnail_attribute( $key ) {
-		static $thumbnail;
+	private function get_image_attribute( $key ) {
+		static $image;
 		static $ran = false;
 
-		if ( ! $ran && is_singular() ) {
-			$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' );
-			$ran       = true;
+		if ( ! $ran && ( is_singular() || is_tax() || is_category() || is_tag() ) ) {
+			$image = is_singular() ? $this->get_singular_image() : $this->get_term_image();
+			$ran   = true;
 		}
 
 		$keys = [
@@ -85,7 +82,20 @@ class OpenGraph {
 			'height' => 2,
 		];
 
-		return isset( $thumbnail[ $keys[ $key ] ] ) ? $thumbnail[ $keys[ $key ] ] : null;
+		return isset( $image[ $keys[ $key ] ] ) ? $image[ $keys[ $key ] ] : null;
+	}
+
+	private function get_singular_image() {
+		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
+		if ( ! empty( $data['facebook_image'] ) ) {
+			return [$data['facebook_image']];
+		}
+		return has_post_thumbnail() ? wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' ) : null;
+	}
+
+	private function get_term_image() {
+		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
+		return empty( $data['facebook_image'] ) ? null : [$data['facebook_image']];
 	}
 
 	private function get_description() {
@@ -150,14 +160,6 @@ class OpenGraph {
 		if ( ! $content ) {
 			return;
 		}
-		$filter = 'slim_seo_og_' . strtr(
-			$property,
-			[
-				'og:' => '',
-				':'   => '_',
-			]
-		);
-		$content = apply_filters( $filter, $content );
 		$content = (array) $content;
 		foreach ( $content as $value ) {
 			echo '<meta property="', esc_attr( $property ), '" content="', esc_attr( $value ), '">', "\n";
