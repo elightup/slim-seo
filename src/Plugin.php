@@ -25,10 +25,12 @@ class Plugin {
 		new Feed;
 		new MetaTags\Robots;
 		new Cleaner;
-		new WooCommerce;
 
 		new Schema\Provider( $title, $description, $breadcrumbs );
-		new Schema\Disabler;
 		new Code;
+
+		new Integrations\WooCommerce;
+		new Integrations\Genesis;
+		new Integrations\BeaverBuilder;
 	}
 }

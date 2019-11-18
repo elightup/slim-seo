@@ -1,16 +1,9 @@
 <?php
-namespace SlimSEO\Schema;
+namespace SlimSEO\Integrations;
 
-class Disabler {
+class Genesis {
 	public function __construct() {
-		$this->disable_beaver_builder_schema();
-
-		add_action( 'init', [ $this, 'disable_genesis_schema' ] );
-	}
-
-	private function disable_beaver_builder_schema() {
-		add_filter( 'fl_builder_disable_schema', '__return_true' );
-		add_filter( 'fl_theme_disable_schema', '__return_true' );
+		add_action( 'template_redirect', [ $this, 'disable_genesis_schema' ] );
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO;
+namespace SlimSEO\Integrations;
 
 class WooCommerce {
 	public function __construct() {
