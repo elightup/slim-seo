@@ -3,9 +3,9 @@ Contributors: elightup, rilwis
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.2.4
+Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.1.1 =
+- Fixed: Fix JS error when the admin notice is hid by other plugins
+- Fixed: Fix <link> tag from HappyForms being removed
+- Changed: Remove noindexed posts/terms from sitemap
 
 = 3.1.0 =
 - Added: Add image settings for social networks
