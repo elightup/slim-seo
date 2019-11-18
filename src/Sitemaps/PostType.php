@@ -41,6 +41,10 @@ class PostType {
 		$query      = new \WP_Query( $query_args );
 
 		foreach ( $query->posts as $post ) {
+			if ( ! $this->is_indexed( $post ) ) {
+				continue;
+			}
+
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
@@ -164,5 +168,10 @@ class PostType {
 		}
 
 		return $values;
+	}
+
+	private function is_indexed( $post ) {
+		$data = get_post_meta( $post->ID, 'slim_seo', true );
+		return empty( $data['noindex'] );
 	}
 }

@@ -5,10 +5,8 @@ class Taxonomy {
 	private $taxonomy;
 
 	public static $query_args = [
-		'hide_empty'             => true,
-		'fields'                 => 'ids',
-		'update_term_meta_cache' => false,
-		'number'                 => 500, // Maximum number of links in a sitemap. See https://support.google.com/webmasters/answer/75712
+		'hide_empty' => true,
+		'number'     => 500, // Maximum number of links in a sitemap. See https://support.google.com/webmasters/answer/75712
 	];
 
 	public function __construct( $taxonomy ) {
@@ -27,11 +25,20 @@ class Taxonomy {
 		$terms      = get_terms( $query_args );
 
 		foreach ( $terms as $term ) {
+			if ( ! $this->is_indexed( $term ) ) {
+				continue;
+			}
+
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_term_link( $term, $this->taxonomy ) ), "</loc>\n";
 			echo "\t</url>\n";
 		}
 
 		echo '</urlset>';
+	}
+
+	private function is_indexed( $term ) {
+		$data = get_term_meta( $term->term_id, 'slim_seo', true );
+		return empty( $data['noindex'] );
 	}
 }

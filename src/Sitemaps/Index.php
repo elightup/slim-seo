@@ -20,10 +20,10 @@ class Index {
 		$query_args = array_merge(
 			PostType::$query_args,
 			[
-				'post_type'      => $post_type,
-				'posts_per_page' => 500,
-				'no_found_rows'  => false,
-				'fields'         => 'ids',
+				'post_type'              => $post_type,
+				'no_found_rows'          => false,
+				'fields'                 => 'ids',
+				'update_post_meta_cache' => false,
 			]
 		);
 		$query      = new \WP_Query( $query_args );
@@ -53,7 +53,9 @@ class Index {
 		$query_args = array_merge(
 			Taxonomy::$query_args,
 			[
-				'taxonomy' => $taxonomy,
+				'taxonomy'               => $taxonomy,
+				'fields'                 => 'ids',
+				'update_term_meta_cache' => false,
 			]
 		);
 		$terms      = get_terms( $query_args );
