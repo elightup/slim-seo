@@ -18,10 +18,8 @@
 
 			const target = e.target.getAttribute( 'data-tab' );
 
-			tabButtons.forEach( function( button ) {
-				button.classList.remove( 'ss-active' );
-			} );
-			tabs.forEach( function( tab ) {
+			tabButtons.forEach( button => button.classList.remove( 'ss-active' ) );
+			tabs.forEach( tab => {
 				tab.classList.remove( 'ss-active' );
 				if ( tab.classList.contains( target ) ) {
 					tab.classList.add( 'ss-active' );
@@ -31,9 +29,7 @@
 			e.target.classList.add( 'ss-active' );
 		}
 
-		tabButtons.forEach( function( button ) {
-			button.addEventListener( 'click', clickHandle );
-		} );
+		tabButtons.forEach( button => button.addEventListener( 'click', clickHandle ) );
 	}
 
 	function openMediaPopup() {
@@ -56,16 +52,14 @@
 			frame.off( 'select' );
 
 			// Handle selection.
-			frame.on( 'select', function () {
+			frame.on( 'select', () => {
 				const url = frame.state().get( 'selection' ).first().toJSON().url;
 				e.target.previousElementSibling.value = url;
 			} );
 		}
 
 		const selectButtons = document.querySelectorAll( '.ss-select-image' );
-		selectButtons.forEach( function( button ) {
-			button.addEventListener( 'click', clickHandle );
-		} );
+		selectButtons.forEach( button => button.addEventListener( 'click', clickHandle ) );
 	}
 
 	class Input {
@@ -116,7 +110,7 @@
 			}
 			super.addEventListener( callback );
 
-			$( document ).on( 'tinymce-editor-init', function( event, editor ) {
+			$( document ).on( 'tinymce-editor-init', ( event, editor ) => {
 				if ( editor.id !== 'content' ) {
 					return;
 				}
