@@ -16,7 +16,7 @@ class WooCommerce {
 	public function no_description( $description ) {
 		/*
 		 * Strip all shortcodes for WooCommerce pages since they do some logic like setting errors in the session.
-		 * Processing these shortcodes might break the WooCommerce (like clearing notices in the session).
+		 * Processing these shortcodes might break WooCommerce (like clearing notices in the session).
 		 *
 		 * @see https://wordpress.org/support/topic/woocommerce-notices-are-not-showing-after-activating-your-plugin/
 		 */
@@ -25,13 +25,7 @@ class WooCommerce {
 
 	private function is_disabled_page() {
 		$pages = [ 'cart', 'checkout', 'myaccount' ];
-		foreach ( $pages as $page ) {
-			$page_id = wc_get_page_id( $page );
-			if ( is_page( $page_id ) ) {
-				return true;
-			}
-		}
-
-		return false;
+		$pages = array_map( 'wc_get_page_id', $pages );
+		return is_page( $pages );
 	}
 }
