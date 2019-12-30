@@ -32,6 +32,8 @@ class Description {
 			$description = $this->get_term_description();
 		} elseif ( is_home() || is_singular() ) {
 			$description = $this->get_singular_description();
+		} elseif ( is_author() ) {
+			$description = $this->get_author_description();
 		}
 
 		$description = apply_filters( 'slim_seo_meta_description', $description );
@@ -77,5 +79,9 @@ class Description {
 		}
 
 		return get_queried_object()->description;
+	}
+
+	private function get_author_description() {
+		return get_user_meta( get_queried_object_id(), 'description', true );
 	}
 }
