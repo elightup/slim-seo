@@ -27,6 +27,15 @@ class Settings {
 		?>
 		<div class="wrap">
 			<h1><?= esc_html( get_admin_page_title() ); ?></h1>
+
+			<form method="post" action="">
+				<p class="submit">
+					<a href="#" class="button button-primary" id="process" data-nonce="<?php echo wp_create_nonce( 'migrate' ); ?>" data-done_text="<?php esc_attr_e( 'Done', 'slim-seo' ); ?>"><?php _e( 'Migrate From Yoast Seo', 'slim-seo' ); ?></a>
+					<span class="spinner"></span>
+				</p>
+			</form>
+			<div id="status"></div>
+
 			<form action="" method="post">
 				<?php wp_nonce_field( 'save' ); ?>
 				<p><?php esc_html_e( 'Use these settings to insert code from Google Tag Manager, Google Analytics or webmaster tools verification.', 'slim-seo' ); ?></p>

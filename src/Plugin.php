@@ -18,6 +18,7 @@ class Plugin {
 		if ( is_admin() ) {
 			new Settings;
 			new Notification;
+			new Migration;
 			return;
 		}
 
