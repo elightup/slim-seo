@@ -15,6 +15,11 @@ class Settings {
 			[ $this, 'render' ]
 		);
 		add_action( "load-{$page_hook}", [ $this, 'save' ] );
+		add_action( "admin_print_styles-{$page_hook}", [ $this, 'enqueue' ] );
+	}
+
+	public function enqueue() {
+		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', ['jquery'], SLIM_SEO_VER, true );
 	}
 
 	public function render() {
