@@ -2,7 +2,7 @@
 namespace SlimSEO\MetaTags\Settings;
 
 class Post extends Base {
-	public function __construct() {
+	public function setup() {
 		$this->object_type = 'post';
 		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
 		add_action( 'admin_print_styles-post-new.php', [ $this, 'enqueue' ] );

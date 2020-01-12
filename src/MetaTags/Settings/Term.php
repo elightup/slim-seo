@@ -2,7 +2,7 @@
 namespace SlimSEO\MetaTags\Settings;
 
 class Term extends Base {
-	public function __construct() {
+	public function setup() {
 		$this->object_type = 'term';
 		$this->title       = __( 'Search Engine Optimization', 'slim-seo' );
 

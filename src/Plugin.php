@@ -2,35 +2,55 @@
 namespace SlimSEO;
 
 class Plugin {
-	public function __construct() {
-		$title = new MetaTags\Title;
-		$description = new MetaTags\Description;
+	private $services = [];
 
-		new MetaTags\OpenGraph( $title, $description );
-		new MetaTags\TwitterCards;
-		new MetaTags\Settings\Post;
-		new MetaTags\Settings\Term;
+	public function register_services() {
+		$this->services['meta_title'] = new MetaTags\Title;
+		$this->services['meta_description'] = new MetaTags\Description;
 
-		new Sitemaps\Manager;
-		new ImagesAlt;
-		$breadcrumbs = new Breadcrumbs;
+		$this->services['open_graph'] = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'] );
+		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
 
+		$this->services['settings_post'] = new MetaTags\Settings\Post;
+		$this->services['settings_term'] = new MetaTags\Settings\Term;
+
+		$this->services['sitemaps'] = new Sitemaps\Manager;
+		$this->services['images_alt'] = new ImagesAlt;
+		$this->services['breadcrumbs'] = new Breadcrumbs;
+
+		// Admin only.
 		if ( is_admin() ) {
-			new Settings;
-			new Notification;
+			$this->services['settings'] = new Settings;
+			$this->services['notification'] = new Notification;
 			return;
 		}
 
-		new AutoRedirection;
-		new Feed;
-		new MetaTags\Robots;
-		new Cleaner;
+		// Front-end only.
+		$this->services['auto_redirection'] = new AutoRedirection;
+		$this->services['feed'] = new Feed;
+		$this->services['meta_robots'] = new MetaTags\Robots;
+		$this->services['cleaner'] = new Cleaner;
 
-		new Schema\Provider( $title, $description, $breadcrumbs );
-		new Code;
+		$this->services['shema'] = new Schema\Provider( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
+		$this->services['code'] = new Code;
 
-		new Integrations\WooCommerce;
-		new Integrations\Genesis;
-		new Integrations\BeaverBuilder;
+		$this->services['woocommerce'] = new Integrations\WooCommerce;
+		$this->services['genesis'] = new Integrations\Genesis;
+		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
+	}
+
+	public function init() {
+		do_action( 'slim_seo_init', $this );
+
+		foreach ( $this->services as $service ) {
+			$service->setup();
+		}
+	}
+
+	/**
+	 * Developers: use this function to disable the services you don't want.
+	 */
+	public function disable( $id ) {
+		unset( $this->services[ $id ] );
 	}
 }

@@ -4,8 +4,8 @@ namespace SlimSEO\MetaTags;
 class Description {
 	private $is_manual = false;
 
-	public function __construct() {
-		add_action( 'init', [ $this, 'add_excerpt_to_pages' ] );
+	public function setup() {
+		$this->add_excerpt_to_pages();
 		add_action( 'wp_head', [ $this, 'output' ] );
 	}
 

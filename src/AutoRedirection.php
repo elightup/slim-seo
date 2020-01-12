@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class AutoRedirection {
-	public function __construct() {
+	public function setup() {
 		add_action( 'template_redirect', [ $this, 'redirect' ] );
 	}
 

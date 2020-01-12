@@ -20,8 +20,11 @@ define( 'SLIM_SEO_VER', '3.1.1' );
 
 require __DIR__ . '/vendor/autoload.php';
 
-new Plugin;
 new Activator( __FILE__ );
 new Deactivator( __FILE__ );
+
+$slim_seo = new Plugin;
+$slim_seo->register_services();
+add_action( 'init', [$slim_seo, 'init'] );
 
 load_plugin_textdomain( 'slim-seo', false, basename( __DIR__ ) . '/languages/' );
