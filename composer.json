@@ -1,7 +1,34 @@
 {
-    "autoload": {
-        "psr-4": {
-            "SlimSEO\\": "src/"
-        }
+  "name": "elightup/slim-seo",
+  "type": "wordpress-plugin",
+  "keywords": [
+    "wordpress",
+    "wordpress-plugin",
+    "seo",
+    "search engine",
+    "search engine optimization"
+  ],
+  "description": "A fast & automated WordPress SEO plugin",
+  "homepage": "https://wpslimseo.com",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Tran Ngoc Tuan Anh",
+      "email": "anhtnt@elightup.com",
+      "homepage": "https://wpslimseo.com",
+      "role": "Developer"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "SlimSEO\\": "src/"
+    }
+  },
+  "extra": {
+    "light-ignore-plugin": {
+      "composer": [
+        "LICENSE"
+      ]
+    }
+  }
 }
