@@ -23,12 +23,5 @@
     "psr-4": {
       "SlimSEO\\": "src/"
     }
-  },
-  "extra": {
-    "light-ignore-plugin": {
-      "composer": [
-        "LICENSE"
-      ]
-    }
   }
 }
