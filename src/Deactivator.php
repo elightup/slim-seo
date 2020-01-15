@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class Deactivator {
-	public function __construct( $file ) {
+	public function setup( $file ) {
 		register_deactivation_hook( $file, [ $this, 'deactivate' ] );
 	}
 

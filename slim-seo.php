@@ -5,7 +5,7 @@
  * Description: A fast and automated SEO plugin for WordPress.
  * Author:      eLightUp
  * Author URI:  https://elightup.com
- * Version:     3.1.1
+ * Version:     3.1.2
  * Text Domain: slim-seo
  * Domain Path: /languages
  */
@@ -16,12 +16,15 @@ defined( 'ABSPATH' ) || die;
 
 define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
-define( 'SLIM_SEO_VER', '3.1.1' );
+define( 'SLIM_SEO_VER', '3.1.2' );
 
 require __DIR__ . '/vendor/autoload.php';
 
-new Plugin;
 new Activator( __FILE__ );
 new Deactivator( __FILE__ );
+
+$slim_seo = new Plugin;
+$slim_seo->register_services();
+add_action( 'init', [$slim_seo, 'init'] );
 
 load_plugin_textdomain( 'slim-seo', false, basename( __DIR__ ) . '/languages/' );

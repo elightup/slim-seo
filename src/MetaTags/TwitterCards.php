@@ -2,7 +2,7 @@
 namespace SlimSEO\MetaTags;
 
 class TwitterCards {
-	public function __construct() {
+	public function setup() {
 		add_action( 'wp_head', [ $this, 'output' ] );
 	}
 

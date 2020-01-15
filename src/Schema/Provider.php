@@ -10,7 +10,9 @@ class Provider {
 		$this->title       = $title;
 		$this->description = $description;
 		$this->breadcrumbs = $breadcrumbs;
+	}
 
+	public function setup() {
 		add_action( 'wp_footer', [ $this, 'output' ] );
 		add_action( 'amp_post_template_footer', [ $this, 'output' ] );
 

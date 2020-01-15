@@ -9,7 +9,7 @@ class Migration {
 	 */
 	public $threshold = 20;
 
-	public function __construct() {
+	public function setup() {
 		add_action( 'wp_ajax_migrate_yoast', [ $this, 'handle_ajax' ] );
 	}
 

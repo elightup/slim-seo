@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class Code {
-	public function __construct() {
+	public function setup() {
 		add_action( 'wp_head', [ $this, 'output_header_code' ] );
 		add_action( 'wp_footer', [ $this, 'output_footer_code' ] );
 	}

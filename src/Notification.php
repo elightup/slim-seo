@@ -4,7 +4,7 @@ namespace SlimSEO;
 class Notification {
 	private $messages = [];
 
-	public function __construct() {
+	public function setup() {
 		if ( $this->is_dismissed() ) {
 			return;
 		}

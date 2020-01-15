@@ -7,7 +7,7 @@ class Breadcrumbs {
 	private $current   = '';
 	private $is_parsed = false;
 
-	public function __construct() {
+	public function setup() {
 		$this->args = array(
 			'separator'       => '&raquo;',
 			'taxonomy'        => 'category',

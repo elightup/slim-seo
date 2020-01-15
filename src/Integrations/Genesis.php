@@ -2,7 +2,7 @@
 namespace SlimSEO\Integrations;
 
 class Genesis {
-	public function __construct() {
+	public function setup() {
 		add_action( 'template_redirect', [ $this, 'disable_genesis_schema' ] );
 	}
 

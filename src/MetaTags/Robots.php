@@ -2,7 +2,7 @@
 namespace SlimSEO\MetaTags;
 
 class Robots {
-	public function __construct() {
+	public function setup() {
 		add_action( 'wp_head', [ $this, 'output' ] );
 		add_action( 'template_redirect', [ $this, 'set_header_noindex' ] );
 		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );

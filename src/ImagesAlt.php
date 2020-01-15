@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class ImagesAlt {
-	public function __construct() {
+	public function setup() {
 		// Add missing alt attribute when outputing images via the_post_thumbnail-family functions.
 		add_filter( 'wp_get_attachment_image_attributes', [ $this, 'add_missing_alt_attribute' ], 10, 2 );
 

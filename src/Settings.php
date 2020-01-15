@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class Settings {
-	public function __construct() {
+	public function setup() {
 		add_action( 'admin_menu', [ $this, 'add_menu' ] );
 	}
 

@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class Feed {
-	public function __construct() {
+	public function setup() {
 		add_filter( 'the_content_feed', [ $this, 'add_link' ] );
 		if ( get_option( 'rss_use_excerpt' ) ) {
 			add_filter( 'the_excerpt_rss', [ $this, 'add_link' ] );
