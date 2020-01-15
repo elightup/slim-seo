@@ -14,14 +14,12 @@ class Migration {
 	}
 
 	public function handle_ajax() {
-		check_ajax_referer( 'process' );
+		check_ajax_referer( 'migrate' );
 
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
-		$page    = isset( $_POST['page'] ) ? $_POST['page'] : '';
 
 		// If restart the process, reset session and send "continue" command
 		if ( $restart ) {
-			do_action( 'tv_import_before_process' );
 
 			session_start();
 			$_SESSION['processed'] = 0;
@@ -39,32 +37,32 @@ class Migration {
 				'type'    => 'done',
 			) );
 		}
-
 		wp_send_json_success( array(
 			'message' => sprintf( __( 'Processed %d posts', 'slim-seo' ), count( $posts ) ),
+			'posts' => $posts,
 			'type'    => 'continue',
 		) );
 	}
 
 	private function get_posts() {
-		$min = isset( $_SESSION['processed'] ) ? $_SESSION['processed'] : 0;
-		$offset = $min + $this->threshold - 1;
-
 		session_start();
+
+		$min    = isset( $_SESSION['processed'] ) ? $_SESSION['processed'] : 0;
+		$offset = $min ? $min + $this->threshold - 1 : 0;
 
 		$_SESSION['processed'] = $offset;
 
-		$posts = new WP_Query( [
+		$posts = new \WP_Query( [
 			'post_type'      => 'post',
-			'posts_per_page' => $threshold,
+			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',
 			'offset'         => $offset,
 		] );
-		if( $posts->have_posts() ) {
+		if( ! $posts->have_posts() ) {
 			return false;
 		}
-		return $posts->found_posts;
+		return $posts->posts;
 	}
 }
 

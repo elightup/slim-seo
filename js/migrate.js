@@ -26,10 +26,10 @@
 		$.post( ajaxurl, {
 			action: 'migrate_yoast',
 			restart: restart,
-			_ajax_nonce: $button.data( 'nonce' )
+			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
 			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
-			callback( response, importData );
+			callback( response, handleMigrate );
 		} );
 	}
 
