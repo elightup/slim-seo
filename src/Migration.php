@@ -7,7 +7,7 @@ class Migration {
 	 * Number of posts being processed in 1 call
 	 * @var int
 	 */
-	public $threshold = 20;
+	public $threshold = 10;
 
 	public function setup() {
 		add_action( 'wp_ajax_migrate_yoast', [ $this, 'handle_ajax' ] );
@@ -47,10 +47,8 @@ class Migration {
 	private function get_posts() {
 		session_start();
 
-		$min    = isset( $_SESSION['processed'] ) ? $_SESSION['processed'] : 0;
-		$offset = $min ? $min + $this->threshold - 1 : 0;
-
-		$_SESSION['processed'] = $offset;
+		$offset                = isset( $_SESSION['processed'] ) ? $_SESSION['processed'] : 0;
+		$_SESSION['processed'] = $_SESSION['processed'] + $this->threshold;
 
 		$posts = new \WP_Query( [
 			'post_type'      => 'post',
@@ -59,6 +57,7 @@ class Migration {
 			'fields'         => 'ids',
 			'offset'         => $offset,
 		] );
+
 		if( ! $posts->have_posts() ) {
 			return false;
 		}
