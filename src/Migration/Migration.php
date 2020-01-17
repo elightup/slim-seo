@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO;
+namespace SlimSEO\Migration;
 
 class Migration {
 
@@ -37,11 +37,20 @@ class Migration {
 				'type'    => 'done',
 			) );
 		}
+		foreach( $posts as $post_id ) {
+			$this->migrate( $post_id );
+		}
+
 		wp_send_json_success( array(
 			'message' => sprintf( __( 'Processed %d posts', 'slim-seo' ), count( $posts ) ),
-			'posts' => $posts,
+			'posts'   => $posts,
 			'type'    => 'continue',
 		) );
+	}
+
+	private function migrate( $post_id ) {
+		$replacer = ReplacerFactory::make( 'yoast' );
+		$replacer->replace( $post_id );
 	}
 
 	private function get_posts() {
@@ -52,6 +61,7 @@ class Migration {
 
 		$posts = new \WP_Query( [
 			'post_type'      => 'post',
+			'post_status'    => ['public', 'draft'],
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',
@@ -65,3 +75,25 @@ class Migration {
 	}
 }
 
+/*class AIOSEO implements Replacer {
+	use GetVariableValues;
+	public function replace( $value ) {
+		$keys = [
+			'%%site_title%%' => 'site_title',
+			'%%post_title%%' => 'post_title',
+		];
+		$replacements = str_replace( $keys, $this->get_variable_values() );
+		return str_replace( $replacements, $value );
+	}
+}
+
+trait GetVariableValues {
+	public function get_variable_values() {
+		return [
+			'site_title'       => get_bloginfo( 'name' ),
+			'site_description' => get_bloginfo( 'description' ),
+			'post_title'       => get_the_title(),
+		];
+	}
+}
+*/

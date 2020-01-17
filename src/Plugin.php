@@ -22,7 +22,7 @@ class Plugin {
 		if ( is_admin() ) {
 			$this->services['settings'] = new Settings;
 			$this->services['notification'] = new Notification;
-			$this->services['migration'] = new Migration;
+			$this->services['migration'] = new Migration\Migration;
 			return;
 		}
 
