@@ -33,12 +33,10 @@ class WooCommerce {
 	}
 
 	public function shop_title( $title, $title_obj ) {
-		$page_id = wc_get_page_id( 'shop' );
-		return $title_obj->get_singular_title( $page_id );
+		return is_shop() ? $title_obj->get_singular_title( wc_get_page_id( 'shop' ) ) : $title;
 	}
 
 	public function shop_description( $description, $description_obj ) {
-		$page_id = wc_get_page_id( 'shop' );
-		return $description_obj->get_singular_description( $page_id );
+		return is_shop() ? $description_obj->get_singular_description( wc_get_page_id( 'shop' ) ) : $description;
 	}
 }
