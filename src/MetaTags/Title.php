@@ -27,13 +27,17 @@ class Title {
 		}
 
 		$title = $custom_title ?: $title;
-		$title = apply_filters( 'slim_seo_meta_title', $title );
+		$title = apply_filters( 'slim_seo_meta_title', $title, $this );
 
 		return $title;
 	}
 
-	private function get_singular_title() {
-		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
+	/**
+	 * Make public to allow access from other class. See Integration/WooCommerce.
+	 */
+	public function get_singular_title( $post_id = null ) {
+		$post_id = $post_id ?: get_queried_object_id();
+		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		return ! empty( $data['title'] ) ? $data['title'] : null;
 	}
 
