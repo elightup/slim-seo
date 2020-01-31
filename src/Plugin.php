@@ -31,7 +31,7 @@ class Plugin {
 		$this->services['meta_robots'] = new MetaTags\Robots;
 		$this->services['cleaner'] = new Cleaner;
 
-		$this->services['shema'] = new Schema\Provider( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
+		$this->services['shema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
 		$this->services['code'] = new Code;
 
 		$this->services['woocommerce'] = new Integrations\WooCommerce;
