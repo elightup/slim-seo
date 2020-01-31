@@ -126,8 +126,8 @@ abstract class Base {
 		$data['title']          = sanitize_text_field( $data['title'] );
 		$data['description']    = sanitize_text_field( $data['description'] );
 		$data['noindex']        = $data['noindex'] ? 1 : 0;
-		$data['facebook_image'] = sanitize_url( $data['facebook_image'] );
-		$data['twitter_image']  = sanitize_url( $data['twitter_image'] );
+		$data['facebook_image'] = esc_url_raw( $data['facebook_image'] );
+		$data['twitter_image']  = esc_url_raw( $data['twitter_image'] );
 
 		return array_filter( $data );
 	}
