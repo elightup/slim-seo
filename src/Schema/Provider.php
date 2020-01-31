@@ -79,18 +79,20 @@ class Provider {
 			$author = new Types\Person( 'author' );
 			$author->user = get_userdata( get_queried_object()->post_author );
 
-			$author_image = new Types\ImageObject( 'author_image' );
-			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
-			$author_image->add_property( 'width', 96 );
-			$author_image->add_property( 'height', 96 );
-			$author_image->add_property( 'caption', $author->user->display_name );
+			if ( $author->user ) {
+				$author_image = new Types\ImageObject( 'author_image' );
+				$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
+				$author_image->add_property( 'width', 96 );
+				$author_image->add_property( 'height', 96 );
+				$author_image->add_property( 'caption', $author->user->display_name );
 
-			$author->add_reference( 'image', $author_image );
+				$author->add_reference( 'image', $author_image );
 
-			$manager->add_entity( $author );
-			$manager->add_entity( $author_image );
+				$manager->add_entity( $author );
+				$manager->add_entity( $author_image );
 
-			$article->add_reference( 'author', $author );
+				$article->add_reference( 'author', $author );
+			}
 
 			if ( has_post_thumbnail() ) {
 				$article->add_reference( 'image', $thumbnail );
