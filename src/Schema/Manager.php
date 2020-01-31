@@ -75,75 +75,92 @@ class Manager {
 		$website->add_reference( 'publisher', $organization );
 		$this->add_entity( $organization );
 
+		$this->add_logo_schema();
+
+		if ( is_singular() && has_post_thumbnail() ) {
+			$this->add_thumbnail_schema();
+		}
+		if ( is_singular( 'post' ) ) {
+			$this->add_post_schemas();
+		}
+		if ( is_author() ) {
+			$this->add_author_schemas();
+		}
+	}
+
+	private function add_logo_schema() {
 		$logo_id = get_option( 'site_icon' );
 		if ( current_theme_supports( 'custom-logo' ) && has_custom_logo() ) {
 			$logo_id = get_theme_mod( 'custom_logo' );
 		}
-		if ( $logo_id ) {
-			$logo = new Types\ImageObject( 'logo' );
-			$logo->image_id = $logo_id;
+		if ( ! $logo_id ) {
+			return;
+		}
+		$logo = new Types\ImageObject( 'logo' );
+		$logo->image_id = $logo_id;
 
-			$organization->add_reference( 'logo', $logo );
-			$organization->add_reference( 'image', $logo );
-			$this->add_entity( $logo );
+		$this->entities['organization']->add_reference( 'logo', $logo );
+		$this->entities['organization']->add_reference( 'image', $logo );
+		$this->add_entity( $logo );
+	}
+
+	private function add_thumbnail_schema() {
+		$thumbnail = new Types\ImageObject( 'thumbnail' );
+		$thumbnail->image_id = get_post_thumbnail_id();
+
+		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
+		$this->entities['webpage']->add_reference( 'image', $thumbnail );
+		$this->add_entity( $thumbnail );
+	}
+
+	private function add_post_schemas() {
+		$article = new Types\Article;
+		$article->add_reference( 'isPartOf', $this->entities['webpage'] );
+		$article->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
+		$this->add_entity( $article );
+
+		if ( isset( $this->entities['thumbnail'] ) ) {
+			$article->add_reference( 'image', $this->entities['thumbnail'] );
 		}
 
-		if ( is_singular() && has_post_thumbnail() ) {
-			$thumbnail = new Types\ImageObject( 'thumbnail' );
-			$thumbnail->image_id = get_post_thumbnail_id();
+		$article->add_reference( 'publisher', $this->entities['organization'] );
 
-			$webpage->add_reference( 'primaryImageOfPage', $thumbnail );
-			$webpage->add_reference( 'image', $thumbnail );
-			$this->add_entity( $thumbnail );
+		$author = new Types\Person( 'author' );
+		$author->user = get_userdata( get_queried_object()->post_author );
+
+		if ( ! $author->user ) {
+			return;
 		}
+		$author_image = $this->get_author_image_schema( $author->user->ID );
+		$author->add_reference( 'image', $author_image );
 
-		if ( is_singular( 'post' ) ) {
-			$article = new Types\Article;
-			$article->add_reference( 'isPartOf', $webpage );
-			$article->add_reference( 'mainEntityOfPage', $webpage );
-			$this->add_entity( $article );
+		$this->add_entity( $author );
+		$this->add_entity( $author_image );
 
-			$author = new Types\Person( 'author' );
-			$author->user = get_userdata( get_queried_object()->post_author );
+		$article->add_reference( 'author', $author );
+	}
 
-			if ( $author->user ) {
-				$author_image = new Types\ImageObject( 'author_image' );
-				$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
-				$author_image->add_property( 'width', 96 );
-				$author_image->add_property( 'height', 96 );
-				$author_image->add_property( 'caption', $author->user->display_name );
+	private function add_author_schemas() {
+		$author = new Types\Person( 'author' );
+		$author->user = get_queried_object();
+		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 
-				$author->add_reference( 'image', $author_image );
+		$author_image = $this->get_author_image_schema( $author->user->ID );
+		$author->add_reference( 'image', $author_image );
 
-				$this->add_entity( $author );
-				$this->add_entity( $author_image );
+		$this->add_entity( $author );
+		$this->add_entity( $author_image );
+	}
 
-				$article->add_reference( 'author', $author );
-			}
+	private function get_author_image_schema( $user_id ) {
+		$user         = get_userdata( $user_id );
+		$author_image = new Types\ImageObject( 'author_image' );
+		$author_image->add_property( 'url', get_avatar_url( $user_id ) );
+		$author_image->add_property( 'width', 96 );
+		$author_image->add_property( 'height', 96 );
+		$author_image->add_property( 'caption', $user->display_name );
 
-			if ( has_post_thumbnail() ) {
-				$article->add_reference( 'image', $thumbnail );
-			}
-
-			$article->add_reference( 'publisher', $organization );
-		}
-
-		if ( is_author() ) {
-			$author = new Types\Person( 'author' );
-			$author->user = get_queried_object();
-			$author->add_reference( 'mainEntityOfPage', $webpage );
-
-			$author_image = new Types\ImageObject( 'author_image' );
-			$author_image->add_property( 'url', get_avatar_url( $author->user->ID ) );
-			$author_image->add_property( 'width', 96 );
-			$author_image->add_property( 'height', 96 );
-			$author_image->add_property( 'caption', $author->user->display_name );
-
-			$author->add_reference( 'image', $author_image );
-
-			$this->add_entity( $author );
-			$this->add_entity( $author_image );
-		}
+		return $author_image;
 	}
 
 	private function add_entity( $entity ) {
