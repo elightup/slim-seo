@@ -36,7 +36,7 @@ class Description {
 			$description = $this->get_author_description();
 		}
 
-		$description = apply_filters( 'slim_seo_meta_description', $description );
+		$description = apply_filters( 'slim_seo_meta_description', $description, $this );
 		$description = $this->normalize( $description );
 
 		return $description;
@@ -57,17 +57,17 @@ class Description {
 
 	/**
 	 * Get description from post excerpt and fallback to post content.
-	 *
-	 * @return string
+	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
-	private function get_singular_description() {
-		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
+	public function get_singular_description( $post_id = null ) {
+		$post_id = $post_id ?: get_queried_object_id();
+		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
 			return $data['description'];
 		}
 
-		$post = get_queried_object();
+		$post = get_post( $post_id );
 		return $post->post_excerpt ? $post->post_excerpt : $post->post_content;
 	}
 
