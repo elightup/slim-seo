@@ -61,7 +61,7 @@ class Migration {
 
 		$posts = new \WP_Query( [
 			'post_type'      => 'post',
-			'post_status'    => ['public', 'draft'],
+			'post_status'    => ['publish', 'draft'],
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',

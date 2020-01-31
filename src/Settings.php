@@ -19,7 +19,27 @@ class Settings {
 	}
 
 	public function enqueue() {
-		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', ['jquery'], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-migrate-js', SLIM_SEO_URL . 'js/migrate.js', ['jquery'], SLIM_SEO_VER, true );
+		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/migrate.css' );
+	}
+
+	public function get_post_count() {
+		$posts = new \WP_Query( [
+			'post_type'      => 'post',
+			'post_status'    => ['publish', 'draft'],
+			'posts_per_page' => -1,
+			'no_found_rows'  => true,
+			'fields'         => 'ids',
+		] );
+
+		if( ! $posts->have_posts() ) {
+			return 0;
+		}
+		return $posts->post_count;
+	}
+
+	public function get_terms() {
+
 	}
 
 	public function render() {
@@ -29,6 +49,7 @@ class Settings {
 			'header_code' => '',
 			'footer_code' => '',
 		], $data );
+		$post_count = $this->get_post_count();
 		?>
 		<div class="wrap">
 			<h1><?= esc_html( get_admin_page_title() ); ?></h1>
@@ -39,6 +60,9 @@ class Settings {
 					<span class="spinner"></span>
 				</p>
 			</form>
+			<div id="ewww-bulk-progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax-post="<?php echo esc_attr( $post_count ); ?>" aria-valuemax-term="" aria-valuenow="">
+				<div class="ui-progressbar-value ui-widget-header ui-corner-left" style="display: block; width: 0%;"></div>
+			</div>
 			<div id="status"></div>
 
 			<form action="" method="post">
