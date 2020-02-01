@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 3.1.2
+Stable tag: 3.1.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,13 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.1.3 =
+- Fixed: Fix SEO settings not working for WooCommerce shop
+- Fixed: Fix multiple messages sent when using Very Simple Contact Form
+- Fixed: Fix WordPress deprecation notice for `sanitize_url`
+- Fixed: Fix "non-object" error on posts having no author
+- Changed: Remove filter to disable schema. Use `slim_seo_init` hook instead.
 
 = 3.1.2 =
 - Fixed: Add missing meta description for author archive
