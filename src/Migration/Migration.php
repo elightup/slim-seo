@@ -19,9 +19,9 @@ class Migration {
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
 
 		// If restart the process, reset session and send "continue" command
+		session_start();
 		if ( $restart ) {
 
-			session_start();
 			$_SESSION['processed'] = 0;
 
 			wp_send_json_success( array(
@@ -31,6 +31,7 @@ class Migration {
 		}
 
 		$posts = $this->get_posts();
+		$processed = $_SESSION['processed'] + count( $posts ) - $this->threshold;
 		if ( ! $posts ) {
 			wp_send_json_success( array(
 				'message' => '',
@@ -42,8 +43,8 @@ class Migration {
 		}
 
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'Processed %d posts', 'slim-seo' ), count( $posts ) ),
-			'posts'   => $posts,
+			'message' => sprintf( __( 'Processed %d posts', 'slim-seo' ), $processed ),
+			'posts'   => $processed,
 			'type'    => 'continue',
 		) );
 	}

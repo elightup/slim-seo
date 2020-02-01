@@ -4,7 +4,11 @@
 	var $status = $( '#status' ),
 		$button = $( '#process ' ),
 		$ajaxLoader = $button.siblings( '.spinner' ),
+		$progressBar = $( '.ss-progressbar' ),
+		$progressBarValue = $( '.ss-progressbar-value' ),
 		restart;
+
+	var totalPosts = $progressBar.data( 'max-post' );
 
 	$button.on( 'click', function ( e ) {
 		e.preventDefault();
@@ -47,16 +51,16 @@
 			$status.addClass( 'error' );
 
 			message = '<p>' + response.data + '</p>';
-			html = html ? html + message : message;
-			$status.html( html );
+			$status.html( message );
 			return;
 		}
 
-		if ( response.data.message ) {
+		if ( response.data.posts ) {
 			$status.addClass( 'updated' );
-			message = response.data.message ? '<p>' + response.data.message + '</p>' : '';
-			html = html ? html + message : message;
-			$status.html( html );
+			message = response.data.posts ? '<p>' + response.data.message + '</p>' : '';
+			$status.html( message );
+			var percentage = response.data.posts * 100 / totalPosts;
+			$( '.ss-progressbar-value' ).css( 'width', percentage + '%' );
 		}
 
 		// Submit form again

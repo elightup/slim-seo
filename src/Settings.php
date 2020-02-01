@@ -60,8 +60,8 @@ class Settings {
 					<span class="spinner"></span>
 				</p>
 			</form>
-			<div id="ewww-bulk-progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax-post="<?php echo esc_attr( $post_count ); ?>" aria-valuemax-term="" aria-valuenow="">
-				<div class="ui-progressbar-value ui-widget-header ui-corner-left" style="display: block; width: 0%;"></div>
+			<div id="ss-progressbar" class="ss-progressbar" data-max-post="<?php echo esc_attr( $post_count ); ?>" data-max-term="" aria-valuenow="">
+				<div class="ss-progressbar-value" style="display: block; width: 0%;"></div>
 			</div>
 			<div id="status"></div>
 
