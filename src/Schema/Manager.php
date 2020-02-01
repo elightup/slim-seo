@@ -25,10 +25,6 @@ class Manager {
 	}
 
 	public function output() {
-		if ( false === apply_filters( 'slim_seo_schema_enable', true ) ) {
-			return;
-		}
-
 		$this->add_schemas();
 
 		$entities = apply_filters( 'slim_seo_schema_entities', $this->entities );
