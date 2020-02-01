@@ -1,5 +1,6 @@
 <?php
 namespace SlimSEO\Migration;
+use SlimSEO\Helper as Helper;
 
 class Migration {
 
@@ -9,8 +10,15 @@ class Migration {
 	 */
 	public $threshold = 10;
 
+	private $replacer = null;
+
 	public function setup() {
+		$this->set_replacer();
 		add_action( 'wp_ajax_migrate_yoast', [ $this, 'handle_ajax' ] );
+	}
+
+	public function set_replacer() {
+		$this->replacer = ReplacerFactory::make( 'yoast' );
 	}
 
 	public function handle_ajax() {
@@ -37,9 +45,10 @@ class Migration {
 				'message' => '',
 				'type'    => 'done',
 			) );
+			$this->handle_ajax_term();
 		}
 		foreach( $posts as $post_id ) {
-			$this->migrate( $post_id );
+			$this->migrate_post( $post_id );
 		}
 
 		wp_send_json_success( array(
@@ -49,19 +58,44 @@ class Migration {
 		) );
 	}
 
-	private function migrate( $post_id ) {
-		$replacer = ReplacerFactory::make( 'yoast' );
-		$replacer->replace( $post_id );
+	private function handle_ajax_term() {
+		$_SESSION['processed'] = 0;
+
+		$terms = $this->replacer->get_terms();
+
+		if ( ! $terms ) {
+			wp_send_json_success( array(
+				'message' => '',
+				'type'    => 'done',
+			) );
+		}
+
+		foreach( $terms as $term_id => $term ) {
+			$this->migrate_term( $term_id );
+		}
+
+		wp_send_json_success( array(
+			'message' => sprintf( __( 'Processed %d terms', 'slim-seo' ), $processed ),
+			'posts'   => $processed,
+			'type'    => 'continue',
+		) );
+	}
+
+	private function migrate_post( $post_id ) {
+		$this->replacer->replace_post( $post_id );
+	}
+
+	private function migrate_term( $term_id ) {
+		$this->replacer->replace_term( $term_id );
 	}
 
 	private function get_posts() {
-		session_start();
-
 		$offset                = isset( $_SESSION['processed'] ) ? $_SESSION['processed'] : 0;
 		$_SESSION['processed'] = $_SESSION['processed'] + $this->threshold;
 
+		$post_types = Helper::get_post_types();
 		$posts = new \WP_Query( [
-			'post_type'      => 'post',
+			'post_type'      => $post_types,
 			'post_status'    => ['publish', 'draft'],
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,

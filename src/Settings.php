@@ -24,8 +24,9 @@ class Settings {
 	}
 
 	public function get_post_count() {
+		$post_types = Helper::get_post_types();
 		$posts = new \WP_Query( [
-			'post_type'      => 'post',
+			'post_type'      => $post_types,
 			'post_status'    => ['publish', 'draft'],
 			'posts_per_page' => -1,
 			'no_found_rows'  => true,

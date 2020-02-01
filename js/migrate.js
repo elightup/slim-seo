@@ -56,10 +56,9 @@
 		}
 
 		if ( response.data.posts ) {
-			$status.addClass( 'updated' );
 			message = response.data.posts ? '<p>' + response.data.message + '</p>' : '';
 			$status.html( message );
-			var percentage = response.data.posts * 100 / totalPosts;
+			var percentage = response.data.posts * 50 / totalPosts;
 			$( '.ss-progressbar-value' ).css( 'width', percentage + '%' );
 		}
 
