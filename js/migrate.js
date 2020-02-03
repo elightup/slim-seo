@@ -4,24 +4,22 @@
 	var $postStatus = $( '#posts-migration-status' ),
 		$termStatus = $( '#terms-migration-status' ),
 		$button = $( '#process ' ),
-		$ajaxLoader = $button.siblings( '.spinner' ),
-		$progressBar = $( '.ss-progressbar' ),
-		$progressBarValue = $( '.ss-progressbar-value' ),
 		restart;
-
-	var totalPosts = $progressBar.data( 'max-post' );
 
 	$button.on( 'click', function ( e ) {
 		e.preventDefault();
-		$ajaxLoader.css( {
-			'display': 'inline-block',
-			'float': 'none'
-		} );
 
 		// Set global variable true to restart again
 		restart = 1;
+		preProcess();
 		handleMigratePosts();
 	} );
+
+	function preProcess() {
+		$button.closest('form').hide();
+		var message = '<p>' + $button.data( 'pre-process' ) + '</p>';
+		$postStatus.html( message );
+	}
 
 	/**
 	 * Import data.

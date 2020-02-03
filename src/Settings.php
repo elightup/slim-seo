@@ -36,7 +36,13 @@ class Settings {
 
 			<form method="post" action="">
 				<p class="submit">
-					<a href="#" class="button button-primary" id="process" data-nonce="<?php echo wp_create_nonce( 'migrate' ); ?>" data-done_text="<?php esc_attr_e( 'Done', 'slim-seo' ); ?>"><?php _e( 'Migrate From Yoast Seo', 'slim-seo' ); ?></a>
+					<a href="#" class="button button-primary" id="process"
+						data-nonce="<?php echo wp_create_nonce( 'migrate' ); ?>"
+						data-done_text="<?php esc_attr_e( 'Done!', 'slim-seo' ); ?>"
+						data-pre-process="<?php esc_attr_e( 'Starting...', 'slim-seo' ); ?>"
+					>
+						<?php _e( 'Migrate From Yoast Seo', 'slim-seo' ); ?>
+					</a>
 				</p>
 			</form>
 

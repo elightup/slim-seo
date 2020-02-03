@@ -52,7 +52,7 @@ class Migration {
 		}
 
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'Processed %d posts', 'slim-seo' ), $processed ),
+			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), $processed ),
 			'posts'   => $processed,
 			'type'    => 'continue',
 		) );
@@ -91,7 +91,7 @@ class Migration {
 		}
 
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'Processed %d terms', 'slim-seo' ), $processed ),
+			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $processed ),
 			'posts'   => $processed,
 			'type'    => 'continue',
 		) );
