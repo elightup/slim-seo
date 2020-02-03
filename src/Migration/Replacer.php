@@ -21,12 +21,12 @@ abstract class Replacer {
 		}
 	}
 
-	public function replace_term( $term_id ) {
+	public function replace_term( $term_id, $term ) {
 		$seo_settings = [
-			'title'          => $this->get_term_title( $term_id ),
-			'description'    => $this->get_term_description( $term_id ),
-			'facebook_image' => $this->get_term_facebook_image( $term_id ),
-			'twitter_image'  => $this->get_term_twitter_image( $term_id ),
+			'title'          => $this->get_term_title( $term_id, $term ),
+			'description'    => $this->get_term_description( $term_id, $term ),
+			'facebook_image' => $this->get_term_facebook_image( $term_id, $term ),
+			'twitter_image'  => $this->get_term_twitter_image( $term_id, $term ),
 		];
 		$seo_settings = array_filter( $seo_settings );
 		if ( $seo_settings ) {
@@ -39,8 +39,8 @@ abstract class Replacer {
 	abstract function get_post_facebook_image( $post_id );
 	abstract function get_post_twitter_image( $post_id );
 
-	abstract function get_term_title( $term_id );
-	abstract function get_term_description( $term_id );
-	abstract function get_term_facebook_image( $term_id );
-	abstract function get_term_twitter_image( $term_id );
+	abstract function get_term_title( $term_id, $term );
+	abstract function get_term_description( $term_id, $term );
+	abstract function get_term_facebook_image( $term_id, $term );
+	abstract function get_term_twitter_image( $term_id, $term );
 }

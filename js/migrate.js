@@ -1,7 +1,8 @@
 ( function ( window, document, $ ) {
 	'use strict';
 
-	var $status = $( '#status' ),
+	var $postStatus = $( '#posts-migration-status' ),
+		$termStatus = $( '#terms-migration-status' ),
 		$button = $( '#process ' ),
 		$ajaxLoader = $button.siblings( '.spinner' ),
 		$progressBar = $( '.ss-progressbar' ),
@@ -19,22 +20,59 @@
 
 		// Set global variable true to restart again
 		restart = 1;
-		handleMigrate();
+		handleMigratePosts();
 	} );
 
 	/**
 	 * Import data.
 	 * Keep sending ajax requests for the action until done.
 	 */
-	function handleMigrate() {
+	function handleMigratePosts() {
 		$.post( ajaxurl, {
-			action: 'migrate_yoast',
+			action: 'migrate_posts',
 			restart: restart,
 			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
 			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
-			callback( response, handleMigrate );
+			postsMigrationCallback( response, handleMigratePosts );
 		} );
+	}
+
+	function handleMigrateTerms() {
+		$.post( ajaxurl, {
+			action: 'migrate_terms',
+			restart: restart,
+			_ajax_nonce: $button.attr( 'data-nonce' )
+		}, function ( response ) {
+			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
+			termsMigrationCallback( response, handleMigrateTerms );
+		} );
+	}
+
+	function termsMigrationCallback( response, func ) {
+		var html = $termStatus.html(),
+			message;
+
+		if ( ! response.success ) {
+			$termStatus.addClass( 'error' );
+
+			message = '<p>' + response.data + '</p>';
+			$termStatus.html( message );
+			return;
+		}
+
+		if ( response.data.posts ) {
+			message = response.data.posts ? '<p>' + response.data.message + '</p>' : '';
+			$termStatus.html( message );
+		}
+
+		// Submit form again
+		if ( response.data.type == 'continue' ) {
+			func();
+		} else {
+			message = '<p>' + $button.data( 'done_text' ) + '</p>';
+			$termStatus.append( message );
+		}
 	}
 
 	/**
@@ -43,31 +81,29 @@
 	 * @param response JSON object returned from WordPress
 	 * @param func Callback function
 	 */
-	function callback( response, func ) {
-		var html = $status.html(),
+	function postsMigrationCallback( response, func ) {
+		var html = $postStatus.html(),
 			message;
 
 		if ( ! response.success ) {
-			$status.addClass( 'error' );
+			$postStatus.addClass( 'error' );
 
 			message = '<p>' + response.data + '</p>';
-			$status.html( message );
+			$postStatus.html( message );
 			return;
 		}
 
 		if ( response.data.posts ) {
 			message = response.data.posts ? '<p>' + response.data.message + '</p>' : '';
-			$status.html( message );
-			var percentage = response.data.posts * 50 / totalPosts;
-			$( '.ss-progressbar-value' ).css( 'width', percentage + '%' );
+			$postStatus.html( message );
 		}
 
 		// Submit form again
 		if ( response.data.type == 'continue' ) {
 			func();
 		} else {
-			$ajaxLoader.hide();
-			alert( $button.data( 'done_text' ) );
+			restart = 1;
+			handleMigrateTerms();
 		}
 	}
 

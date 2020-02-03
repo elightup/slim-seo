@@ -14,14 +14,15 @@ class Migration {
 
 	public function setup() {
 		$this->set_replacer();
-		add_action( 'wp_ajax_migrate_yoast', [ $this, 'handle_ajax' ] );
+		add_action( 'wp_ajax_migrate_posts', [ $this, 'handle_posts_migration' ] );
+		add_action( 'wp_ajax_migrate_terms', [ $this, 'handle_terms_migration' ] );
 	}
 
 	public function set_replacer() {
 		$this->replacer = ReplacerFactory::make( 'yoast' );
 	}
 
-	public function handle_ajax() {
+	public function handle_posts_migration() {
 		check_ajax_referer( 'migrate' );
 
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
@@ -39,14 +40,13 @@ class Migration {
 		}
 
 		$posts = $this->get_posts();
-		$processed = $_SESSION['processed'] + count( $posts ) - $this->threshold;
 		if ( ! $posts ) {
 			wp_send_json_success( array(
 				'message' => '',
 				'type'    => 'done',
 			) );
-			$this->handle_ajax_term();
 		}
+		$processed = $_SESSION['processed'] + count( $posts ) - $this->threshold;
 		foreach( $posts as $post_id ) {
 			$this->migrate_post( $post_id );
 		}
@@ -58,10 +58,24 @@ class Migration {
 		) );
 	}
 
-	private function handle_ajax_term() {
-		$_SESSION['processed'] = 0;
+	public function handle_terms_migration() {
+		check_ajax_referer( 'migrate' );
 
-		$terms = $this->replacer->get_terms();
+		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
+
+		// If restart the process, reset session and send "continue" command
+		session_start();
+		if ( $restart ) {
+
+			$_SESSION['processed'] = 0;
+
+			wp_send_json_success( array(
+				'message' => '',
+				'type'    => 'continue',
+			) );
+		}
+
+		$terms = $this->replacer->get_terms( $this->threshold );
 
 		if ( ! $terms ) {
 			wp_send_json_success( array(
@@ -70,8 +84,10 @@ class Migration {
 			) );
 		}
 
+		$processed = $_SESSION['processed'] + count( $terms ) - $this->threshold;
+
 		foreach( $terms as $term_id => $term ) {
-			$this->migrate_term( $term_id );
+			$this->migrate_term( $term_id, $term );
 		}
 
 		wp_send_json_success( array(
@@ -85,8 +101,8 @@ class Migration {
 		$this->replacer->replace_post( $post_id );
 	}
 
-	private function migrate_term( $term_id ) {
-		$this->replacer->replace_term( $term_id );
+	private function migrate_term( $term_id, $term ) {
+		$this->replacer->replace_term( $term_id, $term );
 	}
 
 	private function get_posts() {
@@ -109,26 +125,3 @@ class Migration {
 		return $posts->posts;
 	}
 }
-
-/*class AIOSEO implements Replacer {
-	use GetVariableValues;
-	public function replace( $value ) {
-		$keys = [
-			'%%site_title%%' => 'site_title',
-			'%%post_title%%' => 'post_title',
-		];
-		$replacements = str_replace( $keys, $this->get_variable_values() );
-		return str_replace( $replacements, $value );
-	}
-}
-
-trait GetVariableValues {
-	public function get_variable_values() {
-		return [
-			'site_title'       => get_bloginfo( 'name' ),
-			'site_description' => get_bloginfo( 'description' ),
-			'post_title'       => get_the_title(),
-		];
-	}
-}
-*/

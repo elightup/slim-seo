@@ -23,26 +23,6 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/migrate.css' );
 	}
 
-	public function get_post_count() {
-		$post_types = Helper::get_post_types();
-		$posts = new \WP_Query( [
-			'post_type'      => $post_types,
-			'post_status'    => ['publish', 'draft'],
-			'posts_per_page' => -1,
-			'no_found_rows'  => true,
-			'fields'         => 'ids',
-		] );
-
-		if( ! $posts->have_posts() ) {
-			return 0;
-		}
-		return $posts->post_count;
-	}
-
-	public function get_terms() {
-
-	}
-
 	public function render() {
 		$data = get_option( 'slim_seo' );
 		$data = $data ? $data : [];
@@ -50,7 +30,6 @@ class Settings {
 			'header_code' => '',
 			'footer_code' => '',
 		], $data );
-		$post_count = $this->get_post_count();
 		?>
 		<div class="wrap">
 			<h1><?= esc_html( get_admin_page_title() ); ?></h1>
@@ -58,13 +37,13 @@ class Settings {
 			<form method="post" action="">
 				<p class="submit">
 					<a href="#" class="button button-primary" id="process" data-nonce="<?php echo wp_create_nonce( 'migrate' ); ?>" data-done_text="<?php esc_attr_e( 'Done', 'slim-seo' ); ?>"><?php _e( 'Migrate From Yoast Seo', 'slim-seo' ); ?></a>
-					<span class="spinner"></span>
 				</p>
 			</form>
-			<div id="ss-progressbar" class="ss-progressbar" data-max-post="<?php echo esc_attr( $post_count ); ?>" data-max-term="" aria-valuenow="">
-				<div class="ss-progressbar-value" style="display: block; width: 0%;"></div>
+
+			<div class="migration-status">
+				<div id="posts-migration-status"></div>
+				<div id="terms-migration-status"></div>
 			</div>
-			<div id="status"></div>
 
 			<form action="" method="post">
 				<?php wp_nonce_field( 'save' ); ?>
