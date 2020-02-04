@@ -20,7 +20,7 @@ class Plugin {
 
 		// Admin only.
 		if ( is_admin() ) {
-			$this->services['settings'] = new Settings;
+			$this->services['settings'] = new Settings\Settings;
 			$this->services['notification'] = new Notification;
 			$this->services['migration'] = new Migration\Migration;
 			return;

@@ -1,0 +1,16 @@
+.nav-tab-wrapper {
+	padding: 0;
+	margin-top: 60px;
+}
+
+.nav-tab-active:focus {
+	box-shadow: none;
+}
+
+.ss-tab-pane {
+	display: none;
+}
+
+.ss-is-active {
+	display: block;
+}
