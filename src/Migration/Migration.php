@@ -10,43 +10,53 @@ class Migration {
 	 */
 	public $threshold = 10;
 
-	private $replacer = null;
-
 	public function setup() {
+		session_start();
+		add_action( 'wp_ajax_before_migration', [ $this, 'handle_before_migration' ] );
 		add_action( 'wp_ajax_migrate_posts', [ $this, 'handle_posts_migration' ] );
 		add_action( 'wp_ajax_migrate_terms', [ $this, 'handle_terms_migration' ] );
 	}
 
 	public function set_replacer( $platform ) {
-		$this->replacer = ReplacerFactory::make( $platform );
+		$_SESSION['replacer'] = ReplacerFactory::make( $platform );
 	}
 
-	public function handle_posts_migration() {
+	public function handle_before_migration() {
 		check_ajax_referer( 'migrate' );
-
-		$platform = isset( $_POST['platform'] ) ? sanitize_text_field( $_POST['platform'] ) : '';
-
-		if ( empty( $platform ) ) {
-			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ) );
-		}
-
-		$this->set_replacer( $platform );
-
 
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
 
-		// If restart the process, reset session and send "continue" command
-		session_start();
+		// Reset the session and prepare before migration.
 		if ( $restart ) {
 
+			// Reset the session variable to default for the new migration.
 			$_SESSION['processed'] = 0;
+			$_SESSION['replacer'] = null;
 
+			$platform = isset( $_POST['platform'] ) ? sanitize_text_field( $_POST['platform'] ) : '';
+
+			if ( empty( $platform ) ) {
+				wp_send_json_error( __( 'No platforms selected', 'slim-seo' ) );
+			}
+
+			$this->set_replacer( $platform );
+
+			$is_plugin_activation = $_SESSION['replacer']->is_plugin_activation();
+
+			if ( ! $is_plugin_activation ) {
+				$platforms = Helper::get_migration_platforms();
+				wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ) );
+			}
+
+			// reset session and send "continue" command to start migrating.
 			wp_send_json_success( array(
 				'message' => '',
 				'type'    => 'continue',
 			) );
 		}
+	}
 
+	public function handle_posts_migration() {
 		$posts = $this->get_posts();
 		if ( ! $posts ) {
 			wp_send_json_success( array(
@@ -67,23 +77,17 @@ class Migration {
 	}
 
 	public function handle_terms_migration() {
-		check_ajax_referer( 'migrate' );
-
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
-
-		// If restart the process, reset session and send "continue" command
-		session_start();
+		// Reset processed session variable after posts migration
 		if ( $restart ) {
-
 			$_SESSION['processed'] = 0;
-
 			wp_send_json_success( array(
 				'message' => '',
 				'type'    => 'continue',
 			) );
 		}
 
-		$terms = $this->replacer->get_terms( $this->threshold );
+		$terms = $_SESSION['replacer']->get_terms( $this->threshold );
 
 		if ( ! $terms ) {
 			wp_send_json_success( array(
@@ -106,11 +110,11 @@ class Migration {
 	}
 
 	private function migrate_post( $post_id ) {
-		$this->replacer->replace_post( $post_id );
+		$_SESSION['replacer']->replace_post( $post_id );
 	}
 
 	private function migrate_term( $term_id, $term ) {
-		$this->replacer->replace_term( $term_id, $term );
+		$_SESSION['replacer']->replace_term( $term_id, $term );
 	}
 
 	private function get_posts() {

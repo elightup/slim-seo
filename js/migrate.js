@@ -15,14 +15,30 @@
 
 		// Set global variable true to restart the session.
 		restart = 1;
-		preProcess();
-		handleMigratePosts();
+		preparing();
+		beforeMigration();
 	} );
 
-	function preProcess() {
+	function preparing() {
 		$button.closest( 'form' ).hide();
 		var message = '<p>' + $button.data( 'pre-process' ) + '</p>';
 		$postStatus.html( message );
+	}
+
+	/**
+	 * Before migration.
+	 * Setup replacer and restart the session.
+	 */
+	function beforeMigration() {
+		$.post( ajaxurl, {
+			action: 'before_migration',
+			restart: restart,
+			platform,
+			_ajax_nonce: $button.attr( 'data-nonce' )
+		}, function ( response ) {
+			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
+			handleMigratePosts();
+		} );
 	}
 
 	/**
@@ -32,11 +48,8 @@
 	function handleMigratePosts() {
 		$.post( ajaxurl, {
 			action: 'migrate_posts',
-			platform,
-			restart: restart,
 			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
-			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
 			postsMigrationCallback( response, handleMigratePosts );
 		} );
 	}
@@ -44,8 +57,7 @@
 	function handleMigrateTerms() {
 		$.post( ajaxurl, {
 			action: 'migrate_terms',
-			platform,
-			restart: restart,
+			restart: restart, // reset again after posts migration.
 			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
 			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
@@ -104,7 +116,7 @@
 		if ( response.data.type == 'continue' ) {
 			func();
 		} else {
-			restart = 1;
+			restart = 1; // reset again after posts migration.
 			handleMigrateTerms();
 		}
 	}

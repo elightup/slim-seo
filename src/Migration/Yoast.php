@@ -26,23 +26,23 @@ class Yoast extends Replacer {
 	}
 
 	public function get_term_title( $term_id, $term ) {
-		$title = $term['wpseo_title'];
+		$title = $term['wpseo_title'] ?? '';
 		$parsed_title = wpseo_replace_vars( $title, $term );
 		return $parsed_title;
 	}
 
 	public function get_term_description( $term_id, $term ) {
-		$description = $term['wpseo_desc'];
+		$description = $term['wpseo_desc'] ?? '';
 		$parsed_description = wpseo_replace_vars( $description, $term );
 		return $parsed_description;
 	}
 
 	public function get_term_facebook_image( $term_id, $term ) {
-		return $term['wpseo_opengraph-image'];
+		return $term['wpseo_opengraph-image'] ?? '';
 	}
 
 	public function get_term_twitter_image( $term_id, $term ) {
-		return $term['wpseo_twitter-image'];
+		return $term['wpseo_twitter-image'] ?? '';
 	}
 
 	public function get_terms( $threshold ) {
@@ -61,5 +61,9 @@ class Yoast extends Replacer {
 		}
 		$extract = array_slice( $terms_array, $offset, $threshold, true );
 		return $extract;
+	}
+
+	public function is_plugin_activation() {
+		return defined( 'WPSEO_VERSION' );
 	}
 }
