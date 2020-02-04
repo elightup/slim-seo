@@ -3,20 +3,24 @@
 
 	var $postStatus = $( '#posts-migration-status' ),
 		$termStatus = $( '#terms-migration-status' ),
+		$platformSelect = $( '#platform' ),
 		$button = $( '#process ' ),
+		platform,
 		restart;
 
 	$button.on( 'click', function ( e ) {
 		e.preventDefault();
 
-		// Set global variable true to restart again
+		platform = $platformSelect.val();
+
+		// Set global variable true to restart the session.
 		restart = 1;
 		preProcess();
 		handleMigratePosts();
 	} );
 
 	function preProcess() {
-		$button.closest('form').hide();
+		$button.closest( 'form' ).hide();
 		var message = '<p>' + $button.data( 'pre-process' ) + '</p>';
 		$postStatus.html( message );
 	}
@@ -28,6 +32,7 @@
 	function handleMigratePosts() {
 		$.post( ajaxurl, {
 			action: 'migrate_posts',
+			platform,
 			restart: restart,
 			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
@@ -39,6 +44,7 @@
 	function handleMigrateTerms() {
 		$.post( ajaxurl, {
 			action: 'migrate_terms',
+			platform,
 			restart: restart,
 			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
@@ -84,8 +90,6 @@
 			message;
 
 		if ( ! response.success ) {
-			$postStatus.addClass( 'error' );
-
 			message = '<p>' + response.data + '</p>';
 			$postStatus.html( message );
 			return;

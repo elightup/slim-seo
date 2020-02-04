@@ -13,17 +13,25 @@ class Migration {
 	private $replacer = null;
 
 	public function setup() {
-		$this->set_replacer();
 		add_action( 'wp_ajax_migrate_posts', [ $this, 'handle_posts_migration' ] );
 		add_action( 'wp_ajax_migrate_terms', [ $this, 'handle_terms_migration' ] );
 	}
 
-	public function set_replacer() {
-		$this->replacer = ReplacerFactory::make( 'yoast' );
+	public function set_replacer( $platform ) {
+		$this->replacer = ReplacerFactory::make( $platform );
 	}
 
 	public function handle_posts_migration() {
 		check_ajax_referer( 'migrate' );
+
+		$platform = isset( $_POST['platform'] ) ? sanitize_text_field( $_POST['platform'] ) : '';
+
+		if ( empty( $platform ) ) {
+			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ) );
+		}
+
+		$this->set_replacer( $platform );
+
 
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
 
