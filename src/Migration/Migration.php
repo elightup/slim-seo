@@ -24,36 +24,27 @@ class Migration {
 	public function handle_before_migration() {
 		check_ajax_referer( 'migrate' );
 
-		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
-
-		// Reset the session and prepare before migration.
-		if ( $restart ) {
-
-			// Reset the session variable to default for the new migration.
-			$_SESSION['processed'] = 0;
-			$_SESSION['replacer'] = null;
-
-			$platform = isset( $_POST['platform'] ) ? sanitize_text_field( $_POST['platform'] ) : '';
-
-			if ( empty( $platform ) ) {
-				wp_send_json_error( __( 'No platforms selected', 'slim-seo' ) );
-			}
-
-			$this->set_replacer( $platform );
-
-			$is_plugin_activation = $_SESSION['replacer']->is_plugin_activation();
-
-			if ( ! $is_plugin_activation ) {
-				$platforms = Helper::get_migration_platforms();
-				wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ) );
-			}
-
-			// reset session and send "continue" command to start migrating.
-			wp_send_json_success( array(
-				'message' => '',
-				'type'    => 'continue',
-			) );
+		// Set replacer from platform.
+		$platform = isset( $_POST['platform'] ) ? sanitize_text_field( $_POST['platform'] ) : '';
+		if ( empty( $platform ) ) {
+			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ) );
 		}
+		$this->set_replacer( $platform );
+
+		// Check if the plugin is activated.
+		$is_plugin_activation = $_SESSION['replacer']->is_plugin_activation();
+		if ( ! $is_plugin_activation ) {
+			$platforms = Helper::get_migration_platforms();
+			wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ) );
+		}
+
+		// Restart the counter.
+		$_SESSION['processed'] = 0;
+
+		wp_send_json_success( [
+			'message' => '',
+			'type'    => 'continue',
+		] );
 	}
 
 	public function handle_posts_migration() {
@@ -64,13 +55,14 @@ class Migration {
 				'type'    => 'done',
 			) );
 		}
-		$processed = $_SESSION['processed'] + count( $posts ) - $this->threshold;
 		foreach( $posts as $post_id ) {
 			$this->migrate_post( $post_id );
 		}
 
+		$_SESSION['processed'] += count( $posts );
+
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), $processed ),
+			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), $_SESSION['processed'] ),
 			'posts'   => $processed,
 			'type'    => 'continue',
 		) );
@@ -96,14 +88,14 @@ class Migration {
 			) );
 		}
 
-		$processed = $_SESSION['processed'] + count( $terms ) - $this->threshold;
-
 		foreach( $terms as $term_id => $term ) {
 			$this->migrate_term( $term_id, $term );
 		}
 
+		$_SESSION['processed'] += count( $terms );
+
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $processed ),
+			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $_SESSION['processed'] ),
 			'posts'   => $processed,
 			'type'    => 'continue',
 		) );
@@ -118,9 +110,6 @@ class Migration {
 	}
 
 	private function get_posts() {
-		$offset                = isset( $_SESSION['processed'] ) ? $_SESSION['processed'] : 0;
-		$_SESSION['processed'] = $_SESSION['processed'] + $this->threshold;
-
 		$post_types = Helper::get_post_types();
 		$posts = new \WP_Query( [
 			'post_type'      => $post_types,
@@ -128,12 +117,13 @@ class Migration {
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',
-			'offset'         => $offset,
+			'offset'         => $_SESSION['processed'],
 		] );
 
 		if( ! $posts->have_posts() ) {
 			return false;
 		}
+
 		return $posts->posts;
 	}
 }

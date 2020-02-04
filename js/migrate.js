@@ -27,12 +27,11 @@
 
 	/**
 	 * Before migration.
-	 * Setup replacer and restart the session.
+	 * Setup replacer and restart the counter.
 	 */
 	function beforeMigration() {
 		$.post( ajaxurl, {
 			action: 'before_migration',
-			restart: restart,
 			platform,
 			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {

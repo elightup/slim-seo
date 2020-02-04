@@ -51,15 +51,12 @@ class Yoast extends Replacer {
 			return '';
 		}
 
-		$offset                = isset( $_SESSION['processed'] ) ? $_SESSION['processed'] : 0;
-		$_SESSION['processed'] = $_SESSION['processed'] + $threshold;
-
 		$terms_array = [];
 		$terms = array_values( $terms );
 		foreach( $terms as $term ) {
 			$terms_array = $terms_array + $term;
 		}
-		$extract = array_slice( $terms_array, $offset, $threshold, true );
+		$extract = array_slice( $terms_array, $_SESSION['processed'], $threshold, true );
 		return $extract;
 	}
 
