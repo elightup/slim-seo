@@ -4,7 +4,7 @@
 	var $postStatus = $( '#posts-migration-status' ),
 		$termStatus = $( '#terms-migration-status' ),
 		$platformSelect = $( '#platform' ),
-		$button = $( '#process ' ),
+		$button = $( '#process' ),
 		platform,
 		restart;
 
@@ -20,8 +20,8 @@
 	} );
 
 	function preparing() {
-		$button.closest( 'form' ).hide();
-		var message = '<p>' + $button.data( 'pre-process' ) + '</p>';
+		$button.closest( '.migration-handler' ).hide();
+		var message = '<p>' + ssMigration.preProcessText + '</p>';
 		$postStatus.html( message );
 	}
 
@@ -33,7 +33,7 @@
 		$.post( ajaxurl, {
 			action: 'before_migration',
 			platform,
-			_ajax_nonce: $button.attr( 'data-nonce' )
+			_ajax_nonce: ssMigration.nonce
 		}, function ( response ) {
 			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
 			handleMigratePosts();
@@ -47,7 +47,6 @@
 	function handleMigratePosts() {
 		$.post( ajaxurl, {
 			action: 'migrate_posts',
-			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
 			postsMigrationCallback( response, handleMigratePosts );
 		} );
@@ -57,7 +56,6 @@
 		$.post( ajaxurl, {
 			action: 'migrate_terms',
 			restart: restart, // reset again after posts migration.
-			_ajax_nonce: $button.attr( 'data-nonce' )
 		}, function ( response ) {
 			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
 			termsMigrationCallback( response, handleMigrateTerms );
@@ -82,7 +80,7 @@
 			$termStatus.html( message );
 			func();
 		} else {
-			message = '<p>' + $button.data( 'done_text' ) + '</p>';
+			message = '<p>' + ssMigration.doneText + '</p>';
 			$termStatus.append( message );
 		}
 	}
