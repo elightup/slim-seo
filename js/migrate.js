@@ -13,8 +13,6 @@
 
 		platform = $platformSelect.val();
 
-		// Set global variable true to restart the session.
-		restart = 1;
 		preProcess();
 		prepareMigration();
 	} );
@@ -34,10 +32,7 @@
 			action: 'prepare_migration',
 			platform,
 			_ajax_nonce: ssMigration.nonce
-		}, function ( response ) {
-			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
-			handleMigratePosts();
-		} );
+		}, handleMigratePosts );
 	}
 
 	/**

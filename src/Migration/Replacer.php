@@ -44,5 +44,5 @@ abstract class Replacer {
 	abstract function get_term_facebook_image( $term_id, $term );
 	abstract function get_term_twitter_image( $term_id, $term );
 
-	abstract function is_plugin_activation();
+	abstract function is_activated();
 }

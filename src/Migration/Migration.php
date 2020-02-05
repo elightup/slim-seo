@@ -16,28 +16,38 @@ class Migration {
 		add_action( 'wp_ajax_migrate_terms', [ $this, 'migrate_terms' ] );
 	}
 
-	public function set_replacer( $platform ) {
-		$_SESSION['replacer'] = ReplacerFactory::make( $platform );
-	}
-
 	public function prepare_migration() {
 		check_ajax_referer( 'migrate' );
 
-		// Set replacer from platform.
-		$platform = isset( $_POST['platform'] ) ? sanitize_text_field( $_POST['platform'] ) : '';
+		$platform = $this->get_platform();
+
+		$this->set_replacer( $platform );
+		$this->check_platform_activation( $platform );
+		$this->restart_counter();
+	}
+
+	private function get_platform() {
+		$platform = filter_input( INPUT_POST, 'platform', FILTER_SANITIZE_STRING );
 		if ( empty( $platform ) ) {
 			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ) );
 		}
-		$this->set_replacer( $platform );
+		return $platform;
+	}
 
-		// Check if the plugin is activated.
-		$is_plugin_activation = $_SESSION['replacer']->is_plugin_activation();
-		if ( ! $is_plugin_activation ) {
-			$platforms = Helper::get_migration_platforms();
-			wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ) );
+	private function set_replacer( $platform ) {
+		$_SESSION['replacer'] = ReplacerFactory::make( $platform );
+	}
+
+	private function check_platform_activation( $platform ) {
+		$is_activated = $_SESSION['replacer']->is_activated();
+		if ( $is_activated ) {
+			return;
 		}
+		$platforms = Helper::get_migration_platforms();
+		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ) );
+	}
 
-		// Restart the counter.
+	private function restart_counter() {
 		$_SESSION['processed'] = 0;
 
 		wp_send_json_success( [
@@ -70,11 +80,7 @@ class Migration {
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
 		// Reset processed session variable after posts migration
 		if ( $restart ) {
-			$_SESSION['processed'] = 0;
-			wp_send_json_success( [
-				'message' => '',
-				'type'    => 'continue',
-			] );
+			$this->restart_counter();
 		}
 
 		$terms = $_SESSION['replacer']->get_terms( $this->threshold );
