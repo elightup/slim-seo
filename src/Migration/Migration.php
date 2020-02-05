@@ -29,7 +29,7 @@ class Migration {
 	private function get_platform() {
 		$platform = filter_input( INPUT_POST, 'platform', FILTER_SANITIZE_STRING );
 		if ( empty( $platform ) ) {
-			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ) );
+			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ), 400 );
 		}
 		return $platform;
 	}
@@ -44,7 +44,7 @@ class Migration {
 			return;
 		}
 		$platforms = Helper::get_migration_platforms();
-		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ) );
+		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ), 400 );
 	}
 
 	private function restart_counter() {

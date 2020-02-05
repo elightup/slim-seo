@@ -1,26 +1,36 @@
 ( function ( window, document, $ ) {
 	'use strict';
 
-	var $postStatus = $( '#posts-migration-status' ),
-		$termStatus = $( '#terms-migration-status' ),
+	var $postStatus = $( '#posts-status' ),
+		$prepareStatus = $( '#prepare-status' ),
+		$termStatus = $( '#terms-status' ),
 		$platformSelect = $( '#platform' ),
 		$button = $( '#process' ),
 		platform,
 		restart;
 
-	$button.on( 'click', function ( e ) {
-		e.preventDefault();
-
+	$button.on( 'click', async function () {
 		platform = $platformSelect.val();
-
-		preProcess();
-		prepareMigration();
+		try {
+			preProcess();
+			const prepare = await prepareMigration();
+			const migratePosts = await handleMigratePosts( prepare );
+			postsMigrationCallback( migratePosts, handleMigratePosts );
+			restart = 1;
+			const handleMigrateTerms = await handleMigrateTerms( )
+		} catch ( err ) {
+			printMessage( $prepareStatus, err.responseJSON.data );
+		}
 	} );
+
+	function printMessage( $status, text ) {
+		var message = '<p>' + text + '</p>';
+		$status.html( message );
+	}
 
 	function preProcess() {
 		$button.closest( '.migration-handler' ).hide();
-		var message = '<p>' + ssMigration.preProcessText + '</p>';
-		$postStatus.html( message );
+		printMessage( $prepareStatus, ssMigration.preProcessText );
 	}
 
 	/**
@@ -28,11 +38,11 @@
 	 * Setup replacer and restart the counter.
 	 */
 	function prepareMigration() {
-		$.post( ajaxurl, {
+		return $.post( ajaxurl, {
 			action: 'prepare_migration',
 			platform,
 			_ajax_nonce: ssMigration.nonce
-		}, handleMigratePosts );
+		} )
 	}
 
 	/**
@@ -40,15 +50,13 @@
 	 * Keep sending ajax requests for the action until done.
 	 */
 	function handleMigratePosts() {
-		$.post( ajaxurl, {
+		return $.post( ajaxurl, {
 			action: 'migrate_posts',
-		}, function ( response ) {
-			postsMigrationCallback( response, handleMigratePosts );
 		} );
 	}
 
 	function handleMigrateTerms() {
-		$.post( ajaxurl, {
+		return $.post( ajaxurl, {
 			action: 'migrate_terms',
 			restart: restart, // reset again after posts migration.
 		}, function ( response ) {
