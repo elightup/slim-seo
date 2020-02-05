@@ -1,5 +1,5 @@
 <?php
-$platforms = SlimSEO\Helper::get_migration_platforms();
+$platforms = SlimSEO\Migration\Helper::get_migration_platforms();
 if ( empty( $platforms ) ) {
 	return;
 }

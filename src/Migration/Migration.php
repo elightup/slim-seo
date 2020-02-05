@@ -1,6 +1,5 @@
 <?php
 namespace SlimSEO\Migration;
-use SlimSEO\Helper as Helper;
 
 class Migration {
 
@@ -63,7 +62,6 @@ class Migration {
 
 		wp_send_json_success( array(
 			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), $_SESSION['processed'] ),
-			'posts'   => $processed,
 			'type'    => 'continue',
 		) );
 	}
@@ -96,7 +94,6 @@ class Migration {
 
 		wp_send_json_success( array(
 			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $_SESSION['processed'] ),
-			'posts'   => $processed,
 			'type'    => 'continue',
 		) );
 	}

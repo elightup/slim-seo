@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO;
+namespace SlimSEO\Migration;
 
 class Helper {
 	public static function get_post_types() {

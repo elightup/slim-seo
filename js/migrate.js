@@ -76,13 +76,10 @@
 			return;
 		}
 
-		if ( response.data.posts ) {
-			message = response.data.posts ? '<p>' + response.data.message + '</p>' : '';
-			$termStatus.html( message );
-		}
-
 		// Submit form again
 		if ( response.data.type == 'continue' ) {
+			message = '<p>' + response.data.message + '</p>';
+			$termStatus.html( message );
 			func();
 		} else {
 			message = '<p>' + $button.data( 'done_text' ) + '</p>';
@@ -106,13 +103,10 @@
 			return;
 		}
 
-		if ( response.data.posts ) {
-			message = response.data.posts ? '<p>' + response.data.message + '</p>' : '';
-			$postStatus.html( message );
-		}
-
 		// Submit form again
 		if ( response.data.type == 'continue' ) {
+			message = '<p>' + response.data.message + '</p>';
+			$postStatus.html( message );
 			func();
 		} else {
 			restart = 1; // reset again after posts migration.
