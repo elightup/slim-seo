@@ -15,11 +15,11 @@
 
 		// Set global variable true to restart the session.
 		restart = 1;
-		preparing();
-		beforeMigration();
+		preProcess();
+		prepareMigration();
 	} );
 
-	function preparing() {
+	function preProcess() {
 		$button.closest( '.migration-handler' ).hide();
 		var message = '<p>' + ssMigration.preProcessText + '</p>';
 		$postStatus.html( message );
@@ -29,9 +29,9 @@
 	 * Before migration.
 	 * Setup replacer and restart the counter.
 	 */
-	function beforeMigration() {
+	function prepareMigration() {
 		$.post( ajaxurl, {
-			action: 'before_migration',
+			action: 'prepare_migration',
 			platform,
 			_ajax_nonce: ssMigration.nonce
 		}, function ( response ) {

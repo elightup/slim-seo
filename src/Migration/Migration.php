@@ -11,16 +11,16 @@ class Migration {
 
 	public function setup() {
 		session_start();
-		add_action( 'wp_ajax_before_migration', [ $this, 'handle_before_migration' ] );
-		add_action( 'wp_ajax_migrate_posts', [ $this, 'handle_posts_migration' ] );
-		add_action( 'wp_ajax_migrate_terms', [ $this, 'handle_terms_migration' ] );
+		add_action( 'wp_ajax_prepare_migration', [ $this, 'prepare_migration' ] );
+		add_action( 'wp_ajax_migrate_posts', [ $this, 'migrate_posts' ] );
+		add_action( 'wp_ajax_migrate_terms', [ $this, 'migrate_terms' ] );
 	}
 
 	public function set_replacer( $platform ) {
 		$_SESSION['replacer'] = ReplacerFactory::make( $platform );
 	}
 
-	public function handle_before_migration() {
+	public function prepare_migration() {
 		check_ajax_referer( 'migrate' );
 
 		// Set replacer from platform.
@@ -46,13 +46,13 @@ class Migration {
 		] );
 	}
 
-	public function handle_posts_migration() {
+	public function migrate_posts() {
 		$posts = $this->get_posts();
 		if ( ! $posts ) {
-			wp_send_json_success( array(
+			wp_send_json_success( [
 				'message' => '',
 				'type'    => 'done',
-			) );
+			] );
 		}
 		foreach( $posts as $post_id ) {
 			$this->migrate_post( $post_id );
@@ -60,30 +60,30 @@ class Migration {
 
 		$_SESSION['processed'] += count( $posts );
 
-		wp_send_json_success( array(
+		wp_send_json_success( [
 			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), $_SESSION['processed'] ),
 			'type'    => 'continue',
-		) );
+		] );
 	}
 
-	public function handle_terms_migration() {
+	public function migrate_terms() {
 		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
 		// Reset processed session variable after posts migration
 		if ( $restart ) {
 			$_SESSION['processed'] = 0;
-			wp_send_json_success( array(
+			wp_send_json_success( [
 				'message' => '',
 				'type'    => 'continue',
-			) );
+			] );
 		}
 
 		$terms = $_SESSION['replacer']->get_terms( $this->threshold );
 
 		if ( ! $terms ) {
-			wp_send_json_success( array(
+			wp_send_json_success( [
 				'message' => '',
 				'type'    => 'done',
-			) );
+			] );
 		}
 
 		foreach( $terms as $term_id => $term ) {
@@ -92,10 +92,10 @@ class Migration {
 
 		$_SESSION['processed'] += count( $terms );
 
-		wp_send_json_success( array(
+		wp_send_json_success( [
 			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $_SESSION['processed'] ),
 			'type'    => 'continue',
-		) );
+		] );
 	}
 
 	private function migrate_post( $post_id ) {

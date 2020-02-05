@@ -60,7 +60,7 @@ class Yoast extends Replacer {
 		return $extract;
 	}
 
-	public function is_plugin_activation() {
+	public function is_activated() {
 		return defined( 'WPSEO_VERSION' );
 	}
 }

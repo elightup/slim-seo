@@ -14,8 +14,8 @@ if ( empty( $platforms ) ) {
 		<label for="platform">Migrate SEO data from:</label>
 		<select name="platform" id="platform">
 			<?php foreach ( $platforms as $id => $platform ): ?>
-				<option value="<?php echo esc_attr( $id ); ?>">
-					<?php echo esc_html( $platform ); ?>
+				<option value="<?= esc_attr( $id ); ?>">
+					<?= esc_html( $platform ); ?>
 				</option>
 			<?php endforeach ?>
 		</select>
