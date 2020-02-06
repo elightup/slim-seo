@@ -25,8 +25,8 @@ if ( empty( $platforms ) ) {
 	</p>
 
 	<div class="migration-status">
-		<div id="prepare-status"></div>
 		<div id="posts-status"></div>
 		<div id="terms-status"></div>
+		<div id="done-status"></div>
 	</div>
 </div>

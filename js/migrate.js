@@ -2,7 +2,7 @@
 	'use strict';
 
 	var $postStatus = $( '#posts-status' ),
-		$prepareStatus = $( '#prepare-status' ),
+		$doneStatus = $( '#done-status' ),
 		$termStatus = $( '#terms-status' ),
 		$platformSelect = $( '#platform' ),
 		$button = $( '#process' ),
@@ -13,13 +13,13 @@
 		platform = $platformSelect.val();
 		try {
 			preProcess();
-			const prepare = await prepareMigration();
-			const migratePosts = await handleMigratePosts( prepare );
-			postsMigrationCallback( migratePosts, handleMigratePosts );
-			restart = 1;
-			const handleMigrateTerms = await handleMigrateTerms( )
+			await prepareMigration();
+			await handleMigratePosts();
+			resetCounter();
+			await handleMigrateTerms();
+			doneMigration();
 		} catch ( err ) {
-			printMessage( $prepareStatus, err.responseJSON.data );
+			printMessage( $postStatus, err.responseJSON.data );
 		}
 	} );
 
@@ -30,7 +30,11 @@
 
 	function preProcess() {
 		$button.closest( '.migration-handler' ).hide();
-		printMessage( $prepareStatus, ssMigration.preProcessText );
+		printMessage( $postStatus, ssMigration.preProcessText );
+	}
+
+	function doneMigration() {
+		printMessage( $doneStatus, ssMigration.doneText );
 	}
 
 	/**
@@ -45,73 +49,39 @@
 		} )
 	}
 
+	function resetCounter() {
+		restart = 1;
+	}
+
+	function startCounter() {
+		restart = 0;
+	}
+
 	/**
 	 * Import data.
 	 * Keep sending ajax requests for the action until done.
 	 */
-	function handleMigratePosts() {
-		return $.post( ajaxurl, {
+	async function handleMigratePosts() {
+		const response = await $.post( ajaxurl, {
 			action: 'migrate_posts',
 		} );
+
+		if ( response.data.type == 'continue' ) {
+			printMessage( $postStatus, response.data.message );
+			await handleMigratePosts();
+		}
 	}
 
-	function handleMigrateTerms() {
-		return $.post( ajaxurl, {
+	async function handleMigrateTerms() {
+		const response = await $.post( ajaxurl, {
 			action: 'migrate_terms',
-			restart: restart, // reset again after posts migration.
-		}, function ( response ) {
-			restart = 0; // Set this global variable = false to make sure all other calls continue properly.
-			termsMigrationCallback( response, handleMigrateTerms );
+			restart, // reset again after posts migration.
 		} );
-	}
-
-	function termsMigrationCallback( response, func ) {
-		var html = $termStatus.html(),
-			message;
-
-		if ( ! response.success ) {
-			$termStatus.addClass( 'error' );
-
-			message = '<p>' + response.data + '</p>';
-			$termStatus.html( message );
-			return;
-		}
-
+		startCounter();
 		// Submit form again
 		if ( response.data.type == 'continue' ) {
-			message = '<p>' + response.data.message + '</p>';
-			$termStatus.html( message );
-			func();
-		} else {
-			message = '<p>' + ssMigration.doneText + '</p>';
-			$termStatus.append( message );
-		}
-	}
-
-	/**
-	 * Callback function to display messages
-	 *
-	 * @param response JSON object returned from WordPress
-	 * @param func Callback function
-	 */
-	function postsMigrationCallback( response, func ) {
-		var html = $postStatus.html(),
-			message;
-
-		if ( ! response.success ) {
-			message = '<p>' + response.data + '</p>';
-			$postStatus.html( message );
-			return;
-		}
-
-		// Submit form again
-		if ( response.data.type == 'continue' ) {
-			message = '<p>' + response.data.message + '</p>';
-			$postStatus.html( message );
-			func();
-		} else {
-			restart = 1; // reset again after posts migration.
-			handleMigrateTerms();
+			printMessage( $termStatus, response.data.message );
+			await handleMigrateTerms();
 		}
 	}
 
