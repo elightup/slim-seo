@@ -2,7 +2,6 @@
 namespace SlimSEO\Migration;
 
 class Migration {
-
 	/**
 	 * Number of posts being processed in 1 call
 	 * @var int
@@ -43,7 +42,7 @@ class Migration {
 		if ( $is_activated ) {
 			return;
 		}
-		$platforms = Helper::get_migration_platforms();
+		$platforms = Helper::get_platforms();
 		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ), 400 );
 	}
 

@@ -19,6 +19,7 @@
 			await handleMigrateTerms();
 			doneMigration();
 		} catch ( err ) {
+			console.log( err );
 			printMessage( $postStatus, err.responseJSON.data );
 		}
 	} );
@@ -38,7 +39,6 @@
 	}
 
 	/**
-	 * Before migration.
 	 * Setup replacer and restart the counter.
 	 */
 	function prepareMigration() {
@@ -46,7 +46,7 @@
 			action: 'prepare_migration',
 			platform,
 			_ajax_nonce: ssMigration.nonce
-		} )
+		} );
 	}
 
 	function resetCounter() {
@@ -58,7 +58,6 @@
 	}
 
 	/**
-	 * Import data.
 	 * Keep sending ajax requests for the action until done.
 	 */
 	async function handleMigratePosts() {
