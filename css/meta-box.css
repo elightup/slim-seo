@@ -78,17 +78,21 @@
 .ss-success:after,
 .ss-warning:after {
 	display: inline-block;
-	font: normal 14px/1 dashicons;
-	position: relative;
-	top: 4px;
+	width: 12px;
+	height: 12px;
+	font-size: 8px;
+	line-height: 12px;
+	border-radius: 9px;
+	color: #fff;
+	text-align: center;
 }
 .ss-success:after {
-	content: "\f12a";
-	color: #70d028;
+	content: "\2713";
+	background: #70d028;
 }
 .ss-warning:after {
-	content: "\f534";
-	color: #f56e28;
+	content: "!";
+	background: #f56e28;
 }
 
 /* Tabs */
