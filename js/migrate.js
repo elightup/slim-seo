@@ -24,25 +24,9 @@
 		}
 	} );
 
-	function printMessage( $status, text ) {
-		var message = '<p>' + text + '</p>';
-		$status.html( message );
-	}
-
-	function resetCounter() {
-		return $.post( ajaxurl, {
-			action: 'reset_counter',
-			_ajax_nonce: ssMigration.nonce
-		} );
-	}
-
 	function preProcess() {
 		$button.closest( '.migration-handler' ).hide();
 		printMessage( $postStatus, ssMigration.preProcessText );
-	}
-
-	function doneMigration() {
-		printMessage( $doneStatus, ssMigration.doneText );
 	}
 
 	/**
@@ -50,8 +34,15 @@
 	 */
 	function prepareMigration() {
 		return $.post( ajaxurl, {
-			action: 'prepare_migration',
+			action: 'ss_prepare_migration',
 			platform,
+			_ajax_nonce: ssMigration.nonce
+		} );
+	}
+
+	function resetCounter() {
+		return $.post( ajaxurl, {
+			action: 'ss_reset_counter',
 			_ajax_nonce: ssMigration.nonce
 		} );
 	}
@@ -61,7 +52,7 @@
 	 */
 	async function handleMigratePosts() {
 		const response = await $.post( ajaxurl, {
-			action: 'migrate_posts',
+			action: 'ss_migrate_posts',
 		} );
 
 		if ( response.data.type == 'continue' ) {
@@ -72,13 +63,22 @@
 
 	async function handleMigrateTerms() {
 		const response = await $.post( ajaxurl, {
-			action: 'migrate_terms',
+			action: 'ss_migrate_terms',
 		} );
 		// Submit form again
 		if ( response.data.type == 'continue' ) {
 			printMessage( $termStatus, response.data.message );
 			await handleMigrateTerms();
 		}
+	}
+
+	function doneMigration() {
+		printMessage( $doneStatus, ssMigration.doneText );
+	}
+
+	function printMessage( $status, text ) {
+		var message = '<p>' + text + '</p>';
+		$status.html( message );
 	}
 
 } )( window, document, jQuery );

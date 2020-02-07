@@ -26,29 +26,29 @@ class Yoast extends Replacer {
 	}
 
 	public function get_term_title( $term_id, $term ) {
-		$title = $term['wpseo_title'] ?? '';
+		$title = isset( $term['wpseo_title'] ) ? $term['wpseo_title'] : '';
 		$parsed_title = wpseo_replace_vars( $title, $term );
 		return $parsed_title;
 	}
 
 	public function get_term_description( $term_id, $term ) {
-		$description = $term['wpseo_desc'] ?? '';
+		$description = isset( $term['wpseo_desc'] ) ? $term['wpseo_desc'] : '';
 		$parsed_description = wpseo_replace_vars( $description, $term );
 		return $parsed_description;
 	}
 
 	public function get_term_facebook_image( $term_id, $term ) {
-		return $term['wpseo_opengraph-image'] ?? '';
+		return isset( $term['wpseo_opengraph-image'] ) ? $term['wpseo_opengraph-image'] : '';
 	}
 
 	public function get_term_twitter_image( $term_id, $term ) {
-		return $term['wpseo_twitter-image'] ?? '';
+		return isset( $term['wpseo_twitter-image'] ) ? $term['wpseo_opengraph-image'] : '';
 	}
 
 	public function get_terms( $threshold ) {
 		$terms = get_option( 'wpseo_taxonomy_meta' );
 		if ( empty( $terms ) ) {
-			return '';
+			return [];
 		}
 
 		$terms_array = [];
