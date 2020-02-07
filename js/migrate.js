@@ -14,12 +14,12 @@
 		try {
 			preProcess();
 			await prepareMigration();
+			await resetCounter();
 			await handleMigratePosts();
-			resetCounter();
+			await resetCounter();
 			await handleMigrateTerms();
 			doneMigration();
 		} catch ( err ) {
-			console.log( err );
 			printMessage( $postStatus, err.responseJSON.data );
 		}
 	} );
@@ -27,6 +27,13 @@
 	function printMessage( $status, text ) {
 		var message = '<p>' + text + '</p>';
 		$status.html( message );
+	}
+
+	function resetCounter() {
+		return $.post( ajaxurl, {
+			action: 'reset_counter',
+			_ajax_nonce: ssMigration.nonce
+		} );
 	}
 
 	function preProcess() {
@@ -49,14 +56,6 @@
 		} );
 	}
 
-	function resetCounter() {
-		restart = 1;
-	}
-
-	function startCounter() {
-		restart = 0;
-	}
-
 	/**
 	 * Keep sending ajax requests for the action until done.
 	 */
@@ -74,9 +73,7 @@
 	async function handleMigrateTerms() {
 		const response = await $.post( ajaxurl, {
 			action: 'migrate_terms',
-			restart, // reset again after posts migration.
 		} );
-		startCounter();
 		// Submit form again
 		if ( response.data.type == 'continue' ) {
 			printMessage( $termStatus, response.data.message );

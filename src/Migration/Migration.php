@@ -11,6 +11,7 @@ class Migration {
 	public function setup() {
 		session_start();
 		add_action( 'wp_ajax_prepare_migration', [ $this, 'prepare_migration' ] );
+		add_action( 'wp_ajax_reset_counter', [ $this, 'reset_counter' ] );
 		add_action( 'wp_ajax_migrate_posts', [ $this, 'migrate_posts' ] );
 		add_action( 'wp_ajax_migrate_terms', [ $this, 'migrate_terms' ] );
 	}
@@ -22,7 +23,6 @@ class Migration {
 
 		$this->set_replacer( $platform );
 		$this->check_platform_activation( $platform );
-		$this->restart_counter();
 	}
 
 	private function get_platform() {
@@ -46,7 +46,7 @@ class Migration {
 		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ), 400 );
 	}
 
-	private function restart_counter() {
+	public function reset_counter() {
 		$_SESSION['processed'] = 0;
 
 		wp_send_json_success( [
@@ -76,12 +76,6 @@ class Migration {
 	}
 
 	public function migrate_terms() {
-		$restart = isset( $_POST['restart'] ) ? intval( $_POST['restart'] ) : 0;
-		// Reset processed session variable after posts migration
-		if ( $restart ) {
-			$this->restart_counter();
-		}
-
 		$terms = $_SESSION['replacer']->get_terms( $this->threshold );
 
 		if ( ! $terms ) {
