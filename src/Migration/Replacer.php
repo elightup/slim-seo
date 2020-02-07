@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\Migration;
 
-abstract class Replacer {
+class Replacer {
 
 	/**
 	 * Parse other plugins' title and description patterns to text.
@@ -34,15 +34,40 @@ abstract class Replacer {
 		}
 	}
 
-	abstract function get_post_title( $post_id );
-	abstract function get_post_description( $post_id );
-	abstract function get_post_facebook_image( $post_id );
-	abstract function get_post_twitter_image( $post_id );
+	function get_post_title( $post_id ) {
+		return null;
+	}
+	function get_post_description( $post_id ) {
+		return null;
+	}
+	function get_post_facebook_image( $post_id ) {
+		return null;
+	}
+	function get_post_twitter_image( $post_id ) {
+		return null;
+	}
 
-	abstract function get_term_title( $term_id, $term );
-	abstract function get_term_description( $term_id, $term );
-	abstract function get_term_facebook_image( $term_id, $term );
-	abstract function get_term_twitter_image( $term_id, $term );
+	function get_term_title( $term_id, $term ) {
+		return null;
+	}
 
-	abstract function is_activated();
+	function get_term_description( $term_id, $term ) {
+		return null;
+	}
+
+	function get_term_facebook_image( $term_id, $term ) {
+		return null;
+	}
+
+	function get_term_twitter_image( $term_id, $term ) {
+		return null;
+	}
+
+	function get_terms() {
+		return null;
+	}
+
+	function is_activated() {
+		return null;
+	}
 }
