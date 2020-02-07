@@ -23,6 +23,7 @@ class Migration {
 
 		$this->set_replacer( $platform );
 		$this->check_platform_activation( $platform );
+		wp_send_json_success();
 	}
 
 	private function get_platform() {

@@ -34,40 +34,40 @@ class Replacer {
 		}
 	}
 
-	function get_post_title( $post_id ) {
+	protected function get_post_title( $post_id ) {
 		return null;
 	}
-	function get_post_description( $post_id ) {
+	protected function get_post_description( $post_id ) {
 		return null;
 	}
-	function get_post_facebook_image( $post_id ) {
+	protected function get_post_facebook_image( $post_id ) {
 		return null;
 	}
-	function get_post_twitter_image( $post_id ) {
-		return null;
-	}
-
-	function get_term_title( $term_id, $term ) {
+	protected function get_post_twitter_image( $post_id ) {
 		return null;
 	}
 
-	function get_term_description( $term_id, $term ) {
+	protected function get_term_title( $term_id, $term ) {
 		return null;
 	}
 
-	function get_term_facebook_image( $term_id, $term ) {
+	protected function get_term_description( $term_id, $term ) {
 		return null;
 	}
 
-	function get_term_twitter_image( $term_id, $term ) {
+	protected function get_term_facebook_image( $term_id, $term ) {
 		return null;
 	}
 
-	function get_terms() {
+	protected function get_term_twitter_image( $term_id, $term ) {
 		return null;
 	}
 
-	function is_activated() {
+	public function get_terms( $threshold ) {
 		return null;
+	}
+
+	public function is_activated() {
+		return true;
 	}
 }
