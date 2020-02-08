@@ -6,6 +6,7 @@ class ReplacerFactory {
 		switch ( $platform ) {
 			case 'yoast': return new Yoast;
 			case 'aioseo': return new AIOSEO;
+			case 'seo-framework': return new SEOFramework;
 		}
 	}
 }

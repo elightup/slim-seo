@@ -10,10 +10,10 @@ class Migration {
 
 	public function setup() {
 		session_start();
-		add_action( 'wp_ajax_prepare_migration', [ $this, 'prepare_migration' ] );
-		add_action( 'wp_ajax_reset_counter', [ $this, 'reset_counter' ] );
-		add_action( 'wp_ajax_migrate_posts', [ $this, 'migrate_posts' ] );
-		add_action( 'wp_ajax_migrate_terms', [ $this, 'migrate_terms' ] );
+		add_action( 'wp_ajax_ss_prepare_migration', [ $this, 'prepare_migration' ] );
+		add_action( 'wp_ajax_ss_reset_counter', [ $this, 'reset_counter' ] );
+		add_action( 'wp_ajax_ss_migrate_posts', [ $this, 'migrate_posts' ] );
+		add_action( 'wp_ajax_ss_migrate_terms', [ $this, 'migrate_terms' ] );
 	}
 
 	public function prepare_migration() {

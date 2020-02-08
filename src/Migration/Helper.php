@@ -8,6 +8,14 @@ class Helper {
 		return array_keys( $post_types );
 	}
 
+	public static function get_taxonomies() {
+		$taxonomies = get_taxonomies( [
+			'public' => true,
+		] );
+		unset( $taxonomies['post_format'] );
+		return array_keys( $taxonomies );
+	}
+
 	public static function get_platforms() {
 		return [
 			'yoast'         => __( 'Yoast SEO', 'slim-seo' ),
