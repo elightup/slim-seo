@@ -25,39 +25,62 @@ class Yoast extends Replacer {
 		return get_post_meta( $post_id, '_yoast_wpseo_twitter-image', true );
 	}
 
-	public function get_term_title( $term_id, $term ) {
-		$title = isset( $term['wpseo_title'] ) ? $term['wpseo_title'] : '';
+	public function get_term_title( $term_id ) {
+		$term = $this->get_term( $term_id );
+		if ( ! $term ) {
+			return '';
+		}
+		$title = $term['wpseo_title'] ? $term['wpseo_title'] : '';
 		$parsed_title = wpseo_replace_vars( $title, $term );
 		return $parsed_title;
 	}
 
-	public function get_term_description( $term_id, $term ) {
-		$description = isset( $term['wpseo_desc'] ) ? $term['wpseo_desc'] : '';
+	public function get_term_description( $term_id ) {
+		$term = $this->get_term( $term_id );
+		if ( ! $term ) {
+			return '';
+		}
+		$description = $term['wpseo_desc'] ? $term['wpseo_desc'] : '';
 		$parsed_description = wpseo_replace_vars( $description, $term );
 		return $parsed_description;
 	}
 
-	public function get_term_facebook_image( $term_id, $term ) {
-		return isset( $term['wpseo_opengraph-image'] ) ? $term['wpseo_opengraph-image'] : '';
+	public function get_term_facebook_image( $term_id ) {
+		$term = $this->get_term( $term_id );
+		if ( ! $term ) {
+			return '';
+		}
+		return $term['wpseo_opengraph-image'] ? $term['wpseo_opengraph-image'] : '';
 	}
 
-	public function get_term_twitter_image( $term_id, $term ) {
-		return isset( $term['wpseo_twitter-image'] ) ? $term['wpseo_opengraph-image'] : '';
+	public function get_term_twitter_image( $term_id ) {
+		$term = $this->get_term( $term_id );
+		if ( ! $term ) {
+			return '';
+		}
+		return $term['wpseo_opengraph-image'] ? $term['wpseo_opengraph-image'] : '';
 	}
 
-	public function get_terms( $threshold ) {
+	/**
+	 * Get terms value from option table.
+	 */
+	public function get_terms() {
 		$terms = get_option( 'wpseo_taxonomy_meta' );
 		if ( empty( $terms ) ) {
 			return [];
 		}
-
-		$terms_array = [];
 		$terms = array_values( $terms );
+		$terms_array = [];
 		foreach( $terms as $term ) {
 			$terms_array = $terms_array + $term;
 		}
-		$extract = array_slice( $terms_array, $_SESSION['processed'], $threshold, true );
-		return $extract;
+		return $terms_array;
+	}
+
+	public function get_term( $term_id ) {
+		$terms = $this->get_terms();
+		$term = ! empty( $terms[ $term_id ] ) ? $terms[ $term_id ] : '';
+		return $term;
 	}
 
 	public function is_activated() {

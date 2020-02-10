@@ -19,24 +19,24 @@ class SEOFramework extends Replacer {
 		return get_post_meta( $post_id, '_social_image_url', true );
 	}
 
-	public function get_term_title( $term_id, $term ) {
+	public function get_term_title( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return empty( $term ) ? '' : $term['doctitle'];
+		return $term ? $term['doctitle'] : '';
 	}
 
-	public function get_term_description( $term_id, $term ) {
+	public function get_term_description( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return empty( $term ) ? '' : $term['description'];
+		return $term ? $term['description'] : '';
 	}
 
-	public function get_term_facebook_image( $term_id, $term ) {
+	public function get_term_facebook_image( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return empty( $term ) ? '' : $term['social_image_url'];
+		return $term ? $term['social_image_url'] : '';
 	}
 
-	public function get_term_twitter_image( $term_id, $term ) {
+	public function get_term_twitter_image( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return empty( $term ) ? '' : $term['social_image_url'];
+		return $term ? $term['social_image_url'] : '';
 	}
 
 	private function get_term( $term_id ) {

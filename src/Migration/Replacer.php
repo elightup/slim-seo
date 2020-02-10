@@ -47,23 +47,19 @@ class Replacer {
 		return null;
 	}
 
-	protected function get_term_title( $term_id, $term ) {
+	protected function get_term_title( $term_id ) {
 		return null;
 	}
 
-	protected function get_term_description( $term_id, $term ) {
+	protected function get_term_description( $term_id ) {
 		return null;
 	}
 
-	protected function get_term_facebook_image( $term_id, $term ) {
+	protected function get_term_facebook_image( $term_id ) {
 		return null;
 	}
 
-	protected function get_term_twitter_image( $term_id, $term ) {
-		return null;
-	}
-
-	public function get_terms( $threshold ) {
+	protected function get_term_twitter_image( $term_id ) {
 		return null;
 	}
 

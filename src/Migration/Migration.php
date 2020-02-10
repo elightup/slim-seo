@@ -77,7 +77,7 @@ class Migration {
 	}
 
 	public function migrate_terms() {
-		$terms = $_SESSION['replacer']->get_terms( $this->threshold );
+		$terms = $this->get_terms();
 
 		if ( ! $terms ) {
 			wp_send_json_success( [
@@ -122,5 +122,14 @@ class Migration {
 		}
 
 		return $posts->posts;
+	}
+
+	private function get_terms() {
+		$terms = Helper::get_terms();
+		if ( empty( $terms ) ) {
+			return false;
+		}
+		$extract = array_slice( $terms, $_SESSION['processed'], $this->threshold, true );
+		return $extract;
 	}
 }

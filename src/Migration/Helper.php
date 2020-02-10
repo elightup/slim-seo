@@ -8,12 +8,18 @@ class Helper {
 		return array_keys( $post_types );
 	}
 
-	public static function get_taxonomies() {
+	public static function get_terms() {
 		$taxonomies = get_taxonomies( [
 			'public' => true,
 		] );
 		unset( $taxonomies['post_format'] );
-		return array_keys( $taxonomies );
+		$taxonomies = array_keys( $taxonomies );
+		$terms = get_terms( [
+			'taxonomy'   => $taxonomies,
+			'hide_empty' => false,
+			'fields'     => 'ids',
+		] );
+		return $terms;
 	}
 
 	public static function get_platforms() {
