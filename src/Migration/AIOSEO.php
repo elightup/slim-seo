@@ -33,4 +33,10 @@ class AIOSEO extends Replacer {
 	public function get_opengraph_image( $settings ) {
 		return $settings['aioseop_opengraph_settings_image'] ? $settings['aioseop_opengraph_settings_image'] : $settings['aioseop_opengraph_settings_customimg'];
 	}
+
+	public function delete_post_meta( $post_id ) {
+		delete_post_meta( $post_id, '_aioseop_title' );
+		delete_post_meta( $post_id, '_aioseop_description' );
+		delete_post_meta( $post_id, '_aioseop_opengraph_settings' );
+	}
 }

@@ -86,8 +86,8 @@ class Migration {
 			] );
 		}
 
-		foreach( $terms as $term_id => $term ) {
-			$this->migrate_term( $term_id, $term );
+		foreach( $terms as $term_id ) {
+			$this->migrate_term( $term_id );
 		}
 
 		$_SESSION['processed'] += count( $terms );
@@ -100,10 +100,12 @@ class Migration {
 
 	private function migrate_post( $post_id ) {
 		$_SESSION['replacer']->replace_post( $post_id );
+		$_SESSION['replacer']->delete_post_meta( $post_id );
 	}
 
-	private function migrate_term( $term_id, $term ) {
-		$_SESSION['replacer']->replace_term( $term_id, $term );
+	private function migrate_term( $term_id ) {
+		$_SESSION['replacer']->replace_term( $term_id );
+		$_SESSION['replacer']->delete_term_meta( $term_id );
 	}
 
 	private function get_posts() {

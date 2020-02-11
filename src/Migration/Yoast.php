@@ -30,7 +30,7 @@ class Yoast extends Replacer {
 		if ( ! $term ) {
 			return '';
 		}
-		$title = $term['wpseo_title'] ? $term['wpseo_title'] : '';
+		$title = ! empty( $term['wpseo_title'] ) ? $term['wpseo_title'] : '';
 		$parsed_title = wpseo_replace_vars( $title, $term );
 		return $parsed_title;
 	}
@@ -40,7 +40,7 @@ class Yoast extends Replacer {
 		if ( ! $term ) {
 			return '';
 		}
-		$description = $term['wpseo_desc'] ? $term['wpseo_desc'] : '';
+		$description = ! empty( $term['wpseo_desc'] ) ? $term['wpseo_desc'] : '';
 		$parsed_description = wpseo_replace_vars( $description, $term );
 		return $parsed_description;
 	}
@@ -50,7 +50,7 @@ class Yoast extends Replacer {
 		if ( ! $term ) {
 			return '';
 		}
-		return $term['wpseo_opengraph-image'] ? $term['wpseo_opengraph-image'] : '';
+		return ! empty( $term['wpseo_opengraph-image'] ) ? $term['wpseo_opengraph-image'] : '';
 	}
 
 	public function get_term_twitter_image( $term_id ) {
@@ -58,7 +58,24 @@ class Yoast extends Replacer {
 		if ( ! $term ) {
 			return '';
 		}
-		return $term['wpseo_opengraph-image'] ? $term['wpseo_opengraph-image'] : '';
+		return  ! empty( $term['wpseo_opengraph-image'] ) ? $term['wpseo_opengraph-image'] : '';
+	}
+
+	public function delete_post_meta( $post_id ) {
+		delete_post_meta( $post_id, '_yoast_wpseo_title' );
+		delete_post_meta( $post_id, '_yoast_wpseo_metadesc' );
+		delete_post_meta( $post_id, '_yoast_wpseo_opengraph-image' );
+		delete_post_meta( $post_id, '_yoast_wpseo_twitter-image' );
+	}
+
+	public function delete_term_meta( $term_id ) {
+		$terms = Helper::get_terms();
+		if ( empty( $terms ) ) {
+			return false;
+		}
+		if ( $term_id === end( $terms ) ) {
+			delete_option( 'wpseo_taxonomy_meta' );
+		}
 	}
 
 	/**
