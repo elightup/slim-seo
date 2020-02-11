@@ -34,11 +34,11 @@ class Replacer {
 		}
 	}
 
-	public function delete_post_meta( $post_id ) {
+	public function cleanup_posts() {
 		return null;
 	}
 
-	public function delete_term_meta( $term_id ) {
+	public function cleanup_terms() {
 		return null;
 	}
 

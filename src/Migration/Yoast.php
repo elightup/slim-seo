@@ -61,21 +61,13 @@ class Yoast extends Replacer {
 		return  ! empty( $term['wpseo_opengraph-image'] ) ? $term['wpseo_opengraph-image'] : '';
 	}
 
-	public function delete_post_meta( $post_id ) {
-		delete_post_meta( $post_id, '_yoast_wpseo_title' );
-		delete_post_meta( $post_id, '_yoast_wpseo_metadesc' );
-		delete_post_meta( $post_id, '_yoast_wpseo_opengraph-image' );
-		delete_post_meta( $post_id, '_yoast_wpseo_twitter-image' );
+	public function cleanup_posts() {
+		global $wpdb;
+		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('_yoast_wpseo_title', '_yoast_wpseo_metadesc', '_yoast_wpseo_opengraph-image', '_yoast_wpseo_twitter-image')" );
 	}
 
-	public function delete_term_meta( $term_id ) {
-		$terms = Helper::get_terms();
-		if ( empty( $terms ) ) {
-			return false;
-		}
-		if ( $term_id === end( $terms ) ) {
-			delete_option( 'wpseo_taxonomy_meta' );
-		}
+	public function cleanup_terms() {
+		delete_option( 'wpseo_taxonomy_meta' );
 	}
 
 	/**

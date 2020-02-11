@@ -43,13 +43,13 @@ class SEOFramework extends Replacer {
 		return get_term_meta( $term_id, 'autodescription-term-settings', true );
 	}
 
-	public function delete_post_meta( $post_id ) {
-		delete_post_meta( $post_id, '_genesis_title' );
-		delete_post_meta( $post_id, '_genesis_description' );
-		delete_post_meta( $post_id, '_social_image_url' );
+	public function cleanup_posts() {
+		global $wpdb;
+		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('_genesis_title', '_genesis_description', '_social_image_url')" );
 	}
 
-	public function delete_term_meta( $term_id ) {
-		delete_term_meta( $term_id, 'autodescription-term-settings' );
+	public function cleanup_terms() {
+		global $wpdb;
+		$wpdb->query( "DELETE FROM $wpdb->termmeta WHERE meta_key = 'autodescription-term-settings'" );
 	}
 }

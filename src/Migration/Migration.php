@@ -59,6 +59,7 @@ class Migration {
 	public function migrate_posts() {
 		$posts = $this->get_posts();
 		if ( ! $posts ) {
+			$_SESSION['replacer']->cleanup_posts();
 			wp_send_json_success( [
 				'message' => '',
 				'type'    => 'done',
@@ -80,6 +81,7 @@ class Migration {
 		$terms = $this->get_terms();
 
 		if ( ! $terms ) {
+			$_SESSION['replacer']->cleanup_terms();
 			wp_send_json_success( [
 				'message' => '',
 				'type'    => 'done',
@@ -100,12 +102,10 @@ class Migration {
 
 	private function migrate_post( $post_id ) {
 		$_SESSION['replacer']->replace_post( $post_id );
-		$_SESSION['replacer']->delete_post_meta( $post_id );
 	}
 
 	private function migrate_term( $term_id ) {
 		$_SESSION['replacer']->replace_term( $term_id );
-		$_SESSION['replacer']->delete_term_meta( $term_id );
 	}
 
 	private function get_posts() {
@@ -127,11 +127,17 @@ class Migration {
 	}
 
 	private function get_terms() {
-		$terms = Helper::get_terms();
+		$taxonomies = Helper::get_taxonomies();
+		$terms = get_terms( [
+			'taxonomy'   => $taxonomies,
+			'hide_empty' => false,
+			'fields'     => 'ids',
+			'number'     => $this->threshold,
+			'offset'     => $_SESSION['processed'],
+		] );
 		if ( empty( $terms ) ) {
 			return false;
 		}
-		$extract = array_slice( $terms, $_SESSION['processed'], $this->threshold, true );
-		return $extract;
+		return $terms;
 	}
 }

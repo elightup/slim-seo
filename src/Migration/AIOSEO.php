@@ -34,9 +34,8 @@ class AIOSEO extends Replacer {
 		return $settings['aioseop_opengraph_settings_image'] ? $settings['aioseop_opengraph_settings_image'] : $settings['aioseop_opengraph_settings_customimg'];
 	}
 
-	public function delete_post_meta( $post_id ) {
-		delete_post_meta( $post_id, '_aioseop_title' );
-		delete_post_meta( $post_id, '_aioseop_description' );
-		delete_post_meta( $post_id, '_aioseop_opengraph_settings' );
+	public function cleanup_posts() {
+		global $wpdb;
+		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('_aioseop_title', '_aioseop_description', '_aioseop_opengraph_settings-image')" );
 	}
 }
