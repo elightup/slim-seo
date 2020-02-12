@@ -5,7 +5,7 @@
  * Description: A fast and automated SEO plugin for WordPress.
  * Author:      eLightUp
  * Author URI:  https://elightup.com
- * Version:     3.1.3
+ * Version:     3.2.0
  * Text Domain: slim-seo
  * Domain Path: /languages
  */
