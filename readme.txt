@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 3.1.3
+Stable tag: 3.2.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -128,6 +128,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.2.1 - 2020-02-12 =
+- Fix stable tag in readme
+
+= 3.2.0 - 2020-02-12 =
+- Add migration tool to migrate SEO data from popular SEO plugins.
+
 = 3.1.3 =
 - Fixed: Fix SEO settings not working for WooCommerce shop
 - Fixed: Fix multiple messages sent when using Very Simple Contact Form
@@ -145,10 +151,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 - Changed: Remove noindexed posts/terms from sitemap
 
 = 3.1.0 =
-- Added: Add image settings for social networks
+- Add image settings for social networks
 
 = 3.0.2 =
-- Added: Add live preview for meta tags
+- Add live preview for meta tags
 
 = 3.0.1 =
 - Added: Add character counter for custom meta tags
@@ -156,33 +162,33 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 - Fixed: Fix custom meta tags for terms
 
 = 3.0.0 =
-- Added: Add meta box for entering custom meta tags for posts and terms
-- Added: Add settings page for entering header/footer code (Google Analytics, Google Tag Manager, webmaster tools verification)
+- Add meta box for entering custom meta tags for posts and terms
+- Add settings page for entering header/footer code (Google Analytics, Google Tag Manager, webmaster tools verification)
 
 = 2.1.1 =
-- Changed: Output paginated sitemap for sites with thousands of posts
+- Output paginated sitemap for sites with thousands of posts
 
 = 2.1.0 =
-- Added: Add support for AMP
-- Added: Add image sitemap
-- Added: Add Organization schema
+- Add support for AMP
+- Add image sitemap
+- Add Organization schema
 
 = 2.0.3 =
 - Fixed: Fix no error notice on WooCommerce login page.
 - Added: Add SSL warning.
 
 = 2.0.2 =
-- Improved: Disable schema markup for Beaver Theme and Genesis.
+- Disable schema markup for Beaver Theme and Genesis.
 
 = 2.0.1 =
-- Fixed: Output Article and Author for single posts only.
+- Output Article and Author for single posts only.
 
 = 2.0.0 =
-- Improved: Improved Schema markup. Use united schema output inside one `<script>` tag and add connections between entities. See [documentation](https://wpslimseo.com/docs/schema/) for details.
+- Improved Schema markup. Use united schema output inside one `<script>` tag and add connections between entities. See [documentation](https://wpslimseo.com/docs/schema/) for details.
 
 = 1.5.1 =
-- Changed: Removed preferred site name from JSON-LD as Google drops support for it.
-- Changed: Made notification dismissible.
+- Removed preferred site name from JSON-LD as Google drops support for it.
+- Made notification dismissible.
 
 = 1.5.0 =
 - Added: Added excerpt to pages to let users customize meta description, especially for static homepage.
