@@ -4,17 +4,15 @@ namespace SlimSEO\Migration;
 class Yoast extends Replacer {
 
 	public function get_post_title( $post_id ) {
-		$post         = get_post( $post_id, ARRAY_A );
-		$title        = get_post_meta( $post_id, '_yoast_wpseo_title', true );
-		$parsed_title = wpseo_replace_vars( $title, $post );
-		return $parsed_title;
+		$post  = get_post( $post_id, ARRAY_A );
+		$title = get_post_meta( $post_id, '_yoast_wpseo_title', true );
+		return wpseo_replace_vars( $title, $post );
 	}
 
 	public function get_post_description( $post_id ) {
-		$post               = get_post( $post_id, ARRAY_A );
-		$description        = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
-		$parsed_description = wpseo_replace_vars( $description, $post );
-		return $parsed_description;
+		$post        = get_post( $post_id, ARRAY_A );
+		$description = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+		return wpseo_replace_vars( $description, $post );
 	}
 
 	public function get_post_facebook_image( $post_id ) {
@@ -30,9 +28,8 @@ class Yoast extends Replacer {
 		if ( ! $term ) {
 			return '';
 		}
-		$title = ! empty( $term['wpseo_title'] ) ? $term['wpseo_title'] : '';
-		$parsed_title = wpseo_replace_vars( $title, $term );
-		return $parsed_title;
+		$title = empty( $term['wpseo_title'] ) ? '' : $term['wpseo_title'];
+		return wpseo_replace_vars( $title, $term );
 	}
 
 	public function get_term_description( $term_id ) {
@@ -40,30 +37,31 @@ class Yoast extends Replacer {
 		if ( ! $term ) {
 			return '';
 		}
-		$description = ! empty( $term['wpseo_desc'] ) ? $term['wpseo_desc'] : '';
-		$parsed_description = wpseo_replace_vars( $description, $term );
-		return $parsed_description;
+		$description = empty( $term['wpseo_desc'] ) ? '' : $term['wpseo_desc'];
+		return wpseo_replace_vars( $description, $term );
 	}
 
 	public function get_term_facebook_image( $term_id ) {
 		$term = $this->get_term( $term_id );
-		if ( ! $term ) {
-			return '';
-		}
-		return ! empty( $term['wpseo_opengraph-image'] ) ? $term['wpseo_opengraph-image'] : '';
+		return empty( $term['wpseo_opengraph-image'] ) ? '' : $term['wpseo_opengraph-image'];
 	}
 
 	public function get_term_twitter_image( $term_id ) {
 		$term = $this->get_term( $term_id );
-		if ( ! $term ) {
-			return '';
-		}
-		return  ! empty( $term['wpseo_opengraph-image'] ) ? $term['wpseo_opengraph-image'] : '';
+		return empty( $term['wpseo_twitter-image'] ) ? '' : $term['wpseo_twitter-image'];
 	}
 
 	public function cleanup_posts() {
 		global $wpdb;
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('_yoast_wpseo_title', '_yoast_wpseo_metadesc', '_yoast_wpseo_opengraph-image', '_yoast_wpseo_twitter-image')" );
+		$keys = [
+			'_yoast_wpseo_title',
+			'_yoast_wpseo_metadesc',
+			'_yoast_wpseo_opengraph-image',
+			'_yoast_wpseo_opengraph-image-id',
+			'_yoast_wpseo_twitter-image',
+			'_yoast_wpseo_twitter-image-id',
+		];
+		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('" . implode( "','", $keys ) . "')" );
 	}
 
 	public function cleanup_terms() {
@@ -88,8 +86,7 @@ class Yoast extends Replacer {
 
 	public function get_term( $term_id ) {
 		$terms = $this->get_terms();
-		$term = ! empty( $terms[ $term_id ] ) ? $terms[ $term_id ] : '';
-		return $term;
+		return isset( $terms[ $term_id ] ) ? $terms[ $term_id ] : null;
 	}
 
 	public function is_activated() {

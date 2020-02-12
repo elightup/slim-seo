@@ -58,7 +58,7 @@ class Migration {
 
 	public function migrate_posts() {
 		$posts = $this->get_posts();
-		if ( ! $posts ) {
+		if ( empty( $posts ) ) {
 			$_SESSION['replacer']->cleanup_posts();
 			wp_send_json_success( [
 				'message' => '',
@@ -80,7 +80,7 @@ class Migration {
 	public function migrate_terms() {
 		$terms = $this->get_terms();
 
-		if ( ! $terms ) {
+		if ( empty( $terms ) ) {
 			$_SESSION['replacer']->cleanup_terms();
 			wp_send_json_success( [
 				'message' => '',
@@ -110,7 +110,7 @@ class Migration {
 
 	private function get_posts() {
 		$post_types = Helper::get_post_types();
-		$posts = new \WP_Query( [
+		$posts      = new \WP_Query( [
 			'post_type'      => $post_types,
 			'post_status'    => ['publish', 'draft'],
 			'posts_per_page' => $this->threshold,
@@ -119,25 +119,17 @@ class Migration {
 			'offset'         => $_SESSION['processed'],
 		] );
 
-		if( ! $posts->have_posts() ) {
-			return false;
-		}
-
 		return $posts->posts;
 	}
 
 	private function get_terms() {
 		$taxonomies = Helper::get_taxonomies();
-		$terms = get_terms( [
+		return get_terms( [
 			'taxonomy'   => $taxonomies,
 			'hide_empty' => false,
 			'fields'     => 'ids',
 			'number'     => $this->threshold,
 			'offset'     => $_SESSION['processed'],
 		] );
-		if ( empty( $terms ) ) {
-			return false;
-		}
-		return $terms;
 	}
 }
