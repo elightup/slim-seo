@@ -9,7 +9,6 @@ class Migration {
 	public $threshold = 10;
 
 	public function setup() {
-		session_start();
 		add_action( 'wp_ajax_ss_prepare_migration', [ $this, 'prepare_migration' ] );
 		add_action( 'wp_ajax_ss_reset_counter', [ $this, 'reset_counter' ] );
 		add_action( 'wp_ajax_ss_migrate_posts', [ $this, 'migrate_posts' ] );
@@ -19,6 +18,7 @@ class Migration {
 	public function prepare_migration() {
 		check_ajax_referer( 'migrate' );
 
+		session_start();
 		$platform = $this->get_platform();
 
 		$this->set_replacer( $platform );
@@ -48,6 +48,7 @@ class Migration {
 	}
 
 	public function reset_counter() {
+		session_start();
 		$_SESSION['processed'] = 0;
 
 		wp_send_json_success( [
@@ -57,6 +58,7 @@ class Migration {
 	}
 
 	public function migrate_posts() {
+		session_start();
 		$posts = $this->get_posts();
 		if ( empty( $posts ) ) {
 			$_SESSION['replacer']->cleanup_posts();
@@ -78,6 +80,7 @@ class Migration {
 	}
 
 	public function migrate_terms() {
+		session_start();
 		$terms = $this->get_terms();
 
 		if ( empty( $terms ) ) {
