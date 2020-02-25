@@ -19,8 +19,8 @@ class Settings {
 	}
 
 	public function enqueue() {
-		wp_enqueue_script( 'slim-seo-migrate-js', SLIM_SEO_URL . 'js/migrate.js', ['jquery'], SLIM_SEO_VER, true );
-		wp_enqueue_script( 'slim-seo-settings-js', SLIM_SEO_URL . 'js/settings.js', ['jquery'], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-migrate-js', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-settings-js', SLIM_SEO_URL . 'js/settings.js', [], SLIM_SEO_VER, true );
 		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/settings.css' );
 		wp_localize_script( 'slim-seo-migrate-js', 'ssMigration', [
 			'nonce'          => wp_create_nonce( 'migrate' ),

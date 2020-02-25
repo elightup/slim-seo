@@ -1,11 +1,11 @@
 === Slim SEO - Fast & Automated WordPress SEO Plugin ===
-Contributors: elightup, rilwis
+Contributors: elightup, rilwis, hungviet91
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.2.2 - 2020-02-25 =
+- Fix loopback request failed in Site Health
+- Load Open Graph, Twitter Cards & Breadcrumbs on the front end only
+- Update JavaScript code, using vanilla JavaScript (no jQuery)
 
 = 3.2.1 - 2020-02-12 =
 - Fix stable tag in readme
