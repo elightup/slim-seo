@@ -1,26 +1,20 @@
-( function ( $ ) {
-	'use strict';
+( function () {
+	const tabs = document.querySelectorAll( '.nav-tab' );
+	const panes = document.querySelectorAll( '.ss-tab-pane' );
 
-	function tabs() {
-		var $container = $( '.nav-tab-wrapper' ),
-			$tabs      = $container.find( '.nav-tab' ),
-			$panes     = $( '.ss-tab-pane' );
+	function clickHandle( e ) {
+		if ( ! e.target.classList.contains( 'nav-tab' ) ) {
+			return;
+		}
 
-		$container.on(
-			'click',
-			'.nav-tab',
-			function ( e ) {
-				e.preventDefault();
+		e.preventDefault();
 
-				$tabs.removeClass( 'nav-tab-active' );
-				$( this ).addClass( 'nav-tab-active' );
+		tabs.forEach( tab => tab.classList.remove( 'nav-tab-active' ) );
+		e.target.classList.add( 'nav-tab-active' );
 
-				$panes.removeClass( 'ss-is-active' );
-				$panes.filter( $( this ).attr( 'href' ) ).addClass( 'ss-is-active' );
-			}
-		);
+		panes.forEach( pane => pane.classList.remove( 'ss-is-active' ) );
+		document.querySelector( e.target.getAttribute( 'href' ) ).classList.add( 'ss-is-active' );
 	}
 
-	// Auto activate tabs when DOM ready.
-	$( tabs );
-} ( jQuery ) );
+	document.querySelector( '.nav-tab-wrapper' ).addEventListener( 'click', clickHandle );
+} () );
