@@ -8,15 +8,11 @@ class Plugin {
 		$this->services['meta_title'] = new MetaTags\Title;
 		$this->services['meta_description'] = new MetaTags\Description;
 
-		$this->services['open_graph'] = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'] );
-		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
-
 		$this->services['settings_post'] = new MetaTags\Settings\Post;
 		$this->services['settings_term'] = new MetaTags\Settings\Term;
 
 		$this->services['sitemaps'] = new Sitemaps\Manager;
 		$this->services['images_alt'] = new ImagesAlt;
-		$this->services['breadcrumbs'] = new Breadcrumbs;
 
 		// Admin only.
 		if ( is_admin() ) {
@@ -27,12 +23,15 @@ class Plugin {
 		}
 
 		// Front-end only.
+		$this->services['open_graph'] = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'] );
+		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
+		$this->services['breadcrumbs'] = new Breadcrumbs;
 		$this->services['auto_redirection'] = new AutoRedirection;
 		$this->services['feed'] = new Feed;
 		$this->services['meta_robots'] = new MetaTags\Robots;
 		$this->services['cleaner'] = new Cleaner;
 
-		$this->services['shema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
+		$this->services['schema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
 		$this->services['code'] = new Code;
 
 		$this->services['woocommerce'] = new Integrations\WooCommerce;
