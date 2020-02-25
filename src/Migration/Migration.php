@@ -27,7 +27,7 @@ class Migration {
 	}
 
 	private function get_platform() {
-		$platform = filter_input( INPUT_POST, 'platform', FILTER_SANITIZE_STRING );
+		$platform = filter_input( INPUT_GET, 'platform', FILTER_SANITIZE_STRING );
 		if ( empty( $platform ) ) {
 			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ), 400 );
 		}
