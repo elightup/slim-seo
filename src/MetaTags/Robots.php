@@ -33,8 +33,10 @@ class Robots {
 			return false;
 		}
 
-		// Singular.
-		if ( is_singular() ) {
+		if (
+			is_singular()                         // Singular, including static front page.
+			|| ( is_home() && ! is_front_page() ) // Static blog page.
+		) {
 			$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
 			if ( ! empty( $data['noindex'] ) ) {
 				return false;

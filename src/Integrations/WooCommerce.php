@@ -14,6 +14,7 @@ class WooCommerce {
 
 		add_filter( 'slim_seo_meta_title', [ $this, 'shop_title' ], 10, 2 );
 		add_filter( 'slim_seo_meta_description', [ $this, 'shop_description' ], 10, 2 );
+		add_filter( 'slim_seo_robots_index', [ $this, 'shop_index' ] );
 	}
 
 	public function no_description( $description ) {
@@ -38,5 +39,16 @@ class WooCommerce {
 
 	public function shop_description( $description, $description_obj ) {
 		return is_shop() ? $description_obj->get_singular_description( wc_get_page_id( 'shop' ) ) : $description;
+	}
+
+	public function shop_index( $is_indexed ) {
+		if ( ! is_shop() ) {
+			return $is_indexed;
+		}
+		$data = get_post_meta( wc_get_page_id( 'shop' ), 'slim_seo', true );
+		if ( ! empty( $data['noindex'] ) ) {
+			return false;
+		}
+		return $is_indexed;
 	}
 }
