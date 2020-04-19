@@ -3,7 +3,8 @@ namespace SlimSEO\MetaTags;
 
 class Robots {
 	public function setup() {
-		add_action( 'wp_head', [ $this, 'output' ] );
+		// Priority 5 to be able to remove canonical link.
+		add_action( 'wp_head', [ $this, 'output' ], 5 );
 		add_action( 'template_redirect', [ $this, 'set_header_noindex' ] );
 		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );
 		add_filter( 'register', [ $this, 'set_link_nofollow' ] );
@@ -14,6 +15,7 @@ class Robots {
 		$is_indexed = apply_filters( 'slim_seo_robots_index', $is_indexed );
 		if ( ! $is_indexed ) {
 			wp_no_robots();
+			remove_action( 'wp_head', 'rel_canonical' );
 		}
 	}
 
