@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.3.2
+Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 3.2.2
+Stable tag: 3.2.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.2.3 - 2020-04-20 =
+- Remove canonical link when a page is not indexed
+- Fix "Hide from search result pages" not working for static blog & WooCommerce shop pages.
+- Fix wrong textdomain
 
 = 3.2.2 - 2020-02-25 =
 - Fix loopback request failed in Site Health
