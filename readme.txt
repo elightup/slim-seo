@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.4
+Tested up to: 5.4.1
 Requires PHP: 5.6
-Stable tag: 3.2.3
+Stable tag: 3.3.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.3.0 - 2020-05-03 =
+- Add canonical URL for missing pages
+- Add settings for homepage when it shows latest posts
+- Add filter for breadcrumb links to make work with other plugins
+- Improve UI, removing tabs
 
 = 3.2.3 - 2020-04-20 =
 - Remove canonical link when a page is not indexed
