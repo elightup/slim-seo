@@ -33,8 +33,10 @@
 			</div>
 		</div>
 		<div class="ss-input">
-			<input type="text" id="ss-facebook-image" name="slim_seo[home_facebook_image]" value="<?= esc_attr( $data['home_facebook_image'] ); ?>">
-			<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+			<div class="ss-input-group">
+				<input type="text" id="ss-facebook-image" name="slim_seo[home_facebook_image]" value="<?= esc_attr( $data['home_facebook_image'] ); ?>">
+				<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+			</div>
 		</div>
 	</div>
 	<div class="ss-field">
@@ -45,8 +47,10 @@
 			</div>
 		</div>
 		<div class="ss-input">
-			<input type="text" id="ss-twitter-image" name="slim_seo[home_twitter_image]" value="<?= esc_attr( $data['home_twitter_image'] ); ?>">
-			<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+			<div class="ss-input-group">
+				<input type="text" id="ss-twitter-image" name="slim_seo[home_twitter_image]" value="<?= esc_attr( $data['home_twitter_image'] ); ?>">
+				<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+			</div>
 		</div>
 	</div>
 

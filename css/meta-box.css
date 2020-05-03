@@ -31,7 +31,7 @@
 
 /* Select image button */
 .ss-select-image.ss-select-image {
-	margin-top: 5px;
+	margin: 0 0 0 5px;
 }
 
 /* Checkbox field */
@@ -45,9 +45,20 @@
 	flex: 0;
 }
 
+/* Group inputs */
+.ss-input-group {
+	width: 100%;
+	display: flex;
+}
+.ss-input-group input[type="text"] {
+	min-width: 0;
+	flex: 1;
+}
+
 @media (min-width: 1200px) {
 	.ss-field {
 		flex-direction: row;
+		align-items: flex-start;
 	}
 	.ss-label {
 		width: 25%;
@@ -121,27 +132,35 @@
 	font-size: 14px;
 }
 
+/* Settings page */
+.settings_page_slim-seo .ss-field {
+	margin-top: 12px;
+}
+
 @media (min-width: 782px) {
 	.term-php .ss-field,
 	.settings_page_slim-seo .ss-field {
 		flex-direction: row;
+		align-items: flex-start;
 	}
 	.term-php .ss-label,
 	.settings_page_slim-seo .ss-label {
 		width: 210px;
-		padding: 14px 10px 14px 0;
+		padding: 8px 10px 8px 0;
 		margin-bottom: 0;
 	}
 	.term-php .ss-input,
 	.settings_page_slim-seo .ss-input {
-		padding: 9px 10px;
+		padding: 8px 10px;
 	}
 	.term-php .ss-input input[type="text"],
 	.settings_page_slim-seo .ss-input input[type="text"],
 	.term-php .ss-input textarea,
 	.settings_page_slim-seo .ss-input textarea,
 	.term-php .ss-description,
-	.settings_page_slim-seo .ss-description {
+	.settings_page_slim-seo .ss-description,
+	.term-php .ss-input-group,
+	.settings_page_slim-seo .ss-input-group {
 		width: 95%;
 	}
 	.term-php .ss-field-checkbox,

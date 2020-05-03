@@ -90,8 +90,10 @@ abstract class Base {
 					</div>
 				</div>
 				<div class="ss-input">
-					<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
-					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+					<div class="ss-input-group">
+						<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
+						<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+					</div>
 				</div>
 			</div>
 			<div class="ss-field">
@@ -102,8 +104,10 @@ abstract class Base {
 					</div>
 				</div>
 				<div class="ss-input">
-					<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
-					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+					<div class="ss-input-group">
+						<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
+						<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+					</div>
 				</div>
 			</div>
 		</div>
