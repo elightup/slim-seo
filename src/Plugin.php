@@ -26,10 +26,10 @@ class Plugin {
 		$this->services['canonical_url'] = new MetaTags\CanonicalUrl();
 		$this->services['open_graph'] = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'], $this->services['canonical_url'] );
 		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
+		$this->services['meta_robots'] = new MetaTags\Robots( $this->services['canonical_url'] );
 		$this->services['breadcrumbs'] = new Breadcrumbs;
 		$this->services['auto_redirection'] = new AutoRedirection;
 		$this->services['feed'] = new Feed;
-		$this->services['meta_robots'] = new MetaTags\Robots;
 		$this->services['cleaner'] = new Cleaner;
 
 		$this->services['schema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );

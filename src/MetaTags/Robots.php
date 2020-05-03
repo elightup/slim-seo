@@ -4,6 +4,12 @@ namespace SlimSEO\MetaTags;
 class Robots {
 	use Context;
 
+	private $url;
+
+	public function __construct( CanonicalUrl $url ) {
+		$this->url = $url;
+	}
+
 	public function setup() {
 		// Priority 5 to be able to remove canonical link.
 		add_action( 'wp_head', [ $this, 'output' ], 5 );
@@ -17,6 +23,7 @@ class Robots {
 		$is_indexed = apply_filters( 'slim_seo_robots_index', $is_indexed );
 		if ( ! $is_indexed ) {
 			wp_no_robots();
+			remove_action( 'wp_head', [ $this->url, 'output' ] );
 			remove_action( 'wp_head', 'rel_canonical' );
 		}
 	}
