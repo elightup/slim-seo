@@ -29,7 +29,7 @@ class Title {
 
 	private function get_home_value() {
 		$data = get_option( 'slim_seo' );
-		return ! empty( $data['home_title'] ) ? $data['home_title'] : null;
+		return isset( $data['home_title'] ) ? $data['home_title'] : null;
 	}
 
 	/**
@@ -38,11 +38,11 @@ class Title {
 	public function get_singular_value( $post_id = null ) {
 		$post_id = $post_id ?: get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
-		return ! empty( $data['title'] ) ? $data['title'] : null;
+		return isset( $data['title'] ) ? $data['title'] : null;
 	}
 
 	private function get_term_value() {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
-		return ! empty( $data['title'] ) ? $data['title'] : null;
+		return isset( $data['title'] ) ? $data['title'] : null;
 	}
 }
