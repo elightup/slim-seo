@@ -40,75 +40,66 @@ abstract class Base {
 			<h2><?= esc_html( $this->title ); ?></h2>
 		<?php endif; ?>
 
-		<nav class="ss-tab-nav">
-			<button data-tab="ss-tab-general" class="button-link ss-active"><?php esc_html_e( 'General Settings', 'slim-seo' ); ?></button> |
-			<button data-tab="ss-tab-social" class="button-link"><?php esc_html_e( 'Social Settings', 'slim-seo' ); ?></button>
-		</nav>
-
-		<div class="ss-tab ss-tab-general ss-active">
-			<div class="ss-field">
-				<div class="ss-label">
-					<label for="ss-title"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
-				</div>
-				<div class="ss-input">
-					<input type="text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
-					<div class="ss-description">
-						<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
-						<span class="ss-counter">0</span>.
-						<?php esc_html_e( 'Recommended length: ≤ 60 characters. ', 'slim-seo' ); ?>
-					</div>
-				</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-title"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
 			</div>
-			<div class="ss-field">
-				<div class="ss-label">
-					<label for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
-				</div>
-				<div class="ss-input">
-					<textarea id="ss-description" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
-					<div class="ss-description">
-						<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
-						<span class="ss-counter">0</span>.
-						<?php esc_html_e( 'Recommended length: 50-160 characters. ', 'slim-seo' ); ?>
-					</div>
-				</div>
-			</div>
-			<div class="ss-field ss-field-checkbox">
-				<div class="ss-label">
-					<label for="ss-noindex"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
-				</div>
-				<div class="ss-input">
-					<input type="checkbox" id="ss-noindex" name="slim_seo[noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
+			<div class="ss-input">
+				<input type="text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
+				<div class="ss-description">
+					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
+					<span class="ss-counter">0</span>.
+					<?php esc_html_e( 'Recommended length: ≤ 60 characters. ', 'slim-seo' ); ?>
 				</div>
 			</div>
 		</div>
-		<div class="ss-tab ss-tab-social">
-			<div class="ss-field">
-				<div class="ss-label">
-					<label for="ss-facebook-image"><?php esc_html_e( 'Facebook image', 'slim-seo' ); ?></label>
-					<div class="ss-description">
-						<?php esc_html_e( 'Recommended size: 1200x628 px', 'slim-seo' ); ?>
-					</div>
-				</div>
-				<div class="ss-input">
-					<div class="ss-input-group">
-						<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
-						<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
-					</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<textarea id="ss-description" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
+				<div class="ss-description">
+					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
+					<span class="ss-counter">0</span>.
+					<?php esc_html_e( 'Recommended length: 50-160 characters. ', 'slim-seo' ); ?>
 				</div>
 			</div>
-			<div class="ss-field">
-				<div class="ss-label">
-					<label for="ss-twitter-image"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
-					<div class="ss-description">
-						<?php esc_html_e( 'Recommended size: 800x418 px', 'slim-seo' ); ?>
-					</div>
+		</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-facebook-image"><?php esc_html_e( 'Facebook image', 'slim-seo' ); ?></label>
+				<div class="ss-description">
+					<?php esc_html_e( 'Recommended size: 1200x628 px', 'slim-seo' ); ?>
 				</div>
-				<div class="ss-input">
-					<div class="ss-input-group">
-						<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
-						<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
-					</div>
+			</div>
+			<div class="ss-input">
+				<div class="ss-input-group">
+					<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
+					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
+			</div>
+		</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-twitter-image"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
+				<div class="ss-description">
+					<?php esc_html_e( 'Recommended size: 800x418 px', 'slim-seo' ); ?>
+				</div>
+			</div>
+			<div class="ss-input">
+				<div class="ss-input-group">
+					<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
+					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+				</div>
+			</div>
+		</div>
+		<div class="ss-field ss-field-checkbox">
+			<div class="ss-label">
+				<label for="ss-noindex"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<input type="checkbox" id="ss-noindex" name="slim_seo[noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
 			</div>
 		</div>
 		<?php

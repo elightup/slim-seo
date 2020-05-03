@@ -4,29 +4,6 @@
 	const isBlockEditor = () => document.body.classList.contains( 'block-editor-page' );
 	const normalize = string => string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
 
-	function toggleTabs() {
-		const tabButtons = document.querySelectorAll( '.ss-tab-nav > button' );
-		const tabs = document.querySelectorAll( '.ss-tab' );
-
-		function clickHandle( e ) {
-			e.preventDefault();
-
-			const target = e.target.getAttribute( 'data-tab' );
-
-			tabButtons.forEach( button => button.classList.remove( 'ss-active' ) );
-			tabs.forEach( tab => {
-				tab.classList.remove( 'ss-active' );
-				if ( tab.classList.contains( target ) ) {
-					tab.classList.add( 'ss-active' );
-				}
-			} );
-
-			e.target.classList.add( 'ss-active' );
-		}
-
-		tabButtons.forEach( button => button.addEventListener( 'click', clickHandle ) );
-	}
-
 	function openMediaPopup() {
 		let frame;
 
@@ -189,7 +166,6 @@
 		}
 	}
 
-	toggleTabs();
 	openMediaPopup();
 
 	// Post.
