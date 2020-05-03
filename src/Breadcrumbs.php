@@ -24,7 +24,9 @@ class Breadcrumbs {
 	public function render_shortcode( $atts ) {
 		$this->args = wp_parse_args( $atts, $this->args );
 		$this->parse();
-		if ( empty( $this->links ) ) {
+
+		$links = $this->get_links();
+		if ( empty( $links ) ) {
 			return '';
 		}
 
@@ -33,7 +35,7 @@ class Breadcrumbs {
 		// Links.
 		$items    = [];
 		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
-		foreach ( $this->links as $i => $item ) {
+		foreach ( $links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
 			$items[] = sprintf( $template, esc_url( $item['url'] ), $class, esc_html( wp_strip_all_tags( $item['text'] ) ), $i + 1 );
 		}
@@ -50,7 +52,7 @@ class Breadcrumbs {
 	}
 
 	public function get_links() {
-		return $this->links;
+		return apply_filters( 'slim_seo_breadcrumbs_links', $this->links );
 	}
 
 	public function parse() {
