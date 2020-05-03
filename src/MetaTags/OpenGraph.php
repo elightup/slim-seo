@@ -73,9 +73,16 @@ class OpenGraph {
 		static $image;
 		static $ran = false;
 
-		if ( ! $ran && ( is_singular() || is_tax() || is_category() || is_tag() ) ) {
-			$image = is_singular() ? $this->get_singular_image() : $this->get_term_image();
-			$ran   = true;
+		if ( ! $ran ) {
+			$image = null;
+			if ( is_front_page() ) {
+				$image = $this->get_home_image();
+			} elseif ( is_tax() || is_category() || is_tag() ) {
+				$image = $this->get_term_image();
+			} elseif ( is_home() || is_singular() ) {
+				$image = $this->get_singular_image();
+			}
+			$ran = true;
 		}
 
 		$keys = [
@@ -85,6 +92,17 @@ class OpenGraph {
 		];
 
 		return isset( $image[ $keys[ $key ] ] ) ? $image[ $keys[ $key ] ] : null;
+	}
+
+	private function get_home_image() {
+		// Static front page.
+		if ( is_page() ) {
+			return $this->get_singular_image();
+		}
+
+		// Homepage displays latest posts.
+		$data = get_option( 'slim_seo' );
+		return empty( $data['home_facebook_image'] ) ? null : [$data['home_facebook_image']];
 	}
 
 	private function get_singular_image() {

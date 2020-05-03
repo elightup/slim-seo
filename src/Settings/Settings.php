@@ -2,6 +2,16 @@
 namespace SlimSEO\Settings;
 
 class Settings {
+	private $defaults = [
+		'header_code'         => '',
+		'footer_code'         => '',
+
+		'home_title'          => '',
+		'home_description'    => '',
+		'home_facebook_image' => '',
+		'home_twitter_image'  => '',
+	];
+
 	public function setup() {
 		add_action( 'admin_menu', [ $this, 'add_menu' ] );
 	}
@@ -27,23 +37,48 @@ class Settings {
 			'doneText'       => __( 'Done!', 'slim-seo' ),
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
+
+		if ( ! $this->is_static_homepage() ) {
+			wp_enqueue_media();
+			wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
+			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', ['jquery', 'underscore'], SLIM_SEO_VER, true );
+			$params = [
+				'site' => [
+					'title'       => get_bloginfo( 'name' ),
+					'description' => get_bloginfo( 'description' ),
+				],
+				'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
+			];
+			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
+		}
 	}
 
 	public function render() {
 		$data = get_option( 'slim_seo' );
 		$data = $data ? $data : [];
-		$data = array_merge( [
-			'header_code' => '',
-			'footer_code' => '',
-		], $data );
+		$data = array_merge( $this->defaults, $data );
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'SEO Settings', 'slim-seo' ); ?></h1>
-			<?php
-			include __DIR__ . '/sections/tabs.php';
-			include __DIR__ . '/sections/general.php';
-			include __DIR__ . '/sections/tools.php';
-			?>
+			<h2 class="nav-tab-wrapper">
+				<a href="#general" class="nav-tab nav-tab-active"><?php esc_html_e( 'General', 'slim-seo' ); ?></a>
+				<?php if ( ! $this->is_static_homepage() ) : ?>
+					<a href="#homepage" class="nav-tab"><?php esc_html_e( 'Homepage', 'slim-seo' ); ?></a>
+				<?php endif; ?>
+				<a href="#tools" class="nav-tab"><?php esc_html_e( 'Tools', 'slim-seo' ); ?></a>
+			</h2>
+
+			<form action="" method="post">
+				<?php
+				wp_nonce_field( 'save' );
+
+				include __DIR__ . '/sections/general.php';
+				if ( ! $this->is_static_homepage() ) {
+					include __DIR__ . '/sections/homepage.php';
+				}
+				include __DIR__ . '/sections/tools.php';
+				?>
+			</form>
 		</div>
 		<?php
 	}
@@ -61,5 +96,20 @@ class Settings {
 		$option = array_merge( $option, $data );
 
 		update_option( 'slim_seo', $option );
+	}
+
+	private function sanitize( $data ) {
+		$data = array_merge( $this->defaults, $data );
+
+		$data['home_title']          = sanitize_text_field( $data['home_title'] );
+		$data['home_description']    = sanitize_text_field( $data['home_description'] );
+		$data['home_facebook_image'] = esc_url_raw( $data['home_facebook_image'] );
+		$data['home_twitter_image']  = esc_url_raw( $data['home_twitter_image'] );
+
+		return array_filter( $data );
+	}
+
+	private function is_static_homepage() {
+		return 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' );
 	}
 }

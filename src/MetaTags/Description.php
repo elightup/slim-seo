@@ -52,7 +52,14 @@ class Description {
 	}
 
 	private function get_home_description() {
-		return is_page() ? $this->get_singular_description() : get_bloginfo( 'description' );
+		// Static front page.
+		if ( is_page() ) {
+			return $this->get_singular_description();
+		}
+
+		// Homepage displays latest posts.
+		$data = get_option( 'slim_seo' );
+		return empty( $data['home_description'] ) ? get_bloginfo( 'description' ) : $data['home_description'];
 	}
 
 	/**

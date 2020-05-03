@@ -115,32 +115,41 @@
 	display: block;
 }
 
-/* For terms */
-.term-php .ss-label {
+/* For terms & settings page (for homepage) */
+.term-php .ss-label,
+.settings_page_slim-seo .ss-label {
 	font-size: 14px;
 }
 
 @media (min-width: 782px) {
-	.term-php .ss-field {
+	.term-php .ss-field,
+	.settings_page_slim-seo .ss-field {
 		flex-direction: row;
 	}
-	.term-php .ss-label {
+	.term-php .ss-label,
+	.settings_page_slim-seo .ss-label {
 		width: 210px;
 		padding: 14px 10px 14px 0;
 		margin-bottom: 0;
 	}
-	.term-php .ss-input {
+	.term-php .ss-input,
+	.settings_page_slim-seo .ss-input {
 		padding: 9px 10px;
 	}
 	.term-php .ss-input input[type="text"],
+	.settings_page_slim-seo .ss-input input[type="text"],
 	.term-php .ss-input textarea,
-	.term-php .ss-description {
+	.settings_page_slim-seo .ss-input textarea,
+	.term-php .ss-description,
+	.settings_page_slim-seo .ss-description {
 		width: 95%;
 	}
-	.term-php .ss-field-checkbox {
+	.term-php .ss-field-checkbox,
+	.settings_page_slim-seo .ss-field-checkbox {
 		align-items: center;
 	}
-	.term-php .ss-field-checkbox .ss-label {
+	.term-php .ss-field-checkbox .ss-label,
+	.settings_page_slim-seo .ss-field-checkbox .ss-label {
 		order: 0;
 	}
 }

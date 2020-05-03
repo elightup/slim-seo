@@ -1,13 +1,8 @@
 ( function ( window, document, wp, $, ss ) {
 	let contentEditor;
 
-	function isBlockEditor() {
-		return document.body.classList.contains( 'block-editor-page' );
-	}
-
-	function normalize( string ) {
-		return string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
-	}
+	const isBlockEditor = () => document.body.classList.contains( 'block-editor-page' );
+	const normalize = string => string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
 
 	function toggleTabs() {
 		const tabButtons = document.querySelectorAll( '.ss-tab-nav > button' );
@@ -138,6 +133,9 @@
 			this.updatePreview = this.updatePreview.bind( this );
 		}
 		get generated() {
+			if ( ! this.ref ) {
+				return '';
+			}
 			const value = this.ref.value;
 			return this.truncate ? value.substring( 0, this.max ) : value;
 		}
@@ -157,13 +155,21 @@
 		}
 		addEventListener() {
 			this.input.addEventListener( this.updateCounter );
-			this.ref.addEventListener( this.updateCounter );
-			this.ref.addEventListener( this.updatePreview );
+			if ( this.ref ) {
+				this.ref.addEventListener( this.updateCounter );
+				this.ref.addEventListener( this.updatePreview );
+			}
 		}
 		init() {
 			this.updatePreview();
 			this.updateCounter();
 			this.addEventListener();
+		}
+	}
+
+	class HomeTitleField extends Field {
+		get generated() {
+			return `${ss.site.title} - ${ss.site.description}`;
 		}
 	}
 
@@ -200,5 +206,13 @@
 		const termDescription = new Field( new Input( '#ss-description' ), new Input( '#description' ), 50, 160, true );
 		termTitle.init();
 		termDescription.init();
+	}
+
+	// Settings page (for homepage)
+	if ( document.body.classList.contains( 'settings_page_slim-seo' ) ) {
+		const HomeTitleInput = new HomeTitleField( new Input( '#ss-title' ), null, 0, 60 );
+		const homeDescription = new Field( new Input( '#ss-description' ), null, 50, 160, true );
+		HomeTitleInput.init();
+		homeDescription.init();
 	}
 } )( window, document, wp, jQuery, ss );

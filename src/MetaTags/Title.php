@@ -5,7 +5,6 @@ class Title {
 	public function setup() {
 		add_action( 'after_setup_theme', [ $this, 'add_title_tag_support' ] );
 		add_filter( 'pre_get_document_title', [ $this, 'filter_title' ] );
-		add_filter( 'pre_get_document_title', [ __NAMESPACE__ . '\Helper', 'normalize' ], 99 );
 	}
 
 	public function add_title_tag_support() {
@@ -19,17 +18,30 @@ class Title {
 	public function filter_title( $title ) {
 		$custom_title = '';
 
-		if ( is_home() || is_singular() ) {
-			$custom_title = $this->get_singular_title();
-		}
-		if ( is_category() || is_tag() || is_tax() ) {
+		if ( is_front_page() ) {
+			$custom_title = $this->get_home_title();
+		} elseif ( is_tax() || is_category() || is_tag() ) {
 			$custom_title = $this->get_term_title();
+		} elseif ( is_home() || is_singular() ) {
+			$custom_title = $this->get_singular_title();
 		}
 
 		$title = $custom_title ?: $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this );
+		$title = Helper::normalize( $title );
 
 		return $title;
+	}
+
+	private function get_home_title() {
+		// Static front page.
+		if ( is_page() ) {
+			return $this->get_singular_title();
+		}
+
+		// Homepage displays latest posts.
+		$data = get_option( 'slim_seo' );
+		return ! empty( $data['home_title'] ) ? $data['home_title'] : null;
 	}
 
 	/**
