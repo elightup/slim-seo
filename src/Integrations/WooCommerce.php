@@ -34,11 +34,11 @@ class WooCommerce {
 	}
 
 	public function shop_title( $title, $title_obj ) {
-		return is_shop() ? $title_obj->get_singular_title( wc_get_page_id( 'shop' ) ) : $title;
+		return is_shop() ? $title_obj->get_singular_value( wc_get_page_id( 'shop' ) ) : $title;
 	}
 
 	public function shop_description( $description, $description_obj ) {
-		return is_shop() ? $description_obj->get_singular_description( wc_get_page_id( 'shop' ) ) : $description;
+		return is_shop() ? $description_obj->get_singular_value( wc_get_page_id( 'shop' ) ) : $description;
 	}
 
 	public function shop_index( $is_indexed ) {

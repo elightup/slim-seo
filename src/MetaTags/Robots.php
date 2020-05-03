@@ -2,6 +2,8 @@
 namespace SlimSEO\MetaTags;
 
 class Robots {
+	use Context;
+
 	public function setup() {
 		// Priority 5 to be able to remove canonical link.
 		add_action( 'wp_head', [ $this, 'output' ], 5 );
@@ -35,25 +37,18 @@ class Robots {
 			return false;
 		}
 
-		if (
-			is_singular()                         // Singular, including static front page.
-			|| ( is_home() && ! is_front_page() ) // Static blog page.
-		) {
-			$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
-			if ( ! empty( $data['noindex'] ) ) {
-				return false;
-			}
-		}
+		$noindex = $this->get_value();
+		return ! $noindex;
+	}
 
-		// Term.
-		if ( is_category() || is_tag() || is_tax() ) {
-			$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
-			if ( ! empty( $data['noindex'] ) ) {
-				return false;
-			}
-		}
+	private function get_singular_value() {
+		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
+		return isset( $data['noindex'] ) ? $data['noindex'] : null;
+	}
 
-		return true;
+	private function get_term_value() {
+		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
+		return isset( $data['noindex'] ) ? $data['noindex'] : null;
 	}
 
 	/**

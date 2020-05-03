@@ -2,6 +2,8 @@
 namespace SlimSEO\MetaTags;
 
 class Description {
+	use Context;
+
 	private $is_manual = false;
 
 	public function setup() {
@@ -24,18 +26,7 @@ class Description {
 	}
 
 	public function get_description() {
-		$description = '';
-
-		if ( is_front_page() ) {
-			$description = $this->get_home_description();
-		} elseif ( is_tax() || is_category() || is_tag() ) {
-			$description = $this->get_term_description();
-		} elseif ( is_home() || is_singular() ) {
-			$description = $this->get_singular_description();
-		} elseif ( is_author() ) {
-			$description = $this->get_author_description();
-		}
-
+		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, $this );
 		$description = $this->normalize( $description );
 
@@ -51,13 +42,7 @@ class Description {
 		return function_exists( 'mb_substr' ) ? mb_substr( $string, 0, 160 ) : substr( $string, 0, 160 );
 	}
 
-	private function get_home_description() {
-		// Static front page.
-		if ( is_page() ) {
-			return $this->get_singular_description();
-		}
-
-		// Homepage displays latest posts.
+	private function get_home_value() {
 		$data = get_option( 'slim_seo' );
 		return empty( $data['home_description'] ) ? get_bloginfo( 'description' ) : $data['home_description'];
 	}
@@ -66,7 +51,7 @@ class Description {
 	 * Get description from post excerpt and fallback to post content.
 	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
-	public function get_singular_description( $post_id = null ) {
+	public function get_singular_value( $post_id = null ) {
 		$post_id = $post_id ?: get_queried_object_id();
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
@@ -78,7 +63,7 @@ class Description {
 		return $post->post_excerpt ? $post->post_excerpt : $post->post_content;
 	}
 
-	private function get_term_description() {
+	private function get_term_value() {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
@@ -88,7 +73,7 @@ class Description {
 		return get_queried_object()->description;
 	}
 
-	private function get_author_description() {
+	private function get_author_value() {
 		return get_user_meta( get_queried_object_id(), 'description', true );
 	}
 }

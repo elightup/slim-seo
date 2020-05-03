@@ -4,10 +4,12 @@ namespace SlimSEO\MetaTags;
 class OpenGraph {
 	private $title;
 	private $description;
+	private $url;
 
-	public function __construct( Title $title, Description $description ) {
+	public function __construct( Title $title, Description $description, CanonicalUrl $url ) {
 		$this->title       = $title;
 		$this->description = $description;
+		$this->url         = $url;
 	}
 
 	public function setup() {
@@ -123,17 +125,7 @@ class OpenGraph {
 	}
 
 	private function get_url() {
-		if ( is_singular() ) {
-			return get_permalink();
-		}
-		$queried_object = get_queried_object();
-		if ( is_category() || is_tag() || is_tax() ) {
-			return get_term_link( $queried_object );
-		}
-		if ( is_post_type_archive() ) {
-			return get_post_type_archive_link( $queried_object->name );
-		}
-		return null;
+		return $this->url->get_url();
 	}
 
 	private function get_locale() {

@@ -2,11 +2,17 @@
 namespace SlimSEO\MetaTags;
 
 class CanonicalUrl {
+	use Context;
+
 	public function setup() {
 		add_action( 'wp_head', [ $this, 'output' ], 5 );
 	}
 
 	public function output() {
+		// WordPress already handles canonical URL for singular pages.
+		if ( is_singular() ) {
+			return;
+		}
 		$url = $this->get_url();
 		if ( $url ) {
 			echo '<link rel="canonical" href="', esc_url( $url ), '" />', "\n";
@@ -14,43 +20,30 @@ class CanonicalUrl {
 	}
 
 	public function get_url() {
-		// WordPress already handles canonical URL for singular pages.
-		if ( is_singular() ) {
-			return '';
-		}
-
-		$url = '';
-		if ( is_home() ) {
-			$url = $this->get_home_url();
-		} elseif ( is_tax() || is_category() || is_tag() ) {
-			$url = $this->get_term_url();
-		} elseif ( is_post_type_archive() ) {
-			$url = $this->get_post_type_archive_url();
-		} elseif ( is_author() ) {
-			$url = $this->get_author_url();
-		}
-
-		// As this is not a singular page, we should handle pagination.
+		$url = $this->get_value();
 		$url = $this->add_pagination( $url );
-
 		$url = apply_filters( 'slim_seo_canonical_url', $url, $this );
 
 		return $url;
 	}
 
-	public function get_home_url() {
-		return is_front_page() ? home_url( '/' ) : get_permalink( get_queried_object() );
+	private function get_home_value() {
+		return home_url( '/' );
 	}
 
-	public function get_term_url() {
+	private function get_singular_value() {
+		return wp_get_canonical_url();
+	}
+
+	private function get_term_value() {
 		return get_term_link( get_queried_object() );
 	}
 
-	public function get_post_type_archive_url() {
-		return get_post_type_archive_link( get_post_type() );
+	private function get_post_type_archive_value() {
+		return get_post_type_archive_link( get_queried_object()->name );
 	}
 
-	public function get_author_url() {
+	private function get_author_value() {
 		return get_author_posts_url( get_queried_object_id() );
 	}
 
