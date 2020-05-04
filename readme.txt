@@ -128,6 +128,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.3.1 - 2020-05-04 =
+- Fix missing function get_term_value for image
+
 = 3.3.0 - 2020-05-03 =
 - Add canonical URL for missing pages
 - Add settings for homepage when it shows latest posts
