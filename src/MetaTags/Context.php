@@ -32,6 +32,10 @@ trait Context {
 		return null;
 	}
 
+	private function get_term_value() {
+		return null;
+	}
+
 	private function get_author_value() {
 		return null;
 	}

@@ -28,7 +28,7 @@ class Image {
 		return has_post_thumbnail() ? wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' ) : null;
 	}
 
-	private function get_term_image() {
+	private function get_term_value() {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
 		if ( empty( $data[ $this->meta_key ] ) ) {
 			return null;
