@@ -56,6 +56,12 @@ class Description {
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
+			
+			/** This mimics the behaviour of `get_the_excerpt` in `/wp-includes/post-template.php` */
+			if ( post_password_required( $post_id ) ) {
+				return __( 'There is no excerpt because this is a protected post.' );
+			}
+			
 			return $data['description'];
 		}
 
