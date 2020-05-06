@@ -59,8 +59,7 @@ class Description {
 			return $data['description'];
 		}
 
-		$post = get_post( $post_id );
-		return $post->post_excerpt ? $post->post_excerpt : $post->post_content;
+		return get_the_excerpt($post_id);
 	}
 
 	private function get_term_value() {
