@@ -48,7 +48,7 @@ class Description {
 	}
 
 	/**
-	 * Get description from manual meta description input or fallback to post excerpt
+	 * Get custom meta description or fallback to post excerpt or post content
 	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
 	public function get_singular_value( $post_id = null ) {
@@ -62,11 +62,11 @@ class Description {
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
-
 			return $data['description'];
 		}
 
-		return get_the_excerpt($post_id);
+		$post = get_post( $post_id );
+		return $post->post_excerpt ? $post->post_excerpt : $post->post_content;
 	}
 
 	private function get_term_value() {
