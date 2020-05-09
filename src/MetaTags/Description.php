@@ -48,11 +48,17 @@ class Description {
 	}
 
 	/**
-	 * Get description from post excerpt and fallback to post content.
+	 * Get custom meta description or fallback to post excerpt or post content
 	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
 	public function get_singular_value( $post_id = null ) {
 		$post_id = $post_id ?: get_queried_object_id();
+
+		// Prevent showing description on password protected posts
+		if ( post_password_required( $post_id ) ) {
+			return __( 'There is no excerpt because this is a protected post.', 'slim-seo' );
+		}
+
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
