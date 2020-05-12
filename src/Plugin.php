@@ -23,7 +23,8 @@ class Plugin {
 		}
 
 		// Front-end only.
-		$this->services['canonical_url'] = new MetaTags\CanonicalUrl();
+		$this->services['canonical_url'] = new MetaTags\CanonicalUrl;
+		$this->services['rel_links'] = new MetaTags\RelLinks;
 		$this->services['open_graph'] = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'], $this->services['canonical_url'] );
 		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
 		$this->services['meta_robots'] = new MetaTags\Robots( $this->services['canonical_url'] );
