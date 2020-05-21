@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.4.1
 Requires PHP: 5.6
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.3.2 - 2020-05-21 =
+- Add password protection support for meta description
+- Add rel prev/next links for archive pages
 
 = 3.3.1 - 2020-05-04 =
 - Fix missing function get_term_value for image
