@@ -21,13 +21,6 @@
 	width: 100%;
 	margin: 0;
 }
-.ss-description {
-	font-size: 12px;
-	font-style: italic;
-	color: #666;
-	margin-top: 3px;
-	box-sizing: border-box;
-}
 
 /* Select image button */
 .ss-select-image.ss-select-image {
@@ -157,8 +150,8 @@
 	.settings_page_slim-seo .ss-input input[type="text"],
 	.term-php .ss-input textarea,
 	.settings_page_slim-seo .ss-input textarea,
-	.term-php .ss-description,
-	.settings_page_slim-seo .ss-description,
+	.term-php .ss-input .description,
+	.settings_page_slim-seo .ss-input .description,
 	.term-php .ss-input-group,
 	.settings_page_slim-seo .ss-input-group {
 		width: 95%;
