@@ -4,6 +4,7 @@ namespace SlimSEO\Settings;
 class Settings {
 	private $defaults = [
 		'header_code'         => '',
+		'body_code'           => '',
 		'footer_code'         => '',
 
 		'home_title'          => '',
