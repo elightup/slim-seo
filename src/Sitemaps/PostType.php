@@ -51,6 +51,7 @@ class PostType {
 
 			$images = $this->get_post_images( $post );
 			array_walk( $images, [$this, 'normalize_image'] );
+			$images = array_filter( $images );
 			array_walk( $images, [$this, 'output_image'] );
 
 			echo "\t</url>\n";
@@ -69,6 +70,9 @@ class PostType {
 	}
 
 	private function output_image( $image ) {
+		if ( empty( $image['url'] ) ) {
+			return;
+		}
 		echo "\t\t<image:image>\n";
 		echo "\t\t\t<image:loc>", esc_url( $image['url'] ), "</image:loc>\n";
 		if ( ! empty( $image['caption'] ) ) {
@@ -93,6 +97,7 @@ class PostType {
 
 		// Ignore if image is deleted.
 		if ( ! get_attached_file( $image ) ) {
+			$image = null;
 			return;
 		}
 
@@ -155,7 +160,7 @@ class PostType {
 
 			// Uploaded images.
 			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) ) {
-				$values[] = $matches[1];
+				$values[] = get_attached_file( $matches[1] ) ? (int) $matches[1] : [ 'url' => $src ];
 				continue;
 			}
 
