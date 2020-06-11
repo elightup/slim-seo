@@ -39,6 +39,7 @@ class Plugin {
 		$this->services['woocommerce'] = new Integrations\WooCommerce;
 		$this->services['genesis'] = new Integrations\Genesis;
 		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
+		$this->services['oxygen'] = new Integrations\Oxygen;
 	}
 
 	public function init() {

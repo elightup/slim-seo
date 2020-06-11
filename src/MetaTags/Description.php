@@ -66,7 +66,9 @@ class Description {
 		}
 
 		$post = get_post( $post_id );
-		return $post->post_excerpt ? $post->post_excerpt : $post->post_content;
+		$description = $post->post_excerpt ? $post->post_excerpt : $post->post_content;
+
+		return apply_filters( 'slim_seo_meta_description_generated', $description );
 	}
 
 	private function get_term_value() {
