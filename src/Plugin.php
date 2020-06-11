@@ -40,6 +40,7 @@ class Plugin {
 		$this->services['genesis'] = new Integrations\Genesis;
 		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
 		$this->services['oxygen'] = new Integrations\Oxygen;
+		$this->services['lifterlms'] = new Integrations\LifterLMS;
 	}
 
 	public function init() {
