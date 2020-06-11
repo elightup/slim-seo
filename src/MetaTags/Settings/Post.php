@@ -16,9 +16,12 @@ class Post extends Base {
 	}
 
 	public function add_meta_box() {
+		$context  = apply_filters( 'slim_seo_meta_box_context', 'normal' );
+		$priority = apply_filters( 'slim_seo_meta_box_priority', 'high' );
+
 		$post_types = $this->get_post_types();
 		foreach ( $post_types as $post_type ) {
-			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ $this, 'render' ], $post_type, 'normal', 'high' );
+			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ $this, 'render' ], $post_type, $context, $priority );
 		}
 	}
 
