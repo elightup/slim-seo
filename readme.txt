@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.4.2
 Requires PHP: 5.6
-Stable tag: 3.4.0
+Stable tag: 3.4.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.4.1 - 2020-06-12 =
+- Hotfix error editing Oxygen templates.
 
 = 3.4.0 - 2020-06-12 =
 - Add integration for LifterLMS: fix compatibility issues and allow users to define meta title/description for catalog pages. Props Rocco Aliberti.
