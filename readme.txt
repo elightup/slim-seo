@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.4.1
+Tested up to: 5.4.2
 Requires PHP: 5.6
-Stable tag: 3.3.2
+Stable tag: 3.4.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,14 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.4.0 - 2020-06-12 =
+- Add integration for LifterLMS: fix compatibility issues and allow users to define meta title/description for catalog pages. Props Rocco Aliberti.
+- Add integration for Oxygen builder, now the plugin parses the content built with Oxygen.
+- Add filter for changing context/priority for meta box.
+- Add support for output code after the opening `<body>` tag.
+- Fix illegal string offset ‘url’ in post sitemap.
+- Use WP native `.description` CSS class.
 
 = 3.3.2 - 2020-05-21 =
 - Add password protection support for meta description
