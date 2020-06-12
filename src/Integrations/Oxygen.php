@@ -8,6 +8,6 @@ class Oxygen {
 
 	public function description( $description ) {
 		$shortcode = get_post_meta( get_the_ID(), 'ct_builder_shortcodes', true );
-		return $shortcode ? do_shortcode( $shortcode ) : $description;
+		return defined( 'CT_VERSION' ) && $shortcode ? do_shortcode( $shortcode ) : $description;
 	}
 }
