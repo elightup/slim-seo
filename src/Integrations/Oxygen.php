@@ -7,7 +7,16 @@ class Oxygen {
 	}
 
 	public function description( $description ) {
+		// Oxygen not activated.
+		if ( ! defined( 'CT_VERSION' ) ) {
+			return $description;
+		}
+		// In builder mode.
+		if ( defined( 'SHOW_CT_BUILDER' ) ) {
+			return $description;
+		}
+
 		$shortcode = get_post_meta( get_the_ID(), 'ct_builder_shortcodes', true );
-		return defined( 'CT_VERSION' ) && $shortcode ? do_shortcode( $shortcode ) : $description;
+		return $shortcode ? do_shortcode( $shortcode ) : $description;
 	}
 }
