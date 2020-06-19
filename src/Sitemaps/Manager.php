@@ -51,7 +51,12 @@ class Manager {
 
 		if ( 0 === strpos( $type, 'taxonomy-' ) ) {
 			$taxonomy = substr( $type, 9 );
-			$sitemap  = new Taxonomy( $taxonomy );
+			$page     = 1;
+			if ( preg_match( '/(.+)-(\d+)$/', $taxonomy, $matches ) && taxonomy_exists( $matches[1] ) ) {
+				$taxonomy = $matches[1];
+				$page     = $matches[2];
+			}
+			$sitemap  = new Taxonomy( $taxonomy, $page );
 			$sitemap->output();
 		}
 

@@ -19,10 +19,9 @@ class Index {
 
 	private function output_post_type_sitemap( $post_type ) {
 		$query_args = PostType::get_query_args( [
-			'post_type'              => $post_type,
-			'no_found_rows'          => false,
-			'fields'                 => 'ids',
-			'update_post_meta_cache' => false,
+			'post_type'     => $post_type,
+			'no_found_rows' => false,
+			'fields'        => 'ids',
 		] );
 		$query      = new \WP_Query( $query_args );
 		if ( ! $query->post_count ) {
@@ -49,18 +48,13 @@ class Index {
 	}
 
 	private function output_taxonomy_sitemap( $taxonomy ) {
-		$query_args = Taxonomy::get_query_args( [
-			'taxonomy'               => $taxonomy,
-			'fields'                 => 'ids',
-			'update_term_meta_cache' => false,
-		] );
-		$terms      = get_terms( $query_args );
-		if ( empty( $terms ) ) {
-			return;
+		$term_count = wp_count_terms( $taxonomy, Taxonomy::get_query_args() );
+		$max_page   = (int) ceil( $term_count / 2000 );
+		for ( $i = 1; $i <= $max_page; $i++ ) {
+			echo "\t<sitemap>\n";
+			$index = 1 === $i ? '' : "-$i";
+			echo "\t\t<loc>", esc_url( home_url( "sitemap-taxonomy-$taxonomy$index.xml" ) ), "</loc>\n";
+			echo "\t</sitemap>\n";
 		}
-
-		echo "\t<sitemap>\n";
-		echo "\t\t<loc>", esc_url( home_url( "sitemap-taxonomy-$taxonomy.xml" ) ), "</loc>\n";
-		echo "\t</sitemap>\n";
 	}
 }
