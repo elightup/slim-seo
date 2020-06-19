@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.4.2
 Requires PHP: 5.6
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -127,6 +127,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.4.2 - 2020-06-19 =
+- Fix Oxygen slider not rendering properly.
+- Increase the maximum number of URLs in sitemap to 2000.
+- Add filter to change query args for sitemaps.
+- Paginate taxonomy sitemap.
 
 = 3.4.1 - 2020-06-12 =
 - Hotfix error editing Oxygen templates.
