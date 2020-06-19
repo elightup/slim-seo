@@ -13,6 +13,7 @@ class Index {
 
 	private function output_post_type_sitemaps() {
 		$post_types = get_post_types( [ 'public' => true ] );
+		$post_types = apply_filters( 'slim_seo_sitemap_post_types', $post_types );
 		array_walk( $post_types, [ $this, 'output_post_type_sitemap' ] );
 	}
 
@@ -46,6 +47,7 @@ class Index {
 				'show_ui' => true,
 			]
 		);
+		$taxonomies = apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
 		array_walk( $taxonomies, [ $this, 'output_taxonomy_sitemap' ] );
 	}
 

@@ -6,7 +6,7 @@ class Taxonomy {
 
 	public static $query_args = [
 		'hide_empty' => true,
-		'number'     => 500, // Maximum number of links in a sitemap. See https://support.google.com/webmasters/answer/75712
+		'number'     => 2000,
 	];
 
 	public function __construct( $taxonomy ) {

@@ -18,7 +18,7 @@ class PostType {
 		'order'                  => 'DESC',
 		'orderyby'               => 'date',
 
-		'posts_per_page'         => 500, // Maximum number of links in a sitemap. See https://support.google.com/webmasters/answer/75712
+		'posts_per_page'         => 2000,
 	];
 
 	public function __construct( $post_type, $page = 1 ) {
