@@ -18,15 +18,12 @@ class Index {
 	}
 
 	private function output_post_type_sitemap( $post_type ) {
-		$query_args = array_merge(
-			PostType::$query_args,
-			[
-				'post_type'              => $post_type,
-				'no_found_rows'          => false,
-				'fields'                 => 'ids',
-				'update_post_meta_cache' => false,
-			]
-		);
+		$query_args = PostType::get_query_args( [
+			'post_type'              => $post_type,
+			'no_found_rows'          => false,
+			'fields'                 => 'ids',
+			'update_post_meta_cache' => false,
+		] );
 		$query      = new \WP_Query( $query_args );
 		if ( ! $query->post_count ) {
 			return;
@@ -52,14 +49,11 @@ class Index {
 	}
 
 	private function output_taxonomy_sitemap( $taxonomy ) {
-		$query_args = array_merge(
-			Taxonomy::$query_args,
-			[
-				'taxonomy'               => $taxonomy,
-				'fields'                 => 'ids',
-				'update_term_meta_cache' => false,
-			]
-		);
+		$query_args = Taxonomy::get_query_args( [
+			'taxonomy'               => $taxonomy,
+			'fields'                 => 'ids',
+			'update_term_meta_cache' => false,
+		] );
 		$terms      = get_terms( $query_args );
 		if ( empty( $terms ) ) {
 			return;

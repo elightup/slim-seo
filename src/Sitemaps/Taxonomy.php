@@ -4,24 +4,23 @@ namespace SlimSEO\Sitemaps;
 class Taxonomy {
 	private $taxonomy;
 
-	public static $query_args = [
-		'hide_empty' => true,
-		'number'     => 2000,
-	];
-
 	public function __construct( $taxonomy ) {
 		$this->taxonomy = $taxonomy;
+	}
+
+	public static function get_query_args( $args = [] ) {
+		return apply_filters( 'slim_seo_taxonomy_query_args', array_merge( [
+			'hide_empty' => true,
+			'number'     => 2000,
+		], $args ), $args );
 	}
 
 	public function output() {
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', "\n";
 
-		$query_args = array_merge(
-			self::$query_args,
-			[
-				'taxonomy' => $this->taxonomy,
-			]
-		);
+		$query_args = self::get_query_args( [
+			'taxonomy' => $this->taxonomy,
+		] );
 		$terms      = get_terms( $query_args );
 
 		foreach ( $terms as $term ) {

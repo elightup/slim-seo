@@ -5,25 +5,27 @@ class PostType {
 	private $post_type;
 	private $page;
 
-	public static $query_args = [
-		'post_status'            => 'publish',
-		'has_password'           => false,
-
-		'ignore_sticky_posts'    => true,
-
-		'no_found_rows'          => true,
-		'update_post_meta_cache' => false,
-		'update_post_term_cache' => false,
-
-		'order'                  => 'DESC',
-		'orderyby'               => 'date',
-
-		'posts_per_page'         => 2000,
-	];
-
 	public function __construct( $post_type, $page = 1 ) {
 		$this->post_type = $post_type;
 		$this->page      = $page;
+	}
+
+	public static function get_query_args( $args = [] ) {
+		return apply_filters( 'slim_seo_sitemap_post_type_query_args', array_merge( [
+			'post_status'            => 'publish',
+			'has_password'           => false,
+
+			'ignore_sticky_posts'    => true,
+
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+
+			'order'                  => 'DESC',
+			'orderyby'               => 'date',
+
+			'posts_per_page'         => 2000,
+		], $args ), $args );
 	}
 
 	public function output() {
@@ -31,13 +33,10 @@ class PostType {
 
 		$this->output_homepage();
 
-		$query_args = array_merge(
-			self::$query_args,
-			[
-				'post_type' => $this->post_type,
-				'paged'     => $this->page,
-			]
-		);
+		$query_args = self::get_query_args( [
+			'post_type' => $this->post_type,
+			'paged'     => $this->page,
+		] );
 		$query      = new \WP_Query( $query_args );
 
 		foreach ( $query->posts as $post ) {
