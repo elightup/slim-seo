@@ -19,8 +19,8 @@ class Settings {
 
 	public function add_menu() {
 		$page_hook = add_options_page(
-			__( 'SEO', 'slim-seo' ),
-			__( 'SEO', 'slim-seo' ),
+			__( 'Slim SEO', 'slim-seo' ),
+			__( 'Slim SEO', 'slim-seo' ),
 			'manage_options',
 			'slim-seo',
 			[ $this, 'render' ]
@@ -60,7 +60,7 @@ class Settings {
 		$data = array_merge( $this->defaults, $data );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'SEO Settings', 'slim-seo' ); ?></h1>
+			<h1><?= esc_html( get_admin_page_title() ); ?></h1>
 			<h2 class="nav-tab-wrapper">
 				<a href="#general" class="nav-tab nav-tab-active"><?php esc_html_e( 'General', 'slim-seo' ); ?></a>
 				<?php if ( ! $this->is_static_homepage() ) : ?>
