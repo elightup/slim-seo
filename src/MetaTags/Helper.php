@@ -10,8 +10,9 @@ class Helper {
 		 * do_shortcode here will parse the <link> and then remove it, which might break the style/JS.
 		 */
 		$skipped_shortcodes = apply_filters( 'slim_seo_skipped_shortcodes', [
-			'happyforms', // HappyForms
-			'contact',    // Very Simple Contact Form
+			'happyforms',   // HappyForms
+			'contact',      // Very Simple Contact Form
+			'edd_invoices', // EDD Invoices
 		] );
 		$shortcodes_bak = $shortcode_tags;
 		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
