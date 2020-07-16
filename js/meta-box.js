@@ -138,6 +138,9 @@
 			}
 		}
 		init() {
+			if ( ! this.input.el ) {
+				return;
+			}
 			this.updatePreview();
 			this.updateCounter();
 			this.addEventListener();
