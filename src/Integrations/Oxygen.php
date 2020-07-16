@@ -23,6 +23,7 @@ class Oxygen {
 
 	public function skip_shortcodes( $shortcodes ) {
 		$shortcodes[] = 'ct_slider';
+		$shortcodes[] = 'ct_code_block';
 		return $shortcodes;
 	}
 }
