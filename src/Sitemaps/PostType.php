@@ -4,6 +4,7 @@ namespace SlimSEO\Sitemaps;
 class PostType {
 	private $post_type;
 	private $page;
+	private $current_post;
 
 	public function __construct( $post_type, $page = 1 ) {
 		$this->post_type = $post_type;
@@ -44,6 +45,8 @@ class PostType {
 				continue;
 			}
 
+			$this->current_post = $post;
+
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
@@ -77,9 +80,8 @@ class PostType {
 		if ( ! empty( $image['caption'] ) ) {
 			echo "\t\t\t<image:caption>", esc_html( $image['caption'] ), "</image:caption>\n";
 		}
-		if ( ! empty( $image['title'] ) ) {
-			echo "\t\t\t<image:title>", esc_html( $image['title'] ), "</image:title>\n";
-		}
+		$title = empty( $image['title'] ) ? $this->current_post->post_title : $image['title'];
+		echo "\t\t\t<image:title>", esc_html( $title ), "</image:title>\n";
 		echo "\t\t</image:image>\n";
 	}
 
