@@ -76,7 +76,7 @@ class PostType {
 			return;
 		}
 		echo "\t\t<image:image>\n";
-		echo "\t\t\t<image:loc>", esc_url( $image['url'] ), "</image:loc>\n";
+		echo "\t\t\t<image:loc>", esc_url( $this->get_absolute_url( $image['url'] ) ), "</image:loc>\n";
 		if ( ! empty( $image['caption'] ) ) {
 			echo "\t\t\t<image:caption>", esc_html( $image['caption'] ), "</image:caption>\n";
 		}
@@ -174,6 +174,15 @@ class PostType {
 		}
 
 		return $values;
+	}
+
+	private function get_absolute_url( $url ) {
+		if ( parse_url( $url, PHP_URL_SCHEME ) ) {
+			return $url;
+		}
+
+		$url_parts = parse_url( home_url() );
+		return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] ) . ltrim( $url, '/' );
 	}
 
 	private function is_indexed( $post ) {
