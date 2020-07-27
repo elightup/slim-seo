@@ -182,6 +182,13 @@ class PostType {
 		}
 
 		$url_parts = parse_url( home_url() );
+
+		// Non-protocol URL.
+		if ( 0 === strpos( $url, '//' ) ) {
+			return "{$url_parts['scheme']}:{$url}";
+		}
+
+		// Relative URL.
 		return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] ) . ltrim( $url, '/' );
 	}
 
