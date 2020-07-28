@@ -122,7 +122,10 @@
 		updateCounter() {
 			let value = this.input.value || this.generated;
 			value = _.unescape( value );
-			this.input.el.nextElementSibling.querySelector( '.ss-counter' ).textContent = value.length;
+			const counter = this.input.el.nextElementSibling.querySelector( '.ss-counter' );
+			if ( counter ) {
+				counte.textContent = value.length;
+			}
 			this.updateStatus( value );
 		}
 		updateStatus( value ) {
