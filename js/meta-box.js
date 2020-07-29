@@ -124,7 +124,7 @@
 			value = _.unescape( value );
 			const counter = this.input.el.nextElementSibling.querySelector( '.ss-counter' );
 			if ( counter ) {
-				counte.textContent = value.length;
+				counter.textContent = value.length;
 			}
 			this.updateStatus( value );
 		}
