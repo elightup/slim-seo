@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.4.2
 Requires PHP: 5.6
-Stable tag: 3.4.6
+Stable tag: 3.4.7
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -128,14 +128,17 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.4.7 - 2020-07-29 =
+- Fix typo in JS which breaks the preview of meta fields.
+
 = 3.4.6 - 2020-07-28 =
-- Fix JS error can't update counter
-- Remove invalid characters in the sitemap XML
-- Fix non-protocol URL of images in the sitemap
+- Fix JS error can't update counter.
+- Remove invalid characters in the sitemap XML.
+- Fix non-protocol URL of images in the sitemap.
 
 = 3.4.5 - 2020-07-21 =
-- Fix image relative URLs in the sitemap
-- Add default title for images in the sitemap
+- Fix image relative URLs in the sitemap.
+- Add default title for images in the sitemap.
 - Fix JavaScript error if the post edit is customized and don't have the plugin inputs.
 
 = 3.4.4 - 2020-07-16 =
