@@ -60,13 +60,17 @@ Slim SEO automatically adds the some structured data to the website via JSON-LD 
 - Auto redirect attachment page to the attachment file URL.
 - Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
 
-To know more about Slim SEO features, please see the [homepage](https://wpslimseo.com).
+#### 6. [Open Source](https://github.com/elightup/slim-seo)
+
+- Slim SEO has different contributors which help make Slim SEO a quality product.
+
+
 
 ### Who should use Slim SEO?
 
 Everyone can use Slim SEO!
 
-However, Slim SEO is perfecly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
+However, Slim SEO is perfectly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
 
 == Installation ==
 
