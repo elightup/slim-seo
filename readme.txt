@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://paypal.me/anhtnt
 Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.4.2
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.4.7
+Stable tag: 3.4.8
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,11 +60,9 @@ Slim SEO automatically adds the some structured data to the website via JSON-LD 
 - Auto redirect attachment page to the attachment file URL.
 - Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
 
-#### 6. [Open Source](https://github.com/elightup/slim-seo)
+#### 6. Open Source
 
-- Slim SEO has different contributors which help make Slim SEO a quality product.
-
-
+Slim SEO has different contributors which help make Slim SEO a quality product. Join us on [Github](https://github.com/elightup/slim-seo)!
 
 ### Who should use Slim SEO?
 
@@ -131,6 +129,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.4.8 - 2020-08-06 =
+- Temporarily disable the core sitemaps in WordPress 5.5 to avoid any conflict and redundancy. We're working on a deep integration to make sure Slim SEO works well with it.
 
 = 3.4.7 - 2020-07-29 =
 - Fix typo in JS which breaks the preview of meta fields.
