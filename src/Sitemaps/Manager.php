@@ -7,6 +7,9 @@ class Manager {
 		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
 		add_action( 'template_redirect', [ $this, 'output' ], 0 );
 		add_action( 'do_robotstxt', [ $this, 'add_to_robots_txt' ] );
+
+		// Disable core sitemaps. Use `init` instead of `wp_sitemaps_enabled` to "completely" remove core sitemaps functionality, such as registering rewrite rules.
+		remove_action( 'init', 'wp_sitemaps_get_server' );
 	}
 
 	public function add_rewrite_rules() {
