@@ -112,7 +112,11 @@ abstract class Base {
 		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : [];
 		$data = $this->sanitize( $data );
 
-		update_metadata( $this->object_type, $object_id, 'slim_seo', $data );
+		if ( empty( $data ) ) {
+			delete_metadata( $this->object_type, $object_id, 'slim_seo' );
+		} else {
+			update_metadata( $this->object_type, $object_id, 'slim_seo', $data );
+		}
 	}
 
 	private function sanitize( $data ) {
