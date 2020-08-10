@@ -13,6 +13,10 @@ class WebStories {
 	}
 
 	public function setup() {
+		if ( ! defined( 'WEBSTORIES_VERSION' ) ) {
+			return;
+		}
+
 		// Use priority 20 to make sure all Web Stories hooks are registered.
 		add_action( 'init', [ $this, 'remove_web_stories_meta_output' ], 20 );
 

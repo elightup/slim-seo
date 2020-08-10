@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.5.0
+Stable tag: 3.5.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -130,7 +130,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
- = 3.5.0 - 2020-08-10 =
+= 3.5.1 - 2020-08-10 =
+- Hotfix for not checking Google Web Stories.
+
+= 3.5.0 - 2020-08-10 =
 - Add support for Google Web Stories.
 - Improve integrations for Jetpack and AMP. Disable Jetpack SEO tools completely when the plugin is activated.
 - Ensure no meta if users enter nothing.
