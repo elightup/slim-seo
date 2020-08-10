@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.4.8
+Stable tag: 3.5.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -129,6 +129,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+ = 3.5.0 - 2020-08-10 =
+- Add support for Google Web Stories.
+- Improve integrations for Jetpack and AMP. Disable Jetpack SEO tools completely when the plugin is activated.
+- Ensure no meta if users enter nothing.
+- Sanitize plugin options, remove option if no settings is saved.
 
 = 3.4.8 - 2020-08-06 =
 - Temporarily disable the core sitemaps in WordPress 5.5 to avoid any conflict and redundancy. We're working on a deep integration to make sure Slim SEO works well with it.
