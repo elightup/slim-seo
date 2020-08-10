@@ -93,21 +93,26 @@ class Settings {
 		$data = wp_unslash( $data );
 
 		$option = get_option( 'slim_seo' );
-		$option = $option ? $option : [];
+		$option = $option ?: [];
 		$option = array_merge( $option, $data );
+		$option = $this->sanitize( $option );
 
-		update_option( 'slim_seo', $option );
+		if ( empty( $option ) ) {
+			delete_option( 'slim_seo' );
+		} else {
+			update_option( 'slim_seo', $option );
+		}
 	}
 
-	private function sanitize( $data ) {
-		$data = array_merge( $this->defaults, $data );
+	private function sanitize( $option ) {
+		$option = array_merge( $this->defaults, $option );
 
-		$data['home_title']          = sanitize_text_field( $data['home_title'] );
-		$data['home_description']    = sanitize_text_field( $data['home_description'] );
-		$data['home_facebook_image'] = esc_url_raw( $data['home_facebook_image'] );
-		$data['home_twitter_image']  = esc_url_raw( $data['home_twitter_image'] );
+		$option['home_title']          = sanitize_text_field( $option['home_title'] );
+		$option['home_description']    = sanitize_text_field( $option['home_description'] );
+		$option['home_facebook_image'] = esc_url_raw( $option['home_facebook_image'] );
+		$option['home_twitter_image']  = esc_url_raw( $option['home_twitter_image'] );
 
-		return array_filter( $data );
+		return array_filter( $option );
 	}
 
 	private function is_static_homepage() {
