@@ -15,13 +15,6 @@ class Manager {
 
 	public function setup() {
 		add_action( 'wp_footer', [ $this, 'output' ] );
-		add_action( 'amp_post_template_footer', [ $this, 'output' ] );
-
-		add_action( 'amp_post_template_head', array( $this, 'remove_default_amp_schema' ), 9 );
-	}
-
-	public function remove_default_amp_schema() {
-		remove_action( 'amp_post_template_head', 'amp_print_schemaorg_metadata' );
 	}
 
 	public function output() {

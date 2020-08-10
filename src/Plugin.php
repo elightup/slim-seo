@@ -42,6 +42,7 @@ class Plugin {
 		$this->services['oxygen'] = new Integrations\Oxygen;
 		$this->services['lifterlms'] = new Integrations\LifterLMS;
 		$this->services['jetpack'] = new Integrations\Jetpack;
+		$this->services['amp'] = new Integrations\AMP( $this->services['schema'] );
 	}
 
 	public function init() {
