@@ -41,6 +41,7 @@ class Plugin {
 		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
 		$this->services['oxygen'] = new Integrations\Oxygen;
 		$this->services['lifterlms'] = new Integrations\LifterLMS;
+		$this->services['jetpack'] = new Integrations\Jetpack;
 	}
 
 	public function init() {

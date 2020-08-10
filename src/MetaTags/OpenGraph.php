@@ -13,7 +13,6 @@ class OpenGraph {
 	}
 
 	public function setup() {
-		add_filter( 'jetpack_enable_open_graph', '__return_false' );
 		add_action( 'wp_head', [ $this, 'output' ] );
 	}
 
