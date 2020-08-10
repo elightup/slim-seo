@@ -43,6 +43,13 @@ class Plugin {
 		$this->services['lifterlms'] = new Integrations\LifterLMS;
 		$this->services['jetpack'] = new Integrations\Jetpack;
 		$this->services['amp'] = new Integrations\AMP( $this->services['schema'] );
+		$this->services['web_stories'] = new Integrations\WebStories(
+			$this->services['meta_title'],
+			$this->services['meta_description'],
+			$this->services['open_graph'],
+			$this->services['twitter_cards'],
+			$this->services['schema']
+		);
 	}
 
 	public function init() {
