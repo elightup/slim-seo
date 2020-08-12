@@ -4,6 +4,12 @@ namespace SlimSEO;
 class Activator {
 	public function __construct( $file ) {
 		register_activation_hook( $file, [ $this, 'activate' ] );
+
+		add_filter( 'plugin_action_links_' . plugin_basename(SLIM_SEO_FILE), function($links) {
+			$links[] = '<a href="' . admin_url( 'options-general.php?page=' . SLIM_SEO_SLUG ) . '">' . __('Settings') . '</a>';
+
+			return $links;
+		} );
 	}
 
 	public function activate( $network_wide ) {

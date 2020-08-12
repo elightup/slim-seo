@@ -14,8 +14,10 @@ namespace SlimSEO;
 
 defined( 'ABSPATH' ) || die;
 
+define( 'SLIM_SEO_FILE', __FILE__ );
 define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
+define( 'SLIM_SEO_SLUG', sanitize_title( pathinfo( __FILE__,  PATHINFO_FILENAME ) ) );
 define( 'SLIM_SEO_VER', '3.5.1' );
 
 require __DIR__ . '/vendor/autoload.php';
