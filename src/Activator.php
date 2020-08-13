@@ -5,7 +5,7 @@ class Activator {
 	public function __construct( $file ) {
 		register_activation_hook( $file, [ $this, 'activate' ] );
 
-		add_filter( 'plugin_action_links_' . plugin_basename(SLIM_SEO_FILE), [ $this, 'add_settings_link' ] );
+		add_filter( 'plugin_action_links_' . plugin_basename( SLIM_SEO_FILE ), [ $this, 'add_settings_link' ] );
 	}
 
 	public function activate( $network_wide ) {
