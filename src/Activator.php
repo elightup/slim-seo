@@ -5,11 +5,7 @@ class Activator {
 	public function __construct( $file ) {
 		register_activation_hook( $file, [ $this, 'activate' ] );
 
-		add_filter( 'plugin_action_links_' . plugin_basename(SLIM_SEO_FILE), function($links) {
-			$links[] = '<a href="' . admin_url( 'options-general.php?page=' . SLIM_SEO_SLUG ) . '">' . __('Settings') . '</a>';
-
-			return $links;
-		} );
+		add_filter( 'plugin_action_links_' . plugin_basename(SLIM_SEO_FILE), [ $this, 'add_settings_link' ] );
 	}
 
 	public function activate( $network_wide ) {
@@ -18,6 +14,12 @@ class Activator {
 		} else {
 			$this->site_activate();
 		}
+	}
+
+	public function add_settings_link( $links ) {
+		$links[] = '<a href="' . esc_url( admin_url( 'options-general.php?page=' . SLIM_SEO_SLUG ) ) . '">' . __( 'Settings', 'slim-seo' ) . '</a>';
+
+		return $links;
 	}
 
 	private function network_activate() {
