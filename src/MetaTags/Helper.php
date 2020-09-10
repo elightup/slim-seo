@@ -13,6 +13,7 @@ class Helper {
 			'happyforms',   // HappyForms
 			'contact',      // Very Simple Contact Form
 			'edd_invoices', // EDD Invoices
+			'velocity',     // Velocity
 		] );
 		$shortcodes_bak = $shortcode_tags;
 		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
