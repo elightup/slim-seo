@@ -21,11 +21,16 @@ class Robots {
 	public function output() {
 		$is_indexed = $this->is_indexed();
 		$is_indexed = apply_filters( 'slim_seo_robots_index', $is_indexed );
-		if ( ! $is_indexed ) {
-			wp_no_robots();
-			remove_action( 'wp_head', [ $this->url, 'output' ] );
-			remove_action( 'wp_head', 'rel_canonical' );
+
+		if ( $is_indexed ) {
+			echo '<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
+			return;
 		}
+
+		// No index.
+		wp_no_robots();
+		remove_action( 'wp_head', [ $this->url, 'output' ] );
+		remove_action( 'wp_head', 'rel_canonical' );
 	}
 
 	private function is_indexed() {
