@@ -67,9 +67,7 @@ class Settings {
 					<a href="#homepage" class="nav-tab"><?php esc_html_e( 'Homepage', 'slim-seo' ); ?></a>
 				<?php endif; ?>
 				<a href="#tools" class="nav-tab"><?php esc_html_e( 'Tools', 'slim-seo' ); ?></a>
-				<?php
-				do_action( 'slim_seo_setting_tabs' );
-				?>
+				<?php do_action( 'slim_seo_settings_tabs' ); ?>
 			</h2>
 
 			<form action="" method="post">
@@ -81,7 +79,7 @@ class Settings {
 					include __DIR__ . '/sections/homepage.php';
 				}
 				include __DIR__ . '/sections/tools.php';
-				do_action( 'slim_seo_setting_tab_panels' );
+				do_action( 'slim_seo_settings_panels' );
 				?>
 			</form>
 		</div>
