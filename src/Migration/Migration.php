@@ -61,7 +61,6 @@ class Migration {
 		session_start();
 		$posts = $this->get_posts();
 		if ( empty( $posts ) ) {
-			$_SESSION['replacer']->cleanup_posts();
 			wp_send_json_success( [
 				'message' => '',
 				'type'    => 'done',
