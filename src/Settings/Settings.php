@@ -39,18 +39,21 @@ class Settings {
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
 
+		wp_enqueue_media();
+		$params = [
+			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
+		];
 		if ( ! $this->is_static_homepage() ) {
-			wp_enqueue_media();
 			wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
-			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', ['jquery', 'underscore'], SLIM_SEO_VER, true );
-			$params = [
-				'site' => [
-					'title'       => get_bloginfo( 'name' ),
-					'description' => get_bloginfo( 'description' ),
-				],
-				'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
+			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
+			$params[ 'site' ] = [
+				'title'       => get_bloginfo( 'name' ),
+				'description' => get_bloginfo( 'description' ),
 			];
 			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
+		} else {
+			wp_enqueue_script( 'slim-seo-media', SLIM_SEO_URL . 'js/media.js', [], SLIM_SEO_VER, true );
+			wp_localize_script( 'slim-seo-media', 'ss', $params );
 		}
 	}
 
@@ -67,6 +70,7 @@ class Settings {
 					<a href="#homepage" class="nav-tab"><?php esc_html_e( 'Homepage', 'slim-seo' ); ?></a>
 				<?php endif; ?>
 				<a href="#tools" class="nav-tab"><?php esc_html_e( 'Tools', 'slim-seo' ); ?></a>
+				<a href="#socials" class="nav-tab"><?php esc_html_e( 'Socials', 'slim-seo' ); ?></a>
 				<?php do_action( 'slim_seo_settings_tabs' ); ?>
 			</h2>
 
@@ -79,6 +83,7 @@ class Settings {
 					include __DIR__ . '/sections/homepage.php';
 				}
 				include __DIR__ . '/sections/tools.php';
+				include __DIR__ . '/sections/socials.php';
 				do_action( 'slim_seo_settings_panels' );
 				?>
 			</form>

@@ -16,10 +16,20 @@ class TwitterCards {
 	public function output() {
 		echo '<meta name="twitter:card" content="summary_large_image">', "\n";
 
+		$default_image = $this->get_default_image();
 		$image_obj = new Image( 'twitter_image' );
-		$image     = $image_obj->get_value();
+		$image     = $default_image ?: $image_obj->get_value();
 		if ( ! empty( $image ) ) {
 			echo '<meta name="twitter:image" content="' . esc_url( $image[0] ) . '">', "\n";
 		}
+	}
+
+	private function get_default_image() {
+		$data = get_option( 'slim_seo' );
+		if ( empty( $data[ "default_twitter_image" ] ) ) {
+			return null;
+		}
+		$image_id = attachment_url_to_postid( $data[ $this->meta_key ] );
+		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ "default_twitter_image" ] ];
 	}
 }
