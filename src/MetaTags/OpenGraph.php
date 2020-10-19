@@ -95,7 +95,7 @@ class OpenGraph {
 		if ( empty( $data[ "default_facebook_image" ] ) ) {
 			return null;
 		}
-		$image_id = attachment_url_to_postid( $data[ $this->meta_key ] );
+		$image_id = attachment_url_to_postid( $data[ 'default_facebook_image' ] );
 		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ "default_facebook_image" ] ];
 	}
 
