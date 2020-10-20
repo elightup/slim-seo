@@ -77,7 +77,7 @@ class OpenGraph {
 		if ( ! $ran ) {
 			$default_image = $this->get_default_image();
 			$image_obj     = new Image( 'facebook_image' );
-			$image         = $default_image ?: $image_obj->get_value();
+			$image         = $image_obj->get_value() ?: $default_image;
 			$ran           = true;
 		}
 
