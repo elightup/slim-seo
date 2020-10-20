@@ -1,4 +1,4 @@
-<div id="socials" class="ss-tab-pane">
+<div id="social" class="ss-tab-pane">
 	<h3><?php esc_attr_e( 'Default Social Image', 'slim-seo' ); ?></h3>
 	<p><?php esc_html_e( 'These images below are used if the post/page being shared does not contain any images.', 'slim-seo' ); ?></p>
 
