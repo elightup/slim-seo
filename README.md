@@ -41,7 +41,7 @@ The plugin allows you to output a breadcrumb trail on your website easily. It au
 
 Schema is a way that describes structured data for search engines. Based on the data provided, search engines can show the content in the search results page in a more appealing way.
 
-Slim SEO automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
+Slim SEO automatically adds structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
 ### 5. [Auto Redirection](https://wpslimseo.com/docs/auto-redirection/)
 
@@ -54,7 +54,7 @@ To know more about Slim SEO features, please see the [homepage](https://wpslimse
 
 Everyone can use Slim SEO!
 
-However, Slim SEO is perfecly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
+However, Slim SEO is perfectly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
 
 ## Installation
 
@@ -68,7 +68,7 @@ That's all. The plugin doesn't have any settings page. Everything is done automa
 
 **How meta title tag is generated?**
 
-WordPress already has this featured! All we need to do is add theme support for `title-tag`. By default, the title tag will have the following format:
+WordPress already has this feature! All we need to do is add theme support for `title-tag`. By default, the title tag will have the following format:
 
 For homepage: Site title - Site description
 For single page or post: Page/Post title - Site title
