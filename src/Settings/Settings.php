@@ -11,6 +11,8 @@ class Settings {
 		'home_description'    => '',
 		'home_facebook_image' => '',
 		'home_twitter_image'  => '',
+		'default_facebook_image' => '',
+		'default_twitter_image'  => '',
 	];
 
 	public function setup() {
