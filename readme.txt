@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.5.1
 Requires PHP: 5.6
-Stable tag: 3.5.4
+Stable tag: 3.6.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -129,6 +129,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+= 3.6.0 - 2020-10-21 =
+- Add default Facebook and Twitter images for sharing
+- Don't remove meta values from other SEO plugins after migration (for safety)
+
 = 3.5.4 - 2020-09-29 =
 - Show large image in the SERP
 - Fix SEOFramework migration
