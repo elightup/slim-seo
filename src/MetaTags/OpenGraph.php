@@ -75,9 +75,10 @@ class OpenGraph {
 		static $ran = false;
 
 		if ( ! $ran ) {
-			$image_obj = new Image( 'facebook_image' );
-			$image     = $image_obj->get_value();
-			$ran       = true;
+			$default_image = $this->get_default_image();
+			$image_obj     = new Image( 'facebook_image' );
+			$image         = $image_obj->get_value() ?: $default_image;
+			$ran           = true;
 		}
 
 		$keys = [
@@ -87,6 +88,15 @@ class OpenGraph {
 		];
 
 		return isset( $image[ $keys[ $key ] ] ) ? $image[ $keys[ $key ] ] : null;
+	}
+
+	private function get_default_image() {
+		$data = get_option( 'slim_seo' );
+		if ( empty( $data[ 'default_facebook_image' ] ) ) {
+			return null;
+		}
+		$image_id = attachment_url_to_postid( $data[ 'default_facebook_image' ] );
+		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ 'default_facebook_image' ] ];
 	}
 
 	private function get_description() {
