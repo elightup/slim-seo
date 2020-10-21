@@ -1,6 +1,6 @@
 <div id="social" class="ss-tab-pane">
-	<h3><?php esc_attr_e( 'Default Social Image', 'slim-seo' ); ?></h3>
-	<p><?php esc_html_e( 'These images below are used if the post/page being shared does not contain any images.', 'slim-seo' ); ?></p>
+	<h3><?php esc_attr_e( 'Default Social Images', 'slim-seo' ); ?></h3>
+	<p><?php esc_html_e( 'These images are used when the post/page being shared does not have featured image or social images set up.', 'slim-seo' ); ?></p>
 
 	<div class="ss-field">
 		<div class="ss-label">

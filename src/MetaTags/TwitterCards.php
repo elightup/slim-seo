@@ -26,10 +26,10 @@ class TwitterCards {
 
 	private function get_default_image() {
 		$data = get_option( 'slim_seo' );
-		if ( empty( $data[ "default_twitter_image" ] ) ) {
+		if ( empty( $data[ 'default_twitter_image' ] ) ) {
 			return null;
 		}
 		$image_id = attachment_url_to_postid( $data[ 'default_twitter_image' ] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ "default_twitter_image" ] ];
+		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ 'default_twitter_image' ] ];
 	}
 }
