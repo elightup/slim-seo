@@ -53,9 +53,13 @@ class Description {
 	 */
 	public function get_singular_value( $post_id = null ) {
 		$post_id = $post_id ?: get_queried_object_id();
+		$post    = get_post( $post_id );
+		if ( ! $post ) {
+			return '';
+		}
 
 		// Prevent showing description on password protected posts
-		if ( post_password_required( $post_id ) ) {
+		if ( post_password_required( $post ) ) {
 			return __( 'There is no excerpt because this is a protected post.', 'slim-seo' );
 		}
 
@@ -65,7 +69,6 @@ class Description {
 			return $data['description'];
 		}
 
-		$post = get_post( $post_id );
 		$description = $post->post_excerpt ? $post->post_excerpt : $post->post_content;
 
 		return apply_filters( 'slim_seo_meta_description_generated', $description );
