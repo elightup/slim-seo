@@ -50,6 +50,8 @@ Slim SEO automatically adds structured data to the website via JSON-LD which mak
 
 To know more about Slim SEO features, please see the [homepage](https://wpslimseo.com).
 
+*If you like this plugin, you might also like our other products: [Meta Box](https://metabox.io) and [GretaThemes](https://gretathemes.com).*
+
 ## Who should use Slim SEO?
 
 Everyone can use Slim SEO!

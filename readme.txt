@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, google, facebook, twitter, meta tags, met
 Requires at least: 4.5
 Tested up to: 5.5.1
 Requires PHP: 5.6
-Stable tag: 3.6.0
+Stable tag: 3.6.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -70,6 +70,8 @@ Everyone can use Slim SEO!
 
 However, Slim SEO is perfectly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
 
+*If you like this plugin, you might also like our other products: [Meta Box](https://metabox.io) and [GretaThemes](https://gretathemes.com).*
+
 == Installation ==
 
 Before installing, please note that the plugin requires PHP >= 5.6.
@@ -129,6 +131,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+= 3.6.1 - 2020-10-26 =
+- Fix no spaces between HTML tags when generate description automatically in Oxygen
+- Hide SEO settings meta box for Oxygen templates
+- Fix PHP notice when generate meta description if post not found
+
 = 3.6.0 - 2020-10-21 =
 - Add default Facebook and Twitter images for sharing
 - Don't remove meta values from other SEO plugins after migration (for safety)
