@@ -18,13 +18,16 @@ class Helper {
 		$shortcodes_bak = $shortcode_tags;
 		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
 
-		$text = do_shortcode( $text );               // Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
+		$text           = do_shortcode( $text );      // Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
+		$shortcode_tags = $shortcodes_bak;            // Revert the global shortcodes registry.
+		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
 
-		$shortcode_tags = $shortcodes_bak;           // Revert the global shortcodes registry.
-		$text           = strip_shortcodes( $text ); // Strip all non-parsed shortcodes.
+		// Replace HTML tags with spaces.
+		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
+		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
 
-		$text = wp_strip_all_tags( $text );          // No HTML tags.
-		$text = preg_replace( '/\s+/', ' ', $text ); // Remove extra white spaces.
+		// Remove extra white spaces.
+		$text = preg_replace( '/\s+/', ' ', $text );
 		$text = trim( $text );
 
 		return $text;
