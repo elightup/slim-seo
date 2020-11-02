@@ -32,7 +32,7 @@ class CanonicalUrl {
 	}
 
 	private function get_singular_value() {
-		return wp_get_canonical_url();
+		return wp_get_canonical_url( get_queried_object() );
 	}
 
 	private function get_term_value() {
