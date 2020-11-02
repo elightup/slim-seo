@@ -1,7 +1,7 @@
 === Slim SEO - Fast & Automated WordPress SEO Plugin ===
 Contributors: elightup, rilwis, hungviet91
 Donate link: https://paypal.me/anhtnt
-Tags: seo, search engine optimization, google, facebook, twitter, meta tags, meta description, open graph, twitter card, sitemap, xml sitemap
+Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
 Tested up to: 5.5.1
 Requires PHP: 5.6
