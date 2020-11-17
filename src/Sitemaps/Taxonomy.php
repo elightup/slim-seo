@@ -20,7 +20,7 @@ class Taxonomy {
 	}
 
 	public function output() {
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', "\n";
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		$offset     = ( $this->page - 1 ) * 2000;
 		$query_args = self::get_query_args( [
@@ -36,6 +36,7 @@ class Taxonomy {
 
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_term_link( $term, $this->taxonomy ) ), "</loc>\n";
+			do_action( 'slim_seo_sitemap_term', $term );
 			echo "\t</url>\n";
 		}
 

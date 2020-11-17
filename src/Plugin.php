@@ -43,6 +43,7 @@ class Plugin {
 		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
 		$this->services['lifterlms'] = new Integrations\LifterLMS;
 		$this->services['jetpack'] = new Integrations\Jetpack;
+		$this->services['polylang'] = new Integrations\Polylang;
 		$this->services['amp'] = new Integrations\AMP( $this->services['schema'] );
 		$this->services['web_stories'] = new Integrations\WebStories(
 			$this->services['meta_title'],
