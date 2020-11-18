@@ -1,11 +1,11 @@
 === Slim SEO - Fast & Automated WordPress SEO Plugin ===
 Contributors: elightup, rilwis, hungviet91
-Donate link: https://paypal.me/anhtnt
+Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
 Tested up to: 5.5.3
 Requires PHP: 5.6
-Stable tag: 3.7.0
+Stable tag: 3.7.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+= 3.7.1 - 2020-11-18 =
+- Hide Elementor, Beaver Builder, Oxygen template post types in sitemaps
+
 = 3.7.0 - 2020-11-17 =
 - Add integration for WPML and Polylang.
 
