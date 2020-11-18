@@ -6,7 +6,7 @@ class WebStories {
 	private $twitter_cards;
 	private $schema;
 
-	public function __construct( $title, $description, $open_graph, $twitter_cards, $schema ) {
+	public function __construct( $open_graph, $twitter_cards, $schema ) {
 		$this->open_graph    = $open_graph;
 		$this->twitter_cards = $twitter_cards;
 		$this->schema        = $schema;

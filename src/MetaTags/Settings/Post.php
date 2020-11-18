@@ -27,7 +27,7 @@ class Post extends Base {
 
 	private function get_post_types() {
 		$post_types = get_post_types( [ 'public' => true ] );
-		$post_types = array_diff( $post_types, [ 'attachment' ] );
+		unset( $post_types['attachment'] );
 		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );
 
 		return $post_types;
