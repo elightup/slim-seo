@@ -9,7 +9,8 @@ class Oxygen {
 
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ] );
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
-		add_filter( 'slim_seo_meta_box_post_types', [ $this, 'filter_post_types' ] );
+		add_filter( 'slim_seo_meta_box_post_types', [ $this, 'remove_post_types' ] );
+		add_filter( 'slim_seo_sitemap_post_types', [ $this, 'remove_post_types' ] );
 	}
 
 	public function description( $description ) {
@@ -28,7 +29,7 @@ class Oxygen {
 		return $shortcodes;
 	}
 
-	public function filter_post_types( $post_types ) {
+	public function remove_post_types( $post_types ) {
 		unset( $post_types['ct_template'] );
 		return $post_types;
 	}

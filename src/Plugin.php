@@ -15,6 +15,8 @@ class Plugin {
 		$this->services['images_alt'] = new ImagesAlt;
 
 		$this->services['oxygen'] = new Integrations\Oxygen;
+		$this->services['elementor'] = new Integrations\Elementor;
+		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
 
 		// Admin only.
 		if ( is_admin() ) {
@@ -40,7 +42,6 @@ class Plugin {
 
 		$this->services['woocommerce'] = new Integrations\WooCommerce;
 		$this->services['genesis'] = new Integrations\Genesis;
-		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
 		$this->services['lifterlms'] = new Integrations\LifterLMS;
 		$this->services['jetpack'] = new Integrations\Jetpack;
 		$this->services['polylang'] = new Integrations\Polylang;
