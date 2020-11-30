@@ -27,6 +27,7 @@
 				margin: 45px auto;
 				display: inline-block;
 				text-align: left;
+				max-width: 800px;
 			}
 			h1 {
 				text-align: center;
@@ -61,7 +62,6 @@
 			td {
 			    padding: .6em 1em;
 			    color: #9aa0ac;
-			    white-space: nowrap;
 			}
 			th {
 				text-align: left;
