@@ -9,7 +9,7 @@ class RelLinks {
 	}
 
 	public function output() {
-		// WordPress already handles canonical URL for singular pages.
+		// WordPress already handles rel URL for singular pages.
 		if ( is_singular() ) {
 			return;
 		}
@@ -31,7 +31,6 @@ class RelLinks {
 		];
 
 		global $wp_query;
-		$max = $wp_query->max_num_pages;
 		$paged = max( 1, get_query_var( 'paged' ) );
 		if ( $paged > 1 ) {
 			$links['prev'] = $this->build_link( $url, $paged - 1 );
@@ -54,6 +53,10 @@ class RelLinks {
 
 	private function get_home_value() {
 		return home_url( '/' );
+	}
+
+	private function get_singular_value() {
+		return get_permalink( get_queried_object() );
 	}
 
 	private function get_term_value() {
