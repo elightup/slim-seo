@@ -17,7 +17,7 @@ class OpenGraph {
 	}
 
 	public function output() {
-		$properties = [
+		$properties = apply_filters( 'slim_seo_open_graph_tags', [
 			'og:title',
 			'og:type',
 			'og:image',
@@ -33,7 +33,7 @@ class OpenGraph {
 			'og:updated_time',
 			'article:section',
 			'article:tag',
-		];
+		] );
 		foreach ( $properties as $property ) {
 			$getter = 'get_' . strtr( $property, [
 				'og:' => '',
