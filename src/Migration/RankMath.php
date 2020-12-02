@@ -1,7 +1,8 @@
 <?php
 namespace SlimSEO\Migration;
 
-use \RankMath\Helper;
+use RankMath\Helper as RMHelper;
+
 class RankMath extends Replacer {
 	public function before_replace_post( $post_id ) {
 		$manager = new RankMathManager();
@@ -22,13 +23,13 @@ class RankMath extends Replacer {
 	public function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$title = get_post_meta( $post_id, 'rank_math_title', true );
-		return Helper::replace_vars( $title, $post );
+		return RMHelper::replace_vars( $title, $post );
 	}
 
 	public function get_post_description( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, 'rank_math_description', true );
-		return Helper::replace_vars( $description, $post );
+		return RMHelper::replace_vars( $description, $post );
 	}
 
 	public function get_post_facebook_image( $post_id ) {
@@ -49,7 +50,7 @@ class RankMath extends Replacer {
 			return '';
 		}
 		$title = get_term_meta( $term_id, 'rank_math_title', true );
-		return Helper::replace_vars( $title, $term );
+		return RMHelper::replace_vars( $title, $term );
 	}
 
 	public function get_term_description( $term_id ) {
@@ -58,7 +59,7 @@ class RankMath extends Replacer {
 			return '';
 		}
 		$description = get_term_meta( $term_id, 'rank_math_description', true );
-		return Helper::replace_vars( $description, $term );
+		return RMHelper::replace_vars( $description, $term );
 	}
 
 	public function get_term_facebook_image( $term_id ) {
