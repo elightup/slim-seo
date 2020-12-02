@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Migration;
 
+use \RankMath\Helper;
 class RankMath extends Replacer {
 	public function before_replace_post( $post_id ) {
 		$manager = new RankMathManager();
@@ -21,13 +22,13 @@ class RankMath extends Replacer {
 	public function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$title = get_post_meta( $post_id, 'rank_math_title', true );
-		return \RankMath\Helper::replace_vars( $title, $post );
+		return Helper::replace_vars( $title, $post );
 	}
 
 	public function get_post_description( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, 'rank_math_description', true );
-		return \RankMath\Helper::replace_vars( $description, $post );
+		return Helper::replace_vars( $description, $post );
 	}
 
 	public function get_post_facebook_image( $post_id ) {
@@ -48,7 +49,7 @@ class RankMath extends Replacer {
 			return '';
 		}
 		$title = get_term_meta( $term_id, 'rank_math_title', true );
-		return \RankMath\Helper::replace_vars( $title, $term );
+		return Helper::replace_vars( $title, $term );
 	}
 
 	public function get_term_description( $term_id ) {
@@ -57,7 +58,7 @@ class RankMath extends Replacer {
 			return '';
 		}
 		$description = get_term_meta( $term_id, 'rank_math_description', true );
-		return \RankMath\Helper::replace_vars( $description, $term );
+		return Helper::replace_vars( $description, $term );
 	}
 
 	public function get_term_facebook_image( $term_id ) {
@@ -74,32 +75,5 @@ class RankMath extends Replacer {
 
 	public function is_activated() {
 		return defined( 'RANK_MATH_VERSION' );
-	}
-}
-
-class RankMathManager extends \RankMath\Replace_Variables\Manager {
-	private $post_id;
-	private $term_id;
-
-	public function set_post( $post_id ) {
-		$this->post_id = $post_id;
-	}
-
-	public function set_term( $term_id ) {
-		$this->term_id = $term_id;
-	}
-
-	protected function get_post() {
-		$this->post = get_post( $this->post_id );
-		return $this->post;
-	}
-
-	public function get_term() {
-		$term = get_term( $this->term_id );
-		return $term->name;
-	}
-
-	public function should_we_setup() {
-		return true;
 	}
 }

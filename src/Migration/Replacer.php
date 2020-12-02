@@ -39,19 +39,15 @@ class Replacer {
 	}
 
 	public function before_replace_post( $post_id ) {
-		return null;
 	}
 
 	public function before_replace_term( $term_id ) {
-		return null;
 	}
 
 	public function cleanup_posts() {
-		return null;
 	}
 
 	public function cleanup_terms() {
-		return null;
 	}
 
 	protected function get_post_title( $post_id ) {
@@ -85,32 +81,5 @@ class Replacer {
 
 	public function is_activated() {
 		return true;
-	}
-}
-
-class Test extends \RankMath\Replace_Variables\Manager {
-	private $ss_post_id;
-
-	public function ss_set_post( $post_id ) {
-		error_log( $post_id );
-		$this->ss_post_id = $post_id;
-	}
-
-	protected function get_post() {
-		$this->post = get_post( $this->ss_post_id );
-		error_log( print_r( $this->post, true ) );
-
-		return $this->post;
-	}
-
-	public function __construct() {
-	}
-
-	public function should_we_setup() {
-		return true;
-	}
-
-	public function check() {
-		print_r( $this->replacements );
 	}
 }
