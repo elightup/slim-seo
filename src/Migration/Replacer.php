@@ -9,6 +9,8 @@ class Replacer {
 	 * @param string $value pattern.
 	 */
 	public function replace_post( $post_id ) {
+		$this->before_replace_post( $post_id );
+
 		$seo_settings = [
 			'title'          => $this->get_post_title( $post_id ),
 			'description'    => $this->get_post_description( $post_id ),
@@ -22,6 +24,8 @@ class Replacer {
 	}
 
 	public function replace_term( $term_id ) {
+		$this->before_replace_term( $term_id );
+
 		$seo_settings = [
 			'title'          => $this->get_term_title( $term_id ),
 			'description'    => $this->get_term_description( $term_id ),
@@ -34,12 +38,16 @@ class Replacer {
 		}
 	}
 
+	public function before_replace_post( $post_id ) {
+	}
+
+	public function before_replace_term( $term_id ) {
+	}
+
 	public function cleanup_posts() {
-		return null;
 	}
 
 	public function cleanup_terms() {
-		return null;
 	}
 
 	protected function get_post_title( $post_id ) {
