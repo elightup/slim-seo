@@ -1,6 +1,5 @@
-document.addEventListener( 'DOMContentLoaded', function() {
-	const closeButton = document.querySelector( '#slim-seo-notification .notice-dismiss' );
-	if ( closeButton ) {
-		closeButton.addEventListener( 'click', () => fetch( ajaxurl + '?action=slim_seo_dismiss_notification&nonce=' + SlimSEONotification.nonce ) );
+document.addEventListener( 'click', function( { target } ) {
+	if ( target.classList.contains( 'notice-dismiss') && target.closest( '#slim-seo-notification' ) ) {
+		fetch( ajaxurl + '?action=slim_seo_dismiss_notification&nonce=' + SlimSEONotification.nonce );
 	}
 } );
