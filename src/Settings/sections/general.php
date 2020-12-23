@@ -85,11 +85,5 @@
 			<?php esc_html_e( 'Schema', 'falcon' ) ?>
 		</label>
 	</p>
-	<p>
-		<label>
-			<input type="checkbox" name="slim_seo[features][]" value="code"<?php checked( $this->is_feature_active( 'code' ) ) ?>>
-			<?php esc_html_e( 'Header/footer code', 'falcon' ) ?>
-		</label>
-	</p>
 	<?php submit_button( __( 'Save', 'slim-seo' ) ); ?>
 </div>

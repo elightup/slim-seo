@@ -26,7 +26,6 @@ class Settings {
 			'feed',
 			'cleaner',
 			'schema',
-			'code',
 		],
 	];
 
