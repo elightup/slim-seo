@@ -3,16 +3,31 @@ namespace SlimSEO\Settings;
 
 class Settings {
 	private $defaults = [
-		'header_code'         => '',
-		'body_code'           => '',
-		'footer_code'         => '',
-
-		'home_title'          => '',
-		'home_description'    => '',
-		'home_facebook_image' => '',
-		'home_twitter_image'  => '',
+		'header_code'            => '',
+		'body_code'              => '',
+		'footer_code'            => '',
+		'home_title'             => '',
+		'home_description'       => '',
+		'home_facebook_image'    => '',
+		'home_twitter_image'     => '',
 		'default_facebook_image' => '',
 		'default_twitter_image'  => '',
+		'features'               => [
+			'meta_title',
+			'meta_description',
+			'meta_robots',
+			'open_graph',
+			'twitter_cards',
+			'canonical_url',
+			'rel_links',
+			'sitemaps',
+			'images_alt',
+			'breadcrumbs',
+			'feed',
+			'cleaner',
+			'schema',
+			'code',
+		],
 	];
 
 	public function setup() {
@@ -68,6 +83,7 @@ class Settings {
 			<h1><?= esc_html( get_admin_page_title() ); ?></h1>
 			<h2 class="nav-tab-wrapper">
 				<a href="#general" class="nav-tab nav-tab-active"><?php esc_html_e( 'General', 'slim-seo' ); ?></a>
+				<a href="#code" class="nav-tab"><?php esc_html_e( 'Code', 'slim-seo' ); ?></a>
 				<?php if ( ! $this->is_static_homepage() ) : ?>
 					<a href="#homepage" class="nav-tab"><?php esc_html_e( 'Homepage', 'slim-seo' ); ?></a>
 				<?php endif; ?>
@@ -81,6 +97,7 @@ class Settings {
 				wp_nonce_field( 'save' );
 
 				include __DIR__ . '/sections/general.php';
+				include __DIR__ . '/sections/code.php';
 				if ( ! $this->is_static_homepage() ) {
 					include __DIR__ . '/sections/homepage.php';
 				}
@@ -126,5 +143,13 @@ class Settings {
 
 	private function is_static_homepage() {
 		return 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' );
+	}
+
+	public function is_feature_active( $feature ) {
+		$defaults = $this->defaults['features'];
+		$data     = get_option( 'slim_seo' );
+		$features = isset( $data['features'] ) ? $data['features'] : $defaults;
+
+		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
 	}
 }

@@ -18,9 +18,10 @@ class Plugin {
 		$this->services['elementor'] = new Integrations\Elementor;
 		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
 
+		$this->services['settings'] = new Settings\Settings;
+
 		// Admin only.
 		if ( is_admin() ) {
-			$this->services['settings'] = new Settings\Settings;
 			$this->services['notification'] = new Notification;
 			$this->services['migration'] = new Migration\Migration;
 			return;
@@ -57,8 +58,11 @@ class Plugin {
 	public function init() {
 		do_action( 'slim_seo_init', $this );
 
-		foreach ( $this->services as $service ) {
-			$service->setup();
+		$settings = $this->services['settings'];
+		foreach ( $this->services as $id => $service ) {
+			if ( $settings->is_feature_active( $id ) ) {
+				$service->setup();
+			}
 		}
 	}
 
