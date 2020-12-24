@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 5.5.4
 Requires PHP: 5.6
-Stable tag: 3.8.0
+Stable tag: 3.9.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+= 3.9.0 - 2020-12-24 =
+- Add options to enable/disable plugin features
+
 = 3.8.0 - 2020-12-02 =
 - Add migration from Rank Math
 - Fix rel links for the the static blog page
