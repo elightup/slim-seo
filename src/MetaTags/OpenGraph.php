@@ -33,6 +33,7 @@ class OpenGraph {
 			'og:updated_time',
 			'article:section',
 			'article:tag',
+			'article:author',
 		] );
 		foreach ( $properties as $property ) {
 			$getter = 'get_' . strtr( $property, [
@@ -145,6 +146,14 @@ class OpenGraph {
 		}
 		$tags = get_the_tags();
 		return is_array( $tags ) ? wp_list_pluck( $tags, 'name' ) : null;
+	}
+
+	private function get_article_author() {
+		if ( ! is_singular() ) {
+			return null;
+		}
+		$author = get_userdata( get_queried_object()->post_author );
+		return $author->display_name;
 	}
 
 	private function output_tag( $property, $content ) {
