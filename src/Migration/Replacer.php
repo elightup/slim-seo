@@ -17,6 +17,7 @@ class Replacer {
 			'facebook_image' => $this->get_post_facebook_image( $post_id ),
 			'twitter_image'  => $this->get_post_twitter_image( $post_id ),
 		];
+		$seo_settings = array_filter( $seo_settings );
 		if ( $seo_settings ) {
 			update_post_meta( $post_id, 'slim_seo', $seo_settings );
 		}

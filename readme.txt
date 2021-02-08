@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 5.6.1
 Requires PHP: 5.6
-Stable tag: 3.9.1
+Stable tag: 3.9.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
