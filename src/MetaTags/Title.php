@@ -5,12 +5,8 @@ class Title {
 	use Context;
 
 	public function setup() {
-		add_action( 'after_setup_theme', [ $this, 'add_title_tag_support' ] );
-		add_filter( 'pre_get_document_title', [ $this, 'filter_title' ] );
-	}
-
-	public function add_title_tag_support() {
 		add_theme_support( 'title-tag' );
+		add_filter( 'pre_get_document_title', [ $this, 'filter_title' ] );
 	}
 
 	public function get_title() {
