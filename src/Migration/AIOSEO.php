@@ -6,6 +6,7 @@ class AIOSEO extends Replacer {
 	public function before_replace_post( $post_id ) {
 		$this->post  = get_post( $post_id );
 		$this->image = new \AIOSEO\Plugin\Common\Social\Image();
+		set_current_screen( 'settings_page_slim-seo' ); // Fix undefined get_current_screen from AIOSEO.
 	}
 
 	public function get_post_title( $post_id ) {
