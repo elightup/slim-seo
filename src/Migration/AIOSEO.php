@@ -4,7 +4,8 @@ namespace SlimSEO\Migration;
 class AIOSEO extends Replacer {
 
 	public function before_replace_post( $post_id ) {
-		$this->post     = get_post( $post_id );
+		$this->post  = get_post( $post_id );
+		$this->image = new \AIOSEO\Plugin\Common\Social\Image();
 	}
 
 	public function get_post_title( $post_id ) {
@@ -26,8 +27,7 @@ class AIOSEO extends Replacer {
 			$imageSource = ! empty( $metaData->og_image_type ) && 'default' !== $metaData->og_image_type
 				? $metaData->og_image_type
 				: aioseo()->options->social->facebook->general->defaultImageSourcePosts;
-
-			$image = aioseo()->social->image->getImage( 'facebook', $imageSource, $this->post );
+			$image = $this->getImage( 'facebook', $imageSource, $this->post );
 		}
 		if ( $image ) {
 			return is_array( $image ) ? $image[0] : $image;
@@ -47,8 +47,7 @@ class AIOSEO extends Replacer {
 			$imageSource = ! empty( $metaData->twitter_image_type ) && 'default' !== $metaData->twitter_image_type
 				? $metaData->twitter_image_type
 				: aioseo()->options->social->twitter->general->defaultImageSourcePosts;
-
-			$image = aioseo()->social->image->getImage( 'twitter', $imageSource, $this->post );
+			$image = $this->getImage( 'twitter', $imageSource, $this->post );
 		}
 
 		$image = $image ? $image : $this->get_post_facebook_image( $post_id );
@@ -56,6 +55,56 @@ class AIOSEO extends Replacer {
 			return is_array( $image ) ? $image[0] : $image;
 		}
 		return '';
+	}
+
+	public function getImage( $type, $imageSource, $post ) {
+		$this->thumbnailSize = apply_filters( 'aioseo_thumbnail_size', 'fullsize' );
+
+		switch ( $imageSource ) {
+			case 'featured':
+				$images[ $type ] = $this->image->getFeaturedImage( $post );
+				$image           = $images[ $type ];
+				break;
+			case 'attach':
+				$images[ $type ] = $this->image->getFirstAttachedImage( $post );
+				$image           = $images[ $type ];
+				break;
+			case 'content':
+				$image = $this->image->getFirstImageInContent( $post );
+				break;
+			case 'author':
+				$image = $this->image->getAuthorAvatar( $post );
+				break;
+			case 'auto':
+				$image = $this->image->getFirstAvailableImage( $post, $type );
+				break;
+			case 'custom':
+				$image = $this->image->getCustomFieldImage( $post, $type );
+				break;
+			case 'custom_image':
+				$metaData = aioseo()->meta->metaData->getMetaData( $post );
+				if ( empty( $metaData ) ) {
+					break;
+				}
+				$image = ( 'facebook' === lcfirst( $type ) ) ? $metaData->og_image_custom_url : $metaData->twitter_image_custom_url;
+				break;
+			case 'default':
+			default:
+				$image = aioseo()->options->social->$type->general->defaultImagePosts;
+		}
+
+		if ( empty( $image ) ) {
+			$image = aioseo()->options->social->$type->general->defaultImagePosts;
+		}
+
+		if ( is_array( $image ) ) {
+			$images[ $type ] = $image;
+			return $images[ $type ];
+		}
+
+		$attachmentId    = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
+		$images[ $type ] = $attachmentId ? wp_get_attachment_image_src( $attachmentId, $this->image->thumbnailSize ) : $image;
+		return $images[ $type ];
 	}
 
 	public function cleanup_posts() {
