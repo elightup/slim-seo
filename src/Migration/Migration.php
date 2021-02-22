@@ -20,9 +20,10 @@ class Migration {
 
 		session_start();
 		$platform = $this->get_platform();
-
+		$_SESSION['platform'] = $platform;
 		$this->set_replacer( $platform );
 		$this->check_platform_activation( $platform );
+
 		wp_send_json_success();
 	}
 
@@ -59,6 +60,7 @@ class Migration {
 
 	public function migrate_posts() {
 		session_start();
+		$this->set_replacer( $_SESSION['platform'] );
 		$posts = $this->get_posts();
 		if ( empty( $posts ) ) {
 			wp_send_json_success( [
@@ -80,6 +82,7 @@ class Migration {
 
 	public function migrate_terms() {
 		session_start();
+		$this->set_replacer( $_SESSION['platform'] );
 		$terms = $this->get_terms();
 
 		if ( empty( $terms ) ) {
