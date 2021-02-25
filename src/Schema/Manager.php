@@ -29,6 +29,8 @@ class Manager {
 			return $entity->get_schema();
 		}, $entities );
 
+		$graph = apply_filters( 'slim_seo_schema_graph', $graph );
+
 		$graph = array_values( array_filter( $graph ) );
 		if ( empty( $graph ) ) {
 			return;
