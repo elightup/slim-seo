@@ -20,7 +20,7 @@ class Helper {
 	public static function get_platforms() {
 		return [
 			'yoast'         => __( 'Yoast SEO', 'slim-seo' ),
-			'aioseo'        => __( 'All In One SEO Pack', 'slim-seo' ),
+			'aioseo'        => __( 'All In One SEO', 'slim-seo' ),
 			'seo-framework' => __( 'The SEO Framework', 'slim-seo' ),
 			'rank-math'     => __( 'Rank Math', 'slim-seo' ),
 		];
