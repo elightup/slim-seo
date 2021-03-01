@@ -152,11 +152,7 @@ class OpenGraph {
 	}
 
 	private function get_article_author() {
-		if ( ! is_singular() ) {
-			return null;
-		}
-		$author = get_userdata( get_queried_object()->post_author );
-		return $author->display_name;
+		return is_singular() ? get_the_author_meta( 'display_name', get_queried_object()->post_author ) : null;
 	}
 
 	private function output_tag( $property, $content ) {
