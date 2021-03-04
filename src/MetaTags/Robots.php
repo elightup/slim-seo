@@ -19,10 +19,12 @@ class Robots {
 	}
 
 	public function output() {
+		$is_ver_less_than_5_7 = version_compare( get_bloginfo( 'version' ), '5.7', '<' );
+
 		$is_indexed = $this->is_indexed();
 		$is_indexed = apply_filters( 'slim_seo_robots_index', $is_indexed );
 
-		if ( $is_indexed ) {
+		if ( $is_indexed && $is_ver_less_than_5_7 ) {
 			echo '<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
 			return;
 		}
