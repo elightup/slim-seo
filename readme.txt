@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.6.2
+Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 3.9.3
+Stable tag: 3.9.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+= 3.9.4 - 2021-03-06 =
+- Improve meta robots tag to be compatible with WordPress 5.7
+
 = 3.9.3 - 2021-03-01 =
 - Add theme support for meta title in case theme authors forget
 - Fix notice appear for article author in Open Graph
