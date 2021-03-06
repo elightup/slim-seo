@@ -81,7 +81,8 @@ class Robots {
 			return false;
 		}
 
-		return ! $this->get_value();
+		$noindex = $this->get_value();
+		return ! $noindex;
 	}
 
 	private function get_singular_value() {
