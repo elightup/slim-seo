@@ -23,6 +23,7 @@ class Settings {
 			'sitemaps',
 			'images_alt',
 			'breadcrumbs',
+			'auto_redirection',
 			'feed',
 			'cleaner',
 			'schema',
