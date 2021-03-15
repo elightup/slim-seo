@@ -137,6 +137,8 @@ class Settings {
 		} else {
 			update_option( 'slim_seo', $option );
 		}
+
+		add_settings_error( null, 'slim-seo', __( 'Settings updated.', 'slim-seo' ), 'success' );
 	}
 
 	private function sanitize( $option ) {
