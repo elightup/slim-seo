@@ -34,10 +34,12 @@ class OpenGraph {
 			'article:section',
 			'article:tag',
 			'article:author',
+			'fb:app_id',
 		] );
 		foreach ( $properties as $property ) {
 			$short_name = strtr( $property, [
 				'og:' => '',
+				'fb:' => '',
 				':'   => '_',
 			] );
 			$getter = "get_{$short_name}";
@@ -153,6 +155,11 @@ class OpenGraph {
 
 	private function get_article_author() {
 		return is_singular() ? get_the_author_meta( 'display_name', get_queried_object()->post_author ) : null;
+	}
+
+	private function get_app_id() {
+		$data = get_option( 'slim_seo' );
+		return empty( $data[ 'facebook_app_id' ] ) ? null : $data[ 'facebook_app_id' ];
 	}
 
 	private function output_tag( $property, $content ) {

@@ -22,6 +22,11 @@ class TwitterCards {
 		if ( ! empty( $image ) ) {
 			echo '<meta name="twitter:image" content="' . esc_url( $image[0] ) . '">', "\n";
 		}
+
+		$site = $this->get_site();
+		if ( $site ) {
+			echo '<meta name="twitter:site" content="' . esc_attr( $site ) . '">', "\n";
+		}
 	}
 
 	private function get_default_image() {
@@ -31,5 +36,10 @@ class TwitterCards {
 		}
 		$image_id = attachment_url_to_postid( $data[ 'default_twitter_image' ] );
 		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ 'default_twitter_image' ] ];
+	}
+
+	private function get_site() {
+		$data = get_option( 'slim_seo' );
+		return empty( $data[ 'twitter_site' ] ) ? null : $data[ 'twitter_site' ];
 	}
 }

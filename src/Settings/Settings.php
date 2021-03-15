@@ -12,6 +12,8 @@ class Settings {
 		'home_twitter_image'     => '',
 		'default_facebook_image' => '',
 		'default_twitter_image'  => '',
+		'facebook_app_id'        => '',
+		'twitter_site'           => '',
 		'features'               => [
 			'meta_title',
 			'meta_description',
