@@ -30,5 +30,5 @@
 		</tr>
 	</table>
 
-	<?php submit_button( __( 'Save', 'slim-seo' ) ); ?>
+	<?php submit_button( __( 'Save Changes', 'slim-seo' ) ); ?>
 </div>

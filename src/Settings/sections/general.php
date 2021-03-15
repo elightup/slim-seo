@@ -1,5 +1,4 @@
 <div id="general" class="ss-tab-pane ss-is-active">
-	<h3><?php esc_attr_e( 'Features', 'slim-seo' ); ?></h3>
 	<p><?php esc_html_e( 'Toggle the features you want to use on your website.', 'slim-seo' ); ?></p>
 	<p>
 		<label>
@@ -92,5 +91,5 @@
 			<?= $this->tooltip( 'Automatically generate unified schema graph to help search engines understand the website structure' ) ?>
 		</label>
 	</p>
-	<?php submit_button( __( 'Save', 'slim-seo' ) ); ?>
+	<?php submit_button( __( 'Save Changes', 'slim-seo' ) ); ?>
 </div>

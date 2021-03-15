@@ -99,26 +99,6 @@
 	background: #f56e28;
 }
 
-/* Tabs */
-.ss-tab-nav {
-	margin: 12px 0 18px;
-}
-.ss-tab-nav > .button-link {
-	text-decoration: none;
-}
-.ss-tab-nav > .button-link:focus {
-	box-shadow: none;
-}
-.ss-tab-nav .ss-active {
-	font-weight: 600;
-}
-.ss-tab {
-	display: none;
-}
-.ss-tab.ss-active {
-	display: block;
-}
-
 /* For terms & settings page (for homepage) */
 .term-php .ss-label,
 .settings_page_slim-seo .ss-label {
