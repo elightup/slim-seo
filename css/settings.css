@@ -15,6 +15,9 @@
 .wrap {
 	margin: 0;
 }
+.notice.notice {
+	margin: 24px;
+}
 
 /* Header */
 .ss-title.ss-title {
