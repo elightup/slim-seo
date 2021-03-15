@@ -1,4 +1,4 @@
-( function () {
+( function ( document ) {
 	const tabs = document.querySelectorAll( '.nav-tab' );
 	const panes = document.querySelectorAll( '.ss-tab-pane' );
 
@@ -17,4 +17,10 @@
 	}
 
 	document.querySelector( '.nav-tab-wrapper' ).addEventListener( 'click', clickHandle );
-} () );
+
+	tippy( '.ss-tooltip', {
+		placement: 'right',
+		arrow: true,
+		animation: 'fade'
+	} );
+} )( document );

@@ -14,3 +14,22 @@
 .ss-is-active {
 	display: block;
 }
+
+/* Tooltip */
+.ss-tooltip {
+	border: none;
+	background: no-repeat;
+	padding: 0;
+	color: #ccc;
+	width: 16px;
+	height: 16px;
+}
+.ss-tooltip .dashicons {
+	font-size: 14px;
+	width: 16px;
+	height: 16px;
+	margin-top: 2px;
+}
+.tippy-tooltip {
+	text-align: left;
+}
