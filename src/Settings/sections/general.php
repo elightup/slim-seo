@@ -75,12 +75,6 @@
 	</p>
 	<p>
 		<label>
-			<input type="checkbox" name="slim_seo[features][]" value="cleaner"<?php checked( $this->is_feature_active( 'cleaner' ) ) ?>>
-			<?php esc_html_e( 'Header cleaner', 'falcon' ) ?>
-		</label>
-	</p>
-	<p>
-		<label>
 			<input type="checkbox" name="slim_seo[features][]" value="schema"<?php checked( $this->is_feature_active( 'schema' ) ) ?>>
 			<?php esc_html_e( 'Schema', 'falcon' ) ?>
 		</label>

@@ -36,7 +36,6 @@ class Plugin {
 		$this->services['breadcrumbs'] = new Breadcrumbs;
 		$this->services['auto_redirection'] = new AutoRedirection;
 		$this->services['feed'] = new Feed;
-		$this->services['cleaner'] = new Cleaner;
 
 		$this->services['schema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
 		$this->services['code'] = new Code;

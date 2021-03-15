@@ -25,7 +25,6 @@ class Settings {
 			'breadcrumbs',
 			'auto_redirection',
 			'feed',
-			'cleaner',
 			'schema',
 		],
 	];
