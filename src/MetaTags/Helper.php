@@ -10,10 +10,19 @@ class Helper {
 		 * do_shortcode here will parse the <link> and then remove it, which might break the style/JS.
 		 */
 		$skipped_shortcodes = apply_filters( 'slim_seo_skipped_shortcodes', [
-			'happyforms',   // HappyForms
-			'contact',      // Very Simple Contact Form
-			'edd_invoices', // EDD Invoices
-			'velocity',     // Velocity
+			'happyforms',               // HappyForms
+			'contact',                  // Very Simple Contact Form
+			'edd_invoices',             // EDD Invoices
+			'velocity',                 // Velocity
+
+			'rwmb_meta',                // Meta Box.
+			'mb_frontend_form',         // MB Frontend Submission.
+			'mb_frontend_dashboard',
+			'mb_user_profile_register', // MB User Profile.
+			'mb_user_profile_login',
+			'mb_user_profile_info',
+			'mb_relationships',         // MB Relationships.
+			'mbfp-button',              // MB Favorite Posts.
 		] );
 		$shortcodes_bak = $shortcode_tags;
 		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
