@@ -29,6 +29,9 @@
 				text-align: left;
 				max-width: 800px;
 			}
+			table {
+				font-size: 14px;
+			}
 			h1 {
 				text-align: center;
 				line-height: 1.1;
