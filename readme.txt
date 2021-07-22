@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 3.10.0
+Stable tag: 3.10.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.10.1 - 2021-07-22 =
+- Fix Jetpack Boost defer JS made sitemap disabled
+- Fix Meta Box plugin shortcodes parsed for the meta description
+
 = 3.10.0 - 2021-03-15 =
 - Add fb:app_id and twitter:site meta tags
 - Improve style for settings page
