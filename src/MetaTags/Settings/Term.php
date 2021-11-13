@@ -21,7 +21,10 @@ class Term extends Base {
 	}
 
 	private function get_taxonomies() {
-		return get_taxonomies( [ 'public' => true ] );
+		$taxonomies = get_taxonomies( [ 'public' => true ] );
+		$taxonomies = apply_filters( 'slim_seo_meta_box_taxonomies', $taxonomies );
+
+		return $taxonomies;
 	}
 
 	protected function get_object_id() {
