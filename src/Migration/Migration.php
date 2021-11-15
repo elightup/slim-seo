@@ -86,7 +86,6 @@ class Migration {
 		$terms = $this->get_terms();
 
 		if ( empty( $terms ) ) {
-			$_SESSION['replacer']->cleanup_terms();
 			wp_send_json_success( [
 				'message' => '',
 				'type'    => 'done',
