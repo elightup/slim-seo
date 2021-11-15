@@ -23,6 +23,10 @@ class Yoast extends Replacer {
 		return get_post_meta( $post_id, '_yoast_wpseo_twitter-image', true );
 	}
 
+	protected function get_post_noindex( $post_id ) {
+		return get_post_meta( $post_id, '_yoast_wpseo_meta-robots-noindex', true );
+	}
+
 	public function get_term_title( $term_id ) {
 		$term = $this->get_term( $term_id );
 		if ( ! $term ) {
@@ -51,6 +55,11 @@ class Yoast extends Replacer {
 		return empty( $term['wpseo_twitter-image'] ) ? '' : $term['wpseo_twitter-image'];
 	}
 
+	public function get_term_noindex( $term_id ) {
+		$term = $this->get_term( $term_id );
+		return intval( isset( $term['wpseo_noindex'] ) && $term['wpseo_noindex'] === 'noindex' );
+	}
+
 	public function cleanup_posts() {
 		global $wpdb;
 		$keys = [
@@ -60,6 +69,7 @@ class Yoast extends Replacer {
 			'_yoast_wpseo_opengraph-image-id',
 			'_yoast_wpseo_twitter-image',
 			'_yoast_wpseo_twitter-image-id',
+			'_yoast_wpseo_meta-robots-noindex',
 		];
 		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('" . implode( "','", $keys ) . "')" );
 	}
