@@ -60,24 +60,6 @@ class Yoast extends Replacer {
 		return intval( isset( $term['wpseo_noindex'] ) && $term['wpseo_noindex'] === 'noindex' );
 	}
 
-	public function cleanup_posts() {
-		global $wpdb;
-		$keys = [
-			'_yoast_wpseo_title',
-			'_yoast_wpseo_metadesc',
-			'_yoast_wpseo_opengraph-image',
-			'_yoast_wpseo_opengraph-image-id',
-			'_yoast_wpseo_twitter-image',
-			'_yoast_wpseo_twitter-image-id',
-			'_yoast_wpseo_meta-robots-noindex',
-		];
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('" . implode( "','", $keys ) . "')" );
-	}
-
-	public function cleanup_terms() {
-		delete_option( 'wpseo_taxonomy_meta' );
-	}
-
 	/**
 	 * Get terms value from option table.
 	 */

@@ -46,12 +46,6 @@ class Replacer {
 	public function before_replace_term( $term_id ) {
 	}
 
-	public function cleanup_posts() {
-	}
-
-	public function cleanup_terms() {
-	}
-
 	protected function get_post_title( $post_id ) {
 		return null;
 	}

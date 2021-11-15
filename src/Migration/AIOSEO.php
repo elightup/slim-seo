@@ -108,11 +108,6 @@ class AIOSEO extends Replacer {
 		return $images[ $type ];
 	}
 
-	public function cleanup_posts() {
-		global $wpdb;
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('_aioseo_title', '_aioseo_description')" );
-	}
-
 	public function is_activated() {
 		return defined( 'AIOSEO_VERSION' );
 	}
