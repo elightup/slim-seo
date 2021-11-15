@@ -19,13 +19,13 @@ class Post extends Base {
 		$context  = apply_filters( 'slim_seo_meta_box_context', 'normal' );
 		$priority = apply_filters( 'slim_seo_meta_box_priority', 'high' );
 
-		$post_types = $this->get_post_types();
+		$post_types = $this->get_types();
 		foreach ( $post_types as $post_type ) {
 			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ $this, 'render' ], $post_type, $context, $priority );
 		}
 	}
 
-	private function get_post_types() {
+	public function get_types() {
 		$post_types = get_post_types( [ 'public' => true ] );
 		unset( $post_types['attachment'] );
 		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );

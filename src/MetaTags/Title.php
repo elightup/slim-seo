@@ -31,14 +31,16 @@ class Title {
 	/**
 	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
+
 	public function get_singular_value( $post_id = null ) {
 		$post_id = $post_id ?: get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		return isset( $data['title'] ) ? $data['title'] : null;
 	}
 
-	private function get_term_value() {
-		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
+	public function get_term_value( $term_id = null ) {
+		$term_id = $term_id ?: get_queried_object_id();
+		$data = get_term_meta( $term_id, 'slim_seo', true );
 		return isset( $data['title'] ) ? $data['title'] : null;
 	}
 }

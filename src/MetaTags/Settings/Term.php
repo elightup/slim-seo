@@ -13,14 +13,14 @@ class Term extends Base {
 	public function register_hooks() {
 		add_action( 'admin_print_styles-term.php', [ $this, 'enqueue' ] );
 
-		$taxonomies = $this->get_taxonomies();
+		$taxonomies = $this->get_types();
 		foreach ( $taxonomies as $taxonomy ) {
 			add_action( "{$taxonomy}_edit_form", [ $this, 'render' ] );
 			add_action( "edited_$taxonomy", [ $this, 'save' ] );
 		}
 	}
 
-	private function get_taxonomies() {
+	public function get_types() {
 		$taxonomies = get_taxonomies( [ 'public' => true ] );
 		$taxonomies = apply_filters( 'slim_seo_meta_box_taxonomies', $taxonomies );
 
