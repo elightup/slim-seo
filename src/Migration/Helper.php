@@ -23,6 +23,7 @@ class Helper {
 			'aioseo'        => __( 'All In One SEO', 'slim-seo' ),
 			'seo-framework' => __( 'The SEO Framework', 'slim-seo' ),
 			'rank-math'     => __( 'Rank Math', 'slim-seo' ),
+			'seopress'      => __( 'SEOPress', 'slim-seo' ),
 		];
 	}
 }

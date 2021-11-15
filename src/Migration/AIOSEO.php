@@ -4,6 +4,8 @@ namespace SlimSEO\Migration;
 use AIOSEO\Plugin\Common;
 
 class AIOSEO extends Replacer {
+	private $post;
+	private $image;
 
 	public function before_replace_post( $post_id ) {
 		$this->post  = get_post( $post_id );
