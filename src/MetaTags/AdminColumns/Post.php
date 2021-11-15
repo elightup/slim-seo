@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags\AdminColumns;
 
+use SlimSEO\MetaTags\Helper;
+
 class Post extends Base {
 	public function setup() {
 		$types = $this->settings->get_types();
@@ -14,10 +16,14 @@ class Post extends Base {
 	public function render( $column, $post_id ) {
 		switch ( $column ) {
 			case 'meta_title':
-				echo esc_html( $this->title->get_singular_value( $post_id ) );
+				$title = $this->title->get_singular_value( $post_id );
+				echo esc_html( Helper::normalize( $title ) );
 				break;
 			case 'meta_description':
-				echo esc_html( $this->description->get_singular_value( $post_id ) );
+				$data = get_post_meta( $post_id, 'slim_seo', true );
+				if ( ! empty( $data['description'] ) ) {
+					echo esc_html( Helper::normalize( $data['description'] ) );
+				}
 				break;
 		}
 	}
