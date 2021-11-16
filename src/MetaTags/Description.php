@@ -74,7 +74,7 @@ class Description {
 		return apply_filters( 'slim_seo_meta_description_generated', $description );
 	}
 
-	public function get_term_value( $term_id ) {
+	public function get_term_value( $term_id = null ) {
 		$term_id = $term_id ?: get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
