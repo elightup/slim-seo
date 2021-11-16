@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.8.1
+Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 3.10.2
+Stable tag: 3.11.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.11.0 - 2021-11-16 =
+- Show meta title and meta description in admin columns
+- Add migration for SEOPress
+- Migrate noindex settings
 
 = 3.10.2 - 2021-09-27 =
 - Breadcrumbs: add link to post type archive for taxonomies if the taxonomy is attached to one post type only
