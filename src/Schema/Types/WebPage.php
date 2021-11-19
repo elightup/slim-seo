@@ -6,14 +6,14 @@ class WebPage extends Base {
 	public $description;
 
 	public function generate() {
-		$schema = [
+		$schema = array(
 			'@type'       => 'WebPage',
 			'@id'         => $this->id,
 			'url'         => $this->url,
 			'inLanguage'  => get_locale(),
 			'name'        => $this->title->get_title(),
 			'description' => $this->description->get_description(),
-		];
+		);
 
 		if ( is_post_type_archive() || is_tax() || is_category() || is_tag() || is_date() ) {
 			$schema['@type'] = 'CollectionPage';
