@@ -3,18 +3,18 @@ namespace SlimSEO\Integrations;
 
 class WooCommerce {
 	public function setup() {
-		add_action( 'template_redirect', [ $this, 'process' ] );
+		add_action( 'template_redirect', array( $this, 'process' ) );
 	}
 
 	public function process() {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;
 		}
-		add_filter( 'slim_seo_meta_description', [ $this, 'no_description' ] );
+		add_filter( 'slim_seo_meta_description', array( $this, 'no_description' ) );
 
-		add_filter( 'slim_seo_meta_title', [ $this, 'shop_title' ], 10, 2 );
-		add_filter( 'slim_seo_meta_description', [ $this, 'shop_description' ], 10, 2 );
-		add_filter( 'slim_seo_robots_index', [ $this, 'shop_index' ] );
+		add_filter( 'slim_seo_meta_title', array( $this, 'shop_title' ), 10, 2 );
+		add_filter( 'slim_seo_meta_description', array( $this, 'shop_description' ), 10, 2 );
+		add_filter( 'slim_seo_robots_index', array( $this, 'shop_index' ) );
 	}
 
 	public function no_description( $description ) {
@@ -28,7 +28,7 @@ class WooCommerce {
 	}
 
 	private function is_disabled_page() {
-		$pages = [ 'cart', 'checkout', 'myaccount' ];
+		$pages = array( 'cart', 'checkout', 'myaccount' );
 		$pages = array_map( 'wc_get_page_id', $pages );
 		return is_page( $pages );
 	}
