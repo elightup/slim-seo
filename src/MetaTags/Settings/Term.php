@@ -7,21 +7,21 @@ class Term extends Base {
 		$this->title       = __( 'Search Engine Optimization', 'slim-seo' );
 
 		// Prority 99 makes sure all taxonomies are registered.
-		add_action( 'init', [ $this, 'register_hooks' ], 99 );
+		add_action( 'init', array( $this, 'register_hooks' ), 99 );
 	}
 
 	public function register_hooks() {
-		add_action( 'admin_print_styles-term.php', [ $this, 'enqueue' ] );
+		add_action( 'admin_print_styles-term.php', array( $this, 'enqueue' ) );
 
 		$taxonomies = $this->get_types();
 		foreach ( $taxonomies as $taxonomy ) {
-			add_action( "{$taxonomy}_edit_form", [ $this, 'render' ] );
-			add_action( "edited_$taxonomy", [ $this, 'save' ] );
+			add_action( "{$taxonomy}_edit_form", array( $this, 'render' ) );
+			add_action( "edited_$taxonomy", array( $this, 'save' ) );
 		}
 	}
 
 	public function get_types() {
-		$taxonomies = get_taxonomies( [ 'public' => true ] );
+		$taxonomies = get_taxonomies( array( 'public' => true ) );
 		$taxonomies = apply_filters( 'slim_seo_meta_box_taxonomies', $taxonomies );
 
 		return $taxonomies;
