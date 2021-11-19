@@ -1,5 +1,4 @@
 vendor
-composer.lock
 *.swp
 .DS_Store
 Thumbs.db
