@@ -16,20 +16,20 @@ class Breadcrumbs extends Base {
 
 	public function generate() {
 		$links = $this->source->get_links();
-		$list  = [];
+		$list  = array();
 		foreach ( $links as $i => $link ) {
-			$list[] = [
+			$list[] = array(
 				'@type'    => 'ListItem',
 				'position' => ( $i + 1 ),
 				'name'     => $link['text'],
 				'item'     => $link['url'],
-			];
+			);
 		}
 
-		return [
+		return array(
 			'@type'           => 'BreadcrumbList',
 			'@id'             => $this->id,
 			'itemListElement' => $list,
-		];
+		);
 	}
 }
