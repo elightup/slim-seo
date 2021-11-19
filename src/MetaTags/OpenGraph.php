@@ -13,38 +13,44 @@ class OpenGraph {
 	}
 
 	public function setup() {
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'wp_head', array( $this, 'output' ) );
 	}
 
 	public function output() {
-		$properties = apply_filters( 'slim_seo_open_graph_tags', [
-			'og:title',
-			'og:type',
-			'og:image',
-			'og:image:width',
-			'og:image:height',
-			'og:image:alt',
-			'og:description',
-			'og:url',
-			'og:locale',
-			'og:site_name',
-			'article:published_time',
-			'article:modified_time',
-			'og:updated_time',
-			'article:section',
-			'article:tag',
-			'article:author',
-			'fb:app_id',
-		] );
+		$properties = apply_filters(
+			'slim_seo_open_graph_tags',
+			array(
+				'og:title',
+				'og:type',
+				'og:image',
+				'og:image:width',
+				'og:image:height',
+				'og:image:alt',
+				'og:description',
+				'og:url',
+				'og:locale',
+				'og:site_name',
+				'article:published_time',
+				'article:modified_time',
+				'og:updated_time',
+				'article:section',
+				'article:tag',
+				'article:author',
+				'fb:app_id',
+			)
+		);
 		foreach ( $properties as $property ) {
-			$short_name = strtr( $property, [
-				'og:' => '',
-				'fb:' => '',
-				':'   => '_',
-			] );
-			$getter = "get_{$short_name}";
-			$value = $this->$getter();
-			$value = apply_filters( "slim_seo_open_graph_{$short_name}", $value, $property );
+			$short_name = strtr(
+				$property,
+				array(
+					'og:' => '',
+					'fb:' => '',
+					':'   => '_',
+				)
+			);
+			$getter     = "get_{$short_name}";
+			$value      = $this->$getter();
+			$value      = apply_filters( "slim_seo_open_graph_{$short_name}", $value, $property );
 			$this->output_tag( $property, $value );
 		}
 	}
@@ -83,26 +89,26 @@ class OpenGraph {
 		if ( ! $ran ) {
 			$default_image = $this->get_default_image();
 			$image_obj     = new Image( 'facebook_image' );
-			$image         = $image_obj->get_value() ?: $default_image;
+			$image         = $image_obj->get_value() ? $image_obj->get_value() : $default_image;
 			$ran           = true;
 		}
 
-		$keys = [
+		$keys = array(
 			'src'    => 0,
 			'width'  => 1,
 			'height' => 2,
-		];
+		);
 
 		return isset( $image[ $keys[ $key ] ] ) ? $image[ $keys[ $key ] ] : null;
 	}
 
 	private function get_default_image() {
 		$data = get_option( 'slim_seo' );
-		if ( empty( $data[ 'default_facebook_image' ] ) ) {
+		if ( empty( $data['default_facebook_image'] ) ) {
 			return null;
 		}
-		$image_id = attachment_url_to_postid( $data[ 'default_facebook_image' ] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ 'default_facebook_image' ] ];
+		$image_id = attachment_url_to_postid( $data['default_facebook_image'] );
+		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : array( $data['default_facebook_image'] );
 	}
 
 	private function get_description() {
@@ -159,7 +165,7 @@ class OpenGraph {
 
 	private function get_app_id() {
 		$data = get_option( 'slim_seo' );
-		return empty( $data[ 'facebook_app_id' ] ) ? null : $data[ 'facebook_app_id' ];
+		return empty( $data['facebook_app_id'] ) ? null : $data['facebook_app_id'];
 	}
 
 	private function output_tag( $property, $content ) {
