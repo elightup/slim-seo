@@ -5,7 +5,7 @@ class CanonicalUrl {
 	use Context;
 
 	public function setup() {
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'wp_head', array( $this, 'output' ) );
 	}
 
 	public function output() {
