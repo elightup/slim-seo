@@ -8,8 +8,8 @@ class Post extends Base {
 		$types = $this->settings->get_types();
 
 		foreach ( $types as $type ) {
-			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
-			add_action( "manage_{$type}_posts_custom_column", [ $this, 'render' ], 10, 2 );
+			add_filter( "manage_{$type}_posts_columns", array( $this, 'columns' ) );
+			add_action( "manage_{$type}_posts_custom_column", array( $this, 'render' ), 10, 2 );
 		}
 	}
 
