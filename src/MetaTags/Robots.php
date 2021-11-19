@@ -17,30 +17,30 @@ class Robots {
 
 		$is_from_5_7 = version_compare( get_bloginfo( 'version' ), '5.6.9', '>' ); // WP uses filter from version 5.7.
 		if ( $is_from_5_7 ) {
-			add_filter( 'wp_robots', [ $this, 'modify_robots' ] );
+			add_filter( 'wp_robots', array( $this, 'modify_robots' ) );
 		} else {
-			add_action( 'wp_head', [ $this, 'output' ], 5 ); // Priority 5 to be able to remove canonical link.
+			add_action( 'wp_head', array( $this, 'output' ), 5 ); // Priority 5 to be able to remove canonical link.
 		}
 
-		add_action( 'template_redirect', [ $this, 'set_header_noindex' ] );
-		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );
-		add_filter( 'register', [ $this, 'set_link_nofollow' ] );
+		add_action( 'template_redirect', array( $this, 'set_header_noindex' ) );
+		add_filter( 'loginout', array( $this, 'set_link_nofollow' ) );
+		add_filter( 'register', array( $this, 'set_link_nofollow' ) );
 	}
 
 	public function modify_robots( $robots ) {
 		$is_indexed = $this->is_indexed();
 		if ( $is_indexed ) {
-			$robots['max-snippet'] = '-1';
+			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
 			return $robots;
 		}
 
 		// No index.
 		$this->remove_canonical_link();
-		return [
+		return array(
 			'noindex' => true,
 			'follow'  => true,
-		];
+		);
 	}
 
 	public function output() {
@@ -56,7 +56,7 @@ class Robots {
 	}
 
 	private function remove_canonical_link() {
-		remove_action( 'wp_head', [ $this->url, 'output' ] );
+		remove_action( 'wp_head', array( $this->url, 'output' ) );
 		remove_action( 'wp_head', 'rel_canonical' );
 	}
 
