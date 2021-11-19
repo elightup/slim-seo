@@ -8,7 +8,7 @@ class Jetpack {
 		add_filter( 'jetpack_seo_meta_tags_enabled', '__return_false' );
 
 		// Jetpack Boost
-		add_filter( 'jetpack_boost_should_defer_js', [ $this, 'disable_defer_js_for_sitemap' ] );
+		add_filter( 'jetpack_boost_should_defer_js', array( $this, 'disable_defer_js_for_sitemap' ) );
 	}
 
 	public function disable_defer_js_for_sitemap( $value ) {
