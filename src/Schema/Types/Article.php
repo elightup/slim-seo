@@ -3,8 +3,8 @@ namespace SlimSEO\Schema\Types;
 
 class Article extends Base {
 	public function generate() {
-		$post = get_queried_object();
-		$schema = [
+		$post   = get_queried_object();
+		$schema = array(
 			'@type'         => 'Article',
 			'@id'           => $this->id,
 			'url'           => $this->url,
@@ -12,7 +12,7 @@ class Article extends Base {
 			'datePublished' => date( 'c', strtotime( $post->post_date_gmt ) ),
 			'dateModified'  => date( 'c', strtotime( $post->post_modified_gmt ) ),
 			'commentCount'  => (int) $post->comment_count,
-		];
+		);
 
 		$content = do_shortcode( $post->post_content );
 		$content = wp_strip_all_tags( $content );
