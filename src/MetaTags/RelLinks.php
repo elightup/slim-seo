@@ -5,7 +5,7 @@ class RelLinks {
 	use Context;
 
 	public function setup() {
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'wp_head', array( $this, 'output' ) );
 	}
 
 	public function output() {
@@ -24,11 +24,11 @@ class RelLinks {
 	}
 
 	private function get_links() {
-		$url = $this->get_value();
-		$links = [
+		$url   = $this->get_value();
+		$links = array(
 			'prev' => null,
-			'next' => null
-		];
+			'next' => null,
+		);
 
 		global $wp_query;
 		$paged = max( 1, get_query_var( 'paged' ) );
