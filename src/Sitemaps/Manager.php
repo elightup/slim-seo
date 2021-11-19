@@ -4,9 +4,9 @@ namespace SlimSEO\Sitemaps;
 class Manager {
 	public function setup() {
 		$this->add_rewrite_rules();
-		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
-		add_action( 'template_redirect', [ $this, 'output' ], 0 );
-		add_action( 'do_robotstxt', [ $this, 'add_to_robots_txt' ] );
+		add_filter( 'query_vars', array( $this, 'add_query_vars' ) );
+		add_action( 'template_redirect', array( $this, 'output' ), 0 );
+		add_action( 'do_robotstxt', array( $this, 'add_to_robots_txt' ) );
 
 		// Disable core sitemaps. Use `init` instead of `wp_sitemaps_enabled` to "completely" remove core sitemaps functionality, such as registering rewrite rules.
 		remove_action( 'init', 'wp_sitemaps_get_server' );
@@ -37,7 +37,7 @@ class Manager {
 		echo '<?xml-stylesheet type="text/xsl" href="', esc_url( SLIM_SEO_URL ), 'src/Sitemaps/style.xsl"?>', "\n";
 
 		if ( 'index' === $type ) {
-			$sitemap = new Index;
+			$sitemap = new Index();
 			$sitemap->output();
 		}
 
@@ -59,7 +59,7 @@ class Manager {
 				$taxonomy = $matches[1];
 				$page     = $matches[2];
 			}
-			$sitemap  = new Taxonomy( $taxonomy, $page );
+			$sitemap = new Taxonomy( $taxonomy, $page );
 			$sitemap->output();
 		}
 
