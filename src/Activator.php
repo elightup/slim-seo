@@ -3,9 +3,9 @@ namespace SlimSEO;
 
 class Activator {
 	public function __construct( $file ) {
-		register_activation_hook( $file, [ $this, 'activate' ] );
+		register_activation_hook( $file, array( $this, 'activate' ) );
 
-		add_filter( 'plugin_action_links_' . plugin_basename( SLIM_SEO_FILE ), [ $this, 'add_settings_link' ] );
+		add_filter( 'plugin_action_links_' . plugin_basename( SLIM_SEO_FILE ), array( $this, 'add_settings_link' ) );
 	}
 
 	public function activate( $network_wide ) {
@@ -24,11 +24,11 @@ class Activator {
 
 	private function network_activate() {
 		$sites = get_sites(
-			[
+			array(
 				'fields'            => 'ids',
 				'number'            => 0,
 				'update_site_cache' => false,
-			]
+			)
 		);
 		foreach ( $sites as $site ) {
 			switch_to_blog( $site );
