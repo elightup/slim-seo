@@ -7,10 +7,10 @@ class Oxygen {
 			return;
 		}
 
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ] );
-		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
-		add_filter( 'slim_seo_meta_box_post_types', [ $this, 'remove_post_types' ] );
-		add_filter( 'slim_seo_sitemap_post_types', [ $this, 'remove_post_types' ] );
+		add_filter( 'slim_seo_meta_description_generated', array( $this, 'description' ) );
+		add_filter( 'slim_seo_skipped_shortcodes', array( $this, 'skip_shortcodes' ) );
+		add_filter( 'slim_seo_meta_box_post_types', array( $this, 'remove_post_types' ) );
+		add_filter( 'slim_seo_sitemap_post_types', array( $this, 'remove_post_types' ) );
 	}
 
 	public function description( $description ) {
@@ -20,7 +20,7 @@ class Oxygen {
 		}
 
 		$shortcode = get_post_meta( get_the_ID(), 'ct_builder_shortcodes', true );
-		return $shortcode ?: $description;
+		return $shortcode ? $shortcode : $description;
 	}
 
 	public function skip_shortcodes( $shortcodes ) {
