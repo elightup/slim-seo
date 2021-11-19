@@ -2,7 +2,7 @@
 namespace SlimSEO\Settings;
 
 class Settings {
-	private $defaults = [
+	private $defaults = array(
 		'header_code'            => '',
 		'body_code'              => '',
 		'footer_code'            => '',
@@ -14,7 +14,7 @@ class Settings {
 		'default_twitter_image'  => '',
 		'facebook_app_id'        => '',
 		'twitter_site'           => '',
-		'features'               => [
+		'features'               => array(
 			'meta_title',
 			'meta_description',
 			'meta_robots',
@@ -28,11 +28,11 @@ class Settings {
 			'auto_redirection',
 			'feed',
 			'schema',
-		],
-	];
+		),
+	);
 
 	public function setup() {
-		add_action( 'admin_menu', [ $this, 'add_menu' ] );
+		add_action( 'admin_menu', array( $this, 'add_menu' ) );
 	}
 
 	public function add_menu() {
@@ -41,46 +41,50 @@ class Settings {
 			__( 'Slim SEO', 'slim-seo' ),
 			'manage_options',
 			'slim-seo',
-			[ $this, 'render' ]
+			array( $this, 'render' )
 		);
-		add_action( "load-{$page_hook}", [ $this, 'save' ] );
-		add_action( "admin_print_styles-{$page_hook}", [ $this, 'enqueue' ] );
+		add_action( "load-{$page_hook}", array( $this, 'save' ) );
+		add_action( "admin_print_styles-{$page_hook}", array( $this, 'enqueue' ) );
 	}
 
 	public function enqueue() {
-		wp_register_script( 'popper', SLIM_SEO_URL . 'js/popper.min.js', [], '2.9.1', true );
-		wp_register_script( 'tippy', SLIM_SEO_URL . 'js/tippy-bundle.umd.min.js', ['popper'], '6.3.1', true );
+		wp_register_script( 'popper', SLIM_SEO_URL . 'js/popper.min.js', array(), '2.9.1', true );
+		wp_register_script( 'tippy', SLIM_SEO_URL . 'js/tippy-bundle.umd.min.js', array( 'popper' ), '6.3.1', true );
 
-		wp_enqueue_script( 'slim-seo-migrate-js', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
-		wp_enqueue_script( 'slim-seo-settings-js', SLIM_SEO_URL . 'js/settings.js', ['tippy'], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-migrate-js', SLIM_SEO_URL . 'js/migrate.js', array(), SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-settings-js', SLIM_SEO_URL . 'js/settings.js', array( 'tippy' ), SLIM_SEO_VER, true );
 		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/settings.css' );
-		wp_localize_script( 'slim-seo-migrate-js', 'ssMigration', [
-			'nonce'          => wp_create_nonce( 'migrate' ),
-			'doneText'       => __( 'Done!', 'slim-seo' ),
-			'preProcessText' => __( 'Starting...', 'slim-seo' ),
-		] );
+		wp_localize_script(
+			'slim-seo-migrate-js',
+			'ssMigration',
+			array(
+				'nonce'          => wp_create_nonce( 'migrate' ),
+				'doneText'       => __( 'Done!', 'slim-seo' ),
+				'preProcessText' => __( 'Starting...', 'slim-seo' ),
+			)
+		);
 
 		wp_enqueue_media();
-		$params = [
+		$params = array(
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
-		];
-		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
+		);
+		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', array(), SLIM_SEO_VER );
 		if ( ! $this->is_static_homepage() ) {
-			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-			$params[ 'site' ] = [
+			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', array( 'jquery', 'underscore' ), SLIM_SEO_VER, true );
+			$params['site'] = array(
 				'title'       => get_bloginfo( 'name' ),
 				'description' => get_bloginfo( 'description' ),
-			];
+			);
 			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
 		} else {
-			wp_enqueue_script( 'slim-seo-media', SLIM_SEO_URL . 'js/media.js', [], SLIM_SEO_VER, true );
+			wp_enqueue_script( 'slim-seo-media', SLIM_SEO_URL . 'js/media.js', array(), SLIM_SEO_VER, true );
 			wp_localize_script( 'slim-seo-media', 'ss', $params );
 		}
 	}
 
 	public function render() {
 		$data = get_option( 'slim_seo' );
-		$data = $data ? $data : [];
+		$data = $data ? $data : array();
 		$data = array_merge( $this->defaults, $data );
 		?>
 		<div class="wrap">
@@ -89,7 +93,7 @@ class Settings {
 				<?= esc_html( get_admin_page_title() ); ?>
 				<a href="https://wpslimseo.com/docs/" target="_blank" rel="noreffer noopener">
 					<span class="dashicons dashicons-media-document"></span>
-					<?php esc_html_e( 'Documentation', 'slim-seo' ) ?>
+					<?php esc_html_e( 'Documentation', 'slim-seo' ); ?>
 				</a>
 			</h1>
 
@@ -126,11 +130,11 @@ class Settings {
 			return;
 		}
 
-		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : [];
+		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : array();
 		$data = wp_unslash( $data );
 
 		$option = get_option( 'slim_seo' );
-		$option = $option ?: [];
+		$option = $option ? $option : array();
 		$option = array_merge( $option, $data );
 		$option = $this->sanitize( $option );
 
