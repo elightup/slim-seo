@@ -12,17 +12,19 @@ class Index {
 	}
 
 	private function output_post_type_sitemaps() {
-		$post_types = get_post_types( [ 'public' => true ] );
+		$post_types = get_post_types( array( 'public' => true ) );
 		$post_types = apply_filters( 'slim_seo_sitemap_post_types', $post_types );
-		array_walk( $post_types, [ $this, 'output_post_type_sitemap' ] );
+		array_walk( $post_types, array( $this, 'output_post_type_sitemap' ) );
 	}
 
 	private function output_post_type_sitemap( $post_type ) {
-		$query_args = PostType::get_query_args( [
-			'post_type'     => $post_type,
-			'no_found_rows' => false,
-			'fields'        => 'ids',
-		] );
+		$query_args = PostType::get_query_args(
+			array(
+				'post_type'     => $post_type,
+				'no_found_rows' => false,
+				'fields'        => 'ids',
+			)
+		);
 		$query      = new \WP_Query( $query_args );
 		if ( ! $query->post_count ) {
 			return;
@@ -38,13 +40,13 @@ class Index {
 
 	private function output_taxonomy_sitemaps() {
 		$taxonomies = get_taxonomies(
-			[
+			array(
 				'public'  => true,
 				'show_ui' => true,
-			]
+			)
 		);
 		$taxonomies = apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
-		array_walk( $taxonomies, [ $this, 'output_taxonomy_sitemap' ] );
+		array_walk( $taxonomies, array( $this, 'output_taxonomy_sitemap' ) );
 	}
 
 	private function output_taxonomy_sitemap( $taxonomy ) {
