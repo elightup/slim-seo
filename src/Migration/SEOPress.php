@@ -7,22 +7,22 @@ class SEOPress extends Replacer {
 	private $replacements;
 
 	public function before_replace_post( $post_id ) {
-		$this->context = [
-            'post'           => get_post( $post_id ),
-            'product'        => null,
-            'term_id'        => null,
-            'is_single'      => true,
-            'is_home'        => false,
-            'is_product'     => false,
-            'is_archive'     => false,
-            'is_category'    => false,
-            'is_author'      => false,
-            'is_404'         => false,
-            'has_category'   => false,
-            'has_tag'        => false,
-            'paged'          => 0,
-            'schemas_manual' => [],
-        ];
+		$this->context = array(
+			'post'           => get_post( $post_id ),
+			'product'        => null,
+			'term_id'        => null,
+			'is_single'      => true,
+			'is_home'        => false,
+			'is_product'     => false,
+			'is_archive'     => false,
+			'is_category'    => false,
+			'is_author'      => false,
+			'is_404'         => false,
+			'has_category'   => false,
+			'has_tag'        => false,
+			'paged'          => 0,
+			'schemas_manual' => array(),
+		);
 	}
 
 	public function get_post_title( $post_id ) {
@@ -34,24 +34,24 @@ class SEOPress extends Replacer {
 	}
 
 	public function get_post_facebook_image( $post_id ) {
-        $social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
-		$og = isset( $social['og'] ) ? $social['og'] : [];
+		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
+		$og     = isset( $social['og'] ) ? $social['og'] : array();
 		return isset( $og['image'] ) ? $og['image'] : null;
 	}
 
 	public function get_post_twitter_image( $post_id ) {
-		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
-		$twitter = isset( $social['twitter'] ) ? $social['twitter'] : [];
+		$social  = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
+		$twitter = isset( $social['twitter'] ) ? $social['twitter'] : array();
 		return isset( $twitter['image'] ) ? $twitter['image'] : null;
 	}
 
 	protected function get_post_noindex( $post_id ) {
-        $robots = seopress_get_service( 'RobotMeta' )->getValue( $this->context );
-		return intval( !empty( $robots['noindex'] ) );
+		$robots = seopress_get_service( 'RobotMeta' )->getValue( $this->context );
+		return intval( ! empty( $robots['noindex'] ) );
 	}
 
 	public function before_replace_term( $term_id ) {
-		$variables          = apply_filters( 'seopress_dyn_variables_fn', [] );
+		$variables          = apply_filters( 'seopress_dyn_variables_fn', array() );
 		$this->variables    = $variables['seopress_titles_template_variables_array'];
 		$this->replacements = $variables['seopress_titles_template_replace_array'];
 	}
@@ -76,7 +76,7 @@ class SEOPress extends Replacer {
 
 	public function get_term_noindex( $term_id ) {
 		$value = get_term_meta( $term_id, '_seopress_robots_index', true );
-		return intval( $value === 'yes' );
+		return intval( 'yes' === $value );
 	}
 
 	public function is_activated() {
