@@ -5,12 +5,12 @@ abstract class Base {
 	public $url;
 	public $context;
 	public $id;
-	public $properties = [];
-	public $references = [];
+	public $properties = array();
+	public $references = array();
 
 	public function __construct( $context = null, $url = null ) {
-		$this->url     = $url ?: $this->get_current_url();
-		$this->context = $context ?: $this->get_type();
+		$this->url     = $url ? $url : $this->get_current_url();
+		$this->context = $context ? $context : $this->get_type();
 		$this->id      = $this->url . '#' . $this->context;
 	}
 
@@ -21,7 +21,7 @@ abstract class Base {
 	private function get_current_url() {
 		global $wp;
 
-		$url = add_query_arg( [], $wp->request );
+		$url = add_query_arg( array(), $wp->request );
 		$url = home_url( $url );
 		$url = strtok( $url, '#' );
 		$url = strtok( $url, '?' );
@@ -52,7 +52,7 @@ abstract class Base {
 		$schema = array_merge( $schema, $this->properties );
 
 		foreach ( $this->references as $name => $entity ) {
-			$schema[ $name ] = [ '@id' => $entity->id ];
+			$schema[ $name ] = array( '@id' => $entity->id );
 		}
 
 		$schema = array_filter( $schema );
