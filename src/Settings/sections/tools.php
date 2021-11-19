@@ -13,8 +13,8 @@ if ( empty( $platforms ) ) {
 	<p class="migration-handler">
 		<label for="platform"><?php esc_html_e( 'Migrate SEO data from:', 'slim-seo' ); ?></label>
 		<select name="platform" id="platform">
-			<?php foreach ( $platforms as $id => $platform ): ?>
-				<option value="<?= esc_attr( $id ); ?>"><?= esc_html( $platform ); ?></option>
+			<?php foreach ( $platforms as $platform_id => $platform ) : ?>
+				<option value="<?= esc_attr( $platform_id ); ?>"><?= esc_html( $platform ); ?></option>
 			<?php endforeach ?>
 		</select>
 		<button type="button" class="button button-primary" id="process"><?php esc_html_e( 'Migrate', 'slim-seo' ); ?></button>
