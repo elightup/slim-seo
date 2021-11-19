@@ -6,7 +6,7 @@ class LifterLMS {
 	private $catalog_page_id;
 
 	public function setup() {
-		add_action( 'template_redirect', [ $this, 'process' ] );
+		add_action( 'template_redirect', array( $this, 'process' ) );
 	}
 
 	public function process() {
@@ -14,12 +14,12 @@ class LifterLMS {
 			return;
 		}
 
-		add_filter( 'slim_seo_meta_description', [ $this, 'no_description' ] );
+		add_filter( 'slim_seo_meta_description', array( $this, 'no_description' ) );
 
 		// Catalogs pages like Course and Membership ones: handle title/description/index.
-		add_filter( 'slim_seo_meta_title', [ $this, 'catalogs_title' ], 10, 2 );
-		add_filter( 'slim_seo_meta_description', [ $this, 'catalogs_description' ], 10, 2 );
-		add_filter( 'slim_seo_robots_index', [ $this, 'catalogs_index' ] );
+		add_filter( 'slim_seo_meta_title', array( $this, 'catalogs_title' ), 10, 2 );
+		add_filter( 'slim_seo_meta_description', array( $this, 'catalogs_description' ), 10, 2 );
+		add_filter( 'slim_seo_robots_index', array( $this, 'catalogs_index' ) );
 	}
 
 	public function no_description( $description ) {
@@ -57,7 +57,7 @@ class LifterLMS {
 	}
 
 	private function is_disabled_context() {
-		$pages = [ 'checkout', 'myaccount' ];
+		$pages = array( 'checkout', 'myaccount' );
 		$pages = array_map( 'llms_get_page_id', $pages );
 		return is_page( $pages );
 	}
