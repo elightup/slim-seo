@@ -11,22 +11,29 @@ class PostType {
 		$this->page      = $page;
 	}
 
-	public static function get_query_args( $args = [] ) {
-		return apply_filters( 'slim_seo_sitemap_post_type_query_args', array_merge( [
-			'post_status'            => 'publish',
-			'has_password'           => false,
+	public static function get_query_args( $args = array() ) {
+		return apply_filters(
+			'slim_seo_sitemap_post_type_query_args',
+			array_merge(
+				array(
+					'post_status'            => 'publish',
+					'has_password'           => false,
 
-			'ignore_sticky_posts'    => true,
+					'ignore_sticky_posts'    => true,
 
-			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
-			'update_post_term_cache' => false,
+					'no_found_rows'          => true,
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
 
-			'order'                  => 'DESC',
-			'orderyby'               => 'date',
+					'order'                  => 'DESC',
+					'orderyby'               => 'date',
 
-			'posts_per_page'         => 2000,
-		], $args ), $args );
+					'posts_per_page'         => 2000,
+				),
+				$args
+			),
+			$args
+		);
 	}
 
 	public function output() {
@@ -34,10 +41,12 @@ class PostType {
 
 		$this->output_homepage();
 
-		$query_args = self::get_query_args( [
-			'post_type' => $this->post_type,
-			'paged'     => $this->page,
-		] );
+		$query_args = self::get_query_args(
+			array(
+				'post_type' => $this->post_type,
+				'paged'     => $this->page,
+			)
+		);
 		$query      = new \WP_Query( $query_args );
 
 		foreach ( $query->posts as $post ) {
@@ -52,9 +61,9 @@ class PostType {
 			echo "\t\t<lastmod>", esc_html( date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
 			$images = $this->get_post_images( $post );
-			array_walk( $images, [$this, 'normalize_image'] );
+			array_walk( $images, array( $this, 'normalize_image' ) );
 			$images = array_filter( $images );
-			array_walk( $images, [$this, 'output_image'] );
+			array_walk( $images, array( $this, 'output_image' ) );
 
 			do_action( 'slim_seo_sitemap_post', $post );
 			echo "\t</url>\n";
@@ -93,7 +102,7 @@ class PostType {
 
 		// If we get image URL only.
 		if ( ! is_numeric( $image ) ) {
-			$image = ['url' => $image];
+			$image = array( 'url' => $image );
 			return;
 		}
 
@@ -111,15 +120,17 @@ class PostType {
 			$caption = get_post_meta( $image, '_wp_attachment_image_alt', true );
 		}
 
-		$image = array_filter( [
-			'url'     => $info[0],
-			'title'   => $attachment->post_title,
-			'caption' => $caption,
-		] );
+		$image = array_filter(
+			array(
+				'url'     => $info[0],
+				'title'   => $attachment->post_title,
+				'caption' => $caption,
+			)
+		);
 	}
 
 	private function get_post_images( $post ) {
-		$images = [];
+		$images = array();
 
 		// Post thumbnail.
 		$images[] = get_post_thumbnail_id( $post );
@@ -133,7 +144,7 @@ class PostType {
 	private function get_images_from_html( $html ) {
 		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
 		if ( ! class_exists( 'DOMDocument' ) ) {
-			return [];
+			return array();
 		}
 
 		$html = do_shortcode( $html );
@@ -150,7 +161,7 @@ class PostType {
 		// Clear the errors to clean up the memory.
 		libxml_clear_errors();
 
-		$values = [];
+		$values = array();
 		$images = $doc->getElementsByTagName( 'img' );
 		foreach ( $images as $image ) {
 			$src = $image->getAttribute( 'src' );
@@ -211,11 +222,11 @@ class PostType {
 
 		$length = strlen( $value );
 		for ( $i = 0; $i < $length; $i++ ) {
-			$current = ord( $value[$i] );
+			$current = ord( $value[ $i ] );
 			if (
-				$current == 0x9
-				|| $current == 0xA
-				|| $current == 0xD
+				0x9 == $current
+				|| 0xA == $current
+				|| 0xD == $current
 				|| ( $current >= 0x20 && $current <= 0xD7FF )
 				|| ( $current >= 0xE000 && $current <= 0xFFFD )
 				|| ( $current >= 0x10000 && $current <= 0x10FFFF )
