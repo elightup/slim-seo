@@ -57,7 +57,7 @@ class Yoast extends Replacer {
 
 	public function get_term_noindex( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return intval( isset( $term['wpseo_noindex'] ) && $term['wpseo_noindex'] === 'noindex' );
+		return intval( isset( $term['wpseo_noindex'] ) && 'noindex' === $term['wpseo_noindex'] );
 	}
 
 	/**
@@ -66,11 +66,11 @@ class Yoast extends Replacer {
 	public function get_terms() {
 		$terms = get_option( 'wpseo_taxonomy_meta' );
 		if ( empty( $terms ) ) {
-			return [];
+			return array();
 		}
-		$terms = array_values( $terms );
-		$terms_array = [];
-		foreach( $terms as $term ) {
+		$terms       = array_values( $terms );
+		$terms_array = array();
+		foreach ( $terms as $term ) {
 			$terms_array = $terms_array + $term;
 		}
 		return $terms_array;
