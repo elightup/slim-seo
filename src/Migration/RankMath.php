@@ -27,7 +27,7 @@ class RankMath extends Replacer {
 	}
 
 	public function get_post_description( $post_id ) {
-		$post  = get_post( $post_id, ARRAY_A );
+		$post        = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, 'rank_math_description', true );
 		return RMHelper::replace_vars( $description, $post );
 	}
@@ -38,7 +38,7 @@ class RankMath extends Replacer {
 
 	public function get_post_twitter_image( $post_id ) {
 		$use_facebook_image = get_post_meta( $post_id, 'rank_math_twitter_use_facebook', true );
-		if ( $use_facebook_image === 'on' ) {
+		if ( 'on' === $use_facebook_image ) {
 			return $this->get_post_facebook_image( $post_id );
 		}
 		return get_post_meta( $post_id, 'rank_math_twitter_image', true );
@@ -73,7 +73,7 @@ class RankMath extends Replacer {
 
 	public function get_term_twitter_image( $term_id ) {
 		$use_facebook_image = get_term_meta( $term_id, 'rank_math_twitter_use_facebook', true );
-		if ( $use_facebook_image === 'on' ) {
+		if ( 'on' === $use_facebook_image ) {
 			return $this->get_term_facebook_image( $term_id );
 		}
 		return get_term_meta( $term_id, 'rank_math_twitter_image', true );
