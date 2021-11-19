@@ -8,7 +8,7 @@ class Description {
 
 	public function setup() {
 		$this->add_excerpt_to_pages();
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'wp_head', array( $this, 'output' ) );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Description {
 	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
 	public function get_singular_value( $post_id = null ) {
-		$post_id = $post_id ?: get_queried_object_id();
+		$post_id = $post_id ? $post_id : get_queried_object_id();
 		$post    = get_post( $post_id );
 		if ( ! $post ) {
 			return '';
@@ -75,7 +75,7 @@ class Description {
 	}
 
 	public function get_term_value( $term_id = null ) {
-		$term_id = $term_id ?: get_queried_object_id();
+		$term_id = $term_id ? $term_id : get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
