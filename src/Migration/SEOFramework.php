@@ -4,7 +4,7 @@ namespace SlimSEO\Migration;
 class SEOFramework extends Replacer {
 	public function get_post_title( $post_id ) {
 		$post_title = get_post_meta( $post_id, '_genesis_title', true );
-		return empty( $post_title) ? '' : $post_title . ' - '. get_bloginfo( 'name' );
+		return empty( $post_title ) ? '' : $post_title . ' - ' . get_bloginfo( 'name' );
 	}
 
 	public function get_post_description( $post_id ) {
