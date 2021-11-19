@@ -7,8 +7,8 @@ class WPML {
 			return;
 		}
 
-		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
-		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
+		add_action( 'slim_seo_sitemap_post', array( $this, 'add_post_links' ) );
+		add_action( 'slim_seo_sitemap_term', array( $this, 'add_term_links' ) );
 	}
 
 	public function add_post_links( $post ) {
@@ -38,7 +38,8 @@ class WPML {
 			}
 			$url = apply_filters( 'wpml_permalink', get_term_link( $term_id ), $language, true );
 			printf(
-				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
+				/* translators: 1: hreflang 2: href */
+				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%1$s\" href=\"%2$s\"/>\n",
 				$language,
 				$url
 			);
@@ -46,6 +47,6 @@ class WPML {
 	}
 
 	private function get_languages() {
-		return array_keys( apply_filters( 'wpml_active_languages', null, ['skip_missing' => true] ) );
+		return array_keys( apply_filters( 'wpml_active_languages', null, array( 'skip_missing' => true ) ) );
 	}
 }
