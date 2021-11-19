@@ -5,7 +5,7 @@ class TwitterCards {
 	use Context;
 
 	public function setup() {
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'wp_head', array( $this, 'output' ) );
 	}
 
 	/**
@@ -17,8 +17,8 @@ class TwitterCards {
 		echo '<meta name="twitter:card" content="summary_large_image">', "\n";
 
 		$default_image = $this->get_default_image();
-		$image_obj = new Image( 'twitter_image' );
-		$image     = $image_obj->get_value() ?: $default_image;
+		$image_obj     = new Image( 'twitter_image' );
+		$image         = $image_obj->get_value() ? $image_obj->get_value() : $default_image;
 		if ( ! empty( $image ) ) {
 			echo '<meta name="twitter:image" content="' . esc_url( $image[0] ) . '">', "\n";
 		}
@@ -31,15 +31,15 @@ class TwitterCards {
 
 	private function get_default_image() {
 		$data = get_option( 'slim_seo' );
-		if ( empty( $data[ 'default_twitter_image' ] ) ) {
+		if ( empty( $data['default_twitter_image'] ) ) {
 			return null;
 		}
-		$image_id = attachment_url_to_postid( $data[ 'default_twitter_image' ] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ 'default_twitter_image' ] ];
+		$image_id = attachment_url_to_postid( $data['default_twitter_image'] );
+		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : array( $data['default_twitter_image'] );
 	}
 
 	private function get_site() {
 		$data = get_option( 'slim_seo' );
-		return empty( $data[ 'twitter_site' ] ) ? null : $data[ 'twitter_site' ];
+		return empty( $data['twitter_site'] ) ? null : $data['twitter_site'];
 	}
 }
