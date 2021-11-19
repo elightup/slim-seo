@@ -16,18 +16,21 @@ class ImageObject extends Base {
 	}
 
 	public function generate() {
-		$schema = [
+		$schema = array(
 			'@type' => 'ImageObject',
 			'@id'   => $this->id,
-		];
+		);
 		if ( $this->image_id ) {
-			$info = wp_get_attachment_image_src( $this->image_id, 'full' );
-			$schema = array_merge( $schema, [
-				'caption' => $this->image->post_excerpt,
-				'url'     => $info[0],
-				'width'   => $info[1],
-				'height'  => $info[2],
-			] );
+			$info   = wp_get_attachment_image_src( $this->image_id, 'full' );
+			$schema = array_merge(
+				$schema,
+				array(
+					'caption' => $this->image->post_excerpt,
+					'url'     => $info[0],
+					'width'   => $info[1],
+					'height'  => $info[2],
+				)
+			);
 		}
 
 		return $schema;
