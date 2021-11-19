@@ -3,7 +3,7 @@ namespace SlimSEO;
 
 class Deactivator {
 	public function setup( $file ) {
-		register_deactivation_hook( $file, [ $this, 'deactivate' ] );
+		register_deactivation_hook( $file, array( $this, 'deactivate' ) );
 	}
 
 	public function deactivate( $network_wide ) {
@@ -16,11 +16,11 @@ class Deactivator {
 
 	private function network_deactivate() {
 		$sites = get_sites(
-			[
+			array(
 				'fields'            => 'ids',
 				'number'            => 0,
 				'update_site_cache' => false,
-			]
+			)
 		);
 		foreach ( $sites as $site ) {
 			switch_to_blog( $site );
