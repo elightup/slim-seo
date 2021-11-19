@@ -25,10 +25,10 @@ require __DIR__ . '/vendor/autoload.php';
 new Activator( __FILE__ );
 new Deactivator( __FILE__ );
 
-$slim_seo = new Plugin;
+$slim_seo = new Plugin();
 $slim_seo->register_services();
 
 // Initialize at priority 5 to be able to disable core sitemaps completely which runs at priority 10.
-add_action( 'init', [ $slim_seo, 'init' ], 5 );
+add_action( 'init', array( $slim_seo, 'init' ), 5 );
 
 load_plugin_textdomain( 'slim-seo', false, basename( __DIR__ ) . '/languages/' );
