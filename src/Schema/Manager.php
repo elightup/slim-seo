@@ -5,7 +5,7 @@ class Manager {
 	private $title;
 	private $description;
 	private $breadcrumbs;
-	private $entities = [];
+	private $entities = array();
 
 	public function __construct( $title, $description, $breadcrumbs ) {
 		$this->title       = $title;
@@ -14,20 +14,26 @@ class Manager {
 	}
 
 	public function setup() {
-		add_action( 'wp_footer', [ $this, 'output' ] );
+		add_action( 'wp_footer', array( $this, 'output' ) );
 	}
 
 	public function output() {
 		$this->add_schemas();
 
 		$entities = apply_filters( 'slim_seo_schema_entities', $this->entities );
-		$entities = array_filter( $entities, function( $entity ) {
-			return $entity->is_active();
-		} );
+		$entities = array_filter(
+			$entities,
+			function( $entity ) {
+				return $entity->is_active();
+			}
+		);
 
-		$graph = array_map( function( $entity ) {
-			return $entity->get_schema();
-		}, $entities );
+		$graph = array_map(
+			function( $entity ) {
+				return $entity->get_schema();
+			},
+			$entities
+		);
 
 		$graph = apply_filters( 'slim_seo_schema_graph', $graph );
 
@@ -36,27 +42,27 @@ class Manager {
 			return;
 		}
 
-		$schema = [
+		$schema = array(
 			'@context' => 'https://schema.org',
 			'@graph'   => $graph,
-		];
-		echo "<script type='application/ld+json'>", json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), "</script>";
+		);
+		echo "<script type='application/ld+json'>", json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), '</script>';
 	}
 
 	private function add_schemas() {
 		$website = new Types\Website( null, home_url( '/' ) );
 		$this->add_entity( $website );
 
-		$search_action = new Types\SearchAction;
+		$search_action = new Types\SearchAction();
 		$website->add_reference( 'potentialAction', $search_action );
 		$this->add_entity( $search_action );
 
-		$breadcrumbs = new Types\Breadcrumbs;
+		$breadcrumbs         = new Types\Breadcrumbs();
 		$breadcrumbs->source = $this->breadcrumbs;
 		$this->add_entity( $breadcrumbs );
 
-		$webpage = new Types\WebPage;
-		$webpage->title = $this->title;
+		$webpage              = new Types\WebPage();
+		$webpage->title       = $this->title;
 		$webpage->description = $this->description;
 		$webpage->add_reference( 'isPartOf', $website );
 		$webpage->add_reference( 'breadcrumb', $breadcrumbs );
@@ -87,7 +93,7 @@ class Manager {
 		if ( ! $logo_id ) {
 			return;
 		}
-		$logo = new Types\ImageObject( 'logo' );
+		$logo           = new Types\ImageObject( 'logo' );
 		$logo->image_id = $logo_id;
 
 		$this->entities['organization']->add_reference( 'logo', $logo );
@@ -96,7 +102,7 @@ class Manager {
 	}
 
 	private function add_thumbnail_schema() {
-		$thumbnail = new Types\ImageObject( 'thumbnail' );
+		$thumbnail           = new Types\ImageObject( 'thumbnail' );
 		$thumbnail->image_id = get_post_thumbnail_id();
 
 		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
@@ -105,7 +111,7 @@ class Manager {
 	}
 
 	private function add_post_schemas() {
-		$article = new Types\Article;
+		$article = new Types\Article();
 		$article->add_reference( 'isPartOf', $this->entities['webpage'] );
 		$article->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 		$this->add_entity( $article );
@@ -116,7 +122,7 @@ class Manager {
 
 		$article->add_reference( 'publisher', $this->entities['organization'] );
 
-		$author = new Types\Person( 'author' );
+		$author       = new Types\Person( 'author' );
 		$author->user = get_userdata( get_queried_object()->post_author );
 
 		if ( ! $author->user ) {
@@ -132,7 +138,7 @@ class Manager {
 	}
 
 	private function add_author_schemas() {
-		$author = new Types\Person( 'author' );
+		$author       = new Types\Person( 'author' );
 		$author->user = get_queried_object();
 		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 
