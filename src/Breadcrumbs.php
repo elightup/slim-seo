@@ -3,7 +3,7 @@ namespace SlimSEO;
 
 class Breadcrumbs {
 	private $args;
-	private $links     = [];
+	private $links     = array();
 	private $current   = '';
 	private $is_parsed = false;
 
@@ -18,7 +18,7 @@ class Breadcrumbs {
 			'label_404'       => __( 'Page not found', 'slim-seo' ),
 		);
 
-		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
+		add_shortcode( 'slim_seo_breadcrumbs', array( $this, 'render_shortcode' ) );
 	}
 
 	public function render_shortcode( $atts ) {
@@ -33,7 +33,7 @@ class Breadcrumbs {
 		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
 
 		// Links.
-		$items    = [];
+		$items    = array();
 		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
@@ -74,7 +74,7 @@ class Breadcrumbs {
 		} elseif ( is_singular() ) {
 			$this->add_singular();
 		} elseif ( is_tax() || is_category() || is_tag() ) { // Taxonomy archive.
-			$term = get_queried_object();
+			$term     = get_queried_object();
 			$taxonomy = get_taxonomy( $term->taxonomy );
 			if ( ! empty( $taxonomy->object_type ) && 1 === count( $taxonomy->object_type ) ) {
 				$this->add_post_type_archive_link();
@@ -174,9 +174,9 @@ class Breadcrumbs {
 	}
 
 	private function add_link( $url, $text ) {
-		$this->links[] = [
+		$this->links[] = array(
 			'url'  => $url,
 			'text' => $text,
-		];
+		);
 	}
 }
