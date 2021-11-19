@@ -18,16 +18,16 @@ class WebStories {
 		}
 
 		// Use priority 20 to make sure all Web Stories hooks are registered.
-		add_action( 'init', [ $this, 'remove_web_stories_meta_output' ], 20 );
+		add_action( 'init', array( $this, 'remove_web_stories_meta_output' ), 20 );
 
-		add_action( 'web_stories_story_head', [ $this, 'output' ] );
+		add_action( 'web_stories_story_head', array( $this, 'output' ) );
 	}
 
 	public function remove_web_stories_meta_output() {
 		$instance = \Google\Web_Stories\get_plugin_instance()->discovery;
-		remove_action( 'web_stories_story_head', [ $instance, 'print_schemaorg_metadata' ] );
-		remove_action( 'web_stories_story_head', [ $instance, 'print_open_graph_metadata' ] );
-		remove_action( 'web_stories_story_head', [ $instance, 'print_twitter_metadata' ] );
+		remove_action( 'web_stories_story_head', array( $instance, 'print_schemaorg_metadata' ) );
+		remove_action( 'web_stories_story_head', array( $instance, 'print_open_graph_metadata' ) );
+		remove_action( 'web_stories_story_head', array( $instance, 'print_twitter_metadata' ) );
 	}
 
 	public function output() {
