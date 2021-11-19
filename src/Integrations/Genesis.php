@@ -3,7 +3,7 @@ namespace SlimSEO\Integrations;
 
 class Genesis {
 	public function setup() {
-		add_action( 'template_redirect', [ $this, 'disable_genesis_schema' ] );
+		add_action( 'template_redirect', array( $this, 'disable_genesis_schema' ) );
 	}
 
 	/**
@@ -53,8 +53,8 @@ class Genesis {
 			'site-footer',
 		);
 
-		foreach( $elements as $element ) {
-			add_filter( 'genesis_attr_' . $element, [ $this, 'remove_genesis_schema_attributes' ], 20 );
+		foreach ( $elements as $element ) {
+			add_filter( 'genesis_attr_' . $element, array( $this, 'remove_genesis_schema_attributes' ), 20 );
 		}
 	}
 
