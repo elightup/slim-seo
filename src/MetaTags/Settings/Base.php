@@ -4,31 +4,31 @@ namespace SlimSEO\MetaTags\Settings;
 abstract class Base {
 	protected $object_type;
 	protected $title;
-	protected $defaults = [
+	protected $defaults = array(
 		'title'          => '',
 		'description'    => '',
 		'noindex'        => 0,
 		'facebook_image' => '',
 		'twitter_image'  => '',
-	];
+	);
 
 	public function enqueue() {
 		wp_enqueue_media();
-		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', ['jquery', 'underscore'], SLIM_SEO_VER, true );
-		$params = [
-			'site' => [
+		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', array(), SLIM_SEO_VER );
+		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', array( 'jquery', 'underscore' ), SLIM_SEO_VER, true );
+		$params = array(
+			'site'            => array(
 				'title'       => get_bloginfo( 'name' ),
 				'description' => get_bloginfo( 'description' ),
-			],
+			),
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
-		];
+		);
 		$params = array_merge( $params, $this->get_script_params() );
 		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
 	}
 
 	protected function get_script_params() {
-		return [];
+		return array();
 	}
 
 	public function render() {
@@ -109,7 +109,7 @@ abstract class Base {
 		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) ) {
 			return;
 		}
-		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : [];
+		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : array();
 		$data = $this->sanitize( $data );
 
 		if ( empty( $data ) ) {
@@ -133,7 +133,7 @@ abstract class Base {
 
 	private function get_data() {
 		$data = get_metadata( $this->object_type, $this->get_object_id(), 'slim_seo', true );
-		$data = $data ? $data : [];
+		$data = $data ? $data : array();
 
 		return array_merge( $this->defaults, $data );
 	}
