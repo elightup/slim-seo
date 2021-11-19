@@ -3,7 +3,7 @@ namespace SlimSEO;
 
 class AutoRedirection {
 	public function setup() {
-		add_action( 'template_redirect', [ $this, 'redirect' ] );
+		add_action( 'template_redirect', array( $this, 'redirect' ) );
 	}
 
 	public function redirect() {
@@ -48,10 +48,12 @@ class AutoRedirection {
 		}
 
 		// If the website has only one user.
-		$users = get_users( [
-			'number' => 2,
-			'fields' => 'ID',
-		] );
+		$users = get_users(
+			array(
+				'number' => 2,
+				'fields' => 'ID',
+			)
+		);
 		if ( 1 === count( $users ) ) {
 			return home_url( '/' );
 		}
