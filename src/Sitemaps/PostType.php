@@ -52,9 +52,9 @@ class PostType {
 			echo "\t\t<lastmod>", esc_html( date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
 			$images = $this->get_post_images( $post );
-			array_walk( $images, [$this, 'normalize_image'] );
+			array_walk( $images, [ $this, 'normalize_image' ] );
 			$images = array_filter( $images );
-			array_walk( $images, [$this, 'output_image'] );
+			array_walk( $images, [ $this, 'output_image' ] );
 
 			do_action( 'slim_seo_sitemap_post', $post );
 			echo "\t</url>\n";
@@ -93,7 +93,7 @@ class PostType {
 
 		// If we get image URL only.
 		if ( ! is_numeric( $image ) ) {
-			$image = ['url' => $image];
+			$image = [ 'url' => $image ];
 			return;
 		}
 
@@ -211,11 +211,11 @@ class PostType {
 
 		$length = strlen( $value );
 		for ( $i = 0; $i < $length; $i++ ) {
-			$current = ord( $value[$i] );
+			$current = ord( $value[ $i ] );
 			if (
-				$current == 0x9
-				|| $current == 0xA
-				|| $current == 0xD
+				$current === 0x9
+				|| $current === 0xA
+				|| $current === 0xD
 				|| ( $current >= 0x20 && $current <= 0xD7FF )
 				|| ( $current >= 0xE000 && $current <= 0xFFFD )
 				|| ( $current >= 0x10000 && $current <= 0x10FFFF )

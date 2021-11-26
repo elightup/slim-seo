@@ -46,6 +46,6 @@ class WPML {
 	}
 
 	private function get_languages() {
-		return array_keys( apply_filters( 'wpml_active_languages', null, ['skip_missing' => true] ) );
+		return array_keys( apply_filters( 'wpml_active_languages', null, [ 'skip_missing' => true ] ) );
 	}
 }

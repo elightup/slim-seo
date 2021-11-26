@@ -9,32 +9,32 @@ class AIOSEO extends Replacer {
 
 	public function before_replace_post( $post_id ) {
 		$this->post  = get_post( $post_id );
-		$this->image = new Common\Social\Image();
+		$this->image = new Common\Social\Image;
 		set_current_screen( 'settings_page_slim-seo' ); // Fix undefined get_current_screen from AIOSEO.
 	}
 
 	public function get_post_title( $post_id ) {
-		$title    = new Common\Meta\Title;
-		$metaData = aioseo()->meta->metaData->getMetaData( $this->post );
+		$title     = new Common\Meta\Title;
+		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return empty( $metaData->title ) ? null : $title->helpers->prepare( $metaData->title, $post_id );
+		return empty( $meta_data->title ) ? null : $title->helpers->prepare( $meta_data->title, $post_id );
 	}
 
 	public function get_post_description( $post_id ) {
 		$description = new Common\Meta\Description;
-		$metaData    = aioseo()->meta->metaData->getMetaData( $this->post );
+		$meta_data   = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return empty( $metaData->description ) ? null : $description->helpers->prepare( $metaData->description, $post_id, false, false );
+		return empty( $meta_data->description ) ? null : $description->helpers->prepare( $meta_data->description, $post_id, false, false );
 	}
 
 	public function get_post_facebook_image( $post_id ) {
-		$metaData = aioseo()->meta->metaData->getMetaData( $this->post );
-		$image = '';
-		if ( ! empty( $metaData ) ) {
-			$imageSource = ! empty( $metaData->og_image_type ) && 'default' !== $metaData->og_image_type
-				? $metaData->og_image_type
+		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
+		$image     = '';
+		if ( ! empty( $meta_data ) ) {
+			$image_source = ! empty( $meta_data->og_image_type ) && 'default' !== $meta_data->og_image_type
+				? $meta_data->og_image_type
 				: aioseo()->options->social->facebook->general->defaultImageSourcePosts;
-			$image = $this->getImage( 'facebook', $imageSource, $this->post );
+			$image = $this->get_image( 'facebook', $image_source, $this->post );
 		}
 		if ( $image ) {
 			return is_array( $image ) ? $image[0] : $image;
@@ -43,18 +43,18 @@ class AIOSEO extends Replacer {
 	}
 
 	public function get_post_twitter_image( $post_id ) {
-		$metaData = aioseo()->meta->metaData->getMetaData( $this->post );
+		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		if ( ! empty( $metaData->twitter_use_og ) ) {
+		if ( ! empty( $meta_data->twitter_use_og ) ) {
 			return $this->get_post_facebook_image( $post_id );
 		}
 
 		$image = '';
-		if ( ! empty( $metaData ) ) {
-			$imageSource = ! empty( $metaData->twitter_image_type ) && 'default' !== $metaData->twitter_image_type
-				? $metaData->twitter_image_type
+		if ( ! empty( $meta_data ) ) {
+			$image_source = ! empty( $meta_data->twitter_image_type ) && 'default' !== $meta_data->twitter_image_type
+				? $meta_data->twitter_image_type
 				: aioseo()->options->social->twitter->general->defaultImageSourcePosts;
-			$image = $this->getImage( 'twitter', $imageSource, $this->post );
+			$image = $this->get_image( 'twitter', $image_source, $this->post );
 		}
 
 		$image = $image ? $image : $this->get_post_facebook_image( $post_id );
@@ -65,15 +65,13 @@ class AIOSEO extends Replacer {
 	}
 
 	public function get_post_noindex( $post_id ) {
-		$metaData = aioseo()->meta->metaData->getMetaData( $this->post );
+		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return intval( $metaData->robots_noindex );
+		return intval( $meta_data->robots_noindex );
 	}
 
-	public function getImage( $type, $imageSource, $post ) {
-		$this->thumbnailSize = apply_filters( 'aioseo_thumbnail_size', 'fullsize' );
-
-		switch ( $imageSource ) {
+	public function get_image( $type, $image_source, $post ) {
+		switch ( $image_source ) {
 			case 'featured':
 				$images[ $type ] = $this->image->getFeaturedImage( $post );
 				$image           = $images[ $type ];
@@ -95,11 +93,11 @@ class AIOSEO extends Replacer {
 				$image = $this->image->getCustomFieldImage( $post, $type );
 				break;
 			case 'custom_image':
-				$metaData = aioseo()->meta->metaData->getMetaData( $post );
-				if ( empty( $metaData ) ) {
+				$meta_data = aioseo()->meta->metaData->getMetaData( $post );
+				if ( empty( $meta_data ) ) {
 					break;
 				}
-				$image = ( 'facebook' === lcfirst( $type ) ) ? $metaData->og_image_custom_url : $metaData->twitter_image_custom_url;
+				$image = ( 'facebook' === lcfirst( $type ) ) ? $meta_data->og_image_custom_url : $meta_data->twitter_image_custom_url;
 				break;
 			case 'default':
 			default:
@@ -115,8 +113,8 @@ class AIOSEO extends Replacer {
 			return $images[ $type ];
 		}
 
-		$attachmentId    = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
-		$images[ $type ] = $attachmentId ? wp_get_attachment_image_src( $attachmentId, $this->image->thumbnailSize ) : $image;
+		$attachment_id   = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
+		$images[ $type ] = $attachment_id ? wp_get_attachment_image_src( $attachment_id, $this->image->thumbnailSize ) : $image;
 		return $images[ $type ];
 	}
 

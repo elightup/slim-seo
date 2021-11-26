@@ -59,7 +59,7 @@ class Manager {
 				$taxonomy = $matches[1];
 				$page     = $matches[2];
 			}
-			$sitemap  = new Taxonomy( $taxonomy, $page );
+			$sitemap = new Taxonomy( $taxonomy, $page );
 			$sitemap->output();
 		}
 

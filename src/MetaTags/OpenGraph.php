@@ -98,11 +98,11 @@ class OpenGraph {
 
 	private function get_default_image() {
 		$data = get_option( 'slim_seo' );
-		if ( empty( $data[ 'default_facebook_image' ] ) ) {
+		if ( empty( $data['default_facebook_image'] ) ) {
 			return null;
 		}
-		$image_id = attachment_url_to_postid( $data[ 'default_facebook_image' ] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ 'default_facebook_image' ] ];
+		$image_id = attachment_url_to_postid( $data['default_facebook_image'] );
+		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data['default_facebook_image'] ];
 	}
 
 	private function get_description() {
@@ -159,7 +159,7 @@ class OpenGraph {
 
 	private function get_app_id() {
 		$data = get_option( 'slim_seo' );
-		return empty( $data[ 'facebook_app_id' ] ) ? null : $data[ 'facebook_app_id' ];
+		return empty( $data['facebook_app_id'] ) ? null : $data['facebook_app_id'];
 	}
 
 	private function output_tag( $property, $content ) {

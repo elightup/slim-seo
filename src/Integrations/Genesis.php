@@ -53,7 +53,7 @@ class Genesis {
 			'site-footer',
 		);
 
-		foreach( $elements as $element ) {
+		foreach ( $elements as $element ) {
 			add_filter( 'genesis_attr_' . $element, [ $this, 'remove_genesis_schema_attributes' ], 20 );
 		}
 	}

@@ -70,7 +70,7 @@ class Yoast extends Replacer {
 		}
 		$terms = array_values( $terms );
 		$terms_array = [];
-		foreach( $terms as $term ) {
+		foreach ( $terms as $term ) {
 			$terms_array = $terms_array + $term;
 		}
 		return $terms_array;
