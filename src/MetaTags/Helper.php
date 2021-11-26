@@ -41,6 +41,7 @@ class Helper {
 			'et_pb_slider',
 			'et_pb_slide',
 			'et_pb_gallery',
+			'et_pb_button',
 		] );
 		$shortcodes_bak = $shortcode_tags;
 		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
