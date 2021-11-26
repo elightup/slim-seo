@@ -85,7 +85,7 @@ class Notification {
 	}
 
 	private function get_ssl_message() {
-		if ( ! is_ssl() ) {
+		if ( ! is_ssl() && ! 'local' === wp_get_environment_type() ) {
 			$this->messages[] = sprintf( __( 'Your website does not use HTTPS. Please upgrade your host to fix this.', 'slim-seo' ), admin_url( 'options-reading.php' ) );
 		}
 	}
