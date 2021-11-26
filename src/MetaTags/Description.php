@@ -74,14 +74,16 @@ class Description {
 		return apply_filters( 'slim_seo_meta_description_generated', $description );
 	}
 
-	private function get_term_value() {
-		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
+	public function get_term_value( $term_id = null ) {
+		$term_id = $term_id ?: get_queried_object_id();
+		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
 			return $data['description'];
 		}
 
-		return get_queried_object()->description;
+		$term = get_term( $term_id );
+		return $term && ! is_wp_error( $term ) ? $term->description : null;
 	}
 
 	private function get_author_value() {

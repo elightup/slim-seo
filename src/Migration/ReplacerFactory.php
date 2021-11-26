@@ -8,6 +8,7 @@ class ReplacerFactory {
 			case 'aioseo': return new AIOSEO;
 			case 'seo-framework': return new SEOFramework;
 			case 'rank-math': return new RankMath;
+			case 'seopress': return new SEOPress;
 		}
 	}
 }

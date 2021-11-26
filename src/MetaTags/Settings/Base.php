@@ -137,4 +137,7 @@ abstract class Base {
 
 		return array_merge( $this->defaults, $data );
 	}
+
+	abstract public function get_types();
+	abstract protected function get_object_id();
 }

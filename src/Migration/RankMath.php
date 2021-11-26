@@ -44,6 +44,11 @@ class RankMath extends Replacer {
 		return get_post_meta( $post_id, 'rank_math_twitter_image', true );
 	}
 
+	protected function get_post_noindex( $post_id ) {
+		$robots = get_post_meta( $post_id, 'rank_math_robots', true );
+		return intval( is_array( $robots ) && in_array( 'noindex', $robots ) );
+	}
+
 	public function get_term_title( $term_id ) {
 		$term = get_term( $term_id );
 		if ( ! $term ) {
@@ -72,6 +77,11 @@ class RankMath extends Replacer {
 			return $this->get_term_facebook_image( $term_id );
 		}
 		return get_term_meta( $term_id, 'rank_math_twitter_image', true );
+	}
+
+	protected function get_term_noindex( $term_id ) {
+		$robots = get_term_meta( $term_id, 'rank_math_robots', true );
+		return intval( is_array( $robots ) && in_array( 'noindex', $robots ) );
 	}
 
 	public function is_activated() {

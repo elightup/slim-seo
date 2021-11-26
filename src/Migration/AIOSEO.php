@@ -1,24 +1,30 @@
 <?php
 namespace SlimSEO\Migration;
 
+use AIOSEO\Plugin\Common;
+
 class AIOSEO extends Replacer {
+	private $post;
+	private $image;
 
 	public function before_replace_post( $post_id ) {
 		$this->post  = get_post( $post_id );
-		$this->image = new \AIOSEO\Plugin\Common\Social\Image();
+		$this->image = new Common\Social\Image();
 		set_current_screen( 'settings_page_slim-seo' ); // Fix undefined get_current_screen from AIOSEO.
 	}
 
 	public function get_post_title( $post_id ) {
-		$meta = get_post_meta( $post_id, '_aioseo_title', true );
-		$title = new \AIOSEO\Plugin\Common\Meta\Title();
-		return $title->prepareTitle( $meta, $post_id );
+		$title    = new Common\Meta\Title;
+		$metaData = aioseo()->meta->metaData->getMetaData( $this->post );
+
+		return empty( $metaData->title ) ? null : $title->helpers->prepare( $metaData->title, $post_id );
 	}
 
 	public function get_post_description( $post_id ) {
-		$meta        = get_post_meta( $post_id, '_aioseo_description', true );
-		$description = new \AIOSEO\Plugin\Common\Meta\Description();
-		return $description->prepareDescription( $meta, $post_id );
+		$description = new Common\Meta\Description;
+		$metaData    = aioseo()->meta->metaData->getMetaData( $this->post );
+
+		return empty( $metaData->description ) ? null : $description->helpers->prepare( $metaData->description, $post_id, false, false );
 	}
 
 	public function get_post_facebook_image( $post_id ) {
@@ -56,6 +62,12 @@ class AIOSEO extends Replacer {
 			return is_array( $image ) ? $image[0] : $image;
 		}
 		return '';
+	}
+
+	public function get_post_noindex( $post_id ) {
+		$metaData = aioseo()->meta->metaData->getMetaData( $this->post );
+
+		return intval( $metaData->robots_noindex );
 	}
 
 	public function getImage( $type, $imageSource, $post ) {
@@ -106,11 +118,6 @@ class AIOSEO extends Replacer {
 		$attachmentId    = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
 		$images[ $type ] = $attachmentId ? wp_get_attachment_image_src( $attachmentId, $this->image->thumbnailSize ) : $image;
 		return $images[ $type ];
-	}
-
-	public function cleanup_posts() {
-		global $wpdb;
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key IN ('_aioseo_title', '_aioseo_description')" );
 	}
 
 	public function is_activated() {
