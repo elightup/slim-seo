@@ -15,13 +15,13 @@ abstract class Base {
 	public function enqueue() {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', ['jquery', 'underscore'], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
 		$params = [
-			'site' => [
+			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
+			'site'            => [
 				'title'       => get_bloginfo( 'name' ),
 				'description' => get_bloginfo( 'description' ),
 			],
-			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 		];
 		$params = array_merge( $params, $this->get_script_params() );
 		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );

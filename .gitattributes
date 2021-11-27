@@ -8,7 +8,9 @@ Thumbs.db export-ignore
 *.json export-ignore
 *.md export-ignore
 *.txt export-ignore
+*.lock export-ignore
 .distignore export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
 .github export-ignore
+phpcs.xml export-ignore

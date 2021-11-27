@@ -8,21 +8,21 @@ class SEOPress extends Replacer {
 
 	public function before_replace_post( $post_id ) {
 		$this->context = [
-            'post'           => get_post( $post_id ),
-            'product'        => null,
-            'term_id'        => null,
-            'is_single'      => true,
-            'is_home'        => false,
-            'is_product'     => false,
-            'is_archive'     => false,
-            'is_category'    => false,
-            'is_author'      => false,
-            'is_404'         => false,
-            'has_category'   => false,
-            'has_tag'        => false,
-            'paged'          => 0,
-            'schemas_manual' => [],
-        ];
+			'post'           => get_post( $post_id ),
+			'product'        => null,
+			'term_id'        => null,
+			'is_single'      => true,
+			'is_home'        => false,
+			'is_product'     => false,
+			'is_archive'     => false,
+			'is_category'    => false,
+			'is_author'      => false,
+			'is_404'         => false,
+			'has_category'   => false,
+			'has_tag'        => false,
+			'paged'          => 0,
+			'schemas_manual' => [],
+		];
 	}
 
 	public function get_post_title( $post_id ) {
@@ -34,7 +34,7 @@ class SEOPress extends Replacer {
 	}
 
 	public function get_post_facebook_image( $post_id ) {
-        $social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
+		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
 		$og = isset( $social['og'] ) ? $social['og'] : [];
 		return isset( $og['image'] ) ? $og['image'] : null;
 	}
@@ -46,8 +46,8 @@ class SEOPress extends Replacer {
 	}
 
 	protected function get_post_noindex( $post_id ) {
-        $robots = seopress_get_service( 'RobotMeta' )->getValue( $this->context );
-		return intval( !empty( $robots['noindex'] ) );
+		$robots = seopress_get_service( 'RobotMeta' )->getValue( $this->context );
+		return intval( ! empty( $robots['noindex'] ) );
 	}
 
 	public function before_replace_term( $term_id ) {

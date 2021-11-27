@@ -61,5 +61,5 @@ abstract class Base {
 		return $schema;
 	}
 
-	abstract function generate();
+	abstract public function generate();
 }

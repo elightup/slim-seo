@@ -11,7 +11,7 @@ class Robots {
 	}
 
 	public function setup() {
-		if ( '0' == get_option( 'blog_public' ) ) {
+		if ( '0' === get_option( 'blog_public' ) ) {
 			return;
 		}
 

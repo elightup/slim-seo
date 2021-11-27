@@ -16,8 +16,8 @@ class Polylang {
 		foreach ( $translations as $code => $post_id ) {
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
-				$code,
-				get_permalink( $post_id )
+				esc_attr( $code ),
+				esc_url( get_permalink( $post_id ) )
 			);
 		}
 	}
@@ -27,8 +27,8 @@ class Polylang {
 		foreach ( $translations as $code => $term_id ) {
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
-				$code,
-				get_term_link( $term_id )
+				esc_attr( $code ),
+				esc_url( get_term_link( $term_id ) )
 			);
 		}
 	}

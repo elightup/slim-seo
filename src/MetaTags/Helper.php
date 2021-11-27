@@ -10,10 +10,10 @@ class Helper {
 		 * do_shortcode here will parse the <link> and then remove it, which might break the style/JS.
 		 */
 		$skipped_shortcodes = apply_filters( 'slim_seo_skipped_shortcodes', [
-			'happyforms',               // HappyForms
-			'contact',                  // Very Simple Contact Form
-			'edd_invoices',             // EDD Invoices
-			'velocity',                 // Velocity
+			'happyforms',               // HappyForms.
+			'contact',                  // Very Simple Contact Form.
+			'edd_invoices',             // EDD Invoices.
+			'velocity',                 // Velocity.
 
 			'rwmb_meta',                // Meta Box.
 			'mb_frontend_form',         // MB Frontend Submission.
