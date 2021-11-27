@@ -53,7 +53,7 @@ class Settings {
 
 		wp_enqueue_script( 'slim-seo-migrate-js', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
 		wp_enqueue_script( 'slim-seo-settings-js', SLIM_SEO_URL . 'js/settings.js', [ 'tippy' ], SLIM_SEO_VER, true );
-		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/settings.css' );
+		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/settings.css', [], SLIM_SEO_VER );
 		wp_localize_script( 'slim-seo-migrate-js', 'ssMigration', [
 			'nonce'          => wp_create_nonce( 'migrate' ),
 			'doneText'       => __( 'Done!', 'slim-seo' ),
@@ -167,6 +167,6 @@ class Settings {
 	}
 
 	public function tooltip( $content ) {
-		return '<button type="button" class="ss-tooltip" data-tippy-content="' . esc_attr( $content ) . '"><span class="dashicons dashicons-editor-help"></span></button>';
+		echo '<button type="button" class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '"><span class="dashicons dashicons-editor-help"></span></button>';
 	}
 }

@@ -28,8 +28,8 @@ class WebPage extends Base {
 		}
 
 		if ( is_singular() ) {
-			$schema['datePublished'] = date( 'c', strtotime( get_queried_object()->post_date_gmt ) );
-			$schema['dateModified']  = date( 'c', strtotime( get_queried_object()->post_modified_gmt ) );
+			$schema['datePublished'] = gmdate( 'c', strtotime( get_queried_object()->post_date_gmt ) );
+			$schema['dateModified']  = gmdate( 'c', strtotime( get_queried_object()->post_modified_gmt ) );
 		}
 
 		return $schema;

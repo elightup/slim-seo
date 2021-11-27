@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreStart
 $platforms = SlimSEO\Migration\Helper::get_platforms();
 if ( empty( $platforms ) ) {
 	return;

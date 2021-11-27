@@ -49,7 +49,7 @@ class PostType {
 
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
-			echo "\t\t<lastmod>", esc_html( date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
+			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
 			$images = $this->get_post_images( $post );
 			array_walk( $images, [ $this, 'normalize_image' ] );
@@ -178,11 +178,11 @@ class PostType {
 	}
 
 	private function get_absolute_url( $url ) {
-		if ( parse_url( $url, PHP_URL_SCHEME ) ) {
+		if ( wp_parse_url( $url, PHP_URL_SCHEME ) ) {
 			return $url;
 		}
 
-		$url_parts = parse_url( home_url() );
+		$url_parts = wp_parse_url( home_url() );
 
 		// Non-protocol URL.
 		if ( 0 === strpos( $url, '//' ) ) {

@@ -7,6 +7,7 @@ class Genesis {
 	}
 
 	/**
+	 * Disable Genesis schama.
 	 * @link https://wordpress.org/plugins/disable-genesis-schema/
 	 * @copyright Bill Erickson <bill@billerickson.net>
 	 */
