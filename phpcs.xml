@@ -92,5 +92,5 @@
 	#############################################################################
 	-->
 	<config name="testVersion" value="5.6-"/>
-	<!-- <rule ref="PHPCompatibilityWP"/> -->
+	<rule ref="PHPCompatibilityWP"/>
 </ruleset>
