@@ -21,7 +21,7 @@ class ImageObject extends Base {
 			'@id'   => $this->id,
 		];
 		if ( $this->image_id ) {
-			$info = wp_get_attachment_image_src( $this->image_id, 'full' );
+			$info   = wp_get_attachment_image_src( $this->image_id, 'full' );
 			$schema = array_merge( $schema, [
 				'caption' => $this->image->post_excerpt,
 				'url'     => $info[0],

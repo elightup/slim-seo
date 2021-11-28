@@ -17,8 +17,8 @@ class TwitterCards {
 		echo '<meta name="twitter:card" content="summary_large_image">', "\n";
 
 		$default_image = $this->get_default_image();
-		$image_obj = new Image( 'twitter_image' );
-		$image     = $image_obj->get_value() ?: $default_image;
+		$image_obj     = new Image( 'twitter_image' );
+		$image         = $image_obj->get_value() ?: $default_image;
 		if ( ! empty( $image ) ) {
 			echo '<meta name="twitter:image" content="' . esc_url( $image[0] ) . '">', "\n";
 		}

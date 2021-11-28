@@ -43,6 +43,7 @@
 
 		<!-- Only comment when neccessary -->
 		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
 		<exclude name="Squiz.Commenting.ClassComment.Missing" />
 		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
@@ -58,18 +59,10 @@
 		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
 
 		<!-- Optional -->
-		<exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
-		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound" />
 		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
-		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
-		<exclude name="WordPress.PHP.StrictComparisons.LooseComparison" />
-		<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited" />
-		<exclude name="WordPress.WP.PostsPerPage.posts_per_page_posts_per_page" />
-		<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash" />
-		<exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized" />
 	</rule>
 
 	<!-- Verify that the text_domain is set to the desired text-domain.

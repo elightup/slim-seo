@@ -19,7 +19,7 @@ class Migration {
 		check_ajax_referer( 'migrate' );
 
 		session_start();
-		$platform = $this->get_platform();
+		$platform             = $this->get_platform();
 		$_SESSION['platform'] = $platform;
 		$this->set_replacer( $platform );
 		$this->check_platform_activation( $platform );

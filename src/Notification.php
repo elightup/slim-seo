@@ -22,7 +22,7 @@ class Notification {
 
 	public function dismiss() {
 		check_ajax_referer( 'dismiss', 'nonce' );
-		$option = get_option( 'slim_seo', [] );
+		$option                           = get_option( 'slim_seo', [] );
 		$option['notification_dismissed'] = 1;
 		update_option( 'slim_seo', $option );
 		wp_send_json_success();

@@ -42,9 +42,9 @@ class OpenGraph {
 				'fb:' => '',
 				':'   => '_',
 			] );
-			$getter = "get_{$short_name}";
-			$value = $this->$getter();
-			$value = apply_filters( "slim_seo_open_graph_{$short_name}", $value, $property );
+			$getter     = "get_{$short_name}";
+			$value      = $this->$getter();
+			$value      = apply_filters( "slim_seo_open_graph_{$short_name}", $value, $property );
 			$this->output_tag( $property, $value );
 		}
 	}

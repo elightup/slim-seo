@@ -24,7 +24,7 @@ class RelLinks {
 	}
 
 	private function get_links() {
-		$url = $this->get_value();
+		$url   = $this->get_value();
 		$links = [
 			'prev' => null,
 			'next' => null,

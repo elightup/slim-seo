@@ -109,7 +109,8 @@ abstract class Base {
 		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) ) {
 			return;
 		}
-		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : [];
+		// @codingStandardsIgnoreLine.
+		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : [];
 		$data = $this->sanitize( $data );
 
 		if ( empty( $data ) ) {

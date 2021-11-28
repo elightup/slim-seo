@@ -51,12 +51,12 @@ class Manager {
 		$website->add_reference( 'potentialAction', $search_action );
 		$this->add_entity( $search_action );
 
-		$breadcrumbs = new Types\Breadcrumbs;
+		$breadcrumbs         = new Types\Breadcrumbs;
 		$breadcrumbs->source = $this->breadcrumbs;
 		$this->add_entity( $breadcrumbs );
 
-		$webpage = new Types\WebPage;
-		$webpage->title = $this->title;
+		$webpage              = new Types\WebPage;
+		$webpage->title       = $this->title;
 		$webpage->description = $this->description;
 		$webpage->add_reference( 'isPartOf', $website );
 		$webpage->add_reference( 'breadcrumb', $breadcrumbs );
@@ -87,7 +87,7 @@ class Manager {
 		if ( ! $logo_id ) {
 			return;
 		}
-		$logo = new Types\ImageObject( 'logo' );
+		$logo           = new Types\ImageObject( 'logo' );
 		$logo->image_id = $logo_id;
 
 		$this->entities['organization']->add_reference( 'logo', $logo );
@@ -96,7 +96,7 @@ class Manager {
 	}
 
 	private function add_thumbnail_schema() {
-		$thumbnail = new Types\ImageObject( 'thumbnail' );
+		$thumbnail           = new Types\ImageObject( 'thumbnail' );
 		$thumbnail->image_id = get_post_thumbnail_id();
 
 		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
@@ -116,7 +116,7 @@ class Manager {
 
 		$article->add_reference( 'publisher', $this->entities['organization'] );
 
-		$author = new Types\Person( 'author' );
+		$author       = new Types\Person( 'author' );
 		$author->user = get_userdata( get_queried_object()->post_author );
 
 		if ( ! $author->user ) {
@@ -132,7 +132,7 @@ class Manager {
 	}
 
 	private function add_author_schemas() {
-		$author = new Types\Person( 'author' );
+		$author       = new Types\Person( 'author' );
 		$author->user = get_queried_object();
 		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 

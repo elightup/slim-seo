@@ -3,7 +3,7 @@ namespace SlimSEO\Schema\Types;
 
 class Article extends Base {
 	public function generate() {
-		$post = get_queried_object();
+		$post   = get_queried_object();
 		$schema = [
 			'@type'         => 'Article',
 			'@id'           => $this->id,

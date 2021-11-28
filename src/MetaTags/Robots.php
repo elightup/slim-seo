@@ -30,7 +30,7 @@ class Robots {
 	public function modify_robots( $robots ) {
 		$is_indexed = $this->is_indexed();
 		if ( $is_indexed ) {
-			$robots['max-snippet'] = '-1';
+			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
 			return $robots;
 		}

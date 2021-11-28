@@ -42,10 +42,14 @@ class Helper {
 			'et_pb_slide',
 			'et_pb_gallery',
 		] );
-		$shortcodes_bak = $shortcode_tags;
-		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
 
+		$shortcodes_bak = $shortcode_tags;
+
+		// @codingStandardsIgnoreLine.
+		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
 		$text           = do_shortcode( $text );      // Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
+
+		// @codingStandardsIgnoreLine.
 		$shortcode_tags = $shortcodes_bak;            // Revert the global shortcodes registry.
 		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
 

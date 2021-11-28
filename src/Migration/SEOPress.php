@@ -35,12 +35,12 @@ class SEOPress extends Replacer {
 
 	public function get_post_facebook_image( $post_id ) {
 		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
-		$og = isset( $social['og'] ) ? $social['og'] : [];
+		$og     = isset( $social['og'] ) ? $social['og'] : [];
 		return isset( $og['image'] ) ? $og['image'] : null;
 	}
 
 	public function get_post_twitter_image( $post_id ) {
-		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
+		$social  = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
 		$twitter = isset( $social['twitter'] ) ? $social['twitter'] : [];
 		return isset( $twitter['image'] ) ? $twitter['image'] : null;
 	}
@@ -51,6 +51,7 @@ class SEOPress extends Replacer {
 	}
 
 	public function before_replace_term( $term_id ) {
+		// @codingStandardsIgnoreLine.
 		$variables          = apply_filters( 'seopress_dyn_variables_fn', [] );
 		$this->variables    = $variables['seopress_titles_template_variables_array'];
 		$this->replacements = $variables['seopress_titles_template_replace_array'];

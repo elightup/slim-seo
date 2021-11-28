@@ -26,6 +26,8 @@ class Code {
 		}
 		$option = get_option( 'slim_seo' );
 		$code   = isset( $option[ $key ] ) ? $option[ $key ] : '';
-		echo $code; // @codingStandardsIgnoreLine
+
+		// @codingStandardsIgnoreLine.
+		echo $code;
 	}
 }

@@ -15,10 +15,13 @@ class WPML {
 		$languages = $this->get_languages();
 
 		foreach ( $languages as $language ) {
+			// @codingStandardsIgnoreLine.
 			$post_id = apply_filters( 'wpml_object_id', $post->ID, $post->post_type, false, $language );
 			if ( ! $post_id ) {
 				continue;
 			}
+
+			// @codingStandardsIgnoreLine.
 			$url = apply_filters( 'wpml_permalink', get_permalink( $post_id ), $language, true );
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
@@ -32,10 +35,13 @@ class WPML {
 		$languages = $this->get_languages();
 
 		foreach ( $languages as $language ) {
+			// @codingStandardsIgnoreLine.
 			$term_id = apply_filters( 'wpml_object_id', $term->term_id, $term->taxonomy, false, $language );
 			if ( ! $term_id ) {
 				continue;
 			}
+
+			// @codingStandardsIgnoreLine.
 			$url = apply_filters( 'wpml_permalink', get_term_link( $term_id ), $language, true );
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
@@ -46,6 +52,7 @@ class WPML {
 	}
 
 	private function get_languages() {
+		// @codingStandardsIgnoreLine.
 		return array_keys( apply_filters( 'wpml_active_languages', null, [ 'skip_missing' => true ] ) );
 	}
 }

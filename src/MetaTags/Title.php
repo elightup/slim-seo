@@ -42,7 +42,7 @@ class Title {
 	 */
 	public function get_term_value( $term_id = null ) {
 		$term_id = $term_id ?: get_queried_object_id();
-		$data = get_term_meta( $term_id, 'slim_seo', true );
+		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		return isset( $data['title'] ) ? $data['title'] : null;
 	}
 }

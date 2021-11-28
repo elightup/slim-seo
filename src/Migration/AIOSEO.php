@@ -34,7 +34,7 @@ class AIOSEO extends Replacer {
 			$image_source = ! empty( $meta_data->og_image_type ) && 'default' !== $meta_data->og_image_type
 				? $meta_data->og_image_type
 				: aioseo()->options->social->facebook->general->defaultImageSourcePosts;
-			$image = $this->get_image( 'facebook', $image_source, $this->post );
+			$image        = $this->get_image( 'facebook', $image_source, $this->post );
 		}
 		if ( $image ) {
 			return is_array( $image ) ? $image[0] : $image;
@@ -54,7 +54,7 @@ class AIOSEO extends Replacer {
 			$image_source = ! empty( $meta_data->twitter_image_type ) && 'default' !== $meta_data->twitter_image_type
 				? $meta_data->twitter_image_type
 				: aioseo()->options->social->twitter->general->defaultImageSourcePosts;
-			$image = $this->get_image( 'twitter', $image_source, $this->post );
+			$image        = $this->get_image( 'twitter', $image_source, $this->post );
 		}
 
 		$image = $image ? $image : $this->get_post_facebook_image( $post_id );

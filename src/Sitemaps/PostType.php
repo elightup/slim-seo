@@ -25,7 +25,7 @@ class PostType {
 			'order'                  => 'DESC',
 			'orderyby'               => 'date',
 
-			'posts_per_page'         => 2000,
+			'posts_per_page'         => 2000, // @codingStandardsIgnoreLine.
 		], $args ), $args );
 	}
 
