@@ -132,7 +132,7 @@ class Settings {
 		$option = get_option( 'slim_seo' );
 		$option = $option ?: [];
 		$option = array_merge( $option, $data );
-		$this->filter_schemas( $option, $data );
+		$option = apply_filters( 'slim_seo_option', $option, $data );
 		$option = $this->sanitize( $option );
 
 		if ( empty( $option ) ) {
@@ -153,9 +153,6 @@ class Settings {
 		$option['home_twitter_image']  = esc_url_raw( $option['home_twitter_image'] );
 
 		return array_filter( $option );
-	}
-	private function filter_schemas( &$option, $data ) {
-		$option['schemas'] = isset( $data['schemas'] ) ? $data['schemas'] : [];
 	}
 
 	private function is_static_homepage() {
