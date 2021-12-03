@@ -128,6 +128,7 @@ class Settings {
 
 		// @codingStandardsIgnoreLine.
 		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : [];
+		$data['schemas'] = isset( $_POST['slim_seo']['schemas'] ) ? $_POST['slim_seo']['schemas'] : [];
 
 		$option = get_option( 'slim_seo' );
 		$option = $option ?: [];
