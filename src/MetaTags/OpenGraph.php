@@ -42,9 +42,9 @@ class OpenGraph {
 				'fb:' => '',
 				':'   => '_',
 			] );
-			$getter = "get_{$short_name}";
-			$value = $this->$getter();
-			$value = apply_filters( "slim_seo_open_graph_{$short_name}", $value, $property );
+			$getter     = "get_{$short_name}";
+			$value      = $this->$getter();
+			$value      = apply_filters( "slim_seo_open_graph_{$short_name}", $value, $property );
 			$this->output_tag( $property, $value );
 		}
 	}
@@ -98,11 +98,11 @@ class OpenGraph {
 
 	private function get_default_image() {
 		$data = get_option( 'slim_seo' );
-		if ( empty( $data[ 'default_facebook_image' ] ) ) {
+		if ( empty( $data['default_facebook_image'] ) ) {
 			return null;
 		}
-		$image_id = attachment_url_to_postid( $data[ 'default_facebook_image' ] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ 'default_facebook_image' ] ];
+		$image_id = attachment_url_to_postid( $data['default_facebook_image'] );
+		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data['default_facebook_image'] ];
 	}
 
 	private function get_description() {
@@ -122,11 +122,11 @@ class OpenGraph {
 	}
 
 	private function get_article_published_time() {
-		return is_singular() ? date( 'c', strtotime( get_queried_object()->post_date_gmt ) ) : null;
+		return is_singular() ? gmdate( 'c', strtotime( get_queried_object()->post_date_gmt ) ) : null;
 	}
 
 	private function get_article_modified_time() {
-		return is_singular() ? date( 'c', strtotime( get_queried_object()->post_modified_gmt ) ) : null;
+		return is_singular() ? gmdate( 'c', strtotime( get_queried_object()->post_modified_gmt ) ) : null;
 	}
 
 	private function get_updated_time() {
@@ -159,7 +159,7 @@ class OpenGraph {
 
 	private function get_app_id() {
 		$data = get_option( 'slim_seo' );
-		return empty( $data[ 'facebook_app_id' ] ) ? null : $data[ 'facebook_app_id' ];
+		return empty( $data['facebook_app_id'] ) ? null : $data['facebook_app_id'];
 	}
 
 	private function output_tag( $property, $content ) {

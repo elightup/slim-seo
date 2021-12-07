@@ -7,6 +7,7 @@ class Genesis {
 	}
 
 	/**
+	 * Disable Genesis schama.
 	 * @link https://wordpress.org/plugins/disable-genesis-schema/
 	 * @copyright Bill Erickson <bill@billerickson.net>
 	 */
@@ -53,7 +54,7 @@ class Genesis {
 			'site-footer',
 		);
 
-		foreach( $elements as $element ) {
+		foreach ( $elements as $element ) {
 			add_filter( 'genesis_attr_' . $element, [ $this, 'remove_genesis_schema_attributes' ], 20 );
 		}
 	}

@@ -10,10 +10,10 @@ class Helper {
 		 * do_shortcode here will parse the <link> and then remove it, which might break the style/JS.
 		 */
 		$skipped_shortcodes = apply_filters( 'slim_seo_skipped_shortcodes', [
-			'happyforms',               // HappyForms
-			'contact',                  // Very Simple Contact Form
-			'edd_invoices',             // EDD Invoices
-			'velocity',                 // Velocity
+			'happyforms',               // HappyForms.
+			'contact',                  // Very Simple Contact Form.
+			'edd_invoices',             // EDD Invoices.
+			'velocity',                 // Velocity.
 
 			'rwmb_meta',                // Meta Box.
 			'mb_frontend_form',         // MB Frontend Submission.
@@ -42,10 +42,14 @@ class Helper {
 			'et_pb_slide',
 			'et_pb_gallery',
 		] );
-		$shortcodes_bak = $shortcode_tags;
-		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
 
+		$shortcodes_bak = $shortcode_tags;
+
+		// @codingStandardsIgnoreLine.
+		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
 		$text           = do_shortcode( $text );      // Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
+
+		// @codingStandardsIgnoreLine.
 		$shortcode_tags = $shortcodes_bak;            // Revert the global shortcodes registry.
 		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
 

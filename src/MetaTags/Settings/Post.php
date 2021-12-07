@@ -11,8 +11,9 @@ class Post extends Base {
 	}
 
 	protected function get_script_params() {
+		// @codingStandardsIgnoreLine.
 		$is_home = 'page' === get_option( 'show_on_front' ) && $this->get_object_id() == get_option( 'page_on_front' );
-		return ['isHome' => $is_home];
+		return [ 'isHome' => $is_home ];
 	}
 
 	public function add_meta_box() {

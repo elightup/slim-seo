@@ -22,7 +22,7 @@ class Notification {
 
 	public function dismiss() {
 		check_ajax_referer( 'dismiss', 'nonce' );
-		$option = get_option( 'slim_seo', [] );
+		$option                           = get_option( 'slim_seo', [] );
 		$option['notification_dismissed'] = 1;
 		update_option( 'slim_seo', $option );
 		wp_send_json_success();
@@ -68,18 +68,21 @@ class Notification {
 
 	private function get_permalink_message() {
 		if ( ! get_option( 'permalink_structure' ) ) {
+			// Translators: %s is the link to the Permalink settings page.
 			$this->messages[] = sprintf( __( 'You are not using pretty permalink structure. <a href="%s">Fix this &rarr;</a>', 'slim-seo' ), admin_url( 'options-permalink.php' ) );
 		}
 	}
 
 	private function get_visibility_message() {
 		if ( ! get_option( 'blog_public' ) ) {
+			// Translators: %s is the link to the Reading settings page.
 			$this->messages[] = sprintf( __( 'Your site is not visible to search engines. <a href="%s">Fix this &rarr;</a>', 'slim-seo' ), admin_url( 'options-reading.php' ) );
 		}
 	}
 
 	private function get_rss_message() {
 		if ( ! get_option( 'rss_use_excerpt' ) ) {
+			// Translators: %s is the link to the Reading settings page.
 			$this->messages[] = sprintf( __( 'Your RSS feed shows full text. <a href="%s">Fix this &rarr;</a>', 'slim-seo' ), admin_url( 'options-reading.php' ) );
 		}
 	}

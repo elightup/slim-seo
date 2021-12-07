@@ -2,12 +2,6 @@
 namespace SlimSEO\Migration;
 
 class Replacer {
-
-	/**
-	 * Parse other plugins' title and description patterns to text.
-	 *
-	 * @param string $value pattern.
-	 */
 	public function replace_post( $post_id ) {
 		$this->before_replace_post( $post_id );
 

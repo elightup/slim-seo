@@ -49,11 +49,11 @@ class Settings {
 
 	public function enqueue() {
 		wp_register_script( 'popper', SLIM_SEO_URL . 'js/popper.min.js', [], '2.9.1', true );
-		wp_register_script( 'tippy', SLIM_SEO_URL . 'js/tippy-bundle.umd.min.js', ['popper'], '6.3.1', true );
+		wp_register_script( 'tippy', SLIM_SEO_URL . 'js/tippy-bundle.umd.min.js', [ 'popper' ], '6.3.1', true );
 
 		wp_enqueue_script( 'slim-seo-migrate-js', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
-		wp_enqueue_script( 'slim-seo-settings-js', SLIM_SEO_URL . 'js/settings.js', ['tippy'], SLIM_SEO_VER, true );
-		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/settings.css' );
+		wp_enqueue_script( 'slim-seo-settings-js', SLIM_SEO_URL . 'js/settings.js', [ 'tippy' ], SLIM_SEO_VER, true );
+		wp_enqueue_style( 'slim-seo-migrate-css', SLIM_SEO_URL . 'css/settings.css', [], SLIM_SEO_VER );
 		wp_localize_script( 'slim-seo-migrate-js', 'ssMigration', [
 			'nonce'          => wp_create_nonce( 'migrate' ),
 			'doneText'       => __( 'Done!', 'slim-seo' ),
@@ -67,7 +67,7 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
 		if ( ! $this->is_static_homepage() ) {
 			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-			$params[ 'site' ] = [
+			$params['site'] = [
 				'title'       => get_bloginfo( 'name' ),
 				'description' => get_bloginfo( 'description' ),
 			];
@@ -89,7 +89,7 @@ class Settings {
 				<?= esc_html( get_admin_page_title() ); ?>
 				<a href="https://wpslimseo.com/docs/" target="_blank" rel="noreffer noopener">
 					<span class="dashicons dashicons-media-document"></span>
-					<?php esc_html_e( 'Documentation', 'slim-seo' ) ?>
+					<?php esc_html_e( 'Documentation', 'slim-seo' ); ?>
 				</a>
 			</h1>
 
@@ -126,12 +126,13 @@ class Settings {
 			return;
 		}
 
-		$data = isset( $_POST['slim_seo'] ) ? $_POST['slim_seo'] : [];
-		$data = wp_unslash( $data );
+		// @codingStandardsIgnoreLine.
+		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : [];
 
 		$option = get_option( 'slim_seo' );
 		$option = $option ?: [];
 		$option = array_merge( $option, $data );
+		$option = apply_filters( 'slim_seo_option', $option, $data );
 		$option = $this->sanitize( $option );
 
 		if ( empty( $option ) ) {
@@ -167,6 +168,6 @@ class Settings {
 	}
 
 	public function tooltip( $content ) {
-		return '<button type="button" class="ss-tooltip" data-tippy-content="' . esc_attr( $content ) . '"><span class="dashicons dashicons-editor-help"></span></button>';
+		echo '<button type="button" class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '"><span class="dashicons dashicons-editor-help"></span></button>';
 	}
 }
