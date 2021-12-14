@@ -141,6 +141,8 @@ class Settings {
 			update_option( 'slim_seo', $option );
 		}
 
+		do_action( 'slim_seo_after_save' );
+
 		add_settings_error( null, 'slim-seo', __( 'Settings updated.', 'slim-seo' ), 'success' );
 	}
 
