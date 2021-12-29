@@ -79,9 +79,6 @@ class Settings {
 	}
 
 	public function render() {
-		$data = get_option( 'slim_seo' );
-		$data = $data ? $data : [];
-		$data = array_merge( $this->defaults, $data );
 		?>
 		<div class="wrap">
 			<h1 class="ss-title">
@@ -95,26 +92,40 @@ class Settings {
 
 			<form action="" method="post" class="ss-tabs">
 				<nav class="ss-tab-list">
-					<a href="#general" class="ss-tab ss-is-active"><?php esc_html_e( 'Features', 'slim-seo' ); ?></a>
-					<a href="#code" class="ss-tab"><?php esc_html_e( 'Code', 'slim-seo' ); ?></a>
-					<?php if ( ! $this->is_static_homepage() ) : ?>
-						<a href="#homepage" class="ss-tab"><?php esc_html_e( 'Homepage', 'slim-seo' ); ?></a>
-					<?php endif; ?>
-					<a href="#social" class="ss-tab"><?php esc_html_e( 'Social', 'slim-seo' ); ?></a>
-					<a href="#tools" class="ss-tab"><?php esc_html_e( 'Tools', 'slim-seo' ); ?></a>
-					<?php do_action( 'slim_seo_settings_tabs' ); ?>
+					<?php
+					$tabs = [
+						'general' => __( 'Features', 'slim-seo' ),
+						'code'    => __( 'Code', 'slim-seo' ),
+					];
+					if ( ! $this->is_static_homepage() ) {
+						$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
+					}
+					$tabs['social'] = __( 'Social', 'slim-seo' );
+					$tabs['tools']  = __( 'Tools', 'slim-seo' );
+
+					$tabs = apply_filters( 'slim_seo_settings_tabs', $tabs );
+
+					foreach ( $tabs as $key => $label ) {
+						printf( '<a href="#%s" class="ss-tab">%s</a>', esc_attr( $key ), esc_html( $label ) );
+					}
+					?>
 				</nav>
 				<?php
 				wp_nonce_field( 'save' );
 
-				include __DIR__ . '/sections/general.php';
-				include __DIR__ . '/sections/code.php';
+				$panes = [
+					'general' => $this->get_pane( 'general' ),
+					'code'    => $this->get_pane( 'code' ),
+				];
 				if ( ! $this->is_static_homepage() ) {
-					include __DIR__ . '/sections/homepage.php';
+					$panes['homepage'] = $this->get_pane( 'homepage' );
 				}
-				include __DIR__ . '/sections/tools.php';
-				include __DIR__ . '/sections/social.php';
-				do_action( 'slim_seo_settings_panels' );
+				$panes['social'] = $this->get_pane( 'social' );
+				$panes['tools']  = $this->get_pane( 'tools' );
+
+				$panes = apply_filters( 'slim_seo_settings_panes', $panes );
+
+				echo implode( '', $panes ); // @codingStandardsIgnoreLine.
 				?>
 			</form>
 		</div>
@@ -171,5 +182,17 @@ class Settings {
 
 	public function tooltip( $content ) {
 		echo '<button type="button" class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '"><span class="dashicons dashicons-editor-help"></span></button>';
+	}
+
+	private function get_pane( $name ) {
+		$data = get_option( 'slim_seo' );
+		$data = $data ? $data : [];
+		$data = array_merge( $this->defaults, $data );
+
+		ob_start();
+		echo '<div id="', esc_attr( $name ), '" class="ss-tab-pane">';
+		include __DIR__ . "/sections/$name.php";
+		echo '</div>';
+		return ob_get_clean();
 	}
 }
