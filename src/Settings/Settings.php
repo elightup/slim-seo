@@ -34,9 +34,9 @@ class Settings {
 	public function setup() {
 		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tab' ], 1 );
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_pane' ], 1 );
-		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
+		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 1 );
 
-		add_action( 'slim_seo_save', [ $this, 'save' ] );
+		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
 
 	public function add_tab( $tabs ) {
