@@ -132,6 +132,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.12.0 - 2022-01-07 =
+- Add Divi compatibility. Props Jay (@grandeljay)
+- Disable HTTPS notificaition on local environments
+- Improve the code of the settings page
+
 = 3.11.1 - 2021-11-16 =
 - Fix error on taxonomy page
 
