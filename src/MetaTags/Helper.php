@@ -53,6 +53,9 @@ class Helper {
 		$shortcode_tags = $shortcodes_bak;            // Revert the global shortcodes registry.
 		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
 
+		// Render blocks.
+		$text = do_blocks( $text );
+
 		// Replace HTML tags with spaces.
 		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
 		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
