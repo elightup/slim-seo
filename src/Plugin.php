@@ -17,6 +17,7 @@ class Plugin {
 		$this->services['oxygen']         = new Integrations\Oxygen;
 		$this->services['elementor']      = new Integrations\Elementor;
 		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
+		$this->services['bricks']         = new Integrations\Bricks;
 
 		$this->services['settings'] = new Settings\Settings;
 
