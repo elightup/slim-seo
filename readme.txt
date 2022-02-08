@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.8.2
+Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 3.12.0
+Stable tag: 3.13.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.13.0 - 2022-02-08 =
+- Add integration for Bricks Builder
+- Fix jumping when switching tabs
+- Fix not rendering dynamic blocks for meta tags
 
 = 3.12.0 - 2022-01-07 =
 - Add Divi compatibility. Props Jay (@grandeljay)
