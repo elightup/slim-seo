@@ -77,7 +77,8 @@ class Robots {
 		}
 
 		// Do not index pages with no content.
-		if ( ! is_front_page() && ! have_posts() ) {
+		global $wp_query;
+		if ( ! is_front_page() && ! $wp_query->post_count ) {
 			return false;
 		}
 
