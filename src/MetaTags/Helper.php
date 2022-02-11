@@ -54,7 +54,9 @@ class Helper {
 		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
 
 		// Render blocks.
-		$text = do_blocks( $text );
+		if ( function_exists( 'do_blocks' ) ) {
+			$text = do_blocks( $text );
+		}
 
 		// Replace HTML tags with spaces.
 		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
