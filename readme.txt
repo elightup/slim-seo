@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 3.13.1
+Stable tag: 3.13.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.13.2 - 2022-02-13 =
+- Fix fatal error on WP < 5
 
 = 3.13.1 - 2022-02-10 =
 - Fix noindex is added to robots with some plugins/themes alter the main query loop
