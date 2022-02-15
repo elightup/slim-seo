@@ -136,8 +136,6 @@ class PostType {
 			return [];
 		}
 
-		$html = do_shortcode( $html );
-
 		// Set encoding.
 		$html = '<?xml encoding="' . get_bloginfo( 'charset' ) . '"?>' . $html;
 
