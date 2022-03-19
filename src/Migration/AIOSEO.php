@@ -114,7 +114,10 @@ class AIOSEO extends Replacer {
 		}
 
 		$attachment_id   = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
-		$images[ $type ] = $attachment_id ? wp_get_attachment_image_src( $attachment_id, $this->image->thumbnailSize ) : $image;
+		// Get protected property from Image class
+		$thumbnailSize = ( fn() => $this->thumbnailSize )->call( $this->image );
+
+		$images[ $type ] = $attachment_id ? wp_get_attachment_image_src( $attachment_id, $thumbnailSize ) : $image;
 		return $images[ $type ];
 	}
 
