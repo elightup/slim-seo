@@ -9,7 +9,7 @@ class AIOSEO extends Replacer {
 
 	public function before_replace_post( $post_id ) {
 		$this->post  = get_post( $post_id );
-		$this->image = new Common\Social\Image;
+		$this->image = new ExtImage;
 		set_current_screen( 'settings_page_slim-seo' ); // Fix undefined get_current_screen from AIOSEO.
 	}
 
@@ -114,14 +114,25 @@ class AIOSEO extends Replacer {
 		}
 
 		$attachment_id   = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
-		// Get protected property from Image class
-		$thumbnailSize = ( fn() => $this->thumbnailSize )->call( $this->image );
-
-		$images[ $type ] = $attachment_id ? wp_get_attachment_image_src( $attachment_id, $thumbnailSize ) : $image;
+		$images[ $type ] = $attachment_id ? wp_get_attachment_image_src( $attachment_id, $this->image->thumbnailSize ) : $image;
 		return $images[ $type ];
 	}
 
 	public function is_activated() {
 		return defined( 'AIOSEO_VERSION' );
+	}
+}
+
+class ExtImage extends Common\Social\Image {
+	public function __get( $name ) {
+        if( method_exists( $this , $method = ( 'get' . ucfirst( $name ) ) ) ) {
+            return $this->$method();
+        } else {
+            throw new Exception( 'Can\'t get property ' . $name );
+        }
+    }
+	public function getThumbnailSize()
+	{
+		return $this->thumbnailSize;
 	}
 }
