@@ -130,8 +130,7 @@ class ExtImage extends Common\Social\Image {
 			return $this->$method();
 		}
 	}
-	public function getThumbnailSize()
-	{
+	public function getThumbnailSize() {
 		return $this->thumbnailSize;
 	}
 }
