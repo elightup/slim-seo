@@ -125,12 +125,11 @@ class AIOSEO extends Replacer {
 
 class ExtImage extends Common\Social\Image {
 	public function __get( $name ) {
-        if( method_exists( $this , $method = ( 'get' . ucfirst( $name ) ) ) ) {
-            return $this->$method();
-        } else {
-            throw new Exception( 'Can\'t get property ' . $name );
-        }
-    }
+		$method = ( 'get' . ucfirst( $name ) );
+		if ( method_exists( $this , $method ) ) {
+			return $this->$method();
+		}
+	}
 	public function getThumbnailSize()
 	{
 		return $this->thumbnailSize;
