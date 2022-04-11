@@ -100,17 +100,16 @@ class Breadcrumbs {
 
 		$this->add_post_type_archive_link();
 
-		// If post type is hierarchical (like page), then output its ancestors.
+		// If post type is hierarchical (like page), add ancestors.
 		if ( is_post_type_hierarchical( get_post_type() ) ) {
 			$ancestors = get_post_ancestors( null );
 			$ancestors = array_reverse( $ancestors );
 			foreach ( $ancestors as $ancestor ) {
 				$this->add_link( get_permalink( $ancestor ), get_the_title( $ancestor ) );
 			}
-			return;
 		}
 
-		// For non-hierarchical post type (like post), output its terms.
+		// Add terms.
 		$terms = get_the_terms( get_the_ID(), $this->args['taxonomy'] );
 		if ( ! is_array( $terms ) ) {
 			return;
