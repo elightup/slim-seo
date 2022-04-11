@@ -29,22 +29,32 @@ class Page {
 				</a>
 			</h1>
 
-			<form action="" method="post" class="ss-tabs">
-				<nav class="ss-tab-list">
+			<div class="ss-content">
+
+				<form action="" method="post" class="ss-tabs">
+					<nav class="ss-tab-list">
+						<?php
+						$tabs = apply_filters( 'slim_seo_settings_tabs', [] );
+						foreach ( $tabs as $key => $label ) {
+							printf( '<a href="#%s" class="ss-tab">%s</a>', esc_attr( $key ), esc_html( $label ) );
+						}
+						?>
+					</nav>
 					<?php
-					$tabs = apply_filters( 'slim_seo_settings_tabs', [] );
-					foreach ( $tabs as $key => $label ) {
-						printf( '<a href="#%s" class="ss-tab">%s</a>', esc_attr( $key ), esc_html( $label ) );
-					}
+					wp_nonce_field( 'save' );
+					$panes = apply_filters( 'slim_seo_settings_panes', [] );
+					echo implode( '', $panes ); // @codingStandardsIgnoreLine.
 					?>
-				</nav>
+				</form>
+
 				<?php
-				wp_nonce_field( 'save' );
-				$panes = apply_filters( 'slim_seo_settings_panes', [] );
-				echo implode( '', $panes ); // @codingStandardsIgnoreLine.
+				if ( ! defined( 'SLIM_SEO_SCHEMA_VER' ) ) {
+					include __DIR__ . '/sections/upgrade.php';
+				}
 				?>
-			</form>
-		</div>
+			</div>
+
+		</div
 		<?php
 	}
 
