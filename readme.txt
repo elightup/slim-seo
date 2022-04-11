@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.9.2
+Tested up to: 5.9.3
 Requires PHP: 5.6
-Stable tag: 3.13.3
+Stable tag: 3.13.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.13.4 - 2022-04-11 =
+- Fix not showing taxonomy terms for hierarchical post types
 
 = 3.13.3 - 2022-03-21 =
 - Sitemap: don't parse shortcodes in post content
