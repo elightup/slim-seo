@@ -1,11 +1,11 @@
 === Slim SEO - Fast & Automated WordPress SEO Plugin ===
-Contributors: elightup, rilwis, hungviet91
+Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.8.2
+Tested up to: 5.9.3
 Requires PHP: 5.6
-Stable tag: 3.11.1
+Stable tag: 3.13.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,6 +131,29 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.13.4 - 2022-04-11 =
+- Fix not showing taxonomy terms for hierarchical post types
+
+= 3.13.3 - 2022-03-21 =
+- Sitemap: don't parse shortcodes in post content
+- Fix error migrating from AIO SEO
+
+= 3.13.2 - 2022-02-13 =
+- Fix fatal error on WP < 5
+
+= 3.13.1 - 2022-02-10 =
+- Fix noindex is added to robots with some plugins/themes alter the main query loop
+
+= 3.13.0 - 2022-02-08 =
+- Add integration for Bricks Builder
+- Fix jumping when switching tabs
+- Fix not rendering dynamic blocks for meta tags
+
+= 3.12.0 - 2022-01-07 =
+- Add Divi compatibility. Props Jay (@grandeljay)
+- Disable HTTPS notificaition on local environments
+- Improve the code of the settings page
 
 = 3.11.1 - 2021-11-16 =
 - Fix error on taxonomy page

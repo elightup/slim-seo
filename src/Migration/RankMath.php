@@ -27,7 +27,7 @@ class RankMath extends Replacer {
 	}
 
 	public function get_post_description( $post_id ) {
-		$post  = get_post( $post_id, ARRAY_A );
+		$post        = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, 'rank_math_description', true );
 		return RMHelper::replace_vars( $description, $post );
 	}
@@ -46,7 +46,7 @@ class RankMath extends Replacer {
 
 	protected function get_post_noindex( $post_id ) {
 		$robots = get_post_meta( $post_id, 'rank_math_robots', true );
-		return intval( is_array( $robots ) && in_array( 'noindex', $robots ) );
+		return intval( is_array( $robots ) && in_array( 'noindex', $robots, true ) );
 	}
 
 	public function get_term_title( $term_id ) {
@@ -81,7 +81,7 @@ class RankMath extends Replacer {
 
 	protected function get_term_noindex( $term_id ) {
 		$robots = get_term_meta( $term_id, 'rank_math_robots', true );
-		return intval( is_array( $robots ) && in_array( 'noindex', $robots ) );
+		return intval( is_array( $robots ) && in_array( 'noindex', $robots, true ) );
 	}
 
 	public function is_activated() {

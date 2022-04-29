@@ -68,9 +68,9 @@ class Yoast extends Replacer {
 		if ( empty( $terms ) ) {
 			return [];
 		}
-		$terms = array_values( $terms );
+		$terms       = array_values( $terms );
 		$terms_array = [];
-		foreach( $terms as $term ) {
+		foreach ( $terms as $term ) {
 			$terms_array = $terms_array + $term;
 		}
 		return $terms_array;

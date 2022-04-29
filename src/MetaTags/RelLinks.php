@@ -24,10 +24,10 @@ class RelLinks {
 	}
 
 	private function get_links() {
-		$url = $this->get_value();
+		$url   = $this->get_value();
 		$links = [
 			'prev' => null,
-			'next' => null
+			'next' => null,
 		];
 
 		global $wp_query;
@@ -43,10 +43,10 @@ class RelLinks {
 	}
 
 	private function build_link( $url, $paged ) {
-		if ( '' == get_option( 'permalink_structure' ) ) {
-			$url = add_query_arg( 'paged', $paged, $url );
-		} else {
+		if ( get_option( 'permalink_structure' ) ) {
 			$url = trailingslashit( $url ) . 'page/' . user_trailingslashit( $paged, 'paged' );
+		} else {
+			$url = add_query_arg( 'paged', $paged, $url );
 		}
 		return $url;
 	}

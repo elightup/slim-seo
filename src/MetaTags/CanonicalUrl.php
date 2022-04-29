@@ -52,10 +52,10 @@ class CanonicalUrl {
 		if ( $paged < 2 ) {
 			return $url;
 		}
-		if ( '' == get_option( 'permalink_structure' ) ) {
-			$url = add_query_arg( 'paged', $paged, $url );
-		} else {
+		if ( get_option( 'permalink_structure' ) ) {
 			$url = trailingslashit( $url ) . 'page/' . user_trailingslashit( $paged, 'paged' );
+		} else {
+			$url = add_query_arg( 'paged', $paged, $url );
 		}
 		return $url;
 	}

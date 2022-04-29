@@ -3,14 +3,14 @@ namespace SlimSEO\Schema\Types;
 
 class Article extends Base {
 	public function generate() {
-		$post = get_queried_object();
+		$post   = get_queried_object();
 		$schema = [
 			'@type'         => 'Article',
 			'@id'           => $this->id,
 			'url'           => $this->url,
 			'headline'      => $post->post_title,
-			'datePublished' => date( 'c', strtotime( $post->post_date_gmt ) ),
-			'dateModified'  => date( 'c', strtotime( $post->post_modified_gmt ) ),
+			'datePublished' => gmdate( 'c', strtotime( $post->post_date_gmt ) ),
+			'dateModified'  => gmdate( 'c', strtotime( $post->post_modified_gmt ) ),
 			'commentCount'  => (int) $post->comment_count,
 		];
 

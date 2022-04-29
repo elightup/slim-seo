@@ -11,7 +11,7 @@ class Robots {
 	}
 
 	public function setup() {
-		if ( '0' == get_option( 'blog_public' ) ) {
+		if ( '0' === get_option( 'blog_public' ) ) {
 			return;
 		}
 
@@ -30,7 +30,7 @@ class Robots {
 	public function modify_robots( $robots ) {
 		$is_indexed = $this->is_indexed();
 		if ( $is_indexed ) {
-			$robots['max-snippet'] = '-1';
+			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
 			return $robots;
 		}
@@ -77,7 +77,8 @@ class Robots {
 		}
 
 		// Do not index pages with no content.
-		if ( ! is_front_page() && ! have_posts() ) {
+		global $wp_query;
+		if ( ! is_front_page() && ! $wp_query->post_count ) {
 			return false;
 		}
 

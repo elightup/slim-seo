@@ -19,7 +19,7 @@ class Migration {
 		check_ajax_referer( 'migrate' );
 
 		session_start();
-		$platform = $this->get_platform();
+		$platform             = $this->get_platform();
 		$_SESSION['platform'] = $platform;
 		$this->set_replacer( $platform );
 		$this->check_platform_activation( $platform );
@@ -45,6 +45,8 @@ class Migration {
 			return;
 		}
 		$platforms = Helper::get_platforms();
+
+		// Translators: %s is the plugin name.
 		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ), 400 );
 	}
 
@@ -68,13 +70,14 @@ class Migration {
 				'type'    => 'done',
 			] );
 		}
-		foreach( $posts as $post_id ) {
+		foreach ( $posts as $post_id ) {
 			$this->migrate_post( $post_id );
 		}
 
 		$_SESSION['processed'] += count( $posts );
 
 		wp_send_json_success( [
+			// Translators: %d is the number of processed posts.
 			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), $_SESSION['processed'] ),
 			'type'    => 'continue',
 		] );
@@ -92,13 +95,14 @@ class Migration {
 			] );
 		}
 
-		foreach( $terms as $term_id ) {
+		foreach ( $terms as $term_id ) {
 			$this->migrate_term( $term_id );
 		}
 
 		$_SESSION['processed'] += count( $terms );
 
 		wp_send_json_success( [
+			// Translators: %d is the number of processed items.
 			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $_SESSION['processed'] ),
 			'type'    => 'continue',
 		] );
@@ -116,7 +120,7 @@ class Migration {
 		$post_types = Helper::get_post_types();
 		$posts      = new \WP_Query( [
 			'post_type'      => $post_types,
-			'post_status'    => ['publish', 'draft'],
+			'post_status'    => [ 'publish', 'draft' ],
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',

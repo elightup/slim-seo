@@ -8,4 +8,6 @@ Thumbs.db
 .gitattributes
 .gitignore
 composer.json
+composer.lock
+phpcs.xml
 README.md
