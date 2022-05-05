@@ -64,6 +64,10 @@ class Breadcrumbs {
 			return;
 		}
 
+		if ( empty( $this->args ) ) {
+			return;
+		}
+
 		// Home.
 		$this->add_link( home_url( '/' ), $this->args['label_home'] );
 
