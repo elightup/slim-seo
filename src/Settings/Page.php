@@ -54,7 +54,7 @@ class Page {
 				?>
 			</div>
 
-		</div
+		</div>
 		<?php
 	}
 
