@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 5.9.3
+Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 3.13.4
+Stable tag: 3.14.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,34 +35,41 @@ Slim SEO helps you do the following jobs automatically:
 
 The following meta tags are auto-generated and optimized for the best SEO scores.
 
-- [Meta title tag](https://wpslimseo.com/docs/meta-title-tag/): display your title in a SEO-friendly way.
-- [Meta description tag](https://wpslimseo.com/docs/meta-description-tag/): auto generate from posts/pages excerpt or content.
-- [Meta robots tag](https://wpslimseo.com/docs/meta-robots-tag/): decide which pages are indexed and which ones not.
-- [Facebook Open Graph Tags](https://wpslimseo.com/docs/facebook-open-graph-tags/): share your posts on Facebook beautifully.
-- [Twitter Card Tags](https://wpslimseo.com/docs/twitter-card-tags/): share your posts on Twitter beautifully.
+- [Meta title tag](https://docs.wpslimseo.com/slim-seo/meta-title-tag/): display your title in a SEO-friendly way.
+- [Meta description tag](https://docs.wpslimseo.com/slim-seo/meta-description-tag/): auto generate from posts/pages excerpt or content.
+- [Meta robots tag](https://docs.wpslimseo.com/slim-seo/meta-robots-tag/): decide which pages are indexed and which ones not.
+- [Facebook Open Graph Tags](https://docs.wpslimseo.com/slim-seo/facebook-open-graph-tags/): share your posts on Facebook beautifully.
+- [Twitter Card Tags](https://docs.wpslimseo.com/slim-seo/twitter-card-tags/): share your posts on Twitter beautifully.
 
-#### 2. [XML Sitemap](https://wpslimseo.com/docs/xml-sitemap/)
+#### 2. [XML Sitemap](https://docs.wpslimseo.com/slim-seo/xml-sitemap/)
 
 Slim SEO automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
-#### 3. [Breadcrumbs](https://wpslimseo.com/docs/breadcrumbs/)
+#### 3. [Breadcrumbs](https://docs.wpslimseo.com/slim-seo/breadcrumbs/)
 
 The plugin allows you to output a breadcrumb trail on your website easily. It automatically fetches the information from the current post and output a hierarchy for you. You can also style the breadcrumbs to match your theme style.
 
-#### 4. [Schema (Structured Data)](https://wpslimseo.com/docs/schema/)
+#### 4. [Schema (Structured Data)](https://docs.wpslimseo.com/slim-seo/schema/)
 
 Schema is a way that describes structured data for search engines. Based on the data provided, search engines can show the content in the search results page in a more appealing way.
 
 Slim SEO automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-#### 5. [Auto Redirection](https://wpslimseo.com/docs/auto-redirection/)
+#### 5. [Auto Redirection](https://docs.wpslimseo.com/slim-seo/auto-redirection/)
 
 - Auto redirect attachment page to the attachment file URL.
 - Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
 
-#### 6. Open Source
+#### 6. And many more
 
-Slim SEO has different contributors which help make Slim SEO a quality product. Join us on [Github](https://github.com/elightup/slim-seo)!
+- [Inserting code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
+- Auto prevent scraping content from [RSS feed](https://docs.wpslimseo.com/slim-seo/rss-feed/)
+- [Integrations](https://docs.wpslimseo.com/slim-seo/integrations/) with many plugins, including page builders
+- [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
+
+## Premium plugins
+
+- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your websites, which allow you to add schema to your custom post types via a visual and user-friendly UI. It supports all the schemas from Google with a wide range of properties. Slim SEO Schema can help you connect schema properties with dynamic data from posts, site or custom fields easily. It has a deep integration with [Meta Box](https://metabox.io), WooCommerce and other page builder plugins.
 
 ### Who should use Slim SEO?
 
@@ -118,9 +125,7 @@ If your homepage shows latest posts, then it's already done automatically by the
 
 = Can I change the meta tags manually? =
 
-It's not available at the moment. Our purpose is provide a configuration-free SEO plugin for WordPress, so you don't get lost in the options. We might improve the plugin later to add essential options. But for now, it's zero configuration.
-
-If you need custom settings, we recommend using Yoast SEO plugin.
+Yes, you can. When you edit a post or a page, there's a "Search Engine Optimization" meta box below the editor, which allows you to edit meta tags if needed.
 
 = Where is my XML sitemap? =
 
@@ -131,6 +136,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.14.0 - 2022-06-18 =
+- Add support for Divi page builder
+- Add support for Zion page builder
+- Fix PHP notice when disabling breadcrumbs
 
 = 3.13.4 - 2022-04-11 =
 - Fix not showing taxonomy terms for hierarchical post types
@@ -357,7 +367,7 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 - Output Article and Author for single posts only.
 
 = 2.0.0 =
-- Improved Schema markup. Use united schema output inside one `<script>` tag and add connections between entities. See [documentation](https://wpslimseo.com/docs/schema/) for details.
+- Improved Schema markup. Use united schema output inside one `<script>` tag and add connections between entities. See [documentation](https://docs.wpslimseo.com/slim-seo/schema/) for details.
 
 = 1.5.1 =
 - Removed preferred site name from JSON-LD as Google drops support for it.
