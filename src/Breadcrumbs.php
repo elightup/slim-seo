@@ -7,17 +7,19 @@ class Breadcrumbs {
 	private $current   = '';
 	private $is_parsed = false;
 
-	public function setup() {
-		$this->args = array(
+	public function __construct() {
+		$this->args = [
 			'separator'       => '&raquo;',
 			'taxonomy'        => 'category',
 			'display_current' => 'true',
 			'label_home'      => __( 'Home', 'slim-seo' ),
-			// translators: search query.
+			// Translators: search query.
 			'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
 			'label_404'       => __( 'Page not found', 'slim-seo' ),
-		);
+		];
+	}
 
+	public function setup() {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
 	}
 
@@ -61,10 +63,6 @@ class Breadcrumbs {
 		}
 
 		if ( is_front_page() ) {
-			return;
-		}
-
-		if ( empty( $this->args ) ) {
 			return;
 		}
 
