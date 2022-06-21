@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 3.14.0
+Stable tag: 3.14.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -136,6 +136,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.14.1 - 2022-06-21 =
+- Fix parsing content from ZionBuilder brakes image slider
+- Fix breadcrumbs schema output when it's inactive
 
 = 3.14.0 - 2022-06-18 =
 - Add support for Divi page builder
