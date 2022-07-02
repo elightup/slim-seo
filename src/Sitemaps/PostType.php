@@ -190,32 +190,4 @@ class PostType {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
 		return empty( $data['noindex'] );
 	}
-
-	/**
-	 * Remove invalid characters in XML.
-	 * @link https://stackoverflow.com/a/3466049/371240
-	 * @link https://stackoverflow.com/a/28152666/371240
-	 */
-	private function remove_invalid_xml( $value ) {
-		$ret = '';
-		if ( empty( $value ) ) {
-			return $ret;
-		}
-
-		$length = strlen( $value );
-		for ( $i = 0; $i < $length; $i++ ) {
-			$current = ord( $value[ $i ] );
-			if (
-				$current === 0x9
-				|| $current === 0xA
-				|| $current === 0xD
-				|| ( $current >= 0x20 && $current <= 0xD7FF )
-				|| ( $current >= 0xE000 && $current <= 0xFFFD )
-				|| ( $current >= 0x10000 && $current <= 0x10FFFF )
-			) {
-				$ret .= chr( $current );
-			}
-		}
-		return $ret;
-	}
 }
