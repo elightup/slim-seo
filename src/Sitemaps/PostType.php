@@ -78,11 +78,6 @@ class PostType {
 		}
 		echo "\t\t<image:image>\n";
 		echo "\t\t\t<image:loc>", esc_url( $this->get_absolute_url( $image['url'] ) ), "</image:loc>\n";
-		if ( ! empty( $image['caption'] ) ) {
-			echo "\t\t\t<image:caption><![CDATA[", esc_html( $this->remove_invalid_xml( $image['caption'] ) ), "]]></image:caption>\n";
-		}
-		$title = empty( $image['title'] ) ? $this->current_post->post_title : $image['title'];
-		echo "\t\t\t<image:title><![CDATA[", esc_html( $this->remove_invalid_xml( $title ) ), "]]></image:title>\n";
 		echo "\t\t</image:image>\n";
 	}
 
