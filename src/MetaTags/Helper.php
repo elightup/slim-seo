@@ -14,6 +14,7 @@ class Helper {
 			'contact',                  // Very Simple Contact Form.
 			'edd_invoices',             // EDD Invoices.
 			'velocity',                 // Velocity.
+			'fluentform',               // Fluent Forms
 
 			'rwmb_meta',                // Meta Box.
 			'mb_frontend_form',         // MB Frontend Submission.
