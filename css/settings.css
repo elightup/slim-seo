@@ -57,7 +57,8 @@
 }
 
 /* Header */
-.ss-title.ss-title {
+/* Very high specificity to overwrite Elementor's CSS: https://wordpress.org/support/topic/admin-css-file-is-enqueued-on-and-brake-other-admin-pages/ */
+#wpwrap #wpcontent #wpbody .ss-title {
 	display: flex;
 	align-items: center;
 	background: #fff;
