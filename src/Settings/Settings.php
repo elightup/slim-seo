@@ -46,8 +46,7 @@ class Settings {
 			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
 		}
 		$tabs['social'] = __( 'Social', 'slim-seo' );
-		$active_tools = $this->check_tab_tools();
-		if ( $active_tools ) {
+		if ( $this->has_seo_plugins() ) {
 			$tabs['tools']  = __( 'Tools', 'slim-seo' );
 		}
 		return $tabs;
@@ -60,28 +59,25 @@ class Settings {
 			$panes['homepage'] = $this->get_pane( 'homepage' );
 		}
 		$panes['social'] = $this->get_pane( 'social' );
-		$active_tools = $this->check_tab_tools();
-		if ( $active_tools ) {
+		if ( $this->has_seo_plugins() ) {
 			$panes['tools']  = $this->get_pane( 'tools' );
 		}
 		return $panes;
 	}
-	public function check_tab_tools() {
-		$seo_tools = [
+	public function has_seo_plugins() {
+		$seo_plugins = [
 			'all-in-one-seo-pack/all-in-one-seo-pack.php',
 			'autodescription/autodescription.php',
 			'seo-by-rank-math/rank-math.php',
 			'wordpress-seo/wp-seo.php',
 			'wp-seopress/seopress.php',
 		];
-		$active_tools = false;
-		foreach ( $seo_tools as $tool) {
-			if ( is_plugin_active( $tool ) ) {
-				$active_tools = true;
-				break;
+		foreach ( $seo_plugins as $plugin ) {
+			if ( is_plugin_active( $plugin ) ) {
+				return true;
 			}
 		}
-		return $active_tools;
+		return false;
 	}
 
 	public function enqueue() {
