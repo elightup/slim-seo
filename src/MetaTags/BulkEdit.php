@@ -46,7 +46,7 @@ class BulkEdit {
 				break;
 			case 'slim_seo[noindex]': 
 				echo '<label class="alignleft">
-						<input type="checkbox" name="slim_seo[noindex]">
+						<input type="checkbox" name="slim_seo[noindex]" value="1">
 						<span class="checkbox-title">Hide from search results</span>
 					</label>';
 				// Closing the fieldset element on last element
@@ -76,7 +76,7 @@ class BulkEdit {
 		if ( empty( $_POST[ 'post_id' ] ) ) {
 			wp_send_json_error( __( 'No post selected', 'slim-seo' ), 400 );
 		}
-		$data = get_metadata( $this->object_type, 60, 'slim_seo', true );
+		$data = get_metadata( $this->object_type, $_POST[ 'post_id' ], 'slim_seo', true );
 
 		wp_send_json_success( [
 			'message'  => 'success',
