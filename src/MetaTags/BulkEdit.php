@@ -12,35 +12,17 @@ class BulkEdit {
 		$this->object_type = 'post';
 		add_filter( 'manage_posts_columns', [ $this, 'add_extra_columns' ] );
 		add_filter( 'manage_pages_columns', [ $this, 'add_extra_columns' ] );
-
-		add_action( 'quick_edit_custom_box', [ $this, 'edit_fields' ], 10, 2 );
-		add_action( 'bulk_edit_custom_box', [ $this, 'edit_fields' ], 10, 2 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 
 		add_action( 'wp_ajax_ss_quick_edit', [ $this, 'ss_save_quick_edit' ] );
 		add_action( 'wp_ajax_ss_save_bulk', [ $this, 'ss_save_bulk_edit' ] );
 	}
 
-	function add_extra_columns( $column_array ) {
+	public function add_extra_columns( $column_array ) {
 		$column_array['slim_seo[title]'] = 'Meta title';
 		$column_array['slim_seo[description]'] = 'Meta description';
 		$column_array['slim_seo[noindex]'] = 'Index';
 		return $column_array;
-	}
-	function populate_columns( $column_name, $id ) {
-		$data = $this->post->get_data();
-		switch( $column_name ) :
-			case 'slim_seo[title]':
-				echo esc_attr( $data['title'] );
-				break;
-			case 'slim_seo[description]':
-				echo esc_attr( $data['description'] );
-				break;
-			case 'slim_seo[noindex]':
-				echo ( $data['noindex'] == true ) ? 'Yes' : 'No';
-				break;
-		endswitch;
-
 	}
 	public function edit_fields( $column_name, $post_type  ) {
 		switch( $column_name ) :
