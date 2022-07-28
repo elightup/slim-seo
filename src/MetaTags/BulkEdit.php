@@ -1,24 +1,24 @@
 <?php
-namespace SlimSEO\MetaTags\Settings;
+namespace SlimSEO\MetaTags;
 
-class BulkEdit extends Base {
+class BulkEdit {
+	protected $defaults = [
+		'title'          => '',
+		'description'    => '',
+		'noindex'        => 0,
+	];
 
-	public function __construct() {
-		
-	}
 	public function setup() {
 		$this->object_type = 'post';
 		add_filter( 'manage_posts_columns', [ $this, 'add_extra_columns' ] );
 		add_filter( 'manage_pages_columns', [ $this, 'add_extra_columns' ] );
 
-		add_action( 'manage_posts_custom_column', [ $this, 'populate_columns' ], 10, 2 );
-		add_action( 'manage_pages_custom_column', [ $this, 'populate_columns' ], 10, 2 );
-
 		add_action( 'quick_edit_custom_box', [ $this, 'edit_fields' ], 10, 2 );
 		add_action( 'bulk_edit_custom_box', [ $this, 'edit_fields' ], 10, 2 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 
-		add_action( 'save_post', [ $this, 'save' ] );
+		add_action( 'wp_ajax_ss_quick_edit', [ $this, 'ss_save_quick_edit' ] );
+		add_action( 'wp_ajax_ss_save_bulk', [ $this, 'ss_save_bulk_edit' ] );
 	}
 
 	function add_extra_columns( $column_array ) {
@@ -28,7 +28,7 @@ class BulkEdit extends Base {
 		return $column_array;
 	}
 	function populate_columns( $column_name, $id ) {
-		$data = $this->get_data();
+		$data = $this->post->get_data();
 		switch( $column_name ) :
 			case 'slim_seo[title]':
 				echo esc_attr( $data['title'] );
@@ -73,11 +73,42 @@ class BulkEdit extends Base {
 		endswitch;
 	}
 	public function enqueue( ) {
-		wp_enqueue_script( 'slim-seo-populate', SLIM_SEO_URL . 'js/populate.js', [], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-populate', SLIM_SEO_URL . 'js/bulk.js', [], SLIM_SEO_VER, true );
 	}
-	public function get_types() {}
+	public function ss_save_bulk_edit() {
+	    if ( ! wp_verify_nonce( $_POST['nonce'], 'save' ) || empty( $_POST[ 'post_ids' ] ) ) {
+			die();
+		}
 
-	protected function get_object_id() {
-		return get_the_ID();
+		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'][0] ) : [];
+		$data = $this->sanitize( $data );
+
+		if ( empty( $data ) ) {
+			return;
+		}
+		foreach( $_POST[ 'post_ids' ] as $post_id ) {
+			update_metadata( $this->object_type, $post_id, 'slim_seo', $data );
+		}
+	}
+	public function ss_save_quick_edit() {
+		if ( empty( $_POST[ 'post_id' ] ) ) {
+			wp_send_json_error( __( 'No post selected', 'slim-seo' ), 400 );
+		}
+		$data = get_metadata( $this->object_type, 60, 'slim_seo', true );
+
+		wp_send_json_success( [
+			'message'  => 'success',
+			'slim_seo' => $data,
+		] );
+		die;
+	}
+	private function sanitize( $data ) {
+		$data = array_merge( $this->defaults, $data );
+
+		$data['title']       = sanitize_text_field( $data['title'] );
+		$data['description'] = sanitize_text_field( $data['description'] );
+		$data['noindex']     = $data['noindex'] ? 1 : 0;
+
+		return array_filter( $data );
 	}
 }
