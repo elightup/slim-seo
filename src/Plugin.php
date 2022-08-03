@@ -28,7 +28,6 @@ class Plugin {
 			$this->services['migration']          = new Migration\Migration;
 			$this->services['admin_columns_post'] = new MetaTags\AdminColumns\Post( $this->services['settings_post'], $this->services['meta_title'], $this->services['meta_description'] );
 			$this->services['admin_columns_term'] = new MetaTags\AdminColumns\Term( $this->services['settings_term'], $this->services['meta_title'], $this->services['meta_description'] );
-			$this->services['admin_bulk_edit'] = new MetaTags\Settings\BulkEdit();
 			return;
 		}
 
