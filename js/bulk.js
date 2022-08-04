@@ -1,4 +1,7 @@
 ( function( $ ) {
+	if ( typeof inlineEditPost === 'undefined') {
+		return;
+	}
 	var wp_inline_edit_function = inlineEditPost.edit;
 	inlineEditPost.edit = function( post_id ) {
 		wp_inline_edit_function.apply( this, arguments );
