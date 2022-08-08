@@ -1,4 +1,4 @@
-( function( $ ) {
+( function() {
 	if ( typeof inlineEditPost === 'undefined' ) {
 		return;
 	}
@@ -16,25 +16,17 @@
 		}
 
 		// Populate inputs with SEO data with Ajax.
-		let $row = $( `#edit-${ id }` );
-		$.ajax( {
-			url: ajaxurl,
-			type: 'GET',
-			data: {
-				action: 'ss_quick_edit',
-				post_id: id,
-				nonce: $( '#ss_nonce' ).val()
-			},
-			success: function( { success, data } ) {
+		fetch( `${ ajaxurl }?action=ss_quick_edit&post_id=${ id }&nonce=${ document.querySelector( '#ss_nonce' ).value }` )
+			.then( response => response.json() )
+			.then( ( { success, data } ) => {
 				if ( !success ) {
 					return;
 				}
 				// Populate inputs with SEO data.
-				$row
-					.find( 'input[name="slim_seo\\[title\\]"]' ).val( data.title ).end()
-					.find( 'textarea[name="slim_seo\\[description\\]"]' ).val( data.description ).end()
-					.find( 'input[name="slim_seo\\[noindex\\]"]' ).prop( 'checked', data.noindex );
-			},
-		} );
+				let row = document.querySelector( `#edit-${ id }` );
+				row.querySelector( 'input[name="slim_seo\\[title\\]"]' ).value = data.title;
+				row.querySelector( 'textarea[name="slim_seo\\[description\\]"]' ).value = data.description;
+				row.querySelector( 'input[name="slim_seo\\[noindex\\]"]' ).checked = !!data.noindex;
+			} );
 	};
-} )( jQuery );
+} )();

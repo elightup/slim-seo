@@ -77,12 +77,11 @@ class Post extends Base {
 	}
 
 	public function get_quick_edit_data() {
+		check_ajax_referer( 'save', 'nonce' );
 		if ( empty( $_GET['post_id'] ) ) {
-			wp_send_json_error( __( 'No post selected', 'slim-seo' ), 400 );
+			wp_send_json_error();
 		}
 		$data = get_post_meta( $_GET['post_id'], 'slim_seo', true );
-
 		wp_send_json_success( $data );
-		die;
 	}
 }
