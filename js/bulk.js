@@ -42,30 +42,4 @@
 			}
 		});
 	}
-	jQuery( 'body' ).on( 'click', 'input[name="bulk_edit"]', function()  {
-		$( this ).after('<span class="spinner is-active"></span>');
-
-		let bulk_edit_row = $( 'tr#bulk-edit' ), // Bulk edit form
-		post_ids = new Array()
-
-		bulk_edit_row.find( '#bulk-titles' ).children().each( function() {
-			post_ids.push( $( this ).attr( 'id' ).replace( /^(ttle)/i, '' ) );
-		});
-		let slim_seo = new Array();
-		slim_seo.push({
-			title: bulk_edit_row.find( 'input[name="slim_seo[title]"]' ).val(),
-			description: bulk_edit_row.find( 'input[name="slim_seo[description]"]' ).val(),
-			noindex: bulk_edit_row.find( 'input[name="slim_seo[noindex]"]' ).attr('checked') ? 1 : 0,
-		});
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			data: {
-				action: 'ss_save_bulk',
-				post_ids: post_ids, // Array of post IDs
-				slim_seo: slim_seo,
-				nonce: $('#ss_nonce').val()
-			}
-		});
-	});
 } )( jQuery );

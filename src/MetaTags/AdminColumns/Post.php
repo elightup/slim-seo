@@ -18,7 +18,6 @@ class Post extends Base {
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'wp_ajax_ss_quick_edit', [ $this, 'get_quick_edit_data' ] );
-		add_action( 'wp_ajax_ss_save_bulk', [ $this, 'save_bulk_edit' ] );
 	}
 
 	public function render( $column, $post_id ) {
@@ -34,7 +33,7 @@ class Post extends Base {
 				}
 				break;
 			case 'noindex':
-				echo empty( $data['noindex'] ) ? '<span class="ss-danger"></span>' : '<span class="ss-success"></span>';
+				echo empty( $data['noindex'] ) ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}
 	}
@@ -77,21 +76,6 @@ class Post extends Base {
 		wp_enqueue_script( 'slim-seo-populate', SLIM_SEO_URL . 'js/bulk.js', [], SLIM_SEO_VER, true );
 	}
 
-	public function save_bulk_edit() {
-		if ( ! wp_verify_nonce( $_POST['nonce'], 'save' ) || empty( $_POST['post_ids'] ) ) {
-			die();
-		}
-
-		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'][0] ) : [];
-		$data = $this->sanitize( $data );
-
-		if ( empty( $data ) ) {
-			return;
-		}
-		foreach ( $_POST['post_ids'] as $post_id ) {
-			update_metadata( $this->object_type, $post_id, 'slim_seo', $data );
-		}
-	}
 	public function get_quick_edit_data() {
 		if ( empty( $_POST['post_id'] ) ) {
 			wp_send_json_error( __( 'No post selected', 'slim-seo' ), 400 );
@@ -103,14 +87,5 @@ class Post extends Base {
 			'slim_seo' => $data,
 		] );
 		die;
-	}
-	private function sanitize( $data ) {
-		$data = array_merge( $this->defaults, $data );
-
-		$data['title']       = sanitize_text_field( $data['title'] );
-		$data['description'] = sanitize_text_field( $data['description'] );
-		$data['noindex']     = $data['noindex'] ? 1 : 0;
-
-		return array_filter( $data );
 	}
 }
