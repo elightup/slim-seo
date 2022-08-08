@@ -4,11 +4,9 @@ namespace SlimSEO\MetaTags\AdminColumns;
 use SlimSEO\MetaTags\Helper;
 
 class Post extends Base {
-	protected $object_type;
 
 	public function setup() {
-		$types             = $this->settings->get_types();
-		$this->object_type = 'post';
+		$types = $this->settings->get_types();
 		foreach ( $types as $type ) {
 			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
 			add_action( "manage_{$type}_posts_custom_column", [ $this, 'render' ], 10, 2 );
@@ -82,6 +80,14 @@ class Post extends Base {
 			wp_send_json_error();
 		}
 		$data = get_post_meta( $_GET['post_id'], 'slim_seo', true );
+		$data = $data ? $data : [];
+
+		$data = array_merge( [
+			'title'       => '',
+			'description' => '',
+			'noindex'     => 0,
+		], $data );
+
 		wp_send_json_success( $data );
 	}
 }
