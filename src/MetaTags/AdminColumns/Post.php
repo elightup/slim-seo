@@ -34,7 +34,7 @@ class Post extends Base {
 				}
 				break;
 			case 'noindex':
-				echo empty( $data['noindex'] ) ? '<span class="dashicons dashicons-no-alt"></span>' : '<span class="dashicons dashicons-saved green"></span>';
+				echo empty( $data['noindex'] ) ? '<span class="ss-danger"></span>' : '<span class="ss-success"></span>';
 				break;
 		}
 	}

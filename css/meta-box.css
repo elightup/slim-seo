@@ -80,7 +80,8 @@
 
 /* Status icon */
 .ss-success:after,
-.ss-warning:after {
+.ss-warning:after,
+.ss-danger:after {
 	display: inline-block;
 	width: 12px;
 	height: 12px;
@@ -97,6 +98,10 @@
 .ss-warning:after {
 	content: "!";
 	background: #f56e28;
+}
+.ss-danger:after {
+	content: "\2717";
+	background: #e53e3e;
 }
 
 /* For terms & settings page (for homepage) */
