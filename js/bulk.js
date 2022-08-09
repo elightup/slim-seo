@@ -39,11 +39,15 @@
 		}
 
 		let row = document.querySelector( '#bulk-edit' );
-		let titles = row.querySelector( '#bulk-titles' );
+		let list = document.querySelector( '#the-list' );
+		let posts = list.querySelectorAll( 'input[name="post[]"]' );
 
-		let post_ids = [];
-		titles.childNodes.forEach( ( child ) => {
-			post_ids.push( child.getAttribute( 'id' ).replace( /^(ttle)/i, '' ) );
+		post_ids = new Array();
+		posts.forEach( ( node , index ) => {
+			if ( ! node.checked ) {
+				return;
+			}
+			post_ids.push( node.value );
 		} );
 		let noindex = row.querySelector( 'input[name="slim_seo[noindex]"]' ).checked ? 1 : 0;
 

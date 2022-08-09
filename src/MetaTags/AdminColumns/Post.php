@@ -101,7 +101,7 @@ class Post extends Base {
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
 		<p class="wp-clearfix"></p>
-		<fieldset class="inline-edit-col-left">
+		<div class="inline-edit-col-left">
 			<legend class="inline-edit-legend"><?php esc_html_e( 'Search Engine Optimization', 'slim-seo' ) ?></legend>
 			<div class="inline-edit-col">
 				<div class="inline-edit-group wp-clearfix">
@@ -111,7 +111,7 @@ class Post extends Base {
 					</label>
 				</div>
 			</div>
-		</fieldset>
+		</div>
 		<?php
 	}
 
