@@ -2,6 +2,8 @@
 	if ( typeof inlineEditPost === 'undefined' ) {
 		return;
 	}
+
+	// Quick edit.
 	let edit = inlineEditPost.edit;
 	inlineEditPost.edit = function( post_id ) {
 		edit.apply( this, arguments );
@@ -29,22 +31,22 @@
 				row.querySelector( 'input[name="slim_seo\\[noindex\\]"]' ).checked = !!data.noindex;
 			} );
 	};
+
+	// Bulk edit.
 	document.addEventListener( 'click', e => {
-		if( 'bulk_edit' === e.target.id ) {
-			let bulk_edit_row = document.querySelector( 'tr#bulk-edit' );
-			let bulk_titles = bulk_edit_row.querySelector( '#bulk-titles' );
-
-			post_ids = new Array();
-			bulk_titles.childNodes.forEach( (child) => {
-			    post_ids.push(child.getAttribute('id').replace( /^(ttle)/i, '' ) );
-			} );
-			let noindex = bulk_edit_row.querySelector( 'input[name="slim_seo[noindex]"]' ).checked ? 1 : 0;
-
-			fetch( `${ ajaxurl }?action=ss_save_bulk&post_ids=${ post_ids }&noindex=${ noindex }&nonce=${ document.querySelector( '#ss_nonce' ).value }` )
-				.then( response => response.json() )
-				.then( ( { success, data } ) => {
-					console.log( success );
-				} );
+		if ( 'bulk_edit' !== e.target.id ) {
+			return;
 		}
+
+		let row = document.querySelector( '#bulk-edit' );
+		let titles = row.querySelector( '#bulk-titles' );
+
+		let post_ids = [];
+		titles.childNodes.forEach( ( child ) => {
+			post_ids.push( child.getAttribute( 'id' ).replace( /^(ttle)/i, '' ) );
+		} );
+		let noindex = row.querySelector( 'input[name="slim_seo[noindex]"]' ).checked ? 1 : 0;
+
+		fetch( `${ ajaxurl }?action=ss_save_bulk&post_ids=${ post_ids }&noindex=${ noindex }&nonce=${ document.querySelector( '#ss_nonce' ).value }` );
 	} );
-} )( );
+} )();

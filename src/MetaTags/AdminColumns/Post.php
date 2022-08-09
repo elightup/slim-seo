@@ -4,20 +4,21 @@ namespace SlimSEO\MetaTags\AdminColumns;
 use SlimSEO\MetaTags\Helper;
 
 class Post extends Base {
-	protected $object_type;
 	public function setup() {
 		$types = $this->settings->get_types();
-		$this->object_type = 'post';
-
 		foreach ( $types as $type ) {
 			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
 			add_action( "manage_{$type}_posts_custom_column", [ $this, 'render' ], 10, 2 );
 		}
-		add_action( 'quick_edit_custom_box', [ $this, 'output_quick_edit_fields' ], 10, 2 );
-		add_action( 'bulk_edit_custom_box', [ $this, 'output_bulk_edit_fields' ], 10, 2 );
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
+
+		// Quick edit.
+		add_action( 'quick_edit_custom_box', [ $this, 'output_quick_edit_fields' ], 10, 2 );
 		add_action( 'wp_ajax_ss_quick_edit', [ $this, 'get_quick_edit_data' ] );
+
+		// Bulk edit.
+		add_action( 'bulk_edit_custom_box', [ $this, 'output_bulk_edit_fields' ], 10, 2 );
 		add_action( 'wp_ajax_ss_save_bulk', [ $this, 'save_bulk_edit' ] );
 	}
 
@@ -37,6 +38,11 @@ class Post extends Base {
 				echo empty( $data['noindex'] ) ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}
+	}
+
+	public function enqueue() {
+		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
+		wp_enqueue_script( 'slim-seo-populate', SLIM_SEO_URL . 'js/bulk.js', [], SLIM_SEO_VER, true );
 	}
 
 	public function output_quick_edit_fields( $column_name, $post_type ) {
@@ -71,32 +77,6 @@ class Post extends Base {
 		</fieldset>
 		<?php
 	}
-	public function output_bulk_edit_fields( $column_name, $post_type ) {
-		if ( 'meta_title' !== $column_name ) {
-			return;
-		}
-		wp_nonce_field( 'save', 'ss_nonce' );
-		?>
-		<p class="wp-clearfix"></p>
-		<div class="inline-edit-col-left">
-			<p class="wp-clearfix"></p>
-			<legend class="inline-edit-legend"><?php esc_html_e( 'Search Engine Optimization', 'slim-seo' ) ?></legend>
-			<div class="inline-edit-col">
-				<div class="inline-edit-group wp-clearfix">
-					<label class="alignleft">
-						<input type="checkbox" name="slim_seo[noindex]" value="1">
-						<span class="checkbox-title"><?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?></span>
-					</label>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-
-	public function enqueue() {
-		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-populate', SLIM_SEO_URL . 'js/bulk.js', [], SLIM_SEO_VER, true );
-	}
 
 	public function get_quick_edit_data() {
 		check_ajax_referer( 'save', 'nonce' );
@@ -113,25 +93,45 @@ class Post extends Base {
 
 		wp_send_json_success( $data );
 	}
-	public function save_bulk_edit() {
-		if ( ! wp_verify_nonce( $_GET['nonce'], 'save' ) || empty( $_GET['post_ids'] ) ) {
-			die();
+
+	public function output_bulk_edit_fields( $column_name, $post_type ) {
+		if ( 'meta_title' !== $column_name ) {
+			return;
 		}
+		wp_nonce_field( 'save', 'ss_nonce' );
+		?>
+		<p class="wp-clearfix"></p>
+		<fieldset class="inline-edit-col-left">
+			<legend class="inline-edit-legend"><?php esc_html_e( 'Search Engine Optimization', 'slim-seo' ) ?></legend>
+			<div class="inline-edit-col">
+				<div class="inline-edit-group wp-clearfix">
+					<label class="alignleft">
+						<input type="checkbox" name="slim_seo[noindex]" value="1">
+						<span class="checkbox-title"><?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?></span>
+					</label>
+				</div>
+			</div>
+		</fieldset>
+		<?php
+	}
+
+	public function save_bulk_edit() {
+		check_ajax_referer( 'save', 'nonce' );
 
 		if ( empty( $_GET['post_ids'] ) || ! isset( $_GET['noindex'] ) ) {
 			wp_send_json_error();
 		}
 
-		$noindex = isset( $_GET['noindex'] ) ? wp_unslash( $_GET['noindex'] ) : [];
+		$noindex = $_GET['noindex'] ? 1 : 0;
 
-		$post_ids = explode( ',', $_GET['post_ids'] );
+		$post_ids = array_filter( array_map( 'intval', explode( ',', $_GET['post_ids'] ) ) );
 		foreach ( $post_ids as $post_id ) {
-			$current_data = get_metadata( $this->object_type, $post_id, 'slim_seo', true );
-			$current_data = $current_data ? $current_data : [];
-			$current_data['noindex'] = $noindex;
+			$data            = get_post_meta( $post_id, 'slim_seo', true );
+			$data            = $data ? $data : [];
+			$data['noindex'] = $noindex;
 
-			update_metadata( $this->object_type, $post_id, 'slim_seo', $current_data );
+			update_post_meta( $post_id, 'slim_seo', $data );
 		}
-		wp_send_json_success( );
+		wp_send_json_success();
 	}
 }
