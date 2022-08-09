@@ -4,18 +4,21 @@ namespace SlimSEO\MetaTags\AdminColumns;
 use SlimSEO\MetaTags\Helper;
 
 class Post extends Base {
-
+	protected $object_type;
 	public function setup() {
 		$types = $this->settings->get_types();
+		$this->object_type = 'post';
+
 		foreach ( $types as $type ) {
 			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
 			add_action( "manage_{$type}_posts_custom_column", [ $this, 'render' ], 10, 2 );
 		}
 		add_action( 'quick_edit_custom_box', [ $this, 'output_quick_edit_fields' ], 10, 2 );
-		add_action( 'bulk_edit_custom_box', [ $this, 'output_quick_edit_fields' ], 10, 2 );
+		add_action( 'bulk_edit_custom_box', [ $this, 'output_bulk_edit_fields' ], 10, 2 );
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'wp_ajax_ss_quick_edit', [ $this, 'get_quick_edit_data' ] );
+		add_action( 'wp_ajax_ss_save_bulk', [ $this, 'save_bulk_edit' ] );
 	}
 
 	public function render( $column, $post_id ) {
@@ -68,6 +71,27 @@ class Post extends Base {
 		</fieldset>
 		<?php
 	}
+	public function output_bulk_edit_fields( $column_name, $post_type ) {
+		if ( 'meta_title' !== $column_name ) {
+			return;
+		}
+		wp_nonce_field( 'save', 'ss_nonce' );
+		?>
+		<p class="wp-clearfix"></p>
+		<div class="inline-edit-col-left">
+			<p class="wp-clearfix"></p>
+			<legend class="inline-edit-legend"><?php esc_html_e( 'Search Engine Optimization', 'slim-seo' ) ?></legend>
+			<div class="inline-edit-col">
+				<div class="inline-edit-group wp-clearfix">
+					<label class="alignleft">
+						<input type="checkbox" name="slim_seo[noindex]" value="1">
+						<span class="checkbox-title"><?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?></span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
 
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
@@ -81,7 +105,6 @@ class Post extends Base {
 		}
 		$data = get_post_meta( $_GET['post_id'], 'slim_seo', true );
 		$data = $data ? $data : [];
-
 		$data = array_merge( [
 			'title'       => '',
 			'description' => '',
@@ -89,5 +112,26 @@ class Post extends Base {
 		], $data );
 
 		wp_send_json_success( $data );
+	}
+	public function save_bulk_edit() {
+		if ( ! wp_verify_nonce( $_GET['nonce'], 'save' ) || empty( $_GET['post_ids'] ) ) {
+			die();
+		}
+
+		if ( empty( $_GET['post_ids'] ) || ! isset( $_GET['noindex'] ) ) {
+			wp_send_json_error();
+		}
+
+		$noindex = isset( $_GET['noindex'] ) ? wp_unslash( $_GET['noindex'] ) : [];
+
+		$post_ids = explode( ',', $_GET['post_ids'] );
+		foreach ( $post_ids as $post_id ) {
+			$current_data = get_metadata( $this->object_type, $post_id, 'slim_seo', true );
+			$current_data = $current_data ? $current_data : [];
+			$current_data['noindex'] = $noindex;
+
+			update_metadata( $this->object_type, $post_id, 'slim_seo', $current_data );
+		}
+		wp_send_json_success( );
 	}
 }
