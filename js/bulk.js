@@ -38,18 +38,10 @@
 			return;
 		}
 
-		let row = document.querySelector( '#bulk-edit' );
-		let list = document.querySelector( '#the-list' );
-		let posts = list.querySelectorAll( 'input[name="post[]"]' );
-
-		post_ids = new Array();
-		posts.forEach( ( node , index ) => {
-			if ( ! node.checked ) {
-				return;
-			}
-			post_ids.push( node.value );
-		} );
-		let noindex = row.querySelector( 'input[name="slim_seo[noindex]"]' ).checked ? 1 : 0;
+		let noindex = document.querySelector( '#bulk-edit input[name="slim_seo[noindex]' ).checked ? 1 : 0;
+		let post_ids = [ ...document.querySelectorAll( '#the-list input[name="post[]"]' ) ]
+			.filter( node => node.checked ).map( node => node.value )
+			.join( ',' );
 
 		fetch( `${ ajaxurl }?action=ss_save_bulk&post_ids=${ post_ids }&noindex=${ noindex }&nonce=${ document.querySelector( '#ss_nonce' ).value }` );
 	} );
