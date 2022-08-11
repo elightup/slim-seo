@@ -38,7 +38,7 @@
 			return;
 		}
 
-		let noindex = document.querySelector( '#bulk-edit input[name="slim_seo[noindex]' ).checked ? 1 : 0;
+		let noindex = document.querySelector( '#bulk-edit select[name="noindex"]' ).value;
 		let post_ids = [ ...document.querySelectorAll( '#the-list input[name="post[]"]' ) ]
 			.filter( node => node.checked ).map( node => node.value )
 			.join( ',' );

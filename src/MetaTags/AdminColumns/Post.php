@@ -105,9 +105,13 @@ class Post extends Base {
 			<legend class="inline-edit-legend"><?php esc_html_e( 'Search Engine Optimization', 'slim-seo' ) ?></legend>
 			<div class="inline-edit-col">
 				<div class="inline-edit-group wp-clearfix">
-					<label class="alignleft">
-						<input type="checkbox" name="slim_seo[noindex]" value="1">
-						<span class="checkbox-title"><?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?></span>
+					<label>
+						<span class="title"><?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?></span>
+						<select name="noindex">
+							<option value="-1"><?php esc_html_e( '— No Change —', 'slim-seo' ) ?></option>
+							<option value="1"><?php esc_html_e( 'Yes', 'slim-seo' ) ?></option>
+							<option value="0"><?php esc_html_e( 'No', 'slim-seo' ) ?></option>
+						</select>
 					</label>
 				</div>
 			</div>
@@ -122,14 +126,24 @@ class Post extends Base {
 			wp_send_json_error();
 		}
 
-		$noindex = $_GET['noindex'] ? 1 : 0;
+		$noindex = (int) $_GET['noindex'];
+		if ( ! in_array( $noindex, [ -1, 0, 1 ], true ) ) {
+			wp_send_json_error();
+		}
 
-		$post_ids = array_filter( array_map( 'intval', explode( ',', $_GET['post_ids'] ) ) );
+		// Not changed.
+		if ( $noindex === -1 ) {
+			wp_send_json_success();
+		}
+
+		$post_ids = wp_strip_all_tags( wp_unslash( $_GET['post_ids'] ) );
+		$post_ids = array_filter( array_map( 'intval', explode( ',', $post_ids ) ) );
 		foreach ( $post_ids as $post_id ) {
 			$data            = get_post_meta( $post_id, 'slim_seo', true );
 			$data            = $data ? $data : [];
 			$data['noindex'] = $noindex;
 
+			$data = array_filter( $data );
 			update_post_meta( $post_id, 'slim_seo', $data );
 		}
 		wp_send_json_success();
