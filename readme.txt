@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 3.14.2
+Stable tag: 3.15.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -136,6 +136,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.15.0 - 2022-08-12 =
+- Edit SEO data in quick edit and bulk edit
+- Hide Tools tab if no other SEO plugins active (for migration)
+- Add hooks for Twitter Cards
+- Fix CSS when Elementor is active
 
 = 3.14.2 - 2022-07-04 =
 - Removed image caption and title from the sitemap as they're deprecated by Google
