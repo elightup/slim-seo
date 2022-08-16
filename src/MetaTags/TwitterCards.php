@@ -19,11 +19,13 @@ class TwitterCards {
 		$default_image = $this->get_default_image();
 		$image_obj     = new Image( 'twitter_image' );
 		$image         = $image_obj->get_value() ?: $default_image;
+		$image         = apply_filters( 'slim_seo_twitter_card_image', $image );
 		if ( ! empty( $image ) ) {
 			echo '<meta name="twitter:image" content="' . esc_url( $image[0] ) . '">', "\n";
 		}
 
 		$site = $this->get_site();
+		$site = apply_filters( 'slim_seo_twitter_card_site', $site );
 		if ( $site ) {
 			echo '<meta name="twitter:site" content="' . esc_attr( $site ) . '">', "\n";
 		}

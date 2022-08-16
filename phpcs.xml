@@ -55,6 +55,8 @@
 		<exclude name="Generic.PHP.DisallowShortOpenTag.EchoFound" />
 		<exclude name="Generic.Commenting.DocComment.SpacingBeforeTags" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax.Found" />
+		<exclude name="Universal.Operators.DisallowShortTernary.Found" />
 		<exclude name="WordPress.Classes.ClassInstantiation.MissingParenthesis" />
 		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
 

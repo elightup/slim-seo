@@ -46,7 +46,9 @@ class Settings {
 			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
 		}
 		$tabs['social'] = __( 'Social', 'slim-seo' );
-		$tabs['tools']  = __( 'Tools', 'slim-seo' );
+		if ( $this->has_seo_plugins() ) {
+			$tabs['tools']  = __( 'Tools', 'slim-seo' );
+		}
 		return $tabs;
 	}
 
@@ -57,13 +59,29 @@ class Settings {
 			$panes['homepage'] = $this->get_pane( 'homepage' );
 		}
 		$panes['social'] = $this->get_pane( 'social' );
-		$panes['tools']  = $this->get_pane( 'tools' );
+		if ( $this->has_seo_plugins() ) {
+			$panes['tools']  = $this->get_pane( 'tools' );
+		}
 		return $panes;
+	}
+	public function has_seo_plugins() {
+		$seo_plugins = [
+			'all-in-one-seo-pack/all-in-one-seo-pack.php',
+			'autodescription/autodescription.php',
+			'seo-by-rank-math/rank-math.php',
+			'wordpress-seo/wp-seo.php',
+			'wp-seopress/seopress.php',
+		];
+		foreach ( $seo_plugins as $plugin ) {
+			if ( is_plugin_active( $plugin ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function enqueue() {
-		wp_register_script( 'popper', SLIM_SEO_URL . 'js/popper.min.js', [], '2.9.1', true );
-		wp_register_script( 'tippy', SLIM_SEO_URL . 'js/tippy-bundle.umd.min.js', [ 'popper' ], '6.3.1', true );
+		wp_register_script( 'tippy', 'https://cdn.jsdelivr.net/combine/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js,npm/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js', [], '6.3.7', true );
 
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [ 'tippy' ], SLIM_SEO_VER, true );

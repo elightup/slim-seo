@@ -7,17 +7,19 @@ class Breadcrumbs {
 	private $current   = '';
 	private $is_parsed = false;
 
-	public function setup() {
-		$this->args = array(
+	public function __construct() {
+		$this->args = [
 			'separator'       => '&raquo;',
 			'taxonomy'        => 'category',
 			'display_current' => 'true',
 			'label_home'      => __( 'Home', 'slim-seo' ),
-			// translators: search query.
+			// Translators: search query.
 			'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
 			'label_404'       => __( 'Page not found', 'slim-seo' ),
-		);
+		];
+	}
 
+	public function setup() {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
 	}
 
@@ -100,17 +102,16 @@ class Breadcrumbs {
 
 		$this->add_post_type_archive_link();
 
-		// If post type is hierarchical (like page), then output its ancestors.
+		// If post type is hierarchical (like page), add ancestors.
 		if ( is_post_type_hierarchical( get_post_type() ) ) {
 			$ancestors = get_post_ancestors( null );
 			$ancestors = array_reverse( $ancestors );
 			foreach ( $ancestors as $ancestor ) {
 				$this->add_link( get_permalink( $ancestor ), get_the_title( $ancestor ) );
 			}
-			return;
 		}
 
-		// For non-hierarchical post type (like post), output its terms.
+		// Add terms.
 		$terms = get_the_terms( get_the_ID(), $this->args['taxonomy'] );
 		if ( ! is_array( $terms ) ) {
 			return;

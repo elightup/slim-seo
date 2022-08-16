@@ -71,7 +71,7 @@ class Description {
 
 		$description = $post->post_excerpt ? $post->post_excerpt : $post->post_content;
 
-		return apply_filters( 'slim_seo_meta_description_generated', $description );
+		return apply_filters( 'slim_seo_meta_description_generated', $description, $post );
 	}
 
 	public function get_term_value( $term_id = null ) {

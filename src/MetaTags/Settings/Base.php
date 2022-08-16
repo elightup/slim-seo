@@ -106,7 +106,7 @@ abstract class Base {
 	}
 
 	public function save( $object_id ) {
-		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) ) {
+		if ( ! check_ajax_referer( 'save', 'ss_nonce', false )  || empty( $_POST ) ) {
 			return;
 		}
 		// @codingStandardsIgnoreLine.

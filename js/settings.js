@@ -9,7 +9,7 @@
 
 		e.preventDefault();
 
-		location.hash = e.target.getAttribute( 'href' );
+		history.pushState( null, null, e.target.getAttribute( 'href' ) );
 
 		tabs.forEach( tab => tab.classList.remove( 'ss-is-active' ) );
 		e.target.classList.add( 'ss-is-active' );
@@ -19,7 +19,7 @@
 	}
 
 	function activateFirstTab() {
-		const hash = location.hash || tabs[0].getAttribute( 'href' );
+		const hash = location.hash || tabs[ 0 ].getAttribute( 'href' );
 
 		document.querySelector( `a[href="${ hash }"]` ).classList.add( 'ss-is-active' );
 		document.querySelector( hash ).classList.add( 'ss-is-active' );

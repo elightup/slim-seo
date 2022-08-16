@@ -9,7 +9,7 @@ class AIOSEO extends Replacer {
 
 	public function before_replace_post( $post_id ) {
 		$this->post  = get_post( $post_id );
-		$this->image = new Common\Social\Image;
+		$this->image = new ExtImage;
 		set_current_screen( 'settings_page_slim-seo' ); // Fix undefined get_current_screen from AIOSEO.
 	}
 
@@ -120,5 +120,17 @@ class AIOSEO extends Replacer {
 
 	public function is_activated() {
 		return defined( 'AIOSEO_VERSION' );
+	}
+}
+
+class ExtImage extends Common\Social\Image {
+	public function __get( $name ) {
+		$method = ( 'get' . ucfirst( $name ) );
+		if ( method_exists( $this , $method ) ) {
+			return $this->$method();
+		}
+	}
+	public function getThumbnailSize() {
+		return $this->thumbnailSize;
 	}
 }

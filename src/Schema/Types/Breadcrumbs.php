@@ -28,6 +28,7 @@ class Breadcrumbs extends Base {
 
 		return [
 			'@type'           => 'BreadcrumbList',
+			'name'            => __( 'Breadcrumbs', 'slim-seo' ),
 			'@id'             => $this->id,
 			'itemListElement' => $list,
 		];

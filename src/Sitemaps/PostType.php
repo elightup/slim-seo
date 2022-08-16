@@ -78,11 +78,6 @@ class PostType {
 		}
 		echo "\t\t<image:image>\n";
 		echo "\t\t\t<image:loc>", esc_url( $this->get_absolute_url( $image['url'] ) ), "</image:loc>\n";
-		if ( ! empty( $image['caption'] ) ) {
-			echo "\t\t\t<image:caption><![CDATA[", esc_html( $this->remove_invalid_xml( $image['caption'] ) ), "]]></image:caption>\n";
-		}
-		$title = empty( $image['title'] ) ? $this->current_post->post_title : $image['title'];
-		echo "\t\t\t<image:title><![CDATA[", esc_html( $this->remove_invalid_xml( $title ) ), "]]></image:title>\n";
 		echo "\t\t</image:image>\n";
 	}
 
@@ -135,8 +130,6 @@ class PostType {
 		if ( ! class_exists( 'DOMDocument' ) ) {
 			return [];
 		}
-
-		$html = do_shortcode( $html );
 
 		// Set encoding.
 		$html = '<?xml encoding="' . get_bloginfo( 'charset' ) . '"?>' . $html;
@@ -196,33 +189,5 @@ class PostType {
 	private function is_indexed( $post ) {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
 		return empty( $data['noindex'] );
-	}
-
-	/**
-	 * Remove invalid characters in XML.
-	 * @link https://stackoverflow.com/a/3466049/371240
-	 * @link https://stackoverflow.com/a/28152666/371240
-	 */
-	private function remove_invalid_xml( $value ) {
-		$ret = '';
-		if ( empty( $value ) ) {
-			return $ret;
-		}
-
-		$length = strlen( $value );
-		for ( $i = 0; $i < $length; $i++ ) {
-			$current = ord( $value[ $i ] );
-			if (
-				$current === 0x9
-				|| $current === 0xA
-				|| $current === 0xD
-				|| ( $current >= 0x20 && $current <= 0xD7FF )
-				|| ( $current >= 0xE000 && $current <= 0xFFFD )
-				|| ( $current >= 0x10000 && $current <= 0x10FFFF )
-			) {
-				$ret .= chr( $current );
-			}
-		}
-		return $ret;
 	}
 }
