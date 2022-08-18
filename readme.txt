@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 3.15.0
+Stable tag: 3.15.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -136,6 +136,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.15.1 - 2022-08-18 =
+- Fix enqueuing wrong quick/bulk edit CSS/JS for the settings page
+- Improve check for getting SEO data
 
 = 3.15.0 - 2022-08-12 =
 - Edit SEO data in quick edit and bulk edit
