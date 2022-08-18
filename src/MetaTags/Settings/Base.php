@@ -134,7 +134,7 @@ abstract class Base {
 
 	private function get_data() {
 		$data = get_metadata( $this->object_type, $this->get_object_id(), 'slim_seo', true );
-		$data = $data ? $data : [];
+		$data = is_array( $data ) && ! empty( $data ) ? $data : [];
 
 		return array_merge( $this->defaults, $data );
 	}
