@@ -4,14 +4,16 @@ namespace SlimSEO\MetaTags\AdminColumns;
 use SlimSEO\MetaTags\Helper;
 
 class Post extends Base {
+	private $types;
+
 	public function setup() {
-		$types = $this->settings->get_types();
-		foreach ( $types as $type ) {
+		$this->types = $this->settings->get_types();
+		foreach ( $this->types as $type ) {
 			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
 			add_action( "manage_{$type}_posts_custom_column", [ $this, 'render' ], 10, 2 );
 		}
 
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
+		add_action( 'admin_print_styles-edit.php', [ $this, 'enqueue' ] );
 
 		// Quick edit.
 		add_action( 'quick_edit_custom_box', [ $this, 'output_quick_edit_fields' ], 10, 2 );
@@ -41,8 +43,11 @@ class Post extends Base {
 	}
 
 	public function enqueue() {
-		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-populate', SLIM_SEO_URL . 'js/bulk.js', [], SLIM_SEO_VER, true );
+		if ( ! in_array( get_current_screen()->post_type, $this->types, true ) ) {
+			return;
+		}
+		wp_enqueue_style( 'slim-seo-edit', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
+		wp_enqueue_script( 'slim-seo-bulk', SLIM_SEO_URL . 'js/bulk.js', [], SLIM_SEO_VER, true );
 	}
 
 	public function output_quick_edit_fields( $column_name, $post_type ) {
