@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use WP_Post;
+
 class Bricks {
 	public function setup() {
 		if ( ! defined( 'BRICKS_VERSION' ) ) {
@@ -13,7 +15,7 @@ class Bricks {
 		add_filter( 'bricks/frontend/disable_seo', '__return_true' );
 	}
 
-	public function description( $description, $post ) {
+	public function description( $description, WP_Post $post ) {
 		$data = \Bricks\Helpers::get_bricks_data( $post->ID );
 		if ( $data ) {
 			$description = \Bricks\Frontend::render_data( $data, $post->ID, 'content', true );
