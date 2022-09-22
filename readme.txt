@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 6.0
+Tested up to: 6.0.2
 Requires PHP: 5.6
-Stable tag: 3.15.1
+Stable tag: 3.15.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -136,6 +136,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.15.2 - 2022-09-22 =
+- Use post excerpt if available for meta description before the builder content in case of using page builders
+- Fix JS warning in the settings page when migration tool is not available
 
 = 3.15.1 - 2022-08-18 =
 - Fix enqueuing wrong quick/bulk edit CSS/JS for the settings page
