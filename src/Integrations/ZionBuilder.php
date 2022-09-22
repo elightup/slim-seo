@@ -1,18 +1,19 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use WP_Post;
+
 class ZionBuilder {
 	public function setup() {
 		if ( ! class_exists( '\ZionBuilder\Plugin' ) ) {
 			return;
 		}
 
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ] );
+		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 	}
 
-	public function description( $description ) : string {
-		$post_id       = get_the_ID();
-		$post_instance = \ZionBuilder\Plugin::$instance->post_manager->get_post_instance( $post_id );
+	public function description( $description, WP_Post $post ) {
+		$post_instance = \ZionBuilder\Plugin::$instance->post_manager->get_post_instance( $post->ID );
 
 		if ( ! $post_instance || $post_instance->is_password_protected() || ! $post_instance->is_built_with_zion() ) {
 			return $description;
