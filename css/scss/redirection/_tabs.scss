@@ -1,0 +1,42 @@
+.react-tabs {
+	background: #fff;
+	position: relative;
+
+	&__tab-list {
+		margin: 0 0 24px;
+		display: flex;
+		align-items: center;
+
+		.button {
+			margin-left: auto;
+			margin-right: 12px;
+			box-shadow: none;
+		}
+	}
+
+	&__tab {
+		cursor: pointer;
+		display: inline-block;
+		line-height: 1;
+		font-weight: 500;
+
+		&:not(:last-child) {
+			border-right: 1px solid #ccd0d4;
+			padding-right: 8px;
+			margin-right: 8px;
+		}
+
+		&--selected,
+		&:hover {
+			color: #007cba;
+		}
+	}
+
+	&__tab-panel {
+		display: none;
+
+		&--selected {
+			display: block;
+		}
+	}
+}

@@ -1,0 +1,43 @@
+.ss-table {
+	.ss-log__hit {
+		width: 6%;
+	}
+
+	.ss-log__created_at,
+	.ss-log__updated_at {
+		width: 15%;
+	}
+
+	.ss-log__actions {
+		width: 10%;
+	}
+}
+
+.ss-orderby {
+	float: right;
+
+	.ss-orderby__arrow {
+		border: solid #ccc;
+		border-width: 0 2px 2px 0;
+		display: block;
+		padding: 2px;
+
+		&.up {
+			transform: rotate( -135deg );
+			-webkit-transform: rotate( -135deg );
+		}
+		  
+		&.down {
+			transform: rotate( 45deg );
+			-webkit-transform: rotate( 45deg );
+		}
+
+		&.active {
+			border-color: #000;
+		}
+
+		&:hover {
+			border-color: #EEC1B7;
+		}
+	}
+}
