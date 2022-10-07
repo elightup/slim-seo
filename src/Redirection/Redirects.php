@@ -29,7 +29,7 @@ class Redirects {
 		$redirect['from'] = html_entity_decode( str_replace( $home_url, '', $redirect['from'] ) );
 		$redirect['to']   = html_entity_decode( str_replace( $home_url, '', $redirect['to'] ) );
 
-		if ( -1 == $redirect_id ) {
+		if ( -1 === $redirect_id ) {
 			$redirects[] = $redirect;
 		} else {
 			$redirects[ $redirect_id ] = $redirect;
@@ -54,7 +54,7 @@ class Redirects {
 			return;
 		}
 
-		$request_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 		$request_url = rtrim( strtolower( urldecode( $request_url ) ), '/' );
 
 		foreach ( $redirects as $redirect ) {

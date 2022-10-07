@@ -29,7 +29,7 @@ class Helper {
 				'redirect_404_to'     => '',
 				'redirect_404_to_url' => '',
 			],
-			get_option( SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME ) ?: [],
+			get_option( SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME ) ?: []
 		);
 	}
 
@@ -37,5 +37,27 @@ class Helper {
 		$settings = self::get_settings();
 
 		return $settings[ $name ] ?? false;
+	}
+
+	/**
+	 * Check if the current request is HTTPS
+	 *
+	 * @link https://developer.wordpress.org/reference/functions/is_ssl/
+	 */
+	public static function is_ssl() : bool {
+		// Cloudflare
+		if ( ! empty( $_SERVER['HTTP_CF_VISITOR'] ) ) {
+			$cfo = json_decode( $_SERVER['HTTP_CF_VISITOR'] );
+			if ( isset( $cfo->scheme ) && 'https' === $cfo->scheme ) {
+				return true;
+			}
+		}
+
+		// Other proxy
+		if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+			return true;
+		}
+
+		return is_ssl();
 	}
 }

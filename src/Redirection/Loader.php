@@ -2,7 +2,7 @@
 namespace SlimSEO\Redirection;
 
 class Loader {
-	public function init() {
+	public function __construct() {
 		if ( is_admin() ) {
 			new Settings;
 		} else {
