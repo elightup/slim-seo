@@ -12,7 +12,7 @@ const Settings = ()  => {
 			<table className='form-table'>
 				<tr>
 					<th scope="row">
-						{ __( 'Enable 404 Logs', 'slim-seo' ) }
+						{ __( 'Enable 404 logs', 'slim-seo' ) }
 						<Tooltip content={ __( 'Enable to track 404 logs', 'slim-seo' ) } />
 					</th>
 					<td>
@@ -25,16 +25,15 @@ const Settings = ()  => {
 
 				<tr>
 					<th scope="row">
-						{ __( 'Redirect 404 to', 'slim-seo' ) }
-						<Tooltip content={ __( 'Redirect 404 page to', 'slim-seo' ) } />
+						{ __( 'Redirect all 404 to', 'slim-seo' ) }
+						<Tooltip content={ __( 'Auto redirect 404 pages if they do not have redirection rule.', 'slim-seo' ) } />
 					</th>
 					<td>
 						<select id='ss-redirect-404-to' name={ `${SSRedirection.settingsName}[redirect_404_to]` } value={ redirect404To } onChange={ e => setRedirect404To( prev => e.target.value ) }>
 							<option value=''>{ __( 'Do nothing', 'slim-seo' ) }</option>
 							<option value='homepage'>{ __( 'Homepage', 'slim-seo' ) }</option>
-							<option value='custom'>{ __( 'Custom', 'slim-seo' ) }</option>
+							<option value='custom'>{ __( 'Custom URL', 'slim-seo' ) }</option>
 						</select>
-
 						{
 							'custom' === redirect404To
 							&& <input type='text' className='regular-text' name={ `${SSRedirection.settingsName}[redirect_404_to_url]` } value={ redirect404ToURL } onChange={ e => setRedirect404ToURL( prev => e.target.value.trim() ) } />
