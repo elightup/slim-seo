@@ -31,9 +31,9 @@ class Log404 {
 				`hit` bigint(20) unsigned DEFAULT '0',
 				`created_at` datetime DEFAULT CURRENT_TIMESTAMP,
 				`updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
-				
+
 				PRIMARY KEY (`id`),
-				
+
 				KEY `url` (`url`)
 			) $charset_collate;
 		";
@@ -46,12 +46,11 @@ class Log404 {
 	public function get( string $value, string $by = 'id' ) : array {
 		global $wpdb;
 
-		$field = 'id' === $by ? "`id`" : "`url`";
+		$field = 'id' === $by ? '`id`' : '`url`';
 		$row   = $wpdb->get_row(
 			"SELECT *
-			FROM {$wpdb->slim_seo_404} 
+			FROM {$wpdb->slim_seo_404}
 			WHERE {$field} = '{$value}'",
-
 			ARRAY_A
 		);
 
@@ -74,31 +73,27 @@ class Log404 {
 			"SELECT *
 			FROM {$wpdb->slim_seo_404}
 			ORDER BY `{$order_by}` {$order}"
-			. ( $limit ? " LIMIT {$limit} OFFSET {$offset}" : "" ),
-			
+			. ( $limit ? " LIMIT {$limit} OFFSET {$offset}" : '' ),
 			ARRAY_A
 		);
 	}
 
 	public function add( array $log ) {
 		global $wpdb;
-		
+
 		$wpdb->insert(
 			$wpdb->slim_seo_404,
-			
 			$log
 		);
 	}
 
 	public function update( array $log ) {
 		global $wpdb;
-		
+
 		$wpdb->update(
 			$wpdb->slim_seo_404,
-			
 			$log,
-
-			[ 'id' => $log['id'], ]
+			[ 'id' => $log['id'] ]
 		);
 	}
 }

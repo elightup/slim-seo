@@ -4,21 +4,21 @@ namespace SlimSEO\Redirection;
 class Helper {
 	public static function redirect_types() : array {
 		return [
-			301 => __( '301 Moved Permanently', 'slim-seo-redirection' ),
-			302 => __( '302 Found', 'slim-seo-redirection' ),
-			307 => __( '307 Temporary Redirect', 'slim-seo-redirection' ),
-			410 => __( '410 Content Deleted', 'slim-seo-redirection' ),
-			451 => __( '451 Unavailable For Legal Reasons', 'slim-seo-redirection' ),
+			301 => __( '301 Moved Permanently', 'slim-seo' ),
+			302 => __( '302 Found', 'slim-seo' ),
+			307 => __( '307 Temporary Redirect', 'slim-seo' ),
+			410 => __( '410 Content Deleted', 'slim-seo' ),
+			451 => __( '451 Unavailable For Legal Reasons', 'slim-seo' ),
 		];
 	}
 
 	public static function condition_options() : array {
 		return [
-			'exact-match' => __( 'Exact Match', 'slim-seo-redirection' ),
-			'contain'     => __( 'Contain', 'slim-seo-redirection' ),
-			'start-with'  => __( 'Start With', 'slim-seo-redirection' ),
-			'end-with'    => __( 'End With', 'slim-seo-redirection' ),
-			'regex'       => __( 'Regex', 'slim-seo-redirection' ),
+			'exact-match' => __( 'Exact Match', 'slim-seo' ),
+			'contain'     => __( 'Contain', 'slim-seo' ),
+			'start-with'  => __( 'Start With', 'slim-seo' ),
+			'end-with'    => __( 'End With', 'slim-seo' ),
+			'regex'       => __( 'Regex', 'slim-seo' ),
 		];
 	}
 
@@ -36,6 +36,6 @@ class Helper {
 	public static function get_setting( string $name ) {
 		$settings = self::get_settings();
 
-		return $settings[$name] ?? false;
+		return $settings[ $name ] ?? false;
 	}
 }

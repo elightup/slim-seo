@@ -32,7 +32,7 @@ class Redirects {
 		if ( -1 == $redirect_id ) {
 			$redirects[] = $redirect;
 		} else {
-			$redirects[$redirect_id] = $redirect;
+			$redirects[ $redirect_id ] = $redirect;
 		}
 
 		update_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME, $redirects );
@@ -108,7 +108,7 @@ class Redirects {
 				default:
 					$from = filter_var( $from, FILTER_VALIDATE_URL ) ? $from : home_url( $from );
 
-					if ( $current_url === $from ) {	
+					if ( $current_url === $from ) {
 						$should_redirect = true;
 					}
 
@@ -144,7 +144,7 @@ class Redirects {
 
 			$to = filter_var( $to, FILTER_VALIDATE_URL ) ? $to : home_url( $to );
 
-			header( 'Location: ' . $to, true, (int)$redirect['type'] );
+			header( 'Location: ' . $to, true, (int) $redirect['type'] );
 			exit();
 		}
 	}

@@ -6,11 +6,8 @@ class Loader {
 		if ( is_admin() ) {
 			new Settings;
 		} else {
-			if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			} else {
-				add_action( 'init', [ 'SlimSEO\Redirection\Redirects', 'handle' ] , 1 );
-				add_action( 'template_redirect', [ 'SlimSEO\Redirection\Redirection404', 'handle' ], 1 );
-			}
+			add_action( 'init', [ __NAMESPACE__ . '\Redirects', 'handle' ], 1 );
+			add_action( 'template_redirect', [ __NAMESPACE__ . '\Redirection404', 'handle' ], 1 );
 		}
 
 		new Api\Redirects;

@@ -39,7 +39,7 @@ class Redirection404 {
 			} else {
 				$log['hit']        = intval( $log['hit'] ) + 1;
 				$log['updated_at'] = $now;
-				
+
 				$log_404->update( $log );
 			}
 		}
@@ -59,6 +59,6 @@ class Redirection404 {
 
 			header( 'Location: ' . $to, true, 301 );
 			exit();
-		}		
+		}
 	}
 }

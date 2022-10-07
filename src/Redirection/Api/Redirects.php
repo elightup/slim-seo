@@ -36,7 +36,7 @@ class Redirects extends Base {
 		$redirects = DbRedirects::list();
 		$redirects = array_map( function( $index, $redirect ) {
 			$redirect['id'] = $index;
-			
+
 			return $redirect;
 		}, array_keys( $redirects ), $redirects );
 		$redirects = array_reverse( $redirects );
@@ -46,23 +46,23 @@ class Redirects extends Base {
 
 	public function is_exists( WP_REST_Request $request ) : bool {
 		$from = $request->get_param( 'from' );
-		
+
 		return DbRedirects::is_exists( $from );
 	}
 
 	public function update_redirect( WP_REST_Request $request ) : bool {
 		$redirect = $request->get_param( 'redirect' );
-		
+
 		DbRedirects::update( $redirect );
-	
+
 		return true;
 	}
 
 	public function delete_redirects( WP_REST_Request $request ) : bool {
 		$ids = $request->get_param( 'ids' );
-		
+
 		DbRedirects::delete( $ids );
-	
+
 		return true;
 	}
 }
