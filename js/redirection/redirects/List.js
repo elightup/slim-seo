@@ -5,7 +5,7 @@ import request from '../helper/request';
 import Paginate from './Paginate';
 import Update from './Update';
 
-const List = ()  => {
+const List = () => {
 	const LIMIT = 20;
 	const [ offset, setOffset ] = useState( 0 );
 	const [ redirects, setRedirects ] = useState( [] );
@@ -28,7 +28,7 @@ const List = ()  => {
 	};
 
 	const checkboxChange = ( e, id ) => {
-		if ( ! e.target.checked ) {
+		if ( !e.target.checked ) {
 			setCheckedList( checkedList.filter( item => item !== id ) );
 		} else {
 			setCheckedList( [ ...checkedList, id ] );
@@ -36,7 +36,7 @@ const List = ()  => {
 	};
 
 	const checkAll = () => {
-		setIsCheckAll( ! isCheckAll );
+		setIsCheckAll( !isCheckAll );
 
 		if ( isCheckAll ) {
 			setCheckedList( [] );
@@ -73,7 +73,7 @@ const List = ()  => {
 		return e => {
 			e.preventDefault();
 
-			if ( ! confirm( __( 'Delete redirect ', 'slim-seo' ) + `'${redirect.from}'?` ) ) {
+			if ( !confirm( __( 'Delete redirect ', 'slim-seo' ) + `'${ redirect.from }'?` ) ) {
 				return;
 			}
 
@@ -121,12 +121,12 @@ const List = ()  => {
 		e.preventDefault();
 
 		search();
-	}
+	};
 
-	const changeEnable = ( e, redirect )=> {
+	const changeEnable = ( e, redirect ) => {
 		setRedirects( prev => prev.map( r => {
 			if ( r.id == redirect.id ) {
-				r.enable = ! r.enable;
+				r.enable = !r.enable;
 
 				request( 'update_redirect', { redirect: r }, 'POST' );
 			}
@@ -194,7 +194,7 @@ const List = ()  => {
 			<table className='ss-table'>
 				<thead>
 					<tr>
-						<th className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onClick={ checkAll } /></th>
+						<th className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onChange={ checkAll } /></th>
 						<th className='ss-redirect__type'>
 							{ __( 'Type', 'slim-seo' ) }
 							<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
@@ -222,41 +222,41 @@ const List = ()  => {
 				<tbody>
 					{
 						isLoadingData
-						? <tr><td colSpan='7'><div className='ss-loader'></div></td></tr>
-						: redirects.length > 0
-							? redirects.slice( offset, offset + LIMIT ).map( redirect => (
-								<tr key={ redirect.id }>
-									<td className='ss-redirect__checkbox'>
-										<input type='checkbox' value={ redirect.id } checked={ checkedList.includes( redirect.id ) } onChange={ e => checkboxChange( e, redirect.id ) } />
-									</td>
-									<td className='ss-redirect__type'>{ redirect.type }</td>
-									<td className='ss-redirect__url'>
-										{ redirect.from }
-										<small>{ SSRedirection.conditionOptions[redirect.condition] }</small>
-									</td>
-									<td className='ss-redirect__url'>
-										{ redirect.to }
-									</td>
-									<td className='ss-redirect__note'>{ redirect.note }</td>
-									<td className='ss-redirect__enable'>
-										<label className='ss-toggle'>
-											<input className='ss-toggle__checkbox' type='checkbox' checked={ 1 == redirect.enable } onChange={ e => changeEnable( e, redirect ) } />
-											<div className='ss-toggle__switch'></div>
-										</label>
-									</td>
-									<td className='ss-redirect__actions'>
-										<a href='#' onClick={ editRedirect( redirect ) } title={ __( 'Edit', 'slim-seo' ) }><span className='dashicons dashicons-edit'></span></a>
-										<a href='#' onClick={ deleteRedirect( redirect ) } title={ __( 'Delete', 'slim-seo' ) }><span className='dashicons dashicons-trash'></span></a>
-									</td>
-								</tr>
-							) )
-							: <tr><td colSpan='7'><p>{ __( 'No redirects found.', 'slim-seo' ) }</p></td></tr>
+							? <tr><td colSpan='7'><div className='ss-loader'></div></td></tr>
+							: redirects.length > 0
+								? redirects.slice( offset, offset + LIMIT ).map( redirect => (
+									<tr key={ redirect.id }>
+										<td className='ss-redirect__checkbox'>
+											<input type='checkbox' value={ redirect.id } checked={ checkedList.includes( redirect.id ) } onChange={ e => checkboxChange( e, redirect.id ) } />
+										</td>
+										<td className='ss-redirect__type'>{ redirect.type }</td>
+										<td className='ss-redirect__url'>
+											{ redirect.from }
+											<small>{ SSRedirection.conditionOptions[ redirect.condition ] }</small>
+										</td>
+										<td className='ss-redirect__url'>
+											{ redirect.to }
+										</td>
+										<td className='ss-redirect__note'>{ redirect.note }</td>
+										<td className='ss-redirect__enable'>
+											<label className='ss-toggle'>
+												<input className='ss-toggle__checkbox' type='checkbox' defaultChecked={ 1 == redirect.enable } onChange={ e => changeEnable( e, redirect ) } />
+												<div className='ss-toggle__switch'></div>
+											</label>
+										</td>
+										<td className='ss-redirect__actions'>
+											<a href='#' onClick={ editRedirect( redirect ) } title={ __( 'Edit', 'slim-seo' ) }><span className='dashicons dashicons-edit'></span></a>
+											<a href='#' onClick={ deleteRedirect( redirect ) } title={ __( 'Delete', 'slim-seo' ) }><span className='dashicons dashicons-trash'></span></a>
+										</td>
+									</tr>
+								) )
+								: <tr><td colSpan='7'><p>{ __( 'No redirects found.', 'slim-seo' ) }</p></td></tr>
 					}
 				</tbody>
 
 				<tfoot>
 					<tr>
-						<th className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onClick={ checkAll } /></th>
+						<th className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onChange={ checkAll } /></th>
 						<th className='ss-redirect__type'>
 							{ __( 'Type', 'slim-seo' ) }
 							<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
