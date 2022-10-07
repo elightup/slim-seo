@@ -21,11 +21,11 @@
 
 	thead,
 	tfoot {
-		color: #999;
+		color: var(--color-gray);
 	}
 
 	tr {
-		border-bottom: 1px solid #f0f0f0;
+		border-bottom: var(--border);
 	}
 
 	th,
@@ -36,31 +36,54 @@
 	th {
 		font-weight: 400;
 		text-align: left;
-	}
 
-	tbody tr:hover {
-		background: #f0f0f0;
+		&.ss-redirect__actions {
+			text-align: right;
+		}
 	}
 
 	a {
 		text-decoration: none;
 	}
+}
 
-	.ss-redirect__checkbox {
-		width: 10%;
+.ss-redirect__checkbox {
+	width: 20px;
+}
+
+.ss-redirect__type,
+.ss-redirect__enable {
+	width: 60px;
+}
+
+.ss-redirect__note {
+	width: 20%;
+}
+
+.ss-redirect__actions {
+	width: 60px;
+	text-align: right;
+
+	a {
+		color: var(--color-gray);
+		padding: 4px;
+		border-radius: 4px;
+		display: inline-block;
+		transition: none;
+
+		&:hover {
+			color: inherit;
+			background: var(--color-lighter);
+
+			.dashicons-trash {
+				color: var(--color-red);
+			}
+		}
 	}
-
-	.ss-redirect__type,
-	.ss-redirect__enable {
-		width: 8%;
-	}
-
-	.ss-redirect__note {
-		width: 20%;
-	}
-
-	.ss-redirect__actions {
-		width: 5%;
+	.dashicons {
+		font-size: 16px;
+		width: 18px;
+		height: 18px;
 	}
 }
 
@@ -194,6 +217,7 @@
 		font-size: 18px;
 		background: none;
 		border: none;
+		cursor: pointer;
 	}
 
 	&__close:hover,

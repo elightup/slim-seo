@@ -1,7 +1,7 @@
-import { useState, useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { Tooltip } from '../helper/misc';
 import request from '../helper/request';
-import { Tooltip } from '../helper/misc'
 import Paginate from './Paginate';
 import Update from './Update';
 
@@ -42,7 +42,7 @@ const List = ()  => {
 			setCheckedList( [] );
 		} else {
 			setCheckedList( redirects.map( redirect => redirect.id ) );
-		}	
+		}
 	};
 
 	const addRedirect = e => {
@@ -93,7 +93,7 @@ const List = ()  => {
 		e.preventDefault();
 
 		reset( 'redirect-type' );
-		
+
 		getRedirects().then( result => {
 			if ( '' !== redirectType ) {
 				setRedirects( prev => prev.filter( redirect => redirect.type == redirectType ) );
@@ -103,7 +103,7 @@ const List = ()  => {
 
 	const search = () => {
 		reset( 'search' );
-		
+
 		getRedirects().then( result => {
 			if ( '' !== searchKeyword ) {
 				setRedirects( prev => prev.filter( redirect => redirect.from.includes( searchKeyword ) || redirect.to.includes( searchKeyword ) ) );
@@ -205,11 +205,11 @@ const List = ()  => {
 						</th>
 						<th className='ss-redirect__note'>
 							{ __( 'Note', 'slim-seo' ) }
-							<Tooltip content={ __( 'Note', 'slim-seo' ) } />
+							<Tooltip content={ __( 'Something to reminds you about the redirects', 'slim-seo' ) } />
 						</th>
 						<th className='ss-redirect__enable'>
 							{ __( 'Enable', 'slim-seo' ) }
-							<Tooltip content={ __( 'Enable redirect', 'slim-seo' ) } />
+							<Tooltip content={ __( 'Is the redirect enabled?', 'slim-seo' ) } />
 						</th>
 						<th className='ss-redirect__actions'>{ __( 'Actions', 'slim-seo' ) }</th>
 					</tr>
@@ -219,7 +219,7 @@ const List = ()  => {
 					{
 						isLoadingData
 						? <tr><td colSpan='5'><div className='ss-loader'></div></td></tr>
-						: redirects.length
+						: redirects.length > 0
 							? redirects.slice( offset, offset + LIMIT ).map( redirect => (
 								<tr key={ redirect.id }>
 									<td className='ss-redirect__checkbox'>
@@ -228,7 +228,7 @@ const List = ()  => {
 									<td className='ss-redirect__type'>{ redirect.type }</td>
 									<td className='ss-redirect__url'>
 										<div><em>{ SSRedirection.conditionOptions[redirect.condition] }</em>: <strong>{ redirect.from }</strong></div>
-										<div>&rarr; <strong>{ redirect.to }</strong></div>										
+										<div>&rarr; <strong>{ redirect.to }</strong></div>
 									</td>
 									<td className='ss-redirect__note'>{ redirect.note }</td>
 									<td className='ss-redirect__enable'>
@@ -243,17 +243,30 @@ const List = ()  => {
 									</td>
 								</tr>
 							) )
-							: <tr><td colSpan='5'>{ __( 'No data', 'slim-seo' ) }</td></tr>
+							: <tr><td colSpan='6'>{ __( 'No data', 'slim-seo' ) }</td></tr>
 					}
 				</tbody>
 
 				<tfoot>
 					<tr>
-						<td className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onClick={ checkAll } /></td>
-						<td className='ss-redirect__type'>{ __( 'Type', 'slim-seo' ) }</td>
-						<th className='ss-redirect__url'>{ __( 'From URL', 'slim-seo' ) } &rarr; { __( 'To URL', 'slim-seo' ) }</th>
-						<td className='ss-redirect__note'>{ __( 'Note', 'slim-seo' ) }</td>
-						<td className='ss-redirect__enable'>{ __( 'Enable', 'slim-seo' ) }</td>
+						<th className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onClick={ checkAll } /></th>
+						<th className='ss-redirect__type'>
+							{ __( 'Type', 'slim-seo' ) }
+							<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
+						</th>
+						<th className='ss-redirect__url'>
+							{ __( 'From URL', 'slim-seo' ) } &rarr; { __( 'To URL', 'slim-seo' ) }
+							<Tooltip content={ __( 'Redirect from - to', 'slim-seo' ) } />
+						</th>
+						<th className='ss-redirect__note'>
+							{ __( 'Note', 'slim-seo' ) }
+							<Tooltip content={ __( 'Something to reminds you about the redirects', 'slim-seo' ) } />
+						</th>
+						<th className='ss-redirect__enable'>
+							{ __( 'Enable', 'slim-seo' ) }
+							<Tooltip content={ __( 'Is the redirect enabled?', 'slim-seo' ) } />
+						</th>
+						<th className='ss-redirect__actions'>{ __( 'Actions', 'slim-seo' ) }</th>
 					</tr>
 				</tfoot>
 			</table>
