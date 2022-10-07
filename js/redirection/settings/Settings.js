@@ -1,4 +1,4 @@
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tooltip } from '../helper/misc';
 
@@ -17,8 +17,8 @@ const Settings = ()  => {
 					</th>
 					<td>
 						<label className='ss-toggle'>
-							<input className='ss-toogle__checkbox' id='ss-enable-404-logs' type='checkbox' name={ `${SSRedirection.settingsName}[enable_404_logs]` } value={ enable404Logs } checked={ 1 == enable404Logs } onChange={ () => setEnable404Logs( prev => 1 == prev ? 0 : 1 ) } />
-							<div className='ss-toogle__switch'></div>
+							<input className='ss-toggle__checkbox' id='ss-enable-404-logs' type='checkbox' name={ `${SSRedirection.settingsName}[enable_404_logs]` } value={ enable404Logs } checked={ 1 == enable404Logs } onChange={ () => setEnable404Logs( prev => 1 == prev ? 0 : 1 ) } />
+							<div className='ss-toggle__switch'></div>
 						</label>
 					</td>
 				</tr>

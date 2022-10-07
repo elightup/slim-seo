@@ -200,8 +200,12 @@ const List = ()  => {
 							<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
 						</th>
 						<th className='ss-redirect__url'>
-							{ __( 'From URL', 'slim-seo' ) } &rarr; { __( 'To URL', 'slim-seo' ) }
-							<Tooltip content={ __( 'Redirect from - to', 'slim-seo' ) } />
+							{ __( 'From URL', 'slim-seo' ) }
+							<Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } />
+						</th>
+						<th className='ss-redirect__url'>
+							{ __( 'To URL', 'slim-seo' ) }
+							<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
 						</th>
 						<th className='ss-redirect__note'>
 							{ __( 'Note', 'slim-seo' ) }
@@ -218,7 +222,7 @@ const List = ()  => {
 				<tbody>
 					{
 						isLoadingData
-						? <tr><td colSpan='5'><div className='ss-loader'></div></td></tr>
+						? <tr><td colSpan='7'><div className='ss-loader'></div></td></tr>
 						: redirects.length > 0
 							? redirects.slice( offset, offset + LIMIT ).map( redirect => (
 								<tr key={ redirect.id }>
@@ -227,14 +231,17 @@ const List = ()  => {
 									</td>
 									<td className='ss-redirect__type'>{ redirect.type }</td>
 									<td className='ss-redirect__url'>
-										<div><em>{ SSRedirection.conditionOptions[redirect.condition] }</em>: <strong>{ redirect.from }</strong></div>
-										<div>&rarr; <strong>{ redirect.to }</strong></div>
+										{ redirect.from }
+										<small>{ SSRedirection.conditionOptions[redirect.condition] }</small>
+									</td>
+									<td className='ss-redirect__url'>
+										{ redirect.to }
 									</td>
 									<td className='ss-redirect__note'>{ redirect.note }</td>
 									<td className='ss-redirect__enable'>
 										<label className='ss-toggle'>
-											<input className='ss-toogle__checkbox' type='checkbox' checked={ 1 == redirect.enable } onChange={ e => changeEnable( e, redirect ) } />
-											<div className='ss-toogle__switch'></div>
+											<input className='ss-toggle__checkbox' type='checkbox' checked={ 1 == redirect.enable } onChange={ e => changeEnable( e, redirect ) } />
+											<div className='ss-toggle__switch'></div>
 										</label>
 									</td>
 									<td className='ss-redirect__actions'>
@@ -243,7 +250,7 @@ const List = ()  => {
 									</td>
 								</tr>
 							) )
-							: <tr><td colSpan='6'>{ __( 'No data', 'slim-seo' ) }</td></tr>
+							: <tr><td colSpan='7'><p>{ __( 'No redirects found.', 'slim-seo' ) }</p></td></tr>
 					}
 				</tbody>
 
@@ -255,8 +262,12 @@ const List = ()  => {
 							<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
 						</th>
 						<th className='ss-redirect__url'>
-							{ __( 'From URL', 'slim-seo' ) } &rarr; { __( 'To URL', 'slim-seo' ) }
-							<Tooltip content={ __( 'Redirect from - to', 'slim-seo' ) } />
+							{ __( 'From URL', 'slim-seo' ) }
+							<Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } />
+						</th>
+						<th className='ss-redirect__url'>
+							{ __( 'To URL', 'slim-seo' ) }
+							<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
 						</th>
 						<th className='ss-redirect__note'>
 							{ __( 'Note', 'slim-seo' ) }

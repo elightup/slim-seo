@@ -31,6 +31,7 @@
 	th,
 	td {
 		padding: 8px 12px;
+		vertical-align: top;
 	}
 
 	th {
@@ -86,12 +87,18 @@
 		height: 18px;
 	}
 }
+.ss-redirect__url {
+	small {
+		display: block;
+		margin-top: 4px;
+	}
+}
 
 .ss-toggle {
 	cursor: pointer;
 	display: inline-block;
 
-	.ss-toogle__switch {
+	.ss-toggle__switch {
 		display: inline-block;
 		background: #ccc;
 		border-radius: 16px;
@@ -102,11 +109,11 @@
 		transition: background 0.25s;
 	}
 
-	.ss-toogle__switch:before, .ss-toogle__switch:after {
+	.ss-toggle__switch:before, .ss-toggle__switch:after {
 		content: "";
 	}
 
-	.ss-toogle__switch:before {
+	.ss-toggle__switch:before {
 		display: block;
 		background: linear-gradient(to bottom, #fff 0%, #eee 100%);
 		border-radius: 50%;
@@ -119,20 +126,20 @@
 		transition: left 0.25s;
 	}
 
-	.ss-toogle__checkbox:checked + .ss-toogle__switch {
+	.ss-toggle__checkbox:checked + .ss-toggle__switch {
 		background: #56c080;
 	}
 
-	.ss-toogle__checkbox:checked + .ss-toogle__switch:before {
+	.ss-toggle__checkbox:checked + .ss-toggle__switch:before {
 		left: 15px;
 	}
 
-	.ss-toogle__checkbox {
+	.ss-toggle__checkbox {
 		position: absolute;
 		visibility: hidden;
 	}
 
-	.ss-toogle__label {
+	.ss-toggle__label {
 		margin-left: 5px;
 		position: relative;
 		top: 2px;

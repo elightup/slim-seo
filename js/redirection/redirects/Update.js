@@ -103,9 +103,9 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 
 					<div className='form-field'>
 						<label className='ss-toggle'>
-							<input className='ss-toogle__checkbox' id='ss-enable' type='checkbox' name='ssr_enable' value={ redirect.enable } checked={ 1 == redirect.enable } onChange={ e => handleChange( { enable: 1 == redirect.enable ? 0 : 1 } ) } />
-							<div className='ss-toogle__switch'></div>
-							<span className='ss-toogle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
+							<input className='ss-toggle__checkbox' id='ss-enable' type='checkbox' name='ssr_enable' value={ redirect.enable } checked={ 1 == redirect.enable } onChange={ e => handleChange( { enable: 1 == redirect.enable ? 0 : 1 } ) } />
+							<div className='ss-toggle__switch'></div>
+							<span className='ss-toggle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
 						</label>
 					</div>
 
@@ -117,9 +117,9 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 						showAdvancedOptions ? (
 							<div className='form-field'>
 								<label className='ss-toggle'>
-									<input className='ss-toogle__checkbox' id='ss-ignore-parameters' type='checkbox' name='ssr_ignore_parameters' value={ redirect.ignoreParameters } checked={ 1 == redirect.ignoreParameters } onChange={ e => handleChange( { ignoreParameters: 1 == redirect.ignoreParameters ? 0 : 1 } ) } />
-									<div className='ss-toogle__switch'></div>
-									<span className='ss-toogle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
+									<input className='ss-toggle__checkbox' id='ss-ignore-parameters' type='checkbox' name='ssr_ignore_parameters' value={ redirect.ignoreParameters } checked={ 1 == redirect.ignoreParameters } onChange={ e => handleChange( { ignoreParameters: 1 == redirect.ignoreParameters ? 0 : 1 } ) } />
+									<div className='ss-toggle__switch'></div>
+									<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
 								</label>
 							</div>
 						) : ''
