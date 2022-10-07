@@ -95,20 +95,20 @@
 		left: 2px;
 		transition: left 0.25s;
 	}
-	
+
 	.ss-toogle__checkbox:checked + .ss-toogle__switch {
 		background: #56c080;
 	}
-	
+
 	.ss-toogle__checkbox:checked + .ss-toogle__switch:before {
 		left: 15px;
 	}
-	  
+
 	.ss-toogle__checkbox {
 		position: absolute;
 		visibility: hidden;
 	}
-	  
+
 	.ss-toogle__label {
 		margin-left: 5px;
 		position: relative;
@@ -156,50 +156,53 @@
 	width: 100%;
 	height: 100%;
 	overflow: auto;
-	background-color: rgb( 0,0,0 );
 	background-color: rgba( 0,0,0,0.4 );
 
-	.ss-modal__content {
-		background-color: #fefefe;
+	&__content {
+		background-color: #fff;
 		margin: auto;
-		padding: 20px;
-		border-radius: 20px;
-		border: 1px solid #888;
+		padding: 24px;
 		width: 50%;
+		position: relative;
 
 		.ss-warning-message {
-			color: red;
+			color: var(--color-red);
 		}
-		
+
 		label {
 			font-weight: bold;
 		}
-	
+
 		#ss-type {
 			width: 100%;
 		}
-	
+
 		#ss-condition {
 			width: 30%;
 		}
-	
+
 		#ss-from {
 			width: 65%;
 		}
 	}
 
-	.ss-modal__close {
-		color: #aaaaaa;
-		float: right;
-		font-size: 14px;
-		font-weight: bold;
+	&__close {
+		position: absolute;
+		top: 6px;
+		right: 10px;
+		color: var(--color-gray);
+		font-size: 18px;
+		background: none;
+		border: none;
 	}
-	  
-	.ss-modal__close:hover,
-	.ss-modal__close:focus {
-		color: #000;
-		text-decoration: none;
-		cursor: pointer;
+
+	&__close:hover,
+	&__close:focus {
+		color: inherit;
+	}
+
+	h3 {
+		margin-top: 0;
 	}
 }
 
