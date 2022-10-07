@@ -1,17 +1,17 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useReducer, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import request from '../helper/request';
 import { Tooltip } from '../helper/misc';
+import request from '../helper/request';
 
 const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 	const [ redirect, setRedirect ] = useState( {} );
 	const [ isProcessing, setIsProcessing ] = useState( false );
 	const [ warningMessage, setWarningMessage ] = useState( '' );
-	const [ showAdvancedOptions, setShowAdvancedOptions ] = useState( false );
+	const [ showAdvancedOptions, toggleAdvancedOptions ] = useReducer( onOrOff => !onOrOff, false );
 
 	const updateRedirect = () => {
 		setWarningMessage( '' );
-		
+
 		request( 'update_redirect', { redirect }, 'POST' ).then( result => {
 			setShowUpdateRedirectModal( false );
 			callback();
@@ -25,8 +25,8 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 	const updateRedirectButtonClicked = e => {
 		e.preventDefault();
 
-		if ( ! redirect.from.length || ! redirect.to.length ) {
-			setWarningMessage( __( 'Please fill out From and To inputs', 'slim-seo' ) );
+		if ( !redirect.from.length || !redirect.to.length ) {
+			setWarningMessage( __( 'Please fill out From URL and To URL', 'slim-seo' ) );
 			return;
 		}
 
@@ -36,28 +36,22 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 			request( 'is_exists', { from: redirect.from } ).then( result => {
 				if ( result ) {
 					setIsProcessing( false );
-					setWarningMessage( __( 'From value is existing already!', 'slim-seo' ) );
+					setWarningMessage( __( 'From URL already exists, which means this page already has a redirect rule!', 'slim-seo' ) );
 				} else {
 					updateRedirect();
 				}
 			} );
-		} else {	
+		} else {
 			updateRedirect();
 		}
-		
-	};
 
-	const showAdvancedOptionsClicked = e => {
-		e.preventDefault();
-
-		setShowAdvancedOptions( prev => ! prev );
 	};
 
 	const closeModalButtonClicked = e => {
 		e.preventDefault();
 
 		setShowUpdateRedirectModal( false );
-	}
+	};
 
 	useEffect( () => {
 		setRedirect( prev => redirectToEdit );
@@ -68,7 +62,7 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 			<div className='ss-modal__content'>
 				<button className='ss-modal__close' onClick={ closeModalButtonClicked }>&times;</button>
 				<h3>{ SSRedirection.defaultRedirect.id == redirect.id ? __( 'Add Redirect', 'slim-seo' ) : __( 'Update Redirect', 'slim-seo' ) }</h3>
-			
+
 				<div className='form-wrap'>
 					<div className='form-field'>
 						<label for='ss-type'>{ __( 'Type', 'slim-seo' ) }
@@ -94,7 +88,7 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 					<div className='form-field'>
 						<label for='ss-to'>
 							{ __( 'To URL', 'slim-seo' ) }
-							<Tooltip content={ __( 'Redirect to URL', 'slim-seo' ) } />
+							<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
 						</label>
 						<input id='ss-to' type='text' name='ssr_to' value={ redirect.to } onChange={ e => handleChange( { to: e.target.value.trim() } ) } />
 					</div>
@@ -102,7 +96,7 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 					<div className='form-field'>
 						<label for='ss-note'>
 							{ __( 'Note', 'slim-seo' ) }
-							<Tooltip content={ __( 'Note', 'slim-seo' ) } />
+							<Tooltip content={ __( 'Something that reminds you about this redirect', 'slim-seo' ) } />
 						</label>
 						<input id='ss-note' type='text' name='ssr_note' value={ redirect.note } onChange={ e => handleChange( { note: e.target.value } ) } />
 					</div>
@@ -115,11 +109,11 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 						</label>
 					</div>
 
-					<p>
-						<a href='#' onClick={ showAdvancedOptionsClicked }>{ showAdvancedOptions ? __( 'Hide advanced options', 'slim-seo' ) : __( 'Show advanced options', 'slim-seo' ) }</a>
-					</p>
+					<div className='form-field'>
+						<button type='button' className='button-link' onClick={ toggleAdvancedOptions }>{ __( 'Advanced options', 'slim-seo' ) }</button>
+					</div>
 
-					{ 
+					{
 						showAdvancedOptions ? (
 							<div className='form-field'>
 								<label className='ss-toggle'>
@@ -131,11 +125,11 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 						) : ''
 					}
 
-					<p>
+					<div className='form-field'>
 						<button className='button button-primary' onClick={ updateRedirectButtonClicked } disabled={ true == isProcessing ? 'disabled' : '' }>
 							{ SSRedirection.defaultRedirect.id == redirect.id ? __( 'Add Redirect', 'slim-seo' ) : __( 'Update Redirect', 'slim-seo' ) }
 						</button>
-					</p>
+					</div>
 
 					<p className='ss-warning-message'>{ warningMessage }</p>
 				</div>
