@@ -1,8 +1,8 @@
 import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import request from '../helper/request';
-import { Tooltip } from '../helper/misc';
 import Paginate from './Paginate';
+import Header from './Header';
 import AddRedirect from '../redirects/Update';
 
 const List = ()  => {
@@ -11,7 +11,7 @@ const List = ()  => {
 	const [ offset, setOffset ] = useState( 0 );
 	const [ logs, setLogs ] = useState( [] );
 	const [ isLoadingData, setIsLoadingData ] = useState( true );
-	const [ orderBy, setOrderBy ] = useState( 'updated_at-DESC' );
+	const [ order, setOrder ] = useState( { orderBy: 'updated_at', sort: 'desc' } );
 	const [ showAddRedirectModal, setShowAddRedirectModal ] = useState( false );
 	const [ redirectToAdd, setRedirectToAdd ] = useState( SSRedirection.defaultRedirect );
 
@@ -28,13 +28,13 @@ const List = ()  => {
 		window.location.reload();
 	};
 
-	const changeOrder = order => {
+	const changeOrder = _order => {
 		return e => {
 			e.preventDefault();
 
-			setIsLoadingData( true );
+			setOrder( { ..._order } );
 
-			setOrderBy( order );
+			setIsLoadingData( true );
 		};
 	};
 
@@ -43,47 +43,17 @@ const List = ()  => {
 	}, [] );
 
 	useEffect( () => {
-		request( 'get_404_logs', { orderBy, limit: LIMIT, offset } ).then( result => {
+		request( 'get_404_logs', { order, limit: LIMIT, offset }, 'POST' ).then( result => {
 			setIsLoadingData( false );
 			setLogs( result );
 		} );
-	}, [ orderBy, offset ] );
+	}, [ order, offset ] );
 
 	return (
 		<>
 			<table className='ss-table'>
 				<thead>
-					<tr>
-						<th className='ss-log__url'>
-							{ __( 'URL', 'slim-seo' ) }
-							<Tooltip content={ __( '404 URL', 'slim-seo' ) } />
-						</th>
-						<th className='ss-log__hit'>
-							{ __( 'Hit', 'slim-seo' ) }
-							<Tooltip content={ __( 'Number of 404 URL has been hitted', 'slim-seo' ) } />
-							<span className='ss-orderby'>
-								<a href='#' onClick={ changeOrder( 'hit-ASC' ) }><i className={ `ss-orderby__arrow up` + ( 'hit-ASC' === orderBy ? ' active' : '' ) }></i></a>
-								<a href='#' onClick={ changeOrder( 'hit-DESC' ) }><i className={ `ss-orderby__arrow down` + ( 'hit-DESC' === orderBy ? ' active' : '' ) }></i></a>
-							</span>
-						</th>
-						<th className='ss-log__created_at'>
-							{ __( 'Created at', 'slim-seo' ) }
-							<Tooltip content={ __( 'Created time of 404 URL', 'slim-seo' ) } />
-							<span className='ss-orderby'>
-								<a href='#' onClick={ changeOrder( 'created_at-ASC' ) }><i className={ `ss-orderby__arrow up` + ( 'created_at-ASC' === orderBy ? ' active' : '' ) }></i></a>
-								<a href='#' onClick={ changeOrder( 'created_at-DESC' ) }><i className={ `ss-orderby__arrow down` + ( 'created_at-DESC' === orderBy ? ' active' : '' ) }></i></a>
-							</span>
-						</th>
-						<th className='ss-log__updated_at'>
-							{ __( 'Updated at', 'slim-seo' ) }
-							<Tooltip content={ __( 'Last time 404 URL has been hitted', 'slim-seo' ) } />
-							<span className='ss-orderby'>
-								<a href='#' onClick={ changeOrder( 'updated_at-ASC' ) }><i className={ `ss-orderby__arrow up` + ( 'updated_at-ASC' === orderBy ? ' active' : '' ) }></i></a>
-								<a href='#' onClick={ changeOrder( 'updated_at-DESC' ) }><i className={ `ss-orderby__arrow down` + ( 'updated_at-DESC' === orderBy ? ' active' : '' ) }></i></a>
-							</span>
-						</th>
-						<th className='ss-log__actions'>{ __( 'Actions', 'slim-seo' ) }</th>
-					</tr>
+					<Header order={ order } changeOrder={ changeOrder } />
 				</thead>
 
 				<tbody>
@@ -105,13 +75,7 @@ const List = ()  => {
 				</tbody>
 
 				<tfoot>
-					<tr>
-						<td className='ss-log__url'>{ __( 'URL', 'slim-seo' ) }</td>
-						<td className='ss-log__hit'>{ __( 'Hit', 'slim-seo' ) }</td>
-						<td className='ss-log__created_at'>{ __( 'Created at', 'slim-seo' ) }</td>
-						<td className='ss-log__updated_at'>{ __( 'Updated at', 'slim-seo' ) }</td>
-						<td className='ss-log__actions'>{ __( 'Actions', 'slim-seo' ) }</td>
-					</tr>
+					<Header order={ order } changeOrder={ changeOrder } />
 				</tfoot>
 			</table>
 
