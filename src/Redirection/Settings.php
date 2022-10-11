@@ -31,6 +31,7 @@ class Settings {
 			'nonce'            => wp_create_nonce( 'wp_rest' ),
 			'settingsPageURL'  => untrailingslashit( admin_url( 'options-general.php?page=slim-seo' ) ),
 			'tabID'            => 'redirection',
+			'homeURL'          => untrailingslashit( home_url() ),
 			'settingsName'     => SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME,
 			'settings'         => Helper::get_settings(),
 			'redirectTypes'    => Helper::redirect_types(),

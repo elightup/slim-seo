@@ -1,6 +1,6 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Tooltip } from '../helper/misc';
+import { Tooltip, getFullURL } from '../helper/misc';
 import request from '../helper/request';
 import Paginate from './Paginate';
 import Update from './Update';
@@ -231,11 +231,11 @@ const List = () => {
 										</td>
 										<td className='ss-redirect__type'>{ redirect.type }</td>
 										<td className='ss-redirect__url'>
-											{ redirect.from }
+											{ 'exact-match' === redirect.condition ? <a href={ getFullURL( redirect.from ) } target='_blank'>{ redirect.from }</a> : redirect.from }
 											<small>{ SSRedirection.conditionOptions[ redirect.condition ] }</small>
 										</td>
 										<td className='ss-redirect__url'>
-											{ redirect.to }
+											<a href={ getFullURL( redirect.to ) } target='_blank'>{ redirect.to }</a>
 										</td>
 										<td className='ss-redirect__note'>{ redirect.note }</td>
 										<td className='ss-redirect__enable'>
