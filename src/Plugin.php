@@ -52,6 +52,7 @@ class Plugin {
 		$this->services['wpml']        = new Integrations\WPML;
 		$this->services['amp']         = new Integrations\AMP( $this->services['schema'] );
 		$this->services['divi']        = new Integrations\Divi;
+		$this->services['metabox']     = new Integrations\MetaBox;
 		$this->services['web_stories'] = new Integrations\WebStories(
 			$this->services['open_graph'],
 			$this->services['twitter_cards'],

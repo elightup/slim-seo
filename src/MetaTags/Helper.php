@@ -15,15 +15,6 @@ class Helper {
 			'edd_invoices',             // EDD Invoices.
 			'velocity',                 // Velocity.
 			'fluentform',               // Fluent Forms
-
-			'rwmb_meta',                // Meta Box.
-			'mb_frontend_form',         // MB Frontend Submission.
-			'mb_frontend_dashboard',
-			'mb_user_profile_register', // MB User Profile.
-			'mb_user_profile_login',
-			'mb_user_profile_info',
-			'mb_relationships',         // MB Relationships.
-			'mbfp-button',              // MB Favorite Posts.
 		] );
 
 		$shortcodes_bak = $shortcode_tags;
