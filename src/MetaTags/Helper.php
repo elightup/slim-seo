@@ -24,25 +24,6 @@ class Helper {
 			'mb_user_profile_info',
 			'mb_relationships',         // MB Relationships.
 			'mbfp-button',              // MB Favorite Posts.
-
-			/**
-			 * Divi
-			 *
-			 * @link https://www.elegantthemes.com/gallery/divi/
-			 */
-			'et_pb_column',
-			'et_pb_fullwidth_section',
-			'et_pb_row',
-			'et_pb_section',
-
-			'et_pb_button',
-			'et_pb_code',
-			'et_pb_fullwidth_code',
-			'et_pb_gallery',
-			'et_pb_image',
-			'et_pb_slide',
-			'et_pb_slider',
-			'et_pb_text',
 		] );
 
 		$shortcodes_bak = $shortcode_tags;
