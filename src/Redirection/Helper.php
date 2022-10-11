@@ -25,11 +25,13 @@ class Helper {
 	public static function get_settings() : array {
 		return array_merge(
 			[
-				'enable_404_logs'     => 0,
-				'redirect_404_to'     => '',
-				'redirect_404_to_url' => '',
+				'force_trailing_slash' => 0,
+				'redirect_www'         => '',
+				'enable_404_logs'      => 0,
+				'redirect_404_to'      => '',
+				'redirect_404_to_url'  => '',
 			],
-			get_option( SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME ) ?: []
+			get_option( 'slim_seo' ) ?: []
 		);
 	}
 

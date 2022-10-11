@@ -19,7 +19,6 @@ define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
 define( 'SLIM_SEO_SLUG', sanitize_title( pathinfo( __FILE__, PATHINFO_FILENAME ) ) );
 define( 'SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME', 'ss_redirection_redirects' );
-define( 'SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME', 'ss_redirection_settings' );
 define( 'SLIM_SEO_VER', '3.15.2' );
 
 require __DIR__ . '/vendor/autoload.php';

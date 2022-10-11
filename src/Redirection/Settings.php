@@ -6,8 +6,7 @@ class Settings {
 		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tab' ] );
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_pane' ] );
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
-
-		add_action( 'slim_seo_save', [ $this, 'save' ] );
+		add_filter( 'slim_seo_option', [ $this, 'option_saved' ], 10, 2 );
 	}
 
 	public function add_tab( array $tabs ) : array {
@@ -32,7 +31,7 @@ class Settings {
 			'settingsPageURL'  => untrailingslashit( admin_url( 'options-general.php?page=slim-seo' ) ),
 			'tabID'            => 'redirection',
 			'homeURL'          => untrailingslashit( home_url() ),
-			'settingsName'     => SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME,
+			'settingsName'     => 'slim_seo',
 			'settings'         => Helper::get_settings(),
 			'redirectTypes'    => Helper::redirect_types(),
 			'conditionOptions' => Helper::condition_options(),
@@ -54,7 +53,18 @@ class Settings {
 		do_action( 'slim_seo_redirection_enqueue_settings' );
 	}
 
-	public function save() {
-		update_option( SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME, $_POST[ SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME ] );
+	public function option_saved( array $option, array $data ) : array {
+		$checkboxes = [
+			'force_trailing_slash',
+			'enable_404_logs',
+		];
+
+		foreach ( $checkboxes as $checkbox ) {
+			if ( empty( $data[$checkbox] ) ) {
+				$option[$checkbox] = 0;
+			}
+		}
+
+		return $option;
 	}
 }

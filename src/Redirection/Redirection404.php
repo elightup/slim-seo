@@ -24,7 +24,7 @@ class Redirection404 {
 		$settings = Helper::get_settings();
 
 		if ( $settings['enable_404_logs'] ) {
-			$request_url = ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 			$log_404     = new Log();
 			$log         = $log_404->get( $request_url, 'url' );
 			$now         = current_datetime()->format( 'Y-m-d H:i:s' );

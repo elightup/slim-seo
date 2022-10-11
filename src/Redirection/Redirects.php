@@ -148,4 +148,38 @@ class Redirects {
 			exit();
 		}
 	}
+
+	public static function force_trailing_slash( string $string, string $type_of_url ) : string {
+		if ( Helper::get_setting( 'force_trailing_slash' ) ) {
+			$string = trailingslashit( $string );
+		}
+
+		return $string;
+	}
+
+	public static function redirect_www() {
+		$redirect_www = Helper::get_setting( 'redirect_www' );
+
+		if ( !$redirect_www ) {
+			return;
+		}
+
+		$should_redirect = false;
+		$http_host       = $_SERVER['HTTP_HOST'];
+
+		if ( 'www-to-non' === $redirect_www && false !== stripos( $http_host, 'wwww' ) ) {
+			$http_host       = substr( $http_host, 4 );
+			$should_redirect = true;
+		} elseif ( 'non-to-www' === $redirect_www && false === stripos( $http_host, 'wwww' ) ) {
+			$http_host       = 'www.' . $http_host;
+			$should_redirect = true;
+		}
+
+		if ( !$should_redirect ) {
+			return;
+		}
+
+		header( 'Location: ' . ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$_SERVER['REQUEST_URI']}", true, 301 );
+		exit();
+	}
 }
