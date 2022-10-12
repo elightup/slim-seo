@@ -165,6 +165,9 @@ class Settings {
 		ob_start();
 		echo '<div id="', esc_attr( $name ), '" class="ss-tab-pane">';
 		include __DIR__ . "/sections/$name.php";
+		if ( 'tools' === $name ) {
+			do_action( 'tools_after_content' );
+		}
 		echo '</div>';
 		return ob_get_clean();
 	}
