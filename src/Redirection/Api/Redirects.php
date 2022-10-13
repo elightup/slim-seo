@@ -1,9 +1,9 @@
 <?php
 namespace SlimSEO\Redirection\Api;
 
-use SlimSEO\Redirection\Redirects as DbRedirects;
 use WP_REST_Server;
 use WP_REST_Request;
+use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 
 class Redirects extends Base {
 	public function register_routes() {
@@ -33,35 +33,39 @@ class Redirects extends Base {
 	}
 
 	public function get_redirects( WP_REST_Request $request ) : array {
-		$redirects = DbRedirects::list();
-		$redirects = array_map( function( $index, $redirect ) {
+		$db_redirects = new DbRedirects;
+		$redirects    = $db_redirects->list();
+		$redirects    = array_map( function( $index, $redirect ) {
 			$redirect['id'] = $index;
 
 			return $redirect;
 		}, array_keys( $redirects ), $redirects );
-		$redirects = array_reverse( $redirects );
+		$redirects    = array_reverse( $redirects );
 
 		return $redirects;
 	}
 
 	public function is_exists( WP_REST_Request $request ) : bool {
-		$from = $request->get_param( 'from' );
+		$from         = $request->get_param( 'from' );
+		$db_redirects = new DbRedirects;
 
-		return DbRedirects::is_exists( $from );
+		return $db_redirects->is_exists( $from );
 	}
 
 	public function update_redirect( WP_REST_Request $request ) : bool {
-		$redirect = $request->get_param( 'redirect' );
+		$redirect     = $request->get_param( 'redirect' );
+		$db_redirects = new DbRedirects;
 
-		DbRedirects::update( $redirect );
+		$db_redirects->update( $redirect );
 
 		return true;
 	}
 
 	public function delete_redirects( WP_REST_Request $request ) : bool {
-		$ids = $request->get_param( 'ids' );
+		$ids          = $request->get_param( 'ids' );
+		$db_redirects = new DbRedirects;
 
-		DbRedirects::delete( $ids );
+		$db_redirects->delete( $ids );
 
 		return true;
 	}

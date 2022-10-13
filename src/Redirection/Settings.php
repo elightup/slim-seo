@@ -32,7 +32,7 @@ class Settings {
 			'tabID'            => 'redirection',
 			'homeURL'          => untrailingslashit( home_url() ),
 			'settingsName'     => 'slim_seo',
-			'settings'         => Helper::get_settings(),
+			'settings'         => self::list(),
 			'redirectTypes'    => Helper::redirect_types(),
 			'conditionOptions' => Helper::condition_options(),
 			'defaultRedirect'  => [
@@ -66,5 +66,24 @@ class Settings {
 		}
 
 		return $option;
+	}
+
+	public static function list() : array {
+		return array_merge(
+			[
+				'force_trailing_slash' => 0,
+				'redirect_www'         => '',
+				'enable_404_logs'      => 0,
+				'redirect_404_to'      => '',
+				'redirect_404_to_url'  => '',
+			],
+			get_option( 'slim_seo' ) ?: []
+		);
+	}
+
+	public static function get( string $name ) {
+		$settings = self::list();
+
+		return $settings[ $name ] ?? false;
 	}
 }

@@ -3,12 +3,12 @@ namespace SlimSEO\Redirection\Api;
 
 use WP_REST_Server;
 use WP_REST_Request;
-use SlimSEO\Redirection\Helper;
-use SlimSEO\Redirection\Redirection404;
+use SlimSEO\Redirection\Settings;
+use SlimSEO\Redirection\Database\Log404 as DbLog;
 
 class Log404 extends Base {
 	public function register_routes() {
-		if ( ! Helper::get_setting( 'enable_404_logs' ) ) {
+		if ( ! Settings::get( 'enable_404_logs' ) ) {
 			return;
 		}
 
@@ -26,14 +26,17 @@ class Log404 extends Base {
 	}
 
 	public function get_total_logs( WP_REST_Request $request ) : int {
-		return Redirection404::get_total_logs();
+		$db_log = new DbLog;
+
+		return $db_log->get_total();
 	}
 
 	public function get_logs( WP_REST_Request $request ) : array {
 		$order  = $request->get_param( 'order' );
 		$limit  = $request->get_param( 'limit' );
 		$offset = $request->get_param( 'offset' );
+		$db_log = new DbLog;
 
-		return Redirection404::get_logs_list( $order['orderBy'], $order['sort'], intval( $limit ), intval( $offset ) );
+		return $db_log->list( $order['orderBy'], $order['sort'], intval( $limit ), intval( $offset ) );
 	}
 }

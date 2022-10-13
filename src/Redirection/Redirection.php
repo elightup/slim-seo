@@ -1,55 +1,18 @@
 <?php
 namespace SlimSEO\Redirection;
 
-class Redirects {
-	public static function list() : array {
-		$redirects = get_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME );
+use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 
-		return ! empty( $redirects ) ? $redirects : [];
+class Redirection {
+	public function __construct() {
+		add_action( 'plugins_loaded', [ $this, 'redirect' ], 1 );
+		add_filter( 'user_trailingslashit', [ $this, 'force_trailing_slash' ], 1000, 2 );
+		add_action( 'plugins_loaded', [ $this, 'redirect_www' ], 2 );
 	}
 
-	public static function is_exists( string $url ) : bool {
-		$redirects = self::list();
-		$home_url  = untrailingslashit( home_url() );
-		$url       = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( wp_unslash( $url ) ) ) );
-
-		return count( array_filter( $redirects, function( $redirect ) use ( $url ) {
-			return $redirect['from'] === $url;
-		} ) ) > 0;
-	}
-
-	public static function update( array $redirect ) {
-		$redirect    = wp_unslash( $redirect );
-		$redirects   = self::list();
-		$redirect_id = $redirect['id'] ?? -1;
-
-		unset( $redirect['id'] );
-
-		$home_url         = untrailingslashit( home_url() );
-		$redirect['from'] = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( $redirect['from'] ) ) );
-		$redirect['to']   = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( $redirect['to'] ) ) );
-		$redirect['note'] = sanitize_text_field( $redirect['note'] );
-
-		if ( -1 === $redirect_id ) {
-			$redirects[] = $redirect;
-		} else {
-			$redirects[ $redirect_id ] = $redirect;
-		}
-
-		update_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME, $redirects );
-	}
-
-	public static function delete( array $ids ) {
-		$redirects = self::list();
-		$redirects = array_filter( $redirects, function( $id ) use ( $ids ) {
-			return ! in_array( $id, $ids, true );
-		}, ARRAY_FILTER_USE_KEY );
-
-		update_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME, $redirects );
-	}
-
-	public static function handle() {
-		$redirects = self::list();
+	public function redirect() {
+		$db_redirects = new DbRedirects;
+		$redirects    = $db_redirects->list();
 
 		if ( empty( $redirects ) ) {
 			return;
@@ -152,16 +115,16 @@ class Redirects {
 		}
 	}
 
-	public static function force_trailing_slash( string $string, string $type_of_url ) : string {
-		if ( Helper::get_setting( 'force_trailing_slash' ) ) {
+	public function force_trailing_slash( string $string, string $type_of_url ) : string {
+		if ( Settings::get( 'force_trailing_slash' ) ) {
 			$string = trailingslashit( $string );
 		}
 
 		return $string;
 	}
 
-	public static function redirect_www() {
-		$redirect_www = Helper::get_setting( 'redirect_www' );
+	public function redirect_www() {
+		$redirect_www = Settings::get( 'redirect_www' );
 
 		if ( ! $redirect_www ) {
 			return;

@@ -68,7 +68,7 @@ class Log404 {
 		);
 	}
 
-	public function get_list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ) : array {
+	public function list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ) : array {
 		global $wpdb;
 
 		$sql_query = "

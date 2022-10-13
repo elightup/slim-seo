@@ -22,25 +22,6 @@ class Helper {
 		];
 	}
 
-	public static function get_settings() : array {
-		return array_merge(
-			[
-				'force_trailing_slash' => 0,
-				'redirect_www'         => '',
-				'enable_404_logs'      => 0,
-				'redirect_404_to'      => '',
-				'redirect_404_to_url'  => '',
-			],
-			get_option( 'slim_seo' ) ?: []
-		);
-	}
-
-	public static function get_setting( string $name ) {
-		$settings = self::get_settings();
-
-		return $settings[ $name ] ?? false;
-	}
-
 	/**
 	 * Check if the current request is HTTPS
 	 *
