@@ -43,14 +43,16 @@ class Log404 {
 		update_option( $option_name, SLIM_SEO_VER );
 	}
 
-	public function get( string $value, string $by = 'id' ) : array {
+	public function get_log_by_url( string $value ) : array {
 		global $wpdb;
 
-		$field = 'id' === $by ? '`id`' : '`url`';
-		$row   = $wpdb->get_row(
-			"SELECT *
-			FROM {$wpdb->slim_seo_404}
-			WHERE {$field} = '{$value}'",
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT *
+				FROM {$wpdb->slim_seo_404}
+				WHERE `url` = %s",
+				$value
+			),
 			ARRAY_A
 		);
 
@@ -69,11 +71,18 @@ class Log404 {
 	public function get_list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ) : array {
 		global $wpdb;
 
+		$sql_query = "
+			SELECT * 
+			FROM {$wpdb->slim_seo_404} 
+			ORDER BY `{$order_by}` {$order}
+		";
+
+		if ( $limit ) {
+			$sql_query .= " LIMIT {$limit} OFFSET {$offset}";
+		}
+
 		return $wpdb->get_results(
-			"SELECT *
-			FROM {$wpdb->slim_seo_404}
-			ORDER BY `{$order_by}` {$order}"
-			. ( $limit ? " LIMIT {$limit} OFFSET {$offset}" : '' ),
+			$sql_query,
 			ARRAY_A
 		);
 	}

@@ -13,7 +13,7 @@ class Redirection404 {
 	public static function get_logs_list( string $order_by, string $order, int $limit, int $offset ) : array {
 		$log_404 = new Log();
 
-		return $log_404->get_list( $order_by, $order, $limit, $offset );
+		return $log_404->get_list( sanitize_text_field( $order_by ), sanitize_text_field( $order ), intval( $limit ), intval( $offset ) );
 	}
 
 	public static function handle() {
@@ -24,11 +24,12 @@ class Redirection404 {
 		$settings = Helper::get_settings();
 
 		if ( $settings['enable_404_logs'] ) {
-			$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+			$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+			$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 			$log_404     = new Log();
-			$log         = $log_404->get( $request_url, 'url' );
+			$log         = $log_404->get_log_by_url( $request_url );
 			$now         = current_datetime()->format( 'Y-m-d H:i:s' );
-
 			if ( empty( $log ) ) {
 				$log_404->add( [
 					'url'        => $request_url,

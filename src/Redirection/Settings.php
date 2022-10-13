@@ -60,8 +60,8 @@ class Settings {
 		];
 
 		foreach ( $checkboxes as $checkbox ) {
-			if ( empty( $data[$checkbox] ) ) {
-				$option[$checkbox] = 0;
+			if ( empty( $data[ $checkbox ] ) ) {
+				$option[ $checkbox ] = 0;
 			}
 		}
 

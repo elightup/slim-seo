@@ -65,6 +65,8 @@
 		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
 		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
+		<exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery" />
+		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
 	</rule>
 
 	<!-- Verify that the text_domain is set to the desired text-domain.

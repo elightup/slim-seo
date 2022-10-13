@@ -11,7 +11,7 @@ class Redirects {
 	public static function is_exists( string $url ) : bool {
 		$redirects = self::list();
 		$home_url  = untrailingslashit( home_url() );
-		$url       = html_entity_decode( str_replace( $home_url, '', $url ) );
+		$url       = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( wp_unslash( $url ) ) ) );
 
 		return count( array_filter( $redirects, function( $redirect ) use ( $url ) {
 			return $redirect['from'] === $url;
@@ -19,15 +19,16 @@ class Redirects {
 	}
 
 	public static function update( array $redirect ) {
+		$redirect    = wp_unslash( $redirect );
 		$redirects   = self::list();
 		$redirect_id = $redirect['id'] ?? -1;
 
 		unset( $redirect['id'] );
 
-		$home_url = untrailingslashit( home_url() );
-
-		$redirect['from'] = html_entity_decode( str_replace( $home_url, '', $redirect['from'] ) );
-		$redirect['to']   = html_entity_decode( str_replace( $home_url, '', $redirect['to'] ) );
+		$home_url         = untrailingslashit( home_url() );
+		$redirect['from'] = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( $redirect['from'] ) ) );
+		$redirect['to']   = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( $redirect['to'] ) ) );
+		$redirect['note'] = sanitize_text_field( $redirect['note'] );
 
 		if ( -1 === $redirect_id ) {
 			$redirects[] = $redirect;
@@ -41,7 +42,7 @@ class Redirects {
 	public static function delete( array $ids ) {
 		$redirects = self::list();
 		$redirects = array_filter( $redirects, function( $id ) use ( $ids ) {
-			return ! in_array( $id, $ids );
+			return ! in_array( $id, $ids, true );
 		}, ARRAY_FILTER_USE_KEY );
 
 		update_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME, $redirects );
@@ -54,7 +55,9 @@ class Redirects {
 			return;
 		}
 
-		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+		$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = rtrim( strtolower( urldecode( $request_url ) ), '/' );
 
 		foreach ( $redirects as $redirect ) {
@@ -160,12 +163,12 @@ class Redirects {
 	public static function redirect_www() {
 		$redirect_www = Helper::get_setting( 'redirect_www' );
 
-		if ( !$redirect_www ) {
+		if ( ! $redirect_www ) {
 			return;
 		}
 
 		$should_redirect = false;
-		$http_host       = $_SERVER['HTTP_HOST'];
+		$http_host       = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
 
 		if ( 'www-to-non' === $redirect_www && false !== stripos( $http_host, 'wwww' ) ) {
 			$http_host       = substr( $http_host, 4 );
@@ -175,11 +178,13 @@ class Redirects {
 			$should_redirect = true;
 		}
 
-		if ( !$should_redirect ) {
+		if ( ! $should_redirect ) {
 			return;
 		}
 
-		header( 'Location: ' . ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$_SERVER['REQUEST_URI']}", true, 301 );
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+		header( 'Location: ' . ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}", true, 301 );
 		exit();
 	}
 }
