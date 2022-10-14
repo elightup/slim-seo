@@ -46,9 +46,7 @@ class Settings {
 			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
 		}
 		$tabs['social'] = __( 'Social', 'slim-seo' );
-		if ( $this->has_seo_plugins() ) {
-			$tabs['tools'] = __( 'Tools', 'slim-seo' );
-		}
+		$tabs['tools']  = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 
@@ -59,25 +57,8 @@ class Settings {
 			$panes['homepage'] = $this->get_pane( 'homepage' );
 		}
 		$panes['social'] = $this->get_pane( 'social' );
-		if ( $this->has_seo_plugins() ) {
-			$panes['tools'] = $this->get_pane( 'tools' );
-		}
+		$panes['tools']  = $this->get_pane( 'tools' );
 		return $panes;
-	}
-	public function has_seo_plugins() {
-		$seo_plugins = [
-			'all-in-one-seo-pack/all-in-one-seo-pack.php',
-			'autodescription/autodescription.php',
-			'seo-by-rank-math/rank-math.php',
-			'wordpress-seo/wp-seo.php',
-			'wp-seopress/seopress.php',
-		];
-		foreach ( $seo_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public function enqueue() {
@@ -86,14 +67,12 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [ 'tippy' ], SLIM_SEO_VER, true );
 
-		if ( $this->has_seo_plugins() ) {
-			wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
-			wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
-				'nonce'          => wp_create_nonce( 'migrate' ),
-				'doneText'       => __( 'Done!', 'slim-seo' ),
-				'preProcessText' => __( 'Starting...', 'slim-seo' ),
-			] );
-		}
+		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
+		wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
+			'nonce'          => wp_create_nonce( 'migrate' ),
+			'doneText'       => __( 'Done!', 'slim-seo' ),
+			'preProcessText' => __( 'Starting...', 'slim-seo' ),
+		] );
 
 		wp_enqueue_media();
 		$params = [
