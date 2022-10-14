@@ -144,9 +144,6 @@ class Settings {
 		ob_start();
 		echo '<div id="', esc_attr( $name ), '" class="ss-tab-pane">';
 		include __DIR__ . "/sections/$name.php";
-		if ( 'tools' === $name ) {
-			do_action( 'slim_seo_tools_tab_content' );
-		}
 		echo '</div>';
 		return ob_get_clean();
 	}

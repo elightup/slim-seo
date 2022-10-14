@@ -18,3 +18,5 @@
 	<div id="terms-status"></div>
 	<div id="done-status"></div>
 </div>
+
+<?php do_action( 'slim_seo_tools_tab_content' ); ?>
