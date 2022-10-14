@@ -240,7 +240,7 @@ const List = () => {
 										<td className='ss-redirect__note'>{ redirect.note }</td>
 										<td className='ss-redirect__enable'>
 											<label className='ss-toggle'>
-												<input className='ss-toggle__checkbox' type='checkbox' defaultChecked={ 1 == redirect.enable } onChange={ e => changeEnable( e, redirect ) } />
+												<input className='ss-toggle__checkbox' type='checkbox' checked={ 1 == redirect.enable } onChange={ e => changeEnable( e, redirect ) } />
 												<div className='ss-toggle__switch'></div>
 											</label>
 										</td>

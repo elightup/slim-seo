@@ -1,4 +1,5 @@
 import { useEffect, useReducer, useState } from '@wordpress/element';
+import { Modal, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Tooltip } from '../helper/misc';
 import request from '../helper/request';
@@ -47,7 +48,7 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 
 	};
 
-	const closeModalButtonClicked = e => {
+	const closeModal = e => {
 		e.preventDefault();
 
 		setShowUpdateRedirectModal( false );
@@ -58,11 +59,8 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 	}, [ redirectToEdit ] );
 
 	return (
-		<div className='ss-modal'>
+		<Modal title={ SSRedirection.defaultRedirect.id == redirect.id ? __( 'Add Redirect', 'slim-seo' ) : __( 'Update Redirect', 'slim-seo' ) } overlayClassName='ss-modal' onRequestClose={ closeModal }>
 			<div className='ss-modal__content'>
-				<button className='ss-modal__close' onClick={ closeModalButtonClicked }>&times;</button>
-				<h3>{ SSRedirection.defaultRedirect.id == redirect.id ? __( 'Add Redirect', 'slim-seo' ) : __( 'Update Redirect', 'slim-seo' ) }</h3>
-
 				<div className='form-wrap'>
 					<div className='form-field'>
 						<label for='ss-type'>{ __( 'Type', 'slim-seo' ) }
@@ -110,7 +108,7 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 					</div>
 
 					<div className='form-field'>
-						<button type='button' className='button-link' onClick={ toggleAdvancedOptions }>{ __( 'Advanced options', 'slim-seo' ) }</button>
+						<Button className='button-link' onClick={ toggleAdvancedOptions }>{ __( 'Advanced options', 'slim-seo' ) }</Button>
 					</div>
 
 					{
@@ -126,15 +124,15 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 					}
 
 					<div className='form-field'>
-						<button className='button button-primary' onClick={ updateRedirectButtonClicked } disabled={ true == isProcessing ? 'disabled' : '' }>
+						<Button variant='primary' onClick={ updateRedirectButtonClicked } disabled={ isProcessing }>
 							{ SSRedirection.defaultRedirect.id == redirect.id ? __( 'Add Redirect', 'slim-seo' ) : __( 'Update Redirect', 'slim-seo' ) }
-						</button>
+						</Button>
 					</div>
 
 					<p className='ss-warning-message'>{ warningMessage }</p>
 				</div>
 			</div>
-		</div>
+		</Modal>
 	);
 };
 
