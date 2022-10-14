@@ -4,24 +4,29 @@ namespace SlimSEO\Redirection;
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 
 class Redirection {
-	public function __construct() {
+	protected $db_redirects;
+
+	public function __construct( DbRedirects $db_redirects ) {
+		$this->db_redirects = $db_redirects;
+
 		add_action( 'plugins_loaded', [ $this, 'redirect' ], 1 );
 		add_filter( 'user_trailingslashit', [ $this, 'force_trailing_slash' ], 1000, 2 );
 		add_action( 'plugins_loaded', [ $this, 'redirect_www' ], 2 );
 	}
 
 	public function redirect() {
-		$db_redirects = new DbRedirects;
-		$redirects    = $db_redirects->list();
+		$redirects = $this->db_redirects->list();
 
 		if ( empty( $redirects ) ) {
 			return;
 		}
 
-		$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
-		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$http_host   = $_SERVER['HTTP_HOST'] ?: ''; // @codingStandardsIgnoreLine.
+		$request_uri = $_SERVER['REQUEST_URI'] ?: ''; // @codingStandardsIgnoreLine.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
-		$request_url = rtrim( strtolower( urldecode( $request_url ) ), '/' );
+		$request_url = Helper::normalize_url( $request_url );
+		$request_url = strtolower( $request_url );
+		$request_url = rtrim( $request_url, '/' );
 
 		foreach ( $redirects as $redirect ) {
 			if ( empty( $redirect['enable'] ) ) {
@@ -131,7 +136,8 @@ class Redirection {
 		}
 
 		$should_redirect = false;
-		$http_host       = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		$http_host       = $_SERVER['HTTP_HOST'] ?: ''; // @codingStandardsIgnoreLine.
+		$http_host       = strtolower( $http_host );
 
 		if ( 'www-to-non' === $redirect_www && false !== stripos( $http_host, 'wwww' ) ) {
 			$http_host       = substr( $http_host, 4 );
@@ -145,9 +151,11 @@ class Redirection {
 			return;
 		}
 
-		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$request_uri  = $_SERVER['REQUEST_URI'] ?: ''; // @codingStandardsIgnoreLine.
+		$redirect_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
+		$redirect_url = Helper::normalize_url( $redirect_url );
 
-		header( 'Location: ' . ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}", true, 301 );
+		header( 'Location: ' . $redirect_url, true, 301 );
 		exit();
 	}
 }

@@ -7,6 +7,13 @@ use SlimSEO\Redirection\Settings;
 use SlimSEO\Redirection\Database\Log404 as DbLog;
 
 class Log404 extends Base {
+	protected $db_log;
+
+	public function __construct( DbLog $db_log ) {
+		parent::__construct();
+		$this->db_log = $db_log;
+	}
+
 	public function register_routes() {
 		if ( ! Settings::get( 'enable_404_logs' ) ) {
 			return;
@@ -25,18 +32,15 @@ class Log404 extends Base {
 		] );
 	}
 
-	public function get_total_logs( WP_REST_Request $request ) : int {
-		$db_log = new DbLog;
-
-		return $db_log->get_total();
+	public function get_total_logs() : int {
+		return $this->db_log->get_total();
 	}
 
 	public function get_logs( WP_REST_Request $request ) : array {
 		$order  = $request->get_param( 'order' );
 		$limit  = $request->get_param( 'limit' );
 		$offset = $request->get_param( 'offset' );
-		$db_log = new DbLog;
 
-		return $db_log->list( $order['orderBy'], $order['sort'], intval( $limit ), intval( $offset ) );
+		return $this->db_log->list( $order['orderBy'], $order['sort'], intval( $limit ), intval( $offset ) );
 	}
 }

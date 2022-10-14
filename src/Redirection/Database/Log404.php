@@ -81,10 +81,12 @@ class Log404 {
 			$sql_query .= " LIMIT {$limit} OFFSET {$offset}";
 		}
 
+		// @codingStandardsIgnoreStart
 		return $wpdb->get_results(
 			$sql_query,
 			ARRAY_A
 		);
+		// @codingStandardsIgnoreEnd
 	}
 
 	public function add( array $log ) {

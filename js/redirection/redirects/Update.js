@@ -33,7 +33,7 @@ const Update = ( { redirectToEdit, callback, setShowUpdateRedirectModal } ) => {
 		setIsProcessing( true );
 
 		if ( SSRedirection.defaultRedirect.id == redirect.id ) {
-			request( 'is_exists', { from: redirect.from } ).then( result => {
+			request( 'exists', { from: redirect.from } ).then( result => {
 				if ( result ) {
 					setIsProcessing( false );
 					setWarningMessage( __( 'From URL already exists, which means this page already has a redirect rule!', 'slim-seo' ) );

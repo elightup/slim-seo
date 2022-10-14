@@ -30,7 +30,7 @@ class Helper {
 	public static function is_ssl() : bool {
 		// Cloudflare
 		if ( ! empty( $_SERVER['HTTP_CF_VISITOR'] ) ) {
-			$cfo = json_decode( $_SERVER['HTTP_CF_VISITOR'] );
+			$cfo = json_decode( $_SERVER['HTTP_CF_VISITOR'] ); // @codingStandardsIgnoreLine.
 			if ( isset( $cfo->scheme ) && 'https' === $cfo->scheme ) {
 				return true;
 			}
@@ -42,5 +42,12 @@ class Helper {
 		}
 
 		return is_ssl();
+	}
+
+	public static function normalize_url( string $url ) : string {
+		$url = wp_unslash( $url );
+		$url = sanitize_text_field( $url );
+		$url = html_entity_decode( $url );
+		return $url;
 	}
 }

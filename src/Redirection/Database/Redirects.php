@@ -1,21 +1,22 @@
 <?php
 namespace SlimSEO\Redirection\Database;
 
+use SlimSEO\Redirection\Helper;
+
 class Redirects {
 	protected $redirects;
 
 	public function __construct() {
-		$this->redirects = get_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME );
-		$this->redirects = ! empty( $this->redirects ) ? $this->redirects : [];
+		$this->redirects = get_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME ) ?: [];
 	}
 
 	public function list() : array {
 		return $this->redirects;
 	}
 
-	public function is_exists( string $url ) : bool {
+	public function exists( string $url ) : bool {
 		$home_url = untrailingslashit( home_url() );
-		$url      = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( wp_unslash( $url ) ) ) );
+		$url      = str_replace( $home_url, '', Helper::normalize_url( $url ) );
 
 		return count( array_filter( $this->redirects, function( $redirect ) use ( $url ) {
 			return $redirect['from'] === $url;
@@ -29,8 +30,8 @@ class Redirects {
 		unset( $redirect['id'] );
 
 		$home_url         = untrailingslashit( home_url() );
-		$redirect['from'] = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( $redirect['from'] ) ) );
-		$redirect['to']   = html_entity_decode( str_replace( $home_url, '', sanitize_text_field( $redirect['to'] ) ) );
+		$redirect['from'] = str_replace( $home_url, '', Helper::normalize_url( $redirect['from'] ) );
+		$redirect['to']   = str_replace( $home_url, '', Helper::normalize_url( $redirect['to'] ) );
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
 
 		if ( -1 === $redirect_id ) {
