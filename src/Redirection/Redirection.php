@@ -21,12 +21,11 @@ class Redirection {
 			return;
 		}
 
-		$http_host   = $_SERVER['HTTP_HOST'] ?: ''; // @codingStandardsIgnoreLine.
-		$request_uri = $_SERVER['REQUEST_URI'] ?: ''; // @codingStandardsIgnoreLine.
+		$http_host   = $_SERVER['HTTP_HOST'] ?? ''; // @codingStandardsIgnoreLine.
+		$request_uri = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
 		$request_url = strtolower( $request_url );
-		$request_url = rtrim( $request_url, '/' );
 
 		foreach ( $redirects as $redirect ) {
 			if ( empty( $redirect['enable'] ) ) {
@@ -40,7 +39,7 @@ class Redirection {
 				$current_url = rtrim( $url_parts[0], '/' );
 			}
 
-			$from            = rtrim( $redirect['from'], '/' );
+			$from            = $redirect['from'];
 			$to              = $redirect['to'];
 			$should_redirect = false;
 
@@ -77,8 +76,6 @@ class Redirection {
 					break;
 
 				default:
-					$from = filter_var( $from, FILTER_VALIDATE_URL ) ? $from : home_url( $from );
-
 					if ( $current_url === $from ) {
 						$should_redirect = true;
 					}
@@ -136,7 +133,7 @@ class Redirection {
 		}
 
 		$should_redirect = false;
-		$http_host       = $_SERVER['HTTP_HOST'] ?: ''; // @codingStandardsIgnoreLine.
+		$http_host       = $_SERVER['HTTP_HOST'] ?? ''; // @codingStandardsIgnoreLine.
 		$http_host       = strtolower( $http_host );
 
 		if ( 'www-to-non' === $redirect_www && false !== stripos( $http_host, 'wwww' ) ) {
@@ -151,7 +148,7 @@ class Redirection {
 			return;
 		}
 
-		$request_uri  = $_SERVER['REQUEST_URI'] ?: ''; // @codingStandardsIgnoreLine.
+		$request_uri  = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
 		$redirect_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$redirect_url = Helper::normalize_url( $redirect_url );
 

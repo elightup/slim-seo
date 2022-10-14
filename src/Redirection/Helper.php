@@ -45,9 +45,12 @@ class Helper {
 	}
 
 	public static function normalize_url( string $url ) : string {
-		$url = wp_unslash( $url );
-		$url = sanitize_text_field( $url );
-		$url = html_entity_decode( $url );
+		$home_url = untrailingslashit( home_url() );
+		$url      = wp_unslash( $url );
+		$url      = sanitize_text_field( $url );
+		$url      = html_entity_decode( $url );
+		$url      = str_replace( $home_url, '', $url );
+		$url      = rtrim( $url, '/' );
 		return $url;
 	}
 }

@@ -22,8 +22,8 @@ class Redirection404 {
 			return;
 		}
 
-		$http_host   = $_SERVER['HTTP_HOST'] ?: ''; // @codingStandardsIgnoreLine.
-		$request_uri = $_SERVER['REQUEST_URI'] ?: ''; // @codingStandardsIgnoreLine.
+		$http_host   = $_SERVER['HTTP_HOST'] ?? ''; // @codingStandardsIgnoreLine.
+		$request_uri = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
 		$log         = $this->db_log->get_log_by_url( $request_url );

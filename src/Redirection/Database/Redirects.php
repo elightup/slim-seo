@@ -15,8 +15,7 @@ class Redirects {
 	}
 
 	public function exists( string $url ) : bool {
-		$home_url = untrailingslashit( home_url() );
-		$url      = str_replace( $home_url, '', Helper::normalize_url( $url ) );
+		$url = Helper::normalize_url( $url );
 
 		return count( array_filter( $this->redirects, function( $redirect ) use ( $url ) {
 			return $redirect['from'] === $url;
@@ -29,9 +28,8 @@ class Redirects {
 
 		unset( $redirect['id'] );
 
-		$home_url         = untrailingslashit( home_url() );
-		$redirect['from'] = str_replace( $home_url, '', Helper::normalize_url( $redirect['from'] ) );
-		$redirect['to']   = str_replace( $home_url, '', Helper::normalize_url( $redirect['to'] ) );
+		$redirect['from'] = Helper::normalize_url( $redirect['from'] );
+		$redirect['to']   = Helper::normalize_url( $redirect['to'] );
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
 
 		if ( -1 === $redirect_id ) {
