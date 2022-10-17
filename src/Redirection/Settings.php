@@ -1,8 +1,14 @@
 <?php
 namespace SlimSEO\Redirection;
 
+use SlimSEO\Redirection\Database\Log404 as DbLog;
+
 class Settings {
-	public function __construct() {
+	protected $db_log;
+
+	public function __construct( DbLog $db_log ) {
+		$this->db_log = $db_log;
+
 		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tab' ] );
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_pane' ] );
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
@@ -25,17 +31,18 @@ class Settings {
 
 		wp_enqueue_script( 'slim-seo-redirection', SLIM_SEO_URL . 'js/redirection.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . '/js/redirection.js' ), true );
 
+		$this->db_log->create_table();
+
 		$localized_data = [
-			'rest'             => untrailingslashit( rest_url() ),
-			'nonce'            => wp_create_nonce( 'wp_rest' ),
-			'settingsPageURL'  => untrailingslashit( admin_url( 'options-general.php?page=slim-seo' ) ),
-			'tabID'            => 'redirection',
-			'homeURL'          => untrailingslashit( home_url() ),
-			'settingsName'     => 'slim_seo',
-			'settings'         => self::list(),
-			'redirectTypes'    => Helper::redirect_types(),
-			'conditionOptions' => Helper::condition_options(),
-			'defaultRedirect'  => [
+			'rest'               => untrailingslashit( rest_url() ),
+			'nonce'              => wp_create_nonce( 'wp_rest' ),
+			'homeURL'            => untrailingslashit( home_url() ),
+			'settingsName'       => 'slim_seo',
+			'settings'           => self::list(),
+			'redirectTypes'      => Helper::redirect_types(),
+			'conditionOptions'   => Helper::condition_options(),
+			'isLog404TableExist' => $this->db_log->table_exists(),
+			'defaultRedirect'    => [
 				'id'               => -1,
 				'type'             => 301,
 				'condition'        => 'exact-match',
@@ -63,6 +70,12 @@ class Settings {
 			if ( empty( $data[ $checkbox ] ) ) {
 				$option[ $checkbox ] = 0;
 			}
+		}
+
+		if ( ! empty( $data['should_delete_404_log_table'] ) ) {
+			$this->db_log->drop_table();
+
+			unset( $option['should_delete_404_log_table'] );
 		}
 
 		return $option;

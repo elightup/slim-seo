@@ -1,19 +1,24 @@
 <?php
 namespace SlimSEO\Redirection\Database;
 
+use SlimSEO\Redirection\Settings;
+
 class Log404 {
+	protected $option_name = 'ss_redirection_db_version';
+
 	public function __construct() {
 		global $wpdb;
 
 		$wpdb->tables[]     = 'slim_seo_404';
 		$wpdb->slim_seo_404 = $wpdb->prefix . 'slim_seo_404';
-
-		$this->create();
 	}
 
-	public function create() {
-		$option_name = 'ss_redirection_db_version';
-		$db_version  = get_option( $option_name );
+	public function create_table() {
+		if ( ! Settings::get( 'enable_404_logs' ) ) {
+			return;
+		}
+
+		$db_version = get_option( $this->option_name );
 
 		if ( $db_version >= SLIM_SEO_VER ) {
 			return;
@@ -40,7 +45,19 @@ class Log404 {
 
 		dbDelta( $sql_query );
 
-		update_option( $option_name, SLIM_SEO_VER );
+		update_option( $this->option_name, SLIM_SEO_VER );
+	}
+
+	public function table_exists() : bool {
+		return get_option( $this->option_name ) ? true : false;
+	}
+
+	public function drop_table() {
+		global $wpdb;
+
+		delete_option( $this->option_name );
+		// @codingStandardsIgnoreLine.
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->slim_seo_404}" );
 	}
 
 	public function get_log_by_url( string $value ) : array {

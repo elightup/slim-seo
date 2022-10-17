@@ -7,7 +7,7 @@ class Loader {
 		$db_log       = new Database\Log404;
 
 		if ( is_admin() ) {
-			new Settings;
+			new Settings( $db_log );
 		} else {
 			new Redirection( $db_redirects );
 			new Redirection404( $db_log );

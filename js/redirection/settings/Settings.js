@@ -6,6 +6,7 @@ const Settings = () => {
 	const [ forceTrailingSlash, setForceTrailingSlash ] = useState( SSRedirection.settings['force_trailing_slash'] );
 	const [ redirectWWW, setRedirectWWW ] = useState( SSRedirection.settings[ 'redirect_www' ] );
 	const [ enable404Logs, setEnable404Logs ] = useState( SSRedirection.settings[ 'enable_404_logs' ] );
+	const [ shouldDeleteLog404Table, setShouldDeleteLog404Table ] = useState( false );
 	const [ redirect404To, setRedirect404To ] = useState( SSRedirection.settings[ 'redirect_404_to' ] );
 	const [ redirect404ToURL, setRedirect404ToURL ] = useState( SSRedirection.settings[ 'redirect_404_to_url' ] );
 
@@ -54,6 +55,25 @@ const Settings = () => {
 							</label>
 						</td>
 					</tr>
+
+					{
+						!enable404Logs
+						&& SSRedirection.isLog404TableExist
+						&& (
+							<tr>
+								<th scope="row">
+									{ __( 'Delete 404 logs table', 'slim-seo' ) }
+									<Tooltip content={ __( 'Delete 404 logs table', 'slim-seo' ) } />
+								</th>
+								<td>
+									<label className='ss-toggle'>
+										<input className='ss-toggle__checkbox' id='ss-delete-404-log-table' type='checkbox' name={ `${ SSRedirection.settingsName }[should_delete_404_log_table]` } value={ shouldDeleteLog404Table } checked={ shouldDeleteLog404Table } onChange={ () => setShouldDeleteLog404Table( prev => !prev ) } />
+										<div className='ss-toggle__switch'></div>
+									</label>
+								</td>
+							</tr>
+						)
+					}
 
 					<tr>
 						<th scope="row">
