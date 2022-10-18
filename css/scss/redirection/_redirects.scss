@@ -179,31 +179,28 @@
 
 .ss-modal {
 	.components-modal__frame {
-		max-height: 510px!important;
+		max-height: 520px!important;
+		width: 600px;
 	}
 
-	&__content {
-		width: 600px;
+	.ss-warning-message {
+		color: var(--color-red);
+	}
 
-		.ss-warning-message {
-			color: var(--color-red);
-		}
+	label {
+		font-weight: bold;
+	}
 
-		label {
-			font-weight: bold;
-		}
+	#ss-type {
+		width: 100%;
+	}
 
-		#ss-type {
-			width: 100%;
-		}
+	#ss-condition {
+		width: 30%;
+	}
 
-		#ss-condition {
-			width: 30%;
-		}
-
-		#ss-from {
-			width: 65%;
-		}
+	#ss-from {
+		width: 65%;
 	}
 }
 
