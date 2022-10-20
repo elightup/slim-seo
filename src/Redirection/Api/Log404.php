@@ -19,13 +19,13 @@ class Log404 extends Base {
 			return;
 		}
 
-		register_rest_route( 'slim-seo-redirection', 'total_404_logs', [
+		register_rest_route( 'slim-seo-redirection', 'total', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_total_logs' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo-redirection', 'get_404_logs', [
+		register_rest_route( 'slim-seo-redirection', 'logs', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_logs' ],
 			'permission_callback' => [ $this, 'has_permission' ],

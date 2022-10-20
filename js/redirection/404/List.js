@@ -40,11 +40,11 @@ const List = ()  => {
 	};
 
 	useEffect( () => {
-		request( 'total_404_logs', {} ).then( setTotalRows );
+		request( 'total', {} ).then( setTotalRows );
 	}, [] );
 
 	useEffect( () => {
-		request( 'get_404_logs', { order, limit: LIMIT, offset }, 'POST' ).then( result => {
+		request( 'logs', { order, limit: LIMIT, offset }, 'POST' ).then( result => {
 			setIsLoadingData( false );
 			setLogs( result );
 		} );
