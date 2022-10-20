@@ -7,7 +7,7 @@ class Redirects {
 	protected $redirects;
 
 	public function __construct() {
-		$this->redirects = get_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME ) ?: [];
+		$this->redirects = get_option( SLIM_SEO_REDIRECTS ) ?: [];
 	}
 
 	public function list() : array {
@@ -38,7 +38,7 @@ class Redirects {
 			$this->redirects[ $redirect_id ] = $redirect;
 		}
 
-		update_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME, $this->redirects );
+		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
 	}
 
 	public function delete( array $ids ) {
@@ -46,6 +46,6 @@ class Redirects {
 			return ! in_array( $id, $ids, true );
 		}, ARRAY_FILTER_USE_KEY );
 
-		update_option( SLIM_SEO_REDIRECTION_REDIRECTS_OPTION_NAME, $this->redirects );
+		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
 	}
 }
