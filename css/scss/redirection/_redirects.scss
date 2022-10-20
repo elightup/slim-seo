@@ -28,6 +28,10 @@
 		border-bottom: var(--border);
 	}
 
+	tfoot tr {
+		border-bottom: none;
+	}
+
 	th,
 	td {
 		padding: 8px;
