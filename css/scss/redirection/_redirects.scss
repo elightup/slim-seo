@@ -30,7 +30,7 @@
 
 	th,
 	td {
-		padding: 8px 12px;
+		padding: 8px;
 		vertical-align: top;
 	}
 
@@ -38,13 +38,18 @@
 		font-weight: 400;
 		text-align: left;
 
-		&.ss-redirect__actions {
-			text-align: right;
+		&.sortable,
+		&.sorted {
+			padding: 0;
 		}
 	}
 
 	a {
 		text-decoration: none;
+
+		.ss-tooltip {
+			float: right;
+		}
 	}
 }
 
@@ -61,6 +66,9 @@
 	width: 20%;
 }
 
+.ss-table .ss-redirect__actions {
+	text-align: right;
+}
 .ss-redirect__actions {
 	width: 60px;
 	text-align: right;
