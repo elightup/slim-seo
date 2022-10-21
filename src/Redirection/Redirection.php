@@ -119,7 +119,12 @@ class Redirection {
 
 	public function force_trailing_slash( string $string, string $type_of_url ) : string {
 		if ( Settings::get( 'force_trailing_slash' ) ) {
-			$string = trailingslashit( $string );
+			$path = parse_url( $string, PHP_URL_PATH );
+			$ext  = pathinfo( $path, PATHINFO_EXTENSION );
+
+			if ( empty( $ext ) ) {
+				$string = trailingslashit( $string );
+			}
 		}
 
 		return $string;
