@@ -117,10 +117,10 @@ const List = () => {
 		}
 	};
 
-	const searchButtonClicked = e => {
-		e.preventDefault();
-
-		search();
+	const onSearchInputKeyDown = e => {
+		if ( 'Enter' === e.code ) {
+			e.preventDefault();
+		}
 	};
 
 	const changeEnable = ( e, redirect ) => {
@@ -186,8 +186,7 @@ const List = () => {
 				</span>
 
 				<span className='ss-search'>
-					<input type='text' className='ss-search-input' value={ searchKeyword } placeholder={ __( 'Search..', 'slim-seo' ) } onKeyUp={ onSearchInputKeyUp } onChange={ e => setSearchKeyword( e.target.value.trim() ) } />
-					<button className='button button-secondary' onClick={ searchButtonClicked }>{ __( 'Search', 'slim-seo' ) }</button>
+					<input type='text' className='ss-search-input' value={ searchKeyword } placeholder={ __( 'Search..', 'slim-seo' ) } onKeyDown={ onSearchInputKeyDown } onKeyUp={ onSearchInputKeyUp } onChange={ e => setSearchKeyword( e.target.value.trim() ) } />
 				</span>
 			</div>
 
