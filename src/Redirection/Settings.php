@@ -42,6 +42,7 @@ class Settings {
 			'redirectTypes'      => Helper::redirect_types(),
 			'conditionOptions'   => Helper::condition_options(),
 			'isLog404TableExist' => $this->db_log->table_exists(),
+			'permalinkUrl'       => admin_url( 'options-permalink.php' ),
 			'defaultRedirect'    => [
 				'id'               => -1,
 				'type'             => 301,

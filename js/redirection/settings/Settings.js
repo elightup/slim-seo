@@ -1,5 +1,5 @@
-import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { RawHTML, useState } from '@wordpress/element';
+import { sprintf, __ } from '@wordpress/i18n';
 import { Tooltip } from '../helper/misc';
 
 const Settings = () => {
@@ -24,6 +24,15 @@ const Settings = () => {
 								<input className='ss-toggle__checkbox' id='ss-force-trailing-slash' type='checkbox' name={ `${ SSRedirection.settingsName }[force_trailing_slash]` } value={ forceTrailingSlash } checked={ 1 == forceTrailingSlash } onChange={ () => setForceTrailingSlash( prev => 1 == prev ? 0 : 1 ) } />
 								<div className='ss-toggle__switch'></div>
 							</label>
+							<br />
+							<RawHTML>{ [
+								'<small>',
+								sprintf(
+									__( 'Don\'t forget to add trailing slash in the <a href="%s">permalink settings</a>. If you use a permalink like "%%postname%%.html", then just enable this settings to force it work for category/tag/taxonomy/archive pages.', 'slim-seo' ),
+									SSRedirection.permalinkUrl
+								),
+								'</small>',
+							]}</RawHTML>
 						</td>
 					</tr>
 				</thead>
