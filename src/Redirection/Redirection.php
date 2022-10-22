@@ -122,7 +122,7 @@ class Redirection {
 			return $url;
 		}
 
-		$path = parse_url( $url, PHP_URL_PATH );
+		$path = wp_parse_url( $url, PHP_URL_PATH );
 		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
 
 		if ( empty( $ext ) ) {
