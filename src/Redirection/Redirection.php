@@ -10,7 +10,7 @@ class Redirection {
 		$this->db_redirects = $db_redirects;
 
 		add_action( 'plugins_loaded', [ $this, 'redirect' ], 1 );
-		add_filter( 'user_trailingslashit', [ $this, 'force_trailing_slash' ], 1000, 2 );
+		add_filter( 'user_trailingslashit', [ $this, 'force_trailing_slash' ], 999 );
 		add_action( 'plugins_loaded', [ $this, 'redirect_www' ], 2 );
 	}
 
@@ -117,17 +117,19 @@ class Redirection {
 		}
 	}
 
-	public function force_trailing_slash( string $string, string $type_of_url ) : string {
-		if ( Settings::get( 'force_trailing_slash' ) ) {
-			$path = parse_url( $string, PHP_URL_PATH );
-			$ext  = pathinfo( $path, PATHINFO_EXTENSION );
-
-			if ( empty( $ext ) ) {
-				$string = trailingslashit( $string );
-			}
+	public function force_trailing_slash( string $url ) : string {
+		if ( ! Settings::get( 'force_trailing_slash' ) ) {
+			return $url;
 		}
 
-		return $string;
+		$path = parse_url( $url, PHP_URL_PATH );
+		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
+
+		if ( empty( $ext ) ) {
+			$url = trailingslashit( $url );
+		}
+
+		return $url;
 	}
 
 	public function redirect_www() {
