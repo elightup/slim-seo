@@ -51,6 +51,7 @@ class Helper {
 		$url      = html_entity_decode( $url );
 		$url      = str_replace( $home_url, '', $url );
 		$url      = rtrim( $url, '/' );
-		return $url;
+
+		return $url ? $url : '/';
 	}
 }
