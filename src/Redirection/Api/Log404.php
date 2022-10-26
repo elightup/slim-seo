@@ -19,9 +19,9 @@ class Log404 extends Base {
 			return;
 		}
 
-		register_rest_route( 'slim-seo-redirection', 'total', [
+		register_rest_route( 'slim-seo-redirection', 'total_logs', [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_total_logs' ],
+			'callback'            => [ $this, 'get_total' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
@@ -32,15 +32,15 @@ class Log404 extends Base {
 		] );
 	}
 
-	public function get_total_logs() : int {
+	public function get_total() : int {
 		return $this->db_log->get_total();
 	}
 
 	public function get_logs( WP_REST_Request $request ) : array {
 		$order  = $request->get_param( 'order' );
-		$limit  = $request->get_param( 'limit' );
-		$offset = $request->get_param( 'offset' );
+		$limit  = (int) $request->get_param( 'limit' );
+		$offset = (int) $request->get_param( 'offset' );
 
-		return $this->db_log->list( $order['orderBy'], $order['sort'], intval( $limit ), intval( $offset ) );
+		return $this->db_log->list( $order['orderBy'], $order['sort'], $limit, $offset );
 	}
 }

@@ -47,7 +47,6 @@ class Redirects extends Base {
 			return $redirect;
 		}, array_keys( $redirects ), $redirects );
 		$redirects = array_reverse( $redirects );
-
 		return $redirects;
 	}
 

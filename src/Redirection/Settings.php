@@ -44,7 +44,7 @@ class Settings {
 			'isLog404TableExist' => $this->db_log->table_exists(),
 			'permalinkUrl'       => admin_url( 'options-permalink.php' ),
 			'defaultRedirect'    => [
-				'id'               => -1,
+				'id'               => 0,
 				'type'             => 301,
 				'condition'        => 'exact-match',
 				'from'             => '',

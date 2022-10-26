@@ -1,4 +1,5 @@
 import { Dashicon, Tooltip as T } from '@wordpress/components';
+import useSWR from 'swr';
 
 export const Tooltip = ( { content, icon = 'editor-help' } ) => (
 	<T text={ content }>
@@ -18,4 +19,35 @@ export const getFullURL = url => {
 	url = '/' === url[0] ? url : `/${url}`
 
 	return SSRedirection.homeURL + `${url}`;
+};
+
+export const fetcher = ( apiName, parameters = {}, method = 'GET' ) => {
+	let options = {
+		method,
+		headers: { 'X-WP-Nonce': SSRedirection.nonce, 'Content-Type': 'application/json' },
+	};
+	let url = `${ SSRedirection.rest }/slim-seo-redirection/${ apiName }`;
+
+	if ( 'POST' === method ) {
+		options.body = JSON.stringify( parameters );
+	} else {
+		const query = ( new URLSearchParams( parameters ) ).toString();
+
+		if ( query ) {
+			url += SSRedirection.rest.includes( '?' ) ? `&${ query }` : `?${ query }`;
+		}
+	}
+
+	return fetch( url, options ).then( response => response.json() );
+};
+
+export const get = ( apiName, parameters = {}, method = 'GET', returnMutate = false, defaultValue ) => {
+	const { data, error, mutate } = useSWR( [ apiName, parameters, method ], fetcher, { revalidateOnFocus: false } );
+	const result = ( error || !data ? defaultValue : data );
+
+	if ( returnMutate ) {
+		return { result, mutate };
+	}
+
+	return result;
 };

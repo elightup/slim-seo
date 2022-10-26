@@ -23,19 +23,15 @@ class Redirects {
 	}
 
 	public function update( array $redirect ) {
-		$redirect    = wp_unslash( $redirect );
-		$redirect_id = $redirect['id'] ?? -1;
-
-		unset( $redirect['id'] );
-
+		$redirect         = wp_unslash( $redirect );
 		$redirect['from'] = Helper::normalize_url( $redirect['from'] );
 		$redirect['to']   = Helper::normalize_url( $redirect['to'] );
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
 
-		if ( -1 === $redirect_id ) {
-			$this->redirects[] = $redirect;
+		if ( empty( $redirect['id'] ) ) {
+			$this->redirects[ strtotime( 'now' ) ] = $redirect;
 		} else {
-			$this->redirects[ $redirect_id ] = $redirect;
+			$this->redirects[ $redirect['id'] ] = $redirect;
 		}
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );

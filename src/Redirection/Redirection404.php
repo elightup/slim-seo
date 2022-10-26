@@ -37,7 +37,7 @@ class Redirection404 {
 				'updated_at' => $now,
 			] );
 		} else {
-			$log['hit']        = intval( $log['hit'] ) + 1;
+			$log['hit']        = (int) $log['hit'] + 1;
 			$log['updated_at'] = $now;
 
 			$this->db_log->update( $log );
