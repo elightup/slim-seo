@@ -1,10 +1,10 @@
-import { useReducer, useState, useEffect } from '@wordpress/element';
-import { Modal, Button } from '@wordpress/components';
+import { Button, Modal } from '@wordpress/components';
+import { useReducer, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Tooltip, fetcher } from '../helper/misc';
+import { fetcher, Tooltip } from '../helper/misc';
 
 const Update = ( { redirectToEdit = SSRedirection.defaultRedirect, children, linkClassName, callback } ) => {
-	const [ redirect, setRedirect ] = useState( [] );
+	const [ redirect, setRedirect ] = useState( redirectToEdit );
 	const [ isProcessing, setIsProcessing ] = useState( false );
 	const [ warningMessage, setWarningMessage ] = useState( '' );
 	const [ showAdvancedOptions, toggleAdvancedOptions ] = useReducer( onOrOff => !onOrOff, false );
@@ -21,18 +21,18 @@ const Update = ( { redirectToEdit = SSRedirection.defaultRedirect, children, lin
 		setWarningMessage( '' );
 
 		fetcher( 'update_redirect', { redirect }, 'POST' ).then( result => {
-			if ( SSRedirection.defaultRedirect.id != redirectToEdit.id ) {
-				setShowUpdateRedirectModal( false );
-				callback( redirect );
-			} else {
+			if ( SSRedirection.defaultRedirect.id == redirectToEdit.id ) {
 				window.location.reload();
+				return;
 			}
+
+			setShowUpdateRedirectModal( false );
+			setIsProcessing( false );
+			callback( redirect );
 		} );
 	};
 
-	const handleChange = obj => {
-		setRedirect( prev => ( { ...prev, ...obj } ) );
-	};
+	const handleChange = obj => setRedirect( prev => ( { ...prev, ...obj } ) );
 
 	const updateRedirectButtonClicked = e => {
 		e.preventDefault();
@@ -44,19 +44,19 @@ const Update = ( { redirectToEdit = SSRedirection.defaultRedirect, children, lin
 
 		setIsProcessing( true );
 
-		if ( SSRedirection.defaultRedirect.id == redirect.id ) {
-			fetcher( 'exists', { from: redirect.from } ).then( result => {
-				if ( result ) {
-					setIsProcessing( false );
-					setWarningMessage( __( 'From URL already exists, which means this page already has a redirect rule!', 'slim-seo' ) );
-				} else {
-					updateRedirect();
-				}
-			} );
-		} else {
+		if ( SSRedirection.defaultRedirect.id != redirect.id ) {
 			updateRedirect();
+			return;
 		}
 
+		fetcher( 'exists', { from: redirect.from } ).then( result => {
+			if ( result ) {
+				setIsProcessing( false );
+				setWarningMessage( __( 'From URL already exists, which means this page already has a redirect rule!', 'slim-seo' ) );
+			} else {
+				updateRedirect();
+			}
+		} );
 	};
 
 	const closeModal = e => {
@@ -64,10 +64,6 @@ const Update = ( { redirectToEdit = SSRedirection.defaultRedirect, children, lin
 
 		setShowUpdateRedirectModal( false );
 	};
-
-	useEffect( () => {
-		setRedirect( redirectToEdit );
-	}, [ redirectToEdit ] );
 
 	return (
 		<>
@@ -127,7 +123,7 @@ const Update = ( { redirectToEdit = SSRedirection.defaultRedirect, children, lin
 							</div>
 
 							{
-								showAdvancedOptions ? (
+								showAdvancedOptions && (
 									<div className='form-field'>
 										<label className='ss-toggle'>
 											<input className='ss-toggle__checkbox' id='ss-ignore-parameters' type='checkbox' name='ssr_ignore_parameters' value={ redirect.ignoreParameters } checked={ 1 == redirect.ignoreParameters } onChange={ e => handleChange( { ignoreParameters: 1 == redirect.ignoreParameters ? 0 : 1 } ) } />
@@ -135,7 +131,7 @@ const Update = ( { redirectToEdit = SSRedirection.defaultRedirect, children, lin
 											<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
 										</label>
 									</div>
-								) : ''
+								)
 							}
 
 							<div className='form-field'>
