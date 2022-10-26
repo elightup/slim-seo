@@ -1,9 +1,8 @@
 import { useState } from '@wordpress/element';
+import Paginate from '../components/Paginate';
 import { get } from '../helper/misc';
 import Items from './Items';
-import Paginate from './Paginate';
-
-const Main = ()  => {
+const Main = () => {
 	const LIMIT = 20;
 	const totalRows = get( 'total_logs' );
 	const [ offset, setOffset ] = useState( 0 );
@@ -11,7 +10,6 @@ const Main = ()  => {
 	return (
 		<>
 			<Items limit={ LIMIT } offset={ offset } />
-
 			<Paginate totalRows={ totalRows } limit={ LIMIT } setOffset={ setOffset } />
 		</>
 	);

@@ -1,9 +1,9 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import Paginate from '../components/Paginate';
 import { fetcher, get } from '../helper/misc';
 import Header from './Header';
 import Item from './Item';
-import Paginate from './Paginate';
 
 const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulkAction } ) => {
 	const LIMIT = 20;

@@ -156,19 +156,16 @@
 }
 
 .ss-paginate {
-	text-align: center;
-
-	ul li {
-		display: inline-block;
-		margin: 0px 10px;
-	}
+	display: flex;
+	justify-content: center;
+	gap: 20px;
 
 	.disabled {
-		display: none!important;
+		display: none;
 	}
 
 	.selected a {
-		color: #e53e3e;
+		color: inherit;
 	}
 
 	a {

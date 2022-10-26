@@ -7,12 +7,10 @@ import Item from './Item';
 const Items = ( { limit, offset } ) => {
 	const [ order, setOrder ] = useState( { orderBy: 'updated_at', sort: 'desc' } );
 	const logs = get( 'logs', { order, limit, offset }, 'POST' );
-	
-	const changeOrder = _order => {
-		return e => {
-			e.preventDefault();
-			setOrder( { ..._order } );
-		};
+
+	const changeOrder = _order => e => {
+		e.preventDefault();
+		setOrder( { ..._order } );
 	};
 
 	if ( undefined === logs ) {
