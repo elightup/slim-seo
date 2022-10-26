@@ -1,6 +1,5 @@
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { fetcher } from '../helper/misc';
 import Add from './Update';
 import Items from './Items';
 
