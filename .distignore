@@ -9,5 +9,11 @@ Thumbs.db
 .gitignore
 composer.json
 composer.lock
+esbuild.js
+package-lock.json
+package.json
 phpcs.xml
 README.md
+
+css/scss
+js/redirection.js.LICENSE.txt
