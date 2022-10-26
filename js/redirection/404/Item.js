@@ -1,5 +1,5 @@
 import { getFullURL } from '../helper/misc';
-import AddRedirect from '../redirects/Update';
+import Update from '../redirects/Update';
 
 const Item = ( { log } ) => {
 	return (
@@ -9,7 +9,7 @@ const Item = ( { log } ) => {
 			<td className='ss-log__created_at'>{ log.created_at }</td>
 			<td className='ss-log__updated_at'>{ log.updated_at }</td>
 			<td className='ss-log__actions'>
-				<AddRedirect redirectToEdit={ { ...SSRedirection.defaultRedirect, from: log.url } } />
+				<Update redirectToEdit={ { from: log.url } } />
 			</td>
 		</tr>
 	);

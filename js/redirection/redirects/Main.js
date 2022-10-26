@@ -1,7 +1,7 @@
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import Add from './Update';
 import Items from './Items';
+import Update from './Update';
 
 const List = () => {
 	const [ bulkAction, setBulkAction ] = useState( '' );
@@ -24,7 +24,7 @@ const List = () => {
 	return (
 		<>
 			<div className='ss-filters'>
-				<Add linkClassName='button button-primary' />
+				<Update linkClassName='button button-primary' />
 
 				<span className='ss-bulk-actions'>
 					<select name='ssr_bulk_actions' value={ bulkAction } onChange={ e => setBulkAction( e.target.value ) }>
