@@ -29,7 +29,7 @@ class Redirects {
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
 
 		if ( empty( $redirect['id'] ) ) {
-			$this->redirects[ strtotime( 'now' ) ] = $redirect;
+			$this->redirects[ uniqid() ] = $redirect;
 		} else {
 			$this->redirects[ $redirect['id'] ] = $redirect;
 		}
