@@ -107,7 +107,7 @@
 	cursor: pointer;
 	display: inline-block;
 
-	.ss-toggle__switch {
+	&__switch {
 		display: inline-block;
 		background: #ccc;
 		border-radius: 16px;
@@ -118,11 +118,12 @@
 		transition: background 0.25s;
 	}
 
-	.ss-toggle__switch:before, .ss-toggle__switch:after {
+	&__switch:before,
+	&__switch:after {
 		content: "";
 	}
 
-	.ss-toggle__switch:before {
+	&__switch:before {
 		display: block;
 		background: linear-gradient(to bottom, #fff 0%, #eee 100%);
 		border-radius: 50%;
@@ -135,20 +136,20 @@
 		transition: left 0.25s;
 	}
 
-	.ss-toggle__checkbox:checked + .ss-toggle__switch {
+	input:checked + &__switch {
 		background: #56c080;
 	}
 
-	.ss-toggle__checkbox:checked + .ss-toggle__switch:before {
+	input:checked + &__switch:before {
 		left: 15px;
 	}
 
-	.ss-toggle__checkbox {
+	input {
 		position: absolute;
 		visibility: hidden;
 	}
 
-	.ss-toggle__label {
+	&__label {
 		margin-left: 5px;
 		position: relative;
 		top: 2px;
@@ -189,25 +190,25 @@
 		width: 600px;
 	}
 
-	.ss-warning-message {
-		color: var(--color-red);
-	}
-
 	label {
 		font-weight: bold;
 	}
+}
 
-	#ss-type {
-		width: 100%;
-	}
+.ss-warning-message {
+	color: var(--color-red);
+}
 
-	#ss-condition {
-		width: 30%;
-	}
+#ss-type {
+	width: 100%;
+}
 
-	#ss-from {
-		width: 65%;
-	}
+#ss-condition {
+	width: 30%;
+}
+
+#ss-from {
+	width: 65%;
 }
 
 .ss-sub-setting {
