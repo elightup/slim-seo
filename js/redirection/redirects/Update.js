@@ -32,7 +32,10 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 		} );
 	};
 
-	const handleChange = obj => setRedirect( prev => ( { ...prev, ...obj } ) );
+	const handleChange = key => e => {
+		const value = e.target.type === 'checkbox' ? Number( e.target.checked ) : e.target.value.trim();
+		setRedirect( prev => ( { ...prev, [ key ]: value } ) );
+	};
 
 	const submit = e => {
 		e.preventDefault();
@@ -75,7 +78,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 								<label for='ss-type'>{ __( 'Type', 'slim-seo' ) }
 									<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
 								</label>
-								<select id='ss-type' value={ redirect.type } onChange={ e => handleChange( { type: e.target.value } ) }>
+								<select id='ss-type' value={ redirect.type } onChange={ handleChange( 'type' ) }>
 									{ Object.entries( SSRedirection.redirectTypes ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> ) }
 								</select>
 							</div>
@@ -86,10 +89,10 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 									<Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } />
 								</label>
 
-								<select value={ redirect.condition } onChange={ e => handleChange( { condition: e.target.value } ) }>
+								<select value={ redirect.condition } onChange={ handleChange( 'condition' ) }>
 									{ Object.entries( SSRedirection.conditionOptions ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> ) }
 								</select>
-								<input id='ss-from' type='text' value={ redirect.from } onChange={ e => handleChange( { from: e.target.value.trim() } ) } />
+								<input id='ss-from' type='text' value={ redirect.from } onChange={ handleChange( 'from' ) } />
 							</div>
 
 							<div className='form-field'>
@@ -97,7 +100,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 									{ __( 'To URL', 'slim-seo' ) }
 									<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
 								</label>
-								<input id='ss-to' type='text' value={ redirect.to } onChange={ e => handleChange( { to: e.target.value.trim() } ) } />
+								<input id='ss-to' type='text' value={ redirect.to } onChange={ handleChange( 'to' ) } />
 							</div>
 
 							<div className='form-field'>
@@ -105,12 +108,12 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 									{ __( 'Note', 'slim-seo' ) }
 									<Tooltip content={ __( 'Something that reminds you about this redirect', 'slim-seo' ) } />
 								</label>
-								<input id='ss-note' type='text' value={ redirect.note } onChange={ e => handleChange( { note: e.target.value } ) } />
+								<input id='ss-note' type='text' value={ redirect.note } onChange={ handleChange( 'note' ) } />
 							</div>
 
 							<div className='form-field'>
 								<label className='ss-toggle'>
-									<input className='ss-toggle__checkbox' type='checkbox' value={ redirect.enable } checked={ 1 == redirect.enable } onChange={ e => handleChange( { enable: 1 == redirect.enable ? 0 : 1 } ) } />
+									<input className='ss-toggle__checkbox' type='checkbox' value='1' checked={ !!redirect.enable } onChange={ handleChange( 'enable' ) } />
 									<div className='ss-toggle__switch'></div>
 									<span className='ss-toggle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
 								</label>
@@ -124,7 +127,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 								showAdvancedOptions && (
 									<div className='form-field'>
 										<label className='ss-toggle'>
-											<input className='ss-toggle__checkbox' type='checkbox' value={ redirect.ignoreParameters } checked={ 1 == redirect.ignoreParameters } onChange={ e => handleChange( { ignoreParameters: 1 == redirect.ignoreParameters ? 0 : 1 } ) } />
+											<input className='ss-toggle__checkbox' type='checkbox' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
 											<div className='ss-toggle__switch'></div>
 											<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
 										</label>
