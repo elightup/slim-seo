@@ -1,16 +1,16 @@
 import { Button, Modal } from '@wordpress/components';
-import { useReducer, useState } from '@wordpress/element';
+import { useReducer, useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { fetcher, Tooltip } from '../helper/misc';
 
 const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) => {
-	const [ redirect, setRedirect ] = useState( { ...SSRedirection.defaultRedirect, ...redirectToEdit } );
+	const [ redirect, setRedirect ] = useState( {} );
 	const [ isProcessing, setIsProcessing ] = useState( false );
 	const [ warningMessage, setWarningMessage ] = useState( '' );
 	const [ showAdvancedOptions, toggleAdvancedOptions ] = useReducer( onOrOff => !onOrOff, false );
 	const [ showModal, setShowModal ] = useState( false );
 	const title = redirect.id ? __( 'Update Redirect', 'slim-seo' ) : __( 'Add Redirect', 'slim-seo' );
-
+	
 	const openModal = e => {
 		e.preventDefault();
 		setShowModal( true );
@@ -58,6 +58,10 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 			}
 		} );
 	};
+
+	useEffect( () => {
+		setRedirect( { ...SSRedirection.defaultRedirect, ...redirectToEdit } );
+	}, [ redirectToEdit ] );
 
 	return (
 		<>
