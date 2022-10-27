@@ -8,9 +8,11 @@ const Items = ( { limit, offset } ) => {
 	const [ order, setOrder ] = useState( { orderBy: 'updated_at', sort: 'desc' } );
 	const logs = get( 'logs', { order, limit, offset }, 'POST' );
 
-	const changeOrder = _order => e => {
+	const changeOrder = by => e => {
 		e.preventDefault();
-		setOrder( { ..._order } );
+
+		const sort = by === order.orderBy ? ( 'desc' === order.sort ? 'asc' : 'desc' ) : 'desc';
+		setOrder( { orderBy: by, sort } );
 	};
 
 	if ( undefined === logs ) {
