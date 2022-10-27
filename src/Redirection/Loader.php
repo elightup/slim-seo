@@ -20,13 +20,13 @@ class Loader {
 		new Api\Log404( $this->db_log );
 
 		add_action( 'init', [ $this, 'init' ] );
-		add_action( SLIM_SEO_AUTOMATICALLY_DELETE_LOGS_SCHEDULE_NAME, [ $this, 'run_schedule' ] );
+		add_action( SLIM_SEO_DELETE_404_LOGS_ACTION, [ $this, 'run_schedule' ] );
 		add_action( 'slim_seo_deactivate', [ $this, 'deactivate' ] );
 	}
 
 	public function init() {
-		if ( ! wp_next_scheduled( SLIM_SEO_AUTOMATICALLY_DELETE_LOGS_SCHEDULE_NAME ) ) {
-			wp_schedule_event( time(), 'daily', SLIM_SEO_AUTOMATICALLY_DELETE_LOGS_SCHEDULE_NAME );
+		if ( ! wp_next_scheduled( SLIM_SEO_DELETE_404_LOGS_ACTION ) ) {
+			wp_schedule_event( time(), 'daily', SLIM_SEO_DELETE_404_LOGS_ACTION );
 		}
 	}
 
@@ -41,6 +41,6 @@ class Loader {
 	}
 
 	public function deactivate() {
-		wp_clear_scheduled_hook( SLIM_SEO_AUTOMATICALLY_DELETE_LOGS_SCHEDULE_NAME );
+		wp_clear_scheduled_hook( SLIM_SEO_DELETE_404_LOGS_ACTION );
 	}
 }
