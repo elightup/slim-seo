@@ -19,6 +19,7 @@ define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
 define( 'SLIM_SEO_SLUG', sanitize_title( pathinfo( __FILE__, PATHINFO_FILENAME ) ) );
 define( 'SLIM_SEO_REDIRECTS', 'ss_redirects' );
+define( 'SLIM_SEO_AUTOMATICALLY_DELETE_LOGS_SCHEDULE_NAME', 'ss_automatically_delete_logs_schedule' );
 define( 'SLIM_SEO_VER', '3.15.2' );
 
 require __DIR__ . '/vendor/autoload.php';

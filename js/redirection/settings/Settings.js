@@ -6,6 +6,7 @@ const Settings = () => {
 	const [ forceTrailingSlash, setForceTrailingSlash ] = useState( SSRedirection.settings['force_trailing_slash'] );
 	const [ redirectWWW, setRedirectWWW ] = useState( SSRedirection.settings[ 'redirect_www' ] );
 	const [ enable404Logs, setEnable404Logs ] = useState( SSRedirection.settings[ 'enable_404_logs' ] );
+	const [ automaticallyDelete404Logs, setAutomaticallyDelete404Logs ] = useState( SSRedirection.settings[ 'automatically_delete_404_logs' ] );
 	const [ shouldDeleteLog404Table, setShouldDeleteLog404Table ] = useState( false );
 	const [ redirect404To, setRedirect404To ] = useState( SSRedirection.settings[ 'redirect_404_to' ] );
 	const [ redirect404ToURL, setRedirect404ToURL ] = useState( SSRedirection.settings[ 'redirect_404_to_url' ] );
@@ -66,22 +67,55 @@ const Settings = () => {
 					</tr>
 
 					{
-						!enable404Logs
-						&& SSRedirection.isLog404TableExist
-						&& (
-							<tr>
-								<th scope="row">
-									{ __( 'Delete 404 logs table', 'slim-seo' ) }
-									<Tooltip content={ __( 'Delete 404 logs table', 'slim-seo' ) } />
-								</th>
-								<td>
-									<label className='ss-toggle'>
-										<input className='ss-toggle__checkbox' id='ss-delete-404-log-table' type='checkbox' name={ `${ SSRedirection.settingsName }[should_delete_404_log_table]` } value={ shouldDeleteLog404Table } checked={ shouldDeleteLog404Table } onChange={ () => setShouldDeleteLog404Table( prev => !prev ) } />
-										<div className='ss-toggle__switch'></div>
-									</label>
-								</td>
-							</tr>
-						)
+						enable404Logs
+							? (
+								<tr className='ss-sub-setting'>
+									<td colspan={ 2 }>
+										<table className='form-table'>
+											<thead>
+												<tr>
+													<th scope="row">
+														{ __( 'Automatically delete logs:', 'slim-seo' ) }
+														<Tooltip content={ __( 'Logs in the database will be automatically removed', 'slim-seo' ) } />
+													</th>
+													<td>
+														<select id='ss-automatically-delete-404-logs' name={ `${ SSRedirection.settingsName }[automatically_delete_404_logs]` } value={ automaticallyDelete404Logs } onChange={ e => setAutomaticallyDelete404Logs( prev => e.target.value ) }>
+															<option value=''>{ __( 'Never', 'slim-seo' ) }</option>
+															<option value='7'>{ __( 'Older than a week', 'slim-seo' ) }</option>
+															<option value='30'>{ __( 'Older than a month', 'slim-seo' ) }</option>
+														</select>
+													</td>
+												</tr>
+											</thead>
+										</table>
+									</td>
+								</tr>
+							)
+							: (
+								SSRedirection.isLog404TableExist
+								&& (
+									<tr className='ss-sub-setting'>
+										<td colspan={ 2 }>
+											<table className='form-table'>
+												<thead>
+													<tr>
+														<th scope="row">
+															{ __( 'Delete 404 logs table', 'slim-seo' ) }
+															<Tooltip content={ __( 'Delete 404 logs table', 'slim-seo' ) } />
+														</th>
+														<td>
+															<label className='ss-toggle'>
+																<input className='ss-toggle__checkbox' id='ss-delete-404-log-table' type='checkbox' name={ `${ SSRedirection.settingsName }[should_delete_404_log_table]` } value={ shouldDeleteLog404Table } checked={ shouldDeleteLog404Table } onChange={ () => setShouldDeleteLog404Table( prev => !prev ) } />
+																<div className='ss-toggle__switch'></div>
+															</label>
+														</td>
+													</tr>
+												</thead>
+											</table>
+										</td>
+									</tr>
+								)
+							)
 					}
 
 					<tr>

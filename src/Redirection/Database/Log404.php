@@ -124,4 +124,15 @@ class Log404 {
 			[ 'id' => $log['id'] ]
 		);
 	}
+
+	public function delete_older_logs( int $days ) {
+		global $wpdb;
+
+		// @codingStandardsIgnoreStart
+		$wpdb->query(
+			"DELETE FROM {$wpdb->slim_seo_404}
+			WHERE updated_at < NOW() - INTERVAL {$days} DAY"
+		);
+		// @codingStandardsIgnoreEnd
+	}
 }
