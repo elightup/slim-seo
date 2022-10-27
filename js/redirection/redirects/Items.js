@@ -1,7 +1,7 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import Paginate from '../components/Paginate';
-import { fetcher, get } from '../helper/misc';
+import { fetcher, useApi } from '../helper/misc';
 import Header from './Header';
 import Item from './Item';
 
@@ -11,7 +11,7 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 	const [ checkedList, setCheckedList ] = useState( [] );
 	const [ isCheckAll, setIsCheckAll ] = useState( false );
 	const [ remountPaginate, setRemountPaginate ] = useState( 0 );
-	const { result: redirects, mutate } = get( 'redirects', {}, 'GET', true );
+	const { result: redirects, mutate } = useApi( 'redirects', {}, 'GET', true );
 
 	const checkAll = () => {
 		setIsCheckAll( !isCheckAll );

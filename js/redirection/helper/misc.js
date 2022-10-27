@@ -41,7 +41,7 @@ export const fetcher = ( apiName, parameters = {}, method = 'GET' ) => {
 	return fetch( url, options ).then( response => response.json() );
 };
 
-export const get = ( apiName, parameters = {}, method = 'GET', returnMutate = false, defaultValue ) => {
+export const useApi = ( apiName, parameters = {}, method = 'GET', returnMutate = false, defaultValue ) => {
 	const { data, error, mutate } = useSWR( [ apiName, parameters, method ], fetcher, { revalidateOnFocus: false } );
 	const result = ( error || !data ? defaultValue : data );
 

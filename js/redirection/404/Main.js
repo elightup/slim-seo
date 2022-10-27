@@ -1,10 +1,10 @@
 import { useState } from '@wordpress/element';
 import Paginate from '../components/Paginate';
-import { get } from '../helper/misc';
+import { useApi } from '../helper/misc';
 import Items from './Items';
 const Main = () => {
 	const LIMIT = 20;
-	const totalRows = get( 'total_logs' );
+	const totalRows = useApi( 'total_logs' );
 	const [ offset, setOffset ] = useState( 0 );
 
 	return (

@@ -1,12 +1,12 @@
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { get } from '../helper/misc';
+import { useApi } from '../helper/misc';
 import Header from './Header';
 import Item from './Item';
 
 const Items = ( { limit, offset } ) => {
 	const [ order, setOrder ] = useState( { orderBy: 'updated_at', sort: 'desc' } );
-	const logs = get( 'logs', { order, limit, offset }, 'POST' );
+	const logs = useApi( 'logs', { order, limit, offset }, 'POST' );
 
 	const changeOrder = by => e => {
 		e.preventDefault();
