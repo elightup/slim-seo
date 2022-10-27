@@ -7,7 +7,8 @@
 		margin-left: 5px;
 	}
 
-	.ss-search {
+	.ss-search,
+	.ss-delete-all-logs {
 		float: right;
 	}
 }
@@ -52,6 +53,15 @@
 			float: right;
 		}
 	}
+
+	.ss-log__hit {
+		width: 80px;
+	}
+
+	.ss-log__created_at,
+	.ss-log__updated_at {
+		width: 140px;
+	}
 }
 
 .ss-redirect__checkbox {
@@ -70,7 +80,9 @@
 .ss-table .ss-redirect__actions {
 	text-align: right;
 }
-.ss-redirect__actions {
+
+.ss-redirect__actions,
+.ss-log__actions {
 	width: 60px;
 	text-align: right;
 
@@ -90,12 +102,14 @@
 			}
 		}
 	}
+
 	.dashicons {
 		font-size: 16px;
 		width: 18px;
 		height: 18px;
 	}
 }
+
 .ss-redirect__url {
 	small {
 		display: block;

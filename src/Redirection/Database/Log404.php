@@ -135,4 +135,26 @@ class Log404 {
 		);
 		// @codingStandardsIgnoreEnd
 	}
+
+	public function delete( int $id ) {
+		global $wpdb;
+
+		// @codingStandardsIgnoreStart
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->slim_seo_404}
+				WHERE `id` = %d",
+
+				$id
+			)
+		);
+		// @codingStandardsIgnoreEnd
+	}
+
+	public function delete_all() {
+		global $wpdb;
+
+		// @codingStandardsIgnoreLine.
+		$wpdb->query( "DELETE FROM {$wpdb->slim_seo_404}" );
+	}
 }
