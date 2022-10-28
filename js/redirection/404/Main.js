@@ -2,6 +2,7 @@ import { useState } from '@wordpress/element';
 import Paginate from '../components/Paginate';
 import { useApi } from '../helper/misc';
 import Items from './Items';
+
 const Main = () => {
 	const LIMIT = 20;
 	const totalRows = useApi( 'total_logs' );

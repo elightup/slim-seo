@@ -41,11 +41,13 @@ export const fetcher = ( apiName, parameters = {}, method = 'GET' ) => {
 	return fetch( url, options ).then( response => response.json() );
 };
 
-export const useApi = ( apiName, parameters = {}, method = 'GET', returnMutate = false, defaultValue ) => {
-	const { data, error, mutate } = useSWR( [ apiName, parameters, method ], fetcher, { revalidateOnFocus: false } );
+export const useApi = ( apiName, parameters = {}, args = {}, defaultValue ) => {
+	args = { method: 'GET', returnMutate: false, options: {}, ...args, };
+
+	const { data, error, mutate } = useSWR( [ apiName, parameters, args.method ], fetcher, { revalidateOnFocus: false, ...args.options } );
 	const result = ( error || !data ? defaultValue : data );
 
-	if ( returnMutate ) {
+	if ( args.returnMutate ) {
 		return { result, mutate };
 	}
 

@@ -11,7 +11,7 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 	const [ checkedList, setCheckedList ] = useState( [] );
 	const [ isCheckAll, setIsCheckAll ] = useState( false );
 	const [ remountPaginate, setRemountPaginate ] = useState( 0 );
-	const { result: redirects, mutate } = useApi( 'redirects', {}, 'GET', true );
+	const { result: redirects, mutate } = useApi( 'redirects', {}, { returnMutate: true } );
 
 	const checkAll = () => {
 		setIsCheckAll( !isCheckAll );
