@@ -6,7 +6,7 @@ import Item from './Item';
 
 const Items = ( { limit, offset } ) => {
 	const [ order, setOrder ] = useState( { orderBy: 'updated_at', sort: 'desc' } );
-	const { result: logs, mutate } = useApi( 'logs', { orderBy: order.orderBy, sort: order.sort, limit, offset }, { returnMutate: true } );
+	const { result: logs, mutate } = useApi( 'logs', { orderBy: order.orderBy, sort: order.sort, limit, offset }, { returnMutate: true, options: { revalidateIfStale: false } } );
 
 	const changeOrder = by => e => {
 		e.preventDefault();
