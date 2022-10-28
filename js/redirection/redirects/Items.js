@@ -25,20 +25,30 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 
 	const deleteRedirects = ( ids = [] ) => {
 		fetcher( 'delete_redirects', { ids }, 'POST' ).then( result => {
-			mutate( redirects.filter( r => {
-				return ! ids.includes( r.id );
-			} ) );
+			mutate( 
+				redirects.filter( r => {
+					return ! ids.includes( r.id );
+				} ),
+				{
+					revalidate: false
+				}
+			);
 		} );
 	};
 
 	const updateRedirects = redirect => {
-		mutate( redirects.map( r => {
-			if ( r.id == redirect.id ) {
-				r = redirect;
-			}
+		mutate(
+			redirects.map( r => {
+				if ( r.id == redirect.id ) {
+					r = redirect;
+				}
 
-			return r;
-		} ) );
+				return r;
+			} ),
+			{
+				revalidate: false
+			}
+		);
 	};
 
 	useEffect( () => {
