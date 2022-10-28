@@ -24,7 +24,7 @@ const List = () => {
 	return (
 		<>
 			<div className='ss-filters'>
-				<Update linkClassName='button button-primary' />
+				<Update redirectToEdit={ {} } linkClassName='button button-primary' />
 
 				<span className='ss-bulk-actions'>
 					<select name='ssr_bulk_actions' value={ bulkAction } onChange={ e => setBulkAction( e.target.value ) }>
