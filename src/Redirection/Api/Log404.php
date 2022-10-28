@@ -26,7 +26,7 @@ class Log404 extends Base {
 		] );
 
 		register_rest_route( 'slim-seo-redirection', 'logs', [
-			'methods'             => WP_REST_Server::EDITABLE,
+			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_logs' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
@@ -49,11 +49,12 @@ class Log404 extends Base {
 	}
 
 	public function get_logs( WP_REST_Request $request ) : array {
-		$order  = $request->get_param( 'order' );
-		$limit  = (int) $request->get_param( 'limit' );
-		$offset = (int) $request->get_param( 'offset' );
+		$order_by = sanitize_text_field( $request->get_param( 'orderBy' ) );
+		$sort     = sanitize_text_field( $request->get_param( 'sort' ) );
+		$limit    = (int) $request->get_param( 'limit' );
+		$offset   = (int) $request->get_param( 'offset' );
 
-		return $this->db_log->list( $order['orderBy'], $order['sort'], $limit, $offset );
+		return $this->db_log->list( $order_by, $sort, $limit, $offset );
 	}
 
 	public function delete_log( WP_REST_Request $request ) {
