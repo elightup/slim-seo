@@ -26,7 +26,7 @@ const Items = ( { limit, offset } ) => {
 	const deleteAllLogs = e => {
 		e.preventDefault();
 
-		if ( !confirm( __( 'Delete all logs?', 'slim-seo' ) ) ) {
+		if ( !confirm( __( 'Are you sure to clear 404 log?', 'slim-seo' ) ) ) {
 			return;
 		}
 
@@ -44,9 +44,9 @@ const Items = ( { limit, offset } ) => {
 	return (
 		<>
 			<div className='ss-filters'>
-				<button className='button button-primary ss-delete-all-logs' onClick={ deleteAllLogs }>{ __( 'Delete all logs', 'slim-seo' ) }</button>
+				<button className='button button-primary' onClick={ deleteAllLogs }>{ __( 'Clear log', 'slim-seo' ) }</button>
 			</div>
-			
+
 			<table className='ss-table'>
 				<thead>
 					<Header order={ order } changeOrder={ changeOrder } />
