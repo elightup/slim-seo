@@ -1,15 +1,17 @@
-import { RawHTML, useState } from '@wordpress/element';
+import { RawHTML, useReducer, useState } from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import { Tooltip } from '../helper/misc';
 
 const Settings = () => {
-	const [ forceTrailingSlash, setForceTrailingSlash ] = useState( SSRedirection.settings['force_trailing_slash'] );
-	const [ redirectWWW, setRedirectWWW ] = useState( SSRedirection.settings[ 'redirect_www' ] );
-	const [ enable404Logs, setEnable404Logs ] = useState( SSRedirection.settings[ 'enable_404_logs' ] );
-	const [ automaticallyDelete404Logs, setAutomaticallyDelete404Logs ] = useState( SSRedirection.settings[ 'automatically_delete_404_logs' ] );
-	const [ shouldDeleteLog404Table, setShouldDeleteLog404Table ] = useState( false );
-	const [ redirect404To, setRedirect404To ] = useState( SSRedirection.settings[ 'redirect_404_to' ] );
-	const [ redirect404ToURL, setRedirect404ToURL ] = useState( SSRedirection.settings[ 'redirect_404_to_url' ] );
+	const { settings, settingsName } = SSRedirection;
+
+	const [ forceTrailingSlash, setForceTrailingSlash ] = useState( settings['force_trailing_slash'] );
+	const [ redirectWWW, setRedirectWWW ] = useState( settings[ 'redirect_www' ] );
+	const [ enable404Logs, setEnable404Logs ] = useState( settings[ 'enable_404_logs' ] );
+	const [ autoDelete404Logs, setAutoDelete404Logs ] = useState( settings[ 'auto_delete_404_logs' ] );
+	const [ deleteLog404Table, toggleDeleteLog404Table ] = useReducer( onOrOff => !onOrOff, false );
+	const [ redirect404To, setRedirect404To ] = useState( settings[ 'redirect_404_to' ] );
+	const [ redirect404ToURL, setRedirect404ToURL ] = useState( settings[ 'redirect_404_to_url' ] );
 
 	return (
 		<>
@@ -17,12 +19,12 @@ const Settings = () => {
 				<thead>
 					<tr>
 						<th scope="row">
-							{ __( 'Force trailing slash', 'slim-seo' ) }
+							<label htmlFor="ss-force-trailing-slash">{ __( 'Force trailing slash', 'slim-seo' ) }</label>
 							<Tooltip content={ __( 'Enable redirect non-slash URL to URL has slash', 'slim-seo' ) } />
 						</th>
 						<td>
 							<label className='ss-toggle'>
-								<input className='ss-toggle__checkbox' id='ss-force-trailing-slash' type='checkbox' name={ `${ SSRedirection.settingsName }[force_trailing_slash]` } value={ forceTrailingSlash } checked={ 1 == forceTrailingSlash } onChange={ () => setForceTrailingSlash( prev => 1 == prev ? 0 : 1 ) } />
+								<input className='ss-toggle__checkbox' id='ss-force-trailing-slash' type='checkbox' name={ `${ settingsName }[force_trailing_slash]` } value="1" checked={ !!forceTrailingSlash } onChange={ () => setForceTrailingSlash( prev => 1 - prev ) } />
 								<div className='ss-toggle__switch'></div>
 							</label>
 							<br />
@@ -41,11 +43,11 @@ const Settings = () => {
 				<tbody>
 					<tr>
 						<th scope="row">
-							{ __( 'Redirect www', 'slim-seo' ) }
+							<label htmlFor="ss-redirect-www">{ __( 'Redirect www', 'slim-seo' ) }</label>
 							<Tooltip content={ __( 'Auto redirect www to non-www and vice versa', 'slim-seo' ) } />
 						</th>
 						<td>
-							<select id='ss-redirect-www' name={ `${ SSRedirection.settingsName }[redirect_www]` } value={ redirectWWW } onChange={ e => setRedirectWWW( prev => e.target.value ) }>
+							<select id='ss-redirect-www' name={ `${ settingsName }[redirect_www]` } value={ redirectWWW } onChange={ e => setRedirectWWW( prev => e.target.value ) }>
 								<option value=''>{ __( 'Do nothing', 'slim-seo' ) }</option>
 								<option value='www-to-non'>{ __( 'www to non-wwww', 'slim-seo' ) }</option>
 								<option value='non-to-www'>{ __( 'non-www to www', 'slim-seo' ) }</option>
@@ -55,12 +57,12 @@ const Settings = () => {
 
 					<tr>
 						<th scope="row">
-							{ __( 'Enable 404 logs', 'slim-seo' ) }
+							<label htmlFor="ss-enable-404-logs">{ __( 'Enable 404 logs', 'slim-seo' ) }</label>
 							<Tooltip content={ __( 'Enable to track 404 logs', 'slim-seo' ) } />
 						</th>
 						<td>
 							<label className='ss-toggle'>
-								<input className='ss-toggle__checkbox' id='ss-enable-404-logs' type='checkbox' name={ `${ SSRedirection.settingsName }[enable_404_logs]` } value={ enable404Logs } checked={ 1 == enable404Logs } onChange={ () => setEnable404Logs( prev => 1 == prev ? 0 : 1 ) } />
+								<input className='ss-toggle__checkbox' id='ss-enable-404-logs' type='checkbox' name={ `${ settingsName }[enable_404_logs]` } value={ enable404Logs } checked={ 1 == enable404Logs } onChange={ () => setEnable404Logs( prev => 1 == prev ? 0 : 1 ) } />
 								<div className='ss-toggle__switch'></div>
 							</label>
 						</td>
@@ -69,69 +71,50 @@ const Settings = () => {
 					{
 						enable404Logs
 							? (
-								<tr className='ss-sub-setting'>
-									<td colspan={ 2 }>
-										<table className='form-table'>
-											<thead>
-												<tr>
-													<th scope="row">
-														{ __( 'Automatically delete logs:', 'slim-seo' ) }
-														<Tooltip content={ __( 'Logs in the database will be automatically removed', 'slim-seo' ) } />
-													</th>
-													<td>
-														<select id='ss-automatically-delete-404-logs' name={ `${ SSRedirection.settingsName }[automatically_delete_404_logs]` } value={ automaticallyDelete404Logs } onChange={ e => setAutomaticallyDelete404Logs( prev => e.target.value ) }>
-															<option value=''>{ __( 'Never', 'slim-seo' ) }</option>
-															<option value='7'>{ __( 'Older than a week', 'slim-seo' ) }</option>
-															<option value='30'>{ __( 'Older than a month', 'slim-seo' ) }</option>
-														</select>
-													</td>
-												</tr>
-											</thead>
-										</table>
+								<tr>
+									<th scope="row">
+										<label htmlFor="ss-auto-delete-404-logs">{ __( 'Auto delete 404 logs', 'slim-seo' ) }</label>
+										<Tooltip content={ __( '404 logs in the database will be automatically removed', 'slim-seo' ) } />
+									</th>
+									<td>
+										<select id='ss-auto-delete-404-logs' name={ `${ settingsName }[auto_delete_404_logs]` } value={ autoDelete404Logs } onChange={ e => setAutoDelete404Logs( e.target.value ) }>
+											<option value='-1'>{ __( 'Never', 'slim-seo' ) }</option>
+											<option value='7'>{ __( 'Older than a week', 'slim-seo' ) }</option>
+											<option value='30'>{ __( 'Older than a month', 'slim-seo' ) }</option>
+										</select>
 									</td>
 								</tr>
 							)
-							: (
-								SSRedirection.isLog404TableExist
-								&& (
-									<tr className='ss-sub-setting'>
-										<td colspan={ 2 }>
-											<table className='form-table'>
-												<thead>
-													<tr>
-														<th scope="row">
-															{ __( 'Delete 404 logs table', 'slim-seo' ) }
-															<Tooltip content={ __( 'Delete 404 logs table', 'slim-seo' ) } />
-														</th>
-														<td>
-															<label className='ss-toggle'>
-																<input className='ss-toggle__checkbox' id='ss-delete-404-log-table' type='checkbox' name={ `${ SSRedirection.settingsName }[should_delete_404_log_table]` } value={ shouldDeleteLog404Table } checked={ shouldDeleteLog404Table } onChange={ () => setShouldDeleteLog404Table( prev => !prev ) } />
-																<div className='ss-toggle__switch'></div>
-															</label>
-														</td>
-													</tr>
-												</thead>
-											</table>
-										</td>
-									</tr>
-								)
-							)
+							: ( SSRedirection.isLog404TableExist && (
+								<tr>
+									<th scope="row">
+										<label htmlFor="ss-delete-404-log-table">{ __( 'Delete 404 logs table', 'slim-seo' ) }</label>
+										<Tooltip content={ __( 'Delete 404 logs table', 'slim-seo' ) } />
+									</th>
+									<td>
+										<label className='ss-toggle'>
+											<input className='ss-toggle__checkbox' id='ss-delete-404-log-table' type='checkbox' name={ `${ settingsName }[delete_404_log_table]` } value='1' checked={ !!deleteLog404Table } onChange={ toggleDeleteLog404Table } />
+											<div className='ss-toggle__switch'></div>
+										</label>
+									</td>
+								</tr>
+							) )
 					}
 
 					<tr>
 						<th scope="row">
-							{ __( 'Redirect all 404 to', 'slim-seo' ) }
+							<label htmlFor="ss-redirect-404-to">{ __( 'Redirect all 404 to', 'slim-seo' ) }</label>
 							<Tooltip content={ __( 'Auto redirect 404 pages if they do not have redirection rule.', 'slim-seo' ) } />
 						</th>
 						<td>
-							<select id='ss-redirect-404-to' name={ `${ SSRedirection.settingsName }[redirect_404_to]` } value={ redirect404To } onChange={ e => setRedirect404To( prev => e.target.value ) }>
+							<select id='ss-redirect-404-to' name={ `${ settingsName }[redirect_404_to]` } value={ redirect404To } onChange={ e => setRedirect404To( e.target.value ) }>
 								<option value=''>{ __( 'Do nothing', 'slim-seo' ) }</option>
 								<option value='homepage'>{ __( 'Homepage', 'slim-seo' ) }</option>
 								<option value='custom'>{ __( 'Custom URL', 'slim-seo' ) }</option>
 							</select>
 							{
 								'custom' === redirect404To
-								&& <input type='text' className='regular-text' name={ `${ SSRedirection.settingsName }[redirect_404_to_url]` } value={ redirect404ToURL } onChange={ e => setRedirect404ToURL( prev => e.target.value.trim() ) } />
+								&& <input type='text' className='regular-text' name={ `${ settingsName }[redirect_404_to_url]` } value={ redirect404ToURL } onChange={ e => setRedirect404ToURL( e.target.value.trim() ) } />
 							}
 						</td>
 					</tr>

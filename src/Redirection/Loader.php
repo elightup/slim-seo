@@ -31,13 +31,11 @@ class Loader {
 	}
 
 	public function run_schedule() {
-		$days = (int) Settings::get( 'automatically_delete_404_logs' );
+		$days = (int) Settings::get( 'auto_delete_404_logs' );
 
-		if ( ! $days ) {
-			return;
+		if ( $days !== -1 ) {
+			$this->db_log->delete_older_logs( $days );
 		}
-
-		$this->db_log->delete_older_logs( $days );
 	}
 
 	public function deactivate() {

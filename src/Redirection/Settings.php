@@ -73,10 +73,9 @@ class Settings {
 			}
 		}
 
-		if ( ! empty( $data['should_delete_404_log_table'] ) ) {
+		if ( ! empty( $data['delete_404_log_table'] ) ) {
 			$this->db_log->drop_table();
-
-			unset( $option['should_delete_404_log_table'] );
+			unset( $option['delete_404_log_table'] );
 		}
 
 		return $option;
@@ -85,12 +84,12 @@ class Settings {
 	public static function list() : array {
 		return array_merge(
 			[
-				'force_trailing_slash'          => 0,
-				'redirect_www'                  => '',
-				'enable_404_logs'               => 0,
-				'automatically_delete_404_logs' => '',
-				'redirect_404_to'               => '',
-				'redirect_404_to_url'           => '',
+				'force_trailing_slash' => 0,
+				'redirect_www'         => '',
+				'enable_404_logs'      => 0,
+				'auto_delete_404_logs' => 30,
+				'redirect_404_to'      => '',
+				'redirect_404_to_url'  => '',
 			],
 			get_option( 'slim_seo' ) ?: []
 		);
