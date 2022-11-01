@@ -5,9 +5,9 @@ import { Tooltip } from '../helper/misc';
 const Settings = () => {
 	const { settings, settingsName } = SSRedirection;
 
-	const [ forceTrailingSlash, setForceTrailingSlash ] = useState( settings['force_trailing_slash'] );
+	const [ forceTrailingSlash, toggleForceTrailingSlash ] = useReducer( onOrOff => !onOrOff, !!settings['force_trailing_slash'] );
 	const [ redirectWWW, setRedirectWWW ] = useState( settings[ 'redirect_www' ] );
-	const [ enable404Logs, setEnable404Logs ] = useState( settings[ 'enable_404_logs' ] );
+	const [ enable404Logs, toggleEnable404Logs ] = useReducer( onOrOff => !onOrOff, !!settings[ 'enable_404_logs' ] );
 	const [ autoDelete404Logs, setAutoDelete404Logs ] = useState( settings[ 'auto_delete_404_logs' ] );
 	const [ deleteLog404Table, toggleDeleteLog404Table ] = useReducer( onOrOff => !onOrOff, false );
 	const [ redirect404To, setRedirect404To ] = useState( settings[ 'redirect_404_to' ] );
@@ -24,7 +24,7 @@ const Settings = () => {
 						</th>
 						<td>
 							<label className='ss-toggle'>
-								<input className='ss-toggle__checkbox' id='ss-force-trailing-slash' type='checkbox' name={ `${ settingsName }[force_trailing_slash]` } value="1" checked={ !!forceTrailingSlash } onChange={ () => setForceTrailingSlash( prev => 1 - prev ) } />
+								<input className='ss-toggle__checkbox' id='ss-force-trailing-slash' type='checkbox' name={ `${ settingsName }[force_trailing_slash]` } value='1' checked={ forceTrailingSlash } onChange={ toggleForceTrailingSlash } />
 								<div className='ss-toggle__switch'></div>
 							</label>
 							<br />
@@ -62,7 +62,7 @@ const Settings = () => {
 						</th>
 						<td>
 							<label className='ss-toggle'>
-								<input className='ss-toggle__checkbox' id='ss-enable-404-logs' type='checkbox' name={ `${ settingsName }[enable_404_logs]` } value={ enable404Logs } checked={ 1 == enable404Logs } onChange={ () => setEnable404Logs( prev => 1 == prev ? 0 : 1 ) } />
+								<input className='ss-toggle__checkbox' id='ss-enable-404-logs' type='checkbox' name={ `${ settingsName }[enable_404_logs]` } value='1' checked={ enable404Logs } onChange={ toggleEnable404Logs } />
 								<div className='ss-toggle__switch'></div>
 							</label>
 						</td>
@@ -93,7 +93,7 @@ const Settings = () => {
 									</th>
 									<td>
 										<label className='ss-toggle'>
-											<input className='ss-toggle__checkbox' id='ss-delete-404-log-table' type='checkbox' name={ `${ settingsName }[delete_404_log_table]` } value='1' checked={ !!deleteLog404Table } onChange={ toggleDeleteLog404Table } />
+											<input className='ss-toggle__checkbox' id='ss-delete-404-log-table' type='checkbox' name={ `${ settingsName }[delete_404_log_table]` } value='1' checked={ deleteLog404Table } onChange={ toggleDeleteLog404Table } />
 											<div className='ss-toggle__switch'></div>
 										</label>
 									</td>
