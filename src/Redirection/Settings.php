@@ -1,42 +1,50 @@
 <?php
 namespace SlimSEO\Redirection;
 
+use SlimSEO\Redirection\Database\Log404 as DbLog;
+
 class Settings {
-	public function __construct() {
+	protected $db_log;
+
+	public function __construct( DbLog $db_log ) {
+		$this->db_log = $db_log;
+
 		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tab' ] );
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_pane' ] );
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
-
-		add_action( 'slim_seo_save', [ $this, 'save' ] );
+		add_filter( 'slim_seo_option', [ $this, 'option_saved' ], 10, 2 );
 	}
-	
+
 	public function add_tab( array $tabs ) : array {
-		$tabs['redirection'] = __( 'Redirection', 'slim-seo-redirection' );
+		$tabs['redirection'] = __( 'Redirection', 'slim-seo' );
 		return $tabs;
 	}
 
 	public function add_pane( array $panes ) : array {
-		$panes['redirection'] = '<div id="redirection" class="ss-tab-pane"><div id="ss-redirection"></div></div>';	
-		
+		$panes['redirection'] = '<div id="redirection" class="ss-tab-pane"><div id="ss-redirection"></div></div>';
+
 		return $panes;
 	}
 
 	public function enqueue() {
-		wp_enqueue_style( 'slim-seo-redirection', SLIM_SEO_URL . 'css/redirection.css', [], SLIM_SEO_VER );
+		wp_enqueue_style( 'slim-seo-redirection', SLIM_SEO_URL . 'css/redirection.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . '/css/redirection.css' ) );
 
-		wp_enqueue_script( 'slim-seo-redirection', SLIM_SEO_URL . 'js/redirection.js', [ 'wp-element', 'wp-i18n', ], SLIM_SEO_VER, true );
+		wp_enqueue_script( 'slim-seo-redirection', SLIM_SEO_URL . 'js/redirection.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . '/js/redirection.js' ), true );
+
+		$this->db_log->create_table();
 
 		$localized_data = [
-			'rest'             => untrailingslashit( rest_url() ),
-			'nonce'            => wp_create_nonce( 'wp_rest' ),
-			'settingsPageURL'  => untrailingslashit( admin_url( 'options-general.php?page = slim-seo' ) ),
-			'tabID'            => 'redirection',
-			'settingsName'     => SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME,
-			'settings'         => Helper::get_settings(),
-			'redirectTypes'    => Helper::redirect_types(),
-			'conditionOptions' => Helper::condition_options(),
-			'defaultRedirect'  => [
-				'id'               => -1,
+			'rest'               => untrailingslashit( rest_url() ),
+			'nonce'              => wp_create_nonce( 'wp_rest' ),
+			'homeURL'            => untrailingslashit( home_url() ),
+			'settingsName'       => 'slim_seo',
+			'settings'           => self::list(),
+			'redirectTypes'      => Helper::redirect_types(),
+			'conditionOptions'   => Helper::condition_options(),
+			'isLog404TableExist' => $this->db_log->table_exists(),
+			'permalinkUrl'       => admin_url( 'options-permalink.php' ),
+			'defaultRedirect'    => [
+				'id'               => 0,
 				'type'             => 301,
 				'condition'        => 'exact-match',
 				'from'             => '',
@@ -53,7 +61,43 @@ class Settings {
 		do_action( 'slim_seo_redirection_enqueue_settings' );
 	}
 
-	public function save() {
-		update_option( SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME, $_POST[SLIM_SEO_REDIRECTION_SETTINGS_OPTION_NAME] );
+	public function option_saved( array $option, array $data ) : array {
+		$checkboxes = [
+			'force_trailing_slash',
+			'enable_404_logs',
+		];
+
+		foreach ( $checkboxes as $checkbox ) {
+			if ( empty( $data[ $checkbox ] ) ) {
+				$option[ $checkbox ] = 0;
+			}
+		}
+
+		if ( ! empty( $data['delete_404_log_table'] ) ) {
+			$this->db_log->drop_table();
+			unset( $option['delete_404_log_table'] );
+		}
+
+		return $option;
+	}
+
+	public static function list() : array {
+		return array_merge(
+			[
+				'force_trailing_slash' => 0,
+				'redirect_www'         => '',
+				'enable_404_logs'      => 0,
+				'auto_delete_404_logs' => 30,
+				'redirect_404_to'      => '',
+				'redirect_404_to_url'  => '',
+			],
+			get_option( 'slim_seo' ) ?: []
+		);
+	}
+
+	public static function get( string $name ) {
+		$settings = self::list();
+
+		return $settings[ $name ] ?? false;
 	}
 }

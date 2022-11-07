@@ -1,5 +1,55 @@
-export const Tooltip = ( { content } ) => {
-	return (
-		<button type='button' className='ss-tooltip' data-tippy-content={ content } title={ content }><span className='dashicons dashicons-editor-help'></span></button>
-	)
+import { Dashicon, Tooltip as T } from '@wordpress/components';
+import useSWR from 'swr';
+
+export const Tooltip = ( { content, icon = 'editor-help' } ) => (
+	<T text={ content }>
+		<span className='ss-tooltip'><Dashicon icon={ icon } /></span>
+	</T>
+);
+
+export const isValidUrl = url => {
+	return null !== url.match( /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,100}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g );
+};
+
+export const getFullURL = url => {
+	if ( isValidUrl( url ) ) {
+		return url;
+	}
+
+	url = '/' === url[0] ? url : `/${url}`
+
+	return SSRedirection.homeURL + `${url}`;
+};
+
+export const fetcher = ( apiName, parameters = {}, method = 'GET' ) => {
+	let options = {
+		method,
+		headers: { 'X-WP-Nonce': SSRedirection.nonce, 'Content-Type': 'application/json' },
+	};
+	let url = `${ SSRedirection.rest }/slim-seo-redirection/${ apiName }`;
+
+	if ( 'POST' === method ) {
+		options.body = JSON.stringify( parameters );
+	} else {
+		const query = ( new URLSearchParams( parameters ) ).toString();
+
+		if ( query ) {
+			url += SSRedirection.rest.includes( '?' ) ? `&${ query }` : `?${ query }`;
+		}
+	}
+
+	return fetch( url, options ).then( response => response.json() );
+};
+
+export const useApi = ( apiName, parameters = {}, args = {}, defaultValue ) => {
+	args = { method: 'GET', returnMutate: false, options: {}, ...args, };
+
+	const { data, error, mutate } = useSWR( [ apiName, parameters, args.method ], fetcher, { revalidateOnFocus: false, ...args.options } );
+	const result = ( error || !data ? defaultValue : data );
+
+	if ( args.returnMutate ) {
+		return { result, mutate };
+	}
+
+	return result;
 };

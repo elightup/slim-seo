@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class Deactivator {
-	public function setup( $file ) {
+	public function __construct( $file ) {
 		register_deactivation_hook( $file, [ $this, 'deactivate' ] );
 	}
 
@@ -36,5 +36,7 @@ class Deactivator {
 		 * So, let WordPress regenerates rewrite rules when needed.
 		 */
 		delete_option( 'rewrite_rules' );
+
+		do_action( 'slim_seo_deactivate' );
 	}
 }

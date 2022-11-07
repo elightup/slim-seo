@@ -3,6 +3,6 @@ vendor
 *.swp
 .DS_Store
 Thumbs.db
-*.js.LICENSE.txt
 css/redirection.css
 js/redirection.js
+*.LICENSE.txt

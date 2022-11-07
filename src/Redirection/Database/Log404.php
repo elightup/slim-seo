@@ -1,19 +1,24 @@
 <?php
 namespace SlimSEO\Redirection\Database;
 
+use SlimSEO\Redirection\Settings;
+
 class Log404 {
+	protected $option_name = 'ss_redirection_db_version';
+
 	public function __construct() {
 		global $wpdb;
 
 		$wpdb->tables[]     = 'slim_seo_404';
 		$wpdb->slim_seo_404 = $wpdb->prefix . 'slim_seo_404';
-
-		$this->create();
 	}
 
-	public function create() {
-		$option_name = 'ss_redirection_db_version';
-		$db_version  = get_option( $option_name );
+	public function create_table() {
+		if ( ! Settings::get( 'enable_404_logs' ) ) {
+			return;
+		}
+
+		$db_version = get_option( $this->option_name );
 
 		if ( $db_version >= SLIM_SEO_VER ) {
 			return;
@@ -31,27 +36,40 @@ class Log404 {
 				`hit` bigint(20) unsigned DEFAULT '0',
 				`created_at` datetime DEFAULT CURRENT_TIMESTAMP,
 				`updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
-				
+
 				PRIMARY KEY (`id`),
-				
+
 				KEY `url` (`url`)
 			) $charset_collate;
 		";
 
 		dbDelta( $sql_query );
 
-		update_option( $option_name, SLIM_SEO_VER );
+		update_option( $this->option_name, SLIM_SEO_VER );
 	}
 
-	public function get( string $value, string $by = 'id' ) : array {
+	public function table_exists() : bool {
+		return get_option( $this->option_name ) ? true : false;
+	}
+
+	public function drop_table() {
 		global $wpdb;
 
-		$field = 'id' === $by ? "`id`" : "`url`";
-		$row   = $wpdb->get_row(
-			"SELECT *
-			FROM {$wpdb->slim_seo_404} 
-			WHERE {$field} = '{$value}'",
+		delete_option( $this->option_name );
+		// @codingStandardsIgnoreLine.
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->slim_seo_404}" );
+	}
 
+	public function get_log_by_url( string $value ) : array {
+		global $wpdb;
+
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT *
+				FROM {$wpdb->slim_seo_404}
+				WHERE `url` = %s",
+				$value
+			),
 			ARRAY_A
 		);
 
@@ -67,38 +85,76 @@ class Log404 {
 		);
 	}
 
-	public function get_list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ) : array {
+	public function list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ) : array {
 		global $wpdb;
 
+		$sql_query = "
+			SELECT * 
+			FROM {$wpdb->slim_seo_404} 
+			ORDER BY `{$order_by}` {$order}
+		";
+
+		if ( $limit ) {
+			$sql_query .= " LIMIT {$limit} OFFSET {$offset}";
+		}
+
+		// @codingStandardsIgnoreStart
 		return $wpdb->get_results(
-			"SELECT *
-			FROM {$wpdb->slim_seo_404}
-			ORDER BY `{$order_by}` {$order}"
-			. ( $limit ? " LIMIT {$limit} OFFSET {$offset}" : "" ),
-			
+			$sql_query,
 			ARRAY_A
 		);
+		// @codingStandardsIgnoreEnd
 	}
 
 	public function add( array $log ) {
 		global $wpdb;
-		
+
 		$wpdb->insert(
 			$wpdb->slim_seo_404,
-			
 			$log
 		);
 	}
 
 	public function update( array $log ) {
 		global $wpdb;
-		
+
 		$wpdb->update(
 			$wpdb->slim_seo_404,
-			
 			$log,
-
-			[ 'id' => $log['id'], ]
+			[ 'id' => $log['id'] ]
 		);
+	}
+
+	public function delete_older_logs( int $days ) {
+		global $wpdb;
+
+		// @codingStandardsIgnoreStart
+		$wpdb->query(
+			"DELETE FROM {$wpdb->slim_seo_404}
+			WHERE updated_at < NOW() - INTERVAL {$days} DAY"
+		);
+		// @codingStandardsIgnoreEnd
+	}
+
+	public function delete( int $id ) {
+		global $wpdb;
+
+		// @codingStandardsIgnoreStart
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->slim_seo_404}
+				WHERE `id` = %d",
+
+				$id
+			)
+		);
+		// @codingStandardsIgnoreEnd
+	}
+
+	public function delete_all() {
+		global $wpdb;
+
+		// @codingStandardsIgnoreLine.
+		$wpdb->query( "DELETE FROM {$wpdb->slim_seo_404}" );
 	}
 }

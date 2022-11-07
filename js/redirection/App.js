@@ -1,8 +1,8 @@
 import { render } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Redirects from './redirects/List';
-import Log404 from './404/List';
+import Redirects from './redirects/Main';
+import Log404 from './404/Main';
 import Settings from './settings/Settings';
 
 const App = () => {
