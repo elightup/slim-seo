@@ -3,13 +3,13 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 6.0.2
+Tested up to: 6.1
 Requires PHP: 7.0
-Stable tag: 3.15.2
+Stable tag: 3.16.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A full-featured SEO plugin for WordPress that's lightweight, blazing fast with minimum configuration. No bloats, no ads and just works!
+A full-featured SEO plugin for WordPress that's lightweight, blazing fast with minimum configuration. No bloats and just works!
 
 == Description ==
 
@@ -55,10 +55,11 @@ Schema is a way that describes structured data for search engines. Based on the 
 
 Slim SEO automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-#### 5. [Auto Redirection](https://docs.wpslimseo.com/slim-seo/auto-redirection/)
+#### 5. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
 
-- Auto redirect attachment page to the attachment file URL.
-- Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
+- Setting up redirection rules easily
+- Auto redirect non-www to www and vice versa
+- 404 link monitoring
 
 #### 6. And many more
 
@@ -136,6 +137,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.16.0 - 2022-11-10 =
+- Add redirection and 404 link monitoring. See [blog post](https://wpslimseo.com/slim-seo-3-16/).
+- Improve compatibility for Divi.
 
 = 3.15.2 - 2022-09-22 =
 - Use post excerpt if available for meta description before the builder content in case of using page builders
