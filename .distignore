@@ -1,12 +1,13 @@
+node_modules
 .git
 .github
+.gitignore
+.gitattributes
 
 .DS_Store
 Thumbs.db
 
 .distignore
-.gitattributes
-.gitignore
 composer.json
 composer.lock
 esbuild.js
@@ -14,6 +15,8 @@ package-lock.json
 package.json
 phpcs.xml
 README.md
+
+*.zip
 
 css/scss
 js/redirection
