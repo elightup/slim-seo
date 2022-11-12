@@ -31,6 +31,8 @@ class Settings {
 
 		wp_enqueue_script( 'slim-seo-redirection', SLIM_SEO_URL . 'js/redirection.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . '/js/redirection.js' ), true );
 
+		wp_set_script_translations( 'slim-seo-redirection', 'slim-seo', SLIM_SEO_DIR . 'languages/' );
+
 		$this->db_log->create_table();
 
 		$localized_data = [
