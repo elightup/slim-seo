@@ -19,6 +19,8 @@ class Loader {
 		new Api\Redirects( $this->db_redirects );
 		new Api\Log404( $this->db_log );
 
+		new Migration\Migration( $this->db_redirects );
+
 		add_action( 'init', [ $this, 'init' ] );
 		add_action( SLIM_SEO_DELETE_404_LOGS_ACTION, [ $this, 'run_schedule' ] );
 		add_action( 'slim_seo_deactivate', [ $this, 'deactivate' ] );

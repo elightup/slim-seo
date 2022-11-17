@@ -27,12 +27,10 @@ class Redirects {
 		$redirect['from'] = Helper::normalize_url( $redirect['from'] );
 		$redirect['to']   = Helper::normalize_url( $redirect['to'] );
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
+		$redirect_id      = empty( $redirect['id'] ) ? uniqid( wp_rand() ) : $redirect['id'];
 
-		if ( empty( $redirect['id'] ) ) {
-			$this->redirects[ uniqid() ] = $redirect;
-		} else {
-			$this->redirects[ $redirect['id'] ] = $redirect;
-		}
+		unset( $redirect['id'] );
+		$this->redirects[ $redirect_id ] = $redirect;
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
 	}
