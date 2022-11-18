@@ -29,9 +29,12 @@ new Deactivator( __FILE__ );
 
 $slim_seo = new Plugin;
 $slim_seo->register_services();
+$slim_seo->register_admin_services();
 
 // Initialize at priority 5 to be able to disable core sitemaps completely which runs at priority 10.
 add_action( 'init', [ $slim_seo, 'init' ], 5 );
+
+add_action( 'init', [ $slim_seo, 'init_admin_columns' ], 99 );
 
 new Redirection\Loader;
 
