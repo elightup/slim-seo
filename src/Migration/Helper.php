@@ -17,13 +17,25 @@ class Helper {
 		return $taxonomies;
 	}
 
-	public static function get_platforms() {
-		return [
-			'yoast'         => __( 'Yoast SEO', 'slim-seo' ),
-			'aioseo'        => __( 'All In One SEO', 'slim-seo' ),
-			'seo-framework' => __( 'The SEO Framework', 'slim-seo' ),
-			'rank-math'     => __( 'Rank Math', 'slim-seo' ),
-			'seopress'      => __( 'SEOPress', 'slim-seo' ),
+	public static function get_platforms( string $type = '' ) : array {
+		$platforms = [
+			'meta'        => [
+				'yoast'         => __( 'Yoast SEO', 'slim-seo' ),
+				'aioseo'        => __( 'All In One SEO', 'slim-seo' ),
+				'seo-framework' => __( 'The SEO Framework', 'slim-seo' ),
+				'rank-math'     => __( 'Rank Math', 'slim-seo' ),
+				'seopress'      => __( 'SEOPress', 'slim-seo' ),
+			],
+			'redirection' => [
+				'redirection'   => __( 'Redirection', 'slim-seo' ),
+				'301-redirects' => __( '301 Redirects', 'slim-seo' ),
+			],
 		];
+
+		if ( '' !== $type ) {
+			return $platforms[ $type ];
+		}
+
+		return array_merge( $platforms['meta'], $platforms['redirection'] );
 	}
 }

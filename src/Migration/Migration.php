@@ -13,6 +13,7 @@ class Migration {
 		add_action( 'wp_ajax_ss_reset_counter', [ $this, 'reset_counter' ] );
 		add_action( 'wp_ajax_ss_migrate_posts', [ $this, 'migrate_posts' ] );
 		add_action( 'wp_ajax_ss_migrate_terms', [ $this, 'migrate_terms' ] );
+		add_action( 'wp_ajax_ss_migrate_redirects', [ $this, 'migrate_redirects' ] );
 	}
 
 	public function prepare_migration() {
@@ -105,6 +106,23 @@ class Migration {
 			// Translators: %d is the number of processed items.
 			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $_SESSION['processed'] ),
 			'type'    => 'continue',
+		] );
+	}
+
+	public function migrate_redirects() {
+		session_start();
+		$this->set_replacer( $_SESSION['platform'] );
+		$migrated_redirects = $_SESSION['replacer']->migrate_redirects();
+
+		if ( empty( $migrated_redirects ) ) {
+			wp_send_json_success( [
+				'message' => '',
+			] );
+		}
+
+		wp_send_json_success( [
+			// Translators: %d is the number of migrated redirects.
+			'message' => sprintf( __( 'Migrated %d redirects...', 'slim-seo' ), $migrated_redirects ),
 		] );
 	}
 
