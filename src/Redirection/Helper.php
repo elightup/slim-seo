@@ -55,12 +55,4 @@ class Helper {
 
 		return $url ? $url : '/';
 	}
-
-	public static function get_migration_platforms() : array {
-		return [
-			'redirection'   => __( 'Redirection', 'slim-seo' ),
-			'301-redirects' => __( '301 Redirects', 'slim-seo' ),
-			'yoast-premium' => __( 'Yoast SEO Premium', 'slim-seo' ),
-		];
-	}
 }

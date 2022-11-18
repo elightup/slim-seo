@@ -1,8 +1,11 @@
 <?php
-namespace SlimSEO\Redirection\Migration;
+namespace SlimSEO\Migration;
+
+use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Redirection\Helper as RedirectionHelper;
 
 class Redirection extends Replacer {
-	public function migrate() : int {
+	public function migrate_redirects() {
 		$migrated_redirects = 0;
 
 		global $wpdb;
@@ -13,9 +16,12 @@ class Redirection extends Replacer {
 			return $migrated_redirects;
 		}
 
+		$db_redirects   = new DbRedirects();
+		$redirect_types = RedirectionHelper::redirect_types();
+
 		foreach ( $results as $result ) {
 			// Ignore if From URL exists
-			if ( $this->db_redirects->exists( $result['url'] ) ) {
+			if ( $db_redirects->exists( $result['url'] ) ) {
 				continue;
 			}
 
@@ -31,7 +37,7 @@ class Redirection extends Replacer {
 			}
 
 			$redirect = [
-				'type'             => isset( $this->redirect_types[ $action_code ] ) ? $action_code : 301,
+				'type'             => isset( $redirect_types[ $action_code ] ) ? $action_code : 301,
 				'condition'        => 'regex' === ( $result['match_url'] ?? '' ) ? 'regex' : 'exact-match',
 				'from'             => $result['url'],
 				'to'               => $result['action_data'] ?? '',
@@ -40,7 +46,7 @@ class Redirection extends Replacer {
 				'ignoreParameters' => $ignore_parameters,
 			];
 
-			$this->db_redirects->update( $redirect );
+			$db_redirects->update( $redirect );
 
 			$migrated_redirects++;
 		}
@@ -48,7 +54,7 @@ class Redirection extends Replacer {
 		return $migrated_redirects;
 	}
 
-	public function is_activated() : bool {
+	public function is_activated() {
 		return defined( 'REDIRECTION_DB_VERSION' );
 	}
 }

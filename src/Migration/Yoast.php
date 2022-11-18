@@ -1,6 +1,9 @@
 <?php
 namespace SlimSEO\Migration;
 
+use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Redirection\Helper as RedirectionHelper;
+
 class Yoast extends Replacer {
 
 	public function get_post_title( $post_id ) {
@@ -79,6 +82,42 @@ class Yoast extends Replacer {
 	public function get_term( $term_id ) {
 		$terms = $this->get_terms();
 		return isset( $terms[ $term_id ] ) ? $terms[ $term_id ] : null;
+	}
+
+	public function migrate_redirects() {
+		$migrated_redirects = 0;
+		$results            = get_option( 'wpseo-premium-redirects-base' ) ?: [];
+
+		if ( empty( $results ) ) {
+			return $migrated_redirects;
+		}
+
+		$db_redirects   = new DbRedirects();
+		$redirect_types = RedirectionHelper::redirect_types();
+
+		foreach ( $results as $result ) {
+			// Ignore if From URL exists
+			if ( $db_redirects->exists( $result['origin'] ) ) {
+				continue;
+			}
+
+			$type     = $result['type'];
+			$redirect = [
+				'type'             => isset( $redirect_types[ $type ] ) ? $type : 301,
+				'condition'        => 'regex' === $result['format'] ? 'regex' : 'exact-match',
+				'from'             => $result['origin'],
+				'to'               => $result['url'],
+				'note'             => '',
+				'enable'           => 1,
+				'ignoreParameters' => 0,
+			];
+
+			$db_redirects->update( $redirect );
+
+			$migrated_redirects++;
+		}
+
+		return $migrated_redirects;
 	}
 
 	public function is_activated() {

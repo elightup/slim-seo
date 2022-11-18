@@ -1,8 +1,11 @@
 <?php
-namespace SlimSEO\Redirection\Migration;
+namespace SlimSEO\Migration;
+
+use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Redirection\Helper as RedirectionHelper;
 
 class Redirects301 extends Replacer {
-	public function migrate() : int {
+	public function migrate_redirects() {
 		$migrated_redirects = 0;
 
 		global $wpdb;
@@ -13,16 +16,19 @@ class Redirects301 extends Replacer {
 			return $migrated_redirects;
 		}
 
+		$db_redirects   = new DbRedirects();
+		$redirect_types = RedirectionHelper::redirect_types();
+
 		foreach ( $results as $result ) {
 			// Ignore if From URL exists
-			if ( $this->db_redirects->exists( $result['url_from'] ) ) {
+			if ( $db_redirects->exists( $result['url_from'] ) ) {
 				continue;
 			}
 
 			$status   = $result['status'];
 			$to       = $result['url_to'];
 			$redirect = [
-				'type'             => isset( $this->redirect_types[ $status ] ) ? $status : 301,
+				'type'             => isset( $redirect_types[ $status ] ) ? $status : 301,
 				'condition'        => 'exact-match',
 				'from'             => $result['url_from'],
 				'to'               => 'post' === $result['type'] ? get_permalink( $to ) : $to,
@@ -31,7 +37,7 @@ class Redirects301 extends Replacer {
 				'ignoreParameters' => 0,
 			];
 
-			$this->db_redirects->update( $redirect );
+			$db_redirects->update( $redirect );
 
 			$migrated_redirects++;
 		}

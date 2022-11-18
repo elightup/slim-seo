@@ -14,6 +14,10 @@ class ReplacerFactory {
 				return new RankMath;
 			case 'seopress':
 				return new SEOPress;
+			case 'redirection':
+				return new Redirection;
+			case '301-redirects':
+				return new Redirects301;
 		}
 	}
 }

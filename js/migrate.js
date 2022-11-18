@@ -2,6 +2,7 @@
 	const postStatus = document.querySelector( '#posts-status' ),
 		doneStatus = document.querySelector( '#done-status' ),
 		termStatus = document.querySelector( '#terms-status' ),
+		redirectsStatus = document.querySelector( '#redirects-status' ),
 		platformSelect = document.querySelector( '#platform' ),
 		button = document.querySelector( '#process' );
 
@@ -13,13 +14,22 @@
 
 	button.addEventListener( 'click', async () => {
 		platform = platformSelect.value;
+
+		const group = platformSelect.options[platformSelect.selectedIndex].parentElement.getAttribute( 'value' );
+
 		try {
 			preProcess();
 			await prepareMigration();
-			await resetCounter();
-			await handleMigratePosts();
-			await resetCounter();
-			await handleMigrateTerms();
+
+			if ( 'redirection' !== group ) {
+				await resetCounter();
+				await handleMigratePosts();
+				await resetCounter();
+				await handleMigrateTerms();
+			}
+
+			await handleMigrateRedirects();
+			
 			doneMigration();
 		} catch ( message ) {
 			printMessage( postStatus, message );
@@ -45,6 +55,12 @@
 			printMessage( termStatus, response.data.message );
 			await handleMigrateTerms();
 		}
+	}
+
+	const handleMigrateRedirects = async () => {
+		const response = await get( `${ajaxurl}?action=ss_migrate_redirects` );
+
+		printMessage( redirectsStatus, response.data.message );
 	}
 
 	const get = async ( url ) => {
