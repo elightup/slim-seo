@@ -21,7 +21,7 @@
 			preProcess();
 			await prepareMigration();
 
-			if ( 'redirection' !== group ) {
+			if ( 'meta' === group ) {
 				await resetCounter();
 				await handleMigratePosts();
 				await resetCounter();

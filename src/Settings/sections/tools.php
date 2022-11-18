@@ -5,12 +5,14 @@
 <p class="migration-handler">
 	<label for="platform"><?php esc_html_e( 'Migrate SEO data from:', 'slim-seo' ); ?></label>
 	<select name="platform" id="platform">
-		<?php $platforms = SlimSEO\Migration\Helper::get_platforms( 'meta' ) ?>
-		<?php foreach ( $platforms as $key => $platform ) : ?>
-			<option value="<?= esc_attr( $key ); ?>"><?= esc_html( $platform ); ?></option>
-		<?php endforeach ?>
+		<optgroup value="meta" label="<?php esc_html_e( 'SEO plugins', 'slim-seo' ); ?>">
+			<?php $platforms = SlimSEO\Migration\Helper::get_platforms( 'meta' ) ?>
+			<?php foreach ( $platforms as $key => $platform ) : ?>
+				<option value="<?= esc_attr( $key ); ?>"><?= esc_html( $platform ); ?></option>
+			<?php endforeach ?>
+		</optgroup>
 
-		<optgroup value="redirection" label="<?php esc_html_e( 'Redirection', 'slim-seo' ); ?>">
+		<optgroup value="redirection" label="<?php esc_html_e( 'Redirection plugins', 'slim-seo' ); ?>">
 			<?php $platforms = SlimSEO\Migration\Helper::get_platforms( 'redirection' ) ?>
 			<?php foreach ( $platforms as $key => $platform ) : ?>
 				<option value="<?= esc_attr( $key ); ?>"><?= esc_html( $platform ); ?></option>
