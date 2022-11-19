@@ -3,7 +3,6 @@ namespace SlimSEO;
 
 class Plugin {
 	private $services = [];
-	private $admin_services = [];
 
 	public function register_services() {
 		$this->services['meta_title']       = new MetaTags\Title;
@@ -27,6 +26,8 @@ class Plugin {
 		if ( is_admin() ) {
 			$this->services['notification']       = new Notification;
 			$this->services['migration']          = new Migration\Migration;
+			$this->services['admin_columns_post'] = new MetaTags\AdminColumns\Post( $this->services['settings_post'], $this->services['meta_title'], $this->services['meta_description'] );
+			$this->services['admin_columns_term'] = new MetaTags\AdminColumns\Term( $this->services['settings_term'], $this->services['meta_title'], $this->services['meta_description'] );
 			return;
 		}
 
@@ -59,30 +60,12 @@ class Plugin {
 		);
 	}
 
-	public function register_admin_services() {
-		// Admin only.
-		if ( is_admin() ) {
-			$this->admin_services['admin_columns_post'] = new MetaTags\AdminColumns\Post( $this->services['settings_post'], $this->services['meta_title'], $this->services['meta_description'] );
-			$this->admin_services['admin_columns_term'] = new MetaTags\AdminColumns\Term( $this->services['settings_term'], $this->services['meta_title'], $this->services['meta_description'] );
-			return;
-		}
-	}
-
 	public function init() {
 		do_action( 'slim_seo_init', $this );
 
 		Settings\Page::setup();
 		$settings = $this->services['settings'];
 		foreach ( $this->services as $id => $service ) {
-			if ( $settings->is_feature_active( $id ) ) {
-				$service->setup();
-			}
-		}
-	}
-
-	public function init_admin_columns() {
-		$settings = $this->services['settings'];
-		foreach ( $this->admin_services as $id => $service ) {
 			if ( $settings->is_feature_active( $id ) ) {
 				$service->setup();
 			}
