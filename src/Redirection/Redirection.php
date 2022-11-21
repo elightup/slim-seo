@@ -11,6 +11,7 @@ class Redirection {
 
 		add_action( 'plugins_loaded', [ $this, 'redirect' ], 1 );
 		add_filter( 'user_trailingslashit', [ $this, 'force_trailing_slash' ], 999 );
+		add_action( 'template_redirect', [ $this, 'auto_redirection' ] );
 		add_action( 'plugins_loaded', [ $this, 'redirect_www' ], 2 );
 	}
 
@@ -130,6 +131,38 @@ class Redirection {
 		}
 
 		return $url;
+	}
+
+	public function auto_redirection() {
+		if ( ! Settings::get( 'auto_redirection' ) ) {
+			return;
+		}
+
+		$destination = '';
+
+		if ( is_attachment() ) {
+			$destination = wp_get_attachment_url( get_queried_object_id() );
+		}
+
+		if ( is_author() ) {
+			if ( ! have_posts() ) {
+				$destination = home_url( '/' );
+			}
+			// If the website has only one user.
+			$users = get_users( [
+				'number' => 2,
+				'fields' => 'ID',
+			] );
+
+			if ( 1 === count( $users ) ) {
+				$destination = home_url( '/' );
+			}
+		}
+
+		if ( $destination ) {
+			wp_safe_redirect( esc_url( $destination ), 301, 'Slim SEO' );
+			die;
+		}
 	}
 
 	public function redirect_www() {

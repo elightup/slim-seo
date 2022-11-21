@@ -66,6 +66,7 @@ class Settings {
 	public function option_saved( array $option, array $data ) : array {
 		$checkboxes = [
 			'force_trailing_slash',
+			'auto_redirection',
 			'enable_404_logs',
 		];
 
@@ -87,6 +88,7 @@ class Settings {
 		return array_merge(
 			[
 				'force_trailing_slash' => 0,
+				'auto_redirection'     => 0,
 				'redirect_www'         => '',
 				'enable_404_logs'      => 0,
 				'auto_delete_404_logs' => 30,

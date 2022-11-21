@@ -71,13 +71,6 @@
 </p>
 <p>
 	<label>
-		<input type="checkbox" name="slim_seo[features][]" value="auto_redirection"<?php checked( $this->is_feature_active( 'auto_redirection' ) ); ?>>
-		<?php esc_html_e( 'Auto redirection', 'slim-seo' ); ?>
-		<?php $this->tooltip( __( 'Automatically redirect pages if needed', 'slim-seo' ) ) ?>
-	</label>
-</p>
-<p>
-	<label>
 		<input type="checkbox" name="slim_seo[features][]" value="feed"<?php checked( $this->is_feature_active( 'feed' ) ); ?>>
 		<?php esc_html_e( 'RSS feed', 'slim-seo' ); ?>
 		<?php $this->tooltip( __( 'Automatically add a back link to posts to prevent content from being copied', 'slim-seo' ) ) ?>
