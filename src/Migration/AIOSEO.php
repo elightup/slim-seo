@@ -123,14 +123,16 @@ class AIOSEO extends Replacer {
 	}
 }
 
-class ExtImage extends Common\Social\Image {
-	public function __get( $name ) {
-		$method = ( 'get' . ucfirst( $name ) );
-		if ( method_exists( $this, $method ) ) {
-			return $this->$method();
+if ( class_exists( 'AIOSEO\Plugin\Common\Social\Image' ) ) {
+	class ExtImage extends Common\Social\Image {
+		public function __get( $name ) {
+			$method = ( 'get' . ucfirst( $name ) );
+			if ( method_exists( $this, $method ) ) {
+				return $this->$method();
+			}
 		}
-	}
-	public function getThumbnailSize() {
-		return $this->thumbnailSize;
+		public function getThumbnailSize() {
+			return $this->thumbnailSize;
+		}
 	}
 }
