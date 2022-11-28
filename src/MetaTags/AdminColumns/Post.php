@@ -7,6 +7,11 @@ class Post extends Base {
 	private $types;
 
 	public function setup() {
+		// Run init in 99 to gel all custom post types
+		add_action( 'init', [ $this, 'setup_admin' ], 99 );
+	}
+
+	public function setup_admin() {
 		$this->types = $this->settings->get_types();
 		foreach ( $this->types as $type ) {
 			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
