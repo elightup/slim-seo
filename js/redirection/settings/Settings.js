@@ -4,8 +4,8 @@ import { Tooltip } from '../helper/misc';
 
 const Settings = () => {
 	const { settings, settingsName } = SSRedirection;
-
 	const [ forceTrailingSlash, toggleForceTrailingSlash ] = useReducer( onOrOff => !onOrOff, !!settings['force_trailing_slash'] );
+	const [ autoRedirection, toggleAutoRedirection ] = useReducer( onOrOff => !onOrOff, !!settings['auto_redirection'] );
 	const [ redirectWWW, setRedirectWWW ] = useState( settings[ 'redirect_www' ] );
 	const [ enable404Logs, toggleEnable404Logs ] = useReducer( onOrOff => !onOrOff, !!settings[ 'enable_404_logs' ] );
 	const [ autoDelete404Logs, setAutoDelete404Logs ] = useState( settings[ 'auto_delete_404_logs' ] );
@@ -41,6 +41,19 @@ const Settings = () => {
 				</thead>
 
 				<tbody>
+					<tr>
+						<th scope="row">
+							<label htmlFor="ss-auto-redirection">{ __( 'Auto redirection', 'slim-seo' ) }</label>
+							<Tooltip content={ __( 'Automatically redirect pages if needed', 'slim-seo' ) } />
+						</th>
+						<td>
+							<label className='ss-toggle'>
+								<input className='ss-toggle__checkbox' id='ss-auto-redirection' type='checkbox' name={ `${ settingsName }[auto_redirection]` } value='1' checked={ autoRedirection } onChange={ toggleAutoRedirection } />
+								<div className='ss-toggle__switch'></div>
+							</label>
+						</td>
+					</tr>
+
 					<tr>
 						<th scope="row">
 							<label htmlFor="ss-redirect-www">{ __( 'Redirect www', 'slim-seo' ) }</label>

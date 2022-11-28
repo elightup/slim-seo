@@ -66,12 +66,13 @@ class Settings {
 	public function option_saved( array $option, array $data ) : array {
 		$checkboxes = [
 			'force_trailing_slash',
+			'auto_redirection',
 			'enable_404_logs',
 		];
 
 		foreach ( $checkboxes as $checkbox ) {
 			if ( empty( $data[ $checkbox ] ) ) {
-				$option[ $checkbox ] = 0;
+				$option[ $checkbox ] = -1;
 			}
 		}
 
@@ -84,17 +85,25 @@ class Settings {
 	}
 
 	public static function list() : array {
-		return array_merge(
-			[
-				'force_trailing_slash' => 0,
-				'redirect_www'         => '',
-				'enable_404_logs'      => 0,
-				'auto_delete_404_logs' => 30,
-				'redirect_404_to'      => '',
-				'redirect_404_to_url'  => '',
-			],
-			get_option( 'slim_seo' ) ?: []
-		);
+		$saved_settings = get_option( 'slim_seo' ) ?: [];
+		$settings       = [
+			'force_trailing_slash' => 0,
+			'auto_redirection'     => 1,
+			'redirect_www'         => '',
+			'enable_404_logs'      => 0,
+			'auto_delete_404_logs' => 30,
+			'redirect_404_to'      => '',
+			'redirect_404_to_url'  => '',
+		];
+
+		foreach ( $settings as $setting_name => $setting_value ) {
+			if ( ! isset( $saved_settings[ $setting_name ] ) ) {
+				continue;
+			}
+
+			$settings[ $setting_name ] = -1 !== $saved_settings[ $setting_name ] ? $saved_settings[ $setting_name ] : 0;
+		}
+		return $settings;
 	}
 
 	public static function get( string $name ) {
