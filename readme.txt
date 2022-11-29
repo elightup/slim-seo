@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 4.5
-Tested up to: 6.1
+Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 3.16.0
+Stable tag: 3.16.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -137,6 +137,14 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.16.1 - 2022-11-29 =
+- Add migration redirects from other plugins
+- Improve compatibility with Genesis
+- Move auto redirection feature to Settings in Redirection tab
+- Fix translation for JS
+- Fix AIO SEO error when migration if the plugin is not activated
+- Fix admin columns not available for post types created late
 
 = 3.16.0 - 2022-11-10 =
 - Add redirection and 404 link monitoring. See [blog post](https://wpslimseo.com/slim-seo-3-16/).
