@@ -21,22 +21,22 @@ trait Context {
 	}
 
 	private function get_home_value() {
-		return null;
+		return '';
 	}
 
 	private function get_singular_value() {
-		return null;
+		return '';
 	}
 
 	private function get_post_type_archive_value() {
-		return null;
+		return '';
 	}
 
 	private function get_term_value() {
-		return null;
+		return '';
 	}
 
 	private function get_author_value() {
-		return null;
+		return '';
 	}
 }
