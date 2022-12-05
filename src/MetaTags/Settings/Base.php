@@ -76,7 +76,7 @@ abstract class Base {
 					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 				<p class="description">
-					<?php esc_html_e( 'Recommended size: 1200x628 px.', 'slim-seo' ); ?>
+					<?php esc_html_e( 'Recommended size: 1200x630 px.', 'slim-seo' ); ?>
 				</p>
 			</div>
 		</div>
@@ -90,7 +90,7 @@ abstract class Base {
 					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 				<p class="description">
-					<?php esc_html_e( 'Recommended size: 800x418 px.', 'slim-seo' ); ?>
+					<?php esc_html_e( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ); ?>
 				</p>
 			</div>
 		</div>
