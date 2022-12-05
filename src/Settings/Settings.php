@@ -38,9 +38,8 @@ class Settings {
 		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
 
-	public function add_tab( $tabs ) {
+	public function add_tab( array $tabs ) : array {
 		$tabs['general'] = __( 'Features', 'slim-seo' );
-		$tabs['code']    = __( 'Code', 'slim-seo' );
 		if ( ! $this->is_static_homepage() ) {
 			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
 		}
@@ -49,9 +48,8 @@ class Settings {
 		return $tabs;
 	}
 
-	public function add_pane( $panes ) {
+	public function add_pane( array $panes ) : array {
 		$panes['general'] = $this->get_pane( 'general' );
-		$panes['code']    = $this->get_pane( 'code' );
 		if ( ! $this->is_static_homepage() ) {
 			$panes['homepage'] = $this->get_pane( 'homepage' );
 		}
@@ -126,7 +124,7 @@ class Settings {
 	public function is_feature_active( $feature ) {
 		$defaults = $this->defaults['features'];
 		$data     = get_option( 'slim_seo' );
-		$features = isset( $data['features'] ) ? $data['features'] : $defaults;
+		$features = $data['features'] ?? $defaults;
 
 		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
 	}
@@ -135,7 +133,7 @@ class Settings {
 		echo '<button type="button" class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '"><span class="dashicons dashicons-editor-help"></span></button>';
 	}
 
-	private function get_pane( $name ) {
+	public function get_pane( string $name ) : string {
 		$data = get_option( 'slim_seo' );
 		$data = $data ? $data : [];
 		$data = array_merge( $this->defaults, $data );

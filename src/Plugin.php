@@ -21,6 +21,7 @@ class Plugin {
 		$this->services['zion']           = new Integrations\ZionBuilder;
 
 		$this->services['settings'] = new Settings\Settings;
+		$this->services['code']     = new Code( $this->services['settings'] );
 
 		// Admin only.
 		if ( is_admin() ) {
@@ -32,16 +33,15 @@ class Plugin {
 		}
 
 		// Front-end only.
-		$this->services['canonical_url']    = new MetaTags\CanonicalUrl;
-		$this->services['rel_links']        = new MetaTags\RelLinks;
-		$this->services['open_graph']       = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'], $this->services['canonical_url'] );
-		$this->services['twitter_cards']    = new MetaTags\TwitterCards;
-		$this->services['meta_robots']      = new MetaTags\Robots( $this->services['canonical_url'] );
-		$this->services['breadcrumbs']      = new Breadcrumbs;
-		$this->services['feed']             = new Feed;
+		$this->services['canonical_url'] = new MetaTags\CanonicalUrl;
+		$this->services['rel_links']     = new MetaTags\RelLinks;
+		$this->services['open_graph']    = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'], $this->services['canonical_url'] );
+		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
+		$this->services['meta_robots']   = new MetaTags\Robots( $this->services['canonical_url'] );
+		$this->services['breadcrumbs']   = new Breadcrumbs;
+		$this->services['feed']          = new Feed;
 
 		$this->services['schema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
-		$this->services['code']   = new Code;
 
 		$this->services['woocommerce'] = new Integrations\WooCommerce;
 		$this->services['genesis']     = new Integrations\Genesis;
