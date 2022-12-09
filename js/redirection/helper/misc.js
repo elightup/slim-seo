@@ -1,11 +1,17 @@
-import { Dashicon, Tooltip as T } from '@wordpress/components';
+import { Dashicon } from '@wordpress/components';
+import ReactTooltip from 'react-tooltip';
 import useSWR from 'swr';
 
-export const Tooltip = ( { content, icon = 'editor-help' } ) => (
-	<T text={ content }>
-		<span className='ss-tooltip'><Dashicon icon={ icon } /></span>
-	</T>
-);
+export const Tooltip = ( { content, icon = 'editor-help', place = 'right' } ) => {
+	const id = Math.random().toString( 16 ).slice( 2 );
+
+	return (
+		<span className='ss-tooltip'>
+			<Dashicon icon={ icon } data-tip={ content } data-for={ id } />
+			<ReactTooltip id={ id } place={ place } />
+		</span>
+	);	
+};
 
 export const isValidUrl = url => {
 	return null !== url.match( /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,100}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g );

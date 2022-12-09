@@ -76,7 +76,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 						<div className='form-wrap'>
 							<div className='form-field'>
 								<label for='ss-type'>{ __( 'Type', 'slim-seo' ) }
-									{/* <Tooltip content={ __( 'Redirect type', 'slim-seo' ) } /> */}
+									<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
 								</label>
 								<select id='ss-type' value={ redirect.type } onChange={ handleChange( 'type' ) }>
 									{ Object.entries( SSRedirection.redirectTypes ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> ) }
@@ -86,7 +86,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 							<div className='form-field'>
 								<label for='ss-from'>
 									{ __( 'From URL', 'slim-seo' ) }
-									{/* <Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } /> */}
+									<Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } />
 								</label>
 
 								<select value={ redirect.condition } onChange={ handleChange( 'condition' ) }>
@@ -98,7 +98,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 							<div className='form-field'>
 								<label for='ss-to'>
 									{ __( 'To URL', 'slim-seo' ) }
-									{/* <Tooltip content={ __( 'Destination URL', 'slim-seo' ) } /> */}
+									<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
 								</label>
 								<input id='ss-to' type='text' value={ redirect.to } onChange={ handleChange( 'to' ) } />
 							</div>
@@ -106,7 +106,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 							<div className='form-field'>
 								<label for='ss-note'>
 									{ __( 'Note', 'slim-seo' ) }
-									{/* <Tooltip content={ __( 'Something that reminds you about this redirect', 'slim-seo' ) } /> */}
+									<Tooltip content={ __( 'Something that reminds you about this redirect', 'slim-seo' ) } />
 								</label>
 								<input id='ss-note' type='text' value={ redirect.note } onChange={ handleChange( 'note' ) } />
 							</div>

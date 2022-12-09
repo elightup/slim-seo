@@ -135,6 +135,7 @@
 	color: #ccc;
 	width: 16px;
 	height: 16px;
+	cursor: pointer;
 }
 .ss-tooltip .dashicons {
 	font-size: 14px;
