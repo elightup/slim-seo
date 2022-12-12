@@ -56,7 +56,7 @@ const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, upd
 			<td className='ss-redirect__note'>{ redirect.note }</td>
 			<td className='ss-redirect__enable'>
 				<label className='ss-toggle'>
-					<input className='ss-toggle__checkbox' type='checkbox' checked={ 1 == redirect.enable } onChange={ changeEnable } />
+					<input type='checkbox' checked={ 1 == redirect.enable } onChange={ changeEnable } />
 					<div className='ss-toggle__switch'></div>
 				</label>
 			</td>

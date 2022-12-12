@@ -147,6 +147,60 @@
 	text-align: left;
 }
 
+/* Switch */
+.ss-toggle {
+	cursor: pointer;
+	display: inline-block;
+}
+
+.ss-toggle__switch {
+	display: inline-block;
+	background: #ccc;
+	border-radius: 16px;
+	width: 29px;
+	height: 16px;
+	position: relative;
+	vertical-align: middle;
+	transition: background 0.25s;
+}
+
+.ss-toggle__switch:before,
+.ss-toggle__switch:after {
+	content: "";
+}
+
+.ss-toggle__switch:before {
+	display: block;
+	background: linear-gradient(to bottom, #fff 0%, #eee 100%);
+	border-radius: 50%;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+	width: 12px;
+	height: 12px;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	transition: left 0.25s;
+}
+
+.ss-toggle input:checked + .ss-toggle__switch {
+	background: #56c080;
+}
+
+.ss-toggle input:checked + .ss-toggle__switch:before {
+	left: 15px;
+}
+
+.ss-toggle input {
+	position: absolute;
+	visibility: hidden;
+}
+
+.ss-toggle__label {
+	margin-left: 5px;
+	position: relative;
+	top: 2px;
+}
+
 /* Misc */
 p.submit {
 	margin-bottom: 0;

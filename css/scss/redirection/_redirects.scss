@@ -116,59 +116,6 @@
 	}
 }
 
-.ss-toggle {
-	cursor: pointer;
-	display: inline-block;
-
-	&__switch {
-		display: inline-block;
-		background: #ccc;
-		border-radius: 16px;
-		width: 29px;
-		height: 16px;
-		position: relative;
-		vertical-align: middle;
-		transition: background 0.25s;
-	}
-
-	&__switch:before,
-	&__switch:after {
-		content: "";
-	}
-
-	&__switch:before {
-		display: block;
-		background: linear-gradient(to bottom, #fff 0%, #eee 100%);
-		border-radius: 50%;
-		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
-		width: 12px;
-		height: 12px;
-		position: absolute;
-		top: 2px;
-		left: 2px;
-		transition: left 0.25s;
-	}
-
-	input:checked + &__switch {
-		background: #56c080;
-	}
-
-	input:checked + &__switch:before {
-		left: 15px;
-	}
-
-	input {
-		position: absolute;
-		visibility: hidden;
-	}
-
-	&__label {
-		margin-left: 5px;
-		position: relative;
-		top: 2px;
-	}
-}
-
 .ss-paginate {
 	display: flex;
 	justify-content: center;
