@@ -1,7 +1,12 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use SlimSEO\MetaTags\Description;
+use SlimSEO\MetaTags\Title;
+
 class WooCommerce {
+	private $shop_page_id;
+
 	public function setup() {
 		add_action( 'template_redirect', [ $this, 'process' ] );
 	}
@@ -10,8 +15,16 @@ class WooCommerce {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;
 		}
+
 		add_filter( 'slim_seo_meta_description', [ $this, 'no_description' ] );
 
+		if ( ! is_shop() ) {
+			return;
+		}
+
+		$this->shop_page_id = (int) wc_get_page_id( 'shop' );
+
+		add_filter( 'post_type_archive_title', [ $this, 'set_page_title_as_archive_title' ] );
 		add_filter( 'slim_seo_meta_title', [ $this, 'shop_title' ], 10, 2 );
 		add_filter( 'slim_seo_meta_description', [ $this, 'shop_description' ], 10, 2 );
 		add_filter( 'slim_seo_robots_index', [ $this, 'shop_index' ] );
@@ -24,31 +37,29 @@ class WooCommerce {
 		 *
 		 * @see https://wordpress.org/support/topic/woocommerce-notices-are-not-showing-after-activating-your-plugin/
 		 */
-		return $this->is_disabled_page() ? strip_shortcodes( $description ) : $description;
+		return $this->no_shortcodes_page() ? strip_shortcodes( $description ) : $description;
 	}
 
-	private function is_disabled_page() {
+	private function no_shortcodes_page() {
 		$pages = [ 'cart', 'checkout', 'myaccount' ];
 		$pages = array_map( 'wc_get_page_id', $pages );
 		return is_page( $pages );
 	}
 
-	public function shop_title( $title, $title_obj ) {
-		return is_shop() ? $title_obj->get_singular_value( wc_get_page_id( 'shop' ) ) : $title;
+	public function set_page_title_as_archive_title() : string {
+		return get_the_title( $this->shop_page_id );
 	}
 
-	public function shop_description( $description, $description_obj ) {
-		return is_shop() ? $description_obj->get_singular_value( wc_get_page_id( 'shop' ) ) : $description;
+	public function shop_title( $title, Title $title_obj ) {
+		return $title_obj->get_singular_value( $this->shop_page_id ) ?: $title;
+	}
+
+	public function shop_description( $description, Description $description_obj ) {
+		return $description_obj->get_singular_value( $this->shop_page_id ) ?: $description;
 	}
 
 	public function shop_index( $is_indexed ) {
-		if ( ! is_shop() ) {
-			return $is_indexed;
-		}
-		$data = get_post_meta( wc_get_page_id( 'shop' ), 'slim_seo', true );
-		if ( ! empty( $data['noindex'] ) ) {
-			return false;
-		}
-		return $is_indexed;
+		$data = get_post_meta( $this->shop_page_id, 'slim_seo', true );
+		return empty( $data['noindex'] ) ? $is_indexed : false;
 	}
 }
