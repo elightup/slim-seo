@@ -55,6 +55,9 @@
 .notice.notice {
 	margin: 24px;
 }
+.ss-feature {
+	margin-bottom: 15px;
+}
 
 /* Header */
 /* Very high specificity to overwrite Elementor's CSS: https://wordpress.org/support/topic/admin-css-file-is-enqueued-on-and-brake-other-admin-pages/ */
