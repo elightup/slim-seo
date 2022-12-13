@@ -95,4 +95,12 @@
 	</span>
 	<?php $this->tooltip( __( 'Automatically generate unified schema graph to help search engines understand the website structure', 'slim-seo' ) ) ?>
 </div>
+<div class="ss-feature">
+	<span class="ss-toggle">
+		<input type="checkbox" name="slim_seo[features][]" value="redirection"<?php checked( $this->is_feature_active( 'redirection' ) ); ?>>
+		<div class="ss-toggle__switch"></div>
+		<span class="ss-toggle__label"><?php esc_html_e( 'Redirection', 'slim-seo' ); ?></span>
+	</span>
+	<?php $this->tooltip( __( 'Redirect broken pages, unimportant pages, or old URLs to existing working URLs', 'slim-seo' ) ) ?>
+</div>
 <?php submit_button( __( 'Save Changes', 'slim-seo' ) ); ?>

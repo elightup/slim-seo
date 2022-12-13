@@ -27,6 +27,7 @@ class Settings {
 			'breadcrumbs',
 			'feed',
 			'schema',
+			'redirection',
 		],
 	];
 
