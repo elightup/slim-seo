@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 3.16.1
+Stable tag: 3.16.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -137,6 +137,13 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.16.2 - 2022-12-13 =
+- Add integration for Auto Listings plugin
+- WooCommerce integration: Fix title for shop page. Now it takes from the SEO settings and fallback to the page title.
+- Updated recommended image size for Facebook and Twitter
+- Hide Code tab if disable "code" feature
+- Add Redirection to features list to enable/disable it if needed
 
 = 3.16.1 - 2022-11-29 =
 - Add migration redirects from other plugins
