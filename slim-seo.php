@@ -33,6 +33,4 @@ $slim_seo->register_services();
 // Initialize at priority 5 to be able to disable core sitemaps completely which runs at priority 10.
 add_action( 'init', [ $slim_seo, 'init' ], 5 );
 
-new Redirection\Loader;
-
 load_plugin_textdomain( 'slim-seo', false, basename( __DIR__ ) . '/languages/' );

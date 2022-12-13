@@ -5,7 +5,7 @@ class Loader {
 	protected $db_redirects;
 	protected $db_log;
 
-	public function __construct() {
+	public function setup() {
 		$this->db_redirects = new Database\Redirects;
 		$this->db_log       = new Database\Log404;
 

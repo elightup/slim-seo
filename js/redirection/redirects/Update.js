@@ -113,7 +113,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 
 							<div className='form-field'>
 								<label className='ss-toggle'>
-									<input className='ss-toggle__checkbox' type='checkbox' value='1' checked={ !!redirect.enable } onChange={ handleChange( 'enable' ) } />
+									<input type='checkbox' value='1' checked={ !!redirect.enable } onChange={ handleChange( 'enable' ) } />
 									<div className='ss-toggle__switch'></div>
 									<span className='ss-toggle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
 								</label>
@@ -127,7 +127,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 								showAdvancedOptions && (
 									<div className='form-field'>
 										<label className='ss-toggle'>
-											<input className='ss-toggle__checkbox' type='checkbox' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
+											<input type='checkbox' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
 											<div className='ss-toggle__switch'></div>
 											<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
 										</label>

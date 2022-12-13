@@ -13,8 +13,8 @@ class Redirection404 {
 
 		$this->db_log = $db_log;
 
-		add_action( 'template_redirect', [ $this, 'log' ], 1 );
-		add_action( 'template_redirect', [ $this, 'redirect' ], 2 );
+		add_action( 'template_redirect', [ $this, 'log' ], 15 );
+		add_action( 'template_redirect', [ $this, 'redirect' ], 20 );
 	}
 
 	public function log() {

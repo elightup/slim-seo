@@ -23,6 +23,8 @@ class Plugin {
 		$this->services['settings'] = new Settings\Settings;
 		$this->services['code']     = new Code( $this->services['settings'] );
 
+		$this->services['redirection'] = new Redirection\Loader;
+
 		// Admin only.
 		if ( is_admin() ) {
 			$this->services['notification']       = new Notification;
