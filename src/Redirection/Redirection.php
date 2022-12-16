@@ -11,7 +11,7 @@ class Redirection {
 
 		add_action( 'template_redirect', [ $this, 'redirect' ], 1 );
 		add_action( 'template_redirect', [ $this, 'redirect_www' ], 5 );
-		add_action( 'template_redirect', [ $this, 'auto_redirection' ], 10 );		
+		add_action( 'template_redirect', [ $this, 'auto_redirection' ], 10 );
 		add_filter( 'user_trailingslashit', [ $this, 'force_trailing_slash' ], 999 );
 	}
 
@@ -154,32 +154,78 @@ class Redirection {
 			return;
 		}
 
-		$destination = '';
+		$this->attachment_redirect();
+		$this->author_redirect();
+		$this->hierarchical_post_slug_changed_redirect();
+	}
 
-		if ( is_attachment() ) {
-			$destination = wp_get_attachment_url( get_queried_object_id() );
+	protected function attachment_redirect() {
+		if ( ! is_attachment() ) {
+			return;
 		}
 
-		if ( is_author() ) {
-			if ( ! have_posts() ) {
-				$destination = home_url( '/' );
-			}
-			// If the website has only one user.
-			$users = get_users( [
-				'number' => 2,
-				'fields' => 'ID',
-			] );
+		$destination = wp_get_attachment_url( get_queried_object_id() );
 
-			if ( 1 === count( $users ) ) {
-				$destination = home_url( '/' );
-			}
+		wp_safe_redirect( esc_url( $destination ), 301, 'Slim SEO' );
+		die;
+	}
+
+	protected function author_redirect() {
+		if ( ! is_author() ) {
+			return;
+		}
+
+		$destination = '';
+
+		if ( ! have_posts() ) {
+			$destination = home_url( '/' );
+		}
+		// If the website has only one user.
+		$users = get_users( [
+			'number' => 2,
+			'fields' => 'ID',
+		] );
+
+		if ( 1 === count( $users ) ) {
+			$destination = home_url( '/' );
 		}
 
 		if ( $destination ) {
 			wp_safe_redirect( esc_url( $destination ), 301, 'Slim SEO' );
 			die;
 		}
-	}	
+	}
+
+	protected function hierarchical_post_slug_changed_redirect() {
+		if ( ! is_404() ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$http_host   = $_SERVER['HTTP_HOST'] ?? ''; // @codingStandardsIgnoreLine.
+		$request_uri = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
+		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
+		$request_url = Helper::normalize_url( $request_url );
+		$request_url = strtolower( $request_url );
+		$post_id     = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT post_id 
+				FROM $wpdb->postmeta
+				WHERE meta_key = '_ss_old_permalink' AND meta_value = %s",
+				$request_url
+			)
+		);
+
+		if ( empty( $post_id ) ) {
+			return;
+		}
+
+		$post = get_permalink( $post_id );
+
+		wp_safe_redirect( $post, 301 );
+		exit;
+	}
 
 	public function force_trailing_slash( string $url ) : string {
 		if ( ! Settings::get( 'force_trailing_slash' ) ) {
