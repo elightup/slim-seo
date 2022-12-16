@@ -13,10 +13,10 @@ class Title {
 		return wp_get_document_title();
 	}
 
-	public function filter_title( string $title ) : string {
+	public function filter_title( $title ) : string {
 		$custom_title = $this->get_value();
 
-		$title = $custom_title ?: $title;
+		$title = $custom_title ?: (string) $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this );
 		$title = Helper::normalize( $title );
 
