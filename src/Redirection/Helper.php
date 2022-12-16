@@ -55,4 +55,37 @@ class Helper {
 
 		return $url ? $url : '/';
 	}
+
+	public static function get_children_posts( int $post_id ) : array {
+		$posts          = [];
+		$children_posts = get_children( [ 'post_parent' => $post_id ] );
+
+		if ( empty( $children_posts ) ) {
+			return $posts;
+		}
+
+		foreach ( $children_posts as $children_post ) {
+			$posts[] = $children_post;
+
+			$child_children_posts = self::get_children_posts( $children_post->ID );
+
+			if ( ! empty( $child_children_posts ) ) {
+				$posts = array_merge( $posts, $child_children_posts );
+			}
+		}
+
+		return $posts;
+	}
+
+	public static function save_old_permalink( int $post_id, string $permalink, string $permalink_before ) {
+		$old_permalinks = (array) get_post_meta( $post_id, '_ss_old_permalink' );
+
+		if ( ! in_array( $permalink_before, $old_permalinks, true ) ) {
+			add_post_meta( $post_id, '_ss_old_permalink', $permalink_before );
+		}
+
+		if ( in_array( $permalink, $old_permalinks, true ) ) {
+			delete_post_meta( $post_id, '_ss_old_permalink', $permalink );
+		}
+	}
 }
