@@ -64,8 +64,9 @@
 #wpwrap #wpcontent #wpbody .ss-title {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	background: #fff;
-	padding: 12px 24px;
+	padding: 0 24px;
 	border-bottom: var(--border);
 }
 .ss-title svg {
@@ -73,18 +74,25 @@
 	height: 36px;
 	margin-right: 12px;
 }
-.ss-title a {
+.ss-title a:first-of-type {
 	margin-left: auto;
-	font-size: 11px;
-	font-weight: bold;
+}
+.ss-title a {
+	font-size: 13px;
 	text-decoration: none;
-	text-transform: uppercase;
-	color: inherit;
+	color: #3c434a;
+	padding: 6px 12px;
+}
+.ss-title a:hover {
+	background: var(--color-lighter);
 }
 .ss-title .dashicons {
-	font-size: 14px;
-	width: 14px;
-	height: 14px;
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	display: block;
+	margin-inline: auto;
+	color: #3c434a;
 }
 
 /* Tabs */
