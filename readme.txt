@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 3.16.2
+Stable tag: 3.16.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,10 +63,11 @@ Slim SEO automatically adds the some structured data to the website via JSON-LD 
 
 #### 6. And many more
 
-- [Inserting code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
+- [Inserting Google Analytics, Facebook pixel or any code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
 - Auto prevent scraping content from [RSS feed](https://docs.wpslimseo.com/slim-seo/rss-feed/)
 - [Integrations](https://docs.wpslimseo.com/slim-seo/integrations/) with many plugins, including page builders
 - [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
+- Auto redirect if post slug changed
 
 ## Premium plugins
 
@@ -137,6 +138,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+= 3.16.3 - 2022-12-19 =
+- Auto redirect if post slug changed
+- Fix param type in meta title
 
 = 3.16.2 - 2022-12-13 =
 - Add integration for Auto Listings plugin
