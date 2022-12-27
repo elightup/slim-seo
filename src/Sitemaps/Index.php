@@ -2,19 +2,21 @@
 namespace SlimSEO\Sitemaps;
 
 class Index {
+	private $post_types;
+	private $taxonomies;
+
+	public function __construct( array $post_types, array $taxonomies ) {
+		$this->post_types = $post_types;
+		$this->taxonomies = $taxonomies;
+	}
+
 	public function output() {
 		echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', "\n";
 
-		$this->output_post_type_sitemaps();
-		$this->output_taxonomy_sitemaps();
+		array_walk( $this->post_types, [ $this, 'output_post_type_sitemap' ] );
+		array_walk( $this->taxonomies, [ $this, 'output_taxonomy_sitemap' ] );
 
 		echo '</sitemapindex>';
-	}
-
-	private function output_post_type_sitemaps() {
-		$post_types = get_post_types( [ 'public' => true ] );
-		$post_types = apply_filters( 'slim_seo_sitemap_post_types', $post_types );
-		array_walk( $post_types, [ $this, 'output_post_type_sitemap' ] );
 	}
 
 	private function output_post_type_sitemap( $post_type ) {
@@ -34,17 +36,6 @@ class Index {
 			echo "\t\t<loc>", esc_url( home_url( "sitemap-post-type-$post_type$index.xml" ) ), "</loc>\n";
 			echo "\t</sitemap>\n";
 		}
-	}
-
-	private function output_taxonomy_sitemaps() {
-		$taxonomies = get_taxonomies(
-			[
-				'public'  => true,
-				'show_ui' => true,
-			]
-		);
-		$taxonomies = apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
-		array_walk( $taxonomies, [ $this, 'output_taxonomy_sitemap' ] );
 	}
 
 	private function output_taxonomy_sitemap( $taxonomy ) {
