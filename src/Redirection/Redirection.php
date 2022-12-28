@@ -46,7 +46,7 @@ class Redirection {
 
 			switch ( $redirect['condition'] ) {
 				case 'regex':
-					$regex = '/' . str_replace( '/', '\/', $from ) . '/i';
+					$regex = "/{$from}/i";
 
 					if ( preg_match( $regex, $current_url ) ) {
 						$to              = preg_replace( $regex, $to, $current_url );

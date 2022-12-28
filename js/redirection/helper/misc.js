@@ -1,20 +1,18 @@
-import { Dashicon } from '@wordpress/components';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip as T, Dashicon } from '@wordpress/components';
 import useSWR from 'swr';
 
-export const Tooltip = ( { content, icon = 'editor-help', place = 'right' } ) => {
-	const id = Math.random().toString( 16 ).slice( 2 );
-
+export const Tooltip = ( { content, icon = 'editor-help' } ) => {
 	return (
-		<span className='ss-tooltip'>
-			<Dashicon icon={ icon } data-tip={ content } data-for={ id } />
-			<ReactTooltip id={ id } place={ place } />
-		</span>
+		<T text={ content }>
+			<span className="ss-tooltip"><Dashicon icon={ icon } /></span>
+		</T>
 	);	
 };
 
 export const isValidUrl = url => {
-	return null !== url.match( /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,100}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g );
+	regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+	
+	return regexp.test( url );
 };
 
 export const getFullURL = url => {

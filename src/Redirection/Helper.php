@@ -44,14 +44,13 @@ class Helper {
 		return is_ssl();
 	}
 
-	public static function normalize_url( string $url ) : string {
-		$home_url = untrailingslashit( home_url() );
-		$url      = wp_unslash( $url );
-		$url      = sanitize_text_field( $url );
-		$url      = html_entity_decode( $url );
-		$url      = str_replace( $home_url, '', $url );
-		$url      = rtrim( $url, '/' );
-		$url      = ltrim( $url, '/' );
+	public static function normalize_url( string $url, $unslash = true ) : string {
+		$url = $unslash ? wp_unslash( $url ) : $url;
+		$url = sanitize_text_field( $url );
+		$url = html_entity_decode( $url );
+		$url = str_replace( untrailingslashit( home_url() ), '', $url );
+		$url = rtrim( $url, '/' );
+		$url = ltrim( $url, '/' );
 
 		return $url ? $url : '/';
 	}
