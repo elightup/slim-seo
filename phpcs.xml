@@ -69,6 +69,8 @@
 		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
 	</rule>
 
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax" />
+
 	<!-- Verify that the text_domain is set to the desired text-domain.
 		 Multiple valid text domains can be provided as a comma-delimited list. -->
 	<rule ref="WordPress.WP.I18n">
@@ -80,7 +82,7 @@
 	<!-- Set the minimum supported WP version. This is used by several sniffs.
 		 The minimum version set here should be in line with the minimum WP version
 		 as set in the "Requires at least" tag in the readme.txt file. -->
-	<config name="minimum_supported_wp_version" value="4.5"/>
+	<config name="minimum_supported_wp_version" value="5.9"/>
 
 	<!-- Verify that everything in the global namespace is prefixed with a plugin specific prefix.
 		 Multiple valid prefixes can be provided as a comma-delimited list. -->
