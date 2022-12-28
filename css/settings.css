@@ -20,25 +20,14 @@
 	justify-content: space-between;
 	align-items: flex-start;
 	margin: 24px;
+	gap: 20px;
 }
-.ss-upgrade {
+.ss-sidebar {
 	width: 280px;
-	margin-left: 20px;
-	border: var(--border);
-	background: #fff;
-	padding: 15px;
 }
+
 .ss-upgrade .dashicons {
 	color: #ef4836;
-	width: 18px;
-	height: 18px;
-	font-size: 24px;
-	position: relative;
-	top: -4px;
-	left: -5px;
-}
-.ss-upgrade h3 {
-	margin: 0;
 }
 .ss-upgrade li {
 	padding-left: 20px;
