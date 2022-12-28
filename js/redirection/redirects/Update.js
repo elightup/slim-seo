@@ -33,7 +33,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 	};
 
 	const handleChange = key => e => {
-		const value = e.target.type === 'checkbox' ? Number( e.target.checked ) : e.target.value.trim();
+		const value = e.target.type === 'checkbox' ? Number( e.target.checked ) : ( 'note' === key ? e.target.value : e.target.value.trim() );
 		setRedirect( prev => ( { ...prev, [ key ]: value } ) );
 	};
 
