@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 4.5
 Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 3.16.3
+Stable tag: 3.16.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -138,6 +138,15 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.16.4 - 2022-12-28 =
+- Set meta column widths to prevent layout broken
+- Add filter for text in feed
+- Deny request to post type/taxonomy sitemaps if they're filtered
+- Fix redirect with regex
+- Fix wrong 404 link in the report table
+- Fix cannot enter spaces in redirect notes
+
 = 3.16.3 - 2022-12-19 =
 - Auto redirect if post slug changed
 - Fix param type in meta title
