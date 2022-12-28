@@ -1,15 +1,11 @@
-import { Dashicon } from '@wordpress/components';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip as T, Dashicon } from '@wordpress/components';
 import useSWR from 'swr';
 
-export const Tooltip = ( { content, icon = 'editor-help', place = 'right' } ) => {
-	const id = Math.random().toString( 16 ).slice( 2 );
-
+export const Tooltip = ( { content, icon = 'editor-help' } ) => {
 	return (
-		<span className='ss-tooltip'>
-			<Dashicon icon={ icon } data-tip={ content } data-for={ id } />
-			<ReactTooltip id={ id } place={ place } />
-		</span>
+		<T text={ content }>
+			<span className="ss-tooltip"><Dashicon icon={ icon } /></span>
+		</T>
 	);	
 };
 
