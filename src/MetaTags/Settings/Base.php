@@ -19,8 +19,8 @@ abstract class Base {
 		$params = [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 			'site'            => [
-				'title'       => get_bloginfo( 'name' ),
-				'description' => get_bloginfo( 'description' ),
+				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
+				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
 		];
 		$params = array_merge( $params, $this->get_script_params() );
