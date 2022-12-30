@@ -16,19 +16,22 @@ abstract class Base {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
+		wp_localize_script( 'slim-seo-meta-box', 'ss', $this->get_script_params() );
+	}
+
+	protected function get_script_params() : array {
 		$params = [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 			'site'            => [
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
+			'title'           => [
+				'separator' => apply_filters( 'document_title_separator', '-' ),
+				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], $this->object_type ),
+			],
 		];
-		$params = array_merge( $params, $this->get_script_params() );
-		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
-	}
-
-	protected function get_script_params() {
-		return [];
+		return $params;
 	}
 
 	public function render() {
