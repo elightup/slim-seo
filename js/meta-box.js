@@ -57,7 +57,7 @@
 	class PostTitleInput extends Input {
 		get value() {
 			if ( ss.isHome ) {
-				return formatTitle( '', 'home' );
+				return formatTitle();
 			}
 			const value = isBlockEditor ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.value;
 			return formatTitle( value );
@@ -102,7 +102,7 @@
 
 	class TermTitleInput extends Input {
 		get value() {
-			return formatTitle( super.value, 'term' );
+			return formatTitle( super.value );
 		}
 	}
 
@@ -160,7 +160,7 @@
 
 	class HomeTitleField extends Field {
 		get generated() {
-			return formatTitle( '', 'home' );
+			return formatTitle();
 		}
 	}
 
