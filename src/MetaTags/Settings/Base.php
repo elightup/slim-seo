@@ -22,7 +22,14 @@ abstract class Base {
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
-			'titleSeparator'  => apply_filters( 'document_title_separator', '-' ),
+			'title'           => [
+				'separator' => apply_filters( 'document_title_separator', '-' ),
+				'parts'     => apply_filters( 'slim_seo_title_parts', [
+					'post' => [ 'title', 'site' ],
+					'term' => [ 'title', 'site' ],
+					'home' => [ 'site', 'tagline' ],
+				] ),
+			],
 		];
 		$params = array_merge( $params, $this->get_script_params() );
 		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );

@@ -3,7 +3,15 @@
 
 	const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
 	const normalize = string => string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
-	const formatTitle = ( ...parts ) => parts.join( ` ${ss.titleSeparator} ` );
+	const formatTitle = ( title = '', type = 'post' ) => {
+		let parts = ss.title.parts[ type ] || [ 'title', 'site' ];
+		const values = {
+			site: ss.site.title,
+			tagline: ss.site.description,
+			title
+		};
+		return parts.map( part => values[ part ] || '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
+	};
 
 	function openMediaPopup() {
 		let frame;
@@ -50,10 +58,10 @@
 	class PostTitleInput extends Input {
 		get value() {
 			if ( ss.isHome ) {
-				return formatTitle( ss.site.title, ss.site.description );
+				return formatTitle( '', 'home' );
 			}
 			const value = isBlockEditor ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.value;
-			return formatTitle( value, ss.site.title );
+			return formatTitle( value );
 		}
 		addEventListener( callback ) {
 			isBlockEditor ? wp.data.subscribe( callback ) : super.addEventListener( callback );
@@ -95,7 +103,7 @@
 
 	class TermTitleInput extends Input {
 		get value() {
-			return formatTitle( super.value, ss.site.title );
+			return formatTitle( super.value, 'term' );
 		}
 	}
 
@@ -153,7 +161,7 @@
 
 	class HomeTitleField extends Field {
 		get generated() {
-			return formatTitle( ss.site.title, ss.site.description );
+			return formatTitle( '', 'home' );
 		}
 	}
 
