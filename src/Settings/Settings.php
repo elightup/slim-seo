@@ -80,8 +80,8 @@ class Settings {
 		if ( ! $this->is_static_homepage() ) {
 			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
 			$params['site'] = [
-				'title'       => get_bloginfo( 'name' ),
-				'description' => get_bloginfo( 'description' ),
+				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
+				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			];
 			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
 		} else {
