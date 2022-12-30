@@ -24,11 +24,7 @@ abstract class Base {
 			],
 			'title'           => [
 				'separator' => apply_filters( 'document_title_separator', '-' ),
-				'parts'     => apply_filters( 'slim_seo_title_parts', [
-					'post' => [ 'title', 'site' ],
-					'term' => [ 'title', 'site' ],
-					'home' => [ 'site', 'tagline' ],
-				] ),
+				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], $this->object_type ),
 			],
 		];
 		$params = array_merge( $params, $this->get_script_params() );

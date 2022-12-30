@@ -84,6 +84,12 @@ class Settings {
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			];
 			$params['titleSeparator'] = apply_filters( 'document_title_separator', '-' );
+
+			$params['title'] = [
+				'separator' => apply_filters( 'document_title_separator', '-' ),
+				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' ),
+			];
+
 			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
 		} else {
 			wp_enqueue_script( 'slim-seo-media', SLIM_SEO_URL . 'js/media.js', [], SLIM_SEO_VER, true );

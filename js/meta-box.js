@@ -3,14 +3,13 @@
 
 	const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
 	const normalize = string => string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
-	const formatTitle = ( title = '', type = 'post' ) => {
-		let parts = ss.title.parts[ type ] || [ 'title', 'site' ];
+	const formatTitle = ( title = '' ) => {
 		const values = {
 			site: ss.site.title,
 			tagline: ss.site.description,
 			title
 		};
-		return parts.map( part => values[ part ] || '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
+		return ss.title.parts.map( part => values[ part ] ?? '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
 	};
 
 	function openMediaPopup() {
