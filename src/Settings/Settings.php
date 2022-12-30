@@ -79,10 +79,11 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
 		if ( ! $this->is_static_homepage() ) {
 			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-			$params['site'] = [
+			$params['site']           = [
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			];
+			$params['titleSeparator'] = apply_filters( 'document_title_separator', '-' );
 			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
 		} else {
 			wp_enqueue_script( 'slim-seo-media', SLIM_SEO_URL . 'js/media.js', [], SLIM_SEO_VER, true );

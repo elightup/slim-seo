@@ -22,6 +22,7 @@ abstract class Base {
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
+			'titleSeparator'  => apply_filters( 'document_title_separator', '-' ),
 		];
 		$params = array_merge( $params, $this->get_script_params() );
 		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );

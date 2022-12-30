@@ -1,8 +1,9 @@
-( function ( window, document, wp, $, ss ) {
+( function( window, document, wp, $, ss ) {
 	let contentEditor;
 
-	const isBlockEditor = () => document.body.classList.contains( 'block-editor-page' );
+	const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
 	const normalize = string => string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
+	const formatTitle = ( ...parts ) => parts.join( ` ${ss.titleSeparator} ` );
 
 	function openMediaPopup() {
 		let frame;
@@ -11,7 +12,7 @@
 			e.preventDefault();
 
 			// Create a frame only if needed.
-			if ( ! frame ) {
+			if ( !frame ) {
 				frame = wp.media( {
 					multiple: false,
 					title: ss.mediaPopupTitle
@@ -49,34 +50,34 @@
 	class PostTitleInput extends Input {
 		get value() {
 			if ( ss.isHome ) {
-				return ss.site.title + ' - ' + ss.site.description;
+				return formatTitle( ss.site.title, ss.site.description );
 			}
-			const value = isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.value;
-			return value + ' - ' + ss.site.title;
+			const value = isBlockEditor ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : super.value;
+			return formatTitle( value, ss.site.title );
 		}
 		addEventListener( callback ) {
-			isBlockEditor() ? wp.data.subscribe( callback ) : super.addEventListener( callback );
+			isBlockEditor ? wp.data.subscribe( callback ) : super.addEventListener( callback );
 		}
 	}
 
 	class PostExcerptInput extends Input {
 		get value() {
-			return isBlockEditor() ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) ) : super.value;
+			return isBlockEditor ? normalize( wp.data.select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) ) : super.value;
 		}
 		addEventListener( callback ) {
-			isBlockEditor() ? wp.data.subscribe( callback ) : super.addEventListener( callback );
+			isBlockEditor ? wp.data.subscribe( callback ) : super.addEventListener( callback );
 		}
 	}
 
 	class PostContentInput extends Input {
 		get value() {
-			if ( isBlockEditor() ) {
+			if ( isBlockEditor ) {
 				return normalize( wp.data.select( 'core/editor' ).getEditedPostContent() );
 			}
-			return contentEditor && ! contentEditor.isHidden() ? normalize( contentEditor.getContent() ) : super.value;
+			return contentEditor && !contentEditor.isHidden() ? normalize( contentEditor.getContent() ) : super.value;
 		}
 		addEventListener( callback ) {
-			if ( isBlockEditor() ) {
+			if ( isBlockEditor ) {
 				wp.data.subscribe( callback );
 				return;
 			}
@@ -94,23 +95,23 @@
 
 	class TermTitleInput extends Input {
 		get value() {
-			return super.value + ' - ' + ss.site.title;
+			return formatTitle( super.value, ss.site.title );
 		}
 	}
 
 	class Field {
 		constructor( input, ref, min, max, truncate ) {
-			this.input    = input;
-			this.ref      = ref;
-			this.min      = min;
-			this.max      = max;
+			this.input = input;
+			this.ref = ref;
+			this.min = min;
+			this.max = max;
 			this.truncate = truncate;
 
 			this.updateCounter = this.updateCounter.bind( this );
 			this.updatePreview = this.updatePreview.bind( this );
 		}
 		get generated() {
-			if ( ! this.ref ) {
+			if ( !this.ref ) {
 				return '';
 			}
 			const value = this.ref.value;
@@ -141,7 +142,7 @@
 			}
 		}
 		init() {
-			if ( ! this.input.el ) {
+			if ( !this.input.el ) {
 				return;
 			}
 			this.updatePreview();
@@ -152,7 +153,7 @@
 
 	class HomeTitleField extends Field {
 		get generated() {
-			return `${ss.site.title} - ${ss.site.description}`;
+			return formatTitle( ss.site.title, ss.site.description );
 		}
 	}
 
