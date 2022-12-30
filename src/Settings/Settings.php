@@ -79,12 +79,10 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
 		if ( ! $this->is_static_homepage() ) {
 			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-			$params['site']           = [
+			$params['site']  = [
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			];
-			$params['titleSeparator'] = apply_filters( 'document_title_separator', '-' );
-
 			$params['title'] = [
 				'separator' => apply_filters( 'document_title_separator', '-' ),
 				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' ),
