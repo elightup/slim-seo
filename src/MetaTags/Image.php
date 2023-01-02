@@ -10,30 +10,39 @@ class Image {
 		$this->meta_key = $meta_key;
 	}
 
-	private function get_home_value() {
-		$data = get_option( 'slim_seo' );
-		if ( empty( $data[ "home_{$this->meta_key}" ] ) ) {
-			return null;
-		}
-		$image_id = attachment_url_to_postid( $data[ "home_{$this->meta_key}" ] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ "home_{$this->meta_key}" ];
+	private function get_home_value() : array {
+		$data = get_option( 'slim_seo', [] );
+		return isset( $data[ "home_{$this->meta_key}" ] ) ? $this->get_data_from_url( $data[ "home_{$this->meta_key}" ] ) : [];
 	}
 
-	private function get_singular_value() {
+	private function get_singular_value() : array {
 		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
 		if ( isset( $data[ $this->meta_key ] ) ) {
-			$image_id = attachment_url_to_postid( $data[ $this->meta_key ] );
-			return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ $this->meta_key ] ];
+			return $this->get_data_from_url( $data[ $this->meta_key ] );
 		}
-		return has_post_thumbnail() ? wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' ) : null;
+		return has_post_thumbnail() ? $this->get_data( get_post_thumbnail_id() ) : [];
 	}
 
-	private function get_term_value() {
+	private function get_term_value() : array {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
-		if ( empty( $data[ $this->meta_key ] ) ) {
-			return null;
-		}
-		$image_id = attachment_url_to_postid( $data[ $this->meta_key ] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data[ $this->meta_key ] ];
+		return isset( $data[ $this->meta_key ] ) ? $this->get_data_from_url( $data[ $this->meta_key ] ) : [];
+	}
+
+	public function get_data_from_url( $url ) : array {
+		$id = attachment_url_to_postid( $url );
+		return $id ? $this->get_data( $id ) : [
+			'src' => $url,
+		];
+	}
+
+	private function get_data( $id ) : array {
+		$image = wp_get_attachment_image_src( $id, 'full' );
+		return $image ? [
+			'id'     => $id,
+			'src'    => $image[0],
+			'width'  => $image[1],
+			'height' => $image[2],
+			'alt'    => get_post_meta( $id, '_wp_attachment_image_alt', true ) ?: get_the_title( $id ),
+		] : [];
 	}
 }

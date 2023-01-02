@@ -5,11 +5,13 @@ class OpenGraph {
 	private $title;
 	private $description;
 	private $url;
+	private $image_obj;
 
 	public function __construct( Title $title, Description $description, CanonicalUrl $url ) {
 		$this->title       = $title;
 		$this->description = $description;
 		$this->url         = $url;
+		$this->image_obj   = new Image( 'facebook_image' );
 	}
 
 	public function setup() {
@@ -69,39 +71,17 @@ class OpenGraph {
 	}
 
 	private function get_image_alt() {
-		if ( ! is_singular() ) {
-			return null;
-		}
-		return get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true );
+		return $this->get_image_attribute( 'alt' );
 	}
 
 	private function get_image_attribute( $key ) {
-		static $image;
-		static $ran = false;
-
-		if ( ! $ran ) {
-			$default_image = $this->get_default_image();
-			$image_obj     = new Image( 'facebook_image' );
-			$image         = $image_obj->get_value() ?: $default_image;
-			$ran           = true;
-		}
-
-		$keys = [
-			'src'    => 0,
-			'width'  => 1,
-			'height' => 2,
-		];
-
-		return isset( $image[ $keys[ $key ] ] ) ? $image[ $keys[ $key ] ] : null;
+		$image = $this->image_obj->get_value() ?: $this->get_default_image();
+		return $image[ $key ] ?? null;
 	}
 
-	private function get_default_image() {
+	private function get_default_image() : array {
 		$data = get_option( 'slim_seo' );
-		if ( empty( $data['default_facebook_image'] ) ) {
-			return null;
-		}
-		$image_id = attachment_url_to_postid( $data['default_facebook_image'] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data['default_facebook_image'] ];
+		return empty( $data['default_facebook_image'] ) ? [] : $this->image_obj->get_data_from_url( $data['default_facebook_image'] );
 	}
 
 	private function get_description() {
