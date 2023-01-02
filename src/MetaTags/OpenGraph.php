@@ -33,7 +33,6 @@ class OpenGraph {
 			'og:updated_time',
 			'article:section',
 			'article:tag',
-			'article:author',
 			'fb:app_id',
 		] );
 		foreach ( $properties as $property ) {
@@ -151,10 +150,6 @@ class OpenGraph {
 		}
 		$tags = get_the_tags();
 		return is_array( $tags ) ? wp_list_pluck( $tags, 'name' ) : null;
-	}
-
-	private function get_article_author() {
-		return is_singular() ? get_the_author_meta( 'display_name', get_queried_object()->post_author ) : null;
 	}
 
 	private function get_app_id() {
