@@ -2,10 +2,10 @@
 Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
-Requires at least: 4.5
+Requires at least: 4.9
 Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 3.16.4
+Stable tag: 3.16.5
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -139,6 +139,13 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.16.5 - 2023-01-03 =
+- Set default OpenGraph tag og:image:alt to image title if alt text is missing
+- Remove the optional OpenGraph tag article:author for privacy and security reasons
+- Make default title value preview reflect the real meta title even after filtering by PHP
+- Fix site title & site description has escaped characters in the input placeholder
+- Fix wrong upgrade link
+
 = 3.16.4 - 2022-12-28 =
 - Set meta column widths to prevent layout broken
 - Add filter for text in feed
@@ -218,7 +225,7 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 = 3.12.0 - 2022-01-07 =
 - Add Divi compatibility. Props Jay (@grandeljay)
-- Disable HTTPS notificaition on local environments
+- Disable HTTPS notification on local environments
 - Improve the code of the settings page
 
 = 3.11.1 - 2021-11-16 =
@@ -360,7 +367,7 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 = 3.2.3 - 2020-04-20 =
 - Remove canonical link when a page is not indexed
 - Fix "Hide from search result pages" not working for static blog & WooCommerce shop pages.
-- Fix wrong textdomain
+- Fix wrong text domain
 
 = 3.2.2 - 2020-02-25 =
 - Fix loopback request failed in Site Health
