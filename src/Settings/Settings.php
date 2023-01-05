@@ -77,7 +77,6 @@ class Settings {
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 		];
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
-		wp_enqueue_style( 'slim-seo-react-tabs', SLIM_SEO_URL . 'css/react-tabs.css', [], SLIM_SEO_VER );
 		if ( ! $this->is_static_homepage() ) {
 			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
 			$params['site']  = [
