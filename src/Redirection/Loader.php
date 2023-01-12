@@ -69,7 +69,7 @@ class Loader {
 	public function run_schedule() {
 		$days = (int) Settings::get( 'auto_delete_404_logs' );
 
-		if ( $days !== -1 ) {
+		if ( $days !== -1 && $this->db_log->table_exists() ) {
 			$this->db_log->delete_older_logs( $days );
 		}
 	}
