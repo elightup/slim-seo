@@ -30,6 +30,7 @@ class Title {
 
 	/**
 	 * Make public to allow access from other class.
+	 * @see AdminColumns/Post.php.
 	 */
 	public function get_singular_value( $post_id = 0 ) : string {
 		$post_id = $post_id ?: get_queried_object_id();
@@ -39,6 +40,7 @@ class Title {
 
 	/**
 	 * Make public to allow access from other class.
+	 * @see AdminColumns/Term.php.
 	 */
 	public function get_term_value( $term_id = 0 ) : string {
 		$term_id = $term_id ?: get_queried_object_id();

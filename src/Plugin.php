@@ -5,8 +5,10 @@ class Plugin {
 	private $services = [];
 
 	public function register_services() {
+		$this->services['canonical_url']    = new MetaTags\CanonicalUrl;
 		$this->services['meta_title']       = new MetaTags\Title;
 		$this->services['meta_description'] = new MetaTags\Description;
+		$this->services['meta_robots']      = new MetaTags\Robots( $this->services['canonical_url'] );
 
 		$this->services['settings_post'] = new MetaTags\Settings\Post;
 		$this->services['settings_term'] = new MetaTags\Settings\Term;
@@ -29,17 +31,25 @@ class Plugin {
 		if ( is_admin() ) {
 			$this->services['notification']       = new Notification;
 			$this->services['migration']          = new Migration\Migration;
-			$this->services['admin_columns_post'] = new MetaTags\AdminColumns\Post( $this->services['settings_post'], $this->services['meta_title'], $this->services['meta_description'] );
-			$this->services['admin_columns_term'] = new MetaTags\AdminColumns\Term( $this->services['settings_term'], $this->services['meta_title'], $this->services['meta_description'] );
+			$this->services['admin_columns_post'] = new MetaTags\AdminColumns\Post(
+				$this->services['settings_post'],
+				$this->services['meta_title'],
+				$this->services['meta_description'],
+				$this->services['meta_robots']
+			);
+			$this->services['admin_columns_term'] = new MetaTags\AdminColumns\Term(
+				$this->services['settings_term'],
+				$this->services['meta_title'],
+				$this->services['meta_description'],
+				$this->services['meta_robots']
+			);
 			return;
 		}
 
 		// Front-end only.
-		$this->services['canonical_url'] = new MetaTags\CanonicalUrl;
 		$this->services['rel_links']     = new MetaTags\RelLinks;
 		$this->services['open_graph']    = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'], $this->services['canonical_url'] );
 		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
-		$this->services['meta_robots']   = new MetaTags\Robots( $this->services['canonical_url'] );
 		$this->services['breadcrumbs']   = new Breadcrumbs;
 		$this->services['feed']          = new Feed;
 

@@ -42,7 +42,7 @@ class Post extends Base {
 				}
 				break;
 			case 'noindex':
-				echo empty( $data['noindex'] ) ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
+				echo $this->robots->get_singular_value( $post_id ) ? '<span class="ss-danger"></span>' : '<span class="ss-success"></span>';
 				break;
 		}
 	}
