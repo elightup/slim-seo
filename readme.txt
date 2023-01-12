@@ -2,7 +2,7 @@
 Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
-Requires at least: 4.9
+Requires at least: 5.7
 Tested up to: 6.1.1
 Requires PHP: 7.0
 Stable tag: 3.16.5

@@ -15,12 +15,7 @@ class Robots {
 			return;
 		}
 
-		$is_from_5_7 = version_compare( get_bloginfo( 'version' ), '5.6.9', '>' ); // WP uses filter from version 5.7.
-		if ( $is_from_5_7 ) {
-			add_filter( 'wp_robots', [ $this, 'modify_robots' ] );
-		} else {
-			add_action( 'wp_head', [ $this, 'output' ], 5 ); // Priority 5 to be able to remove canonical link.
-		}
+		add_filter( 'wp_robots', [ $this, 'modify_robots' ] );
 
 		add_action( 'template_redirect', [ $this, 'set_header_noindex' ] );
 		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );
@@ -41,18 +36,6 @@ class Robots {
 			'noindex' => true,
 			'follow'  => true,
 		];
-	}
-
-	public function output() {
-		$is_indexed = $this->is_indexed();
-		if ( $is_indexed ) {
-			echo '<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
-			return;
-		}
-
-		// No index.
-		wp_no_robots();
-		$this->remove_canonical_link();
 	}
 
 	private function remove_canonical_link() {
