@@ -20,8 +20,8 @@ class Loader {
 		new Api\Log404( $this->db_log );
 
 		add_action( 'post_updated', [ $this, 'check_for_changed_slugs' ], 10, 3 );
-		add_action( 'init', [ $this, 'init' ] );
-		add_action( SLIM_SEO_DELETE_404_LOGS_ACTION, [ $this, 'run_schedule' ] );
+		add_action( 'init', [ $this, 'setup_wp_schedule' ] );
+		add_action( SLIM_SEO_DELETE_404_LOGS_ACTION, [ $this, 'run_wp_schedule' ] );
 		add_action( 'slim_seo_deactivate', [ $this, 'deactivate' ] );
 	}
 
@@ -60,13 +60,19 @@ class Loader {
 		}
 	}
 
-	public function init() {
-		if ( ! wp_next_scheduled( SLIM_SEO_DELETE_404_LOGS_ACTION ) ) {
-			wp_schedule_event( time(), 'daily', SLIM_SEO_DELETE_404_LOGS_ACTION );
+	public function setup_wp_schedule() {
+		$days = (int) Settings::get( 'auto_delete_404_logs' );
+
+		if ( Settings::get( 'enable_404_logs' ) && $days !== -1 ) {
+			if ( ! wp_next_scheduled( SLIM_SEO_DELETE_404_LOGS_ACTION ) ) {
+				wp_schedule_event( time(), 'daily', SLIM_SEO_DELETE_404_LOGS_ACTION );
+			}
+		} else {
+			wp_clear_scheduled_hook( SLIM_SEO_DELETE_404_LOGS_ACTION );
 		}
 	}
 
-	public function run_schedule() {
+	public function run_wp_schedule() {
 		$days = (int) Settings::get( 'auto_delete_404_logs' );
 
 		if ( $days !== -1 && $this->db_log->table_exists() ) {
