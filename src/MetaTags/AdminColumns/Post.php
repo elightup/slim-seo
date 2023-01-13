@@ -33,7 +33,13 @@ class Post extends Base {
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $this->title->get_singular_value( $post_id );
-				echo esc_html( Helper::normalize( $title ) );
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Title::filter_title()
+				 */
+				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title );
+				$title = Helper::normalize( $title );
+				echo esc_html( $title );
 				break;
 			case 'meta_description':
 				$data = get_post_meta( $post_id, 'slim_seo', true );
