@@ -82,7 +82,7 @@ class Robots {
 	 * Make public to allow access from other class.
 	 * @see AdminColumns/Term.php.
 	 */
-	public function get_term_value( $term_id ) : bool {
+	public function get_term_value( $term_id = 0 ) : bool {
 		$term_id = $term_id ?: get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
