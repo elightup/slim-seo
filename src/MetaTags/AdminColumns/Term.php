@@ -29,7 +29,13 @@ class Term extends Base {
 				}
 				break;
 			case 'noindex':
-				echo $this->robots->get_term_value( $term_id ) ? '<span class="ss-danger"></span>' : '<span class="ss-success"></span>';
+				$noindex = $this->robots->get_term_value( $term_id );
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Robots::indexed()
+				 */
+				$index = apply_filters( 'slim_seo_robots_index', ! $noindex );
+				echo $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}
 

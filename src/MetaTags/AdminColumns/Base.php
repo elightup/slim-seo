@@ -10,6 +10,7 @@ abstract class Base {
 	protected $settings;
 	protected $title;
 	protected $description;
+	protected $robots;
 
 	public function __construct( Settings $settings, Title $title, Description $description, Robots $robots ) {
 		$this->settings    = $settings;

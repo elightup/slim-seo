@@ -23,8 +23,7 @@ class Robots {
 	}
 
 	public function modify_robots( $robots ) {
-		$is_indexed = $this->is_indexed();
-		if ( $is_indexed ) {
+		if ( $this->indexed() ) {
 			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
 			return $robots;
@@ -43,7 +42,7 @@ class Robots {
 		remove_action( 'wp_head', 'rel_canonical' );
 	}
 
-	private function is_indexed() {
+	private function indexed() {
 		$value = $this->get_indexed();
 		return apply_filters( 'slim_seo_robots_index', $value );
 	}

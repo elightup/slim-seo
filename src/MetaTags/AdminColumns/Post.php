@@ -30,19 +30,25 @@ class Post extends Base {
 	}
 
 	public function render( $column, $post_id ) {
-		$data = get_post_meta( $post_id, 'slim_seo', true );
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $this->title->get_singular_value( $post_id );
 				echo esc_html( Helper::normalize( $title ) );
 				break;
 			case 'meta_description':
+				$data = get_post_meta( $post_id, 'slim_seo', true );
 				if ( ! empty( $data['description'] ) ) {
 					echo esc_html( Helper::normalize( $data['description'] ) );
 				}
 				break;
 			case 'noindex':
-				echo $this->robots->get_singular_value( $post_id ) ? '<span class="ss-danger"></span>' : '<span class="ss-success"></span>';
+				$noindex = $this->robots->get_singular_value( $post_id );
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Robots::indexed()
+				 */
+				$index = apply_filters( 'slim_seo_robots_index', ! $noindex );
+				echo $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}
 	}
