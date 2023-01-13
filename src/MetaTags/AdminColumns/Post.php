@@ -42,10 +42,15 @@ class Post extends Base {
 				echo esc_html( $title );
 				break;
 			case 'meta_description':
-				$data = get_post_meta( $post_id, 'slim_seo', true );
-				if ( ! empty( $data['description'] ) ) {
-					echo esc_html( Helper::normalize( $data['description'] ) );
-				}
+				$data        = get_post_meta( $post_id, 'slim_seo', true ) ?: [];
+				$description = $data['description'] ?? '';
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Description::get_description()
+				 */
+				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description );
+				$description = Helper::normalize( $description );
+				echo esc_html( $description );
 				break;
 			case 'noindex':
 				$noindex = $this->robots->get_singular_value( $post_id );

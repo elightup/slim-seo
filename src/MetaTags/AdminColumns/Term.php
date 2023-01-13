@@ -27,14 +27,17 @@ class Term extends Base {
 				 */
 				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title );
 				$title = Helper::normalize( $title );
-				echo esc_html( $title );
-				break;
+				return $title;
 			case 'meta_description':
-				$data = get_term_meta( $term_id, 'slim_seo', true );
-				if ( ! empty( $data['description'] ) ) {
-					return Helper::normalize( $data['description'] );
-				}
-				break;
+				$data        = get_term_meta( $term_id, 'slim_seo', true ) ?: [];
+				$description = $data['description'] ?? '';
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Description::get_description()
+				 */
+				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description );
+				$description = Helper::normalize( $description );
+				return $description;
 			case 'noindex':
 				$noindex = $this->robots->get_term_value( $term_id );
 				/**
@@ -42,8 +45,7 @@ class Term extends Base {
 				 * @see MetaTags/Robots::indexed()
 				 */
 				$index = apply_filters( 'slim_seo_robots_index', ! $noindex );
-				echo $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
-				break;
+				return $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 		}
 
 		return $output;
