@@ -117,12 +117,12 @@ abstract class Base {
 	public function get_quick_edit_data() {
 		check_ajax_referer( 'save', 'nonce' );
 
-		$object_id = intval( $_GET['object_id'] ?? 0 );
-		if ( ! $object_id ) {
+		$id = intval( $_GET['id'] ?? 0 );
+		if ( ! $id ) {
 			wp_send_json_error();
 		}
 
-		$data = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
+		$data = get_metadata( $this->object_type, $id, 'slim_seo', true ) ?: [];
 		$data = array_merge( [
 			'title'       => '',
 			'description' => '',
@@ -135,8 +135,8 @@ abstract class Base {
 	public function save_bulk_edit() {
 		check_ajax_referer( 'save', 'nonce' );
 
-		$object_ids = wp_parse_id_list( wp_unslash( $_GET['object_ids'] ?? '' ) );
-		if ( empty( $object_ids ) || ! isset( $_GET['noindex'] ) ) {
+		$ids = wp_parse_id_list( wp_unslash( $_GET['ids'] ?? '' ) );
+		if ( empty( $ids ) || ! isset( $_GET['noindex'] ) ) {
 			wp_send_json_error();
 		}
 
@@ -150,15 +150,15 @@ abstract class Base {
 			wp_send_json_success();
 		}
 
-		foreach ( $object_ids as $object_id ) {
-			$data            = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
+		foreach ( $ids as $id ) {
+			$data            = get_metadata( $this->object_type, $id, 'slim_seo', true ) ?: [];
 			$data['noindex'] = $noindex;
 
 			$data = array_filter( $data );
 			if ( empty( $data ) ) {
-				delete_metadata( $this->object_type, $object_id, 'slim_seo' );
+				delete_metadata( $this->object_type, $id, 'slim_seo' );
 			} else {
-				update_metadata( $this->object_type, $object_id, 'slim_seo', $data );
+				update_metadata( $this->object_type, $id, 'slim_seo', $data );
 			}
 		}
 		wp_send_json_success();
