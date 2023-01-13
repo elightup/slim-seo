@@ -38,7 +38,7 @@ class Term extends Base {
 				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description );
 				$description = Helper::normalize( $description );
 				return $description;
-			case 'noindex':
+			case 'index':
 				$noindex = $this->robots->get_term_value( $term_id );
 				/**
 				 * Make the filter works in the back end as well.

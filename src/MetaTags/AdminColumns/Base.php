@@ -22,7 +22,7 @@ abstract class Base {
 	public function columns( $columns ) {
 		$columns['meta_title']       = esc_html__( 'Meta title', 'slim-seo' );
 		$columns['meta_description'] = esc_html__( 'Meta desc.', 'slim-seo' );
-		$columns['noindex']          = esc_html__( 'Index', 'slim-seo' );
+		$columns['index']            = esc_html__( 'Index', 'slim-seo' );
 
 		return $columns;
 	}

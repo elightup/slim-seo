@@ -52,7 +52,7 @@ class Post extends Base {
 				$description = Helper::normalize( $description );
 				echo esc_html( $description );
 				break;
-			case 'noindex':
+			case 'index':
 				$noindex = $this->robots->get_singular_value( $post_id );
 				/**
 				 * Make the filter works in the back end as well.
@@ -110,7 +110,7 @@ class Post extends Base {
 		if ( empty( $_GET['post_id'] ) ) {
 			wp_send_json_error();
 		}
-		$data = get_post_meta( $_GET['post_id'], 'slim_seo', true );
+		$data = get_post_meta( (int) $_GET['post_id'], 'slim_seo', true );
 		$data = $data ? $data : [];
 		$data = array_merge( [
 			'title'       => '',
