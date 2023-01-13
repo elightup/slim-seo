@@ -32,19 +32,20 @@ abstract class Base {
 
 		// Quick edit.
 		add_action( 'quick_edit_custom_box', [ $this, 'output_quick_edit_fields' ] );
-		add_action( 'wp_ajax_ss_quick_edit', [ $this, 'get_quick_edit_data' ] );
+		add_action( "wp_ajax_ss_quick_edit_{$this->object_type}", [ $this, 'get_quick_edit_data' ] );
 
 		// Bulk edit.
 		add_action( 'bulk_edit_custom_box', [ $this, 'output_bulk_edit_fields' ] );
-		add_action( 'wp_ajax_ss_save_bulk', [ $this, 'save_bulk_edit' ] );
+		add_action( "wp_ajax_ss_save_bulk_{$this->object_type}", [ $this, 'save_bulk_edit' ] );
 	}
 
 	public function enqueue() {
 		if ( ! $this->is_screen() ) {
 			return;
 		}
-		wp_enqueue_style( 'slim-seo-edit', SLIM_SEO_URL . 'css/edit.css', filemtime( SLIM_SEO_DIR . 'css/edit.css' ), SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-bulk', SLIM_SEO_URL . 'js/bulk.js', filemtime( SLIM_SEO_DIR . 'js/bulk.js' ), SLIM_SEO_VER, true );
+		wp_enqueue_style( 'slim-seo-admin-columns', SLIM_SEO_URL . 'css/admin-columns.css', filemtime( SLIM_SEO_DIR . 'css/admin-columns.css' ), SLIM_SEO_VER );
+		wp_enqueue_script( 'slim-seo-admin-columns', SLIM_SEO_URL . 'js/admin-columns.js', filemtime( SLIM_SEO_DIR . 'js/admin-columns.js' ), SLIM_SEO_VER, true );
+		wp_add_inline_script( 'slim-seo-admin-columns', "let ssObjectType = '{$this->object_type}'", 'before' );
 	}
 
 	public function columns( $columns ) {
@@ -116,14 +117,12 @@ abstract class Base {
 	public function get_quick_edit_data() {
 		check_ajax_referer( 'save', 'nonce' );
 
-		$object_type = sanitize_text_field( wp_unslash( $_GET['object_type'] ?? '' ) );
-		$object_id   = intval( $_GET['object_id'] ?? 0 );
-
-		if ( $this->object_type !== $object_type || ! $object_id ) {
+		$object_id = intval( $_GET['object_id'] ?? 0 );
+		if ( ! $object_id ) {
 			wp_send_json_error();
 		}
 
-		$data = get_metadata( $object_type, $object_id, 'slim_seo', true ) ?: [];
+		$data = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
 		$data = array_merge( [
 			'title'       => '',
 			'description' => '',
@@ -136,10 +135,8 @@ abstract class Base {
 	public function save_bulk_edit() {
 		check_ajax_referer( 'save', 'nonce' );
 
-		$object_type = sanitize_text_field( wp_unslash( $_GET['object_type'] ?? '' ) );
-		$object_ids  = wp_parse_id_list( wp_unslash( $_GET['object_ids'] ?? '' ) );
-
-		if ( $this->object_type !== $object_type || empty( $object_ids ) || ! isset( $_GET['noindex'] ) ) {
+		$object_ids = wp_parse_id_list( wp_unslash( $_GET['object_ids'] ?? '' ) );
+		if ( empty( $object_ids ) || ! isset( $_GET['noindex'] ) ) {
 			wp_send_json_error();
 		}
 
@@ -154,14 +151,14 @@ abstract class Base {
 		}
 
 		foreach ( $object_ids as $object_id ) {
-			$data            = get_metadata( $object_type, $object_id, 'slim_seo', true ) ?: [];
+			$data            = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
 			$data['noindex'] = $noindex;
 
 			$data = array_filter( $data );
 			if ( empty( $data ) ) {
-				delete_metadata( $object_type, $object_id, 'slim_seo' );
+				delete_metadata( $this->object_type, $object_id, 'slim_seo' );
 			} else {
-				update_metadata( $object_type, $object_id, 'slim_seo', $data );
+				update_metadata( $this->object_type, $object_id, 'slim_seo', $data );
 			}
 		}
 		wp_send_json_success();
