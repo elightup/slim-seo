@@ -13,8 +13,6 @@ class Post extends Base {
 			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
 			add_action( "manage_{$type}_posts_custom_column", [ $this, 'render' ], 10, 2 );
 		}
-
-		add_action( 'admin_print_styles-edit.php', [ $this, 'enqueue' ] );
 	}
 
 	public function render( $column, $post_id ) {
@@ -50,14 +48,6 @@ class Post extends Base {
 				echo $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}
-	}
-
-	public function enqueue() {
-		if ( ! $this->is_screen() ) {
-			return;
-		}
-		wp_enqueue_style( 'slim-seo-edit', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-bulk', SLIM_SEO_URL . 'js/bulk.js', [], SLIM_SEO_VER, true );
 	}
 
 	protected function is_screen(): bool {

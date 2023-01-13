@@ -28,6 +28,8 @@ abstract class Base {
 	public function setup_admin() {
 		$this->types = $this->settings->get_types();
 
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
+
 		// Quick edit.
 		add_action( 'quick_edit_custom_box', [ $this, 'output_quick_edit_fields' ] );
 		add_action( 'wp_ajax_ss_quick_edit', [ $this, 'get_quick_edit_data' ] );
@@ -35,6 +37,14 @@ abstract class Base {
 		// Bulk edit.
 		add_action( 'bulk_edit_custom_box', [ $this, 'output_bulk_edit_fields' ] );
 		add_action( 'wp_ajax_ss_save_bulk', [ $this, 'save_bulk_edit' ] );
+	}
+
+	public function enqueue() {
+		if ( ! $this->is_screen() ) {
+			return;
+		}
+		wp_enqueue_style( 'slim-seo-edit', SLIM_SEO_URL . 'css/edit.css', filemtime( SLIM_SEO_DIR . 'css/edit.css' ), SLIM_SEO_VER );
+		wp_enqueue_script( 'slim-seo-bulk', SLIM_SEO_URL . 'js/bulk.js', filemtime( SLIM_SEO_DIR . 'js/bulk.js' ), SLIM_SEO_VER, true );
 	}
 
 	public function columns( $columns ) {
@@ -108,8 +118,6 @@ abstract class Base {
 
 		$object_type = sanitize_text_field( wp_unslash( $_GET['object_type'] ?? '' ) );
 		$object_id   = intval( $_GET['object_id'] ?? 0 );
-
-		f( $this->object_type );
 
 		if ( $this->object_type !== $object_type || ! $object_id ) {
 			wp_send_json_error();

@@ -13,8 +13,6 @@ class Term extends Base {
 			add_filter( "manage_edit-{$type}_columns", [ $this, 'columns' ] );
 			add_filter( "manage_{$type}_custom_column", [ $this, 'render' ], 10, 3 );
 		}
-
-		add_action( 'admin_print_styles-edit-tags.php', [ $this, 'enqueue' ] );
 	}
 
 	public function render( $output, $column, $term_id ) {
@@ -49,13 +47,6 @@ class Term extends Base {
 		}
 
 		return $output;
-	}
-
-	public function enqueue() {
-		if ( ! $this->is_screen() ) {
-			return;
-		}
-		wp_enqueue_style( 'slim-seo-edit', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
 	}
 
 	protected function is_screen(): bool {
