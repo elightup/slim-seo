@@ -2,6 +2,7 @@
 namespace SlimSEO\Integrations;
 
 use SlimSEO\MetaTags\Description;
+use SlimSEO\MetaTags\Robots;
 use SlimSEO\MetaTags\Title;
 
 class AutoListings {
@@ -27,7 +28,7 @@ class AutoListings {
 		add_filter( 'post_type_archive_title', [ $this, 'set_page_title_as_archive_title' ] );
 		add_filter( 'slim_seo_meta_title', [ $this, 'archive_title' ], 10, 2 );
 		add_filter( 'slim_seo_meta_description', [ $this, 'archive_description' ], 10, 2 );
-		add_filter( 'slim_seo_robots_index', [ $this, 'archive_index' ] );
+		add_filter( 'slim_seo_robots_index', [ $this, 'archive_index' ], 10, 2 );
 	}
 
 	public function skip_shortcodes( array $shortcodes ) : array {
@@ -59,8 +60,7 @@ class AutoListings {
 		return $description_obj->get_singular_value( $this->archive_page_id ) ?: $description;
 	}
 
-	public function archive_index( $is_indexed ) {
-		$data = get_post_meta( $this->archive_page_id, 'slim_seo', true );
-		return empty( $data['noindex'] ) ? $is_indexed : false;
+	public function archive_index( $indexed, Robots $robots ) {
+		return $robots->get_singular_value( $this->archive_page_id ) ? false : $indexed;
 	}
 }
