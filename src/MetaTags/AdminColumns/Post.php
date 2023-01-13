@@ -30,19 +30,36 @@ class Post extends Base {
 	}
 
 	public function render( $column, $post_id ) {
-		$data = get_post_meta( $post_id, 'slim_seo', true );
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $this->title->get_singular_value( $post_id );
-				echo esc_html( Helper::normalize( $title ) );
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Title::filter_title()
+				 */
+				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title );
+				$title = Helper::normalize( $title );
+				echo esc_html( $title );
 				break;
 			case 'meta_description':
-				if ( ! empty( $data['description'] ) ) {
-					echo esc_html( Helper::normalize( $data['description'] ) );
-				}
+				$data        = get_post_meta( $post_id, 'slim_seo', true ) ?: [];
+				$description = $data['description'] ?? '';
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Description::get_description()
+				 */
+				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description );
+				$description = Helper::normalize( $description );
+				echo esc_html( $description );
 				break;
-			case 'noindex':
-				echo empty( $data['noindex'] ) ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
+			case 'index':
+				$noindex = $this->robots->get_singular_value( $post_id );
+				/**
+				 * Make the filter works in the back end as well.
+				 * @see MetaTags/Robots::indexed()
+				 */
+				$index = apply_filters( 'slim_seo_robots_index', ! $noindex );
+				echo $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}
 	}
@@ -93,7 +110,7 @@ class Post extends Base {
 		if ( empty( $_GET['post_id'] ) ) {
 			wp_send_json_error();
 		}
-		$data = get_post_meta( $_GET['post_id'], 'slim_seo', true );
+		$data = get_post_meta( (int) $_GET['post_id'], 'slim_seo', true );
 		$data = $data ? $data : [];
 		$data = array_merge( [
 			'title'       => '',
