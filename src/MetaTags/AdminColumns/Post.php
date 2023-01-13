@@ -15,36 +15,28 @@ class Post extends Base {
 		}
 	}
 
+	/**
+	 * Render the column.
+	 * The value of meta tags will be applied with filters to make them work in the back end.
+	 */
 	public function render( $column, $post_id ) {
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $this->title->get_singular_value( $post_id );
-				/**
-				 * Make the filter works in the back end as well.
-				 * @see MetaTags/Title::filter_title()
-				 */
-				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title );
+				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title, $post_id );
 				$title = Helper::normalize( $title );
 				echo esc_html( $title );
 				break;
 			case 'meta_description':
 				$data        = get_post_meta( $post_id, 'slim_seo', true ) ?: [];
 				$description = $data['description'] ?? '';
-				/**
-				 * Make the filter works in the back end as well.
-				 * @see MetaTags/Description::get_description()
-				 */
-				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description );
+				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description, $post_id );
 				$description = Helper::normalize( $description );
 				echo esc_html( $description );
 				break;
 			case 'index':
 				$noindex = $this->robots->get_singular_value( $post_id );
-				/**
-				 * Make the filter works in the back end as well.
-				 * @see MetaTags/Robots::indexed()
-				 */
-				$index = apply_filters( 'slim_seo_robots_index', ! $noindex );
+				$index   = apply_filters( 'slim_seo_robots_index', ! $noindex, $this->robots, $post_id );
 				echo $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}

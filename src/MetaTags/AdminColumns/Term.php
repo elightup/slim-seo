@@ -15,34 +15,26 @@ class Term extends Base {
 		}
 	}
 
+	/**
+	 * Render the column.
+	 * The value of meta tags will be applied with filters to make them work in the back end.
+	 */
 	public function render( $output, $column, $term_id ) {
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $this->title->get_term_value( $term_id );
-				/**
-				 * Make the filter works in the back end as well.
-				 * @see MetaTags/Title::filter_title()
-				 */
-				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title );
+				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title, $term_id );
 				$title = Helper::normalize( $title );
 				return $title;
 			case 'meta_description':
 				$data        = get_term_meta( $term_id, 'slim_seo', true ) ?: [];
 				$description = $data['description'] ?? '';
-				/**
-				 * Make the filter works in the back end as well.
-				 * @see MetaTags/Description::get_description()
-				 */
-				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description );
+				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description, $term_id );
 				$description = Helper::normalize( $description );
 				return $description;
 			case 'index':
 				$noindex = $this->robots->get_term_value( $term_id );
-				/**
-				 * Make the filter works in the back end as well.
-				 * @see MetaTags/Robots::indexed()
-				 */
-				$index = apply_filters( 'slim_seo_robots_index', ! $noindex );
+				$index   = apply_filters( 'slim_seo_robots_index', ! $noindex, $this->robots, $term_id );
 				return $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 		}
 

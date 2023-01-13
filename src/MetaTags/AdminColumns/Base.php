@@ -129,6 +129,13 @@ abstract class Base {
 			'noindex'     => 0,
 		], $data );
 
+		/**
+		 * Make the meta filters work in the back end.
+		 */
+		$data['title']       = apply_filters( 'slim_seo_meta_title', $data['title'], $this->title, $id );
+		$data['description'] = apply_filters( 'slim_seo_meta_description', $data['description'], $this->description, $id );
+		$data['noindex']     = ! apply_filters( 'slim_seo_robots_index', ! $data['noindex'], $this->robots, $id );
+
 		wp_send_json_success( $data );
 	}
 
