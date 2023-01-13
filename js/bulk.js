@@ -18,13 +18,12 @@
 		}
 
 		// Populate inputs with SEO data with Ajax.
-		fetch( `${ ajaxurl }?action=ss_quick_edit&post_id=${ id }&nonce=${ document.querySelector( '#ss_nonce' ).value }` )
+		fetch( `${ ajaxurl }?action=ss_quick_edit&object_type=post&object_id=${ id }&nonce=${ document.querySelector( '#ss_nonce' ).value }` )
 			.then( response => response.json() )
 			.then( ( { success, data } ) => {
 				if ( !success ) {
 					return;
 				}
-				// Populate inputs with SEO data.
 				let row = document.querySelector( `#edit-${ id }` );
 				row.querySelector( 'input[name="slim_seo[title]"]' ).value = data.title;
 				row.querySelector( 'textarea[name="slim_seo[description]"]' ).value = data.description;
@@ -39,10 +38,10 @@
 		}
 
 		let noindex = document.querySelector( '#bulk-edit select[name="noindex"]' ).value;
-		let post_ids = [ ...document.querySelectorAll( '#the-list input[name="post[]"]' ) ]
+		let ids = [ ...document.querySelectorAll( '#the-list input[name="post[]"]' ) ]
 			.filter( node => node.checked ).map( node => node.value )
 			.join( ',' );
 
-		fetch( `${ ajaxurl }?action=ss_save_bulk&post_ids=${ post_ids }&noindex=${ noindex }&nonce=${ document.querySelector( '#ss_nonce' ).value }` );
+		fetch( `${ ajaxurl }?action=ss_save_bulk&object_type=post&object_ids=${ ids }&noindex=${ noindex }&nonce=${ document.querySelector( '#ss_nonce' ).value }` );
 	} );
 } )();

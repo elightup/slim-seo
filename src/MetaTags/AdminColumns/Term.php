@@ -4,10 +4,10 @@ namespace SlimSEO\MetaTags\AdminColumns;
 use SlimSEO\MetaTags\Helper;
 
 class Term extends Base {
-	private $types;
+	protected $object_type = 'term';
 
-	public function setup() {
-		$this->types = $this->settings->get_types();
+	public function setup_admin() {
+		parent::setup_admin();
 
 		foreach ( $this->types as $type ) {
 			add_filter( "manage_edit-{$type}_columns", [ $this, 'columns' ] );
@@ -52,9 +52,14 @@ class Term extends Base {
 	}
 
 	public function enqueue() {
-		if ( ! in_array( get_current_screen()->taxonomy, $this->types, true ) ) {
+		if ( ! $this->is_screen() ) {
 			return;
 		}
 		wp_enqueue_style( 'slim-seo-edit', SLIM_SEO_URL . 'css/edit.css', [], SLIM_SEO_VER );
+	}
+
+	protected function is_screen(): bool {
+		$screen = get_current_screen();
+		return $screen->base === 'edit-tags' && in_array( $screen->taxonomy, $this->types, true );
 	}
 }
