@@ -7,6 +7,8 @@ class Activator {
 
 		add_filter( 'plugin_action_links_slim-seo/slim-seo.php', [ $this, 'add_plugin_action_links' ] );
 		add_filter( 'plugin_row_meta', [ $this, 'add_plugin_meta_links' ], 10, 2 );
+
+		add_action( 'activated_plugin', [ $this, 'redirect' ], 10, 2 );
 	}
 
 	public function activate( $network_wide ) {
@@ -55,5 +57,29 @@ class Activator {
 	private function site_activate() {
 		// Update rewrite rules. @see Deactivator class.
 		delete_option( 'rewrite_rules' );
+	}
+
+	public function redirect( $plugin, $network_wide = false ) {
+		$is_cli    = 'cli' === php_sapi_name();
+		$is_plugin = 'slim-seo/slim-seo.php' === $plugin;
+
+		$action           = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		$checked          = isset( $_POST['checked'] ) && is_array( $_POST['checked'] ) ? count( $_POST['checked'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		$is_bulk_activate = $action === 'activate-selected' && $checked > 1;
+
+		if ( ! $is_plugin || $network_wide || $is_cli || $is_bulk_activate || $this->is_bundled() ) {
+			return;
+		}
+		wp_safe_redirect( admin_url( 'options-general.php?page=slim-seo' ) );
+		die;
+	}
+
+	private function is_bundled() : bool {
+		foreach ( $_REQUEST as $key => $value ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( false !== strpos( $key, 'tgmpa' ) || ( ! is_array( $value ) && false !== strpos( $value, 'tgmpa' ) ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
