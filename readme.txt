@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 3.16.5
+Stable tag: 3.16.6
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -138,6 +138,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.16.6 - 2023-01-31 =
+- Make filters to meta tags (title, description, robots) work on the admin post/term list table
+- Don't add schedule or remove 404 log if not enabled
+- Only run schedule for delete logs automatically if 404 log table exists
+- Fix taxonomy quick edit not working
 
 = 3.16.5 - 2023-01-03 =
 - Set default OpenGraph tag og:image:alt to image title if alt text is missing
