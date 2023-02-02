@@ -23,5 +23,8 @@
     "psr-4": {
       "SlimSEO\\": "src/"
     }
+  },
+  "require": {
+    "php": ">=7.0"
   }
 }
