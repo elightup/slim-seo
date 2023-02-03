@@ -43,6 +43,17 @@
 			inputs.openInNewTab = $( '#wp-link-target' );
 			inputs.search = $( '#wp-link-search' );
 
+			// Slim SEO - Begin: Add inputs
+			$( '#wp-link .link-target' ).append( `<br><label><span></span> <input type="checkbox" id="ss-link-rel-nofollow"> ${ ssLinkL10n.nofollow }</label>` );
+			$( '#wp-link .link-target' ).append( `<br><label><span></span> <input type="checkbox" id="ss-link-rel-sponsored"> ${ ssLinkL10n.sponsored }</label>` );
+			$( '#wp-link .link-target' ).append( `<br><label><span></span> <input type="checkbox" id="ss-link-rel-ugc"> ${ ssLinkL10n.ugc }</label><br>` );
+			$( '.wp-link-text-field' ).before( `<div><label><span>${ ssLinkL10n.labelTitle }</span> <input id="ss-link-title" type="text" /></label></div>` );
+			inputs.relNofollow = $( '#ss-link-rel-nofollow' );
+			inputs.relSponsored = $( '#ss-link-rel-sponsored' );
+			inputs.relUgc = $( '#ss-link-rel-ugc' );
+			inputs.title = $( '#ss-link-title' );
+			// Slim SEO - End
+
 			// Build rivers.
 			rivers.search = new River( $( '#search-results' ) );
 			rivers.recent = new River( $( '#most-recent-results' ) );
@@ -250,6 +261,14 @@
 					inputs.url.val( href );
 					inputs.openInNewTab.prop( 'checked', '_blank' === linkNode.attr( 'target' ) );
 					inputs.submit.val( wpLinkL10n.update );
+
+					// Slim SEO - Begin: set inputs' values from the link.
+					let rel = linkNode.attr( 'rel' );
+					inputs.relNofollow.prop( 'checked', rel.indexOf( 'nofollow' ) >= 0 );
+					inputs.relSponsored.prop( 'checked', rel.indexOf( 'sponsored' ) >= 0 );
+					inputs.relUgc.prop( 'checked', rel.indexOf( 'ugc' ) >= 0 );
+					inputs.title.val( linkNode.attr( 'title' ) );
+					// Slim SEO - End
 				} else {
 					this.setDefaultValues( linkText );
 				}
@@ -311,18 +330,44 @@
 		getAttrs: function() {
 			wpLink.correctURL();
 
+			// Slim SEO - Begin: get link attributes.
+			let rel = [];
+			if ( inputs.relNofollow.prop( 'checked' ) ) {
+				rel.push( 'nofollow' );
+			}
+			if ( inputs.relSponsored.prop( 'checked' ) ) {
+				rel.push( 'sponsored' );
+			}
+			if ( inputs.relUgc.prop( 'checked' ) ) {
+				rel.push( 'ugc' );
+			}
+			rel = rel.join( ' ' );
+
 			return {
 				href: inputs.url.val().trim(),
-				target: inputs.openInNewTab.prop( 'checked' ) ? '_blank' : null
+				target: inputs.openInNewTab.prop( 'checked' ) ? '_blank' : null,
+				rel,
+				title: inputs.title.val().trim()
 			};
+			// Slim SEO - End
 		},
 
 		buildHtml: function(attrs) {
 			var html = '<a href="' + attrs.href + '"';
 
-			if ( attrs.target ) {
-				html += ' rel="noopener" target="' + attrs.target + '"';
+			// Slim SEO - Begin: add attributes to the link HTML.
+			if ( attrs.title ) {
+				title = attrs.title.replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
+				html += ` title="${ title }"`;
 			}
+
+			if ( attrs.target ) {
+				attrs.rel += ' noopener';
+					html += ` rel="${ attrs.rel.trim() }" target="${ attrs.target }"`;
+			} else if ( attrs.rel ) {
+				html += ` rel="${ attrs.rel }"`;
+			}
+			// Slim SEO - End
 
 			return html + '>';
 		},
@@ -499,6 +544,13 @@
 
 		setDefaultValues: function( selection ) {
 			inputs.url.val( this.getUrlFromSelection( selection ) );
+
+			// Slim SEO - Begin: reset inputs for a new link.
+			inputs.title.val( '' );
+			inputs.relNofollow.prop( 'checked', false );
+			inputs.relSponsored.prop( 'checked', false );
+			inputs.relUgc.prop( 'checked', false );
+			// Slim SEO - End
 
 			// Empty the search field and swap the "rivers".
 			inputs.search.val('');
@@ -799,4 +851,4 @@
 	});
 
 	$( wpLink.init );
-})( jQuery, window.wpLinkL10n, window.wp );
+})( jQuery, window.ssLinkL10n, window.wp );
