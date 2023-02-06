@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 3.16.6
+Stable tag: 3.17.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -69,9 +69,12 @@ Slim SEO automatically adds the some structured data to the website via JSON-LD 
 - [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
 - Auto redirect if post slug changed
 
-## Premium plugins
+### Premium plugins
 
-- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your websites, which allow you to add schema to your custom post types via a visual and user-friendly UI. It supports all the schemas from Google with a wide range of properties. Slim SEO Schema can help you connect schema properties with dynamic data from posts, site or custom fields easily. It has a deep integration with [Meta Box](https://metabox.io), WooCommerce and other page builder plugins.
+- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your WordPress websites, which allow you to add schema to your custom post types via a visual and user-friendly UI.
+- [Slim SEO Link Manager](https://wpslimseo.com/slim-seo-link-manager/): build and monitor internal links in your WordPress websites in real-time with advanced & insightful reports.
+
+[View all](https://wpslimseo.com/products/)
 
 ### Who should use Slim SEO?
 
@@ -79,7 +82,13 @@ Everyone can use Slim SEO!
 
 However, Slim SEO is perfectly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
 
-*If you like this plugin, you might also like our other products: [Meta Box](https://metabox.io) and [GretaThemes](https://gretathemes.com).*
+## You might also like
+
+If you love this plugin, please try our other great products:
+
+- [Meta Box](https://metabox.io): The best plugin for adding custom meta boxes and custom fields for WordPress
+- [GretaThemes](https://gretathemes.com): Beautiful and easy to use WordPress themes
+- [Auto Listings](https://wpautolistings.com): The best WordPress plugin for car dealership & car listings websites.
 
 == Installation ==
 
@@ -138,6 +147,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.17.0 - 2023-02-06 =
+- Add integration with AffiliateWP
+- Improve compatible with Bricks & WP Grid Builder
+- Redirect to the settings page after activation
 
 = 3.16.6 - 2023-01-31 =
 - Make filters to meta tags (title, description, robots) work on the admin post/term list table

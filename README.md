@@ -43,20 +43,40 @@ Schema is a way that describes structured data for search engines. Based on the 
 
 Slim SEO automatically adds structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-### 5. [Auto Redirection](https://wpslimseo.com/docs/auto-redirection/)
+#### 5. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
 
-- Auto redirect attachment page to the attachment file URL.
-- Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
+- Setting up redirection rules easily
+- Auto redirect non-www to www and vice versa
+- 404 link monitoring
 
-To know more about Slim SEO features, please see the [homepage](https://wpslimseo.com).
+#### 6. And many more
 
-*If you like this plugin, you might also like our other products: [Meta Box](https://metabox.io) and [GretaThemes](https://gretathemes.com).*
+- [Inserting Google Analytics, Facebook pixel or any code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
+- Auto prevent scraping content from [RSS feed](https://docs.wpslimseo.com/slim-seo/rss-feed/)
+- [Integrations](https://docs.wpslimseo.com/slim-seo/integrations/) with many plugins, including page builders
+- [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
+- Auto redirect if post slug changed
+
+### Premium plugins
+
+- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your WordPress websites, which allow you to add schema to your custom post types via a visual and user-friendly UI.
+- [Slim SEO Link Manager](https://wpslimseo.com/slim-seo-link-manager/): build and monitor internal links in your WordPress websites in real-time with advanced & insightful reports.
+
+[View all](https://wpslimseo.com/products/)
 
 ## Who should use Slim SEO?
 
 Everyone can use Slim SEO!
 
 However, Slim SEO is perfectly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
+
+## You might also like
+
+If you love this plugin, please try our other great products:
+
+- [Meta Box](https://metabox.io): The best plugin for adding custom meta boxes and custom fields for WordPress
+- [GretaThemes](https://gretathemes.com): Beautiful and easy to use WordPress themes
+- [Auto Listings](https://wpautolistings.com): The best WordPress plugin for car dealership & car listings websites.
 
 ## Installation
 
