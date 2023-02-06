@@ -26,7 +26,7 @@ class Page {
 				<?= esc_html( get_admin_page_title() ); ?>
 
 				<?php if ( $upgradeable ) : ?>
-					<a href="https://wpslimseo.com/slim-seo-schema/?utm_source=WordPress&utm_medium=link&utm_campaign=plugin" target="_blank" rel="noreffer noopener" style="color: #ef4836">
+					<a href="https://wpslimseo.com/products/?utm_source=WordPress&utm_medium=link&utm_campaign=plugin" target="_blank" rel="noreffer noopener" style="color: #ef4836">
 						<span class="dashicons dashicons-awards" style="color: #ef4836"></span>
 						<strong><?php esc_html_e( 'Upgrade', 'slim-seo' ); ?></strong>
 					</a>
