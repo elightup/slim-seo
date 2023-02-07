@@ -5,6 +5,8 @@ import {
 	getAuthority, getFragment, getPath, getProtocol, getQueryString, isValidAuthority, isValidFragment, isValidPath, isValidProtocol, isValidQueryString
 } from '@wordpress/url';
 
+import classnames from 'classnames';
+
 /**
  * Check for issues with the provided href.
  *
@@ -79,7 +81,7 @@ export function isValidHref( href ) {
  *
  * @return {Object} The final format object.
  */
-export function createLinkFormat( { url, type, id, opensInNewWindow, relNofollow, relSponsored, relUgc } ) {
+export function createLinkFormat( { url, type, id, opensInNewWindow, nofollow, sponsored, ugc } ) {
 	const format = {
 		type: 'core/link',
 		attributes: {
@@ -96,17 +98,7 @@ export function createLinkFormat( { url, type, id, opensInNewWindow, relNofollow
 	}
 
 	// Slim SEO - Begin: get link attributes.
-	let rel = [];
-	if ( relNofollow ) {
-		rel.push( 'nofollow' );
-	}
-	if ( relSponsored ) {
-		rel.push( 'sponsored' );
-	}
-	if ( relUgc ) {
-		rel.push( 'ugc' );
-	}
-	rel = rel.join( ' ' );
+	const rel = classnames( { nofollow, sponsored, ugc } );
 	if ( rel ) {
 		if ( format.attributes.rel ) {
 			format.attributes.rel += ` ${ rel }`;

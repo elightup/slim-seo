@@ -64,9 +64,9 @@ function InlineLinkUI( {
 		opensInNewTab: activeAttributes.target === '_blank',
 
 		// Slim SEO - Begin: set values for rel props.
-		relNofollow: activeAttributes.rel ? activeAttributes.rel.includes('nofollow') : false,
-		relSponsored: activeAttributes.rel ? activeAttributes.rel.includes('sponsored') : false,
-		relUgc: activeAttributes.rel ? activeAttributes.rel.includes('ugc') : false,
+		nofollow: activeAttributes.rel ? activeAttributes.rel.includes('nofollow') : false,
+		sponsored: activeAttributes.rel ? activeAttributes.rel.includes('sponsored') : false,
+		ugc: activeAttributes.rel ? activeAttributes.rel.includes('ugc') : false,
 		// Slim SEO - End.
 
 		title: richTextText,
@@ -94,9 +94,9 @@ function InlineLinkUI( {
 		const didToggleSetting =
 			(
 				linkValue.opensInNewTab !== nextValue.opensInNewTab
-				|| linkValue.relNofollow !== nextValue.relNofollow
-				|| linkValue.relSponsored !== nextValue.relSponsored
-				|| linkValue.relUgc !== nextValue.relUgc
+				|| linkValue.nofollow !== nextValue.nofollow
+				|| linkValue.sponsored !== nextValue.sponsored
+				|| linkValue.ugc !== nextValue.ugc
 			)
 			&& linkValue.url === nextValue.url;
 
@@ -125,9 +125,9 @@ function InlineLinkUI( {
 			opensInNewWindow: nextValue.opensInNewTab,
 
 			// Slim SEO: new props.
-			relNofollow: nextValue.relNofollow,
-			relSponsored: nextValue.relSponsored,
-			relUgc: nextValue.relUgc,
+			nofollow: nextValue.nofollow,
+			sponsored: nextValue.sponsored,
+			ugc: nextValue.ugc,
 		} );
 
 		const newText = nextValue.title || newUrl;
@@ -289,15 +289,15 @@ function InlineLinkUI( {
 						title: __( 'Open in new tab', 'slim-seo' ),
 					},
 					{
-						id: 'relNofollow',
+						id: 'nofollow',
 						title: __( 'Add rel="nofollow" to link', 'slim-seo' ),
 					},
 					{
-						id: 'relSponsored',
+						id: 'sponsored',
 						title: __( 'Add rel="sponsored" to link', 'slim-seo' ),
 					},
 					{
-						id: 'relUgc',
+						id: 'ugc',
 						title: __( 'Add rel="ugc" to link', 'slim-seo' ),
 					},
 				] }
