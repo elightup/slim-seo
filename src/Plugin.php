@@ -29,6 +29,7 @@ class Plugin {
 
 		// Admin only.
 		if ( is_admin() ) {
+			$this->services['link_attributes']    = new LinkAttributes;
 			$this->services['notification']       = new Notification;
 			$this->services['migration']          = new Migration\Migration;
 			$this->services['admin_columns_post'] = new MetaTags\AdminColumns\Post(

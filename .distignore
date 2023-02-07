@@ -18,6 +18,8 @@ README.md
 
 *.zip
 
-css/scss
-js/redirection
+css/scss/
+js/redirection/
 js/redirection.js.LICENSE.txt
+
+js/link-attributes/block-editor/src/
