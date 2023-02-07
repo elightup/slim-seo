@@ -47,11 +47,9 @@
 			$( '#wp-link .link-target' ).append( `<br><label><span></span> <input type="checkbox" id="ss-link-rel-nofollow"> ${ ssLinkL10n.nofollow }</label>` );
 			$( '#wp-link .link-target' ).append( `<br><label><span></span> <input type="checkbox" id="ss-link-rel-sponsored"> ${ ssLinkL10n.sponsored }</label>` );
 			$( '#wp-link .link-target' ).append( `<br><label><span></span> <input type="checkbox" id="ss-link-rel-ugc"> ${ ssLinkL10n.ugc }</label><br>` );
-			$( '.wp-link-text-field' ).before( `<div><label><span>${ ssLinkL10n.labelTitle }</span> <input id="ss-link-title" type="text" /></label></div>` );
-			inputs.relNofollow = $( '#ss-link-rel-nofollow' );
-			inputs.relSponsored = $( '#ss-link-rel-sponsored' );
-			inputs.relUgc = $( '#ss-link-rel-ugc' );
-			inputs.title = $( '#ss-link-title' );
+			inputs.nofollow = $( '#ss-link-rel-nofollow' );
+			inputs.sponsored = $( '#ss-link-rel-sponsored' );
+			inputs.ugc = $( '#ss-link-rel-ugc' );
 			// Slim SEO - End
 
 			// Build rivers.
@@ -264,10 +262,9 @@
 
 					// Slim SEO - Begin: set inputs' values from the link.
 					let rel = linkNode.attr( 'rel' );
-					inputs.relNofollow.prop( 'checked', rel.indexOf( 'nofollow' ) >= 0 );
-					inputs.relSponsored.prop( 'checked', rel.indexOf( 'sponsored' ) >= 0 );
-					inputs.relUgc.prop( 'checked', rel.indexOf( 'ugc' ) >= 0 );
-					inputs.title.val( linkNode.attr( 'title' ) );
+					inputs.nofollow.prop( 'checked', rel.includes( 'nofollow' ) );
+					inputs.sponsored.prop( 'checked', rel.includes( 'sponsored' ) );
+					inputs.ugc.prop( 'checked', rel.includes( 'ugc' ) );
 					// Slim SEO - End
 				} else {
 					this.setDefaultValues( linkText );
@@ -332,13 +329,13 @@
 
 			// Slim SEO - Begin: get link attributes.
 			let rel = [];
-			if ( inputs.relNofollow.prop( 'checked' ) ) {
+			if ( inputs.nofollow.prop( 'checked' ) ) {
 				rel.push( 'nofollow' );
 			}
-			if ( inputs.relSponsored.prop( 'checked' ) ) {
+			if ( inputs.sponsored.prop( 'checked' ) ) {
 				rel.push( 'sponsored' );
 			}
-			if ( inputs.relUgc.prop( 'checked' ) ) {
+			if ( inputs.ugc.prop( 'checked' ) ) {
 				rel.push( 'ugc' );
 			}
 			rel = rel.join( ' ' );
@@ -347,7 +344,6 @@
 				href: inputs.url.val().trim(),
 				target: inputs.openInNewTab.prop( 'checked' ) ? '_blank' : null,
 				rel,
-				title: inputs.title.val().trim()
 			};
 			// Slim SEO - End
 		},
@@ -356,11 +352,6 @@
 			var html = '<a href="' + attrs.href + '"';
 
 			// Slim SEO - Begin: add attributes to the link HTML.
-			if ( attrs.title ) {
-				title = attrs.title.replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
-				html += ` title="${ title }"`;
-			}
-
 			if ( attrs.target ) {
 				attrs.rel += ' noopener';
 					html += ` rel="${ attrs.rel.trim() }" target="${ attrs.target }"`;
@@ -546,10 +537,9 @@
 			inputs.url.val( this.getUrlFromSelection( selection ) );
 
 			// Slim SEO - Begin: reset inputs for a new link.
-			inputs.title.val( '' );
-			inputs.relNofollow.prop( 'checked', false );
-			inputs.relSponsored.prop( 'checked', false );
-			inputs.relUgc.prop( 'checked', false );
+			inputs.nofollow.prop( 'checked', false );
+			inputs.sponsored.prop( 'checked', false );
+			inputs.ugc.prop( 'checked', false );
 			// Slim SEO - End
 
 			// Empty the search field and swap the "rivers".
