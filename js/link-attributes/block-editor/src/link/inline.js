@@ -77,7 +77,7 @@ function InlineLinkUI( {
 		const newValue = removeFormat( value, 'core/link' );
 		onChange( newValue );
 		stopAddingLink();
-		speak( __( 'Link removed.' ), 'assertive' );
+		speak( __( 'Link removed.', 'slim-seo' ), 'assertive' );
 	}
 
 	function onChangeLink( nextValue ) {
@@ -208,14 +208,14 @@ function InlineLinkUI( {
 		if ( ! isValidHref( newUrl ) ) {
 			speak(
 				__(
-					'Warning: the link has been inserted but may have errors. Please test it.'
+					'Warning: the link has been inserted but may have errors. Please test it.', 'slim-seo'
 				),
 				'assertive'
 			);
 		} else if ( isActive ) {
-			speak( __( 'Link edited.' ), 'assertive' );
+			speak( __( 'Link edited.', 'slim-seo' ), 'assertive' );
 		} else {
-			speak( __( 'Link inserted.' ), 'assertive' );
+			speak( __( 'Link inserted.', 'slim-seo' ), 'assertive' );
 		}
 	}
 
@@ -254,7 +254,7 @@ function InlineLinkUI( {
 		return createInterpolateElement(
 			sprintf(
 				/* translators: %s: search term. */
-				__( 'Create Page: <mark>%s</mark>' ),
+				__( 'Create Page: <mark>%s</mark>', 'slim-seo' ),
 				searchTerm
 			),
 			{ mark: <mark /> }
