@@ -1,23 +1,19 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
-import {
-	getTextContent,
-	applyFormat,
-	removeFormat,
-	slice,
-	isCollapsed,
-} from '@wordpress/rich-text';
-import { isURL, isEmail } from '@wordpress/url';
-import {
-	RichTextToolbarButton,
-	RichTextShortcut,
-} from '@wordpress/block-editor';
-import { decodeEntities } from '@wordpress/html-entities';
-import { link as linkIcon, linkOff } from '@wordpress/icons';
 import { speak } from '@wordpress/a11y';
+import {
+	RichTextShortcut, RichTextToolbarButton
+} from '@wordpress/block-editor';
+import { useState } from '@wordpress/element';
+import { decodeEntities } from '@wordpress/html-entities';
+import { __ } from '@wordpress/i18n';
+import { link as linkIcon, linkOff } from '@wordpress/icons';
+import {
+	applyFormat, getTextContent, isCollapsed, removeFormat,
+	slice
+} from '@wordpress/rich-text';
+import { isEmail, isURL } from '@wordpress/url';
 
 /**
  * Internal dependencies
@@ -125,6 +121,9 @@ export const link = {
 		type: 'data-type',
 		id: 'data-id',
 		target: 'target',
+
+		// Slim SEO: Add new attributes for rel.
+		rel: 'rel'
 	},
 	__unstablePasteRule( value, { html, plainText } ) {
 		if ( isCollapsed( value ) ) {

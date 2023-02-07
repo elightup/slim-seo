@@ -2,16 +2,7 @@
  * WordPress dependencies
  */
 import {
-	getProtocol,
-	isValidProtocol,
-	getAuthority,
-	isValidAuthority,
-	getPath,
-	isValidPath,
-	getQueryString,
-	isValidQueryString,
-	getFragment,
-	isValidFragment,
+	getAuthority, getFragment, getPath, getProtocol, getQueryString, isValidAuthority, isValidFragment, isValidPath, isValidProtocol, isValidQueryString
 } from '@wordpress/url';
 
 /**
@@ -88,7 +79,7 @@ export function isValidHref( href ) {
  *
  * @return {Object} The final format object.
  */
-export function createLinkFormat( { url, type, id, opensInNewWindow } ) {
+export function createLinkFormat( { url, type, id, opensInNewWindow, relNofollow, relSponsored, relUgc } ) {
 	const format = {
 		type: 'core/link',
 		attributes: {
@@ -103,6 +94,27 @@ export function createLinkFormat( { url, type, id, opensInNewWindow } ) {
 		format.attributes.target = '_blank';
 		format.attributes.rel = 'noreferrer noopener';
 	}
+
+	// Slim SEO - Begin: get link attributes.
+	let rel = [];
+	if ( relNofollow ) {
+		rel.push( 'nofollow' );
+	}
+	if ( relSponsored ) {
+		rel.push( 'sponsored' );
+	}
+	if ( relUgc ) {
+		rel.push( 'ugc' );
+	}
+	rel = rel.join( ' ' );
+	if ( rel ) {
+		if ( format.attributes.rel ) {
+			format.attributes.rel += ` ${ rel }`;
+		} else {
+			format.attributes.rel = rel;
+		}
+	}
+	// Slim SEO - End
 
 	return format;
 }

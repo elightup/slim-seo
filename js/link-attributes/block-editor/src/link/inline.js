@@ -62,6 +62,13 @@ function InlineLinkUI( {
 		type: activeAttributes.type,
 		id: activeAttributes.id,
 		opensInNewTab: activeAttributes.target === '_blank',
+
+		// Slim SEO - Begin: set values for rel props.
+		relNofollow: activeAttributes.rel ? activeAttributes.rel.includes('nofollow') : false,
+		relSponsored: activeAttributes.rel ? activeAttributes.rel.includes('sponsored') : false,
+		relUgc: activeAttributes.rel ? activeAttributes.rel.includes('ugc') : false,
+		// Slim SEO - End.
+
 		title: richTextText,
 		...nextLinkValue,
 	};
@@ -83,9 +90,15 @@ function InlineLinkUI( {
 		};
 
 		// LinkControl calls `onChange` immediately upon the toggling a setting.
+		// Slim SEO: Add more conditions.
 		const didToggleSetting =
-			linkValue.opensInNewTab !== nextValue.opensInNewTab &&
-			linkValue.url === nextValue.url;
+			(
+				linkValue.opensInNewTab !== nextValue.opensInNewTab
+				|| linkValue.relNofollow !== nextValue.relNofollow
+				|| linkValue.relSponsored !== nextValue.relSponsored
+				|| linkValue.relUgc !== nextValue.relUgc
+			)
+			&& linkValue.url === nextValue.url;
 
 		// If change handler was called as a result of a settings change during
 		// link insertion, it must be held in state until the link is ready to
@@ -110,6 +123,11 @@ function InlineLinkUI( {
 					? String( nextValue.id )
 					: undefined,
 			opensInNewWindow: nextValue.opensInNewTab,
+
+			// Slim SEO: new props.
+			relNofollow: nextValue.relNofollow,
+			relSponsored: nextValue.relSponsored,
+			relUgc: nextValue.relUgc,
 		} );
 
 		const newText = nextValue.title || newUrl;
@@ -262,6 +280,27 @@ function InlineLinkUI( {
 				withCreateSuggestion={ userCanCreatePages }
 				createSuggestionButtonText={ createButtonText }
 				hasTextControl
+
+				// Slim SEO: Add more settings to link controls.
+				// https://github.com/WordPress/gutenberg/tree/trunk/packages/block-editor/src/components/link-control#settings
+				settings={ [
+					{
+						id: 'opensInNewTab',
+						title: __( 'Open in new tab', 'slim-seo' ),
+					},
+					{
+						id: 'relNofollow',
+						title: __( 'Add rel="nofollow" to link', 'slim-seo' ),
+					},
+					{
+						id: 'relSponsored',
+						title: __( 'Add rel="sponsored" to link', 'slim-seo' ),
+					},
+					{
+						id: 'relUgc',
+						title: __( 'Add rel="ugc" to link', 'slim-seo' ),
+					},
+				] }
 			/>
 		</Popover>
 	);
