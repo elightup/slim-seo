@@ -5,78 +5,81 @@ class Plugin {
 	private $services = [];
 
 	public function register_services() {
-		$this->services['canonical_url']    = new MetaTags\CanonicalUrl;
-		$this->services['meta_title']       = new MetaTags\Title;
-		$this->services['meta_description'] = new MetaTags\Description;
-		$this->services['meta_robots']      = new MetaTags\Robots( $this->services['canonical_url'] );
+		// Shortcut.
+		$services = &$this->services;
 
-		$this->services['settings_post'] = new MetaTags\Settings\Post;
-		$this->services['settings_term'] = new MetaTags\Settings\Term;
+		$services['canonical_url']    = new MetaTags\CanonicalUrl;
+		$services['meta_title']       = new MetaTags\Title;
+		$services['meta_description'] = new MetaTags\Description;
+		$services['meta_robots']      = new MetaTags\Robots( $services['canonical_url'] );
 
-		$this->services['sitemaps']   = new Sitemaps\Manager;
-		$this->services['images_alt'] = new ImagesAlt;
+		$services['settings_post'] = new MetaTags\Settings\Post;
+		$services['settings_term'] = new MetaTags\Settings\Term;
 
-		$this->services['oxygen']         = new Integrations\Oxygen;
-		$this->services['elementor']      = new Integrations\Elementor;
-		$this->services['beaver_builder'] = new Integrations\BeaverBuilder;
-		$this->services['bricks']         = new Integrations\Bricks;
-		$this->services['zion']           = new Integrations\ZionBuilder;
+		$services['sitemaps']   = new Sitemaps\Manager;
+		$services['images_alt'] = new ImagesAlt;
 
-		$this->services['settings'] = new Settings\Settings;
-		$this->services['code']     = new Code( $this->services['settings'] );
+		$services['oxygen']         = new Integrations\Oxygen;
+		$services['elementor']      = new Integrations\Elementor;
+		$services['beaver_builder'] = new Integrations\BeaverBuilder;
+		$services['bricks']         = new Integrations\Bricks;
+		$services['zion']           = new Integrations\ZionBuilder;
 
-		$this->services['redirection'] = new Redirection\Loader;
+		$services['settings'] = new Settings\Settings;
+		$services['code']     = new Code( $services['settings'] );
+
+		$services['redirection'] = new Redirection\Loader;
 
 		// Admin only.
 		if ( is_admin() ) {
-			$this->services['link_attributes']    = new LinkAttributes;
-			$this->services['notification']       = new Notification;
-			$this->services['migration']          = new Migration\Migration;
-			$this->services['admin_columns_post'] = new MetaTags\AdminColumns\Post(
-				$this->services['settings_post'],
-				$this->services['meta_title'],
-				$this->services['meta_description'],
-				$this->services['meta_robots']
+			$services['link_attributes']    = new LinkAttributes;
+			$services['notification']       = new Notification;
+			$services['migration']          = new Migration\Migration;
+			$services['admin_columns_post'] = new MetaTags\AdminColumns\Post(
+				$services['settings_post'],
+				$services['meta_title'],
+				$services['meta_description'],
+				$services['meta_robots']
 			);
-			$this->services['admin_columns_term'] = new MetaTags\AdminColumns\Term(
-				$this->services['settings_term'],
-				$this->services['meta_title'],
-				$this->services['meta_description'],
-				$this->services['meta_robots']
+			$services['admin_columns_term'] = new MetaTags\AdminColumns\Term(
+				$services['settings_term'],
+				$services['meta_title'],
+				$services['meta_description'],
+				$services['meta_robots']
 			);
 			return;
 		}
 
 		// Front-end only.
-		$this->services['rel_links']     = new MetaTags\RelLinks;
-		$this->services['open_graph']    = new MetaTags\OpenGraph( $this->services['meta_title'], $this->services['meta_description'], $this->services['canonical_url'] );
-		$this->services['twitter_cards'] = new MetaTags\TwitterCards;
-		$this->services['breadcrumbs']   = new Breadcrumbs;
-		$this->services['feed']          = new Feed;
+		$services['rel_links']     = new MetaTags\RelLinks;
+		$services['open_graph']    = new MetaTags\OpenGraph( $services['meta_title'], $services['meta_description'], $services['canonical_url'] );
+		$services['twitter_cards'] = new MetaTags\TwitterCards;
+		$services['breadcrumbs']   = new Breadcrumbs;
+		$services['feed']          = new Feed;
 
-		$this->services['schema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
+		$services['schema'] = new Schema\Manager( $services['meta_title'], $services['meta_description'], $services['breadcrumbs'] );
 
-		$this->services['woocommerce']     = new Integrations\WooCommerce;
-		$this->services['auto_listings']   = new Integrations\AutoListings;
-		$this->services['genesis']         = new Integrations\Genesis;
-		$this->services['lifterlms']       = new Integrations\LifterLMS;
-		$this->services['jetpack']         = new Integrations\Jetpack;
-		$this->services['polylang']        = new Integrations\Polylang;
-		$this->services['wpml']            = new Integrations\WPML;
-		$this->services['amp']             = new Integrations\AMP( $this->services['schema'] );
-		$this->services['divi']            = new Integrations\Divi;
-		$this->services['metabox']         = new Integrations\MetaBox;
-		$this->services['affiliatewp']     = new Integrations\AffiliateWP;
-		$this->services['web_stories']     = new Integrations\WebStories(
-			$this->services['open_graph'],
-			$this->services['twitter_cards'],
-			$this->services['schema']
+		$services['woocommerce']     = new Integrations\WooCommerce;
+		$services['auto_listings']   = new Integrations\AutoListings;
+		$services['genesis']         = new Integrations\Genesis;
+		$services['lifterlms']       = new Integrations\LifterLMS;
+		$services['jetpack']         = new Integrations\Jetpack;
+		$services['polylang']        = new Integrations\Polylang;
+		$services['wpml']            = new Integrations\WPML;
+		$services['amp']             = new Integrations\AMP( $services['schema'] );
+		$services['divi']            = new Integrations\Divi;
+		$services['metabox']         = new Integrations\MetaBox;
+		$services['affiliatewp']     = new Integrations\AffiliateWP;
+		$services['web_stories']     = new Integrations\WebStories(
+			$services['open_graph'],
+			$services['twitter_cards'],
+			$services['schema']
 		);
-		$this->services['ultimate_member'] = new Integrations\UltimateMember(
-			$this->services['meta_description'],
-			$this->services['open_graph'],
-			$this->services['twitter_cards'],
-			$this->services['meta_robots']
+		$services['ultimate_member'] = new Integrations\UltimateMember(
+			$services['meta_description'],
+			$services['open_graph'],
+			$services['twitter_cards'],
+			$services['meta_robots']
 		);
 	}
 
@@ -96,6 +99,6 @@ class Plugin {
 	 * Developers: use this function to disable the services you don't want.
 	 */
 	public function disable( $id ) {
-		unset( $this->services[ $id ] );
+		unset( $services[ $id ] );
 	}
 }
