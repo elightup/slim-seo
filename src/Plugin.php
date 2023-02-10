@@ -56,21 +56,27 @@ class Plugin {
 
 		$this->services['schema'] = new Schema\Manager( $this->services['meta_title'], $this->services['meta_description'], $this->services['breadcrumbs'] );
 
-		$this->services['woocommerce']   = new Integrations\WooCommerce;
-		$this->services['auto_listings'] = new Integrations\AutoListings;
-		$this->services['genesis']       = new Integrations\Genesis;
-		$this->services['lifterlms']     = new Integrations\LifterLMS;
-		$this->services['jetpack']       = new Integrations\Jetpack;
-		$this->services['polylang']      = new Integrations\Polylang;
-		$this->services['wpml']          = new Integrations\WPML;
-		$this->services['amp']           = new Integrations\AMP( $this->services['schema'] );
-		$this->services['divi']          = new Integrations\Divi;
-		$this->services['metabox']       = new Integrations\MetaBox;
-		$this->services['affiliatewp']   = new Integrations\AffiliateWP;
-		$this->services['web_stories']   = new Integrations\WebStories(
+		$this->services['woocommerce']     = new Integrations\WooCommerce;
+		$this->services['auto_listings']   = new Integrations\AutoListings;
+		$this->services['genesis']         = new Integrations\Genesis;
+		$this->services['lifterlms']       = new Integrations\LifterLMS;
+		$this->services['jetpack']         = new Integrations\Jetpack;
+		$this->services['polylang']        = new Integrations\Polylang;
+		$this->services['wpml']            = new Integrations\WPML;
+		$this->services['amp']             = new Integrations\AMP( $this->services['schema'] );
+		$this->services['divi']            = new Integrations\Divi;
+		$this->services['metabox']         = new Integrations\MetaBox;
+		$this->services['affiliatewp']     = new Integrations\AffiliateWP;
+		$this->services['web_stories']     = new Integrations\WebStories(
 			$this->services['open_graph'],
 			$this->services['twitter_cards'],
 			$this->services['schema']
+		);
+		$this->services['ultimate_member'] = new Integrations\UltimateMember(
+			$this->services['meta_description'],
+			$this->services['open_graph'],
+			$this->services['twitter_cards'],
+			$this->services['meta_robots']
 		);
 	}
 
