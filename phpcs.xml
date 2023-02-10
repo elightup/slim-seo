@@ -59,6 +59,7 @@
 		<exclude name="Universal.Operators.DisallowShortTernary.Found" />
 		<exclude name="WordPress.Classes.ClassInstantiation.MissingParenthesis" />
 		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+		<exclude name="PSR12.Classes.ClassInstantiation.MissingParentheses" />
 
 		<!-- Optional -->
 		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
