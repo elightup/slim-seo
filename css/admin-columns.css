@@ -9,6 +9,19 @@
 	width: 48px;
 	text-align: center;
 }
+.ss-meta-content {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* The Event Calendar */
+.post-type-tribe_events .column-meta_title,
+.post-type-tribe_events .column-meta_description {
+	width: auto;
+}
+
 
 /* Status icon */
 .ss-success:after,
