@@ -1,10 +1,6 @@
 <?php
 namespace SlimSEO\Integrations;
 
-use SlimSEO\MetaTags\Description;
-use SlimSEO\MetaTags\Robots;
-use SlimSEO\MetaTags\Title;
-
 class WooCommerce {
 	private $shop_page_id;
 
@@ -26,9 +22,6 @@ class WooCommerce {
 		$this->shop_page_id = (int) wc_get_page_id( 'shop' );
 
 		add_filter( 'post_type_archive_title', [ $this, 'set_page_title_as_archive_title' ] );
-		add_filter( 'slim_seo_meta_title', [ $this, 'shop_title' ], 10, 2 );
-		add_filter( 'slim_seo_meta_description', [ $this, 'shop_description' ], 10, 2 );
-		add_filter( 'slim_seo_robots_index', [ $this, 'shop_index' ], 10, 2 );
 	}
 
 	/**
@@ -47,19 +40,7 @@ class WooCommerce {
 		return is_page( $pages );
 	}
 
-	public function set_page_title_as_archive_title() : string {
+	public function set_page_title_as_archive_title(): string {
 		return get_the_title( $this->shop_page_id );
-	}
-
-	public function shop_title( $title, Title $title_obj ) {
-		return $title_obj->get_singular_value( $this->shop_page_id ) ?: $title;
-	}
-
-	public function shop_description( $description, Description $description_obj ) {
-		return $description_obj->get_singular_value( $this->shop_page_id ) ?: $description;
-	}
-
-	public function shop_index( $indexed, Robots $robots ) {
-		return $robots->get_singular_value( $this->shop_page_id ) ? false : $indexed;
 	}
 }
