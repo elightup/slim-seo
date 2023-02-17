@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.1.1
 Requires PHP: 7.1
-Stable tag: 3.17.0
+Stable tag: 3.18.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,15 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.18.0 - 2023-02-17 =
+- Increase min required PHP version to 7.1
+- Add rel nofollow, sponsored and ugc to links. Works for both classic and block editors.
+- Add integration for Ultimate Member
+- Improve integration for WooCommerce
+- If a page is set as the post type archive, get SEO settings from that page
+- Truncate the admin columns for meta and use tooltip to show it full and improve CSS for it
+- Fix redirect 404 not working if 404 logs is not enabled
 
 = 3.17.0 - 2023-02-06 =
 - Add integration with AffiliateWP
