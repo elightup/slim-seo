@@ -149,6 +149,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Changelog ==
 
 = 3.18.0 - 2023-02-17 =
+
+[View blog post](https://wpslimseo.com/slim-seo-3-18/)
+
 - Increase min required PHP version to 7.1
 - Add rel nofollow, sponsored and ugc to links. Works for both classic and block editors.
 - Add integration for Ultimate Member
