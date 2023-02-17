@@ -1,25 +1,20 @@
-/* Column width */
-.column-meta_title.column-meta_title {
-	width: 8%;
-}
-.column-meta_description.column-meta_description {
-	width: 12%;
-}
-.column-index.column-index {
-	width: 48px;
-	text-align: center;
-}
 .ss-meta-content {
 	display: -webkit-box;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 }
+.column-index.column-index {
+	width: 48px;
+	text-align: center;
+}
 
-/* The Event Calendar */
-.post-type-tribe_events .column-meta_title,
-.post-type-tribe_events .column-meta_description {
-	width: auto;
+/* WooCommerce */
+.post-type-product .column-meta_title {
+	width: 6%;
+}
+.post-type-product .column-meta_description {
+	width: 10%;
 }
 
 
