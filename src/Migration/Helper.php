@@ -27,8 +27,8 @@ class Helper {
 				'seopress'      => __( 'SEOPress', 'slim-seo' ),
 			],
 			'redirection' => [
-				'redirection'   => __( 'Redirection', 'slim-seo' ),
-				'301-redirects' => __( '301 Redirects', 'slim-seo' ),
+				'redirection'   => _x( 'Redirection', 'Plugin Name', 'slim-seo' ),
+				'301-redirects' => _x( '301 Redirects', 'Plugin Name', 'slim-seo' ),
 			],
 		];
 
