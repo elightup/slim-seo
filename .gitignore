@@ -1,4 +1,9 @@
+node_modules
 vendor
 *.swp
 .DS_Store
 Thumbs.db
+css/redirection.css
+js/redirection.js
+js/link-attributes/block-editor/dist
+*.LICENSE.txt

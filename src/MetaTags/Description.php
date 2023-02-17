@@ -27,7 +27,7 @@ class Description {
 
 	public function get_description() {
 		$description = $this->get_value();
-		$description = apply_filters( 'slim_seo_meta_description', $description, $this );
+		$description = apply_filters( 'slim_seo_meta_description', $description, $this, get_queried_object_id() );
 		$description = $this->normalize( $description );
 
 		return $description;
@@ -52,7 +52,7 @@ class Description {
 	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
 	public function get_singular_value( $post_id = null ) {
-		$post_id = $post_id ?: get_queried_object_id();
+		$post_id = $post_id ?: $this->get_queried_object_id();
 		$post    = get_post( $post_id );
 		if ( ! $post ) {
 			return '';

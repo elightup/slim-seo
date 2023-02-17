@@ -25,9 +25,9 @@ class Settings {
 			'sitemaps',
 			'images_alt',
 			'breadcrumbs',
-			'auto_redirection',
 			'feed',
 			'schema',
+			'redirection',
 		],
 	];
 
@@ -39,45 +39,24 @@ class Settings {
 		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
 
-	public function add_tab( $tabs ) {
+	public function add_tab( array $tabs ) : array {
 		$tabs['general'] = __( 'Features', 'slim-seo' );
-		$tabs['code']    = __( 'Code', 'slim-seo' );
 		if ( ! $this->is_static_homepage() ) {
 			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
 		}
 		$tabs['social'] = __( 'Social', 'slim-seo' );
-		if ( $this->has_seo_plugins() ) {
-			$tabs['tools'] = __( 'Tools', 'slim-seo' );
-		}
+		$tabs['tools']  = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 
-	public function add_pane( $panes ) {
+	public function add_pane( array $panes ) : array {
 		$panes['general'] = $this->get_pane( 'general' );
-		$panes['code']    = $this->get_pane( 'code' );
 		if ( ! $this->is_static_homepage() ) {
 			$panes['homepage'] = $this->get_pane( 'homepage' );
 		}
 		$panes['social'] = $this->get_pane( 'social' );
-		if ( $this->has_seo_plugins() ) {
-			$panes['tools'] = $this->get_pane( 'tools' );
-		}
+		$panes['tools']  = $this->get_pane( 'tools' );
 		return $panes;
-	}
-	public function has_seo_plugins() {
-		$seo_plugins = [
-			'all-in-one-seo-pack/all-in-one-seo-pack.php',
-			'autodescription/autodescription.php',
-			'seo-by-rank-math/rank-math.php',
-			'wordpress-seo/wp-seo.php',
-			'wp-seopress/seopress.php',
-		];
-		foreach ( $seo_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public function enqueue() {
@@ -86,14 +65,12 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [ 'tippy' ], SLIM_SEO_VER, true );
 
-		if ( $this->has_seo_plugins() ) {
-			wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
-			wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
-				'nonce'          => wp_create_nonce( 'migrate' ),
-				'doneText'       => __( 'Done!', 'slim-seo' ),
-				'preProcessText' => __( 'Starting...', 'slim-seo' ),
-			] );
-		}
+		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], SLIM_SEO_VER, true );
+		wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
+			'nonce'          => wp_create_nonce( 'migrate' ),
+			'doneText'       => __( 'Done!', 'slim-seo' ),
+			'preProcessText' => __( 'Starting...', 'slim-seo' ),
+		] );
 
 		wp_enqueue_media();
 		$params = [
@@ -102,10 +79,15 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
 		if ( ! $this->is_static_homepage() ) {
 			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-			$params['site'] = [
-				'title'       => get_bloginfo( 'name' ),
-				'description' => get_bloginfo( 'description' ),
+			$params['site']  = [
+				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
+				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			];
+			$params['title'] = [
+				'separator' => apply_filters( 'document_title_separator', '-' ),
+				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' ),
+			];
+
 			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
 		} else {
 			wp_enqueue_script( 'slim-seo-media', SLIM_SEO_URL . 'js/media.js', [], SLIM_SEO_VER, true );
@@ -148,7 +130,7 @@ class Settings {
 	public function is_feature_active( $feature ) {
 		$defaults = $this->defaults['features'];
 		$data     = get_option( 'slim_seo' );
-		$features = isset( $data['features'] ) ? $data['features'] : $defaults;
+		$features = $data['features'] ?? $defaults;
 
 		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
 	}
@@ -157,7 +139,7 @@ class Settings {
 		echo '<button type="button" class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '"><span class="dashicons dashicons-editor-help"></span></button>';
 	}
 
-	private function get_pane( $name ) {
+	public function get_pane( string $name ) : string {
 		$data = get_option( 'slim_seo' );
 		$data = $data ? $data : [];
 		$data = array_merge( $this->defaults, $data );

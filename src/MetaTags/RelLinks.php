@@ -56,7 +56,7 @@ class RelLinks {
 	}
 
 	private function get_singular_value() {
-		return get_permalink( get_queried_object() );
+		return get_permalink( $this->get_queried_object() );
 	}
 
 	private function get_term_value() {

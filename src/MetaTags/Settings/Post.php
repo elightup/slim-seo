@@ -10,10 +10,18 @@ class Post extends Base {
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
 
-	protected function get_script_params() {
+	protected function get_script_params() : array {
+		$params = parent::get_script_params();
+
 		// @codingStandardsIgnoreLine.
 		$is_home = 'page' === get_option( 'show_on_front' ) && $this->get_object_id() == get_option( 'page_on_front' );
-		return [ 'isHome' => $is_home ];
+		$params['isHome'] = $is_home;
+
+		if ( $is_home ) {
+			$params['title']['parts'] = apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' );
+		}
+
+		return $params;
 	}
 
 	public function add_meta_box() {

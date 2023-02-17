@@ -1,3 +1,23 @@
+.ss-meta-content {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.column-index.column-index {
+	width: 48px;
+	text-align: center;
+}
+
+/* WooCommerce */
+.post-type-product .column-meta_title {
+	width: 6%;
+}
+.post-type-product .column-meta_description {
+	width: 10%;
+}
+
+
 /* Status icon */
 .ss-success:after,
 .ss-warning:after,
@@ -22,8 +42,4 @@
 .ss-danger:after {
 	content: "\2717";
 	background: #e53e3e;
-}
-
-.column-noindex.column-noindex {
-	text-align: center;
 }

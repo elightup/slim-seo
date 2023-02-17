@@ -36,8 +36,11 @@ class Manager {
 		echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 		echo '<?xml-stylesheet type="text/xsl" href="', esc_url( SLIM_SEO_URL ), 'src/Sitemaps/style.xsl"?>', "\n";
 
+		$post_types = $this->get_allowed_post_types();
+		$taxonomies = $this->get_allowed_taxonomies();
+
 		if ( 'index' === $type ) {
-			$sitemap = new Index;
+			$sitemap = new Index( $post_types, $taxonomies );
 			$sitemap->output();
 		}
 
@@ -48,6 +51,10 @@ class Manager {
 				$post_type = $matches[1];
 				$page      = $matches[2];
 			}
+			if ( ! in_array( $post_type, $post_types, true ) ) {
+				wp_die( esc_html__( 'Invalid sitemap URL.', 'slim-seo' ) );
+			}
+
 			$sitemap = new PostType( $post_type, $page );
 			$sitemap->output();
 		}
@@ -59,6 +66,10 @@ class Manager {
 				$taxonomy = $matches[1];
 				$page     = $matches[2];
 			}
+			if ( ! in_array( $taxonomy, $taxonomies, true ) ) {
+				wp_die( esc_html__( 'Invalid sitemap URL.', 'slim-seo' ) );
+			}
+
 			$sitemap = new Taxonomy( $taxonomy, $page );
 			$sitemap->output();
 		}
@@ -68,5 +79,18 @@ class Manager {
 
 	public function add_to_robots_txt() {
 		echo 'Sitemap: ', esc_url( home_url( 'sitemap.xml' ) ), "\n";
+	}
+
+	private function get_allowed_post_types() : array {
+		$post_types = get_post_types( [ 'public' => true ] );
+		return (array) apply_filters( 'slim_seo_sitemap_post_types', $post_types );
+	}
+
+	private function get_allowed_taxonomies() : array {
+		$taxonomies = get_taxonomies( [
+			'public'  => true,
+			'show_ui' => true,
+		] );
+		return (array) apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
 	}
 }

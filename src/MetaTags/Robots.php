@@ -15,12 +15,7 @@ class Robots {
 			return;
 		}
 
-		$is_from_5_7 = version_compare( get_bloginfo( 'version' ), '5.6.9', '>' ); // WP uses filter from version 5.7.
-		if ( $is_from_5_7 ) {
-			add_filter( 'wp_robots', [ $this, 'modify_robots' ] );
-		} else {
-			add_action( 'wp_head', [ $this, 'output' ], 5 ); // Priority 5 to be able to remove canonical link.
-		}
+		add_filter( 'wp_robots', [ $this, 'modify_robots' ] );
 
 		add_action( 'template_redirect', [ $this, 'set_header_noindex' ] );
 		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );
@@ -28,8 +23,7 @@ class Robots {
 	}
 
 	public function modify_robots( $robots ) {
-		$is_indexed = $this->is_indexed();
-		if ( $is_indexed ) {
+		if ( $this->indexed() ) {
 			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
 			return $robots;
@@ -43,26 +37,14 @@ class Robots {
 		];
 	}
 
-	public function output() {
-		$is_indexed = $this->is_indexed();
-		if ( $is_indexed ) {
-			echo '<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1">';
-			return;
-		}
-
-		// No index.
-		wp_no_robots();
-		$this->remove_canonical_link();
-	}
-
 	private function remove_canonical_link() {
 		remove_action( 'wp_head', [ $this->url, 'output' ] );
 		remove_action( 'wp_head', 'rel_canonical' );
 	}
 
-	private function is_indexed() {
+	private function indexed() {
 		$value = $this->get_indexed();
-		return apply_filters( 'slim_seo_robots_index', $value );
+		return apply_filters( 'slim_seo_robots_index', $value, $this, get_queried_object_id() );
 	}
 
 	private function get_indexed() {
@@ -86,14 +68,24 @@ class Robots {
 		return ! $noindex;
 	}
 
-	private function get_singular_value() {
-		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
-		return isset( $data['noindex'] ) ? $data['noindex'] : null;
+	/**
+	 * Make public to allow access from other class.
+	 * @see AdminColumns/Post.php.
+	 */
+	public function get_singular_value( $post_id = 0 ): bool {
+		$post_id = $post_id ?: $this->get_queried_object_id();
+		$data    = get_post_meta( $post_id, 'slim_seo', true );
+		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
 	}
 
-	private function get_term_value() {
-		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
-		return isset( $data['noindex'] ) ? $data['noindex'] : null;
+	/**
+	 * Make public to allow access from other class.
+	 * @see AdminColumns/Term.php.
+	 */
+	public function get_term_value( $term_id = 0 ) : bool {
+		$term_id = $term_id ?: get_queried_object_id();
+		$data    = get_term_meta( $term_id, 'slim_seo', true );
+		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
 	}
 
 	/**

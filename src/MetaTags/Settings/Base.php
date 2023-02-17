@@ -16,19 +16,22 @@ abstract class Base {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
+		wp_localize_script( 'slim-seo-meta-box', 'ss', $this->get_script_params() );
+	}
+
+	protected function get_script_params() : array {
 		$params = [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 			'site'            => [
-				'title'       => get_bloginfo( 'name' ),
-				'description' => get_bloginfo( 'description' ),
+				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
+				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
+			],
+			'title'           => [
+				'separator' => apply_filters( 'document_title_separator', '-' ),
+				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], $this->object_type ),
 			],
 		];
-		$params = array_merge( $params, $this->get_script_params() );
-		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
-	}
-
-	protected function get_script_params() {
-		return [];
+		return $params;
 	}
 
 	public function render() {
@@ -76,7 +79,7 @@ abstract class Base {
 					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 				<p class="description">
-					<?php esc_html_e( 'Recommended size: 1200x628 px.', 'slim-seo' ); ?>
+					<?php esc_html_e( 'Recommended size: 1200x630 px.', 'slim-seo' ); ?>
 				</p>
 			</div>
 		</div>
@@ -90,7 +93,7 @@ abstract class Base {
 					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 				<p class="description">
-					<?php esc_html_e( 'Recommended size: 800x418 px.', 'slim-seo' ); ?>
+					<?php esc_html_e( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ); ?>
 				</p>
 			</div>
 		</div>
@@ -106,7 +109,7 @@ abstract class Base {
 	}
 
 	public function save( $object_id ) {
-		if ( ! check_ajax_referer( 'save', 'ss_nonce', false )  || empty( $_POST ) ) {
+		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) || empty( $_POST ) ) {
 			return;
 		}
 		// @codingStandardsIgnoreLine.

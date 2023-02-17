@@ -1,6 +1,10 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use SlimSEO\MetaTags\Description;
+use SlimSEO\MetaTags\Robots;
+use SlimSEO\MetaTags\Title;
+
 class LifterLMS {
 
 	private $catalog_page_id;
@@ -14,46 +18,41 @@ class LifterLMS {
 			return;
 		}
 
-		add_filter( 'slim_seo_meta_description', [ $this, 'no_description' ] );
+		add_filter( 'slim_seo_meta_description', [ $this, 'strip_shortcodes' ] );
 
 		// Catalogs pages like Course and Membership ones: handle title/description/index.
 		add_filter( 'slim_seo_meta_title', [ $this, 'catalogs_title' ], 10, 2 );
 		add_filter( 'slim_seo_meta_description', [ $this, 'catalogs_description' ], 10, 2 );
-		add_filter( 'slim_seo_robots_index', [ $this, 'catalogs_index' ] );
+		add_filter( 'slim_seo_robots_index', [ $this, 'catalogs_index' ], 10, 2 );
 	}
 
-	public function no_description( $description ) {
-		/*
-		 * Strip all shortcodes for some LifterLMS pages since they do some logic like setting errors in the session.
-		 * Processing these shortcodes might break LifterLMS (like clearing notices in the session).
-		 *
-		 * @see https://github.com/gocodebox/lifterlms/issues/1181
-		 */
+	/**
+	 * Strip all shortcodes for some LifterLMS pages since they do some logic like setting errors in the session.
+	 * Processing these shortcodes might break LifterLMS (like clearing notices in the session).
+	 *
+	 * @see https://github.com/gocodebox/lifterlms/issues/1181
+	 */
+	public function strip_shortcodes( $description ) {
 		return $this->is_disabled_context() ? strip_shortcodes( $description ) : $description;
 	}
 
-	public function catalogs_title( $title, $title_obj ) {
+	public function catalogs_title( $title, Title $title_obj ) {
 		$catalog_page_id = $this->catalog_page_id();
 		return $catalog_page_id > 0 ? $title_obj->get_singular_value( $catalog_page_id ) : $title;
 	}
 
-	public function catalogs_description( $description, $description_obj ) {
+	public function catalogs_description( $description, Description $description_obj ) {
 		$catalog_page_id = $this->catalog_page_id();
 		return $catalog_page_id > 0 ? $description_obj->get_singular_value( $catalog_page_id ) : $description;
 	}
 
-	public function catalogs_index( $is_indexed ) {
+	public function catalogs_index( $indexed, Robots $robots ) {
 		$catalog_page_id = $this->catalog_page_id();
 		if ( $catalog_page_id < 1 ) {
-			return $is_indexed;
+			return $indexed;
 		}
 
-		$data = get_post_meta( $catalog_page_id, 'slim_seo', true );
-		if ( ! empty( $data['noindex'] ) ) {
-			return false;
-		}
-
-		return $is_indexed;
+		return $robots->get_singular_value( $catalog_page_id ) ? false : $indexed;
 	}
 
 	private function is_disabled_context() {

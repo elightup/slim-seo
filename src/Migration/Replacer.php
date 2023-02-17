@@ -80,6 +80,10 @@ class Replacer {
 		return null;
 	}
 
+	public function migrate_redirects() {
+		return null;
+	}
+
 	public function is_activated() {
 		return true;
 	}

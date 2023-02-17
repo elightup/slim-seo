@@ -2,14 +2,14 @@
 Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/pro/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
-Requires at least: 4.5
-Tested up to: 6.0.2
-Requires PHP: 5.6
-Stable tag: 3.15.2
+Requires at least: 5.7
+Tested up to: 6.1.1
+Requires PHP: 7.1
+Stable tag: 3.18.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A full-featured SEO plugin for WordPress that's lightweight, blazing fast with minimum configuration. No bloats, no ads and just works!
+A full-featured SEO plugin for WordPress that's lightweight, blazing fast with minimum configuration. No bloats and just works!
 
 == Description ==
 
@@ -55,21 +55,26 @@ Schema is a way that describes structured data for search engines. Based on the 
 
 Slim SEO automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-#### 5. [Auto Redirection](https://docs.wpslimseo.com/slim-seo/auto-redirection/)
+#### 5. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
 
-- Auto redirect attachment page to the attachment file URL.
-- Auto redirect author page to the homepage if the website has only one author or the author doesn't have any posts.
+- Setting up redirection rules easily
+- Auto redirect non-www to www and vice versa
+- 404 link monitoring
 
 #### 6. And many more
 
-- [Inserting code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
+- [Inserting Google Analytics, Facebook pixel or any code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
 - Auto prevent scraping content from [RSS feed](https://docs.wpslimseo.com/slim-seo/rss-feed/)
 - [Integrations](https://docs.wpslimseo.com/slim-seo/integrations/) with many plugins, including page builders
 - [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
+- Auto redirect if post slug changed
 
-## Premium plugins
+### Premium plugins
 
-- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your websites, which allow you to add schema to your custom post types via a visual and user-friendly UI. It supports all the schemas from Google with a wide range of properties. Slim SEO Schema can help you connect schema properties with dynamic data from posts, site or custom fields easily. It has a deep integration with [Meta Box](https://metabox.io), WooCommerce and other page builder plugins.
+- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your WordPress websites, which allow you to add schema to your custom post types via a visual and user-friendly UI.
+- [Slim SEO Link Manager](https://wpslimseo.com/slim-seo-link-manager/): build and monitor internal links in your WordPress websites in real-time with advanced & insightful reports.
+
+[View all](https://wpslimseo.com/products/)
 
 ### Who should use Slim SEO?
 
@@ -77,7 +82,13 @@ Everyone can use Slim SEO!
 
 However, Slim SEO is perfectly suitable for users who prefer simplicity or do not like the complicated options that other SEO plugins provide. It's also a good choice for users with little SEO knowledge and just want to use SEO plugins to automate their jobs.
 
-*If you like this plugin, you might also like our other products: [Meta Box](https://metabox.io) and [GretaThemes](https://gretathemes.com).*
+## You might also like
+
+If you love this plugin, please try our other great products:
+
+- [Meta Box](https://metabox.io): The best plugin for adding custom meta boxes and custom fields for WordPress
+- [GretaThemes](https://gretathemes.com): Beautiful and easy to use WordPress themes
+- [Auto Listings](https://wpautolistings.com): The best WordPress plugin for car dealership & car listings websites.
 
 == Installation ==
 
@@ -137,6 +148,67 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.18.0 - 2023-02-17 =
+
+[View blog post](https://wpslimseo.com/slim-seo-3-18/)
+
+- Increase min required PHP version to 7.1
+- Add rel nofollow, sponsored and ugc to links. Works for both classic and block editors.
+- Add integration for Ultimate Member
+- Improve integration for WooCommerce
+- If a page is set as the post type archive, get SEO settings from that page
+- Truncate the admin columns for meta and use tooltip to show it full and improve CSS for it
+- Fix redirect 404 not working if 404 logs is not enabled
+
+= 3.17.0 - 2023-02-06 =
+- Add integration with AffiliateWP
+- Improve compatible with Bricks & WP Grid Builder
+- Redirect to the settings page after activation
+
+= 3.16.6 - 2023-01-31 =
+- Make filters to meta tags (title, description, robots) work on the admin post/term list table
+- Don't add schedule or remove 404 log if not enabled
+- Only run schedule for delete logs automatically if 404 log table exists
+- Fix taxonomy quick edit not working
+
+= 3.16.5 - 2023-01-03 =
+- Set default OpenGraph tag og:image:alt to image title if alt text is missing
+- Remove the optional OpenGraph tag article:author for privacy and security reasons
+- Make default title value preview reflect the real meta title even after filtering by PHP
+- Fix site title & site description has escaped characters in the input placeholder
+- Fix wrong upgrade link
+
+= 3.16.4 - 2022-12-28 =
+- Set meta column widths to prevent layout broken
+- Add filter for text in feed
+- Deny request to post type/taxonomy sitemaps if they're filtered
+- Fix redirect with regex
+- Fix wrong 404 link in the report table
+- Fix cannot enter spaces in redirect notes
+
+= 3.16.3 - 2022-12-19 =
+- Auto redirect if post slug changed
+- Fix param type in meta title
+
+= 3.16.2 - 2022-12-13 =
+- Add integration for Auto Listings plugin
+- WooCommerce integration: Fix title for shop page. Now it takes from the SEO settings and fallback to the page title.
+- Updated recommended image size for Facebook and Twitter
+- Hide Code tab if disable "code" feature
+- Add Redirection to features list to enable/disable it if needed
+
+= 3.16.1 - 2022-11-29 =
+- Add migration redirects from other plugins
+- Improve compatibility with Genesis
+- Move auto redirection feature to Settings in Redirection tab
+- Fix translation for JS
+- Fix AIO SEO error when migration if the plugin is not activated
+- Fix admin columns not available for post types created late
+
+= 3.16.0 - 2022-11-10 =
+- Add redirection and 404 link monitoring. See [blog post](https://wpslimseo.com/slim-seo-3-16/).
+- Improve compatibility for Divi.
+
 = 3.15.2 - 2022-09-22 =
 - Use post excerpt if available for meta description before the builder content in case of using page builders
 - Fix JS warning in the settings page when migration tool is not available
@@ -185,7 +257,7 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 = 3.12.0 - 2022-01-07 =
 - Add Divi compatibility. Props Jay (@grandeljay)
-- Disable HTTPS notificaition on local environments
+- Disable HTTPS notification on local environments
 - Improve the code of the settings page
 
 = 3.11.1 - 2021-11-16 =
@@ -327,7 +399,7 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 = 3.2.3 - 2020-04-20 =
 - Remove canonical link when a page is not indexed
 - Fix "Hide from search result pages" not working for static blog & WooCommerce shop pages.
-- Fix wrong textdomain
+- Fix wrong text domain
 
 = 3.2.2 - 2020-02-25 =
 - Fix loopback request failed in Site Health

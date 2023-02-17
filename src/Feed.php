@@ -10,7 +10,9 @@ class Feed {
 	}
 
 	public function add_link( $content ) {
-		$content .= "\n" . '<p><a href="' . esc_url( get_permalink() ) . '">' . esc_html__( 'Source', 'slim-seo' ) . '</a></p>';
+		$text     = __( 'Source', 'slim-seo' );
+		$text     = apply_filters( 'slim_seo_feed_text', $text );
+		$content .= "\n" . '<p><a href="' . esc_url( get_permalink() ) . '">' . esc_html( $text ) . '</a></p>';
 		return $content;
 	}
 }

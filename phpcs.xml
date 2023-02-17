@@ -59,13 +59,18 @@
 		<exclude name="Universal.Operators.DisallowShortTernary.Found" />
 		<exclude name="WordPress.Classes.ClassInstantiation.MissingParenthesis" />
 		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+		<exclude name="PSR12.Classes.ClassInstantiation.MissingParentheses" />
 
 		<!-- Optional -->
 		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
 		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
+		<exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery" />
+		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching" />
 	</rule>
+
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax" />
 
 	<!-- Verify that the text_domain is set to the desired text-domain.
 		 Multiple valid text domains can be provided as a comma-delimited list. -->
@@ -78,7 +83,7 @@
 	<!-- Set the minimum supported WP version. This is used by several sniffs.
 		 The minimum version set here should be in line with the minimum WP version
 		 as set in the "Requires at least" tag in the readme.txt file. -->
-	<config name="minimum_supported_wp_version" value="4.5"/>
+	<config name="minimum_supported_wp_version" value="5.9"/>
 
 	<!-- Verify that everything in the global namespace is prefixed with a plugin specific prefix.
 		 Multiple valid prefixes can be provided as a comma-delimited list. -->
@@ -93,6 +98,6 @@
 	USE THE PHPCompatibility RULESET
 	#############################################################################
 	-->
-	<config name="testVersion" value="5.6-"/>
+	<config name="testVersion" value="7.1-"/>
 	<rule ref="PHPCompatibilityWP"/>
 </ruleset>

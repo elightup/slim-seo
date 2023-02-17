@@ -1,0 +1,185 @@
+.ss-filters {
+	margin: 10px 0px;
+
+	.ss-bulk-actions,
+	.ss-filter,
+	.button-secondary {
+		margin-left: 5px;
+	}
+
+	.ss-search {
+		float: right;
+	}
+}
+
+.ss-table {
+	width: 100%;
+	border-collapse: collapse;
+
+	thead,
+	tfoot {
+		color: var(--color-gray);
+	}
+
+	tr {
+		border-bottom: var(--border);
+	}
+
+	tfoot tr {
+		border-bottom: none;
+	}
+
+	th,
+	td {
+		padding: 8px;
+		vertical-align: top;
+	}
+
+	th {
+		font-weight: 400;
+		text-align: left;
+
+		&.sortable,
+		&.sorted {
+			padding: 0;
+		}
+	}
+
+	a {
+		text-decoration: none;
+
+		.ss-tooltip {
+			float: right;
+		}
+	}
+
+	.ss-log__hit {
+		width: 80px;
+	}
+
+	.ss-log__created_at,
+	.ss-log__updated_at {
+		width: 140px;
+	}
+}
+
+.ss-redirect__checkbox {
+	width: 20px;
+}
+
+.ss-redirect__type,
+.ss-redirect__enable {
+	width: 60px;
+}
+
+.ss-redirect__note {
+	width: 20%;
+}
+
+.ss-table .ss-redirect__actions {
+	text-align: right;
+}
+
+.ss-redirect__actions,
+.ss-log__actions {
+	width: 60px;
+	text-align: right;
+
+	a {
+		color: var(--color-gray);
+		padding: 4px;
+		border-radius: 4px;
+		display: inline-block;
+		transition: none;
+
+		&:hover {
+			color: inherit;
+			background: var(--color-lighter);
+
+			.dashicons-trash {
+				color: var(--color-red);
+			}
+		}
+	}
+
+	.dashicons {
+		font-size: 16px;
+		width: 18px;
+		height: 18px;
+	}
+}
+
+.ss-redirect__url {
+	small {
+		display: block;
+		margin-top: 4px;
+	}
+}
+
+.ss-paginate {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+
+	.disabled {
+		display: none;
+	}
+
+	.selected a {
+		color: inherit;
+	}
+
+	a {
+		cursor: pointer;
+	}
+}
+
+.ss-loader {
+	border: 3px solid #fff;
+	border-top: 3px solid #3498db;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	animation: ss-spin 2s linear infinite;
+	margin: 20px auto;
+}
+
+.ss-modal {
+	.components-modal__frame {
+		max-height: 520px!important;
+		width: 600px;
+	}
+
+	label {
+		font-weight: bold;
+	}
+}
+
+.ss-warning-message {
+	color: var(--color-red);
+}
+
+#ss-type {
+	width: 100%;
+}
+
+#ss-condition {
+	width: 30%;
+}
+
+#ss-from {
+	width: 65%;
+}
+
+.ss-sub-setting {
+	padding-left: 50px;
+
+	th {
+		font-weight: normal;
+	}
+}
+
+@keyframes ss-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

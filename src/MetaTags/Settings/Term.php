@@ -6,7 +6,7 @@ class Term extends Base {
 		$this->object_type = 'term';
 		$this->title       = __( 'Search Engine Optimization', 'slim-seo' );
 
-		// Prority 99 makes sure all taxonomies are registered.
+		// Priority 99 makes sure all taxonomies are registered.
 		add_action( 'init', [ $this, 'register_hooks' ], 99 );
 	}
 

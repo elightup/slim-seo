@@ -17,10 +17,14 @@ class Bricks {
 
 	public function description( $description, WP_Post $post ) {
 		$data = \Bricks\Helpers::get_bricks_data( $post->ID );
-		if ( $data ) {
-			$description = \Bricks\Frontend::render_data( $data, $post->ID, 'content', true );
+		if ( empty( $data ) ) {
+			return $description;
 		}
 
-		return $description;
+		$content = array_map( function( $element ) {
+			return $element['settings']['text'] ?? '';
+		}, $data );
+
+		return implode( ' ', $content );
 	}
 }

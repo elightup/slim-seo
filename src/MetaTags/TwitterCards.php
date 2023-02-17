@@ -2,7 +2,11 @@
 namespace SlimSEO\MetaTags;
 
 class TwitterCards {
-	use Context;
+	private $image_obj;
+
+	public function __construct() {
+		$this->image_obj = new Image( 'twitter_image' );
+	}
 
 	public function setup() {
 		add_action( 'wp_head', [ $this, 'output' ] );
@@ -16,12 +20,11 @@ class TwitterCards {
 	public function output() {
 		echo '<meta name="twitter:card" content="summary_large_image">', "\n";
 
-		$default_image = $this->get_default_image();
-		$image_obj     = new Image( 'twitter_image' );
-		$image         = $image_obj->get_value() ?: $default_image;
-		$image         = apply_filters( 'slim_seo_twitter_card_image', $image );
+		$image = $this->image_obj->get_value() ?: $this->get_default_image();
+		$image = $image['src'] ?? '';
+		$image = apply_filters( 'slim_seo_twitter_card_image', $image );
 		if ( ! empty( $image ) ) {
-			echo '<meta name="twitter:image" content="' . esc_url( $image[0] ) . '">', "\n";
+			echo '<meta name="twitter:image" content="' . esc_url( $image ) . '">', "\n";
 		}
 
 		$site = $this->get_site();
@@ -31,17 +34,13 @@ class TwitterCards {
 		}
 	}
 
-	private function get_default_image() {
+	private function get_default_image() : array {
 		$data = get_option( 'slim_seo' );
-		if ( empty( $data['default_twitter_image'] ) ) {
-			return null;
-		}
-		$image_id = attachment_url_to_postid( $data['default_twitter_image'] );
-		return $image_id ? wp_get_attachment_image_src( $image_id, 'full' ) : [ $data['default_twitter_image'] ];
+		return empty( $data['default_twitter_image'] ) ? [] : $this->image_obj->get_data_from_url( $data['default_twitter_image'] );
 	}
 
-	private function get_site() {
-		$data = get_option( 'slim_seo' );
-		return empty( $data['twitter_site'] ) ? null : $data['twitter_site'];
+	private function get_site() : string {
+		$data = get_option( 'slim_seo', [] );
+		return $data['twitter_site'] ?? '';
 	}
 }

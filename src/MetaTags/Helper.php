@@ -15,34 +15,6 @@ class Helper {
 			'edd_invoices',             // EDD Invoices.
 			'velocity',                 // Velocity.
 			'fluentform',               // Fluent Forms
-
-			'rwmb_meta',                // Meta Box.
-			'mb_frontend_form',         // MB Frontend Submission.
-			'mb_frontend_dashboard',
-			'mb_user_profile_register', // MB User Profile.
-			'mb_user_profile_login',
-			'mb_user_profile_info',
-			'mb_relationships',         // MB Relationships.
-			'mbfp-button',              // MB Favorite Posts.
-
-			/**
-			 * Divi
-			 *
-			 * @link https://www.elegantthemes.com/gallery/divi/
-			 */
-			'et_pb_column',
-			'et_pb_fullwidth_section',
-			'et_pb_row',
-			'et_pb_section',
-
-			'et_pb_button',
-			'et_pb_code',
-			'et_pb_fullwidth_code',
-			'et_pb_gallery',
-			'et_pb_image',
-			'et_pb_slide',
-			'et_pb_slider',
-			'et_pb_text',
 		] );
 
 		$shortcodes_bak = $shortcode_tags;
