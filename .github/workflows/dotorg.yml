@@ -12,7 +12,7 @@ jobs:
     - name: Install PHP dependencies
       run: composer install
     - name: Install NPM dependencies
-      run: npm install
+      run: npm install --force
     - name: Build Javascript
       run: npm run build
     - name: WordPress Plugin Deploy
