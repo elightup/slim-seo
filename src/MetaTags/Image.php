@@ -15,8 +15,8 @@ class Image {
 		return isset( $data[ "home_{$this->meta_key}" ] ) ? $this->get_data_from_url( $data[ "home_{$this->meta_key}" ] ) : [];
 	}
 
-	private function get_singular_value() : array {
-		$data = get_post_meta( get_queried_object_id(), 'slim_seo', true );
+	private function get_singular_value(): array {
+		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
 		if ( isset( $data[ $this->meta_key ] ) ) {
 			return $this->get_data_from_url( $data[ $this->meta_key ] );
 		}

@@ -32,8 +32,8 @@ class Title {
 	 * Make public to allow access from other class.
 	 * @see AdminColumns/Post.php.
 	 */
-	public function get_singular_value( $post_id = 0 ) : string {
-		$post_id = $post_id ?: get_queried_object_id();
+	public function get_singular_value( $post_id = 0 ): string {
+		$post_id = $post_id ?: $this->get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		return $data['title'] ?? '';
 	}
