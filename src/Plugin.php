@@ -99,6 +99,6 @@ class Plugin {
 	 * Developers: use this function to disable the services you don't want.
 	 */
 	public function disable( $id ) {
-		unset( $services[ $id ] );
+		unset( $this->services[ $id ] );
 	}
 }
