@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.1.1
 Requires PHP: 7.1
-Stable tag: 3.18.0
+Stable tag: 3.18.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -148,6 +148,13 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.18.1 - 2023-02-22 =
+
+- Make plugin name clear for translators (#76). Credit Alex Lion (@alexclassroom).
+- Fix PHP warning for the Google Web Stories integration
+- Fix wrong reference to plugin's service list
+- Fix breadcrumbs on pages with other queries
+
 = 3.18.0 - 2023-02-17 =
 
 [View blog post](https://wpslimseo.com/slim-seo-3-18/)
@@ -206,7 +213,10 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 - Fix admin columns not available for post types created late
 
 = 3.16.0 - 2022-11-10 =
-- Add redirection and 404 link monitoring. See [blog post](https://wpslimseo.com/slim-seo-3-16/).
+
+[View blog post](https://wpslimseo.com/slim-seo-3-16/)
+
+- Add redirection and 404 link monitoring.
 - Improve compatibility for Divi.
 
 = 3.15.2 - 2022-09-22 =
