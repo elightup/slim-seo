@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO;
 
+use WP_Term;
+
 class Breadcrumbs {
 	private $args;
 	private $links     = [];
@@ -19,11 +21,11 @@ class Breadcrumbs {
 		];
 	}
 
-	public function setup() {
+	public function setup(): void {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
 	}
 
-	public function render_shortcode( $atts ) {
+	public function render_shortcode( $atts ): string {
 		$this->args = wp_parse_args( $atts, $this->args );
 		$this->parse();
 
@@ -53,11 +55,11 @@ class Breadcrumbs {
 		return $output;
 	}
 
-	public function get_links() {
+	public function get_links(): array {
 		return apply_filters( 'slim_seo_breadcrumbs_links', $this->links );
 	}
 
-	public function parse() {
+	public function parse(): void {
 		if ( $this->is_parsed ) {
 			return;
 		}
@@ -79,7 +81,7 @@ class Breadcrumbs {
 			$term     = get_queried_object();
 			$taxonomy = get_taxonomy( $term->taxonomy );
 			if ( ! empty( $taxonomy->object_type ) && 1 === count( $taxonomy->object_type ) ) {
-				$this->add_post_type_archive_link();
+				$this->add_post_type_archive_link( reset( $taxonomy->object_type ) );
 			}
 
 			$this->add_term_ancestors( $term );
@@ -97,14 +99,15 @@ class Breadcrumbs {
 		$this->is_parsed = true;
 	}
 
-	private function add_singular() {
+	private function add_singular(): void {
+		$post          = get_queried_object();
 		$this->current = single_post_title( '', false );
 
-		$this->add_post_type_archive_link();
+		$this->add_post_type_archive_link( $post->post_type );
 
 		// If post type is hierarchical (like page), add ancestors.
-		if ( is_post_type_hierarchical( get_post_type() ) ) {
-			$ancestors = get_post_ancestors( null );
+		if ( is_post_type_hierarchical( $post->post_type ) ) {
+			$ancestors = get_post_ancestors( $post );
 			$ancestors = array_reverse( $ancestors );
 			foreach ( $ancestors as $ancestor ) {
 				$this->add_link( get_permalink( $ancestor ), get_the_title( $ancestor ) );
@@ -112,7 +115,7 @@ class Breadcrumbs {
 		}
 
 		// Add terms.
-		$terms = get_the_terms( get_the_ID(), $this->args['taxonomy'] );
+		$terms = get_the_terms( $post, $this->args['taxonomy'] );
 		if ( ! is_array( $terms ) ) {
 			return;
 		}
@@ -123,9 +126,7 @@ class Breadcrumbs {
 		$this->add_link( get_term_link( $term ), $term->name );
 	}
 
-	private function add_post_type_archive_link() {
-		$post_type = get_post_type();
-
+	private function add_post_type_archive_link( string $post_type ): void {
 		// For posts, check if there's a static page for Blog archive.
 		if ( 'post' === $post_type ) {
 			$blog_page = get_option( 'page_for_posts' );
@@ -142,7 +143,7 @@ class Breadcrumbs {
 		}
 	}
 
-	private function add_term_ancestors( $term ) {
+	private function add_term_ancestors( WP_Term $term ): void {
 		$ancestors = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
 		$ancestors = array_reverse( $ancestors );
 		foreach ( $ancestors as $ancestor_id ) {
@@ -151,30 +152,29 @@ class Breadcrumbs {
 		}
 	}
 
-	private function add_date_links() {
-		$time        = strtotime( get_the_date( 'c' ) );
-		$year        = get_the_date( 'Y' );
-		$year_label  = date_i18n( 'Y', $time ); // Use date_i18n to show date in localized format.
-		$month       = get_the_date( 'm' );
-		$month_label = date_i18n( 'F', $time );
-
+	private function add_date_links(): void {
+		$year = get_query_var( 'year' );
 		if ( is_year() ) {
-			$this->current = $year_label;
+			$this->current = $year;
 			return;
 		}
 
+		global $wp_locale;
+		$month       = get_query_var( 'monthnum' );
+		$month_label = $month ? $wp_locale->get_month( $month ) : '';
 		if ( is_month() ) {
-			$this->add_link( get_year_link( $year ), $year_label );
+			$this->add_link( get_year_link( $year ), $year );
 			$this->current = $month_label;
 			return;
 		}
 
-		$this->add_link( get_year_link( $year ), $year_label );
+		$day = get_query_var( 'day' );
+		$this->add_link( get_year_link( $year ), $year );
 		$this->add_link( get_month_link( $year, $month ), $month_label );
-		$this->current = date_i18n( 'd', $time );
+		$this->current = zeroise( $day, 2 );
 	}
 
-	private function add_link( $url, $text ) {
+	private function add_link( string $url, string $text ): void {
 		$this->links[] = [
 			'url'  => $url,
 			'text' => $text,
