@@ -148,7 +148,9 @@ class Breadcrumbs {
 		$ancestors = array_reverse( $ancestors );
 		foreach ( $ancestors as $ancestor_id ) {
 			$ancestor = get_term( $ancestor_id, $term->taxonomy );
-			$this->add_link( get_term_link( $ancestor ), $ancestor->name );
+			if ( $ancestor instanceof WP_Term ) {
+				$this->add_link( get_term_link( $ancestor ), $ancestor->name );
+			}
 		}
 	}
 
