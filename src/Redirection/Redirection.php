@@ -46,7 +46,7 @@ class Redirection {
 
 			switch ( $redirect['condition'] ) {
 				case 'regex':
-					$regex = "/{$from}/i";
+					$regex = '/' . preg_quote( $from, '/' ) . '/i';
 
 					if ( preg_match( $regex, $current_url ) ) {
 						$to              = preg_replace( $regex, $to, $current_url );
@@ -210,7 +210,7 @@ class Redirection {
 		$request_url = strtolower( $request_url );
 		$post_id     = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT post_id 
+				"SELECT post_id
 				FROM $wpdb->postmeta
 				WHERE meta_key = '_ss_old_permalink' AND meta_value = %s",
 				$request_url
