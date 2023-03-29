@@ -4,7 +4,6 @@ namespace SlimSEO\MetaTags\AdminColumns;
 use SlimSEO\MetaTags\Settings\Base as Settings;
 use SlimSEO\MetaTags\Title;
 use SlimSEO\MetaTags\Description;
-use SlimSEO\MetaTags\CanonicalUrl;
 use SlimSEO\MetaTags\Robots;
 
 abstract class Base {
@@ -15,11 +14,10 @@ abstract class Base {
 	protected $object_type;
 	protected $types;
 
-	public function __construct( Settings $settings, Title $title, Description $description, CanonicalUrl $canonical Robots $robots ) {
+	public function __construct( Settings $settings, Title $title, Description $description, Robots $robots ) {
 		$this->settings    = $settings;
 		$this->title       = $title;
 		$this->description = $description;
-		$this->canonical   = $canonical;
 		$this->robots      = $robots;
 	}
 
@@ -83,12 +81,6 @@ abstract class Base {
 						<textarea name="slim_seo[description]" value=""></textarea>
 					</span>
 				</label>
-				<label>
-					<span class="title"><?php esc_html_e( 'Canonical url', 'slim-seo' ) ?></span>
-					<span class="input-text-wrap">
-						<input type="text" name="slim_seo[canonical]" value="">
-					</span>
-				</label>
 				<div class="inline-edit-group wp-clearfix">
 					<label class="alignleft">
 						<input type="checkbox" name="slim_seo[noindex]" value="1">
@@ -140,12 +132,12 @@ abstract class Base {
 			'canonical'   => '',
 			'noindex'     => 0,
 		], $data );
+
 		/**
 		 * Make the meta filters work in the back end.
 		 */
 		$data['title']       = apply_filters( 'slim_seo_meta_title', $data['title'], $this->title, $id );
 		$data['description'] = apply_filters( 'slim_seo_meta_description', $data['description'], $this->description, $id );
-		$data['canonical']   = apply_filters( 'slim_seo_canonical_url', $data['canonical'], $this->canonical, $id );
 		$data['noindex']     = ! apply_filters( 'slim_seo_robots_index', ! $data['noindex'], $this->robots, $id );
 
 		wp_send_json_success( $data );

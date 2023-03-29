@@ -100,7 +100,7 @@ abstract class Base {
 		</div>
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-title"><?php esc_html_e( 'Canonical url', 'slim-seo' ); ?></label>
+				<label for="ss-title"><?php esc_html_e( 'Canonical URL', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
 				<input type="text" id="ss-title" name="slim_seo[canonical]" value="<?= esc_attr( $data['canonical'] ); ?>">

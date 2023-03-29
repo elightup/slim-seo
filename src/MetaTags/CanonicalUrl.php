@@ -30,15 +30,11 @@ class CanonicalUrl {
 		return home_url( '/' );
 	}
 
-	private function get_singular_value( $post_id = null ) {
-		$post_id = $post_id ?: $this->get_queried_object_id();
-		$post    = get_post( $post_id );
-		if ( ! $post ) {
-			return '';
-		}
+	private function get_singular_value() {
+		$post_id = $this->get_queried_object_id();
 
 		$data = get_post_meta( $post_id, 'slim_seo', true );
-		if ( ! empty( $data['canonical'] ) && wp_http_validate_url( $data['canonical'] ) ) {
+		if ( ! empty( $data['canonical'] ) ) {
 			return $data['canonical'];
 		}
 

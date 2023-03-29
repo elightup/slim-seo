@@ -39,10 +39,10 @@
 				if ( !success ) {
 					return;
 				}
+
 				let row = document.querySelector( `#edit-${ id }` );
 				row.querySelector( 'input[name="slim_seo[title]"]' ).value = data.title;
 				row.querySelector( 'textarea[name="slim_seo[description]"]' ).value = data.description;
-				row.querySelector( 'input[name="slim_seo[canonical]"]' ).value = data.canonical;
 				row.querySelector( 'input[name="slim_seo[noindex]"]' ).checked = !!data.noindex;
 
 			} );

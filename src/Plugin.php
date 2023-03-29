@@ -39,14 +39,12 @@ class Plugin {
 				$services['settings_post'],
 				$services['meta_title'],
 				$services['meta_description'],
-				$services['canonical_url'],
 				$services['meta_robots']
 			);
 			$services['admin_columns_term'] = new MetaTags\AdminColumns\Term(
 				$services['settings_term'],
 				$services['meta_title'],
 				$services['meta_description'],
-				$services['canonical_url'],
 				$services['meta_robots']
 			);
 			return;
