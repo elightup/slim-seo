@@ -5,15 +5,13 @@ class CanonicalUrl {
 	use Context;
 
 	public function setup() {
+		remove_action( 'wp_head', 'rel_canonical' );
 		add_action( 'wp_head', [ $this, 'output' ] );
 	}
 
 	public function output() {
-		// WordPress already handles canonical URL for singular pages.
-		if ( is_singular() ) {
-			return;
-		}
 		$url = $this->get_url();
+
 		if ( $url ) {
 			echo '<link rel="canonical" href="', esc_url( $url ), '" />', "\n";
 		}
@@ -23,6 +21,7 @@ class CanonicalUrl {
 		$url = $this->get_value();
 		$url = $this->add_pagination( $url );
 		$url = apply_filters( 'slim_seo_canonical_url', $url, $this );
+		$url = $this->normalize( $url );
 
 		return $url;
 	}
@@ -31,8 +30,23 @@ class CanonicalUrl {
 		return home_url( '/' );
 	}
 
-	private function get_singular_value() {
+	private function get_singular_value( $post_id = null ) {
+		$post_id = $post_id ?: $this->get_queried_object_id();
+		$post    = get_post( $post_id );
+		if ( ! $post ) {
+			return '';
+		}
+
+		$data = get_post_meta( $post_id, 'slim_seo', true );
+		if ( ! empty( $data['canonical'] ) ) {
+			return $data['canonical'];
+		}
+
 		return wp_get_canonical_url( $this->get_queried_object() );
+	}
+
+	private function normalize( $url ) {
+		return Helper::normalize( $url );
 	}
 
 	private function get_term_value() {

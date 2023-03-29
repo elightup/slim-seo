@@ -81,6 +81,12 @@ abstract class Base {
 						<textarea name="slim_seo[description]" value=""></textarea>
 					</span>
 				</label>
+				<label>
+					<span class="title"><?php esc_html_e( 'Canonical url', 'slim-seo' ) ?></span>
+					<span class="input-text-wrap">
+						<input type="text" name="slim_seo[canonical]" value="">
+					</span>
+				</label>
 				<div class="inline-edit-group wp-clearfix">
 					<label class="alignleft">
 						<input type="checkbox" name="slim_seo[noindex]" value="1">

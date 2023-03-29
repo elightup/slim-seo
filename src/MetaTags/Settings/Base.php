@@ -7,9 +7,10 @@ abstract class Base {
 	protected $defaults = [
 		'title'          => '',
 		'description'    => '',
-		'noindex'        => 0,
 		'facebook_image' => '',
 		'twitter_image'  => '',
+		'canonical'      => '',
+		'noindex'        => 0,
 	];
 
 	public function enqueue() {
@@ -95,6 +96,14 @@ abstract class Base {
 				<p class="description">
 					<?php esc_html_e( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ); ?>
 				</p>
+			</div>
+		</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-title"><?php esc_html_e( 'Canonical url', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<input type="text" id="ss-title" name="slim_seo[canonical]" value="<?= esc_attr( $data['canonical'] ); ?>">
 			</div>
 		</div>
 		<div class="ss-field ss-field-checkbox">
