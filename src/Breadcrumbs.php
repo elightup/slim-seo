@@ -138,6 +138,10 @@ class Breadcrumbs {
 
 		$post_type_object = get_post_type_object( $post_type );
 		$link             = get_post_type_archive_link( $post_type );
+		if ( 'product' === $post_type ) {
+			$this->add_link( $link, woocommerce_page_title() ?: get_bloginfo( 'name' ) ?: __( 'Shop', 'slim-seo' ) );
+			return;
+		}
 		if ( $link ) {
 			$this->add_link( $link, $post_type_object->labels->name );
 		}
