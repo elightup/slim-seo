@@ -38,7 +38,7 @@ class CanonicalUrl {
 		}
 
 		$data = get_post_meta( $post_id, 'slim_seo', true );
-		if ( ! empty( $data['canonical'] && wp_http_validate_url( $data['canonical'] ) ) ) {
+		if ( ! empty( $data['canonical'] ) && wp_http_validate_url( $data['canonical'] ) ) {
 			return $data['canonical'];
 		}
 
