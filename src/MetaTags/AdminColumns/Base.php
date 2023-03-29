@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags\AdminColumns;
 use SlimSEO\MetaTags\Settings\Base as Settings;
 use SlimSEO\MetaTags\Title;
 use SlimSEO\MetaTags\Description;
+use SlimSEO\MetaTags\CanonicalUrl;
 use SlimSEO\MetaTags\Robots;
 
 abstract class Base {
@@ -14,10 +15,11 @@ abstract class Base {
 	protected $object_type;
 	protected $types;
 
-	public function __construct( Settings $settings, Title $title, Description $description, Robots $robots ) {
+	public function __construct( Settings $settings, Title $title, Description $description, CanonicalUrl $canonical Robots $robots ) {
 		$this->settings    = $settings;
 		$this->title       = $title;
 		$this->description = $description;
+		$this->canonical   = $canonical;
 		$this->robots      = $robots;
 	}
 
@@ -135,14 +137,15 @@ abstract class Base {
 		$data = array_merge( [
 			'title'       => '',
 			'description' => '',
+			'canonical'   => '',
 			'noindex'     => 0,
 		], $data );
-
 		/**
 		 * Make the meta filters work in the back end.
 		 */
 		$data['title']       = apply_filters( 'slim_seo_meta_title', $data['title'], $this->title, $id );
 		$data['description'] = apply_filters( 'slim_seo_meta_description', $data['description'], $this->description, $id );
+		$data['canonical']   = apply_filters( 'slim_seo_canonical_url', $data['canonical'], $this->canonical, $id );
 		$data['noindex']     = ! apply_filters( 'slim_seo_robots_index', ! $data['noindex'], $this->robots, $id );
 
 		wp_send_json_success( $data );
