@@ -11,7 +11,6 @@ class CanonicalUrl {
 
 	public function output() {
 		$url = $this->get_url();
-
 		if ( $url ) {
 			echo '<link rel="canonical" href="', esc_url( $url ), '" />', "\n";
 		}
@@ -21,7 +20,6 @@ class CanonicalUrl {
 		$url = $this->get_value();
 		$url = $this->add_pagination( $url );
 		$url = apply_filters( 'slim_seo_canonical_url', $url, $this );
-		$url = $this->normalize( $url );
 
 		return $url;
 	}
@@ -31,18 +29,8 @@ class CanonicalUrl {
 	}
 
 	private function get_singular_value() {
-		$post_id = $this->get_queried_object_id();
-
-		$data = get_post_meta( $post_id, 'slim_seo', true );
-		if ( ! empty( $data['canonical'] ) ) {
-			return $data['canonical'];
-		}
-
-		return wp_get_canonical_url( $this->get_queried_object() );
-	}
-
-	private function normalize( $url ) {
-		return Helper::normalize( $url );
+		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
+		return $data['canonical'] ?? wp_get_canonical_url( $this->get_queried_object() );
 	}
 
 	private function get_term_value() {

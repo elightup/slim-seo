@@ -129,7 +129,6 @@ abstract class Base {
 		$data = array_merge( [
 			'title'       => '',
 			'description' => '',
-			'canonical'   => '',
 			'noindex'     => 0,
 		], $data );
 
