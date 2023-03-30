@@ -35,19 +35,15 @@ class CanonicalUrl {
 
 	private function get_term_value(): string {
 		$data = get_term_meta( $this->get_queried_object_id(), 'slim_seo', true );
-		if ( ! empty( $data['canonical'] ) ) {
-			return $data['canonical'];
-		}
-		$url = get_term_link( get_queried_object() );
-		return is_string( $url ) ? $url : '';
+		return $data['canonical'] ?? get_term_link( $this->get_queried_object() );
 	}
 
 	private function get_post_type_archive_value(): string {
-		return (string) get_post_type_archive_link( get_queried_object()->name );
+		return (string) get_post_type_archive_link( $this->get_queried_object()->name );
 	}
 
 	private function get_author_value(): string {
-		return get_author_posts_url( get_queried_object_id() );
+		return get_author_posts_url( $this->get_queried_object_id() );
 	}
 
 	private function add_pagination( string $url ): string {
