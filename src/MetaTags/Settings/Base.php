@@ -7,9 +7,10 @@ abstract class Base {
 	protected $defaults = [
 		'title'          => '',
 		'description'    => '',
-		'noindex'        => 0,
 		'facebook_image' => '',
 		'twitter_image'  => '',
+		'canonical'      => '',
+		'noindex'        => 0,
 	];
 
 	public function enqueue() {
@@ -97,6 +98,14 @@ abstract class Base {
 				</p>
 			</div>
 		</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-title"><?php esc_html_e( 'Canonical URL', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<input type="text" id="ss-title" name="slim_seo[canonical]" value="<?= esc_attr( $data['canonical'] ); ?>">
+			</div>
+		</div>
 		<div class="ss-field ss-field-checkbox">
 			<div class="ss-label">
 				<label for="ss-noindex"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
@@ -128,9 +137,10 @@ abstract class Base {
 
 		$data['title']          = sanitize_text_field( $data['title'] );
 		$data['description']    = sanitize_text_field( $data['description'] );
-		$data['noindex']        = $data['noindex'] ? 1 : 0;
 		$data['facebook_image'] = esc_url_raw( $data['facebook_image'] );
 		$data['twitter_image']  = esc_url_raw( $data['twitter_image'] );
+		$data['canonical']      = esc_url_raw( $data['canonical'] );
+		$data['noindex']        = $data['noindex'] ? 1 : 0;
 
 		return array_filter( $data );
 	}
