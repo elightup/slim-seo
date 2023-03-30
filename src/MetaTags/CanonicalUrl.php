@@ -34,6 +34,10 @@ class CanonicalUrl {
 	}
 
 	private function get_term_value(): string {
+		$data = get_term_meta( $this->get_queried_object_id(), 'slim_seo', true );
+		if ( ! empty( $data['canonical'] ) ) {
+			return $data['canonical'];
+		}
 		$url = get_term_link( get_queried_object() );
 		return is_string( $url ) ? $url : '';
 	}
