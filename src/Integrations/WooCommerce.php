@@ -13,6 +13,7 @@ class WooCommerce {
 			return;
 		}
 
+		add_filter( 'slim_seo_breadcrumbs_args', [ $this, 'change_breadcrumbs_taxonomy' ] );
 		add_filter( 'slim_seo_meta_description', [ $this, 'strip_shortcodes' ] );
 
 		if ( ! is_shop() ) {
@@ -22,6 +23,11 @@ class WooCommerce {
 		$this->shop_page_id = (int) wc_get_page_id( 'shop' );
 
 		add_filter( 'post_type_archive_title', [ $this, 'set_page_title_as_archive_title' ] );
+	}
+
+	public function change_breadcrumbs_taxonomy( array $args ): array {
+		$args['taxonomy'] = 'product_cat';
+		return $args;
 	}
 
 	/**

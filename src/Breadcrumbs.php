@@ -64,6 +64,9 @@ class Breadcrumbs {
 			return;
 		}
 
+		// Allow developers to change the breadcrumbs args before parsing in real-time.
+		$this->args = apply_filters( 'slim_seo_breadcrumbs_args', $this->args );
+
 		if ( is_front_page() ) {
 			return;
 		}
