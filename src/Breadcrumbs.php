@@ -138,8 +138,19 @@ class Breadcrumbs {
 
 		$post_type_object = get_post_type_object( $post_type );
 		$link             = get_post_type_archive_link( $post_type );
+		$text             = $post_type_object->labels->name;
+
+		// If a page is set as the post type archive (like WooCommerce shop), then get title from that page.
+		// Otherwise get from the post type archive settings.
+		if ( is_string( $post_type_object->has_archive ) ) {
+			$page = get_page_by_path( $post_type_object->has_archive );
+			if ( $page ) {
+				$text = get_the_title( $page );
+			}
+		}
+
 		if ( $link ) {
-			$this->add_link( $link, $post_type_object->labels->name );
+			$this->add_link( $link, $text );
 		}
 	}
 
