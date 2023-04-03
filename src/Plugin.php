@@ -93,6 +93,14 @@ class Plugin {
 				$service->setup();
 			}
 		}
+
+		if ( is_admin() ) {
+			new Dashboard( 'https://wpslimseo.com/feed/', 'https://docs.wpslimseo.com/', [
+				'title'           => 'Slim Seo',
+				'dismiss_tooltip' => esc_html__( 'Dismiss all Slim Seo news', 'slim-seo' ),
+				'dismiss_confirm' => esc_html__( 'Are you sure to dismiss all Slim Seo news?', 'slim-seo' ),
+			] );
+		}
 	}
 
 	/**
