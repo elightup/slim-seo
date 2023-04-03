@@ -23,12 +23,9 @@ class RelLinks {
 		}
 	}
 
-	private function get_links() {
+	private function get_links(): array {
 		$url   = $this->get_value();
-		$links = [
-			'prev' => null,
-			'next' => null,
-		];
+		$links = [];
 
 		global $wp_query;
 		$paged = max( 1, get_query_var( 'paged' ) );
@@ -42,32 +39,31 @@ class RelLinks {
 		return $links;
 	}
 
-	private function build_link( $url, $paged ) {
+	private function build_link( string $url, int $paged ): string {
 		if ( get_option( 'permalink_structure' ) ) {
-			$url = trailingslashit( $url ) . 'page/' . user_trailingslashit( $paged, 'paged' );
-		} else {
-			$url = add_query_arg( 'paged', $paged, $url );
+			return $paged === 1 ? $url : trailingslashit( $url ) . 'page/' . user_trailingslashit( $paged, 'paged' );
 		}
-		return $url;
+
+		return add_query_arg( 'paged', $paged, $url );
 	}
 
-	private function get_home_value() {
+	private function get_home_value(): string {
 		return home_url( '/' );
 	}
 
-	private function get_singular_value() {
+	private function get_singular_value(): string {
 		return get_permalink( $this->get_queried_object() );
 	}
 
-	private function get_term_value() {
-		return get_term_link( get_queried_object() );
+	private function get_term_value(): string {
+		return get_term_link( $this->get_queried_object() );
 	}
 
-	private function get_post_type_archive_value() {
-		return get_post_type_archive_link( get_queried_object()->name );
+	private function get_post_type_archive_value(): string {
+		return get_post_type_archive_link( $this->get_queried_object()->name );
 	}
 
-	private function get_author_value() {
-		return get_author_posts_url( get_queried_object_id() );
+	private function get_author_value(): string {
+		return get_author_posts_url( $this->get_queried_object_id() );
 	}
 }
