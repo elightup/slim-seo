@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.7
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 7.1
-Stable tag: 3.18.2
+Stable tag: 3.19.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -148,11 +148,16 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.19.0 - 2023-04-04 =
+- Add canonical URL
+- If a page is set as the post type archive, get the page title for the breadcrumbs
+- Make breadcrumbs include product categories for WooCommerce
+- Fix rel link for the 1st page containing /page/1
+
 = 3.18.2 - 2023-03-21 =
 - Add type safe for checking terms in breadcrumbs
 - Fix regex redirection causing PHP warnings
 - Fix link attributes in WP 6.0
-
 
 = 3.18.1 - 2023-02-22 =
 
