@@ -9,10 +9,10 @@
 	--border-lighter: 1px solid var(--color-lighter);
 	--wp-admin-theme-color: #007cba;
 }
-#wpcontent {
+.settings_page_slim-seo #wpcontent {
 	padding-left: 0;
 }
-.wrap {
+.settings_page_slim-seo .wrap {
 	margin: 0;
 }
 .ss-content {
