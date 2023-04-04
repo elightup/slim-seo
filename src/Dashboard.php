@@ -18,14 +18,14 @@ class Dashboard {
 		add_action( "wp_ajax_{$this->slug}-dismiss-news", [ $this, 'ajax_dismiss' ] );
 	}
 
-	private function get_transient_name() : string {
+	private function get_transient_name(): string {
 		$locale = get_user_locale();
 		return 'dash_v2_' . md5( "dashboard_primary_{$locale}" );
 	}
 
-	public function add_news( string $value ) : string {
+	public function add_news( string $value ): string {
 		$is_dismissed = get_user_meta( get_current_user_id(), $this->slug . '_dismiss_news', true );
-		$is_dismissed = apply_filters( 'rwmb_dismiss_dashboard_widget', $is_dismissed );
+		$is_dismissed = apply_filters( 'slim_seo_dismiss_dashboard_widget', $is_dismissed );
 		if ( $is_dismissed ) {
 			return $value;
 		}
@@ -37,7 +37,7 @@ class Dashboard {
 		return $value . $this->get_html() . $script;
 	}
 
-	private function get_html() : string {
+	private function get_html(): string {
 		$cache_key = $this->slug . '-news';
 		$output    = get_transient( $cache_key );
 		if ( false !== $output ) {
@@ -61,7 +61,7 @@ class Dashboard {
 		$output = (string) ob_get_clean();
 
 		$output = (string) preg_replace( '/<a(.+?)>(.+?)<\/a>/i', '<a$1>' . esc_html( $this->translations['title'] ) . ': $2</a>', $output );
-		$output = str_replace( '<li>', '<li class="' . esc_attr( $this->slug ) . '-news-item"><a href="#" class="dashicons dashicons-no-alt" title="' . esc_attr( $this->translations['dismiss_tooltip'] ) . '" style="float: right; box-shadow: none; margin-left: 5px;"></a>', $output );
+		$output = str_replace( '<li>', '<li><a href="#" class="dashicons dashicons-no-alt" title="' . esc_attr( $this->translations['dismiss_tooltip'] ) . '" style="float: right; box-shadow: none; margin-left: 5px;"></a>', $output );
 
 		set_transient( $cache_key, $output, DAY_IN_SECONDS );
 
