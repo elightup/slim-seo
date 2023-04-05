@@ -20,7 +20,7 @@ abstract class Base {
 		wp_localize_script( 'slim-seo-meta-box', 'ss', $this->get_script_params() );
 	}
 
-	protected function get_script_params() : array {
+	protected function get_script_params(): array {
 		$params = [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 			'site'            => [
@@ -100,10 +100,10 @@ abstract class Base {
 		</div>
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-title"><?php esc_html_e( 'Canonical URL', 'slim-seo' ); ?></label>
+				<label for="ss-canonical"><?php esc_html_e( 'Canonical URL', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<input type="text" id="ss-title" name="slim_seo[canonical]" value="<?= esc_attr( $data['canonical'] ); ?>">
+				<input type="text" id="ss-canonical" name="slim_seo[canonical]" value="<?= esc_attr( $data['canonical'] ); ?>">
 			</div>
 		</div>
 		<div class="ss-field ss-field-checkbox">
