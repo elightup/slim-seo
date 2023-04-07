@@ -159,15 +159,23 @@ class PostType {
 				continue;
 			}
 
-			// External images.
-			$values[] = array(
+			if ( $this->is_external( $src ) ) {
+				continue;
+			}
+
+			$values[] = [
 				'url'     => $src,
 				'title'   => $image->getAttribute( 'title' ),
 				'caption' => $image->getAttribute( 'alt' ),
-			);
+			];
 		}
 
 		return $values;
+	}
+
+	private function is_external( string $url ): bool {
+		$home_url = untrailingslashit( home_url() );
+		return strpos( $url, $home_url ) === false;
 	}
 
 	private function get_absolute_url( $url ) {
