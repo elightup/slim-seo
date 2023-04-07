@@ -21,10 +21,48 @@ class Bricks {
 			return $description;
 		}
 
-		$content = array_map( function( $element ) {
-			return $element['settings']['text'] ?? '';
-		}, $data );
+		$data        = $this->remove_elements( $data );
+		$description = \Bricks\Frontend::render_data( $data );
 
-		return implode( ' ', $content );
+		return $description;
+	}
+
+	private function remove_elements( array $data ): array {
+		// Skip these elements as their content are not suitable for meta description.
+		$skipped_elements = apply_filters( 'slim_seo_bricks_skipped_elements', [
+			// Bricks.
+			'audio',
+			'code',
+			'divider',
+			'facebook-page',
+			'form',
+			'icon',
+			'map',
+			'nav-menu',
+			'pagination',
+			'pie-chart',
+			'post-author',
+			'post-comments',
+			'post-meta',
+			'post-navigation',
+			'post-taxonomy',
+			'post-sharing',
+			'post-title',
+			'posts',
+			'related-posts',
+			'search',
+			'sidebar',
+			'social-icons',
+			'svg',
+			'video',
+			'wordpress',
+
+			// WP Grid Builder.
+			'wpgb-facet',
+		] );
+
+		return array_filter( $data, function( $element ) use ( $skipped_elements ) {
+			return ! in_array( $element['name'], $skipped_elements, true );
+		} );
 	}
 }
