@@ -17,7 +17,7 @@ class Title {
 		$custom_title = $this->get_value();
 
 		$title = $custom_title ?: (string) $title;
-		$title = apply_filters( 'slim_seo_meta_title', $title, $this, get_queried_object_id() );
+		$title = apply_filters( 'slim_seo_meta_title', $title, get_queried_object_id() );
 		$title = Helper::normalize( $title );
 
 		return $title;

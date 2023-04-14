@@ -23,18 +23,18 @@ class Term extends Base {
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $this->title->get_term_value( $term_id );
-				$title = apply_filters( 'slim_seo_meta_title', $title, $this->title, $term_id );
+				$title = apply_filters( 'slim_seo_meta_title', $title, $term_id );
 				$title = Helper::normalize( $title );
 				return $title;
 			case 'meta_description':
 				$data        = get_term_meta( $term_id, 'slim_seo', true ) ?: [];
 				$description = $data['description'] ?? '';
-				$description = apply_filters( 'slim_seo_meta_description', $description, $this->description, $term_id );
+				$description = apply_filters( 'slim_seo_meta_description', $description, $term_id );
 				$description = Helper::normalize( $description );
 				return $description;
 			case 'index':
 				$noindex = $this->robots->get_term_value( $term_id );
-				$index   = apply_filters( 'slim_seo_robots_index', ! $noindex, $this->robots, $term_id );
+				$index   = apply_filters( 'slim_seo_robots_index', ! $noindex, $term_id );
 				return $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 		}
 

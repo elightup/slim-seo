@@ -44,7 +44,7 @@ class Robots {
 
 	private function indexed() {
 		$value = $this->get_indexed();
-		return apply_filters( 'slim_seo_robots_index', $value, $this, get_queried_object_id() );
+		return apply_filters( 'slim_seo_robots_index', $value, get_queried_object_id() );
 	}
 
 	private function get_indexed() {
