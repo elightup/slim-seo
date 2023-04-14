@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.2
 Requires PHP: 7.1
-Stable tag: 3.19.0
+Stable tag: 3.19.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,11 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.19.1 - 2023-04-14 =
+- Exclude external images from the sitemap
+- Fix Bricks dynamic tags not rendering
+- Fix clicking on canonical field focusing on title field
 
 = 3.19.0 - 2023-04-04 =
 - Add canonical URL
