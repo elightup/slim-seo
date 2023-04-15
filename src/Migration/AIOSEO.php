@@ -134,5 +134,10 @@ if ( class_exists( 'AIOSEO\Plugin\Common\Social\Image' ) ) {
 		public function getThumbnailSize() {
 			return $this->thumbnailSize;
 		}
+		public function getFeaturedImage() {}
+		public function getFirstImageInContent() {}
+		public function getAuthorAvatar() {}
+		public function getFirstAvailableImage() {}
+		public function getCustomFieldImage() {}
 	}
 }
