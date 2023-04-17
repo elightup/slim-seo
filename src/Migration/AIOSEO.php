@@ -2,6 +2,7 @@
 namespace SlimSEO\Migration;
 
 use AIOSEO\Plugin\Common;
+use ReflectionObject;
 
 class AIOSEO extends Replacer {
 	private $post;
@@ -71,9 +72,15 @@ class AIOSEO extends Replacer {
 	}
 
 	public function get_image( $type, $image_source, $post ) {
+		$reflector = new ReflectionObject( $this->image );
+
 		switch ( $image_source ) {
 			case 'featured':
-				$images[ $type ] = $this->image->getFeaturedImage( $post );
+				$method = $reflector->getMethod( 'getFeaturedImage' );
+				if ( $method->isPrivate() ) {
+					$method->setAccessible(true);
+				}
+				$images[ $type ] = $method->invoke( $this->image, $post );
 				$image           = $images[ $type ];
 				break;
 			case 'attach':
@@ -134,10 +141,5 @@ if ( class_exists( 'AIOSEO\Plugin\Common\Social\Image' ) ) {
 		public function getThumbnailSize() {
 			return $this->thumbnailSize;
 		}
-		public function getFeaturedImage() {}
-		public function getFirstImageInContent() {}
-		public function getAuthorAvatar() {}
-		public function getFirstAvailableImage() {}
-		public function getCustomFieldImage() {}
 	}
 }
