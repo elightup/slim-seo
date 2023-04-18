@@ -144,31 +144,36 @@
 	margin: 20px auto;
 }
 
-.ss-modal {
-	.components-modal__frame {
-		max-height: 520px!important;
-		width: 600px;
-	}
-
-	label {
-		font-weight: bold;
-	}
+.ss-modal .components-modal__frame {
+	width: 600px;
 }
 
 .ss-warning-message {
 	color: var(--color-red);
 }
 
-#ss-type {
-	width: 100%;
-}
+.ssr-modal-field {
+	margin-bottom: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
 
-#ss-condition {
-	width: 30%;
-}
+	label {
+		font-weight: bold;
+	}
+	input, select {
+		width: 100%;
+		max-width: none;
+	}
 
-#ss-from {
-	width: 65%;
+	button:focus {
+		outline: none;
+	}
+}
+.ss-from-inputs {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	gap: 4px;
 }
 
 .ss-sub-setting {

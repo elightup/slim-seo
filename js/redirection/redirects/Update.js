@@ -1,7 +1,7 @@
 import { Button, Modal } from '@wordpress/components';
-import { useReducer, useState, useEffect } from '@wordpress/element';
+import { useEffect, useReducer, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { fetcher, Tooltip } from '../helper/misc';
+import { Tooltip, fetcher } from '../helper/misc';
 
 const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) => {
 	const [ redirect, setRedirect ] = useState( {} );
@@ -10,7 +10,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 	const [ showAdvancedOptions, toggleAdvancedOptions ] = useReducer( onOrOff => !onOrOff, false );
 	const [ showModal, setShowModal ] = useState( false );
 	const title = redirect.id ? __( 'Update Redirect', 'slim-seo' ) : __( 'Add Redirect', 'slim-seo' );
-	
+
 	const openModal = e => {
 		e.preventDefault();
 		setShowModal( true );
@@ -72,75 +72,73 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 
 			{
 				showModal && (
-					<Modal title={ title } overlayClassName='ss-modal' onRequestClose={ closeModal }>
-						<div className='form-wrap'>
-							<div className='form-field'>
-								<label for='ss-type'>{ __( 'Type', 'slim-seo' ) }
-									<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
-								</label>
-								<select id='ss-type' value={ redirect.type } onChange={ handleChange( 'type' ) }>
-									{ Object.entries( SSRedirection.redirectTypes ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> ) }
-								</select>
-							</div>
+					<Modal title={ title } overlayClassName='ss-modal ssr-modal' onRequestClose={ closeModal }>
+						<div className='ssr-modal-field'>
+							<label for='ss-type'>{ __( 'Type', 'slim-seo' ) }
+								<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
+							</label>
+							<select id='ss-type' value={ redirect.type } onChange={ handleChange( 'type' ) }>
+								{ Object.entries( SSRedirection.redirectTypes ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> ) }
+							</select>
+						</div>
 
-							<div className='form-field'>
-								<label for='ss-from'>
-									{ __( 'From URL', 'slim-seo' ) }
-									<Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } />
-								</label>
+						<div className='ssr-modal-field'>
+							<label for='ss-from'>
+								{ __( 'From URL', 'slim-seo' ) }
+								<Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } />
+							</label>
 
+							<div className='ss-from-inputs'>
 								<select value={ redirect.condition } onChange={ handleChange( 'condition' ) }>
 									{ Object.entries( SSRedirection.conditionOptions ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> ) }
 								</select>
 								<input id='ss-from' type='text' value={ redirect.from } onChange={ handleChange( 'from' ) } />
 							</div>
-
-							<div className='form-field'>
-								<label for='ss-to'>
-									{ __( 'To URL', 'slim-seo' ) }
-									<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
-								</label>
-								<input id='ss-to' type='text' value={ redirect.to } onChange={ handleChange( 'to' ) } />
-							</div>
-
-							<div className='form-field'>
-								<label for='ss-note'>
-									{ __( 'Note', 'slim-seo' ) }
-									<Tooltip content={ __( 'Something that reminds you about this redirect', 'slim-seo' ) } />
-								</label>
-								<input id='ss-note' type='text' value={ redirect.note } onChange={ handleChange( 'note' ) } />
-							</div>
-
-							<div className='form-field'>
-								<label className='ss-toggle'>
-									<input type='checkbox' value='1' checked={ !!redirect.enable } onChange={ handleChange( 'enable' ) } />
-									<div className='ss-toggle__switch'></div>
-									<span className='ss-toggle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
-								</label>
-							</div>
-
-							<div className='form-field'>
-								<Button className='button-link' onClick={ toggleAdvancedOptions }>{ __( 'Advanced options', 'slim-seo' ) }</Button>
-							</div>
-
-							{
-								showAdvancedOptions && (
-									<div className='form-field'>
-										<label className='ss-toggle'>
-											<input type='checkbox' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
-											<div className='ss-toggle__switch'></div>
-											<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
-										</label>
-									</div>
-								)
-							}
-
-							<div className='form-field'>
-								<Button variant='primary' onClick={ submit } disabled={ isProcessing }>{ title }</Button>
-							</div>
-
-							<p className='ss-warning-message'>{ warningMessage }</p>
 						</div>
+
+						<div className='ssr-modal-field'>
+							<label for='ss-to'>
+								{ __( 'To URL', 'slim-seo' ) }
+								<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
+							</label>
+							<input id='ss-to' type='text' value={ redirect.to } onChange={ handleChange( 'to' ) } />
+						</div>
+
+						<div className='ssr-modal-field'>
+							<label for='ss-note'>
+								{ __( 'Note', 'slim-seo' ) }
+								<Tooltip content={ __( 'Something that reminds you about this redirect', 'slim-seo' ) } />
+							</label>
+							<input id='ss-note' type='text' value={ redirect.note } onChange={ handleChange( 'note' ) } />
+						</div>
+
+						<div className='ssr-modal-field'>
+							<label className='ss-toggle'>
+								<input type='checkbox' value='1' checked={ !!redirect.enable } onChange={ handleChange( 'enable' ) } />
+								<div className='ss-toggle__switch'></div>
+								<span className='ss-toggle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
+							</label>
+						</div>
+
+						<div className='ssr-modal-field'>
+							<Button className='button-link' onClick={ toggleAdvancedOptions }>{ __( 'Advanced options', 'slim-seo' ) }</Button>
+						</div>
+
+						{
+							showAdvancedOptions && (
+								<div className='ssr-modal-field'>
+									<label className='ss-toggle'>
+										<input type='checkbox' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
+										<div className='ss-toggle__switch'></div>
+										<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
+									</label>
+								</div>
+							)
+						}
+
+						<Button variant='primary' onClick={ submit } disabled={ isProcessing }>{ title }</Button>
+
+						<p className='ss-warning-message'>{ warningMessage }</p>
 					</Modal>
 				)
 			}
