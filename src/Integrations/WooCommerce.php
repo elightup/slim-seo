@@ -2,8 +2,6 @@
 namespace SlimSEO\Integrations;
 
 class WooCommerce {
-	private $shop_page_id;
-
 	public function setup() {
 		add_action( 'template_redirect', [ $this, 'process' ] );
 	}
@@ -15,14 +13,6 @@ class WooCommerce {
 
 		add_filter( 'slim_seo_breadcrumbs_args', [ $this, 'change_breadcrumbs_taxonomy' ] );
 		add_filter( 'slim_seo_meta_description', [ $this, 'strip_shortcodes' ] );
-
-		if ( ! is_shop() ) {
-			return;
-		}
-
-		$this->shop_page_id = (int) wc_get_page_id( 'shop' );
-
-		add_filter( 'post_type_archive_title', [ $this, 'set_page_title_as_archive_title' ] );
 	}
 
 	public function change_breadcrumbs_taxonomy( array $args ): array {
@@ -44,9 +34,5 @@ class WooCommerce {
 		$pages = [ 'cart', 'checkout', 'myaccount' ];
 		$pages = array_map( 'wc_get_page_id', $pages );
 		return is_page( $pages );
-	}
-
-	public function set_page_title_as_archive_title(): string {
-		return get_the_title( $this->shop_page_id );
 	}
 }
