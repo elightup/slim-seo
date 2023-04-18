@@ -25,7 +25,7 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 
 	const deleteRedirects = ( ids = [] ) => {
 		fetcher( 'delete_redirects', { ids }, 'POST' ).then( result => {
-			mutate( 
+			mutate(
 				redirects.filter( r => {
 					return ! ids.includes( r.id );
 				} ),
@@ -67,7 +67,7 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 	if ( undefined === redirects ) {
 		return <div className='ss-loader'></div>;
 	} else if ( 0 === Object.keys( redirects ).length ) {
-		return <span>{ __( 'No redirects found.', 'slim-seo' ) }</span>;
+		return;
 	}
 
 	let filteredRedirects = [ ...redirects ];
