@@ -30,7 +30,8 @@ class Breadcrumbs {
 	}
 
 	public function render_block( $attributes ): string {
-		return '<p>This is so good</p>';
+		$attributes['display_current'] = $attributes['display_current'] ? 'true' : 'false';
+		return $this->render_shortcode( $attributes );
 	}
 
 	public function render_shortcode( $atts ): string {
