@@ -16,6 +16,7 @@ class Manager {
 		add_rewrite_rule( 'sitemap\.xml$', 'index.php?ss_sitemap=index', 'top' );
 		add_rewrite_rule( 'sitemap-(post-type-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
 		add_rewrite_rule( 'sitemap-(taxonomy-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+		add_rewrite_rule( 'sitemap-(user[^/]*?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
 	}
 
 	public function add_query_vars( $vars ) {
@@ -74,19 +75,30 @@ class Manager {
 			$sitemap->output();
 		}
 
+		if ( 0 === strpos( $type, 'user' ) ) {
+			$user = substr( $type, 4 );
+			$page = 1;
+			if ( preg_match( '/-(\d+)$/', $user, $matches ) ) {
+				$page = (int) $matches[1];
+			}
+
+			$sitemap = new User( $page );
+			$sitemap->output();
+		}
+
 		die;
 	}
 
 	public function add_to_robots_txt() {
-		echo 'Sitemap: ', esc_url( home_url( 'sitemap.xml' ) ), "\n";
+		echo "\nSitemap: ", esc_url( home_url( 'sitemap.xml' ) ), "\n";
 	}
 
-	private function get_allowed_post_types() : array {
+	private function get_allowed_post_types(): array {
 		$post_types = get_post_types( [ 'public' => true ] );
 		return (array) apply_filters( 'slim_seo_sitemap_post_types', $post_types );
 	}
 
-	private function get_allowed_taxonomies() : array {
+	private function get_allowed_taxonomies(): array {
 		$taxonomies = get_taxonomies( [
 			'public'  => true,
 			'show_ui' => true,

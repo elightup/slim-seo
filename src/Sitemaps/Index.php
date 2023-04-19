@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Sitemaps;
 
+use WP_User_Query;
+
 class Index {
 	private $post_types;
 	private $taxonomies;
@@ -15,6 +17,7 @@ class Index {
 
 		array_walk( $this->post_types, [ $this, 'output_post_type_sitemap' ] );
 		array_walk( $this->taxonomies, [ $this, 'output_taxonomy_sitemap' ] );
+		$this->output_user_sitemap();
 
 		echo '</sitemapindex>';
 	}
@@ -45,6 +48,22 @@ class Index {
 			echo "\t<sitemap>\n";
 			$index = 1 === $i ? '' : "-$i";
 			echo "\t\t<loc>", esc_url( home_url( "sitemap-taxonomy-$taxonomy$index.xml" ) ), "</loc>\n";
+			echo "\t</sitemap>\n";
+		}
+	}
+
+	private function output_user_sitemap() {
+		$query_args = User::get_query_args( [
+			'field'       => 'ID',
+			'count_total' => true,
+		] );
+		$query      = new WP_User_Query( $query_args );
+		$total      = $query->get_total();
+		$max_page   = (int) ceil( $total / 2000 );
+		for ( $i = 1; $i <= $max_page; $i++ ) {
+			echo "\t<sitemap>\n";
+			$index = 1 === $i ? '' : "-$i";
+			echo "\t\t<loc>", esc_url( home_url( "sitemap-user$index.xml" ) ), "</loc>\n";
 			echo "\t</sitemap>\n";
 		}
 	}
