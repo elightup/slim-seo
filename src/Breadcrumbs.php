@@ -23,6 +23,14 @@ class Breadcrumbs {
 
 	public function setup(): void {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
+
+		register_block_type( SLIM_SEO_DIR . 'js/breadcrumbs/dist/', [
+			'render_callback' => [ $this, 'render_block' ],
+		] );
+	}
+
+	public function render_block( $attributes ): string {
+		return '<p>This is so good</p>';
 	}
 
 	public function render_shortcode( $atts ): string {

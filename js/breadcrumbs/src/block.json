@@ -1,0 +1,43 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "slim-seo/breadcrumbs",
+	"version": "0.1.0",
+	"title": "[Slim SEO] Breadcrumbs",
+	"category": "design",
+	"icon": "randomize",
+	"description": "Displaying breadcrumbs for the current page",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "slim-seo",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"attributes": {
+		"separator": {
+			"type": "string",
+			"default": "&raquo;"
+		},
+		"taxonomy": {
+			"type": "string",
+			"default": "category"
+		},
+		"display_current": {
+			"type": "boolean",
+			"default": true
+		},
+		"label_home": {
+			"type": "string",
+			"default": "Home"
+		},
+		"label_search": {
+			"type": "string",
+			"default": "Search Results for &#8220;%s&#8221;"
+		},
+		"label_404": {
+			"type": "string",
+			"default": "Page not found"
+		}
+	}
+}
