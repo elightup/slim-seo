@@ -64,7 +64,16 @@ class Bricks {
 		] );
 
 		return array_filter( $data, function( $element ) use ( $skipped_elements ) {
-			return ! in_array( $element['name'], $skipped_elements, true );
+			if ( in_array( $element['name'], $skipped_elements, true ) ) {
+				return false;
+			}
+
+			// Ignore element with query loop.
+			if ( ! empty( $element['settings']['hasLoop'] ) ) {
+				return false;
+			}
+
+			return true;
 		} );
 	}
 
