@@ -23,6 +23,19 @@ class Breadcrumbs {
 
 	public function setup(): void {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
+
+		register_block_type( SLIM_SEO_DIR . 'js/breadcrumbs/dist/', [
+			'render_callback' => [ $this, 'render_block' ],
+		] );
+	}
+
+	public function render_block( $attributes ): string {
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return '<small><i>' . __( 'Due to the limitation of conditional tags in the admin, the preview of the breadcrumbs block is not available.', 'slim-seo' ) . '</i></small>';
+		}
+
+		$attributes['display_current'] = $attributes['display_current'] ? 'true' : 'false';
+		return $this->render_shortcode( $attributes );
 	}
 
 	public function render_shortcode( $atts ): string {

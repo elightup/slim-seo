@@ -4,7 +4,8 @@
 		"build:css": "sass -s compressed --no-source-map css/scss/redirection.scss css/redirection.css",
 		"build:redirection": "node esbuild",
 		"build:link": "wp-scripts build js/link-attributes/block-editor/src/index.js --output-path=js/link-attributes/block-editor/dist",
-		"build": "npm run build:css && npm run build:redirection && npm run build:link",
+		"build:breadcrumbs": "wp-scripts build --webpack-src-dir=js/breadcrumbs/src --output-path=js/breadcrumbs/dist",
+		"build": "npm run build:css && npm run build:redirection && npm run build:link && npm run build:breadcrumbs",
 		"start": "npm run build"
 	},
 	"dependencies": {

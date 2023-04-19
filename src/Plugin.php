@@ -29,6 +29,7 @@ class Plugin {
 		$services['code']     = new Code( $services['settings'] );
 
 		$services['redirection'] = new Redirection\Loader;
+		$services['breadcrumbs'] = new Breadcrumbs;
 
 		// Admin only.
 		if ( is_admin() ) {
@@ -54,7 +55,6 @@ class Plugin {
 		$services['rel_links']     = new MetaTags\RelLinks;
 		$services['open_graph']    = new MetaTags\OpenGraph( $services['meta_title'], $services['meta_description'], $services['canonical_url'] );
 		$services['twitter_cards'] = new MetaTags\TwitterCards;
-		$services['breadcrumbs']   = new Breadcrumbs;
 		$services['feed']          = new Feed;
 
 		$services['schema'] = new Schema\Manager( $services['meta_title'], $services['meta_description'], $services['breadcrumbs'] );
