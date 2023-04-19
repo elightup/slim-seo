@@ -10,6 +10,7 @@ class AIOSEO extends Replacer {
 	public function before_replace_post( $post_id ) {
 		$this->post  = get_post( $post_id );
 		$this->image = new ExtImage;
+
 		set_current_screen( 'settings_page_slim-seo' ); // Fix undefined get_current_screen from AIOSEO.
 	}
 
@@ -36,6 +37,7 @@ class AIOSEO extends Replacer {
 				: aioseo()->options->social->facebook->general->defaultImageSourcePosts;
 			$image        = $this->get_image( 'facebook', $image_source, $this->post );
 		}
+
 		if ( $image ) {
 			return is_array( $image ) ? $image[0] : $image;
 		}
@@ -72,26 +74,6 @@ class AIOSEO extends Replacer {
 
 	public function get_image( $type, $image_source, $post ) {
 		switch ( $image_source ) {
-			case 'featured':
-				$images[ $type ] = $this->image->getFeaturedImage( $post );
-				$image           = $images[ $type ];
-				break;
-			case 'attach':
-				$images[ $type ] = $this->image->getFirstAttachedImage( $post );
-				$image           = $images[ $type ];
-				break;
-			case 'content':
-				$image = $this->image->getFirstImageInContent( $post );
-				break;
-			case 'author':
-				$image = $this->image->getAuthorAvatar( $post );
-				break;
-			case 'auto':
-				$image = $this->image->getFirstAvailableImage( $post, $type );
-				break;
-			case 'custom':
-				$image = $this->image->getCustomFieldImage( $post, $type );
-				break;
 			case 'custom_image':
 				$meta_data = aioseo()->meta->metaData->getMetaData( $post );
 				if ( empty( $meta_data ) ) {
@@ -100,8 +82,10 @@ class AIOSEO extends Replacer {
 				$image = ( 'facebook' === lcfirst( $type ) ) ? $meta_data->og_image_custom_url : $meta_data->twitter_image_custom_url;
 				break;
 			case 'default':
-			default:
 				$image = aioseo()->options->social->$type->general->defaultImagePosts;
+				break;
+			default:
+				$image = $this->getAioImage( $type, $post );
 		}
 
 		if ( empty( $image ) ) {
@@ -116,6 +100,27 @@ class AIOSEO extends Replacer {
 		$attachment_id   = aioseo()->helpers->attachmentUrlToPostId( aioseo()->helpers->removeImageDimensions( $image ) );
 		$images[ $type ] = $attachment_id ? wp_get_attachment_image_src( $attachment_id, $this->image->thumbnailSize ) : $image;
 		return $images[ $type ];
+	}
+
+
+	public function getAioImage( $type, $post ) {
+		global $wpdb;
+
+		$column = 'og_image_url';
+		if ( 'twitter' === $type ) {
+			$column = 'twitter_image_url';
+		}
+
+		$image = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT $column
+				FROM {$wpdb->prefix}aioseo_posts
+				WHERE post_id = %d",
+				$post->ID
+			)
+		);
+
+		return $image;
 	}
 
 	public function is_activated() {
