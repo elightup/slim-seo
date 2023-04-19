@@ -85,7 +85,7 @@ class AIOSEO extends Replacer {
 				$image = aioseo()->options->social->$type->general->defaultImagePosts;
 				break;
 			default:
-				$image = $this->getAioImage( $post );
+				$image = $this->getAioImage( $type, $post );
 		}
 
 		if ( empty( $image ) ) {
@@ -103,21 +103,22 @@ class AIOSEO extends Replacer {
 	}
 
 
-	public function getAioImage( $post ) {
+	public function getAioImage( $type, $post ) {
 		global $wpdb;
 
-		$image     = $wpdb->get_var(
+		$column = 'og_image_url';
+		if ( 'twitter' === $type ) {
+			$column = 'twitter_image_url';
+		}
+
+		$image = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT og_image_url
+				"SELECT $column
 				FROM {$wpdb->prefix}aioseo_posts
-				WHERE post_id = %s",
+				WHERE post_id = %d",
 				$post->ID
 			)
 		);
-
-		if ( empty( $image ) ) {
-			return;
-		}
 
 		return $image;
 	}
