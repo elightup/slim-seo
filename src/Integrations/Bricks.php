@@ -13,6 +13,8 @@ class Bricks {
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );
 		add_filter( 'bricks/frontend/disable_seo', '__return_true' );
+
+		add_filter( 'slim_seo_sitemap_post_types', [ $this, 'exclude_templates' ] );
 	}
 
 	public function description( $description, WP_Post $post ) {
@@ -64,5 +66,10 @@ class Bricks {
 		return array_filter( $data, function( $element ) use ( $skipped_elements ) {
 			return ! in_array( $element['name'], $skipped_elements, true );
 		} );
+	}
+
+	public function exclude_templates( array $post_types ): array {
+		unset( $post_types['bricks_template'] );
+		return $post_types;
 	}
 }
