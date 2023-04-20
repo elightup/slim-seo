@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.2
 Requires PHP: 7.1
-Stable tag: 3.19.1
+Stable tag: 3.20.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,17 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.20.0 - 2023-04-20 =
+- Add user sitemap
+- Add breadcrumbs block, useful to be used with the Full Site Editor
+- Add Pinterest rich pins for WooCommerce
+- Improve Bricks + WPGB integration, ignore elements with query loop
+- Exclude Bricks templates from the sitemap
+- Skip rendering some blocks for meta description & Open Graph, which cause custom CSS issue with FluentForms
+- Fix migrating from AIO SEO plugin, due to its recent changed
+- Fix redirect not working with mailto: link
+- Fix compatibility with Auto Listings & LifterLMS
 
 = 3.19.1 - 2023-04-14 =
 - Exclude external images from the sitemap
