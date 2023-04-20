@@ -29,7 +29,9 @@ class Helper {
 
 		// Render blocks.
 		if ( function_exists( 'do_blocks' ) ) {
+			add_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ], 10, 2 );
 			$text = do_blocks( $text );
+			remove_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ] );
 		}
 
 		// Replace HTML tags with spaces.
@@ -41,5 +43,12 @@ class Helper {
 		$text = trim( $text );
 
 		return $text;
+	}
+
+	public static function maybe_skip_block( ?string $output, array $block ): ?string {
+		$skipped_blocks = apply_filters( 'slim_seo_skipped_blocks', [
+			'fluentfom/guten-block',
+		] );
+		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
 	}
 }
