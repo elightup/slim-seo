@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.2
 Requires PHP: 7.1
-Stable tag: 3.20.0
+Stable tag: 3.20.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,19 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.20.1 - 2023-04-25 =
+
+Based on the user feedback, we decide to disable user sitemap by default. You can still enable it if needed with the snippet:
+
+```php
+add_filter( 'slim_seo_user_sitemap', '__return_true' );
+```
+
+You might want to re-save the permalinks to update the rewrite rules.
+
+Other fixes:
+- Improve the Bricks integration to work with pages that use templates
 
 = 3.20.0 - 2023-04-20 =
 - Add user sitemap
