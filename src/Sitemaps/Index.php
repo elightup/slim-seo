@@ -17,7 +17,10 @@ class Index {
 
 		array_walk( $this->post_types, [ $this, 'output_post_type_sitemap' ] );
 		array_walk( $this->taxonomies, [ $this, 'output_taxonomy_sitemap' ] );
-		$this->output_user_sitemap();
+
+		if ( User::is_active() ) {
+			$this->output_user_sitemap();
+		}
 
 		echo '</sitemapindex>';
 	}

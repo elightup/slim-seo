@@ -16,7 +16,10 @@ class Manager {
 		add_rewrite_rule( 'sitemap\.xml$', 'index.php?ss_sitemap=index', 'top' );
 		add_rewrite_rule( 'sitemap-(post-type-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
 		add_rewrite_rule( 'sitemap-(taxonomy-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
-		add_rewrite_rule( 'sitemap-(user[^/]*?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+
+		if ( User::is_active() ) {
+			add_rewrite_rule( 'sitemap-(user[^/]*?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+		}
 	}
 
 	public function add_query_vars( $vars ) {
@@ -75,7 +78,7 @@ class Manager {
 			$sitemap->output();
 		}
 
-		if ( 0 === strpos( $type, 'user' ) ) {
+		if ( User::is_active() && 0 === strpos( $type, 'user' ) ) {
 			$user = substr( $type, 4 );
 			$page = 1;
 			if ( preg_match( '/-(\d+)$/', $user, $matches ) ) {

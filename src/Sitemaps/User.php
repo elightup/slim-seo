@@ -8,6 +8,10 @@ class User {
 		$this->page = $page;
 	}
 
+	public static function is_active() {
+		return apply_filters( 'slim_seo_user_sitemap', false );
+	}
+
 	public static function get_query_args( array $args = [] ): array {
 		return apply_filters( 'slim_seo_user_query_args', array_merge( [
 			'number'      => 2000,
