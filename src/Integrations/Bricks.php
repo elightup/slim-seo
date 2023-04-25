@@ -18,7 +18,11 @@ class Bricks {
 	}
 
 	public function description( $description, WP_Post $post ) {
-		$data = \Bricks\Helpers::get_bricks_data( $post->ID );
+		// Get from the post first, then from the template.
+		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
+		if ( empty( $data ) ) {
+			$data = \Bricks\Helpers::get_bricks_data( $post->ID );
+		}
 		if ( empty( $data ) ) {
 			return $description;
 		}
