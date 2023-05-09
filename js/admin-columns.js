@@ -7,7 +7,7 @@
 
 	let name = ssObjectType === 'post' ? 'inlineEditPost' : 'inlineEditTax';
 
-	if ( typeof window[ name ] === 'undefined' ) {
+	if ( typeof window[ name ] === 'undefined' || ! document.querySelector( '#ss_nonce' ) ) {
 		return;
 	}
 
