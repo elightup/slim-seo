@@ -10,11 +10,13 @@ class Helper {
 		 * do_shortcode here will parse the <link> and then remove it, which might break the style/JS.
 		 */
 		$skipped_shortcodes = apply_filters( 'slim_seo_skipped_shortcodes', [
-			'happyforms',               // HappyForms.
-			'contact',                  // Very Simple Contact Form.
-			'edd_invoices',             // EDD Invoices.
-			'velocity',                 // Velocity.
-			'fluentform',               // Fluent Forms
+			'happyforms',
+			'contact',      // Very Simple Contact Form.
+			'edd_invoices',
+			'velocity',
+			'fluentform',
+			'wpforms',
+			'mailpoet_form',
 		] );
 
 		$shortcodes_bak = $shortcode_tags;
@@ -48,6 +50,8 @@ class Helper {
 	public static function maybe_skip_block( ?string $output, array $block ): ?string {
 		$skipped_blocks = apply_filters( 'slim_seo_skipped_blocks', [
 			'fluentfom/guten-block',
+			'wpforms/form-selector',
+			'mailpoet/subscription-form-block',
 		] );
 		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
 	}
