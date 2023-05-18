@@ -35,8 +35,8 @@ export default function Edit( { attributes, setAttributes } ) {
 					</PanelRow>
 					<PanelRow>
 						<ToggleControl
-							label={ __( 'Display current page', 'mb-frontend-submission' ) }
-							help={ __( 'Whether or not to display the current page.', 'mb-frontend-submission' ) }
+							label={ __( 'Display current page', 'slim-seo' ) }
+							help={ __( 'Whether or not to display the current page.', 'slim-seo' ) }
 							checked={ display_current }
 							onChange={ () => setAttributes( { display_current: !display_current } ) }
 						/>
