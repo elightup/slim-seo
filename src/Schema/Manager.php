@@ -40,7 +40,11 @@ class Manager {
 			'@context' => 'https://schema.org',
 			'@graph'   => $graph,
 		];
-		echo '<script type="application/ld+json">', wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), '</script>';
+		$flags  = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+		if ( wp_get_environment_type() !== 'production' ) {
+			$flags = $flags | JSON_PRETTY_PRINT;
+		}
+		echo '<script type="application/ld+json">', wp_json_encode( $schema, $flags ), '</script>';
 	}
 
 	private function add_schemas() {
