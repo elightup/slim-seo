@@ -41,9 +41,6 @@ class Settings {
 
 	public function add_tab( array $tabs ): array {
 		$tabs['general'] = __( 'Features', 'slim-seo' );
-		if ( ! $this->is_static_homepage() ) {
-			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
-		}
 		$tabs['content'] = __( 'Content', 'slim-seo' );
 		$tabs['social']  = __( 'Social', 'slim-seo' );
 		$tabs['tools']   = __( 'Tools', 'slim-seo' );
@@ -52,9 +49,6 @@ class Settings {
 
 	public function add_pane( array $panes ): array {
 		$panes['general'] = $this->get_pane( 'general' );
-		if ( ! $this->is_static_homepage() ) {
-			$panes['homepage'] = $this->get_pane( 'homepage' );
-		}
 		$panes['content'] = $this->get_pane( 'content' );
 		$panes['social']  = $this->get_pane( 'social' );
 		$panes['tools']   = $this->get_pane( 'tools' );
@@ -79,22 +73,18 @@ class Settings {
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 		];
 		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
-		if ( ! $this->is_static_homepage() ) {
-			wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-			$params['site']  = [
-				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
-				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
-			];
-			$params['title'] = [
-				'separator' => apply_filters( 'document_title_separator', '-' ),
-				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' ),
-			];
 
-			wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
-		} else {
-			wp_enqueue_script( 'slim-seo-media', SLIM_SEO_URL . 'js/media.js', [], SLIM_SEO_VER, true );
-			wp_localize_script( 'slim-seo-media', 'ss', $params );
-		}
+		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
+		$params['site']  = [
+			'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
+			'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
+		];
+		$params['title'] = [
+			'separator' => apply_filters( 'document_title_separator', '-' ),
+			'parts'     => apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' ),
+		];
+
+		wp_localize_script( 'slim-seo-meta-box', 'ss', $params );
 	}
 
 	public function save() {
