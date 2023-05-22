@@ -39,23 +39,25 @@ class Settings {
 		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
 
-	public function add_tab( array $tabs ) : array {
+	public function add_tab( array $tabs ): array {
 		$tabs['general'] = __( 'Features', 'slim-seo' );
 		if ( ! $this->is_static_homepage() ) {
 			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
 		}
-		$tabs['social'] = __( 'Social', 'slim-seo' );
-		$tabs['tools']  = __( 'Tools', 'slim-seo' );
+		$tabs['content'] = __( 'Content', 'slim-seo' );
+		$tabs['social']  = __( 'Social', 'slim-seo' );
+		$tabs['tools']   = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 
-	public function add_pane( array $panes ) : array {
+	public function add_pane( array $panes ): array {
 		$panes['general'] = $this->get_pane( 'general' );
 		if ( ! $this->is_static_homepage() ) {
 			$panes['homepage'] = $this->get_pane( 'homepage' );
 		}
-		$panes['social'] = $this->get_pane( 'social' );
-		$panes['tools']  = $this->get_pane( 'tools' );
+		$panes['content'] = $this->get_pane( 'content' );
+		$panes['social']  = $this->get_pane( 'social' );
+		$panes['tools']   = $this->get_pane( 'tools' );
 		return $panes;
 	}
 
@@ -139,7 +141,7 @@ class Settings {
 		echo '<button type="button" class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '"><span class="dashicons dashicons-editor-help"></span></button>';
 	}
 
-	public function get_pane( string $name ) : string {
+	public function get_pane( string $name ): string {
 		$data = get_option( 'slim_seo' );
 		$data = $data ? $data : [];
 		$data = array_merge( $this->defaults, $data );
