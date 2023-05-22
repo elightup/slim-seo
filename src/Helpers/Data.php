@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO;
+namespace SlimSEO\Helpers;
 
 class Data {
 	public static function get_post_types() {
