@@ -25,7 +25,7 @@ class Description {
 		}
 	}
 
-	public function get_description() {
+	public function get_description(): string {
 		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, get_queried_object_id() );
 		$description = $this->normalize( $description );
@@ -33,16 +33,19 @@ class Description {
 		return $description;
 	}
 
-	private function normalize( $description ) {
+	private function normalize( string $description ): string {
 		$description = Helper::normalize( $description );
-		return $this->is_manual ? $description : $this->truncate( $description );
+
+		$is_manual = apply_filters( 'slim_seo_meta_description_manual', $this->is_manual );
+
+		return $is_manual ? $description : $this->truncate( $description );
 	}
 
-	private function truncate( $string ) {
-		return function_exists( 'mb_substr' ) ? mb_substr( $string, 0, 160 ) : substr( $string, 0, 160 );
+	private function truncate( string $text ): string {
+		return function_exists( 'mb_substr' ) ? mb_substr( $text, 0, 160 ) : substr( $text, 0, 160 );
 	}
 
-	private function get_home_value() {
+	private function get_home_value(): string {
 		$data = get_option( 'slim_seo' );
 		return empty( $data['home_description'] ) ? get_bloginfo( 'description' ) : $data['home_description'];
 	}
@@ -51,7 +54,7 @@ class Description {
 	 * Get custom meta description or fallback to post excerpt or post content
 	 * Make public to allow access from other class. See Integration/WooCommerce.
 	 */
-	public function get_singular_value( $post_id = null ) {
+	public function get_singular_value( $post_id = null ): string {
 		$post_id = $post_id ?: $this->get_queried_object_id();
 		$post    = get_post( $post_id );
 		if ( ! $post ) {
@@ -79,7 +82,7 @@ class Description {
 		return apply_filters( 'slim_seo_meta_description_generated', $post->post_content, $post );
 	}
 
-	public function get_term_value( $term_id = null ) {
+	public function get_term_value( $term_id = null ): string {
 		$term_id = $term_id ?: get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
@@ -88,10 +91,10 @@ class Description {
 		}
 
 		$term = get_term( $term_id );
-		return $term && ! is_wp_error( $term ) ? $term->description : null;
+		return $term && ! is_wp_error( $term ) ? $term->description : '';
 	}
 
-	private function get_author_value() {
+	private function get_author_value(): string {
 		return get_user_meta( get_queried_object_id(), 'description', true );
 	}
 }
