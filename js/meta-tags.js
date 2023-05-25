@@ -7,7 +7,6 @@ document.querySelector( '#ss-post-type-select' ).addEventListener( 'change', e =
 
 	let contentEditor;
 
-	const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
 	const normalize = string => string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
 	const formatTitle = ( title = '' ) => {
 		const values = {
@@ -61,9 +60,8 @@ document.querySelector( '#ss-post-type-select' ).addEventListener( 'change', e =
 	}
 
 	class Field {
-		constructor( input, ref, min, max, truncate ) {
+		constructor( input, min, max, truncate ) {
 			this.input = input;
-			this.ref = ref;
 			this.min = min;
 			this.max = max;
 			this.truncate = truncate;
@@ -72,11 +70,7 @@ document.querySelector( '#ss-post-type-select' ).addEventListener( 'change', e =
 			this.updatePreview = this.updatePreview.bind( this );
 		}
 		get generated() {
-			if ( !this.ref ) {
-				return '';
-			}
-			const value = this.ref.value;
-			return this.truncate ? value.substring( 0, this.max ) : value;
+			return '';
 		}
 		updatePreview() {
 			this.input.el.placeholder = _.unescape( this.generated );
@@ -91,21 +85,19 @@ document.querySelector( '#ss-post-type-select' ).addEventListener( 'change', e =
 			this.updateStatus( value );
 		}
 		updateStatus( value ) {
-			const isGood = value && value.length >= this.min && value.length <= this.max;
-			this.input.el.parentNode.previousElementSibling.classList.remove( 'ss-success', 'ss-warning' );
-			this.input.el.parentNode.previousElementSibling.classList.add( isGood ? 'ss-success' : 'ss-warning' );
+			const isGood = value && value.length >= this.min && value.length <= this.max,
+				label = this.input.el.parentNode.previousElementSibling;
+			label.classList.remove( 'ss-success', 'ss-warning' );
+			label.classList.add( isGood ? 'ss-success' : 'ss-warning' );
 		}
 		addEventListener() {
 			this.input.addEventListener( this.updateCounter );
-			if ( this.ref ) {
-				this.ref.addEventListener( this.updateCounter );
-				this.ref.addEventListener( this.updatePreview );
-			}
 		}
 		init() {
 			if ( !this.input.el ) {
 				return;
 			}
+			console.log( this.input.el );
 			this.updatePreview();
 			this.updateCounter();
 			this.addEventListener();
@@ -120,10 +112,10 @@ document.querySelector( '#ss-post-type-select' ).addEventListener( 'change', e =
 
 	openMediaPopup();
 
-	if ( document.body.classList.contains( 'settings_page_slim-seo' ) ) {
-		const HomeTitleInput = new HomeTitleField( new Input( '#ss-title' ), null, 0, 60 );
-		const homeDescription = new Field( new Input( '#ss-description' ), null, 50, 160, true );
-		HomeTitleInput.init();
-		homeDescription.init();
-	}
+	ss.items.forEach( item => {
+		const TitleInput = new Field( new Input( `#ss-title-${item}-archive` ), 0, 60 );
+		const Description = new Field( new Input( `#ss-description-${item}-archive` ), 50, 160, true );
+		TitleInput.init();
+		Description.init();
+	} );
 } )( window, document, wp, jQuery, ss );
