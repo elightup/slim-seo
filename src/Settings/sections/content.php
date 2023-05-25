@@ -51,14 +51,23 @@ $taxonomies = array_values( Data::get_taxonomies() );
 				esc_attr( $post_type_object->name ),
 				$index === 0 ? ' ss-is-active' : ''
 			);
+			?>
 
-			// Translators: %s - post type singular name.
-			printf( '<h3>' . esc_html__( '%s settings', 'slim-seo' ) . '</h3>', $post_type_object->labels->singular_name );
-			( new MetaTags( $post_type_object->name ) )->render();
+			<div class="ss-field">
+				<div class="ss-label">
+					<label for="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>"><?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?></label>
+				</div>
+				<div class="ss-input">
+					<input type="checkbox" id="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>" name="slim_seo[<?= esc_attr( $post_type_object->name ) ?>][noindex]" value="1">
+				</div>
+			</div>
 
-			// Translators: %s - post type singular name.
-			printf( '<h3>' . esc_html__( '%s archive settings', 'slim-seo' ) . '</h3>', $post_type_object->labels->singular_name );
-			( new MetaTags( $post_type_object->name ) )->render();
+			<?php
+			if ( $post_type_object->has_archive ) {
+				// Translators: %s - post type singular name.
+				printf( '<h3>' . esc_html__( '%s archive page', 'slim-seo' ) . '</h3>', $post_type_object->labels->singular_name );
+				( new MetaTags( $post_type_object->name ) )->render();
+			}
 
 			submit_button( __( 'Save Changes', 'slim-seo' ) );
 
