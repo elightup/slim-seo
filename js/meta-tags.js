@@ -2,10 +2,6 @@ document.querySelector( '#ss-post-type-select' ).addEventListener( 'change', e =
 	document.querySelectorAll( '.ss-post-type-settings' ).forEach( el => el.classList.remove( 'ss-is-active' ) );
 	document.querySelector( `.ss-post-type-settings--${ e.target.value }` ).classList.add( 'ss-is-active' );
 } );
-document.querySelector( '#ss-taxonomy-select' ).addEventListener( 'change', e => {
-	document.querySelectorAll( '.ss-taxonomy-settings' ).forEach( el => el.classList.remove( 'ss-is-active' ) );
-	document.querySelector( `.ss-taxonomy-settings--${ e.target.value }` ).classList.add( 'ss-is-active' );
-} );
 
 ( function( window, document, wp, $, ss ) {
 

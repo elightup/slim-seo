@@ -1,9 +1,12 @@
-.ss-post-type-settings,
-.ss-taxonomy-settings {
+.ss-post-type-settings {
 	display: none;
 
 	&.ss-is-active {
 		display: block;
+	}
+
+	.ss-field {
+		margin-top: 12px;
 	}
 }
 
@@ -111,51 +114,4 @@
 .ss-danger:after {
 	content: "\2717";
 	background: #e53e3e;
-}
-
-/* For terms & settings page (for homepage) */
-.term-php .ss-label,
-.settings_page_slim-seo .ss-label {
-	font-size: 14px;
-}
-
-/* Settings page */
-.settings_page_slim-seo .ss-field {
-	margin-top: 12px;
-}
-
-@media (min-width: 782px) {
-	.term-php .ss-field,
-	.settings_page_slim-seo .ss-field {
-		flex-direction: row;
-		align-items: flex-start;
-	}
-	.term-php .ss-label,
-	.settings_page_slim-seo .ss-label {
-		width: 210px;
-		padding: 8px 10px 8px 0;
-		margin-bottom: 0;
-	}
-	.term-php .ss-input,
-	.settings_page_slim-seo .ss-input {
-		padding: 8px 10px;
-	}
-	.term-php .ss-input input[type="text"],
-	.settings_page_slim-seo .ss-input input[type="text"],
-	.term-php .ss-input textarea,
-	.settings_page_slim-seo .ss-input textarea,
-	.term-php .ss-input .description,
-	.settings_page_slim-seo .ss-input .description,
-	.term-php .ss-input-group,
-	.settings_page_slim-seo .ss-input-group {
-		width: 95%;
-	}
-	.term-php .ss-field-checkbox,
-	.settings_page_slim-seo .ss-field-checkbox {
-		align-items: center;
-	}
-	.term-php .ss-field-checkbox .ss-label,
-	.settings_page_slim-seo .ss-field-checkbox .ss-label {
-		order: 0;
-	}
 }

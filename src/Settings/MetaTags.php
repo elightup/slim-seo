@@ -40,10 +40,10 @@ class MetaTags {
 		?>
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-title"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
+				<label for="ss-title-<?= esc_attr( $this->option_key ) ?>"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<input type="text" id="ss-title" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][title]" value="<?= esc_attr( $data['title'] ); ?>">
+				<input type="text" id="ss-title-<?= esc_attr( $this->option_key ) ?>" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][title]" value="<?= esc_attr( $data['title'] ); ?>">
 				<p class="description">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
 					<span class="ss-counter">0</span>.
@@ -53,10 +53,10 @@ class MetaTags {
 		</div>
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
+				<label for="ss-description-<?= esc_attr( $this->option_key ) ?>"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<textarea id="ss-description" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
+				<textarea id="ss-description-<?= esc_attr( $this->option_key ) ?>" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
 				<p class="description">
 					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
 					<span class="ss-counter">0</span>.
@@ -66,11 +66,11 @@ class MetaTags {
 		</div>
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-facebook-image"><?php esc_html_e( 'Facebook image', 'slim-seo' ); ?></label>
+				<label for="ss-facebook-image-<?= esc_attr( $this->option_key ) ?>"><?php esc_html_e( 'Facebook image', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
 				<div class="ss-input-group">
-					<input type="text" id="ss-facebook-image" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
+					<input type="text" id="ss-facebook-image-<?= esc_attr( $this->option_key ) ?>" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
 					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 				<p class="description">
@@ -80,11 +80,11 @@ class MetaTags {
 		</div>
 		<div class="ss-field">
 			<div class="ss-label">
-				<label for="ss-twitter-image"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
+				<label for="ss-twitter-image-<?= esc_attr( $this->option_key ) ?>"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
 				<div class="ss-input-group">
-					<input type="text" id="ss-twitter-image" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
+					<input type="text" id="ss-twitter-image-<?= esc_attr( $this->option_key ) ?>" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
 					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 				</div>
 				<p class="description">
@@ -94,10 +94,10 @@ class MetaTags {
 		</div>
 		<div class="ss-field ss-field-checkbox">
 			<div class="ss-label">
-				<label for="ss-noindex"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
+				<label for="ss-noindex-<?= esc_attr( $this->option_key ) ?>"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<input type="checkbox" id="ss-noindex" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
+				<input type="checkbox" id="ss-noindex-<?= esc_attr( $this->option_key ) ?>" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
 			</div>
 		</div>
 		<?php
