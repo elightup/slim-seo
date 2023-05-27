@@ -24,7 +24,7 @@ class Redirects {
 
 	public function update( array $redirect ) {
 		$redirect['from'] = Helper::normalize_url( $redirect['from'], false );
-		$redirect['to']   = Helper::normalize_url( $redirect['to'] );
+		$redirect['to']   = Helper::normalize_url( $redirect['to'], true, true, false );
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
 		$redirect_id      = empty( $redirect['id'] ) ? uniqid( wp_rand() ) : $redirect['id'];
 
