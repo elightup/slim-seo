@@ -24,3 +24,16 @@ esbuild.build( {
 	entryPoints: [ 'js/redirection/App.js' ],
 	outfile: 'js/redirection.js'
 } );
+
+
+esbuild.build( {
+	...config,
+	entryPoints: [ 'js/seo-settings/src/settings.js' ],
+	outfile: 'js/seo-settings/dist/settings.js'
+} );
+
+esbuild.build( {
+	...config,
+	entryPoints: [ 'js/seo-settings/src/post-term.js' ],
+	outfile: 'js/seo-settings/dist/post-term.js'
+} );

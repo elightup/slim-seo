@@ -23,7 +23,7 @@ class MetaTags {
 	public static function enqueue() {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], filemtime( SLIM_SEO_DIR . '/css/meta-tags.css' ) );
-		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags.js', [ 'jquery', 'underscore' ], filemtime( SLIM_SEO_DIR . '/js/meta-tags.js' ), true );
+		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/seo-settings/dist/settings.js', [ 'jquery', 'underscore' ], filemtime( SLIM_SEO_DIR . '/js/seo-settings/dist/settings.js' ), true );
 
 		$params = [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
