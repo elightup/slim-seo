@@ -104,17 +104,11 @@ document.querySelector( '#ss-post-type-select' ).addEventListener( 'change', e =
 		}
 	}
 
-	class HomeTitleField extends Field {
-		get generated() {
-			return formatTitle();
-		}
-	}
-
 	openMediaPopup();
 
 	ss.items.forEach( item => {
-		const TitleInput = new Field( new Input( `#ss-title-${item}-archive` ), 0, 60 );
-		const Description = new Field( new Input( `#ss-description-${item}-archive` ), 50, 160, true );
+		const TitleInput = new Field( new Input( `#ss-title-${item}` ), 0, 60 );
+		const Description = new Field( new Input( `#ss-description-${item}` ), 50, 160, true );
 		TitleInput.init();
 		Description.init();
 	} );

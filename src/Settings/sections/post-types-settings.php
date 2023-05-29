@@ -45,7 +45,7 @@ foreach ( $post_types as $index => $post_type_object ) {
 	if ( $post_type_object->has_archive ) {
 		// Translators: %s - post type singular name.
 		printf( '<h3>' . esc_html__( '%s archive page', 'slim-seo' ) . '</h3>', $post_type_object->labels->singular_name );
-		( new MetaTags( "{$post_type_object->name}-archive" ) )->render();
+		( new MetaTags( "{$post_type_object->name}_archive" ) )->render();
 	}
 
 	submit_button( __( 'Save Changes', 'slim-seo' ) );
