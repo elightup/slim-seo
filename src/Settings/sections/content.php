@@ -1,7 +1,5 @@
 <?php
-use SlimSEO\Settings\MetaTags;
-
-if ( $this->is_static_homepage() ) {
+if ( $this->meta_tags_manager->is_static_homepage() ) {
 	include __DIR__ . '/post-types-settings.php';
 	return;
 }
@@ -15,7 +13,7 @@ if ( $this->is_static_homepage() ) {
 
 	<div class="ss-tab-pane" id="content-homepage">
 		<?php
-		( new MetaTags( 'home' ) )->render();
+		$this->meta_tags_manager->get( 'home' )->render();
 
 		submit_button( __( 'Save Changes', 'slim-seo' ) );
 		?>

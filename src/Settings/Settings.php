@@ -2,14 +2,12 @@
 namespace SlimSEO\Settings;
 
 class Settings {
+	private $meta_tags_manager;
+
 	private $defaults = [
 		'header_code'            => '',
 		'body_code'              => '',
 		'footer_code'            => '',
-		'home_title'             => '',
-		'home_description'       => '',
-		'home_facebook_image'    => '',
-		'home_twitter_image'     => '',
 		'default_facebook_image' => '',
 		'default_twitter_image'  => '',
 		'facebook_app_id'        => '',
@@ -30,6 +28,10 @@ class Settings {
 			'redirection',
 		],
 	];
+
+	public function __construct( MetaTags\Manager $meta_tags_manager ) {
+		$this->meta_tags_manager = $meta_tags_manager;
+	}
 
 	public function setup() {
 		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tab' ], 1 );
@@ -68,7 +70,7 @@ class Settings {
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
 
-		MetaTags::enqueue();
+		$this->meta_tags_manager->enqueue();
 	}
 
 	public function save() {
@@ -91,16 +93,9 @@ class Settings {
 	private function sanitize( $option ) {
 		$option = array_merge( $this->defaults, $option );
 
-		$option['home_title']          = sanitize_text_field( $option['home_title'] );
-		$option['home_description']    = sanitize_text_field( $option['home_description'] );
-		$option['home_facebook_image'] = esc_url_raw( $option['home_facebook_image'] );
-		$option['home_twitter_image']  = esc_url_raw( $option['home_twitter_image'] );
+		$this->meta_tags_manager->sanitize( $option );
 
 		return array_filter( $option );
-	}
-
-	private function is_static_homepage() {
-		return 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' );
 	}
 
 	public function is_feature_active( $feature ) {

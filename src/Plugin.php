@@ -25,8 +25,9 @@ class Plugin {
 		$services['bricks']         = new Integrations\Bricks;
 		$services['zion']           = new Integrations\ZionBuilder;
 
-		$services['settings'] = new Settings\Settings;
-		$services['code']     = new Code( $services['settings'] );
+		$services['meta_tags_manager'] = new Settings\MetaTags\Manager;
+		$services['settings']          = new Settings\Settings( $services['meta_tags_manager'] );
+		$services['code']              = new Code( $services['settings'] );
 
 		$services['redirection'] = new Redirection\Loader;
 		$services['breadcrumbs'] = new Breadcrumbs;

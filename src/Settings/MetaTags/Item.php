@@ -1,63 +1,20 @@
 <?php
-namespace SlimSEO\Settings;
+namespace SlimSEO\Settings\MetaTags;
 
-use SlimSEO\Helpers\Data;
-
-class MetaTags {
+class Item {
 	private $option_key = '';
-	private $args       = [];
 	private $defaults   = [
 		'title'          => '',
 		'description'    => '',
 		'facebook_image' => '',
 		'twitter_image'  => '',
-		'canonical'      => '',
-		'noindex'        => 0,
 	];
 
-	public function __construct( string $option_key, array $args = [] ) {
+	public function __construct( string $option_key ) {
 		$this->option_key = $option_key;
-		$this->args       = $args;
 	}
 
-	public static function enqueue() {
-		wp_enqueue_media();
-		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], filemtime( SLIM_SEO_DIR . '/css/meta-tags.css' ) );
-		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/seo-settings/dist/settings.js', [ 'jquery', 'underscore' ], filemtime( SLIM_SEO_DIR . '/js/seo-settings/dist/settings.js' ), true );
-
-		$params = [
-			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
-			'site'            => [
-				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
-				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
-			],
-			'title'           => [
-				'separator' => apply_filters( 'document_title_separator', '-' ),
-				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], 'post' ),
-			],
-		];
-
-		$items = array_keys( array_filter( Data::get_post_types(), function ( $post_type_object ) {
-			return $post_type_object->has_archive;
-		} ) );
-		$items = array_map( function( $item ) {
-			return "{$item}_archive";
-		}, $items );
-
-		if ( ! self::is_static_homepage() ) {
-			$items[] = 'home';
-		}
-
-		$params['items'] = $items;
-
-		wp_localize_script( 'slim-seo-meta-tags', 'ss', $params );
-	}
-
-	public static function is_static_homepage() {
-		return 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' );
-	}
-
-	public function render() {
+	public function render(): void {
 		$data = $this->get_data();
 		?>
 		<input type="hidden" id="ss-title-preview-<?= esc_attr( $this->option_key ) ?>" value="<?= esc_attr( $this->get_default_title() ) ?>">
@@ -116,14 +73,6 @@ class MetaTags {
 				</p>
 			</div>
 		</div>
-		<div class="ss-field ss-field-checkbox">
-			<div class="ss-label">
-				<label for="ss-noindex-<?= esc_attr( $this->option_key ) ?>"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
-			</div>
-			<div class="ss-input">
-				<input type="checkbox" id="ss-noindex-<?= esc_attr( $this->option_key ) ?>" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
-			</div>
-		</div>
 		<?php
 	}
 
@@ -155,23 +104,22 @@ class MetaTags {
 		return $this->option_key === 'home' ? get_bloginfo( 'description' ) : '';
 	}
 
-	public function sanitize( array $data ) {
+	public function sanitize( array $data ): array {
 		$data = array_merge( $this->defaults, $data );
 
 		$data['title']          = sanitize_text_field( $data['title'] );
 		$data['description']    = sanitize_text_field( $data['description'] );
 		$data['facebook_image'] = esc_url_raw( $data['facebook_image'] );
 		$data['twitter_image']  = esc_url_raw( $data['twitter_image'] );
-		$data['canonical']      = esc_url_raw( $data['canonical'] );
-		$data['noindex']        = $data['noindex'] ? 1 : 0;
 
 		return array_filter( $data );
 	}
 
-	private function get_data() {
-		$data = get_option( 'slim_seo', [] ) ?: [];
-		$data = is_array( $data ) && ! empty( $data ) ? $data : [];
-		$data = $data[ $this->option_key ] ?? [];
+	private function get_data(): array {
+		$option = get_option( 'slim_seo', [] ) ?: [];
+		$option = is_array( $option ) && ! empty( $option ) ? $option : [];
+
+		$data = $option[ $this->option_key ] ?? [];
 
 		return array_merge( $this->defaults, $data );
 	}
