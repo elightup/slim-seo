@@ -34,7 +34,10 @@ foreach ( $post_types as $index => $post_type_object ) {
 
 	<div class="ss-field">
 		<div class="ss-label">
-			<label for="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>"><?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?></label>
+			<label for="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>">
+				<?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?>
+				<?php $this->tooltip( __( 'This setting will hide all posts of this post types from search results and also will exclude the post type from the sitemap.', 'slim-seo' ) ) ?>
+			</label>
 		</div>
 		<div class="ss-input">
 			<input type="checkbox" id="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>" name="slim_seo[<?= esc_attr( $post_type_object->name ) ?>][noindex]" value="1">
