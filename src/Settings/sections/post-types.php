@@ -2,7 +2,7 @@
 
 <div class="ss-field">
 	<div class="ss-label">
-		<label for="ss-post-type-select"><?php esc_html_e( 'Post type', 'slim-seo' ) ?></label>
+		<label for="ss-post-type-select"><?php esc_html_e( 'Select a post type', 'slim-seo' ) ?></label>
 	</div>
 	<div class="ss-input">
 		<select id="ss-post-type-select">
@@ -25,7 +25,7 @@
 			<div class="ss-label">
 				<label for="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>">
 					<?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?>
-					<?php $this->tooltip( __( 'This setting will hide all posts of this post types from search results and also will exclude the post type from the sitemap.', 'slim-seo' ) ) ?>
+					<?php $this->tooltip( __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) ) ?>
 				</label>
 			</div>
 			<div class="ss-input">

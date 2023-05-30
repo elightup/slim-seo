@@ -7,7 +7,9 @@ class Manager {
 	private $items = [];
 
 	public function setup() {
-		$items = array_keys( $this->get_post_types() );
+		$items = array_keys( array_filter( $this->get_post_types(), function ( $post_type_object ) {
+			return $post_type_object->has_archive;
+		} ) );
 		$items = array_map( function( $item ) {
 			return "{$item}_archive";
 		}, $items );
@@ -22,11 +24,7 @@ class Manager {
 	}
 
 	public function get_post_types(): array {
-		$post_types = array_filter( Data::get_post_types(), function ( $post_type_object ) {
-			return $post_type_object->has_archive;
-		} );
-
-		return array_diff_key( $post_types, array_flip( [ 'post', 'page' ] ) );
+		return array_diff_key( Data::get_post_types(), array_flip( [ 'post', 'page' ] ) );
 	}
 
 	public function get( string $name ): Item {
