@@ -240,3 +240,11 @@ p.submit {
 		display: none;
 	}
 }
+
+.ss-post-type-settings {
+	display: none;
+
+	&.ss-is-active {
+		display: block;
+	}
+}
