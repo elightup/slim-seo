@@ -28,12 +28,12 @@ esbuild.build( {
 
 esbuild.build( {
 	...config,
-	entryPoints: [ 'js/seo-settings/src/settings.js' ],
-	outfile: 'js/seo-settings/dist/settings.js'
+	entryPoints: [ 'js/meta-tags/src/settings.js' ],
+	outfile: 'js/meta-tags/dist/settings.js'
 } );
 
 esbuild.build( {
 	...config,
-	entryPoints: [ 'js/seo-settings/src/post-term.js' ],
-	outfile: 'js/seo-settings/dist/post-term.js'
+	entryPoints: [ 'js/meta-tags/src/object.js' ],
+	outfile: 'js/meta-tags/dist/object.js'
 } );

@@ -7,5 +7,5 @@ css/redirection.css
 js/redirection.js
 js/link-attributes/block-editor/dist
 js/breadcrumbs/dist
-js/seo-settings/dist
+js/meta-tags/dist
 *.LICENSE.txt
