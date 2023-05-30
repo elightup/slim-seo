@@ -20,4 +20,14 @@ class Data {
 
 		return $taxonomies;
 	}
+
+	public static function get_post_type_archive_page( string $post_type ) {
+		$post_type_object = get_post_type_object( $post_type );
+		if ( ! is_string( $post_type_object->has_archive ) ) {
+			return null;
+		}
+
+		$page = get_page_by_path( $post_type_object->has_archive );
+		return $page ?: null;
+	}
 }
