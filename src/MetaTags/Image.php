@@ -10,9 +10,17 @@ class Image {
 		$this->meta_key = $meta_key;
 	}
 
-	private function get_home_value() : array {
+	private function get_home_value(): array {
 		$data = get_option( 'slim_seo', [] );
-		return isset( $data[ "home_{$this->meta_key}" ] ) ? $this->get_data_from_url( $data[ "home_{$this->meta_key}" ] ) : [];
+		$url  = $data['home'][ $this->meta_key ] ?? '';
+		return $url ? $this->get_data_from_url( $url ) : [];
+	}
+
+	private function get_post_type_archive_value(): array {
+		$post_type_object = get_queried_object();
+		$data             = get_option( 'slim_seo' );
+		$url              = $data[ "{$post_type_object->name}_archive" ][ $this->meta_key ] ?? '';
+		return $url ? $this->get_data_from_url( $url ) : [];
 	}
 
 	private function get_singular_value(): array {
@@ -23,19 +31,19 @@ class Image {
 		return has_post_thumbnail() ? $this->get_data( get_post_thumbnail_id() ) : [];
 	}
 
-	private function get_term_value() : array {
+	private function get_term_value(): array {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
 		return isset( $data[ $this->meta_key ] ) ? $this->get_data_from_url( $data[ $this->meta_key ] ) : [];
 	}
 
-	public function get_data_from_url( $url ) : array {
+	public function get_data_from_url( $url ): array {
 		$id = attachment_url_to_postid( $url );
 		return $id ? $this->get_data( $id ) : [
 			'src' => $url,
 		];
 	}
 
-	private function get_data( $id ) : array {
+	private function get_data( $id ): array {
 		$image = wp_get_attachment_image_src( $id, 'full' );
 		return $image ? [
 			'id'     => $id,

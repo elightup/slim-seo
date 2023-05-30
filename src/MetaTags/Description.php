@@ -42,9 +42,15 @@ class Description {
 		return function_exists( 'mb_substr' ) ? mb_substr( $string, 0, 160 ) : substr( $string, 0, 160 );
 	}
 
-	private function get_home_value() {
+	private function get_home_value(): string {
 		$data = get_option( 'slim_seo' );
-		return empty( $data['home_description'] ) ? get_bloginfo( 'description' ) : $data['home_description'];
+		return $data['home']['description'] ?? get_bloginfo( 'description' );
+	}
+
+	private function get_post_type_archive_value(): string {
+		$post_type_object = get_queried_object();
+		$data             = get_option( 'slim_seo' );
+		return $data[ "{$post_type_object->name}_archive" ]['description'] ?? '';
 	}
 
 	/**
