@@ -42,18 +42,18 @@ class Settings {
 	}
 
 	public function add_tab( array $tabs ): array {
-		$tabs['general'] = __( 'Features', 'slim-seo' );
-		$tabs['content'] = __( 'Content', 'slim-seo' );
-		$tabs['social']  = __( 'Social', 'slim-seo' );
-		$tabs['tools']   = __( 'Tools', 'slim-seo' );
+		$tabs['general']   = __( 'Features', 'slim-seo' );
+		$tabs['meta-tags'] = __( 'Meta Tags', 'slim-seo' );
+		$tabs['social']    = __( 'Social', 'slim-seo' );
+		$tabs['tools']     = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 
 	public function add_pane( array $panes ): array {
-		$panes['general'] = $this->get_pane( 'general' );
-		$panes['content'] = $this->get_pane( 'content' );
-		$panes['social']  = $this->get_pane( 'social' );
-		$panes['tools']   = $this->get_pane( 'tools' );
+		$panes['general']   = $this->get_pane( 'general' );
+		$panes['meta-tags'] = $this->get_pane( 'meta-tags' );
+		$panes['social']    = $this->get_pane( 'social' );
+		$panes['tools']     = $this->get_pane( 'tools' );
 		return $panes;
 	}
 
