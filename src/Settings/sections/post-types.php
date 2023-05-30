@@ -1,4 +1,7 @@
-<?php $post_types = $this->meta_tags_manager->get_post_types() ?>
+<?php
+$post_types = $this->meta_tags_manager->get_post_types();
+$option     = get_option( 'slim_seo' );
+?>
 
 <div class="ss-field">
 	<div class="ss-label">
@@ -20,6 +23,7 @@
 	</div>
 </div>
 <?php foreach ( $post_types as $post_type_object ) : ?>
+	<?php $data = $option[ $post_type_object->name ] ?? []; ?>
 	<div class="ss-post-type-settings ss-post-type-settings--<?= esc_attr( $post_type_object->name ) ?>">
 		<div class="ss-field">
 			<div class="ss-label">
@@ -29,7 +33,7 @@
 				</label>
 			</div>
 			<div class="ss-input">
-				<input type="checkbox" id="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>" name="slim_seo[<?= esc_attr( $post_type_object->name ) ?>][noindex]" value="1">
+				<input type="checkbox" id="ss-noindex-<?= esc_attr( $post_type_object->name ) ?>" name="slim_seo[<?= esc_attr( $post_type_object->name ) ?>][noindex]" value="1"<?php checked( 1, $data['noindex'] ?? 0 ) ?>>
 			</div>
 		</div>
 
