@@ -127,34 +127,6 @@
 	margin-top: 0;
 }
 
-// Nested tabs
-.ss-tabs .ss-tabs {
-	border: 0;
-
-	.ss-tab-list {
-		border: 0;
-		margin-bottom: 24px;
-	}
-	.ss-tab {
-		height: auto;
-		padding: 0;
-		line-height: 1;
-
-		&:not(:last-child) {
-			border-right: 1px solid var(--color-light);
-			padding-right: 8px;
-			margin-right: 8px;
-		}
-
-		&.ss-is-active {
-			box-shadow: none;
-		}
-	}
-	.ss-tab-pane {
-		padding: 0;
-	}
-}
-
 /* Tooltip */
 .ss-tooltip {
 	border: none;
