@@ -34,26 +34,40 @@ class Settings {
 	}
 
 	public function setup() {
-		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tab' ], 1 );
-		add_filter( 'slim_seo_settings_panes', [ $this, 'add_pane' ], 1 );
+		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tabs' ], 1 );
+		add_filter( 'slim_seo_settings_panes', [ $this, 'add_panes' ], 1 );
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 1 );
 
 		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
 
-	public function add_tab( array $tabs ): array {
-		$tabs['general']   = __( 'Features', 'slim-seo' );
-		$tabs['meta-tags'] = __( 'Meta Tags', 'slim-seo' );
-		$tabs['social']    = __( 'Social', 'slim-seo' );
-		$tabs['tools']     = __( 'Tools', 'slim-seo' );
+	public function add_tabs( array $tabs ): array {
+		$tabs['general'] = __( 'Features', 'slim-seo' );
+
+		if ( $this->meta_tags_manager->has_homepage_settings() ) {
+			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
+		}
+		if ( $this->meta_tags_manager->get_post_types() ) {
+			$tabs['post-types'] = __( 'Post types', 'slim-seo' );
+		}
+
+		$tabs['social'] = __( 'Social', 'slim-seo' );
+		$tabs['tools']  = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 
-	public function add_pane( array $panes ): array {
-		$panes['general']   = $this->get_pane( 'general' );
-		$panes['meta-tags'] = $this->get_pane( 'meta-tags' );
-		$panes['social']    = $this->get_pane( 'social' );
-		$panes['tools']     = $this->get_pane( 'tools' );
+	public function add_panes( array $panes ): array {
+		$panes['general'] = $this->get_pane( 'general' );
+
+		if ( $this->meta_tags_manager->has_homepage_settings() ) {
+			$panes['homepage'] = $this->get_pane( 'homepage' );
+		}
+		if ( $this->meta_tags_manager->get_post_types() ) {
+			$panes['post-types'] = $this->get_pane( 'post-types' );
+		}
+
+		$panes['social'] = $this->get_pane( 'social' );
+		$panes['tools']  = $this->get_pane( 'tools' );
 		return $panes;
 	}
 

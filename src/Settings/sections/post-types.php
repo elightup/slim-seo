@@ -1,8 +1,5 @@
-<?php
-use SlimSEO\Helpers\Data;
+<?php $post_types = $this->meta_tags_manager->get_post_types() ?>
 
-$post_types = array_values( Data::get_post_types() );
-?>
 <div class="ss-field">
 	<div class="ss-label">
 		<label for="ss-post-type-select"><?php esc_html_e( 'Post type', 'slim-seo' ) ?></label>

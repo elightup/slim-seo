@@ -7,20 +7,26 @@ class Manager {
 	private $items = [];
 
 	public function setup() {
-		$items = array_keys( array_filter( Data::get_post_types(), function ( $post_type_object ) {
-			return $post_type_object->has_archive;
-		} ) );
+		$items = array_keys( $this->get_post_types() );
 		$items = array_map( function( $item ) {
 			return "{$item}_archive";
 		}, $items );
 
-		if ( ! $this->is_static_homepage() ) {
+		if ( $this->has_homepage_settings() ) {
 			$items[] = 'home';
 		}
 
 		foreach ( $items as $item ) {
 			$this->items[ $item ] = new Item( $item );
 		}
+	}
+
+	public function get_post_types(): array {
+		$post_types = array_filter( Data::get_post_types(), function ( $post_type_object ) {
+			return $post_type_object->has_archive;
+		} );
+
+		return array_diff_key( $post_types, array_flip( [ 'post', 'page' ] ) );
 	}
 
 	public function get( string $name ): Item {
@@ -37,8 +43,8 @@ class Manager {
 		] );
 	}
 
-	public function is_static_homepage() {
-		return 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' );
+	public function has_homepage_settings() {
+		return 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' );
 	}
 
 	public function sanitize( array &$option ) {
