@@ -114,8 +114,8 @@ class Settings {
 
 	public function is_feature_active( $feature ) {
 		$defaults = $this->defaults['features'];
-		$data     = get_option( 'slim_seo' );
-		$features = $data['features'] ?? $defaults;
+		$option   = get_option( 'slim_seo' );
+		$features = $option['features'] ?? $defaults;
 
 		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
 	}

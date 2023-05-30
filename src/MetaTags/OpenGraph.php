@@ -79,9 +79,9 @@ class OpenGraph {
 		return $image[ $key ] ?? null;
 	}
 
-	private function get_default_image() : array {
-		$data = get_option( 'slim_seo' );
-		return empty( $data['default_facebook_image'] ) ? [] : $this->image_obj->get_data_from_url( $data['default_facebook_image'] );
+	private function get_default_image(): array {
+		$option = get_option( 'slim_seo' );
+		return empty( $option['default_facebook_image'] ) ? [] : $this->image_obj->get_data_from_url( $option['default_facebook_image'] );
 	}
 
 	private function get_description() {

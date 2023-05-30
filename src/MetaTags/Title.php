@@ -26,14 +26,14 @@ class Title {
 	}
 
 	private function get_home_value(): string {
-		$data = get_option( 'slim_seo' );
-		return $data['home']['title'] ?? '';
+		$option = get_option( 'slim_seo' );
+		return $option['home']['title'] ?? '';
 	}
 
 	private function get_post_type_archive_value(): string {
 		$post_type_object = get_queried_object();
-		$data             = get_option( 'slim_seo' );
-		return $data[ "{$post_type_object->name}_archive" ]['title'] ?? '';
+		$option           = get_option( 'slim_seo' );
+		return $option[ "{$post_type_object->name}_archive" ]['title'] ?? '';
 	}
 
 	/**
