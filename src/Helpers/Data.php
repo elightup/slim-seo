@@ -11,7 +11,10 @@ class Data {
 	}
 
 	public static function get_taxonomies() {
-		$taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
+		$taxonomies = get_taxonomies( [
+			'public'  => true,
+			'show_ui' => true,
+		], 'objects' );
 		unset( $taxonomies['post_format'] );
 		$taxonomies = apply_filters( 'slim_seo_taxonomies', $taxonomies );
 
