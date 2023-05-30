@@ -8,6 +8,8 @@ class Plugin {
 		// Shortcut.
 		$services = &$this->services;
 
+		$services['upgrade'] = new Upgrade;
+
 		$services['canonical_url']    = new MetaTags\CanonicalUrl;
 		$services['meta_title']       = new MetaTags\Title;
 		$services['meta_description'] = new MetaTags\Description;
@@ -54,11 +56,19 @@ class Plugin {
 
 		// Front-end only.
 		$services['rel_links']     = new MetaTags\RelLinks;
-		$services['open_graph']    = new MetaTags\OpenGraph( $services['meta_title'], $services['meta_description'], $services['canonical_url'] );
+		$services['open_graph']    = new MetaTags\OpenGraph(
+			$services['meta_title'],
+			$services['meta_description'],
+			$services['canonical_url']
+		);
 		$services['twitter_cards'] = new MetaTags\TwitterCards;
 		$services['feed']          = new Feed;
 
-		$services['schema'] = new Schema\Manager( $services['meta_title'], $services['meta_description'], $services['breadcrumbs'] );
+		$services['schema'] = new Schema\Manager(
+			$services['meta_title'],
+			$services['meta_description'],
+			$services['breadcrumbs']
+		);
 
 		$services['woocommerce']     = new Integrations\WooCommerce;
 		$services['auto_listings']   = new Integrations\AutoListings;

@@ -116,10 +116,8 @@ class Item {
 	}
 
 	private function get_data(): array {
-		$option = get_option( 'slim_seo', [] ) ?: [];
-		$option = is_array( $option ) && ! empty( $option ) ? $option : [];
-
-		$data = $option[ $this->option_key ] ?? [];
+		$option = get_option( 'slim_seo' );
+		$data   = $option[ $this->option_key ] ?? [];
 
 		return array_merge( $this->defaults, $data );
 	}
