@@ -48,7 +48,7 @@ class Settings {
 			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
 		}
 		if ( $this->meta_tags_manager->get_post_types() ) {
-			$tabs['post-types'] = __( 'Post types', 'slim-seo' );
+			$tabs['post-types'] = __( 'Post Types', 'slim-seo' );
 		}
 
 		$tabs['social'] = __( 'Social', 'slim-seo' );
