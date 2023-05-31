@@ -11,11 +11,11 @@ class Title {
 		add_filter( 'post_type_archive_title', [ $this, 'set_page_title_as_archive_title' ] );
 	}
 
-	public function get_title() : string {
+	public function get_title(): string {
 		return wp_get_document_title();
 	}
 
-	public function filter_title( $title ) : string {
+	public function filter_title( $title ): string {
 		$custom_title = $this->get_value();
 
 		$title = $custom_title ?: (string) $title;
@@ -25,9 +25,15 @@ class Title {
 		return $title;
 	}
 
-	private function get_home_value() : string {
-		$data = get_option( 'slim_seo' );
-		return $data['home_title'] ?? '';
+	private function get_home_value(): string {
+		$option = get_option( 'slim_seo' );
+		return $option['home']['title'] ?? '';
+	}
+
+	private function get_post_type_archive_value(): string {
+		$post_type_object = get_queried_object();
+		$option           = get_option( 'slim_seo' );
+		return $option[ "{$post_type_object->name}_archive" ]['title'] ?? '';
 	}
 
 	/**
@@ -44,7 +50,7 @@ class Title {
 	 * Make public to allow access from other class.
 	 * @see AdminColumns/Term.php.
 	 */
-	public function get_term_value( $term_id = 0 ) : string {
+	public function get_term_value( $term_id = 0 ): string {
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		return $data['title'] ?? '';

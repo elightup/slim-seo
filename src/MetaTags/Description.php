@@ -46,8 +46,14 @@ class Description {
 	}
 
 	private function get_home_value(): string {
-		$data = get_option( 'slim_seo' );
-		return empty( $data['home_description'] ) ? get_bloginfo( 'description' ) : $data['home_description'];
+		$option = get_option( 'slim_seo' );
+		return $option['home']['description'] ?? get_bloginfo( 'description' );
+	}
+
+	private function get_post_type_archive_value(): string {
+		$post_type_object = get_queried_object();
+		$option           = get_option( 'slim_seo' );
+		return $option[ "{$post_type_object->name}_archive" ]['description'] ?? '';
 	}
 
 	/**

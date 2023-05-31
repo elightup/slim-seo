@@ -1,10 +1,4 @@
 ( function() {
-	tippy( '.ss-tooltip', {
-		placement: 'top',
-		arrow: true,
-		animation: 'fade'
-	} );
-
 	let name = ssObjectType === 'post' ? 'inlineEditPost' : 'inlineEditTax';
 
 	if ( typeof window[ name ] === 'undefined' || ! document.querySelector( '#ss_nonce' ) ) {

@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Sitemaps;
 
+use SlimSEO\Helpers\Data;
+
 class Manager {
 	public function setup() {
 		$this->add_rewrite_rules();
@@ -97,15 +99,17 @@ class Manager {
 	}
 
 	private function get_allowed_post_types(): array {
-		$post_types = get_post_types( [ 'public' => true ] );
-		return (array) apply_filters( 'slim_seo_sitemap_post_types', $post_types );
+		$option     = get_option( 'slim_seo' );
+		$post_types = array_keys( Data::get_post_types() );
+		$post_types = array_filter( $post_types, function ( $post_type ) use ( $option ) {
+			return empty( $option[ $post_type ]['noindex'] );
+		} );
+
+		return (array) apply_filters( 'slim_seo_sitemap_post_types', array_values( $post_types ) );
 	}
 
 	private function get_allowed_taxonomies(): array {
-		$taxonomies = get_taxonomies( [
-			'public'  => true,
-			'show_ui' => true,
-		] );
+		$taxonomies = array_keys( Data::get_taxonomies() );
 		return (array) apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
 	}
 }

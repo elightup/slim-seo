@@ -44,10 +44,8 @@ abstract class Base {
 			return;
 		}
 
-		wp_register_script( 'tippy', 'https://cdn.jsdelivr.net/combine/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js,npm/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js', [], '6.3.7', true );
-
 		wp_enqueue_style( 'slim-seo-admin-columns', SLIM_SEO_URL . 'css/admin-columns.css', [], filemtime( SLIM_SEO_DIR . 'css/admin-columns.css' ) );
-		wp_enqueue_script( 'slim-seo-admin-columns', SLIM_SEO_URL . 'js/admin-columns.js', [ 'tippy' ], filemtime( SLIM_SEO_DIR . 'js/admin-columns.js' ), true );
+		wp_enqueue_script( 'slim-seo-admin-columns', SLIM_SEO_URL . 'js/admin-columns.js', [], filemtime( SLIM_SEO_DIR . 'js/admin-columns.js' ), true );
 		wp_add_inline_script( 'slim-seo-admin-columns', "let ssObjectType = '{$this->object_type}'", 'before' );
 	}
 

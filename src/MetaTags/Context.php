@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimSEO\Helpers\Data;
+
 trait Context {
 	private $queried_object;
 	private $queried_object_id;
@@ -14,17 +16,14 @@ trait Context {
 		// Otherwise get from the post type archive settings.
 		if ( is_post_type_archive() ) {
 			$post_type_object = get_queried_object();
-			if ( ! is_string( $post_type_object->has_archive ) ) {
+			$archive_page     = Data::get_post_type_archive_page( $post_type_object->name );
+
+			if ( ! $archive_page ) {
 				return $this->get_post_type_archive_value();
 			}
 
-			$page = get_page_by_path( $post_type_object->has_archive );
-			if ( ! $page ) {
-				return $this->get_post_type_archive_value();
-			}
-
-			$this->queried_object    = $page;
-			$this->queried_object_id = $page->ID;
+			$this->queried_object    = $archive_page;
+			$this->queried_object_id = $archive_page->ID;
 			return $this->get_singular_value();
 		}
 

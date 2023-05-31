@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO;
 
+use SlimSEO\Helpers\Data;
 use WP_Term;
 
 class Breadcrumbs {
@@ -158,11 +159,9 @@ class Breadcrumbs {
 
 		// If a page is set as the post type archive (like WooCommerce shop), then get title from that page.
 		// Otherwise get from the post type archive settings.
-		if ( is_string( $post_type_object->has_archive ) ) {
-			$page = get_page_by_path( $post_type_object->has_archive );
-			if ( $page ) {
-				$text = get_the_title( $page );
-			}
+		$archive_page = Data::get_post_type_archive_page( $post_type );
+		if ( $archive_page ) {
+			$text = get_the_title( $archive_page );
 		}
 
 		if ( $link ) {

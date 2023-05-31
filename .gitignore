@@ -3,8 +3,13 @@ vendor
 *.swp
 .DS_Store
 Thumbs.db
+*.LICENSE.txt
+
 css/redirection.css
+css/settings.css
+css/meta-tags.css
+
 js/redirection.js
 js/link-attributes/block-editor/dist
 js/breadcrumbs/dist
-*.LICENSE.txt
+js/meta-tags/dist

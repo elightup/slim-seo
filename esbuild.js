@@ -24,3 +24,16 @@ esbuild.build( {
 	entryPoints: [ 'js/redirection/App.js' ],
 	outfile: 'js/redirection.js'
 } );
+
+
+esbuild.build( {
+	...config,
+	entryPoints: [ 'js/meta-tags/src/settings.js' ],
+	outfile: 'js/meta-tags/dist/settings.js'
+} );
+
+esbuild.build( {
+	...config,
+	entryPoints: [ 'js/meta-tags/src/object.js' ],
+	outfile: 'js/meta-tags/dist/object.js'
+} );

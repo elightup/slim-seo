@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
 
+use SlimSEO\Helpers\Data;
+
 class Post extends Base {
 	public function setup() {
 		$this->object_type = 'post';
@@ -35,8 +37,7 @@ class Post extends Base {
 	}
 
 	public function get_types() {
-		$post_types = get_post_types( [ 'public' => true ] );
-		unset( $post_types['attachment'] );
+		$post_types = array_keys( Data::get_post_types() );
 		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );
 
 		return $post_types;

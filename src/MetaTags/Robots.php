@@ -68,21 +68,34 @@ class Robots {
 		return ! $noindex;
 	}
 
+	private function get_post_type_archive_value(): bool {
+		$post_type_object = get_queried_object();
+		$option           = get_option( 'slim_seo' );
+		return (bool) ( $option[ $post_type_object->name ]['noindex'] ?? false );
+	}
+
 	/**
 	 * Make public to allow access from other class.
 	 * @see AdminColumns/Post.php.
 	 */
 	public function get_singular_value( $post_id = 0 ): bool {
-		$post_id = $post_id ?: $this->get_queried_object_id();
-		$data    = get_post_meta( $post_id, 'slim_seo', true );
-		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
+		$post      = $post_id ? get_post( $post_id ) : $this->get_queried_object();
+		$post_type = get_post_type( $post );
+
+		$option            = get_option( 'slim_seo' );
+		$post_type_noindex = (bool) ( $option[ $post_type ]['noindex'] ?? false );
+
+		$data         = get_post_meta( $post_id, 'slim_seo', true );
+		$post_noindex = (bool) ( $data['noindex'] ?? false );
+
+		return $post_noindex || $post_type_noindex;
 	}
 
 	/**
 	 * Make public to allow access from other class.
 	 * @see AdminColumns/Term.php.
 	 */
-	public function get_term_value( $term_id = 0 ) : bool {
+	public function get_term_value( $term_id = 0 ): bool {
 		$term_id = $term_id ?: get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;

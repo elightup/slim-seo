@@ -15,9 +15,9 @@ abstract class Base {
 
 	public function enqueue() {
 		wp_enqueue_media();
-		wp_enqueue_style( 'slim-seo-meta-box', SLIM_SEO_URL . 'css/meta-box.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-meta-box', SLIM_SEO_URL . 'js/meta-box.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-		wp_localize_script( 'slim-seo-meta-box', 'ss', $this->get_script_params() );
+		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], SLIM_SEO_VER );
+		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/object.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
+		wp_localize_script( 'slim-seo-meta-tags', 'ss', $this->get_script_params() );
 	}
 
 	protected function get_script_params(): array {
