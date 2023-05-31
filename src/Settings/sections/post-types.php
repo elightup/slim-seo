@@ -1,6 +1,6 @@
 <?php
-
 use SlimSEO\Helpers\Data;
+use SlimSEO\Helpers\UI;
 
 $post_types = $this->meta_tags_manager->get_post_types();
 $option     = get_option( 'slim_seo' );
@@ -32,7 +32,7 @@ $option     = get_option( 'slim_seo' );
 			<div class="ss-label">
 				<label for="ss-noindex-<?= esc_attr( $post_type ) ?>">
 					<?php esc_html_e( 'Hide from search results', 'slim-seo' ) ?>
-					<?php $this->tooltip( __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) ) ?>
+					<?php UI::tooltip( __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) ) ?>
 				</label>
 			</div>
 			<div class="ss-input">

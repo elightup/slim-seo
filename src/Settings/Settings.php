@@ -72,10 +72,8 @@ class Settings {
 	}
 
 	public function enqueue() {
-		wp_register_script( 'tippy', 'https://cdn.jsdelivr.net/combine/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js,npm/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js', [], '6.3.7', true );
-
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
-		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [ 'tippy' ], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
+		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
 
 		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], filemtime( SLIM_SEO_DIR . '/js/migrate.js' ), true );
 		wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
@@ -118,10 +116,6 @@ class Settings {
 		$features = $option['features'] ?? $defaults;
 
 		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
-	}
-
-	public function tooltip( $content ) {
-		echo '<button type="button" class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '"><span class="dashicons dashicons-editor-help"></span></button>';
 	}
 
 	public function get_pane( string $name ): string {

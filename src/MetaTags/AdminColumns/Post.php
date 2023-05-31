@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags\AdminColumns;
 
+use SlimSEO\Helpers\UI;
 use SlimSEO\MetaTags\Helper;
 
 class Post extends Base {
@@ -25,14 +26,14 @@ class Post extends Base {
 				$title = $this->title->get_singular_value( $post_id );
 				$title = apply_filters( 'slim_seo_meta_title', $title, $post_id );
 				$title = Helper::normalize( $title );
-				echo '<div class="ss-tooltip" data-tippy-content="', esc_attr( $title ), '"><span class="ss-meta-content">', esc_html( $title ), '</span></div>';
+				UI::tooltip( $title, "<span class='ss-meta-content'>$title</span>", 'top' );
 				break;
 			case 'meta_description':
 				$data        = get_post_meta( $post_id, 'slim_seo', true ) ?: [];
 				$description = $data['description'] ?? '';
 				$description = apply_filters( 'slim_seo_meta_description', $description, $post_id );
 				$description = Helper::normalize( $description );
-				echo '<div class="ss-tooltip" data-tippy-content="', esc_attr( $description ), '"><span class="ss-meta-content">', esc_html( $description ), '</span></div>';
+				UI::tooltip( $description, "<span class='ss-meta-content'>$description</span>", 'top' );
 				break;
 			case 'index':
 				$noindex = $this->robots->get_singular_value( $post_id );

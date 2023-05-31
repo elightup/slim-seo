@@ -29,14 +29,6 @@
 
 	activateFirstTab();
 
-	if ( typeof tippy !== 'undefined' ) {
-		tippy( '.ss-tooltip', {
-			placement: 'right',
-			arrow: true,
-			animation: 'fade'
-		} );
-	}
-
 	function toggleCheckboxHandleClick( e ) {
 		const input = e.target.parentElement.querySelector( 'input' );
 		input.checked = !input.checked;

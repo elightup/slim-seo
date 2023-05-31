@@ -129,19 +129,17 @@
 
 /* Tooltip */
 .ss-tooltip {
-	border: none;
-	background: no-repeat;
-	padding: 0;
 	color: #ccc;
 	width: 16px;
 	height: 16px;
-	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
 }
 .ss-tooltip .dashicons {
 	font-size: 14px;
 	width: 16px;
 	height: 16px;
-	margin-top: 2px;
 }
 .tippy-tooltip {
 	text-align: left;
