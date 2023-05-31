@@ -36,7 +36,7 @@ $option     = get_option( 'slim_seo' );
 				</label>
 			</div>
 			<div class="ss-input">
-				<input type="checkbox" id="ss-noindex-<?= esc_attr( $post_type ) ?>" name="slim_seo[<?= esc_attr( $post_type ) ?>][noindex]" value="1"<?php checked( 1, $data['noindex'] ?? 0 ) ?>>
+				<?php UI::toggle( "slim_seo[$post_type][noindex]", 1, ! empty( $data['noindex'] ) ) ?>
 			</div>
 		</div>
 

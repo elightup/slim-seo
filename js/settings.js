@@ -28,12 +28,4 @@
 	document.querySelector( '.ss-tab-list' ).addEventListener( 'click', clickHandle );
 
 	activateFirstTab();
-
-	function toggleCheckboxHandleClick( e ) {
-		const input = e.target.parentElement.querySelector( 'input' );
-		input.checked = !input.checked;
-	}
-
-	const toggleCheckboxes = document.querySelectorAll( '.ss-feature .ss-toggle' );
-	toggleCheckboxes.forEach( toggleCheckbox => toggleCheckbox.addEventListener( 'click', toggleCheckboxHandleClick ) );
 } )( document, location );
