@@ -58,6 +58,7 @@ class Bricks {
 			'related-posts',
 			'search',
 			'sidebar',
+			'shortcode',
 			'social-icons',
 			'svg',
 			'video',
