@@ -7,6 +7,10 @@ class Manager {
 	private $items = [];
 
 	public function setup() {
+		add_action( 'admin_init', [ $this, 'admin_init' ] );
+	}
+
+	public function admin_init() {
 		$items = array_keys( array_filter( $this->get_post_types(), function ( $post_type_object ) {
 			return $post_type_object->has_archive;
 		} ) );
