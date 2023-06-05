@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.7
 Tested up to: 6.2.2
 Requires PHP: 7.1
-Stable tag: 3.21.0
+Stable tag: 3.21.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,9 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.21.1 - 2023-06-05 =
+- Fix error on settings page when having a CPT with has_archive = true
 
 = 3.21.0 - 2023-06-05 =
 
