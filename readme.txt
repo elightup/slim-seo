@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.7
-Tested up to: 6.2.1
+Tested up to: 6.2.2
 Requires PHP: 7.1
-Stable tag: 3.20.2
+Stable tag: 3.21.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -148,6 +148,23 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 
 == Changelog ==
 
+= 3.21.0 - 2023-06-05 =
+
+**Highlights**
+
+Add settings for custom post types to give you options to:
+
+- Not include a post type in the search results. This option will apply the robots tag "noindex" to all posts of the post type and exclude the post type from the sitemap.
+- Change the meta tags (title, description, Facebook & Twitter images) for the post type archive page.
+
+Other changes:
+
+- Add "Page %s" to the title for paginated pages with custom title
+- Bricks integration: ignore shortcodes inside Bricks elements when rendering the meta description
+- Add `slim_seo_meta_description_manual` filter to decide whether the meta description is manually set
+- Fix conflict with `core/query` block
+- Fix redirection "To URL" missing trailing slash
+
 = 3.20.2 - 2023-05-19 =
 - Add support for WPForms and MailPoet
 - Fix wrong text domain.
@@ -161,7 +178,8 @@ Based on the user feedback, we decide to disable user sitemap by default. You ca
 
 You might want to re-save the permalinks to update the rewrite rules.
 
-Other fixes:
+Other changes:
+
 - Improve the Bricks integration to work with pages that use templates
 
 = 3.20.0 - 2023-04-20 =
