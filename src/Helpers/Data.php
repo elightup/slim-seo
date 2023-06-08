@@ -23,7 +23,7 @@ class Data {
 
 	public static function get_post_type_archive_page( string $post_type ) {
 		$post_type_object = get_post_type_object( $post_type );
-		if ( ! is_string( $post_type_object->has_archive ) ) {
+		if ( ! $post_type_object || ! is_string( $post_type_object->has_archive ) ) {
 			return null;
 		}
 
