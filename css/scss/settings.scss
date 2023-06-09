@@ -46,7 +46,7 @@
 	justify-content: space-between;
 	background: #fff;
 	padding: 0 24px;
-	border-bottom: var(--border);
+	border-bottom: var(--ss-border);
 }
 .ss-title svg {
 	width: 36px;
@@ -63,7 +63,7 @@
 	padding: 6px 12px;
 }
 .ss-title a:hover {
-	background: var(--color-lighter);
+	background: var(--ss-color-lighter);
 }
 .ss-title .dashicons {
 	font-size: 24px;
@@ -78,13 +78,13 @@
 .ss-tabs {
 	flex: 1;
 	background: #fff;
-	border: var(--border);
+	border: var(--ss-border);
 }
 .ss-content > .ss-tabs {
 	margin: 0;
 }
 .ss-tab-list {
-	border-bottom: var(--border);
+	border-bottom: var(--ss-border);
 	margin: 0;
 	display: flex;
 	align-items: center;
@@ -103,8 +103,8 @@
 	color: inherit;
 }
 .ss-tab.ss-is-active {
-	box-shadow: inset 0 0 0 1.5px transparent,inset 0 -4px 0 0 var(--wp-admin-theme-color);
-	color: var(--wp-admin-theme-color);
+	box-shadow: inset 0 0 0 1.5px transparent,inset 0 -4px 0 0 var(--ss-color-primary);
+	color: var(--ss-color-primary);
 }
 .ss-tab-pane {
 	display: none;

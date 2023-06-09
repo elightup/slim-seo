@@ -30,7 +30,7 @@
 		display: none;
 
 		&:checked + .ss-toggle__switch {
-			background: var(--wp-admin-theme-color);
+			background: var(--ss-color-primary);
 
 			&:before {
 				left: 14px;
