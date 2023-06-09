@@ -23,11 +23,9 @@ class UI {
 	public static function toggle( string $name, string $value, bool $checked, string $title = '' ) {
 		?>
 		<label class="ss-toggle">
-			<input type="checkbox" name="<?= esc_attr( $name ) ?>" value="<?= esc_attr( $value ) ?>"<?php checked( $checked ) ?>>
+			<input type="checkbox" id="<?= esc_attr( $name ) ?>" name="<?= esc_attr( $name ) ?>" value="<?= esc_attr( $value ) ?>"<?php checked( $checked ) ?>>
 			<div class="ss-toggle__switch"></div>
-			<?php if ( $title ) : ?>
-				<span class="ss-toggle__label"><?= esc_html( $title ) ?></span>
-			<?php endif ?>
+			<?= $title ? esc_html( $title ) : '' ?>
 		</label>
 		<?php
 	}
