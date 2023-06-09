@@ -1,5 +1,6 @@
 @import 'components/variables';
 @import 'components/toggle';
+@import 'components/tabs';
 
 /* General */
 .settings_page_slim-seo #wpcontent {
@@ -72,49 +73,6 @@
 	display: block;
 	margin-inline: auto;
 	color: #3c434a;
-}
-
-/* Tabs */
-.ss-tabs {
-	flex: 1;
-	background: #fff;
-	border: var(--ss-border);
-}
-.ss-content > .ss-tabs {
-	margin: 0;
-}
-.ss-tab-list {
-	border-bottom: var(--ss-border);
-	margin: 0;
-	display: flex;
-	align-items: center;
-}
-.ss-tab {
-	cursor: pointer;
-	display: inline-block;
-	box-sizing: border-box;
-	height: 48px;
-	line-height: 42px;
-	padding: 3px 12px;
-	margin-bottom: 0;
-	font-weight: 500;
-	transition: box-shadow 0.1s linear;
-	text-decoration: none;
-	color: inherit;
-}
-.ss-tab.ss-is-active {
-	box-shadow: inset 0 0 0 1.5px transparent,inset 0 -4px 0 0 var(--ss-color-primary);
-	color: var(--ss-color-primary);
-}
-.ss-tab-pane {
-	display: none;
-	padding: 16px 12px;
-}
-.ss-tab-pane.ss-is-active {
-	display: block;
-}
-.ss-tab-pane > :first-child {
-	margin-top: 0;
 }
 
 /* Tooltip */
