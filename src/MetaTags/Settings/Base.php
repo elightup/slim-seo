@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
 
+use SlimSEO\Helpers\UI;
+
 abstract class Base {
 	protected $object_type;
 	protected $title;
@@ -108,10 +110,10 @@ abstract class Base {
 		</div>
 		<div class="ss-field ss-field-checkbox">
 			<div class="ss-label">
-				<label for="ss-noindex"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
+				<label for="slim_seo[noindex]"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
-				<input type="checkbox" id="ss-noindex" name="slim_seo[noindex]" value="1" <?php checked( $data['noindex'] ); ?>>
+				<?php UI::toggle( 'slim_seo[noindex]', 1, $data['noindex'] ); ?>
 			</div>
 		</div>
 		<?php

@@ -18,11 +18,11 @@
 
 	thead,
 	tfoot {
-		color: var(--color-gray);
+		color: var(--ss-color-gray);
 	}
 
 	tr {
-		border-bottom: var(--border);
+		border-bottom: var(--ss-border);
 	}
 
 	tfoot tr {
@@ -86,7 +86,7 @@
 	text-align: right;
 
 	a {
-		color: var(--color-gray);
+		color: var(--ss-color-gray);
 		padding: 4px;
 		border-radius: 4px;
 		display: inline-block;
@@ -94,10 +94,10 @@
 
 		&:hover {
 			color: inherit;
-			background: var(--color-lighter);
+			background: var(--ss-color-lighter);
 
 			.dashicons-trash {
-				color: var(--color-red);
+				color: var(--ss-color-red);
 			}
 		}
 	}
@@ -149,7 +149,7 @@
 }
 
 .ss-warning-message {
-	color: var(--color-red);
+	color: var(--ss-color-red);
 }
 
 .ssr-modal-field {

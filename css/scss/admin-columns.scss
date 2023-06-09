@@ -1,0 +1,20 @@
+@use 'components/status-icons';
+
+.ss-meta-content {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.column-index.column-index {
+	width: 48px;
+	text-align: center;
+}
+
+/* WooCommerce */
+.post-type-product .column-meta_title {
+	width: 6%;
+}
+.post-type-product .column-meta_description {
+	width: 10%;
+}

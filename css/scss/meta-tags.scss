@@ -1,3 +1,6 @@
+@use 'components/status-icons';
+@use 'components/toggle';
+
 /* Field */
 .ss-field {
 	display: flex;
@@ -35,6 +38,7 @@
 /* Checkbox field */
 .ss-field-checkbox {
 	flex-direction: row;
+	gap: 5px;
 }
 
 .ss-field-checkbox .ss-label {
@@ -68,8 +72,12 @@
 		margin-bottom: 0;
 	}
 
-	.ss-field-checkbox .ss-label {
-		order: 0;
+	.ss-field-checkbox {
+		gap: 0;
+
+		.ss-label {
+			order: 0;
+		}
 	}
 
 	/* Styles for 'side' meta box */
@@ -84,40 +92,12 @@
 
 	#side-sortables .ss-field-checkbox {
 		flex-direction: row;
+		gap: 5px;
 	}
 
 	#side-sortables .ss-field-checkbox .ss-label {
 		order: 2;
 	}
-}
-
-/* Status icon */
-.ss-success:after,
-.ss-warning:after,
-.ss-danger:after {
-	display: inline-block;
-	width: 12px;
-	height: 12px;
-	font-size: 8px;
-	line-height: 12px;
-	border-radius: 9px;
-	color: #fff;
-	text-align: center;
-}
-
-.ss-success:after {
-	content: "\2713";
-	background: #70d028;
-}
-
-.ss-warning:after {
-	content: "!";
-	background: #f56e28;
-}
-
-.ss-danger:after {
-	content: "\2717";
-	background: #e53e3e;
 }
 
 // For terms & settings page
