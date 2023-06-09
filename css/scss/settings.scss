@@ -1,6 +1,6 @@
-@import 'components/variables';
-@import 'components/toggle';
-@import 'components/tabs';
+@use 'components/variables';
+@use 'components/toggle';
+@use 'components/tabs';
 
 /* General */
 .settings_page_slim-seo #wpcontent {
