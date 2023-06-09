@@ -1,0 +1,27 @@
+.ss-success:after,
+.ss-warning:after,
+.ss-danger:after {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	font-size: 8px;
+	line-height: 12px;
+	border-radius: 9px;
+	color: #fff;
+	text-align: center;
+}
+
+.ss-success:after {
+	content: "\2713";
+	background: #70d028;
+}
+
+.ss-warning:after {
+	content: "!";
+	background: #f56e28;
+}
+
+.ss-danger:after {
+	content: "\2717";
+	background: #e53e3e;
+}
