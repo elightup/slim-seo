@@ -2,6 +2,8 @@
 namespace SlimSEO\Migration;
 
 use RankMath\Helper as RMHelper;
+use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Redirection\Helper as RedirectionHelper;
 
 class RankMath extends Replacer {
 	public function before_replace_post( $post_id ) {
@@ -82,6 +84,78 @@ class RankMath extends Replacer {
 	protected function get_term_noindex( $term_id ) {
 		$robots = get_term_meta( $term_id, 'rank_math_robots', true );
 		return intval( is_array( $robots ) && in_array( 'noindex', $robots, true ) );
+	}
+
+	public function migrate_redirects() {
+		$migrated_redirects = 0;
+
+		global $wpdb;
+
+		$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}rank_math_redirections", ARRAY_A );
+
+		if ( empty( $results ) ) {
+			return $migrated_redirects;
+		}
+
+		$db_redirects        = new DbRedirects();
+		$redirect_types      = RedirectionHelper::redirect_types();
+		$redirect_conditions = RedirectionHelper::condition_options();
+
+		foreach ( $results as $result ) {
+			if ( empty( $result['sources'] ) ) {
+				continue;
+			}
+
+			$sources = maybe_unserialize( $result['sources'] );
+
+			if ( ! is_array( $sources ) ) {
+				continue;
+			}
+
+			foreach ( $sources as $source ) {
+				// Ignore if From URL exists
+				if ( $db_redirects->exists( $source['pattern'] ) ) {
+					continue;
+				}
+
+				$type      = $result['header_code'];
+				$type      = isset( $redirect_types[ $type ] ) ? $type : 301;
+				$condition = $source['comparison'];
+
+				switch ( $condition ) {
+					case 'start':
+						$condition = 'start-with';
+
+						break;
+
+					case 'end':
+						$condition = 'end-with';
+
+						break;
+
+					default:
+						$condition = isset( $redirect_conditions[ $condition ] ) ? $condition : 'exact-match';
+
+						break;
+				}
+
+				$redirect = [
+					'type'             => $type,
+					'condition'        => $condition,
+					'from'             => $source['pattern'],
+					'to'               => $result['url_to'],
+					'note'             => '',
+					'enable'           => 'active' === $result['status'] ? 1 : 0,
+					'ignoreParameters' => 0,
+				];
+
+				$db_redirects->update( $redirect );
+
+				$migrated_redirects++;
+			}			
+		}
+
+		return $migrated_redirects;
 	}
 
 	public function is_activated() {
