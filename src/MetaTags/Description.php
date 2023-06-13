@@ -42,7 +42,7 @@ class Description {
 	}
 
 	private function truncate( string $text ): string {
-		return function_exists( 'mb_substr' ) ? mb_substr( $text, 0, 160 ) : substr( $text, 0, 160 );
+		return mb_substr( $text, 0, 160 );
 	}
 
 	private function get_home_value(): string {
