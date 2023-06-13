@@ -19,7 +19,7 @@ class Activator {
 		}
 	}
 
-	public function add_plugin_action_links( array $links ) : array {
+	public function add_plugin_action_links( array $links ): array {
 		$links[]     = '<a href="' . esc_url( admin_url( 'options-general.php?page=slim-seo' ) ) . '">' . __( 'Settings', 'slim-seo' ) . '</a>';
 		$upgradeable = apply_filters( 'slim_seo_upgradeable', true );
 		if ( $upgradeable ) {
@@ -74,9 +74,9 @@ class Activator {
 		die;
 	}
 
-	private function is_bundled() : bool {
+	private function is_bundled(): bool {
 		foreach ( $_REQUEST as $key => $value ) { // phpcs:ignore WordPress.Security.NonceVerification
-			if ( false !== strpos( $key, 'tgmpa' ) || ( ! is_array( $value ) && false !== strpos( $value, 'tgmpa' ) ) ) {
+			if ( str_contains( $key, 'tgmpa' ) || ( is_string( $value ) && str_contains( $value, 'tgmpa' ) ) ) {
 				return true;
 			}
 		}

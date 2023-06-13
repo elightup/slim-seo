@@ -50,7 +50,7 @@ class Manager {
 			$sitemap->output();
 		}
 
-		if ( 0 === strpos( $type, 'post-type-' ) ) {
+		if ( str_starts_with( $type, 'post-type-' ) ) {
 			$post_type = substr( $type, 10 );
 			$page      = 1;
 			if ( preg_match( '/(.+)-(\d+)$/', $post_type, $matches ) && post_type_exists( $matches[1] ) ) {
@@ -65,7 +65,7 @@ class Manager {
 			$sitemap->output();
 		}
 
-		if ( 0 === strpos( $type, 'taxonomy-' ) ) {
+		if ( str_starts_with( $type, 'taxonomy-' ) ) {
 			$taxonomy = substr( $type, 9 );
 			$page     = 1;
 			if ( preg_match( '/(.+)-(\d+)$/', $taxonomy, $matches ) && taxonomy_exists( $matches[1] ) ) {
@@ -80,7 +80,7 @@ class Manager {
 			$sitemap->output();
 		}
 
-		if ( User::is_active() && 0 === strpos( $type, 'user' ) ) {
+		if ( User::is_active() && str_starts_with( $type, 'user' ) ) {
 			$user = substr( $type, 4 );
 			$page = 1;
 			if ( preg_match( '/-(\d+)$/', $user, $matches ) ) {

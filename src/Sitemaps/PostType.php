@@ -175,7 +175,7 @@ class PostType {
 
 	private function is_external( string $url ): bool {
 		$home_url = untrailingslashit( home_url() );
-		return strpos( $url, $home_url ) === false;
+		return ! str_contains( $url, $home_url );
 	}
 
 	private function get_absolute_url( $url ) {
@@ -186,7 +186,7 @@ class PostType {
 		$url_parts = wp_parse_url( home_url() );
 
 		// Non-protocol URL.
-		if ( 0 === strpos( $url, '//' ) ) {
+		if ( str_starts_with( $url, '//' ) ) {
 			return "{$url_parts['scheme']}:{$url}";
 		}
 
