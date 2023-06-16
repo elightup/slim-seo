@@ -85,7 +85,7 @@ class Robots {
 		$option            = get_option( 'slim_seo' );
 		$post_type_noindex = (bool) ( $option[ $post_type ]['noindex'] ?? false );
 
-		$data         = get_post_meta( $post_id, 'slim_seo', true );
+		$data         = get_post_meta( $post->ID, 'slim_seo', true );
 		$post_noindex = (bool) ( $data['noindex'] ?? false );
 
 		return $post_noindex || $post_type_noindex;

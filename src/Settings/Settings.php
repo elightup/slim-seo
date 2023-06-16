@@ -93,12 +93,26 @@ class Settings {
 		$option = $option ?: [];
 		$option = array_merge( $option, $data );
 		$option = apply_filters( 'slim_seo_option', $option, $data );
+		$this->remove_post_types_noindex( $option, $data );
 		$option = $this->sanitize( $option );
 
 		if ( empty( $option ) ) {
 			delete_option( 'slim_seo' );
 		} else {
 			update_option( 'slim_seo', $option );
+		}
+	}
+
+	public function remove_post_types_noindex( &$option, $data ) {
+		$post_types = $this->meta_tags_manager->get_post_types();
+		if ( empty( $post_types ) ) {
+			return;
+		}
+
+		foreach ( $post_types as $key => $post_type_object ) {
+			if ( ! isset( $data[ $key ]['noindex'] ) ) {
+				unset( $option[ $key ]['noindex'] );
+			}
 		}
 	}
 
