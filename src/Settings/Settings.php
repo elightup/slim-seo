@@ -92,8 +92,8 @@ class Settings {
 		$option = get_option( 'slim_seo' );
 		$option = $option ?: [];
 		$option = array_merge( $option, $data );
-		$option = apply_filters( 'slim_seo_option', $option, $data );
 		$this->remove_post_types_noindex( $option, $data );
+		$option = apply_filters( 'slim_seo_option', $option, $data );
 		$option = $this->sanitize( $option );
 
 		if ( empty( $option ) ) {
