@@ -54,11 +54,11 @@ class Manager {
 			if ( ! isset( $option[ $key ] ) ) {
 				continue;
 			}
-			$data = $item->sanitize( $option[ $key ] );
-			if ( empty( $data ) ) {
+			$temp = $item->sanitize( $option[ $key ] );
+			if ( empty( $temp ) ) {
 				unset( $option[ $key ] );
 			} else {
-				$option[ $key ] = $data;
+				$option[ $key ] = $temp;
 			}
 		}
 
