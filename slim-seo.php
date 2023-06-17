@@ -26,7 +26,7 @@ require __DIR__ . '/vendor/autoload.php';
 new Activator( __FILE__ );
 new Deactivator( __FILE__ );
 
-$slim_seo = new Plugin;
+$slim_seo = new Container();
 $slim_seo->register_services();
 
 // Initialize at priority 5 to be able to disable core sitemaps completely which runs at priority 10.

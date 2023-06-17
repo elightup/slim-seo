@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO;
 
-class Plugin {
+class Container {
 	private $services = [];
 
 	public function register_services() {
