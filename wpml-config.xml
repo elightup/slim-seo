@@ -1,0 +1,6 @@
+<wpml-config>
+	<custom-fields>
+		<custom-field action="translate">slim_seo</custom-field>
+	</custom-fields>
+</wpml-config>
+
