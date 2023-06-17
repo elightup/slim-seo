@@ -92,9 +92,8 @@ class Settings {
 		$option = get_option( 'slim_seo' );
 		$option = $option ?: [];
 		$option = array_merge( $option, $data );
-		$this->remove_post_types_noindex( $option, $data );
 		$option = apply_filters( 'slim_seo_option', $option, $data );
-		$option = $this->sanitize( $option );
+		$option = $this->sanitize( $option, $data );
 
 		if ( empty( $option ) ) {
 			delete_option( 'slim_seo' );
@@ -103,23 +102,10 @@ class Settings {
 		}
 	}
 
-	public function remove_post_types_noindex( &$option, $data ) {
-		$post_types = $this->meta_tags_manager->get_post_types();
-		if ( empty( $post_types ) ) {
-			return;
-		}
-
-		foreach ( $post_types as $key => $post_type_object ) {
-			if ( ! isset( $data[ $key ]['noindex'] ) ) {
-				unset( $option[ $key ]['noindex'] );
-			}
-		}
-	}
-
-	private function sanitize( $option ) {
+	private function sanitize( $option, $data ) {
 		$option = array_merge( $this->defaults, $option );
 
-		$this->meta_tags_manager->sanitize( $option );
+		$this->meta_tags_manager->sanitize( $option, $data );
 
 		return array_filter( $option );
 	}

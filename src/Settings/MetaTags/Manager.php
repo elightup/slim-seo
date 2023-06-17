@@ -49,7 +49,7 @@ class Manager {
 		return 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' );
 	}
 
-	public function sanitize( array &$option ) {
+	public function sanitize( array &$option, $data ) {
 		foreach ( $this->items as $key => $item ) {
 			if ( ! isset( $option[ $key ] ) ) {
 				continue;
@@ -59,6 +59,12 @@ class Manager {
 				unset( $option[ $key ] );
 			} else {
 				$option[ $key ] = $data;
+			}
+		}
+
+		foreach ( $this->get_post_types() as $key => $post_type_object ) {
+			if ( ! isset( $data[ $key ]['noindex'] ) ) {
+				unset( $option[ $key ]['noindex'] );
 			}
 		}
 	}
