@@ -49,7 +49,16 @@ class Manager {
 		return 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' );
 	}
 
-	public function sanitize( array &$option, $data ) {
+	public function sanitize( array &$option, array $data ) {
+		// Post type settings.
+		$post_types = array_keys( $this->get_post_types() );
+		foreach ( $post_types as $post_type ) {
+			if ( empty( $data[ $post_type ] ) ) {
+				unset( $option[ $post_type ] );
+			}
+		}
+
+		// Post type archive settings.
 		foreach ( $this->items as $key => $item ) {
 			if ( ! isset( $option[ $key ] ) ) {
 				continue;
@@ -59,12 +68,6 @@ class Manager {
 				unset( $option[ $key ] );
 			} else {
 				$option[ $key ] = $temp;
-			}
-		}
-
-		foreach ( $this->get_post_types() as $key => $post_type_object ) {
-			if ( ! isset( $data[ $key ]['noindex'] ) ) {
-				unset( $option[ $key ]['noindex'] );
 			}
 		}
 	}
