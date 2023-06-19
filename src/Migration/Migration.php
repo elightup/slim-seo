@@ -53,7 +53,7 @@ class Migration {
 		if ( $this->source->is_activated() ) {
 			return;
 		}
-		$sources = Helper::get_sources();
+		$sources = Data::get_migration_sources();
 
 		// Translators: %s is the plugin name.
 		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $sources[ $source_id ] ), 400 );
@@ -143,7 +143,7 @@ class Migration {
 	}
 
 	private function get_posts(): array {
-		$query      = new \WP_Query( [
+		$query = new \WP_Query( [
 			'post_type'      => array_keys( Data::get_post_types() ),
 			'post_status'    => 'any',
 			'posts_per_page' => $this->threshold,

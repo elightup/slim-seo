@@ -6,14 +6,14 @@
 	<label for="source"><?php esc_html_e( 'Migrate SEO data from:', 'slim-seo' ); ?></label>
 	<select name="source" id="source">
 		<optgroup value="meta" label="<?php esc_html_e( 'SEO plugins', 'slim-seo' ); ?>">
-			<?php $sources = SlimSEO\Migration\Helper::get_sources( 'meta' ) ?>
+			<?php $sources = SlimSEO\Helpers\Data::get_migration_sources( 'meta' ) ?>
 			<?php foreach ( $sources as $id => $source ) : ?>
 				<option value="<?= esc_attr( $id ); ?>"><?= esc_html( $source ); ?></option>
 			<?php endforeach ?>
 		</optgroup>
 
 		<optgroup value="redirection" label="<?php esc_html_e( 'Redirection plugins', 'slim-seo' ); ?>">
-			<?php $sources = SlimSEO\Migration\Helper::get_sources( 'redirection' ) ?>
+			<?php $sources = SlimSEO\Helpers\Data::get_migration_sources( 'redirection' ) ?>
 			<?php foreach ( $sources as $id => $source ) : ?>
 				<option value="<?= esc_attr( $id ); ?>"><?= esc_html( $source ); ?></option>
 			<?php endforeach ?>
