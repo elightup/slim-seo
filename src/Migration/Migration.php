@@ -145,7 +145,7 @@ class Migration {
 		$post_types = Helper::get_post_types();
 		$posts      = new \WP_Query( [
 			'post_type'      => $post_types,
-			'post_status'    => [ 'publish', 'draft' ],
+			'post_status'    => 'any',
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',
