@@ -48,7 +48,7 @@ class Log404 {
 		update_option( $this->option_name, SLIM_SEO_VER );
 	}
 
-	public function table_exists() : bool {
+	public function table_exists(): bool {
 		return get_option( $this->option_name ) ? true : false;
 	}
 
@@ -60,7 +60,7 @@ class Log404 {
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->slim_seo_404}" );
 	}
 
-	public function get_log_by_url( string $value ) : array {
+	public function get_log_by_url( string $value ): array {
 		global $wpdb;
 
 		$row = $wpdb->get_row(
@@ -76,7 +76,7 @@ class Log404 {
 		return ! empty( $row ) ? $row : [];
 	}
 
-	public function get_total() : int {
+	public function get_total(): int {
 		global $wpdb;
 
 		return $wpdb->get_var(
@@ -85,7 +85,7 @@ class Log404 {
 		);
 	}
 
-	public function list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ) : array {
+	public function list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ): array {
 		global $wpdb;
 
 		$sql_query = "

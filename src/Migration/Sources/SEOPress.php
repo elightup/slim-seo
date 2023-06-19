@@ -2,7 +2,7 @@
 namespace SlimSEO\Migration\Sources;
 
 class SEOPress extends Source {
-    protected $constant = 'SEOPRESS_VERSION';
+	protected $constant = 'SEOPRESS_VERSION';
 	private $context;
 
 	protected function before_migrate_post( $post_id ) {

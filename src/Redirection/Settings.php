@@ -15,12 +15,12 @@ class Settings {
 		add_filter( 'slim_seo_option', [ $this, 'option_saved' ], 10, 2 );
 	}
 
-	public function add_tab( array $tabs ) : array {
+	public function add_tab( array $tabs ): array {
 		$tabs['redirection'] = __( 'Redirection', 'slim-seo' );
 		return $tabs;
 	}
 
-	public function add_pane( array $panes ) : array {
+	public function add_pane( array $panes ): array {
 		$panes['redirection'] = '<div id="redirection" class="ss-tab-pane"><div id="ss-redirection"></div></div>';
 
 		return $panes;
@@ -64,7 +64,7 @@ class Settings {
 		do_action( 'slim_seo_redirection_enqueue_settings' );
 	}
 
-	public function option_saved( array $option, array $data ) : array {
+	public function option_saved( array $option, array $data ): array {
 		$checkboxes = [
 			'force_trailing_slash',
 			'auto_redirection',
@@ -85,7 +85,7 @@ class Settings {
 		return $option;
 	}
 
-	public static function list() : array {
+	public static function list(): array {
 		$saved_settings = get_option( 'slim_seo' ) ?: [];
 		$settings       = [
 			'force_trailing_slash' => 0,

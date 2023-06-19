@@ -44,11 +44,11 @@ class Log404 extends Base {
 		] );
 	}
 
-	public function get_total() : int {
+	public function get_total(): int {
 		return $this->db_log->get_total();
 	}
 
-	public function get_logs( WP_REST_Request $request ) : array {
+	public function get_logs( WP_REST_Request $request ): array {
 		$order_by = sanitize_text_field( $request->get_param( 'orderBy' ) );
 		$sort     = sanitize_text_field( $request->get_param( 'sort' ) );
 		$limit    = (int) $request->get_param( 'limit' );

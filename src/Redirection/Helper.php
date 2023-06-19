@@ -2,7 +2,7 @@
 namespace SlimSEO\Redirection;
 
 class Helper {
-	public static function redirect_types() : array {
+	public static function redirect_types(): array {
 		return [
 			301 => __( '301 Moved Permanently', 'slim-seo' ),
 			302 => __( '302 Found', 'slim-seo' ),
@@ -12,7 +12,7 @@ class Helper {
 		];
 	}
 
-	public static function condition_options() : array {
+	public static function condition_options(): array {
 		return [
 			'exact-match' => __( 'Exact Match', 'slim-seo' ),
 			'contain'     => __( 'Contain', 'slim-seo' ),
@@ -27,7 +27,7 @@ class Helper {
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/is_ssl/
 	 */
-	public static function is_ssl() : bool {
+	public static function is_ssl(): bool {
 		// Cloudflare
 		if ( ! empty( $_SERVER['HTTP_CF_VISITOR'] ) ) {
 			$cfo = json_decode( $_SERVER['HTTP_CF_VISITOR'] ); // @codingStandardsIgnoreLine.
@@ -44,7 +44,7 @@ class Helper {
 		return is_ssl();
 	}
 
-	public static function normalize_url( string $url, $unslash = true, $ltrim = true, $rtrim = true ) : string {
+	public static function normalize_url( string $url, $unslash = true, $ltrim = true, $rtrim = true ): string {
 		$url = $unslash ? wp_unslash( $url ) : $url;
 		$url = sanitize_text_field( $url );
 		$url = html_entity_decode( $url );
@@ -55,7 +55,7 @@ class Helper {
 		return $url ? $url : '/';
 	}
 
-	public static function get_children_posts( int $post_id ) : array {
+	public static function get_children_posts( int $post_id ): array {
 		$posts          = [];
 		$children_posts = get_children( [ 'post_parent' => $post_id ] );
 

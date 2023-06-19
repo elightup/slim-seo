@@ -20,6 +20,6 @@ class Factory {
 				return new Sources\Redirects301;
 		}
 
-        return null;
+		return null;
 	}
 }

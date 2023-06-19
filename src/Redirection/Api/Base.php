@@ -8,7 +8,7 @@ abstract class Base {
 
 	abstract public function register_routes();
 
-	public function has_permission() : bool {
+	public function has_permission(): bool {
 		return current_user_can( 'manage_options' );
 	}
 }

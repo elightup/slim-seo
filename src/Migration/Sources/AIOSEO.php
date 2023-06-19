@@ -4,7 +4,7 @@ namespace SlimSEO\Migration\Sources;
 use AIOSEO\Plugin\Common;
 
 class AIOSEO extends Source {
-    protected $constant = 'AIOSEO_VERSION';
+	protected $constant = 'AIOSEO_VERSION';
 	private $post;
 	private $image;
 

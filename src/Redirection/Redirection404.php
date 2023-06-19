@@ -8,7 +8,7 @@ class Redirection404 {
 
 	public function __construct( DbLog $db_log ) {
 		add_action( 'template_redirect', [ $this, 'redirect' ], 20 );
-		
+
 		if ( ! Settings::get( 'enable_404_logs' ) ) {
 			return;
 		}

@@ -14,7 +14,7 @@ class AutoListings {
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 	}
 
-	public function skip_shortcodes( array $shortcodes ) : array {
+	public function skip_shortcodes( array $shortcodes ): array {
 		$shortcodes = array_merge( $shortcodes, [
 			'auto_listings_search',
 			'auto_listings_listing',

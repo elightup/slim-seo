@@ -10,11 +10,11 @@ class Redirects {
 		$this->redirects = get_option( SLIM_SEO_REDIRECTS ) ?: [];
 	}
 
-	public function list() : array {
+	public function list(): array {
 		return $this->redirects;
 	}
 
-	public function exists( string $url ) : bool {
+	public function exists( string $url ): bool {
 		$url = Helper::normalize_url( $url );
 
 		return count( array_filter( $this->redirects, function( $redirect ) use ( $url ) {

@@ -39,7 +39,7 @@ class Redirects extends Base {
 		] );
 	}
 
-	public function get_redirects() : array {
+	public function get_redirects(): array {
 		$redirects = $this->db_redirects->list();
 		$redirects = array_map( function( $index, $redirect ) {
 			$redirect['id'] = $index;
@@ -50,13 +50,13 @@ class Redirects extends Base {
 		return $redirects;
 	}
 
-	public function exists( WP_REST_Request $request ) : bool {
+	public function exists( WP_REST_Request $request ): bool {
 		$from = $request->get_param( 'from' );
 
 		return $this->db_redirects->exists( $from );
 	}
 
-	public function update_redirect( WP_REST_Request $request ) : bool {
+	public function update_redirect( WP_REST_Request $request ): bool {
 		$redirect = $request->get_param( 'redirect' );
 
 		$this->db_redirects->update( $redirect );
@@ -64,7 +64,7 @@ class Redirects extends Base {
 		return true;
 	}
 
-	public function delete_redirects( WP_REST_Request $request ) : bool {
+	public function delete_redirects( WP_REST_Request $request ): bool {
 		$ids = $request->get_param( 'ids' );
 
 		$this->db_redirects->delete( $ids );

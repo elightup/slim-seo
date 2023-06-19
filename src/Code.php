@@ -47,7 +47,7 @@ class Code {
 	/**
 	 * Insert "Code" tab after "General" tab.
 	 */
-	public function add_tab( array $tabs ) : array {
+	public function add_tab( array $tabs ): array {
 		$new = [];
 		foreach ( $tabs as $key => $value ) {
 			$new[ $key ] = $value;
@@ -58,7 +58,7 @@ class Code {
 		return $new;
 	}
 
-	public function add_pane( array $panes ) : array {
+	public function add_pane( array $panes ): array {
 		$panes['code'] = $this->settings->get_pane( 'code' );
 		return $panes;
 	}

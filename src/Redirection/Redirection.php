@@ -227,7 +227,7 @@ class Redirection {
 		exit;
 	}
 
-	public function force_trailing_slash( string $url ) : string {
+	public function force_trailing_slash( string $url ): string {
 		if ( ! Settings::get( 'force_trailing_slash' ) ) {
 			return $url;
 		}

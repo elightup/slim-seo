@@ -12,7 +12,7 @@ class Post extends Base {
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
 
-	protected function get_script_params() : array {
+	protected function get_script_params(): array {
 		$params = parent::get_script_params();
 
 		// @codingStandardsIgnoreLine.

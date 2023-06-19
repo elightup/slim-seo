@@ -172,5 +172,5 @@ abstract class Base {
 		wp_send_json_success();
 	}
 
-	abstract protected function is_screen() : bool;
+	abstract protected function is_screen(): bool;
 }
