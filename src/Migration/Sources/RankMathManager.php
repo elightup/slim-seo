@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Sources;
 
 class RankMathManager extends \RankMath\Replace_Variables\Manager {
 	private $post_id;

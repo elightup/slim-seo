@@ -1,19 +1,21 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Sources;
 
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
 
-class Redirects301 extends Replacer {
+class Redirects301 extends Source {
+	protected $constant = 'EPS_REDIRECT_VERSION';
+
 	public function migrate_redirects() {
-		$migrated_redirects = 0;
+		$count = 0;
 
 		global $wpdb;
 
 		$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}redirects", ARRAY_A );
 
 		if ( empty( $results ) ) {
-			return $migrated_redirects;
+			return $count;
 		}
 
 		$db_redirects   = new DbRedirects();
@@ -39,13 +41,9 @@ class Redirects301 extends Replacer {
 
 			$db_redirects->update( $redirect );
 
-			$migrated_redirects++;
+			++$count;
 		}
 
-		return $migrated_redirects;
-	}
-
-	public function is_activated() : bool {
-		return defined( 'EPS_REDIRECT_VERSION' );
+		return $count;
 	}
 }

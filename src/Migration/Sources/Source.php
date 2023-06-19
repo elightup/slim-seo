@@ -1,90 +1,90 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Sources;
 
-class Replacer {
-	public function replace_post( $post_id ) {
-		$this->before_replace_post( $post_id );
+abstract class Source {
+	protected $constant = '';
 
-		$seo_settings = [
+    public function is_activated(): bool {
+        return defined( $this->constant );
+    }
+
+	public function migrate_post( $post_id ) {
+		$this->before_migrate_post( $post_id );
+
+		$settings = array_filter( [
 			'title'          => $this->get_post_title( $post_id ),
 			'description'    => $this->get_post_description( $post_id ),
 			'facebook_image' => $this->get_post_facebook_image( $post_id ),
 			'twitter_image'  => $this->get_post_twitter_image( $post_id ),
 			'noindex'        => $this->get_post_noindex( $post_id ),
-		];
-		$seo_settings = array_filter( $seo_settings );
-		if ( $seo_settings ) {
-			update_post_meta( $post_id, 'slim_seo', $seo_settings );
+		] );
+		if ( $settings ) {
+			update_post_meta( $post_id, 'slim_seo', $settings );
 		}
 	}
 
-	public function replace_term( $term_id ) {
-		$this->before_replace_term( $term_id );
+	public function migrate_term( $term_id ) {
+		$this->before_migrate_term( $term_id );
 
-		$seo_settings = [
+		$settings = [
 			'title'          => $this->get_term_title( $term_id ),
 			'description'    => $this->get_term_description( $term_id ),
 			'facebook_image' => $this->get_term_facebook_image( $term_id ),
 			'twitter_image'  => $this->get_term_twitter_image( $term_id ),
 			'noindex'        => $this->get_term_noindex( $term_id ),
 		];
-		$seo_settings = array_filter( $seo_settings );
-		if ( $seo_settings ) {
-			update_term_meta( $term_id, 'slim_seo', $seo_settings );
+		$settings = array_filter( $settings );
+		if ( $settings ) {
+			update_term_meta( $term_id, 'slim_seo', $settings );
 		}
 	}
 
-	public function before_replace_post( $post_id ) {
+    public function migrate_redirects() {
+    }
+
+	protected function before_migrate_post( $post_id ) {
 	}
 
-	public function before_replace_term( $term_id ) {
+	protected function before_migrate_term( $term_id ) {
 	}
 
 	protected function get_post_title( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_description( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_facebook_image( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_twitter_image( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_noindex( $post_id ) {
-		return null;
+		return 0;
 	}
 
 	protected function get_term_title( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_description( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_facebook_image( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_twitter_image( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_noindex( $term_id ) {
-		return null;
-	}
-
-	public function migrate_redirects() {
-		return null;
-	}
-
-	public function is_activated() {
-		return true;
+		return 0;
 	}
 }

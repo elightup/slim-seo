@@ -1,19 +1,21 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Sources;
 
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
 
-class Redirection extends Replacer {
+class Redirection extends Source {
+	protected $constant = 'REDIRECTION_DB_VERSION';
+
 	public function migrate_redirects() {
-		$migrated_redirects = 0;
+		$count = 0;
 
 		global $wpdb;
 
 		$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}redirection_items", ARRAY_A );
 
 		if ( empty( $results ) ) {
-			return $migrated_redirects;
+			return $count;
 		}
 
 		$db_redirects   = new DbRedirects();
@@ -48,13 +50,9 @@ class Redirection extends Replacer {
 
 			$db_redirects->update( $redirect );
 
-			$migrated_redirects++;
+			++$count;
 		}
 
-		return $migrated_redirects;
-	}
-
-	public function is_activated() {
-		return defined( 'REDIRECTION_DB_VERSION' );
+		return $count;
 	}
 }

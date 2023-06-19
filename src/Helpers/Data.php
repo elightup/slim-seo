@@ -5,9 +5,7 @@ class Data {
 	public static function get_post_types() {
 		$post_types = get_post_types( [ 'public' => true ], 'objects' );
 		unset( $post_types['attachment'] );
-		$post_types = apply_filters( 'slim_seo_post_types', $post_types );
-
-		return $post_types;
+		return apply_filters( 'slim_seo_post_types', $post_types );
 	}
 
 	public static function get_taxonomies() {
@@ -16,9 +14,7 @@ class Data {
 			'show_ui' => true,
 		], 'objects' );
 		unset( $taxonomies['post_format'] );
-		$taxonomies = apply_filters( 'slim_seo_taxonomies', $taxonomies );
-
-		return $taxonomies;
+		return apply_filters( 'slim_seo_taxonomies', $taxonomies );
 	}
 
 	public static function get_post_type_archive_page( string $post_type ) {
@@ -29,5 +25,23 @@ class Data {
 
 		$page = get_page_by_path( $post_type_object->has_archive );
 		return $page ?: null;
+	}
+
+	public static function get_migration_sources( string $type = '' ): array {
+		$sources = [
+			'meta'        => [
+				'yoast'         => __( 'Yoast SEO', 'slim-seo' ),
+				'aioseo'        => __( 'All In One SEO', 'slim-seo' ),
+				'seo-framework' => __( 'The SEO Framework', 'slim-seo' ),
+				'rank-math'     => __( 'Rank Math', 'slim-seo' ),
+				'seopress'      => __( 'SEOPress', 'slim-seo' ),
+			],
+			'redirection' => [
+				'redirection'   => _x( 'Redirection', 'Plugin Name', 'slim-seo' ),
+				'301-redirects' => _x( '301 Redirects', 'Plugin Name', 'slim-seo' ),
+			],
+		];
+
+		return $type ? $sources[ $type ] : array_merge( $sources['meta'], $sources['redirection'] );
 	}
 }
