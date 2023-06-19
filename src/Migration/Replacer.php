@@ -34,10 +34,10 @@ class Replacer {
 		}
 	}
 
-	public function before_replace_post( $post_id ) {
+	protected function before_replace_post( $post_id ) {
 	}
 
-	public function before_replace_term( $term_id ) {
+	protected function before_replace_term( $term_id ) {
 	}
 
 	protected function get_post_title( $post_id ) {
