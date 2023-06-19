@@ -1,10 +1,8 @@
 <?php
 namespace SlimSEO\Migration;
 
-use SlimSEO\Migration\Sources\Source;
-
 class Factory {
-	public static function make( string $source ): ?Source {
+	public static function make( string $source ): ?Sources\Source {
 		switch ( $source ) {
 			case 'yoast':
 				return new Sources\Yoast;
