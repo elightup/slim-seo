@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Platforms;
 
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;

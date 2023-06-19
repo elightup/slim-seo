@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Platforms;
 
 use AIOSEO\Plugin\Common;
 

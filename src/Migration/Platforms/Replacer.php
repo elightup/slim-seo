@@ -1,7 +1,7 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Platforms;
 
-class Replacer {
+abstract class Replacer {
 	public function replace_post( $post_id ) {
 		$this->before_replace_post( $post_id );
 

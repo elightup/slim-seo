@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Migration;
+namespace SlimSEO\Migration\Platforms;
 
 class SEOFramework extends Replacer {
 	public function get_post_title( $post_id ) {
