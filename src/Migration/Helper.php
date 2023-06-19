@@ -2,23 +2,8 @@
 namespace SlimSEO\Migration;
 
 class Helper {
-	public static function get_post_types() {
-		$post_types = get_post_types( [ 'public' => true ] );
-		unset( $post_types['attachment'] );
-		return array_keys( $post_types );
-	}
-
-	public static function get_taxonomies() {
-		$taxonomies = get_taxonomies( [
-			'public' => true,
-		] );
-		unset( $taxonomies['post_format'] );
-		$taxonomies = array_keys( $taxonomies );
-		return $taxonomies;
-	}
-
 	public static function get_sources( string $type = '' ): array {
-		$platforms = [
+		$sources = [
 			'meta'        => [
 				'yoast'         => __( 'Yoast SEO', 'slim-seo' ),
 				'aioseo'        => __( 'All In One SEO', 'slim-seo' ),
@@ -32,10 +17,6 @@ class Helper {
 			],
 		];
 
-		if ( '' !== $type ) {
-			return $platforms[ $type ];
-		}
-
-		return array_merge( $platforms['meta'], $platforms['redirection'] );
+		return $type ? $sources[ $type ] : array_merge( $sources['meta'], $sources['redirection'] );
 	}
 }

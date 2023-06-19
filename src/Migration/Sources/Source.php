@@ -4,19 +4,22 @@ namespace SlimSEO\Migration\Sources;
 abstract class Source {
 	protected $constant = '';
 
+    public function is_activated(): bool {
+        return defined( $this->constant );
+    }
+
 	public function migrate_post( $post_id ) {
 		$this->before_migrate_post( $post_id );
 
-		$seo_settings = [
+		$settings = array_filter( [
 			'title'          => $this->get_post_title( $post_id ),
 			'description'    => $this->get_post_description( $post_id ),
 			'facebook_image' => $this->get_post_facebook_image( $post_id ),
 			'twitter_image'  => $this->get_post_twitter_image( $post_id ),
 			'noindex'        => $this->get_post_noindex( $post_id ),
-		];
-		$seo_settings = array_filter( $seo_settings );
-		if ( $seo_settings ) {
-			update_post_meta( $post_id, 'slim_seo', $seo_settings );
+		] );
+		if ( $settings ) {
+			update_post_meta( $post_id, 'slim_seo', $settings );
 		}
 	}
 
@@ -35,6 +38,9 @@ abstract class Source {
 			update_term_meta( $term_id, 'slim_seo', $seo_settings );
 		}
 	}
+
+    public function migrate_redirects() {
+    }
 
 	protected function before_migrate_post( $post_id ) {
 	}
@@ -80,13 +86,5 @@ abstract class Source {
 
 	protected function get_term_noindex( $term_id ) {
 		return null;
-	}
-
-	public function migrate_redirects() {
-		return null;
-	}
-
-	public function is_activated(): bool {
-		return defined( $this->constant );
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Migration;
 
+use SlimSEO\Helpers\Data;
 use SlimSEO\Migration\Sources\Source;
 
 class Migration {
@@ -133,18 +134,17 @@ class Migration {
 		] );
 	}
 
-	private function migrate_post( $post_id ) {
+	private function migrate_post( int $post_id ) {
 		$this->source->migrate_post( $post_id );
 	}
 
-	private function migrate_term( $term_id ) {
+	private function migrate_term( int $term_id ) {
 		$this->source->migrate_term( $term_id );
 	}
 
-	private function get_posts() {
-		$post_types = Helper::get_post_types();
-		$posts      = new \WP_Query( [
-			'post_type'      => $post_types,
+	private function get_posts(): array {
+		$query      = new \WP_Query( [
+			'post_type'      => array_keys( Data::get_post_types() ),
 			'post_status'    => 'any',
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
@@ -152,13 +152,12 @@ class Migration {
 			'offset'         => $_SESSION['processed'],
 		] );
 
-		return $posts->posts;
+		return $query->posts;
 	}
 
-	private function get_terms() {
-		$taxonomies = Helper::get_taxonomies();
+	private function get_terms(): array {
 		return get_terms( [
-			'taxonomy'   => $taxonomies,
+			'taxonomy'   => array_keys( Data::get_taxonomies() ),
 			'hide_empty' => false,
 			'fields'     => 'ids',
 			'number'     => $this->threshold,

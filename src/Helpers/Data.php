@@ -5,9 +5,7 @@ class Data {
 	public static function get_post_types() {
 		$post_types = get_post_types( [ 'public' => true ], 'objects' );
 		unset( $post_types['attachment'] );
-		$post_types = apply_filters( 'slim_seo_post_types', $post_types );
-
-		return $post_types;
+		return apply_filters( 'slim_seo_post_types', $post_types );
 	}
 
 	public static function get_taxonomies() {
@@ -16,9 +14,7 @@ class Data {
 			'show_ui' => true,
 		], 'objects' );
 		unset( $taxonomies['post_format'] );
-		$taxonomies = apply_filters( 'slim_seo_taxonomies', $taxonomies );
-
-		return $taxonomies;
+		return apply_filters( 'slim_seo_taxonomies', $taxonomies );
 	}
 
 	public static function get_post_type_archive_page( string $post_type ) {
