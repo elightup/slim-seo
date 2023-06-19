@@ -18,22 +18,22 @@ class SEOFramework extends Source {
 	}
 
 	public function get_post_noindex( $post_id ) {
-		return intval( get_post_meta( $post_id, '_genesis_noindex', true ) );
+		return (int) get_post_meta( $post_id, '_genesis_noindex', true );
 	}
 
 	public function get_term_title( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return empty( $term['doctitle'] ) ? '' : $term['doctitle'];
+		return $term['doctitle'] ?? '';
 	}
 
 	public function get_term_description( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return empty( $term['description'] ) ? '' : $term['description'];
+		return $term['description'] ?? '';
 	}
 
 	public function get_term_facebook_image( $term_id ) {
 		$term = $this->get_term( $term_id );
-		return empty( $term['social_image_url'] ) ? '' : $term['social_image_url'];
+		return $term['social_image_url'] ?? '';
 	}
 
 	public function get_term_noindex( $term_id ) {

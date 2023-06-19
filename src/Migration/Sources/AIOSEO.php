@@ -19,14 +19,14 @@ class AIOSEO extends Source {
 		$title     = new Common\Meta\Title;
 		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return empty( $meta_data->title ) ? null : $title->helpers->prepare( $meta_data->title, $post_id );
+		return empty( $meta_data->title ) ? '' : $title->helpers->prepare( $meta_data->title, $post_id );
 	}
 
 	public function get_post_description( $post_id ) {
 		$description = new Common\Meta\Description;
 		$meta_data   = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return empty( $meta_data->description ) ? null : $description->helpers->prepare( $meta_data->description, $post_id, false, false );
+		return empty( $meta_data->description ) ? '' : $description->helpers->prepare( $meta_data->description, $post_id, false, false );
 	}
 
 	public function get_post_facebook_image( $post_id ) {
@@ -70,7 +70,7 @@ class AIOSEO extends Source {
 	public function get_post_noindex( $post_id ) {
 		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return intval( $meta_data->robots_noindex );
+		return (int) $meta_data->robots_noindex;
 	}
 
 	public function get_image( $type, $image_source, $post ) {
@@ -80,7 +80,7 @@ class AIOSEO extends Source {
 				if ( empty( $meta_data ) ) {
 					break;
 				}
-				$image = ( 'facebook' === lcfirst( $type ) ) ? $meta_data->og_image_custom_url : $meta_data->twitter_image_custom_url;
+				$image = 'facebook' === lcfirst( $type ) ? $meta_data->og_image_custom_url : $meta_data->twitter_image_custom_url;
 				break;
 			case 'default':
 				$image = aioseo()->options->social->$type->general->defaultImagePosts;
@@ -103,7 +103,6 @@ class AIOSEO extends Source {
 		return $images[ $type ];
 	}
 
-
 	public function getAioImage( $type, $post ) {
 		global $wpdb;
 
@@ -112,16 +111,7 @@ class AIOSEO extends Source {
 			$column = 'twitter_image_url';
 		}
 
-		$image = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT $column
-				FROM {$wpdb->prefix}aioseo_posts
-				WHERE post_id = %d",
-				$post->ID
-			)
-		);
-
-		return $image;
+		return $wpdb->get_var( $wpdb->prepare( "SELECT $column FROM {$wpdb->prefix}aioseo_posts WHERE post_id = %d", $post->ID ) );
 	}
 }
 

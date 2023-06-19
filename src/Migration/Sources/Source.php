@@ -26,16 +26,16 @@ abstract class Source {
 	public function migrate_term( $term_id ) {
 		$this->before_migrate_term( $term_id );
 
-		$seo_settings = [
+		$settings = [
 			'title'          => $this->get_term_title( $term_id ),
 			'description'    => $this->get_term_description( $term_id ),
 			'facebook_image' => $this->get_term_facebook_image( $term_id ),
 			'twitter_image'  => $this->get_term_twitter_image( $term_id ),
 			'noindex'        => $this->get_term_noindex( $term_id ),
 		];
-		$seo_settings = array_filter( $seo_settings );
-		if ( $seo_settings ) {
-			update_term_meta( $term_id, 'slim_seo', $seo_settings );
+		$settings = array_filter( $settings );
+		if ( $settings ) {
+			update_term_meta( $term_id, 'slim_seo', $settings );
 		}
 	}
 
@@ -49,42 +49,42 @@ abstract class Source {
 	}
 
 	protected function get_post_title( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_description( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_facebook_image( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_twitter_image( $post_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_post_noindex( $post_id ) {
-		return null;
+		return 0;
 	}
 
 	protected function get_term_title( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_description( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_facebook_image( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_twitter_image( $term_id ) {
-		return null;
+		return '';
 	}
 
 	protected function get_term_noindex( $term_id ) {
-		return null;
+		return 0;
 	}
 }

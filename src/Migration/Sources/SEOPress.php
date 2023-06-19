@@ -19,12 +19,12 @@ class SEOPress extends Source {
 
 	protected function get_post_facebook_image( $post_id ) {
 		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
-		return $social['og']['image'] ?? null;
+		return $social['og']['image'] ?? '';
 	}
 
 	protected function get_post_twitter_image( $post_id ) {
 		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
-		return $social['twitter']['image'] ?? null;
+		return $social['twitter']['image'] ?? '';
 	}
 
 	protected function get_post_noindex( $post_id ) {
@@ -46,12 +46,12 @@ class SEOPress extends Source {
 
 	protected function get_term_facebook_image( $term_id ) {
 		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
-		return $social['og']['image'] ?? null;
+		return $social['og']['image'] ?? '';
 	}
 
 	protected function get_term_twitter_image( $term_id ) {
 		$social = seopress_get_service( 'SocialMeta' )->getValue( $this->context );
-		return $social['twitter']['image'] ?? null;
+		return $social['twitter']['image'] ?? '';
 	}
 
 	protected function get_term_noindex( $term_id ) {

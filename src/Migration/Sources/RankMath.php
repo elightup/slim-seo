@@ -4,7 +4,7 @@ namespace SlimSEO\Migration\Sources;
 use RankMath\Helper as RMHelper;
 
 class RankMath extends Source {
-    protected $constant = 'RANK_MATH_VERSION';
+	protected $constant = 'RANK_MATH_VERSION';
 
 	public function before_migrate_post( $post_id ) {
 		$manager = new RankMathManager();
