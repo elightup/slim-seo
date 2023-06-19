@@ -1,9 +1,9 @@
 <?php
-namespace SlimSEO\Migration\Platforms;
+namespace SlimSEO\Migration\Sources;
 
-abstract class Replacer {
-	public function replace_post( $post_id ) {
-		$this->before_replace_post( $post_id );
+abstract class Source {
+	public function migrate_post( $post_id ) {
+		$this->before_migrate_post( $post_id );
 
 		$seo_settings = [
 			'title'          => $this->get_post_title( $post_id ),
@@ -18,8 +18,8 @@ abstract class Replacer {
 		}
 	}
 
-	public function replace_term( $term_id ) {
-		$this->before_replace_term( $term_id );
+	public function migrate_term( $term_id ) {
+		$this->before_migrate_term( $term_id );
 
 		$seo_settings = [
 			'title'          => $this->get_term_title( $term_id ),
@@ -34,10 +34,10 @@ abstract class Replacer {
 		}
 	}
 
-	protected function before_replace_post( $post_id ) {
+	protected function before_migrate_post( $post_id ) {
 	}
 
-	protected function before_replace_term( $term_id ) {
+	protected function before_migrate_term( $term_id ) {
 	}
 
 	protected function get_post_title( $post_id ) {

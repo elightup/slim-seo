@@ -1,10 +1,10 @@
 <?php
-namespace SlimSEO\Migration\Platforms;
+namespace SlimSEO\Migration\Sources;
 
-class SEOPress extends Replacer {
+class SEOPress extends Source {
 	private $context;
 
-	protected function before_replace_post( $post_id ) {
+	protected function before_migrate_post( $post_id ) {
 		$this->context = seopress_get_service( 'ContextPage' )->buildContextWithCurrentId( $post_id )->getContext();
 	}
 
@@ -31,7 +31,7 @@ class SEOPress extends Replacer {
 		return intval( ! empty( $robots['noindex'] ) );
 	}
 
-	protected function before_replace_term( $term_id ) {
+	protected function before_migrate_term( $term_id ) {
 		$this->context = seopress_get_service( 'ContextPage' )->buildContextWithCurrentId( $term_id, [ 'type' => 'term' ] )->getContext();
 	}
 

@@ -4,7 +4,7 @@ Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.9
 Tested up to: 6.2.2
-Requires PHP: 7.1
+Requires PHP: 7.2
 Stable tag: 3.21.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html

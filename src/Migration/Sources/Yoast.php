@@ -1,10 +1,10 @@
 <?php
-namespace SlimSEO\Migration\Platforms;
+namespace SlimSEO\Migration\Sources;
 
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
 
-class Yoast extends Replacer {
+class Yoast extends Source {
 
 	public function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );

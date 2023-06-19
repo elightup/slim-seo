@@ -1,13 +1,13 @@
 <?php
-namespace SlimSEO\Migration\Platforms;
+namespace SlimSEO\Migration\Sources;
 
 use AIOSEO\Plugin\Common;
 
-class AIOSEO extends Replacer {
+class AIOSEO extends Source {
 	private $post;
 	private $image;
 
-	public function before_replace_post( $post_id ) {
+	public function before_migrate_post( $post_id ) {
 		$this->post  = get_post( $post_id );
 		$this->image = new ExtImage;
 

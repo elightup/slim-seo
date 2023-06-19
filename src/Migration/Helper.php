@@ -17,7 +17,7 @@ class Helper {
 		return $taxonomies;
 	}
 
-	public static function get_platforms( string $type = '' ) : array {
+	public static function get_sources( string $type = '' ): array {
 		$platforms = [
 			'meta'        => [
 				'yoast'         => __( 'Yoast SEO', 'slim-seo' ),

@@ -16,42 +16,41 @@ class Migration {
 		add_action( 'wp_ajax_ss_migrate_redirects', [ $this, 'migrate_redirects' ] );
 	}
 
-	public function prepare_migration() {
+	public function prepare_migration(): void {
 		check_ajax_referer( 'migrate' );
 
 		session_start();
-		$platform             = $this->get_platform();
-		$_SESSION['platform'] = $platform;
-		$this->set_replacer( $platform );
-		$this->check_platform_activation( $platform );
+		$source_id             = $this->get_source_id();
+		$_SESSION['source_id'] = $source_id;
+		$this->set_source( $source_id );
+		$this->check_activation( $source_id );
 
 		wp_send_json_success();
 	}
 
-	private function get_platform() {
-		$platform = filter_input( INPUT_GET, 'platform', FILTER_SANITIZE_STRING );
-		if ( empty( $platform ) ) {
+	private function get_source_id(): string {
+		$source_id = filter_input( INPUT_GET, 'source_id' );
+		if ( empty( $source_id ) ) {
 			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ), 400 );
 		}
-		return $platform;
+		return $source_id;
 	}
 
-	private function set_replacer( $platform ) {
-		$_SESSION['replacer'] = ReplacerFactory::make( $platform );
+	private function set_source( string $source_id ): void {
+		$_SESSION['source'] = Factory::make( $source_id );
 	}
 
-	private function check_platform_activation( $platform ) {
-		$is_activated = $_SESSION['replacer']->is_activated();
-		if ( $is_activated ) {
+	private function check_activation( string $source_id ): void {
+		if ( $_SESSION['source']->is_activated() ) {
 			return;
 		}
-		$platforms = Helper::get_platforms();
+		$sources = Helper::get_sources();
 
 		// Translators: %s is the plugin name.
-		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $platforms[ $platform ] ), 400 );
+		wp_send_json_error( sprintf( __( 'Please activate %s plugin to use this feature. You can deactivate it after migration.', 'slim-seo' ), $sources[ $source_id ] ), 400 );
 	}
 
-	public function reset_counter() {
+	public function reset_counter(): void {
 		session_start();
 		$_SESSION['processed'] = 0;
 
@@ -61,9 +60,9 @@ class Migration {
 		] );
 	}
 
-	public function migrate_posts() {
+	public function migrate_posts(): void {
 		session_start();
-		$this->set_replacer( $_SESSION['platform'] );
+		$this->set_source( $_SESSION['source_id'] );
 		$posts = $this->get_posts();
 		if ( empty( $posts ) ) {
 			wp_send_json_success( [
@@ -84,9 +83,9 @@ class Migration {
 		] );
 	}
 
-	public function migrate_terms() {
+	public function migrate_terms(): void {
 		session_start();
-		$this->set_replacer( $_SESSION['platform'] );
+		$this->set_source( $_SESSION['source_id'] );
 		$terms = $this->get_terms();
 
 		if ( empty( $terms ) ) {
@@ -111,8 +110,8 @@ class Migration {
 
 	public function migrate_redirects() {
 		session_start();
-		$this->set_replacer( $_SESSION['platform'] );
-		$migrated_redirects = $_SESSION['replacer']->migrate_redirects();
+		$this->set_source( $_SESSION['source_id'] );
+		$migrated_redirects = $_SESSION['source']->migrate_redirects();
 
 		if ( empty( $migrated_redirects ) ) {
 			wp_send_json_success( [
@@ -127,11 +126,11 @@ class Migration {
 	}
 
 	private function migrate_post( $post_id ) {
-		$_SESSION['replacer']->replace_post( $post_id );
+		$_SESSION['source']->migrate_post( $post_id );
 	}
 
 	private function migrate_term( $term_id ) {
-		$_SESSION['replacer']->replace_term( $term_id );
+		$_SESSION['source']->migrate_term( $term_id );
 	}
 
 	private function get_posts() {

@@ -1,10 +1,10 @@
 <?php
-namespace SlimSEO\Migration\Platforms;
+namespace SlimSEO\Migration\Sources;
 
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
 
-class Redirects301 extends Replacer {
+class Redirects301 extends Source {
 	public function migrate_redirects() {
 		$migrated_redirects = 0;
 

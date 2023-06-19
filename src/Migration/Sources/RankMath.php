@@ -1,10 +1,10 @@
 <?php
-namespace SlimSEO\Migration\Platforms;
+namespace SlimSEO\Migration\Sources;
 
 use RankMath\Helper as RMHelper;
 
-class RankMath extends Replacer {
-	public function before_replace_post( $post_id ) {
+class RankMath extends Source {
+	public function before_migrate_post( $post_id ) {
 		$manager = new RankMathManager();
 		$manager->set_post( $post_id );
 		$manager->setup();
@@ -12,7 +12,7 @@ class RankMath extends Replacer {
 		rank_math()->variables = $manager;
 	}
 
-	public function before_replace_term( $term_id ) {
+	public function before_migrate_term( $term_id ) {
 		$manager = new RankMathManager();
 		$manager->set_term( $term_id );
 		$manager->setup();
