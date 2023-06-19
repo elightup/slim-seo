@@ -4,39 +4,39 @@ namespace SlimSEO\Migration\Sources;
 class SEOFramework extends Source {
 	protected $constant = 'THE_SEO_FRAMEWORK_VERSION';
 
-	public function get_post_title( $post_id ) {
+	protected function get_post_title( $post_id ) {
 		$post_title = get_post_meta( $post_id, '_genesis_title', true );
 		return empty( $post_title ) ? '' : $post_title . ' - ' . get_bloginfo( 'name' );
 	}
 
-	public function get_post_description( $post_id ) {
+	protected function get_post_description( $post_id ) {
 		return get_post_meta( $post_id, '_genesis_description', true );
 	}
 
-	public function get_post_facebook_image( $post_id ) {
+	protected function get_post_facebook_image( $post_id ) {
 		return get_post_meta( $post_id, '_social_image_url', true );
 	}
 
-	public function get_post_noindex( $post_id ) {
+	protected function get_post_noindex( $post_id ) {
 		return (int) get_post_meta( $post_id, '_genesis_noindex', true );
 	}
 
-	public function get_term_title( $term_id ) {
+	protected function get_term_title( $term_id ) {
 		$term = $this->get_term( $term_id );
 		return $term['doctitle'] ?? '';
 	}
 
-	public function get_term_description( $term_id ) {
+	protected function get_term_description( $term_id ) {
 		$term = $this->get_term( $term_id );
 		return $term['description'] ?? '';
 	}
 
-	public function get_term_facebook_image( $term_id ) {
+	protected function get_term_facebook_image( $term_id ) {
 		$term = $this->get_term( $term_id );
 		return $term['social_image_url'] ?? '';
 	}
 
-	public function get_term_noindex( $term_id ) {
+	protected function get_term_noindex( $term_id ) {
 		$term = $this->get_term( $term_id );
 		return intval( ! empty( $term['noindex'] ) );
 	}

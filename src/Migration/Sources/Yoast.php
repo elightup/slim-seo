@@ -7,23 +7,23 @@ use SlimSEO\Redirection\Helper as RedirectionHelper;
 class Yoast extends Source {
 	protected $constant = 'WPSEO_VERSION';
 
-	public function get_post_title( $post_id ) {
+	protected function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$title = get_post_meta( $post_id, '_yoast_wpseo_title', true );
 		return wpseo_replace_vars( $title, $post );
 	}
 
-	public function get_post_description( $post_id ) {
+	protected function get_post_description( $post_id ) {
 		$post        = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
 		return wpseo_replace_vars( $description, $post );
 	}
 
-	public function get_post_facebook_image( $post_id ) {
+	protected function get_post_facebook_image( $post_id ) {
 		return get_post_meta( $post_id, '_yoast_wpseo_opengraph-image', true );
 	}
 
-	public function get_post_twitter_image( $post_id ) {
+	protected function get_post_twitter_image( $post_id ) {
 		return get_post_meta( $post_id, '_yoast_wpseo_twitter-image', true );
 	}
 
@@ -31,7 +31,7 @@ class Yoast extends Source {
 		return (int) get_post_meta( $post_id, '_yoast_wpseo_meta-robots-noindex', true );
 	}
 
-	public function get_term_title( $term_id ) {
+	protected function get_term_title( $term_id ) {
 		$term = $this->get_term( $term_id );
 		if ( ! $term ) {
 			return '';
@@ -40,7 +40,7 @@ class Yoast extends Source {
 		return wpseo_replace_vars( $title, $term );
 	}
 
-	public function get_term_description( $term_id ) {
+	protected function get_term_description( $term_id ) {
 		$term = $this->get_term( $term_id );
 		if ( ! $term ) {
 			return '';
@@ -49,17 +49,17 @@ class Yoast extends Source {
 		return wpseo_replace_vars( $description, $term );
 	}
 
-	public function get_term_facebook_image( $term_id ) {
+	protected function get_term_facebook_image( $term_id ) {
 		$term = $this->get_term( $term_id );
 		return $term['wpseo_opengraph-image'] ?? '';
 	}
 
-	public function get_term_twitter_image( $term_id ) {
+	protected function get_term_twitter_image( $term_id ) {
 		$term = $this->get_term( $term_id );
 		return $term['wpseo_twitter-image'] ?? '';
 	}
 
-	public function get_term_noindex( $term_id ) {
+	protected function get_term_noindex( $term_id ) {
 		$term = $this->get_term( $term_id );
 		return intval( isset( $term['wpseo_noindex'] ) && $term['wpseo_noindex'] === 'noindex' );
 	}
@@ -67,7 +67,7 @@ class Yoast extends Source {
 	/**
 	 * Get terms value from option table.
 	 */
-	public function get_terms() {
+	private function get_terms() {
 		$terms = get_option( 'wpseo_taxonomy_meta' );
 		if ( empty( $terms ) ) {
 			return [];
@@ -80,7 +80,7 @@ class Yoast extends Source {
 		return $terms_array;
 	}
 
-	public function get_term( $term_id ) {
+	private function get_term( $term_id ) {
 		$terms = $this->get_terms();
 		return $terms[ $term_id ] ?? null;
 	}

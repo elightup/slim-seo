@@ -8,28 +8,28 @@ class AIOSEO extends Source {
 	private $post;
 	private $image;
 
-	public function before_migrate_post( $post_id ) {
+	protected function before_migrate_post( $post_id ) {
 		$this->post  = get_post( $post_id );
 		$this->image = new ExtImage;
 
 		set_current_screen( 'settings_page_slim-seo' ); // Fix undefined get_current_screen from AIOSEO.
 	}
 
-	public function get_post_title( $post_id ) {
+	protected function get_post_title( $post_id ) {
 		$title     = new Common\Meta\Title;
 		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
 		return empty( $meta_data->title ) ? '' : $title->helpers->prepare( $meta_data->title, $post_id );
 	}
 
-	public function get_post_description( $post_id ) {
+	protected function get_post_description( $post_id ) {
 		$description = new Common\Meta\Description;
 		$meta_data   = aioseo()->meta->metaData->getMetaData( $this->post );
 
 		return empty( $meta_data->description ) ? '' : $description->helpers->prepare( $meta_data->description, $post_id, false, false );
 	}
 
-	public function get_post_facebook_image( $post_id ) {
+	protected function get_post_facebook_image( $post_id ) {
 		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 		$image     = '';
 		if ( ! empty( $meta_data ) ) {
@@ -45,7 +45,7 @@ class AIOSEO extends Source {
 		return '';
 	}
 
-	public function get_post_twitter_image( $post_id ) {
+	protected function get_post_twitter_image( $post_id ) {
 		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
 		if ( ! empty( $meta_data->twitter_use_og ) ) {
@@ -67,13 +67,13 @@ class AIOSEO extends Source {
 		return '';
 	}
 
-	public function get_post_noindex( $post_id ) {
+	protected function get_post_noindex( $post_id ) {
 		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
 		return (int) $meta_data->robots_noindex;
 	}
 
-	public function get_image( $type, $image_source, $post ) {
+	private function get_image( $type, $image_source, $post ) {
 		switch ( $image_source ) {
 			case 'custom_image':
 				$meta_data = aioseo()->meta->metaData->getMetaData( $post );
@@ -103,7 +103,7 @@ class AIOSEO extends Source {
 		return $images[ $type ];
 	}
 
-	public function getAioImage( $type, $post ) {
+	private function getAioImage( $type, $post ) {
 		global $wpdb;
 
 		$column = 'og_image_url';
