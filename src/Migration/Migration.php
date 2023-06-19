@@ -1,12 +1,20 @@
 <?php
 namespace SlimSEO\Migration;
 
+use SlimSEO\Migration\Sources\Source;
+
 class Migration {
 	/**
 	 * Number of posts being processed in 1 call
 	 * @var int
 	 */
-	public $threshold = 10;
+	private $threshold = 10;
+
+	/**
+	 * The source object to do the migration.
+	 * @var Source
+	 */
+	private $source;
 
 	public function setup() {
 		add_action( 'wp_ajax_ss_prepare_migration', [ $this, 'prepare_migration' ] );
@@ -37,11 +45,11 @@ class Migration {
 	}
 
 	private function set_source( string $source_id ): void {
-		$_SESSION['source'] = Factory::make( $source_id );
+		$this->source = Factory::make( $source_id );
 	}
 
 	private function check_activation( string $source_id ): void {
-		if ( $_SESSION['source']->is_activated() ) {
+		if ( $this->source->is_activated() ) {
 			return;
 		}
 		$sources = Helper::get_sources();
@@ -111,9 +119,9 @@ class Migration {
 	public function migrate_redirects() {
 		session_start();
 		$this->set_source( $_SESSION['source_id'] );
-		$migrated_redirects = $_SESSION['source']->migrate_redirects();
+		$count = $this->source->migrate_redirects();
 
-		if ( empty( $migrated_redirects ) ) {
+		if ( empty( $count ) ) {
 			wp_send_json_success( [
 				'message' => '',
 			] );
@@ -121,16 +129,16 @@ class Migration {
 
 		wp_send_json_success( [
 			// Translators: %d is the number of migrated redirects.
-			'message' => sprintf( __( 'Migrated %d redirects...', 'slim-seo' ), $migrated_redirects ),
+			'message' => sprintf( __( 'Migrated %d redirects...', 'slim-seo' ), $count ),
 		] );
 	}
 
 	private function migrate_post( $post_id ) {
-		$_SESSION['source']->migrate_post( $post_id );
+		$this->source->migrate_post( $post_id );
 	}
 
 	private function migrate_term( $term_id ) {
-		$_SESSION['source']->migrate_term( $term_id );
+		$this->source->migrate_term( $term_id );
 	}
 
 	private function get_posts() {
