@@ -2,6 +2,7 @@
 namespace SlimSEO\Migration\Sources;
 
 class SEOPress extends Source {
+    protected $constant = 'SEOPRESS_VERSION';
 	private $context;
 
 	protected function before_migrate_post( $post_id ) {
@@ -56,9 +57,5 @@ class SEOPress extends Source {
 	protected function get_term_noindex( $term_id ) {
 		$robots = seopress_get_service( 'RobotMeta' )->getValue( $this->context );
 		return intval( ! empty( $robots['noindex'] ) );
-	}
-
-	public function is_activated() {
-		return defined( 'SEOPRESS_VERSION' );
 	}
 }

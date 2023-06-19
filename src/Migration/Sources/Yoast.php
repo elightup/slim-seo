@@ -5,6 +5,7 @@ use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
 
 class Yoast extends Source {
+    protected $constant = 'WPSEO_VERSION';
 
 	public function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
@@ -118,9 +119,5 @@ class Yoast extends Source {
 		}
 
 		return $migrated_redirects;
-	}
-
-	public function is_activated() {
-		return defined( 'WPSEO_VERSION' );
 	}
 }

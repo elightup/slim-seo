@@ -2,6 +2,8 @@
 namespace SlimSEO\Migration\Sources;
 
 abstract class Source {
+	protected $constant = '';
+
 	public function migrate_post( $post_id ) {
 		$this->before_migrate_post( $post_id );
 
@@ -84,7 +86,7 @@ abstract class Source {
 		return null;
 	}
 
-	public function is_activated() {
-		return true;
+	public function is_activated(): bool {
+		return defined( $this->constant );
 	}
 }

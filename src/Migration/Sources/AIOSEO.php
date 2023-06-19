@@ -4,6 +4,7 @@ namespace SlimSEO\Migration\Sources;
 use AIOSEO\Plugin\Common;
 
 class AIOSEO extends Source {
+    protected $constant = 'AIOSEO_VERSION';
 	private $post;
 	private $image;
 
@@ -121,10 +122,6 @@ class AIOSEO extends Source {
 		);
 
 		return $image;
-	}
-
-	public function is_activated() {
-		return defined( 'AIOSEO_VERSION' );
 	}
 }
 

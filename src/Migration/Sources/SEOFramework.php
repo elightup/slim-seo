@@ -2,6 +2,8 @@
 namespace SlimSEO\Migration\Sources;
 
 class SEOFramework extends Source {
+	protected $constant = 'THE_SEO_FRAMEWORK_VERSION';
+
 	public function get_post_title( $post_id ) {
 		$post_title = get_post_meta( $post_id, '_genesis_title', true );
 		return empty( $post_title ) ? '' : $post_title . ' - ' . get_bloginfo( 'name' );

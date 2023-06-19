@@ -4,6 +4,8 @@ namespace SlimSEO\Migration\Sources;
 use RankMath\Helper as RMHelper;
 
 class RankMath extends Source {
+    protected $constant = 'RANK_MATH_VERSION';
+
 	public function before_migrate_post( $post_id ) {
 		$manager = new RankMathManager();
 		$manager->set_post( $post_id );
@@ -82,9 +84,5 @@ class RankMath extends Source {
 	protected function get_term_noindex( $term_id ) {
 		$robots = get_term_meta( $term_id, 'rank_math_robots', true );
 		return intval( is_array( $robots ) && in_array( 'noindex', $robots, true ) );
-	}
-
-	public function is_activated() {
-		return defined( 'RANK_MATH_VERSION' );
 	}
 }

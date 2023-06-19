@@ -5,6 +5,8 @@ use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
 
 class Redirection extends Source {
+    protected $constant = 'REDIRECTION_DB_VERSION';
+
 	public function migrate_redirects() {
 		$migrated_redirects = 0;
 
@@ -52,9 +54,5 @@ class Redirection extends Source {
 		}
 
 		return $migrated_redirects;
-	}
-
-	public function is_activated() {
-		return defined( 'REDIRECTION_DB_VERSION' );
 	}
 }
