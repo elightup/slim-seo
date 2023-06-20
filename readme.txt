@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.9
 Tested up to: 6.2.2
 Requires PHP: 7.2
-Stable tag: 3.21.1
+Stable tag: 3.21.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,13 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.21.2 - 2023-06-20 =
+- Import redirects from Rank Math & SEOPress #94
+- Add wpml-config.xml for translating meta tags in WPML and Polylang
+- Delete plugin settings when uninstall
+- Fix noindex not working correctly
+- Fix PHP warning on getting post type archive page
 
 = 3.21.1 - 2023-06-05 =
 - Fix error on settings page when having a CPT with has_archive = true
