@@ -89,7 +89,7 @@ class SEOPress extends Replacer {
 			'post_type'      => 'seopress_404',
 			'post_status'    => 'any',
 			'posts_per_page' => -1
-        ] );
+ 		] );
 
 		if ( empty( $results ) ) {
 			return $migrated_redirects;
