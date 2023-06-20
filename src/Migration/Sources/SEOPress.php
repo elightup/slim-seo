@@ -1,6 +1,9 @@
 <?php
 namespace SlimSEO\Migration\Sources;
 
+use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Redirection\Helper as RedirectionHelper;
+
 class SEOPress extends Source {
 	protected $constant = 'SEOPRESS_VERSION';
 	private $context;
@@ -57,5 +60,40 @@ class SEOPress extends Source {
 	protected function get_term_noindex( $term_id ) {
 		$robots = seopress_get_service( 'RobotMeta' )->getValue( $this->context );
 		return intval( ! empty( $robots['noindex'] ) );
+	}
+
+	public function migrate_redirects() {
+		$count = 0;
+		$posts = get_posts( [
+			'post_type'      => 'seopress_404',
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+		] );
+
+		if ( empty( $posts ) ) {
+			return $count;
+		}
+
+		$db_redirects   = new DbRedirects();
+		$redirect_types = RedirectionHelper::redirect_types();
+
+		foreach ( $posts as $post ) {
+			$type     = get_post_meta( $post->ID, '_seopress_redirections_type', true );
+			$redirect = [
+				'type'             => isset( $redirect_types[ $type ] ) ? $type : 301,
+				'condition'        => get_post_meta( $post->ID, '_seopress_redirections_enabled_regex', true ) ? 'regex' : 'exact-match',
+				'from'             => $post->post_title,
+				'to'               => get_post_meta( $post->ID, '_seopress_redirections_value', true ),
+				'note'             => '',
+				'enable'           => get_post_meta( $post->ID, '_seopress_redirections_enabled', true ) && 'publish' === $post->post_status ? 1 : 0,
+				'ignoreParameters' => 'exact_match' === get_post_meta( $post->ID, '_seopress_redirections_param', true ) ? 0 : 1,
+			];
+
+			$db_redirects->update( $redirect );
+
+			++$count;
+		}
+
+		return $count;
 	}
 }
