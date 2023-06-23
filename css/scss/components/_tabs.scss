@@ -29,6 +29,7 @@
 	transition: box-shadow 0.1s linear;
 	text-decoration: none;
 	color: inherit;
+	white-space: nowrap;
 
 	&:hover {
 		color: var(--ss-color-primary);
