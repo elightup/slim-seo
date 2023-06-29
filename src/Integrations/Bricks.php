@@ -30,7 +30,7 @@ class Bricks {
 		$data        = $this->remove_elements( $data );
 		$description = \Bricks\Frontend::render_data( $data );
 
-		return $description;
+		return (string) $description;
 	}
 
 	private function remove_elements( array $data ): array {
