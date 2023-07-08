@@ -50,6 +50,7 @@ class Helper {
 	public static function maybe_skip_block( ?string $output, array $block ): ?string {
 		$skipped_blocks = apply_filters( 'slim_seo_skipped_blocks', [
 			'core/query',
+			'core/code',
 			'fluentfom/guten-block',
 			'wpforms/form-selector',
 			'mailpoet/subscription-form-block',
