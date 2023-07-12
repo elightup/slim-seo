@@ -33,6 +33,7 @@ class Oxygen {
 
 	public function remove_post_types( $post_types ) {
 		unset( $post_types['ct_template'] );
+		unset( $post_types['oxy_user_library'] );
 		return $post_types;
 	}
 }

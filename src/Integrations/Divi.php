@@ -10,6 +10,7 @@ class Divi {
 		}
 
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
+		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 	}
 
 	public function description( $description, WP_Post $post ) {
@@ -18,5 +19,10 @@ class Divi {
 			$description = preg_replace( '~\[/?[^\]]+?/?\]~s', '', $post->post_content );
 		}
 		return $description;
+	}
+
+	public function remove_post_types( $post_types ) {
+		unset( $post_types['et_pb_layout'] );
+		return $post_types;
 	}
 }
