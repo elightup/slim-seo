@@ -51,7 +51,7 @@ class Manager {
 		$website = new Types\Website( null, home_url( '/' ) );
 		$this->add_entity( $website );
 
-		$search_action = new Types\SearchAction;
+		$search_action = new Types\SearchAction( null, home_url( '/' ) );
 		$website->add_reference( 'potentialAction', $search_action );
 		$this->add_entity( $search_action );
 
@@ -91,7 +91,7 @@ class Manager {
 		if ( ! $logo_id ) {
 			return;
 		}
-		$logo           = new Types\ImageObject( 'logo' );
+		$logo           = new Types\ImageObject( 'logo', home_url( '/' ) );
 		$logo->image_id = $logo_id;
 
 		$this->entities['organization']->add_reference( 'logo', $logo );
@@ -100,8 +100,9 @@ class Manager {
 	}
 
 	private function add_thumbnail_schema() {
-		$thumbnail           = new Types\ImageObject( 'thumbnail' );
-		$thumbnail->image_id = get_post_thumbnail_id();
+		$post                = get_queried_object();
+		$thumbnail           = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
+		$thumbnail->image_id = get_post_thumbnail_id( $post );
 
 		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
 		$this->entities['webpage']->add_reference( 'image', $thumbnail );
@@ -109,7 +110,8 @@ class Manager {
 	}
 
 	private function add_post_schemas() {
-		$article = new Types\Article;
+		$post    = get_queried_object();
+		$article = new Types\Article( null, get_permalink( $post ) );
 		$article->add_reference( 'isPartOf', $this->entities['webpage'] );
 		$article->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 		$this->add_entity( $article );
@@ -120,8 +122,8 @@ class Manager {
 
 		$article->add_reference( 'publisher', $this->entities['organization'] );
 
-		$author       = new Types\Person( 'author' );
-		$author->user = get_userdata( get_queried_object()->post_author );
+		$author       = new Types\Person( 'author', get_author_posts_url( $post->post_author ) );
+		$author->user = get_userdata( $post->post_author );
 
 		if ( ! $author->user ) {
 			return;
@@ -136,7 +138,7 @@ class Manager {
 	}
 
 	private function add_author_schemas() {
-		$author       = new Types\Person( 'author' );
+		$author       = new Types\Person( 'author', get_author_posts_url( get_queried_object_id() ) );
 		$author->user = get_queried_object();
 		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 
@@ -149,7 +151,7 @@ class Manager {
 
 	private function get_author_image_schema( $user_id ) {
 		$user         = get_userdata( $user_id );
-		$author_image = new Types\ImageObject( 'author_image' );
+		$author_image = new Types\ImageObject( 'author_image', get_author_posts_url( $user_id ) );
 		$author_image->add_property( 'url', get_avatar_url( $user_id ) );
 		$author_image->add_property( 'width', 96 );
 		$author_image->add_property( 'height', 96 );
