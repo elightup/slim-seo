@@ -67,7 +67,8 @@ class Container {
 		$services['schema'] = new Schema\Manager(
 			$services['meta_title'],
 			$services['meta_description'],
-			$services['breadcrumbs']
+			$services['breadcrumbs'],
+			$services['canonical_url']
 		);
 
 		$services['woocommerce']     = new Integrations\WooCommerce;

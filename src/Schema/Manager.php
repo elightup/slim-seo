@@ -1,16 +1,23 @@
 <?php
 namespace SlimSEO\Schema;
 
+use SlimSEO\Breadcrumbs;
+use SlimSEO\MetaTags\CanonicalUrl;
+use SlimSEO\MetaTags\Description;
+use SlimSEO\MetaTags\Title;
+
 class Manager {
 	private $title;
 	private $description;
 	private $breadcrumbs;
+	private $canonical_url;
 	private $entities = [];
 
-	public function __construct( $title, $description, $breadcrumbs ) {
-		$this->title       = $title;
-		$this->description = $description;
-		$this->breadcrumbs = $breadcrumbs;
+	public function __construct( Title $title, Description $description, Breadcrumbs $breadcrumbs, CanonicalUrl $canonical_url ) {
+		$this->title         = $title;
+		$this->description   = $description;
+		$this->breadcrumbs   = $breadcrumbs;
+		$this->canonical_url = $canonical_url;
 	}
 
 	public function setup() {
@@ -55,11 +62,11 @@ class Manager {
 		$website->add_reference( 'potentialAction', $search_action );
 		$this->add_entity( $search_action );
 
-		$breadcrumbs         = new Types\Breadcrumbs;
+		$breadcrumbs         = new Types\Breadcrumbs( null, $this->canonical_url->get_url() );
 		$breadcrumbs->source = $this->breadcrumbs;
 		$this->add_entity( $breadcrumbs );
 
-		$webpage              = new Types\WebPage;
+		$webpage              = new Types\WebPage( null, $this->canonical_url->get_url() );
 		$webpage->title       = $this->title;
 		$webpage->description = $this->description;
 		$webpage->add_reference( 'isPartOf', $website );
