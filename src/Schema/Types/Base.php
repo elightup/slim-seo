@@ -18,11 +18,13 @@ abstract class Base {
 		return apply_filters( "slim_seo_schema_{$this->context}_enable", true );
 	}
 
-	private function get_current_url() {
+	private function get_current_url(): string {
 		global $wp;
 
-		$url = add_query_arg( [], $wp->request );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$url = $_SERVER['REQUEST_URI'] ?? add_query_arg( [], $wp->request );
 		$url = home_url( $url );
+		$url = esc_url( wp_strip_all_tags( $url ) );
 		$url = strtok( $url, '#' );
 		$url = strtok( $url, '?' );
 
