@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.9
-Tested up to: 6.2.2
+Tested up to: 6.3
 Requires PHP: 7.2
-Stable tag: 3.21.2
+Stable tag: 3.21.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,15 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.21.3 - 2023-07-24 =
+- Schema: set the same @id for search action, logo, author across the site
+- Schema: fix missing trailing slash in the current URL
+- Add support for Syntax-highlighting Code Block (with Server-side Rendering) plugin
+- Add more ignored post types from page builders
+- Remove meta description in Hello Elementor theme
+- Fix incorrect data type returned from Bricks for WooCommerce cart page
+- Fix JS error on the settings page if no custom post types
 
 = 3.21.2 - 2023-06-20 =
 - Import redirects from Rank Math & SEOPress #94
