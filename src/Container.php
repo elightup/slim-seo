@@ -93,6 +93,8 @@ class Container {
 			$services['twitter_cards'],
 			$services['meta_robots']
 		);
+
+		$services['the_events_calendar'] = new Integrations\TheEventsCalendar;
 	}
 
 	public function init() {
