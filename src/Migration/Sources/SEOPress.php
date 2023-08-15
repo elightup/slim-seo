@@ -30,9 +30,18 @@ class SEOPress extends Source {
 		return $social['twitter']['image'] ?? '';
 	}
 
-	protected function get_post_noindex( $post_id ) {
-		$robots = seopress_get_service( 'RobotMeta' )->getValue( $this->context );
-		return intval( ! empty( $robots['noindex'] ) );
+	/**
+	 * Get meta robots noindex value.
+	 *
+	 * Must use low-level function `get_post_meta()` because the `RobotMeta` service tries to get the primary category of a post.
+	 * In case post type = 'product' and the website doesn't use WooCommerce, this call returns `WP_Error` and breaks the Ajax.
+	 *
+	 * @link https://github.com/wp-seopress/wp-seopress-public/blob/master/src/Helpers/Metas/RobotSettings.php#L14
+	 */
+	protected function get_post_noindex( $post_id ): int {
+		$noindex = get_post_meta( $post_id, '_seopress_robots_index', true );
+		$noindex = $noindex === true || $noindex === 'yes';
+		return intval( $noindex );
 	}
 
 	protected function before_migrate_term( $term_id ) {
