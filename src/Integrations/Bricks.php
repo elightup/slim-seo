@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use SlimSEO\MetaTags\Helper;
 use WP_Post;
 
 class Bricks {
@@ -27,8 +28,15 @@ class Bricks {
 			return $description;
 		}
 
-		$data        = $this->remove_elements( $data );
+		$data = $this->remove_elements( $data );
+
+		// Skip shortcodes & blocks inside dynamic data {post_content}.
+		add_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
+
 		$description = \Bricks\Frontend::render_data( $data );
+
+		// Remove the filter.
+		remove_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
 
 		return (string) $description;
 	}
@@ -85,5 +93,9 @@ class Bricks {
 	public function remove_post_types( array $post_types ): array {
 		unset( $post_types['bricks_template'] );
 		return $post_types;
+	}
+
+	public function skip_shortcodes( string $content ): string {
+		return Helper::normalize( $content );
 	}
 }
