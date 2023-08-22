@@ -17,6 +17,7 @@ class Helper {
 			'fluentform',
 			'wpforms',
 			'mailpoet_form',
+			'gravityview',
 		] );
 
 		$shortcodes_bak = $shortcode_tags;
