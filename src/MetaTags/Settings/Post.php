@@ -28,7 +28,7 @@ class Post extends Base {
 
 	public function add_meta_box() {
 		$context  = apply_filters( 'slim_seo_meta_box_context', 'normal' );
-		$priority = apply_filters( 'slim_seo_meta_box_priority', 'high' );
+		$priority = apply_filters( 'slim_seo_meta_box_priority', 'low' );
 
 		$post_types = $this->get_types();
 		foreach ( $post_types as $post_type ) {
