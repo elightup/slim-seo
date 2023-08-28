@@ -18,7 +18,7 @@ class Upgrade {
 
 	private function upgrade_to_v1() {
 		// Upgrade data for homepage settings.
-		$option        = get_option( 'slim_seo' );
+		$option        = get_option( 'slim_seo' ) ?: [];
 		$home_settings = array_filter( [
 			'title'          => $option['home_title'] ?? '',
 			'description'    => $option['home_description'] ?? '',
