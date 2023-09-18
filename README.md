@@ -59,8 +59,8 @@ Slim SEO automatically adds structured data to the website via JSON-LD which mak
 
 ### Premium plugins
 
-- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your WordPress websites, which allow you to add schema to your custom post types via a visual and user-friendly UI.
-- [Slim SEO Link Manager](https://wpslimseo.com/slim-seo-link-manager/): build and monitor internal links in your WordPress websites in real-time with advanced & insightful reports.
+- [Slim SEO Schema](https://wpslimseo.com/products/slim-seo-schema/) - An advanced, powerful and flexible plugin to add schemas to WordPress.
+- [Slim SEO Link Manager](https://wpslimseo.com/products/slim-seo-link-manager/) - Build internal link easier in WordPress with real-time reports.
 
 [View all](https://wpslimseo.com/products/)
 
@@ -72,11 +72,11 @@ However, Slim SEO is perfectly suitable for users who prefer simplicity or do no
 
 ## You might also like
 
-If you love this plugin, please try our other great products:
+If you like this plugin, you might also like our other WordPress products:
 
-- [Meta Box](https://metabox.io): The best plugin for adding custom meta boxes and custom fields for WordPress
-- [GretaThemes](https://gretathemes.com): Beautiful and easy to use WordPress themes
-- [Auto Listings](https://wpautolistings.com): The best WordPress plugin for car dealership & car listings websites.
+- [Meta Box](https://metabox.io) - A powerful WordPress plugin for creating custom post types and custom fields.
+- [GretaThemes](https://gretathemes.com) - Free and premium WordPress themes that clean, simple and just work.
+- [Auto Listings](https://wpautolistings.com) - A car sale and dealership plugin for WordPress.
 
 ## Installation
 

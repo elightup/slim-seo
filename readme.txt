@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.9
-Tested up to: 6.3
+Tested up to: 6.3.1
 Requires PHP: 7.2
-Stable tag: 3.21.3
+Stable tag: 3.22.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,8 +71,8 @@ Slim SEO automatically adds the some structured data to the website via JSON-LD 
 
 ### Premium plugins
 
-- [Slim SEO Schema](https://wpslimseo.com/slim-seo-schema/): an advanced and comprehensive schema builder for your WordPress websites, which allow you to add schema to your custom post types via a visual and user-friendly UI.
-- [Slim SEO Link Manager](https://wpslimseo.com/slim-seo-link-manager/): build and monitor internal links in your WordPress websites in real-time with advanced & insightful reports.
+- [Slim SEO Schema](https://wpslimseo.com/products/slim-seo-schema/) - An advanced, powerful and flexible plugin to add schemas to WordPress.
+- [Slim SEO Link Manager](https://wpslimseo.com/products/slim-seo-link-manager/) - Build internal link easier in WordPress with real-time reports.
 
 [View all](https://wpslimseo.com/products/)
 
@@ -84,11 +84,11 @@ However, Slim SEO is perfectly suitable for users who prefer simplicity or do no
 
 ## You might also like
 
-If you love this plugin, please try our other great products:
+If you like this plugin, you might also like our other WordPress products:
 
-- [Meta Box](https://metabox.io): The best plugin for adding custom meta boxes and custom fields for WordPress
-- [GretaThemes](https://gretathemes.com): Beautiful and easy to use WordPress themes
-- [Auto Listings](https://wpautolistings.com): The best WordPress plugin for car dealership & car listings websites.
+- [Meta Box](https://metabox.io) - A powerful WordPress plugin for creating custom post types and custom fields.
+- [GretaThemes](https://gretathemes.com) - Free and premium WordPress themes that clean, simple and just work.
+- [Auto Listings](https://wpautolistings.com) - A car sale and dealership plugin for WordPress.
 
 == Installation ==
 
@@ -147,6 +147,15 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.22.0 - 2023-09-18 =
+- Add integration with The Events Calendar
+- Add integration with GravityView
+- Bricks integration: skip shortcodes & blocks in dynamic data {post.content}
+- Add missing alt for avatars
+- Fix getting robots noindex from SEOPress
+- Add safe-check for get term's canonical URL
+- Change priority for meta box to low
 
 = 3.21.3 - 2023-07-24 =
 - Schema: set the same @id for search action, logo, author across the site
