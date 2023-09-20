@@ -16,10 +16,10 @@ class RelLinks {
 
 		$links = $this->get_links();
 		if ( isset( $links['next'] ) ) {
-			echo '<link rel="next" href="', esc_url( $links['next'] ), '" />', "\n";
+			echo '<link rel="next" href="', esc_url( $links['next'] ), '">', "\n";
 		}
 		if ( isset( $links['prev'] ) ) {
-			echo '<link rel="prev" href="', esc_url( $links['prev'] ), '" />', "\n";
+			echo '<link rel="prev" href="', esc_url( $links['prev'] ), '">', "\n";
 		}
 	}
 
