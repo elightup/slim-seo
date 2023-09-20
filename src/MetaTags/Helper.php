@@ -16,6 +16,7 @@ class Helper {
 			'velocity',
 			'fluentform',
 			'wpforms',
+			'ninja_form',
 			'mailpoet_form',
 			'gravityview',
 		] );
@@ -54,6 +55,7 @@ class Helper {
 			'core/code',
 			'fluentfom/guten-block',
 			'wpforms/form-selector',
+			'ninja-forms/form',
 			'mailpoet/subscription-form-block',
 		] );
 		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
