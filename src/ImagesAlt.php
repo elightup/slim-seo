@@ -7,19 +7,27 @@ use WP_User;
 
 class ImagesAlt {
 	public function setup() {
-		// Add missing alt attribute when outputting images via the_post_thumbnail-family functions.
-		add_filter( 'wp_get_attachment_image_attributes', [ $this, 'add_missing_alt_attribute' ], 10, 2 );
-
-		// Add missing alt attribute when inserting images to the editor. Work with both classic and Gutenberg editor.
-		add_filter( 'wp_prepare_attachment_for_js', [ $this, 'add_missing_alt_attribute' ], 10, 2 );
+		add_action( 'add_attachment', [ $this, 'generate_alt_text_on_upload' ] );
 
 		// Fix missing alt text for avatar.
 		add_filter( 'get_avatar', [ $this, 'add_avatar_alt' ], 10, 5 );
 	}
 
-	public function add_missing_alt_attribute( $attr, $attachment ) {
-		$attr['alt'] = $attr['alt'] ?: $attachment->post_title;
-		return $attr;
+	public function generate_alt_text_on_upload( int $post_id ): void {
+		if ( ! wp_attachment_is_image( $post_id ) ) {
+			return;
+		}
+
+		$title = get_post( $post_id )->post_title;
+
+		// Sanitize the title: remove hyphens, underscores & extra spaces.
+		$title = preg_replace( '%\s*[-_\s]+\s*%', ' ', $title );
+
+		// Sanitize the title: capitalize first letter of every word (other letters lower case).
+		$title = ucwords( strtolower( $title ) );
+
+		// Set the image alt-text.
+		update_post_meta( $post_id, '_wp_attachment_image_alt', $title );
 	}
 
 	public function add_avatar_alt( string $avatar, $id_or_email, int $size, string $default_value, string $alt ): string {
