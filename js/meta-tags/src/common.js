@@ -28,7 +28,11 @@ const openMediaPopup = () => {
 	selectButtons.forEach( button => button.addEventListener( 'click', clickHandle ) );
 };
 
-export const normalize = string => string ? string.replace( /<[^>]+>/gm, '' ).replace( /\s+/gm, ' ' ).trim() : '';
+export const normalize = html => !html ? '' : html
+	.replace( /<(script|style)[^>]*?>.*?<\/\1>/gm, '' ) // Remove <style> & <script>
+	.replace( /<[^>]*?>/gm, '' )                        // Remove other HTML tags.
+	.replace( /\s+/gm, ' ' )                            // Remove duplicated white spaces.
+	.trim();
 
 export class Input {
 	constructor( selector ) {
