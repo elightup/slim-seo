@@ -8,6 +8,7 @@
  * Version:     3.22.0
  * Text Domain: slim-seo
  * Domain Path: /languages
+ * GitHub Plugin URI: elightup/slim-seo
  */
 
 namespace SlimSEO;
