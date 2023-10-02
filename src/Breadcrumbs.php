@@ -63,7 +63,7 @@ class Breadcrumbs {
 			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', esc_html( wp_strip_all_tags( $this->current ) ) );
 		}
 
-		$output .= implode( " <span class='breadcrumbs__separator'>{$this->args['separator']}</span> ", $items );
+		$output .= implode( " <span class='breadcrumbs__separator' aria-hidden='true'>{$this->args['separator']}</span> ", $items );
 		$output .= '</nav>';
 
 		return $output;
