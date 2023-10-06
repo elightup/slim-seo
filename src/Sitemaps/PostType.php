@@ -54,6 +54,7 @@ class PostType {
 			$images = $this->get_post_images( $post );
 			array_walk( $images, [ $this, 'normalize_image' ] );
 			$images = array_filter( $images );
+			$images = array_filter( $images, [ $this, 'is_internal' ] );
 			array_walk( $images, [ $this, 'output_image' ] );
 
 			do_action( 'slim_seo_sitemap_post', $post );
@@ -72,45 +73,19 @@ class PostType {
 		echo "\t</url>\n";
 	}
 
-	private function output_image( $image ) {
-		if ( empty( $image['url'] ) ) {
-			return;
-		}
+	private function output_image( string $url ): void {
 		echo "\t\t<image:image>\n";
-		echo "\t\t\t<image:loc>", esc_url( $this->get_absolute_url( $image['url'] ) ), "</image:loc>\n";
+		echo "\t\t\t<image:loc>", esc_url( $url ), "</image:loc>\n";
 		echo "\t\t</image:image>\n";
 	}
 
 	private function normalize_image( &$image ) {
-		if ( is_array( $image ) ) {
-			return;
+		// If we get image ID only.
+		if ( is_numeric( $image ) && get_attached_file( $image ) ) {
+			$image = wp_get_attachment_image_url( $image, 'full' );
 		}
 
-		// If we get image URL only.
-		if ( ! is_numeric( $image ) ) {
-			$image = [ 'url' => $image ];
-			return;
-		}
-
-		// Ignore if image is deleted.
-		if ( ! get_attached_file( $image ) ) {
-			$image = null;
-			return;
-		}
-
-		$info       = wp_get_attachment_image_src( $image, 'full' );
-		$attachment = get_post( $image );
-
-		$caption = $attachment->post_excerpt;
-		if ( empty( $caption ) ) {
-			$caption = get_post_meta( $image, '_wp_attachment_image_alt', true );
-		}
-
-		$image = array_filter( [
-			'url'     => $info[0],
-			'title'   => $attachment->post_title,
-			'caption' => $caption,
-		] );
+		$image = $this->get_absolute_url( $image );
 	}
 
 	private function get_post_images( $post ) {
@@ -159,26 +134,18 @@ class PostType {
 				continue;
 			}
 
-			if ( $this->is_external( $src ) ) {
-				continue;
-			}
-
-			$values[] = [
-				'url'     => $src,
-				'title'   => $image->getAttribute( 'title' ),
-				'caption' => $image->getAttribute( 'alt' ),
-			];
+			$values[] = $src;
 		}
 
 		return $values;
 	}
 
-	private function is_external( string $url ): bool {
+	private function is_internal( string $url ): bool {
 		$home_url = untrailingslashit( home_url() );
-		return ! str_contains( $url, $home_url );
+		return str_contains( $url, $home_url );
 	}
 
-	private function get_absolute_url( $url ) {
+	private function get_absolute_url( string $url ): string {
 		if ( wp_parse_url( $url, PHP_URL_SCHEME ) ) {
 			return $url;
 		}
