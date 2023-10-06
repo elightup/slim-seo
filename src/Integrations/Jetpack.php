@@ -9,9 +9,15 @@ class Jetpack {
 
 		// Jetpack Boost
 		add_filter( 'jetpack_boost_should_defer_js', [ $this, 'disable_defer_js_for_sitemap' ] );
+
+		add_action( 'slim_seo_sitemap_before_output', [ $this, 'disable_photon_for_sitemap' ] );
 	}
 
 	public function disable_defer_js_for_sitemap( $value ) {
 		return empty( get_query_var( 'ss_sitemap' ) ) ? $value : false;
+	}
+
+	public function disable_photon_for_sitemap() {
+		add_filter( 'jetpack_photon_skip_image', '__return_true' );
 	}
 }

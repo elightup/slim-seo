@@ -1,17 +1,18 @@
 <?php
 namespace SlimSEO\Sitemaps;
 
+use WP_Post;
+
 class PostType {
 	private $post_type;
 	private $page;
-	private $current_post;
 
 	public function __construct( $post_type, $page = 1 ) {
 		$this->post_type = $post_type;
 		$this->page      = $page;
 	}
 
-	public static function get_query_args( $args = [] ) {
+	public static function get_query_args( $args = [] ): array {
 		return apply_filters( 'slim_seo_sitemap_post_type_query_args', array_merge( [
 			'post_status'            => 'publish',
 			'has_password'           => false,
@@ -29,7 +30,7 @@ class PostType {
 		], $args ), $args );
 	}
 
-	public function output() {
+	public function output(): void {
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		$this->output_homepage();
@@ -45,8 +46,6 @@ class PostType {
 				continue;
 			}
 
-			$this->current_post = $post;
-
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
@@ -54,6 +53,7 @@ class PostType {
 			$images = $this->get_post_images( $post );
 			array_walk( $images, [ $this, 'normalize_image' ] );
 			$images = array_filter( $images );
+			$images = array_filter( $images, [ $this, 'is_internal' ] );
 			array_walk( $images, [ $this, 'output_image' ] );
 
 			do_action( 'slim_seo_sitemap_post', $post );
@@ -63,7 +63,7 @@ class PostType {
 		echo '</urlset>';
 	}
 
-	private function output_homepage() {
+	private function output_homepage(): void {
 		if ( 'page' !== $this->post_type || 'posts' !== get_option( 'show_on_front' ) ) {
 			return;
 		}
@@ -72,48 +72,22 @@ class PostType {
 		echo "\t</url>\n";
 	}
 
-	private function output_image( $image ) {
-		if ( empty( $image['url'] ) ) {
-			return;
-		}
+	private function output_image( string $url ): void {
 		echo "\t\t<image:image>\n";
-		echo "\t\t\t<image:loc>", esc_url( $this->get_absolute_url( $image['url'] ) ), "</image:loc>\n";
+		echo "\t\t\t<image:loc>", esc_url( $url ), "</image:loc>\n";
 		echo "\t\t</image:image>\n";
 	}
 
-	private function normalize_image( &$image ) {
-		if ( is_array( $image ) ) {
-			return;
+	private function normalize_image( &$image ): void {
+		// If we get image ID only.
+		if ( is_numeric( $image ) && get_attached_file( $image ) ) {
+			$image = wp_get_attachment_image_url( $image, 'full' );
 		}
 
-		// If we get image URL only.
-		if ( ! is_numeric( $image ) ) {
-			$image = [ 'url' => $image ];
-			return;
-		}
-
-		// Ignore if image is deleted.
-		if ( ! get_attached_file( $image ) ) {
-			$image = null;
-			return;
-		}
-
-		$info       = wp_get_attachment_image_src( $image, 'full' );
-		$attachment = get_post( $image );
-
-		$caption = $attachment->post_excerpt;
-		if ( empty( $caption ) ) {
-			$caption = get_post_meta( $image, '_wp_attachment_image_alt', true );
-		}
-
-		$image = array_filter( [
-			'url'     => $info[0],
-			'title'   => $attachment->post_title,
-			'caption' => $caption,
-		] );
+		$image = $this->get_absolute_url( $image );
 	}
 
-	private function get_post_images( $post ) {
+	private function get_post_images( WP_Post $post ): array {
 		$images = [];
 
 		// Post thumbnail.
@@ -125,7 +99,7 @@ class PostType {
 		return array_filter( $images );
 	}
 
-	private function get_images_from_html( $html ) {
+	private function get_images_from_html( string $html ): array {
 		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
 		if ( ! class_exists( 'DOMDocument' ) ) {
 			return [];
@@ -154,31 +128,23 @@ class PostType {
 			$class = $image->getAttribute( 'class' );
 
 			// Uploaded images.
-			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) && get_attached_file( $matches[1] ) ) {
+			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) ) {
 				$values[] = (int) $matches[1];
 				continue;
 			}
 
-			if ( $this->is_external( $src ) ) {
-				continue;
-			}
-
-			$values[] = [
-				'url'     => $src,
-				'title'   => $image->getAttribute( 'title' ),
-				'caption' => $image->getAttribute( 'alt' ),
-			];
+			$values[] = $src;
 		}
 
 		return $values;
 	}
 
-	private function is_external( string $url ): bool {
+	private function is_internal( string $url ): bool {
 		$home_url = untrailingslashit( home_url() );
-		return ! str_contains( $url, $home_url );
+		return str_contains( $url, $home_url );
 	}
 
-	private function get_absolute_url( $url ) {
+	private function get_absolute_url( string $url ): string {
 		if ( wp_parse_url( $url, PHP_URL_SCHEME ) ) {
 			return $url;
 		}
@@ -194,7 +160,7 @@ class PostType {
 		return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] ) . ltrim( $url, '/' );
 	}
 
-	private function is_indexed( $post ) {
+	private function is_indexed( WP_Post $post ): bool {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
 		return empty( $data['noindex'] );
 	}
