@@ -1,5 +1,3 @@
-
-Warning: Version warning: Imagick was compiled against ImageMagick version 1808 but version 1809 is loaded. Imagick will run but may behave surprisingly in Unknown on line 0
 <?php
 namespace SlimSEO\Sitemaps;
 

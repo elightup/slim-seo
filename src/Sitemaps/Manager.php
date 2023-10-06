@@ -35,6 +35,8 @@ class Manager {
 			return;
 		}
 
+		do_action( 'slim_seo_sitemap_before_output' );
+
 		status_header( 200 );
 		header( 'Content-type: text/xml; charset=utf-8', true );
 		header( 'X-Robots-Tag: noindex, follow', true );
