@@ -1,17 +1,20 @@
+
+Warning: Version warning: Imagick was compiled against ImageMagick version 1808 but version 1809 is loaded. Imagick will run but may behave surprisingly in Unknown on line 0
 <?php
 namespace SlimSEO\Sitemaps;
+
+use WP_Post;
 
 class PostType {
 	private $post_type;
 	private $page;
-	private $current_post;
 
 	public function __construct( $post_type, $page = 1 ) {
 		$this->post_type = $post_type;
 		$this->page      = $page;
 	}
 
-	public static function get_query_args( $args = [] ) {
+	public static function get_query_args( $args = [] ): array {
 		return apply_filters( 'slim_seo_sitemap_post_type_query_args', array_merge( [
 			'post_status'            => 'publish',
 			'has_password'           => false,
@@ -29,7 +32,7 @@ class PostType {
 		], $args ), $args );
 	}
 
-	public function output() {
+	public function output(): void {
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		$this->output_homepage();
@@ -44,8 +47,6 @@ class PostType {
 			if ( ! $this->is_indexed( $post ) ) {
 				continue;
 			}
-
-			$this->current_post = $post;
 
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
@@ -64,7 +65,7 @@ class PostType {
 		echo '</urlset>';
 	}
 
-	private function output_homepage() {
+	private function output_homepage(): void {
 		if ( 'page' !== $this->post_type || 'posts' !== get_option( 'show_on_front' ) ) {
 			return;
 		}
@@ -79,7 +80,7 @@ class PostType {
 		echo "\t\t</image:image>\n";
 	}
 
-	private function normalize_image( &$image ) {
+	private function normalize_image( &$image ): void {
 		// If we get image ID only.
 		if ( is_numeric( $image ) && get_attached_file( $image ) ) {
 			$image = wp_get_attachment_image_url( $image, 'full' );
@@ -88,7 +89,7 @@ class PostType {
 		$image = $this->get_absolute_url( $image );
 	}
 
-	private function get_post_images( $post ) {
+	private function get_post_images( WP_Post $post ): array {
 		$images = [];
 
 		// Post thumbnail.
@@ -100,7 +101,7 @@ class PostType {
 		return array_filter( $images );
 	}
 
-	private function get_images_from_html( $html ) {
+	private function get_images_from_html( string $html ): array {
 		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
 		if ( ! class_exists( 'DOMDocument' ) ) {
 			return [];
@@ -129,7 +130,7 @@ class PostType {
 			$class = $image->getAttribute( 'class' );
 
 			// Uploaded images.
-			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) && get_attached_file( $matches[1] ) ) {
+			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) ) {
 				$values[] = (int) $matches[1];
 				continue;
 			}
@@ -161,7 +162,7 @@ class PostType {
 		return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] ) . ltrim( $url, '/' );
 	}
 
-	private function is_indexed( $post ) {
+	private function is_indexed( WP_Post $post ): bool {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
 		return empty( $data['noindex'] );
 	}
