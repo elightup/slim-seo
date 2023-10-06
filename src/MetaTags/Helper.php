@@ -19,6 +19,11 @@ class Helper {
 			'ninja_form',
 			'mailpoet_form',
 			'gravityview',
+
+			// Filter everything.
+			'fe_widget',
+			'fe_chips',
+			'fe_sort',
 		] );
 
 		$shortcodes_bak = $shortcode_tags;
