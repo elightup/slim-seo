@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.9
 Tested up to: 6.3.1
 Requires PHP: 7.2
-Stable tag: 3.22.0
+Stable tag: 3.22.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -92,7 +92,7 @@ If you like this plugin, you might also like our other WordPress products:
 
 == Installation ==
 
-Before installing, please note that the plugin requires PHP >= 5.6.
+Before installing, please note that the plugin requires PHP >= 7.2.
 
 1. Go to Plugins > Add New.
 2. Search for "Slim SEO".
@@ -147,6 +147,15 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.22.1 - 2023-10-11 =
+- Add support for Ninja Forms and Filter Everything plugins
+- Add support for Github Updater
+- Set `og:type="website"` for static front page
+- Improve breadcrumbs accessibility by adding `aria-hidden="true"` to separators
+- Generate alt text for images on upload instead of when inserting into posts
+- Disable Jetpack Photon for sitemaps (#99)
+- Fix not stripping inline CSS from meta description preview, fix Stackable plugin compatibility
 
 = 3.22.0 - 2023-09-18 =
 - Add integration with The Events Calendar
