@@ -4,7 +4,7 @@ namespace SlimSEO\Sitemaps;
 use SlimSEO\Helpers\Data;
 
 class Manager {
-	public function setup() {
+	public function setup(): void {
 		$this->add_rewrite_rules();
 		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
 		add_action( 'template_redirect', [ $this, 'output' ], 0 );
@@ -14,7 +14,7 @@ class Manager {
 		remove_action( 'init', 'wp_sitemaps_get_server' );
 	}
 
-	public function add_rewrite_rules() {
+	public function add_rewrite_rules(): void {
 		add_rewrite_rule( 'sitemap\.xml$', 'index.php?ss_sitemap=index', 'top' );
 		add_rewrite_rule( 'sitemap-(post-type-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
 		add_rewrite_rule( 'sitemap-(taxonomy-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
@@ -24,12 +24,12 @@ class Manager {
 		}
 	}
 
-	public function add_query_vars( $vars ) {
+	public function add_query_vars( array $vars ): array {
 		$vars[] = 'ss_sitemap';
 		return $vars;
 	}
 
-	public function output() {
+	public function output(): void {
 		$type = get_query_var( 'ss_sitemap' );
 		if ( ! $type ) {
 			return;
@@ -57,7 +57,7 @@ class Manager {
 			$page      = 1;
 			if ( preg_match( '/(.+)-(\d+)$/', $post_type, $matches ) && post_type_exists( $matches[1] ) ) {
 				$post_type = $matches[1];
-				$page      = $matches[2];
+				$page      = (int) $matches[2];
 			}
 			if ( ! in_array( $post_type, $post_types, true ) ) {
 				wp_die( esc_html__( 'Invalid sitemap URL.', 'slim-seo' ) );
@@ -72,7 +72,7 @@ class Manager {
 			$page     = 1;
 			if ( preg_match( '/(.+)-(\d+)$/', $taxonomy, $matches ) && taxonomy_exists( $matches[1] ) ) {
 				$taxonomy = $matches[1];
-				$page     = $matches[2];
+				$page     = (int) $matches[2];
 			}
 			if ( ! in_array( $taxonomy, $taxonomies, true ) ) {
 				wp_die( esc_html__( 'Invalid sitemap URL.', 'slim-seo' ) );
@@ -96,7 +96,7 @@ class Manager {
 		die;
 	}
 
-	public function add_to_robots_txt() {
+	public function add_to_robots_txt(): void {
 		echo "\nSitemap: ", esc_url( home_url( 'sitemap.xml' ) ), "\n";
 	}
 

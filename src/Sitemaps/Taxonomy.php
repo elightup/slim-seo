@@ -1,16 +1,18 @@
 <?php
 namespace SlimSEO\Sitemaps;
 
+use WP_Term;
+
 class Taxonomy {
 	private $taxonomy;
 	private $page;
 
-	public function __construct( $taxonomy, $page = 1 ) {
+	public function __construct( string $taxonomy, int $page = 1 ) {
 		$this->taxonomy = $taxonomy;
 		$this->page     = $page;
 	}
 
-	public static function get_query_args( $args = [] ) {
+	public static function get_query_args( array $args = [] ): array {
 		return apply_filters( 'slim_seo_taxonomy_query_args', array_merge( [
 			'hide_empty'             => true,
 			'number'                 => 2000,
@@ -19,7 +21,7 @@ class Taxonomy {
 		], $args ), $args );
 	}
 
-	public function output() {
+	public function output(): void {
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		$offset     = ( $this->page - 1 ) * 2000;
@@ -43,7 +45,7 @@ class Taxonomy {
 		echo '</urlset>';
 	}
 
-	private function is_indexed( $term ) {
+	private function is_indexed( WP_Term $term ): bool {
 		$data = get_term_meta( $term->term_id, 'slim_seo', true );
 		return empty( $data['noindex'] );
 	}

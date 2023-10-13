@@ -7,12 +7,12 @@ class PostType {
 	private $post_type;
 	private $page;
 
-	public function __construct( $post_type, $page = 1 ) {
+	public function __construct( string $post_type, int $page = 1 ) {
 		$this->post_type = $post_type;
 		$this->page      = $page;
 	}
 
-	public static function get_query_args( $args = [] ): array {
+	public static function get_query_args( array $args = [] ): array {
 		return apply_filters( 'slim_seo_sitemap_post_type_query_args', array_merge( [
 			'post_status'            => 'publish',
 			'has_password'           => false,
@@ -33,7 +33,10 @@ class PostType {
 	public function output(): void {
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
-		$this->output_homepage();
+		if ( $this->page === 1 ) {
+			$this->output_homepage();
+			$this->output_post_type_archive();
+		}
 
 		$query_args = self::get_query_args( [
 			'post_type' => $this->post_type,
@@ -69,6 +72,16 @@ class PostType {
 		}
 		echo "\t<url>\n";
 		echo "\t\t<loc>", esc_url( home_url( '/' ) ), "</loc>\n";
+		echo "\t</url>\n";
+	}
+
+	private function output_post_type_archive(): void {
+		$url = get_post_type_archive_link( $this->post_type );
+		if ( ! $url ) {
+			return;
+		}
+		echo "\t<url>\n";
+		echo "\t\t<loc>", esc_url( $url ), "</loc>\n";
 		echo "\t</url>\n";
 	}
 

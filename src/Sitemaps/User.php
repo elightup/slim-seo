@@ -8,7 +8,7 @@ class User {
 		$this->page = $page;
 	}
 
-	public static function is_active() {
+	public static function is_active(): bool {
 		return apply_filters( 'slim_seo_user_sitemap', false );
 	}
 
@@ -19,7 +19,7 @@ class User {
 		], $args ), $args );
 	}
 
-	public function output() {
+	public function output(): void {
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		$query_args = self::get_query_args( [
