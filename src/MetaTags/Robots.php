@@ -79,13 +79,13 @@ class Robots {
 	 * @see AdminColumns/Post.php.
 	 */
 	public function get_singular_value( $post_id = 0 ): bool {
-		$post      = $post_id ? get_post( $post_id ) : $this->get_queried_object();
-		$post_type = get_post_type( $post );
+		$post_id   = $post_id ?: $this->get_queried_object_id();
+		$post_type = get_post_type( $post_id );
 
 		$option            = get_option( 'slim_seo' );
 		$post_type_noindex = (bool) ( $option[ $post_type ]['noindex'] ?? false );
 
-		$data         = get_post_meta( $post->ID, 'slim_seo', true );
+		$data         = get_post_meta( $post_id, 'slim_seo', true );
 		$post_noindex = (bool) ( $data['noindex'] ?? false );
 
 		return $post_noindex || $post_type_noindex;
