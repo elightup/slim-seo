@@ -4,8 +4,11 @@ namespace SlimSEO\Sitemaps;
 use SlimSEO\Helpers\Data;
 
 class Manager {
+	private $post_types = [];
+	private $taxonomies = [];
+
 	public function setup(): void {
-		$this->add_rewrite_rules();
+		add_action( 'init', [ $this, 'add_rewrite_rules' ], 20 ); // Priority 20 to make sure all post types & taxonomies are registered.
 		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
 		add_action( 'template_redirect', [ $this, 'output' ], 0 );
 		add_action( 'do_robotstxt', [ $this, 'add_to_robots_txt' ] );
@@ -15,12 +18,26 @@ class Manager {
 	}
 
 	public function add_rewrite_rules(): void {
-		add_rewrite_rule( 'sitemap\.xml$', 'index.php?ss_sitemap=index', 'top' );
-		add_rewrite_rule( 'sitemap-(post-type-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
-		add_rewrite_rule( 'sitemap-(taxonomy-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+		$this->get_post_types();
+		$this->get_taxonomies();
 
+		$has_sitemap = false;
+
+		if ( ! empty( $this->post_types ) ) {
+			add_rewrite_rule( 'sitemap-(post-type-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+			$has_sitemap = true;
+		}
+		if ( ! empty( $this->taxonomies ) ) {
+			add_rewrite_rule( 'sitemap-(taxonomy-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+			$has_sitemap = true;
+		}
 		if ( User::is_active() ) {
 			add_rewrite_rule( 'sitemap-(user[^/]*?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+			$has_sitemap = true;
+		}
+
+		if ( $has_sitemap ) {
+			add_rewrite_rule( 'sitemap\.xml$', 'index.php?ss_sitemap=index', 'top' );
 		}
 	}
 
@@ -44,11 +61,8 @@ class Manager {
 		echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
 		echo '<?xml-stylesheet type="text/xsl" href="', esc_url( SLIM_SEO_URL ), 'src/Sitemaps/style.xsl"?>', "\n";
 
-		$post_types = $this->get_allowed_post_types();
-		$taxonomies = $this->get_allowed_taxonomies();
-
 		if ( 'index' === $type ) {
-			$sitemap = new Index( $post_types, $taxonomies );
+			$sitemap = new Index( $this->post_types, $this->taxonomies );
 			$sitemap->output();
 		}
 
@@ -59,7 +73,7 @@ class Manager {
 				$post_type = $matches[1];
 				$page      = (int) $matches[2];
 			}
-			if ( ! in_array( $post_type, $post_types, true ) ) {
+			if ( ! in_array( $post_type, $this->post_types, true ) ) {
 				wp_die( esc_html__( 'Invalid sitemap URL.', 'slim-seo' ) );
 			}
 
@@ -74,7 +88,7 @@ class Manager {
 				$taxonomy = $matches[1];
 				$page     = (int) $matches[2];
 			}
-			if ( ! in_array( $taxonomy, $taxonomies, true ) ) {
+			if ( ! in_array( $taxonomy, $this->taxonomies, true ) ) {
 				wp_die( esc_html__( 'Invalid sitemap URL.', 'slim-seo' ) );
 			}
 
@@ -100,18 +114,19 @@ class Manager {
 		echo "\nSitemap: ", esc_url( home_url( 'sitemap.xml' ) ), "\n";
 	}
 
-	private function get_allowed_post_types(): array {
+	private function get_post_types(): void {
 		$option     = get_option( 'slim_seo' );
 		$post_types = array_keys( Data::get_post_types() );
 		$post_types = array_filter( $post_types, function ( $post_type ) use ( $option ) {
 			return empty( $option[ $post_type ]['noindex'] );
 		} );
 
-		return (array) apply_filters( 'slim_seo_sitemap_post_types', array_values( $post_types ) );
+		$this->post_types = (array) apply_filters( 'slim_seo_sitemap_post_types', array_values( $post_types ) );
 	}
 
-	private function get_allowed_taxonomies(): array {
+	private function get_taxonomies(): void {
 		$taxonomies = array_keys( Data::get_taxonomies() );
-		return (array) apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
+
+		$this->taxonomies = (array) apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
 	}
 }
