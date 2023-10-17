@@ -26,17 +26,17 @@ class Page {
 				<?= esc_html( get_admin_page_title() ); ?>
 
 				<?php if ( $upgradeable ) : ?>
-					<a href="https://wpslimseo.com/products/?utm_source=WordPress&utm_medium=link&utm_campaign=plugin" target="_blank" rel="noreffer noopener" style="color: #ef4836">
+					<a href="https://elu.to/ssp" target="_blank" rel="noreffer noopener" style="color: #ef4836">
 						<span class="dashicons dashicons-awards" style="color: #ef4836"></span>
 						<strong><?php esc_html_e( 'Upgrade', 'slim-seo' ); ?></strong>
 					</a>
 				<?php endif ?>
 
-				<a href="https://www.facebook.com/groups/slimseo" target="_blank" rel="noreffer noopener">
+				<a href="https://elu.to/ssfb" target="_blank" rel="noreffer noopener">
 					<span class="dashicons dashicons-groups"></span>
 					<?php esc_html_e( 'Facebook Group', 'slim-seo' ); ?>
 				</a>
-				<a href="https://docs.wpslimseo.com" target="_blank" rel="noreffer noopener">
+				<a href="https://elu.to/ssd" target="_blank" rel="noreffer noopener">
 					<span class="dashicons dashicons-media-document"></span>
 					<?php esc_html_e( 'Documentation', 'slim-seo' ); ?>
 				</a>
@@ -67,7 +67,7 @@ class Page {
 						</h3>
 						<div class="inside">
 							<p><?php esc_html_e( 'If you like Slim SEO, please write a review on WordPress.org to help us spread the word. We really appreciate that!', 'slim-seo' ) ?></p>
-							<p><a href="https://wordpress.org/support/plugin/slim-seo/reviews/?filter=5" class="button" target="_blank" rel="noopenner noreferrer"><?php esc_html_e( 'Write a review', 'slim-seo' ) ?></a></p>
+							<p><a href="https://elu.to/ssr" class="button" target="_blank" rel="noopenner noreferrer"><?php esc_html_e( 'Write a review', 'slim-seo' ) ?></a></p>
 						</div>
 					</div>
 					<?php
