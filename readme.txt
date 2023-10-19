@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.9
-Tested up to: 6.3.1
+Tested up to: 6.3.2
 Requires PHP: 7.2
-Stable tag: 3.22.1
+Stable tag: 3.22.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -147,6 +147,12 @@ The sitemap URL is located at `domain.com/sitemap.xml`.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.22.2 - 2023-10-19 =
+- Do not generate rewrite rules for sitemaps if no post types or no taxonomies
+- Add post type archive link to sitemap
+- Fix not auto generating alt text for existing images
+- Fix warning for PHP 8.1/8.2 when getting robots tag for Account page of Jnews theme
 
 = 3.22.1 - 2023-10-11 =
 - Add support for Ninja Forms and Filter Everything plugins
