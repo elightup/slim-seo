@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Sitemaps;
 
+use SlimSEO\Helpers\Data;
 use WP_Post;
 
 class PostType {
@@ -76,6 +77,17 @@ class PostType {
 	}
 
 	private function output_post_type_archive(): void {
+		// Ignore post as it's always the homepage or blog page, which are already included in the "page" sitemap.
+		if ( $this->post_type === 'post' ) {
+			return;
+		}
+
+		// If post type archive is a page, ignore it because it's already included in the "page" sitemap.
+		$archive_page = Data::get_post_type_archive_page( $this->post_type );
+		if ( $archive_page ) {
+			return;
+		}
+
 		$url = get_post_type_archive_link( $this->post_type );
 		if ( ! $url ) {
 			return;
