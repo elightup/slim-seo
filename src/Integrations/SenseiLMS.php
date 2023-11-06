@@ -7,11 +7,7 @@ class SenseiLMS {
 			return;
 		}
 
-		add_action( 'template_redirect', [ $this, 'process' ] );
-	}
-
-	public function process() {
-		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
+		add_action( 'slim_seo_skipped_shortcodes', [ $this, 'process' ] );
 	}
 
 	/**
