@@ -96,12 +96,14 @@ class Breadcrumbs {
 			$this->add_singular();
 		} elseif ( is_tax() || is_category() || is_tag() ) { // Taxonomy archive.
 			$term     = get_queried_object();
-			$taxonomy = get_taxonomy( $term->taxonomy );
-			if ( ! empty( $taxonomy->object_type ) && 1 === count( $taxonomy->object_type ) ) {
-				$this->add_post_type_archive_link( reset( $taxonomy->object_type ) );
-			}
+			if ( $term ) {
+				$taxonomy = get_taxonomy( $term->taxonomy );
+				if ( ! empty( $taxonomy->object_type ) && 1 === count( $taxonomy->object_type ) ) {
+					$this->add_post_type_archive_link( reset( $taxonomy->object_type ) );
+				}
 
-			$this->add_term_ancestors( $term );
+				$this->add_term_ancestors( $term );
+			}
 			$this->current = single_term_title( '', false );
 		} elseif ( is_search() ) {
 			$this->current = sprintf( $this->args['label_search'], get_search_query() );
