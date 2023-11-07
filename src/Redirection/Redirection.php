@@ -88,32 +88,9 @@ class Redirection {
 				continue;
 			}
 
-			switch ( $redirect['type'] ) {
-				case 301:
-					header( 'HTTP/1.1 301 Moved Permanently' );
-
-					break;
-				case 302:
-					header( 'HTTP/1.1 302 Found' );
-
-					break;
-				case 307:
-					header( 'HTTP/1.1 307 Temporary Redirect' );
-
-					break;
-				case 410:
-					header( 'HTTP/1.1 410 Content Deleted' );
-
-					break;
-				case 451:
-					header( 'HTTP/1.1 451 Unavailable For Legal Reasons' );
-
-					break;
-			}
-
 			$to = filter_var( $to, FILTER_VALIDATE_URL ) ? $to : home_url( $to );
 
-			header( 'Location: ' . $to, true, (int) $redirect['type'] );
+			wp_redirect( $to, (int) $redirect[ 'type' ], 'Slim SEO' );
 			exit();
 		}
 	}

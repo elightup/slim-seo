@@ -7,8 +7,6 @@ class Helper {
 			301 => __( '301 Moved Permanently', 'slim-seo' ),
 			302 => __( '302 Found', 'slim-seo' ),
 			307 => __( '307 Temporary Redirect', 'slim-seo' ),
-			410 => __( '410 Content Deleted', 'slim-seo' ),
-			451 => __( '451 Unavailable For Legal Reasons', 'slim-seo' ),
 		];
 	}
 
