@@ -12,26 +12,29 @@ class TranslatePress {
 	}
 
 	public function add_post_links( $post ) {
+		$trp = \TRP_Translate_Press::get_trp_instance();
+		$url_converter = $trp->get_component( 'url_converter' );
+
 		$languages = $this->get_languages();
 		foreach ( $languages as $language ) {
-			$url = trailingslashit( get_home_url() ) . trailingslashit( $language ) . $post->post_name;
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
 				esc_attr( $language ),
-				esc_url( esc_url( $url ) )
+				esc_url( $url_converter->get_url_for_language( $language, get_permalink( $post->ID ), '') )
 			);
 		}
 	}
 
 	public function add_term_links( $term ) {
-		$languages = $this->get_languages();
+		$trp = \TRP_Translate_Press::get_trp_instance();
+		$url_converter = $trp->get_component( 'url_converter' );
 
+		$languages = $this->get_languages();
 		foreach ( $languages as $language ) {
-			$url = trailingslashit( get_home_url() ) . trailingslashit( $language ) . $term->slug;
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
 				esc_attr( $language ),
-				esc_url( $url )
+				esc_url( $url_converter->get_url_for_language( $language, get_term_link( $term->term_id ), '') )
 			);
 		}
 	}
@@ -43,10 +46,7 @@ class TranslatePress {
 		$default      = $settings['default-language'];
 
 		return array_filter( $settings['publish-languages'], function( $language ) use ( $default ) {
-			if ( $default === $language ) {
-				return false;
-			}
-			return true;
+			return $default !== $language;
 		} );
 	}
 }
