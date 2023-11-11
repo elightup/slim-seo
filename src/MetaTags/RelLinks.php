@@ -56,7 +56,8 @@ class RelLinks {
 	}
 
 	private function get_term_value(): string {
-		return get_term_link( $this->get_queried_object() );
+		$term_link = get_term_link( $this->get_queried_object() );
+		return is_string( $term_link ) ? $term_link : '';
 	}
 
 	private function get_post_type_archive_value(): string {
