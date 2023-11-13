@@ -19,6 +19,7 @@ class Helper {
 			'ninja_form',
 			'mailpoet_form',
 			'gravityview',
+			'civicrm',
 
 			// Filter everything.
 			'fe_widget',
