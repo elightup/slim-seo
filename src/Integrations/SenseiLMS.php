@@ -2,11 +2,11 @@
 namespace SlimSEO\Integrations;
 
 class SenseiLMS {
-	public function setup() {
-		if ( ! defined( 'SENSEI_LMS_VERSION' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'SENSEI_LMS_VERSION' );
+	}
 
+	public function setup() {
 		add_action( 'slim_seo_skipped_shortcodes', [ $this, 'process' ] );
 	}
 

@@ -2,11 +2,12 @@
 namespace SlimSEO\Integrations;
 
 class TheEventsCalendar {
-	public function setup() {
-		if ( ! defined( 'TRIBE_EVENTS_FILE' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'TRIBE_EVENTS_FILE' );
+	}
 
+
+	public function setup() {
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 	}
 

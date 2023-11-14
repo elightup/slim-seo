@@ -16,11 +16,11 @@ class WebStories {
 		$this->schema        = $schema;
 	}
 
-	public function setup(): void {
-		if ( ! defined( 'WEBSTORIES_VERSION' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'WEBSTORIES_VERSION' );
+	}
 
+	public function setup(): void {
 		// Use priority 20 to make sure all Web Stories hooks are registered.
 		add_action( 'init', [ $this, 'remove_web_stories_meta_output' ], 20 );
 

@@ -11,15 +11,16 @@ class WooCommerce {
 	];
 	private $product;
 
+	public function is_active(): bool {
+		return class_exists( 'WooCommerce' );
+	}
+
+
 	public function setup() {
 		add_action( 'template_redirect', [ $this, 'process' ] );
 	}
 
 	public function process() {
-		if ( ! class_exists( 'WooCommerce' ) ) {
-			return;
-		}
-
 		add_filter( 'slim_seo_breadcrumbs_args', [ $this, 'change_breadcrumbs_taxonomy' ] );
 		add_filter( 'slim_seo_meta_description', [ $this, 'strip_shortcodes' ] );
 

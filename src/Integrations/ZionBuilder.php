@@ -4,11 +4,11 @@ namespace SlimSEO\Integrations;
 use WP_Post;
 
 class ZionBuilder {
-	public function setup() {
-		if ( ! class_exists( '\ZionBuilder\Plugin' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return class_exists( '\ZionBuilder\Plugin' );
+	}
 
+	public function setup() {
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 	}
 

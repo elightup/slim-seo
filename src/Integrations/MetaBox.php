@@ -2,11 +2,11 @@
 namespace SlimSEO\Integrations;
 
 class MetaBox {
-	public function setup() {
-		if ( ! defined( 'RWMB_VER' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'RWMB_VER' );
+	}
 
+	public function setup() {
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 		add_filter( 'slim_seo_skipped_blocks', [ $this, 'skip_blocks' ] );
 	}

@@ -2,11 +2,11 @@
 namespace SlimSEO\Integrations;
 
 class Polylang {
-	public function setup() {
-		if ( ! defined( 'POLYLANG_VERSION' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'POLYLANG_VERSION' );
+	}
 
+	public function setup() {
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
 	}

@@ -24,12 +24,16 @@ class UltimateMember {
 		$this->robots        = $robots;
 	}
 
+	public function is_active(): bool {
+		return function_exists( 'um_is_core_page' );
+	}
+
 	public function setup() {
 		add_action( 'template_redirect', [ $this, 'process' ] );
 	}
 
 	public function process() {
-		if ( ! function_exists( 'um_is_core_page' ) || ! um_is_core_page( 'user' ) ) {
+		if ( ! um_is_core_page( 'user' ) ) {
 			return;
 		}
 
