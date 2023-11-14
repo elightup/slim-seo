@@ -105,9 +105,15 @@ class Container {
 		Settings\Page::setup();
 		$settings = $this->services['settings'];
 		foreach ( $this->services as $id => $service ) {
-			if ( $settings->is_feature_active( $id ) ) {
-				$service->setup();
+			if ( ! $settings->is_feature_active( $id ) ) {
+				continue;
 			}
+
+			if ( method_exists( $service, 'is_active' ) && ! $service->is_active() ) {
+				continue;
+			}
+
+			$service->setup();
 		}
 	}
 
