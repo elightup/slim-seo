@@ -2,15 +2,15 @@
 namespace SlimSEO\Integrations;
 
 class AutoListings {
+	public function is_active(): bool {
+		return defined( 'AUTO_LISTINGS_VERSION' );
+	}
+
 	public function setup() {
 		add_action( 'template_redirect', [ $this, 'process' ] );
 	}
 
 	public function process() {
-		if ( ! defined( 'AUTO_LISTINGS_VERSION' ) ) {
-			return;
-		}
-
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 	}
 

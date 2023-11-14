@@ -4,11 +4,11 @@ namespace SlimSEO\Integrations;
 use WP_Post;
 
 class Divi {
-	public function setup() {
-		if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'ET_BUILDER_VERSION' );
+	}
 
+	public function setup() {
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 	}

@@ -2,15 +2,15 @@
 namespace SlimSEO\Integrations;
 
 class LifterLMS {
+	public function is_active(): bool {
+		return class_exists( 'LifterLMS' );
+	}
+
 	public function setup() {
 		add_action( 'template_redirect', [ $this, 'process' ] );
 	}
 
 	public function process() {
-		if ( ! class_exists( 'LifterLMS' ) ) {
-			return;
-		}
-
 		add_filter( 'slim_seo_meta_description', [ $this, 'strip_shortcodes' ] );
 	}
 

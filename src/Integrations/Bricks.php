@@ -5,11 +5,11 @@ use SlimSEO\MetaTags\Helper;
 use WP_Post;
 
 class Bricks {
-	public function setup() {
-		if ( ! defined( 'BRICKS_VERSION' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'BRICKS_VERSION' );
+	}
 
+	public function setup() {
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );

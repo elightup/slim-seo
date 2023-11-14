@@ -4,11 +4,11 @@ namespace SlimSEO\Integrations;
 use WP_Post;
 
 class Oxygen {
-	public function setup() {
-		if ( ! defined( 'CT_VERSION' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'CT_VERSION' );
+	}
 
+	public function setup() {
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );

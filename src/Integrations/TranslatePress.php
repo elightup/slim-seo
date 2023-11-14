@@ -4,11 +4,11 @@ namespace SlimSEO\Integrations;
 class TranslatePress {
 	private $trp;
 
-	public function setup() {
-		if ( ! defined( 'TRP_PLUGIN_VERSION' ) ) {
-			return;
-		}
+	public function is_active(): bool {
+		return defined( 'TRP_PLUGIN_VERSION' );
+	}
 
+	public function setup() {
 		$this->trp = \TRP_Translate_Press::get_trp_instance();
 
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
