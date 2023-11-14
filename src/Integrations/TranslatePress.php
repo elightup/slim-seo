@@ -2,51 +2,55 @@
 namespace SlimSEO\Integrations;
 
 class TranslatePress {
+	private $trp;
+
 	public function setup() {
 		if ( ! defined( 'TRP_PLUGIN_VERSION' ) ) {
 			return;
 		}
 
+		$this->trp = \TRP_Translate_Press::get_trp_instance();
+
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
+		add_action( 'wpseo_sitemap_url', [ $this, 'get_url' ], 10, 2 );
 	}
 
-	public function add_post_links( $post ) {
-		$trp = \TRP_Translate_Press::get_trp_instance();
-		$url_converter = $trp->get_component( 'url_converter' );
+	public function add_post_links( \WP_Post $post ): void {
+		$this->add_links( get_permalink( $post ) );
+	}
 
+	public function add_term_links( \WP_Term $term ): void {
+		$this->add_links( get_term_link( $term ) );
+	}
+
+	private function add_links( string $url ): void {
 		$languages = $this->get_languages();
 		foreach ( $languages as $language ) {
+			/**
+			 * Hack: TranslatePress checks current filter to bypass translating URLs in sitemaps.
+			 * We have to use the Yoast SEO's filter name to make it work.
+			 * This will be removed when TranslatePress adds support for Slim SEO's hooks.
+			 */
+			$url = apply_filters( 'wpseo_sitemap_url', $url, $language );
+
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
 				esc_attr( $language ),
-				esc_url( $url_converter->get_url_for_language( $language, get_permalink( $post->ID ), '') )
+				esc_url( $url )
 			);
 		}
 	}
 
-	public function add_term_links( $term ) {
-		$trp = \TRP_Translate_Press::get_trp_instance();
-		$url_converter = $trp->get_component( 'url_converter' );
-
-		$languages = $this->get_languages();
-		foreach ( $languages as $language ) {
-			printf(
-				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
-				esc_attr( $language ),
-				esc_url( $url_converter->get_url_for_language( $language, get_term_link( $term->term_id ), '') )
-			);
-		}
+	public function get_url( string $url, string $language ): string {
+		$url_converter = $this->trp->get_component( 'url_converter' );
+		return $url_converter->get_url_for_language( $language, $url, '' );
 	}
 
-	private function get_languages() {
-		$trp          = \TRP_Translate_Press::get_trp_instance();
-		$trp_settings = $trp->get_component( 'settings' );
+	private function get_languages(): array {
+		$trp_settings = $this->trp->get_component( 'settings' );
 		$settings     = $trp_settings->get_settings();
-		$default      = $settings['default-language'];
 
-		return array_filter( $settings['publish-languages'], function( $language ) use ( $default ) {
-			return $default !== $language;
-		} );
+		return array_diff( $settings[ 'publish-languages' ], [ $settings[ 'default-language' ] ] );
 	}
 }
