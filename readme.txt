@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.9
-Tested up to: 6.3.2
+Tested up to: 6.4.1
 Requires PHP: 7.2
-Stable tag: 3.22.2
+Stable tag: 3.22.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -142,11 +142,26 @@ Yes, you can. When you edit a post or a page, there's a "Search Engine Optimizat
 
 The sitemap URL is located at `domain.com/sitemap.xml`.
 
+= How to remove plugin's data when uninstalling =
+
+Add the following constant in your `wp-config.php` file:
+
+`define( 'SLIM_SEO_DELETE_DATA', true );`
+
 == Screenshots ==
 
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.22.3 - 2023-11-14 =
+- Add support for Sensei LMS, Civi CRM, TranslatePress
+- Add `SLIM_SEO_DELETE_DATA` constant to set whether the plugin deletes its data when uninstalling, default `false`
+- Use only 3xx status codes for redirection
+- Add type-safe check for rel links for terms
+- Remove dashboard news
+- Prevent error for breadcrumbs on tax page
+- Fix duplicated post type archive url in sitemaps
 
 = 3.22.2 - 2023-10-19 =
 - Do not generate rewrite rules for sitemaps if no post types or no taxonomies
