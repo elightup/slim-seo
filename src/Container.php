@@ -78,6 +78,7 @@ class Container {
 		$services['jetpack']         = new Integrations\Jetpack;
 		$services['polylang']        = new Integrations\Polylang;
 		$services['wpml']            = new Integrations\WPML;
+		$services['translatepress']  = new Integrations\TranslatePress;
 		$services['amp']             = new Integrations\AMP( $services['schema'] );
 		$services['divi']            = new Integrations\Divi;
 		$services['metabox']         = new Integrations\MetaBox;
