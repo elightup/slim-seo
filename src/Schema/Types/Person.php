@@ -13,6 +13,7 @@ class Person extends Base {
 			'description' => $this->user->description,
 			'givenName'   => $this->user->first_name,
 			'familyName'  => $this->user->last_name,
+			'image'       => get_avatar_url( $this->user->ID ),
 		];
 
 		return $schema;

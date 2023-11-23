@@ -135,12 +135,8 @@ class Manager {
 		if ( ! $author->user ) {
 			return;
 		}
-		$author_image = $this->get_author_image_schema( $author->user->ID );
-		$author->add_reference( 'image', $author_image );
 
 		$this->add_entity( $author );
-		$this->add_entity( $author_image );
-
 		$article->add_reference( 'author', $author );
 	}
 
@@ -149,22 +145,7 @@ class Manager {
 		$author->user = get_queried_object();
 		$author->add_reference( 'mainEntityOfPage', $this->entities[ 'webpage' ] );
 
-		$author_image = $this->get_author_image_schema( $author->user->ID );
-		$author->add_reference( 'image', $author_image );
-
 		$this->add_entity( $author );
-		$this->add_entity( $author_image );
-	}
-
-	private function get_author_image_schema( $user_id ) {
-		$user         = get_userdata( $user_id );
-		$author_image = new Types\ImageObject( 'author_image', get_author_posts_url( $user_id ) );
-		$author_image->add_property( 'url', get_avatar_url( $user_id ) );
-		$author_image->add_property( 'width', 96 );
-		$author_image->add_property( 'height', 96 );
-		$author_image->add_property( 'caption', $user->display_name );
-
-		return $author_image;
 	}
 
 	private function add_entity( $entity ) {
