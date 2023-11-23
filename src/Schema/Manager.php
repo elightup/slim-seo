@@ -28,11 +28,11 @@ class Manager {
 		$this->add_schemas();
 
 		$entities = apply_filters( 'slim_seo_schema_entities', $this->entities );
-		$entities = array_filter( $entities, function( $entity ) {
+		$entities = array_filter( $entities, function ($entity) {
 			return $entity->is_active();
 		} );
 
-		$graph = array_map( function( $entity ) {
+		$graph = array_map( function ($entity) {
 			return $entity->get_schema();
 		}, $entities );
 
@@ -62,15 +62,15 @@ class Manager {
 		$website->add_reference( 'potentialAction', $search_action );
 		$this->add_entity( $search_action );
 
-		$breadcrumbs         = new Types\Breadcrumbs( null, $this->canonical_url->get_url() );
-		$breadcrumbs->source = $this->breadcrumbs;
-		$this->add_entity( $breadcrumbs );
+		$breadcrumb_list         = new Types\BreadcrumbList( null, $this->canonical_url->get_url() );
+		$breadcrumb_list->source = $this->breadcrumbs;
+		$this->add_entity( $breadcrumb_list );
 
 		$webpage              = new Types\WebPage( null, $this->canonical_url->get_url() );
 		$webpage->title       = $this->title;
 		$webpage->description = $this->description;
 		$webpage->add_reference( 'isPartOf', $website );
-		$webpage->add_reference( 'breadcrumb', $breadcrumbs );
+		$webpage->add_reference( 'breadcrumb', $breadcrumb_list );
 		$this->add_entity( $webpage );
 
 		$organization = new Types\Organization( null, home_url( '/' ) );
@@ -101,8 +101,8 @@ class Manager {
 		$logo           = new Types\ImageObject( 'logo', home_url( '/' ) );
 		$logo->image_id = $logo_id;
 
-		$this->entities['organization']->add_reference( 'logo', $logo );
-		$this->entities['organization']->add_reference( 'image', $logo );
+		$this->entities[ 'organization' ]->add_reference( 'logo', $logo );
+		$this->entities[ 'organization' ]->add_reference( 'image', $logo );
 		$this->add_entity( $logo );
 	}
 
@@ -111,23 +111,23 @@ class Manager {
 		$thumbnail           = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
 		$thumbnail->image_id = get_post_thumbnail_id( $post );
 
-		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
-		$this->entities['webpage']->add_reference( 'image', $thumbnail );
+		$this->entities[ 'webpage' ]->add_reference( 'primaryImageOfPage', $thumbnail );
+		$this->entities[ 'webpage' ]->add_reference( 'image', $thumbnail );
 		$this->add_entity( $thumbnail );
 	}
 
 	private function add_post_schemas() {
 		$post    = get_queried_object();
 		$article = new Types\Article( null, get_permalink( $post ) );
-		$article->add_reference( 'isPartOf', $this->entities['webpage'] );
-		$article->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
+		$article->add_reference( 'isPartOf', $this->entities[ 'webpage' ] );
+		$article->add_reference( 'mainEntityOfPage', $this->entities[ 'webpage' ] );
 		$this->add_entity( $article );
 
-		if ( isset( $this->entities['thumbnail'] ) ) {
-			$article->add_reference( 'image', $this->entities['thumbnail'] );
+		if ( isset( $this->entities[ 'thumbnail' ] ) ) {
+			$article->add_reference( 'image', $this->entities[ 'thumbnail' ] );
 		}
 
-		$article->add_reference( 'publisher', $this->entities['organization'] );
+		$article->add_reference( 'publisher', $this->entities[ 'organization' ] );
 
 		$author       = new Types\Person( 'author', get_author_posts_url( $post->post_author ) );
 		$author->user = get_userdata( $post->post_author );
@@ -147,7 +147,7 @@ class Manager {
 	private function add_author_schemas() {
 		$author       = new Types\Person( 'author', get_author_posts_url( get_queried_object_id() ) );
 		$author->user = get_queried_object();
-		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
+		$author->add_reference( 'mainEntityOfPage', $this->entities[ 'webpage' ] );
 
 		$author_image = $this->get_author_image_schema( $author->user->ID );
 		$author->add_reference( 'image', $author_image );

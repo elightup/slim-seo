@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
-class Breadcrumbs extends Base {
+class BreadcrumbList extends Base {
 	public $source;
 
 	public function is_active() {
