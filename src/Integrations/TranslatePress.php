@@ -13,7 +13,7 @@ class TranslatePress {
 
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
-		add_action( 'wpseo_sitemap_url', [ $this, 'get_url' ], 10, 2 );
+		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );
 	}
 
 	public function add_post_links( \WP_Post $post ): void {
@@ -43,6 +43,9 @@ class TranslatePress {
 	}
 
 	public function get_url( string $url, string $language ): string {
+		// Remove TranslatePress callback for this hook to avoid potential errors.
+		remove_all_actions( 'wpseo_sitemap_url' );
+
 		$url_converter = $this->trp->get_component( 'url_converter' );
 		return $url_converter->get_url_for_language( $language, $url, '' );
 	}
