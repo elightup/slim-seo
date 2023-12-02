@@ -23,8 +23,8 @@ abstract class Source {
 		}
 	}
 
-	public function migrate_term( $term_id ) {
-		$this->before_migrate_term( $term_id );
+	public function migrate_term( $term_id, $taxonomy ) {
+		$this->before_migrate_term( $term_id, $taxonomy );
 
 		$settings = [
 			'title'          => $this->get_term_title( $term_id ),
@@ -33,6 +33,7 @@ abstract class Source {
 			'twitter_image'  => $this->get_term_twitter_image( $term_id ),
 			'noindex'        => $this->get_term_noindex( $term_id ),
 		];
+
 		$settings = array_filter( $settings );
 		if ( $settings ) {
 			update_term_meta( $term_id, 'slim_seo', $settings );
@@ -45,7 +46,7 @@ abstract class Source {
 	protected function before_migrate_post( $post_id ) {
 	}
 
-	protected function before_migrate_term( $term_id ) {
+	protected function before_migrate_term( $term_id, $taxonomy ) {
 	}
 
 	protected function get_post_title( $post_id ) {

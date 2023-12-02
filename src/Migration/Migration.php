@@ -105,7 +105,8 @@ class Migration {
 		}
 
 		foreach ( $terms as $term_id ) {
-			$this->migrate_term( $term_id );
+			$term = get_term( $term_id );
+			$this->migrate_term( $term_id, $term->taxonomy );
 		}
 
 		$_SESSION['processed'] += count( $terms );
@@ -138,8 +139,8 @@ class Migration {
 		$this->source->migrate_post( $post_id );
 	}
 
-	private function migrate_term( int $term_id ) {
-		$this->source->migrate_term( $term_id );
+	private function migrate_term( int $term_id, string $taxonomy ) {
+		$this->source->migrate_term( $term_id, $taxonomy );
 	}
 
 	private function get_posts(): array {
