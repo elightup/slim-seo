@@ -19,8 +19,10 @@ class ImagesAlt {
 		add_filter( 'get_avatar', [ $this, 'add_avatar_alt' ], 10, 5 );
 	}
 
-	public function add_missing_alt_attribute( array $attributes, WP_Post $attachment ): array {
-		$attributes['alt'] = $attributes['alt'] ?: $this->normalize( $attachment->post_title );
+	public function add_missing_alt_attribute( array $attributes, $attachment ): array {
+		if ( $attachment && empty( $attributes[ 'alt' ] ) ) {
+			$attributes[ 'alt' ] = $this->normalize( $attachment->post_title );
+		}
 		return $attributes;
 	}
 
