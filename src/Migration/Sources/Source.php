@@ -23,8 +23,8 @@ abstract class Source {
 		}
 	}
 
-	public function migrate_term( $term_id, $taxonomy ) {
-		$this->before_migrate_term( $term_id, $taxonomy );
+	public function migrate_term( $term_id ) {
+		$this->before_migrate_term( $term_id );
 
 		$settings = [
 			'title'          => $this->get_term_title( $term_id ),

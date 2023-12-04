@@ -16,7 +16,7 @@ class RankMath extends Source {
 		rank_math()->variables = $manager;
 	}
 
-	protected function before_migrate_term( $term_id, $taxonomy = 'category' ) {
+	protected function before_migrate_term( $term_id ) {
 		$manager = new RankMathManager();
 		$manager->set_term( $term_id );
 		$manager->setup();
