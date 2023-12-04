@@ -46,7 +46,7 @@ abstract class Source {
 	protected function before_migrate_post( $post_id ) {
 	}
 
-	protected function before_migrate_term( $term_id, $taxonomy ) {
+	protected function before_migrate_term( $term_id ) {
 	}
 
 	protected function get_post_title( $post_id ) {
