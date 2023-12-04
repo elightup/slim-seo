@@ -33,7 +33,6 @@ abstract class Source {
 			'twitter_image'  => $this->get_term_twitter_image( $term_id ),
 			'noindex'        => $this->get_term_noindex( $term_id ),
 		];
-
 		$settings = array_filter( $settings );
 		if ( $settings ) {
 			update_term_meta( $term_id, 'slim_seo', $settings );
