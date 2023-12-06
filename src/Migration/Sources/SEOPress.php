@@ -45,7 +45,9 @@ class SEOPress extends Source {
 	}
 
 	protected function before_migrate_term( $term_id ) {
-		$this->context = seopress_get_service( 'ContextPage' )->buildContextWithCurrentId( $term_id, [ 'type' => 'term' ] )->getContext();
+		add_filter( 'seopress_primary_category_list', '__return_empty_array' );
+		$term = get_term( $term_id );
+		$this->context = seopress_get_service( 'ContextPage' )->buildContextWithCurrentId( $term_id, [ 'type' => 'term', 'taxonomy' => $term->taxonomy ] )->getContext();
 	}
 
 	protected function get_term_title( $term_id ) {
