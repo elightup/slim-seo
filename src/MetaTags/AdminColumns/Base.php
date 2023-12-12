@@ -28,6 +28,8 @@ abstract class Base {
 	public function setup_admin() {
 		$this->types = $this->settings->get_types();
 
+		$this->types = apply_filters( "slim_seo_admin_columns_{$this->object_type}", $this->types );
+
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 
 		// Quick edit.
