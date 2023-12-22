@@ -88,9 +88,17 @@ class Redirection {
 				continue;
 			}
 
+			$status = (int) $redirect[ 'type' ];
+
+			// Don't redirect if 410. Instead return 410 status header.
+			if ( $status === 410 ) {
+				status_header( $status );
+				return;
+			}
+
 			$to = filter_var( $to, FILTER_VALIDATE_URL ) ? $to : home_url( $to );
 
-			wp_redirect( $to, (int) $redirect[ 'type' ], 'Slim SEO' );
+			wp_redirect( $to, $status, 'Slim SEO' );
 			exit();
 		}
 	}
