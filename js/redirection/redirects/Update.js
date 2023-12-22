@@ -85,7 +85,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 							<select id='ss-type' value={ redirect.type } onChange={ handleChange( 'type' ) }>
 								{ Object.entries( SSRedirection.redirectTypes ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> ) }
 							</select>
-							{ redirect.type == 410 && <p className='description'><small>{__( '410 means the content is gone and no longer available. It can be deleted permanently. In this case, we need to return the 410 status instead of redirect. If you want to show an alternative page for this content, please consider a 3xx redirect.', 'slim-seo')}</small></p>}
+							{ redirect.type == 410 && <p className='description'><small>{ __( '410 means the content is gone and no longer available. It can be deleted permanently. In this case, we need to return the 410 status instead of redirect. If you want to show an alternative page for this content, please consider a 3xx redirect.', 'slim-seo' ) }</small></p> }
 						</div>
 
 						<div className='ssr-modal-field'>
@@ -145,9 +145,9 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 							)
 						}
 
-						<Button variant='primary' onClick={ submit } disabled={ isProcessing }>{ title }</Button>
+						<button className='button button-primary' onClick={ submit } disabled={ isProcessing }>{ title }</button>
 
-						<p className='ss-warning-message'>{ warningMessage }</p>
+						{ warningMessage && <p className='ss-warning-message'>{ warningMessage }</p> }
 					</Modal>
 				)
 			}

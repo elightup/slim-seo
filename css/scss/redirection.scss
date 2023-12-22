@@ -150,6 +150,7 @@
 
 .ss-warning-message {
 	color: var(--ss-color-red);
+	margin-bottom: 0;
 }
 
 .ssr-modal-field {
@@ -161,7 +162,9 @@
 	label {
 		font-weight: bold;
 	}
-	input, select {
+
+	input,
+	select {
 		width: 100%;
 		max-width: none;
 	}
@@ -170,10 +173,18 @@
 		outline: none;
 	}
 }
+
 .ss-from-inputs {
 	display: grid;
 	grid-template-columns: 150px 1fr;
 	gap: 4px;
+}
+
+.ssr-modal .button-primary {
+	margin-top: 24px;
+}
+.ssr-modal .button-link:focus {
+	box-shadow: none;
 }
 
 .ss-sub-setting {
@@ -185,6 +196,11 @@
 }
 
 @keyframes ss-spin {
-	0% { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }
