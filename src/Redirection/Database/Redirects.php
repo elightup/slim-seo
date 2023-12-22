@@ -22,16 +22,18 @@ class Redirects {
 		} ) ) > 0;
 	}
 
-	public function update( array $redirect ) {
+	public function update( array $redirect ): string {
 		$redirect['from'] = Helper::normalize_url( $redirect['from'], false );
 		$redirect['to']   = Helper::normalize_url( $redirect['to'], true, true, false );
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
-		$redirect_id      = empty( $redirect['id'] ) ? uniqid( wp_rand() ) : $redirect['id'];
+		$id               = (string) ( empty( $redirect['id'] ) ? uniqid() : $redirect['id'] );
 
 		unset( $redirect['id'] );
-		$this->redirects[ $redirect_id ] = $redirect;
+		$this->redirects[ $id ] = $redirect;
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
+
+		return $id;
 	}
 
 	public function delete( array $ids ) {

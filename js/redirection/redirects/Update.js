@@ -1,7 +1,7 @@
 import { Button, Modal } from '@wordpress/components';
 import { useEffect, useReducer, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Tooltip, fetcher } from '../helper/misc';
+import { Tooltip, fetcher, useApi } from '../helper/misc';
 
 const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) => {
 	const [ redirect, setRedirect ] = useState( {} );
@@ -9,6 +9,8 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 	const [ warningMessage, setWarningMessage ] = useState( '' );
 	const [ showAdvancedOptions, toggleAdvancedOptions ] = useReducer( onOrOff => !onOrOff, false );
 	const [ showModal, setShowModal ] = useState( false );
+	const { result: redirects, mutate } = useApi( 'redirects', {}, { returnMutate: true } );
+
 	const title = redirect.id ? __( 'Update Redirect', 'slim-seo' ) : __( 'Add Redirect', 'slim-seo' );
 
 	const openModal = e => {
@@ -20,15 +22,21 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 	const updateRedirect = () => {
 		setWarningMessage( '' );
 
-		fetcher( 'update_redirect', { redirect }, 'POST' ).then( result => {
-			if ( ! redirect.id ) {
-				window.location.reload();
+		fetcher( 'update_redirect', { redirect }, 'POST' ).then( id => {
+			setShowModal( false );
+			setIsProcessing( false );
+
+			// Update a redirect.
+			if ( redirect.id ) {
+				callback( redirect );
 				return;
 			}
 
-			setShowModal( false );
-			setIsProcessing( false );
-			callback( redirect );
+			// Add new redirect.
+			redirect.id = id;
+			let newRedirects = [ ...redirects ];
+			newRedirects.push( redirect );
+			mutate( newRedirects, { revalidate: false } );
 		} );
 	};
 

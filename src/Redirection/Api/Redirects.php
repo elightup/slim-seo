@@ -56,12 +56,10 @@ class Redirects extends Base {
 		return $this->db_redirects->exists( $from );
 	}
 
-	public function update_redirect( WP_REST_Request $request ): bool {
+	public function update_redirect( WP_REST_Request $request ): string {
 		$redirect = $request->get_param( 'redirect' );
 
-		$this->db_redirects->update( $redirect );
-
-		return true;
+		return $this->db_redirects->update( $redirect );
 	}
 
 	public function delete_redirects( WP_REST_Request $request ): bool {
