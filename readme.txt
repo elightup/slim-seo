@@ -5,7 +5,7 @@ Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitte
 Requires at least: 5.9
 Tested up to: 6.4.1
 Requires PHP: 7.2
-Stable tag: 3.22.4
+Stable tag: 3.22.5
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -153,6 +153,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.22.5 - 2024-01-02 =
+- Re-add 410 in the redirection module. In this case, show correct 410 header instead of making redirect because 410 means the content is gone and no longer available. [See this tutorial](https://wpslimseo.com/deleting-website-content-seo-best-practices/) for more details.
+- Add filters `slim_seo_admin_columns_post` and `slim_seo_admin_columns_term` to hide admin columns for post types and taxonomies.
+- Do not reload page when adding new redirects.
 
 = 3.22.4 - 2023-12-06 =
 - Fix migrating Woo's product categories from SEOPress (#107)
