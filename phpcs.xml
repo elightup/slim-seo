@@ -34,6 +34,7 @@
 	<exclude-pattern>/tests/*</exclude-pattern>
 	<exclude-pattern>/.github/*</exclude-pattern>
 	<exclude-pattern>*.min.js</exclude-pattern>
+	<exclude-pattern>node_modules</exclude-pattern>
 
 
 	<rule ref="WordPress">
