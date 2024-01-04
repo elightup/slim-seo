@@ -1,0 +1,18 @@
+.featureBox {
+	margin-top: 24px;
+	display: flex;
+	align-items: start;
+	gap: 8px;
+
+	.ss-toggle {
+		position: relative;
+		top: 2px;
+	}
+}
+
+.featureBox_title {
+	font-weight: 600;
+	font-size: 14px;
+	color: #1d2327;
+	margin-bottom: 4px;
+}

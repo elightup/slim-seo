@@ -21,10 +21,7 @@ $features = [
 echo '<p>', esc_html__( 'Toggle the features you want to use on your website.', 'slim-seo' ), '</p>';
 
 foreach ( $features as $key => $text ) {
-	echo '<div class="ss-field">';
-	UI::toggle( 'slim_seo[features][]', $key, $this->is_feature_active( $key ), $text[0] );
-	UI::tooltip( $text[1] );
-	echo '</div>';
+	UI::feature_box( 'slim_seo[features][]', $key, $this->is_feature_active( $key ), $text[0], $text[1] );
 }
 
 submit_button( __( 'Save Changes', 'slim-seo' ) );
