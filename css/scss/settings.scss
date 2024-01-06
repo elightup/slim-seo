@@ -47,13 +47,14 @@
 	align-items: center;
 	justify-content: space-between;
 	background: #fff;
-	padding: 0 24px;
+	padding: 12px 24px;
 	border-bottom: var(--ss-border);
+	font-size: 20px;
 }
 .ss-title svg {
 	width: 36px;
 	height: 36px;
-	margin-right: 12px;
+	margin-right: 8px;
 }
 .ss-title a:first-of-type {
 	margin-left: auto;
@@ -61,19 +62,15 @@
 .ss-title a {
 	font-size: 13px;
 	text-decoration: none;
-	color: #3c434a;
-	padding: 6px 12px;
-}
-.ss-title a:hover {
-	background: var(--ss-color-lighter);
+	padding-inline: 12px;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 .ss-title .dashicons {
-	font-size: 24px;
-	width: 24px;
-	height: 24px;
-	display: block;
-	margin-inline: auto;
-	color: #3c434a;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
 }
 
 /* Tooltip */
