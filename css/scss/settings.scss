@@ -1,33 +1,39 @@
 @use 'components/variables';
 @use 'components/toggle';
 @use 'components/tabs';
+@use 'components/postbox';
 @use 'components/feature-box';
 
 /* General */
 .settings_page_slim-seo #wpcontent {
 	padding-left: 0;
 }
+
 .settings_page_slim-seo .wrap {
 	margin: 0;
 }
+
 .ss-content {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	margin: 24px;
-	gap: 20px;
+	display: grid;
+	grid-template-columns: 1fr 300px;
+	align-items: start;
+	gap: 24px;
+	margin: 48px 24px;
 }
-.ss-sidebar {
-	width: 280px;
+
+#poststuff {
+	padding-top: 0;
 }
 
 .ss-upgrade .dashicons {
 	color: #ef4836;
 }
+
 .ss-upgrade li {
 	padding-left: 20px;
 	position: relative;
 }
+
 .ss-upgrade svg {
 	width: 1em;
 	height: 1em;
@@ -36,6 +42,7 @@
 	top: 4px;
 	left: 0;
 }
+
 .notice.notice {
 	margin: 24px;
 }
@@ -51,22 +58,29 @@
 	border-bottom: var(--ss-border);
 	font-size: 20px;
 }
+
 .ss-title svg {
 	width: 36px;
 	height: 36px;
 	margin-right: 8px;
 }
+
 .ss-title a:first-of-type {
 	margin-left: auto;
 }
+
 .ss-title a {
 	font-size: 13px;
 	text-decoration: none;
-	padding-inline: 12px;
 	display: flex;
 	align-items: center;
 	gap: 4px;
 }
+
+.ss-title a+a {
+	margin-left: 24px;
+}
+
 .ss-title .dashicons {
 	font-size: 16px;
 	width: 16px;
@@ -82,11 +96,13 @@
 	align-items: center;
 	margin-top: 2px;
 }
+
 .ss-tooltip .dashicons {
 	font-size: 14px;
 	width: 16px;
 	height: 16px;
 }
+
 .tippy-tooltip {
 	text-align: left;
 }

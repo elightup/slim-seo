@@ -1,9 +1,9 @@
 @use 'variables';
 
 .ss-tabs {
-	flex: 1;
 	background: #fff;
 	border: var(--ss-border);
+	border-radius: 6px;
 }
 
 .ss-content>.ss-tabs {
