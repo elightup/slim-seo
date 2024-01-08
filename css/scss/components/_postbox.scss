@@ -1,15 +1,17 @@
-.postbox {
-	box-sizing: border-box;
-	padding: 12px 24px 24px;
-	border-color: var(--ss-color-light);
-	border-radius: 6px;
-}
+.settings_page_slim-seo {
+	.postbox {
+		box-sizing: border-box;
+		padding: 12px 24px 24px;
+		border-color: var(--ss-color-light);
+		border-radius: 6px;
+	}
 
-#poststuff .ss-sidebar .hndle {
-	font-size: 16px;
-	padding: 8px 0 0;
-}
+	#poststuff .hndle {
+		font-size: 16px;
+		padding: 8px 0 0;
+	}
 
-.postbox .inside {
-	padding: 0;
+	.postbox .inside {
+		padding: 0;
+	}
 }

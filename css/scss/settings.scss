@@ -5,12 +5,18 @@
 @use 'components/feature-box';
 
 /* General */
-.settings_page_slim-seo #wpcontent {
-	padding-left: 0;
-}
+.settings_page_slim-seo {
+	#wpcontent {
+		padding-left: 0;
+	}
 
-.settings_page_slim-seo .wrap {
-	margin: 0;
+	.wrap {
+		margin: 0;
+	}
+
+	#poststuff {
+		padding-top: 0;
+	}
 }
 
 .ss-content {
@@ -19,10 +25,6 @@
 	align-items: start;
 	gap: 24px;
 	margin: 48px 24px;
-}
-
-#poststuff {
-	padding-top: 0;
 }
 
 .ss-upgrade .dashicons {
