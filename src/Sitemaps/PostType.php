@@ -55,7 +55,7 @@ class PostType {
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
 			$images = $this->get_post_images( $post );
-			array_walk( $images, [ $this, 'normalize_image' ] );
+			$images = array_map( [ $this, 'normalize_image' ], $images );
 			$images = array_filter( $images );
 			$images = array_filter( $images, [ $this, 'is_internal' ] );
 			array_walk( $images, [ $this, 'output_image' ] );
@@ -103,13 +103,13 @@ class PostType {
 		echo "\t\t</image:image>\n";
 	}
 
-	private function normalize_image( &$image ): void {
+	private function normalize_image( $image ): string {
 		// If we get image ID only.
-		if ( is_numeric( $image ) && get_attached_file( $image ) ) {
-			$image = wp_get_attachment_image_url( $image, 'full' );
+		if ( is_numeric( $image ) ) {
+			return get_attached_file( $image ) ? wp_get_attachment_image_url( $image, 'full' ) : '';
 		}
 
-		$image = $this->get_absolute_url( $image );
+		return $this->get_absolute_url( $image );
 	}
 
 	private function get_post_images( WP_Post $post ): array {
