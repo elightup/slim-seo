@@ -43,4 +43,10 @@ class Redirects {
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
 	}
+
+	public function update_all( array $redirects ) {
+		$this->redirects = $redirects;
+
+		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
+	}
 }

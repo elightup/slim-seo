@@ -58,3 +58,25 @@ export const useApi = ( apiName, parameters = {}, args = {}, defaultValue ) => {
 
 	return result;
 };
+
+export const exportCSV = ( fileName, data ) => {
+	const csvContent = 'data:text/csv;charset=utf-8,' + data.map( row => {
+		return row.map( ceil => {
+			if ( ! ceil || typeof ceil !== 'string' ) {
+				return ceil;
+			}
+
+			ceil = ceil.replaceAll( ',', '' );
+
+			return ceil;
+		} ).join( ',' );
+	} ).join( '\n' );
+
+	const encodedURI = encodeURI( csvContent );
+	const fixedEncodedURI = encodedURI.replaceAll( '#', '%23' );
+	const link = document.createElement( 'a' );
+
+	link.setAttribute( 'href', fixedEncodedURI );
+	link.setAttribute( 'download', fileName );
+	link.click();
+};

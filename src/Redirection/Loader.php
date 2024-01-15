@@ -16,6 +16,7 @@ class Loader {
 			new Redirection404( $this->db_log );
 		}
 
+		new ExportImport( $this->db_redirects );
 		new Api\Redirects( $this->db_redirects );
 		new Api\Log404( $this->db_log );
 
