@@ -88,6 +88,7 @@ class Redirection {
 				continue;
 			}
 
+			// phpcs:ignore
 			$status = (int) $redirect[ 'type' ];
 
 			// Don't redirect if 410. Instead return 410 status header.
@@ -98,6 +99,7 @@ class Redirection {
 
 			$to = filter_var( $to, FILTER_VALIDATE_URL ) ? $to : home_url( $to );
 
+			// phpcs:ignore
 			wp_redirect( $to, $status, 'Slim SEO' );
 			exit();
 		}
