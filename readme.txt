@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.9
-Tested up to: 6.4.1
+Tested up to: 6.4.2
 Requires PHP: 7.2
-Stable tag: 3.22.5
+Stable tag: 3.23.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -153,6 +153,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.23.0 - 2024-01-23 =
+- Add CSV import/export for redirects
+- Fix getting wrong image URL in the sitemap
+- Improve the style for the settings page
 
 = 3.22.5 - 2024-01-02 =
 - Re-add 410 in the redirection module. In this case, show correct 410 header instead of making redirect because 410 means the content is gone and no longer available. [See this tutorial](https://wpslimseo.com/deleting-website-content-seo-best-practices/) for more details.
