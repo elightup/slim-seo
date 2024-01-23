@@ -70,7 +70,7 @@ class ExportImport extends Base {
 	public function import( WP_REST_Request $request ): bool {
 		$text = $request->get_param( 'text' );
 		$text = wp_unslash( $text );
-		$rows = explode( PHP_EOL, $text );
+		$rows = preg_split( '/\r\n|\r|\n/', $text );
 
 		if ( empty( $rows ) ) {
 			return false;
