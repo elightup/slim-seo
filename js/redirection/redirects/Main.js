@@ -50,8 +50,7 @@ const List = () => {
 
 							<span className='ss-filters-right'>
 								<span className='ss-export-import'>
-									<Export />
-									<Import />
+									<Export /> | <Import />
 								</span>
 
 								<span className='ss-search'>

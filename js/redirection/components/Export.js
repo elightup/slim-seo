@@ -4,6 +4,7 @@ import { fetcher, exportCSV } from "../helper/misc";
 
 const Export = () => {
 	const [ exporting, toggleExporting ] = useReducer( exporting => !exporting, false );
+	const text = exporting ? __( 'Exporting', 'slim-seo' ) : __( 'Export', 'slim-seo' );
 
 	const submit = e => {
 		e.preventDefault();
@@ -22,11 +23,9 @@ const Export = () => {
 	};
 
 	return (
-		<>
-			<button type="button" className="button" onClick={ submit } disabled={ exporting }>
-				{ exporting ? __( 'Exporting', 'slim-seo' ) : __( 'Export', 'slim-seo' ) }
-			</button>
-		</>
+		<a href='#' title={ text } onClick={ submit } disabled={ exporting }>
+			{ text }
+		</a>
 	);
 };
 

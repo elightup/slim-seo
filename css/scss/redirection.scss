@@ -11,6 +11,26 @@
 	.ss-import {
 		float: right;
 	}
+
+	.ss-export-import,
+	.ss-import {
+		font-size: 12px;
+		font-weight: 400;
+		color: var(--ss-color-light);
+
+		a {
+			text-decoration: none;
+			color: var(--ss-color-gray);
+
+			&:hover {
+				color: var(--ss-color-primary);
+			}
+		}
+	}
+
+	.ss-export-import {
+		margin-right: 5px;
+	}
 }
 
 .ss-table {

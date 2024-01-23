@@ -7,6 +7,7 @@ const Import = () => {
 	const [ upload, toggleUpload ] = useReducer( upload => !upload, false );
 	const [ file, setFile ] = useState();
 	const [ loading, toggleLoading ] = useReducer( loading => !loading, false );
+	const text = __( 'Import', 'slim-seo' );
 
 	const handleChange = e => setFile( e.target.files[ 0 ] );
 
@@ -32,7 +33,7 @@ const Import = () => {
 
 	return (
 		<>
-			<button type="button" className="button" onClick={ toggleUpload }>{ __( 'Import', 'slim-seo' ) }</button>
+			<a href='#' title={ text } onClick={ toggleUpload }>{ text }</a>
 			
 			{
 				upload
