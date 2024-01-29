@@ -22,12 +22,10 @@ abstract class Base {
 		global $wp;
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$url = $_SERVER['REQUEST_URI'] ?? add_query_arg( [], $wp->request );
-		$url = home_url( $url );
+		$url = home_url( add_query_arg( [], $wp->request ) );
 		$url = esc_url( wp_strip_all_tags( $url ) );
 		$url = strtok( $url, '#' );
 		$url = strtok( $url, '?' );
-
 		return $url;
 	}
 
