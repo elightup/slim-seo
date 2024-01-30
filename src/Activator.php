@@ -23,7 +23,7 @@ class Activator {
 		$links[]     = '<a href="' . esc_url( admin_url( 'options-general.php?page=slim-seo' ) ) . '">' . __( 'Settings', 'slim-seo' ) . '</a>';
 		$upgradeable = apply_filters( 'slim_seo_upgradeable', true );
 		if ( $upgradeable ) {
-			$links[] = '<a href="https://wpslimseo.com/products/?utm_source=WordPress&utm_medium=link&utm_campaign=plugin" style="color: #39b54a; font-weight: bold">' . esc_html__( 'Upgrade', 'slim-seo' ) . '</a>';
+			$links[] = '<a href="https://elu.to/spp" style="color: #39b54a; font-weight: bold">' . esc_html__( 'Upgrade', 'slim-seo' ) . '</a>';
 		}
 		return $links;
 	}
