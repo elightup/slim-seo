@@ -40,7 +40,7 @@ class ImagesAlt {
 		update_post_meta( $post_id, '_wp_attachment_image_alt', $alt );
 	}
 
-	public function add_avatar_alt( string $avatar, $id_or_email, int $size, string $default_value, string $alt ): string {
+	public function add_avatar_alt( string $avatar, $id_or_email, $size, $default_value, $alt ): string {
 		if ( $alt ) {
 			return $avatar;
 		}
