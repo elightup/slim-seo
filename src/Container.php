@@ -8,6 +8,8 @@ class Container {
 		// Shortcut.
 		$services = &$this->services;
 
+		$services['core'] = new Core;
+
 		$services['upgrade'] = new Upgrade;
 
 		$services['canonical_url']    = new MetaTags\CanonicalUrl;
