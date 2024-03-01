@@ -123,8 +123,15 @@ abstract class Base {
 		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) || empty( $_POST ) ) {
 			return;
 		}
-		// @codingStandardsIgnoreLine.
-		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : [];
+
+		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : []; // phpcs:ignore
+
+		// Do not erase existing data when quick editing.
+		if ( isset( $_POST['action'] ) && $_POST['action'] === 'inline-save' ) { // phpcs:ignore
+			$existing_data = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
+			$data          = array_merge( $existing_data, $data );
+		}
+
 		$data = $this->sanitize( $data );
 
 		if ( empty( $data ) ) {
