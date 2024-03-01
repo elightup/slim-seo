@@ -59,7 +59,10 @@ class Manager {
 		header( 'X-Robots-Tag: noindex, follow', true );
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>', "\n";
-		echo '<?xml-stylesheet type="text/xsl" href="', esc_url( SLIM_SEO_URL ), 'src/Sitemaps/style.xsl"?>', "\n";
+
+		if ( apply_filters( 'slim_seo_sitemap_style', true ) ) {
+			echo '<?xml-stylesheet type="text/xsl" href="', esc_url( SLIM_SEO_URL ), 'src/Sitemaps/style.xsl"?>', "\n";
+		}
 
 		if ( 'index' === $type ) {
 			$sitemap = new Index( $this->post_types, $this->taxonomies );
