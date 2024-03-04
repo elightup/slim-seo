@@ -22,7 +22,7 @@ class Title {
 
 		// Add a page number if necessary.
 		if ( $custom_title && ( $paged >= 2 || $page >= 2 ) ) {
-			$separator = apply_filters( 'document_title_separator', '-' );
+			$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
 			// Translators: %s - Page number.
 			$custom_title .= " $separator " . sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) );
 		}

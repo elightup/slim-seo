@@ -13,7 +13,7 @@ class TranslatePress {
 
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
-		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );
+		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );  // phpcs:ignore
 	}
 
 	public function add_post_links( \WP_Post $post ): void {
@@ -32,7 +32,7 @@ class TranslatePress {
 			 * We have to use the Yoast SEO's filter name to make it work.
 			 * This will be removed when TranslatePress adds support for Slim SEO's hooks.
 			 */
-			$url = apply_filters( 'wpseo_sitemap_url', $url, $language );
+			$url = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
 
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
@@ -54,6 +54,6 @@ class TranslatePress {
 		$trp_settings = $this->trp->get_component( 'settings' );
 		$settings     = $trp_settings->get_settings();
 
-		return array_diff( $settings[ 'publish-languages' ], [ $settings[ 'default-language' ] ] );
+		return array_diff( $settings['publish-languages'], [ $settings['default-language'] ] );
 	}
 }

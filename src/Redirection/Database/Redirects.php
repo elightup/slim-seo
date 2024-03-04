@@ -17,7 +17,7 @@ class Redirects {
 	public function exists( string $url ): bool {
 		$url = Helper::normalize_url( $url );
 
-		return count( array_filter( $this->redirects, function( $redirect ) use ( $url ) {
+		return count( array_filter( $this->redirects, function ( $redirect ) use ( $url ) {
 			return $redirect['from'] === $url;
 		} ) ) > 0;
 	}
@@ -37,7 +37,7 @@ class Redirects {
 	}
 
 	public function delete( array $ids ) {
-		$this->redirects = array_filter( $this->redirects, function( $id ) use ( $ids ) {
+		$this->redirects = array_filter( $this->redirects, function ( $id ) use ( $ids ) {
 			return ! in_array( $id, $ids, true );
 		}, ARRAY_FILTER_USE_KEY );
 

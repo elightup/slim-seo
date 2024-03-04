@@ -30,7 +30,7 @@ abstract class Base {
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
 			'title'           => [
-				'separator' => apply_filters( 'document_title_separator', '-' ),
+				'separator' => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
 				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], $this->object_type ),
 			],
 		];

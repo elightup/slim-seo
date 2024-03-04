@@ -2,8 +2,8 @@
 use SlimSEO\Helpers\Data;
 use SlimSEO\Helpers\UI;
 
-$post_types = $this->meta_tags_manager->get_post_types();
-$option     = get_option( 'slim_seo' );
+$post_types = $this->meta_tags_manager->get_post_types(); // phpcs:ignore
+$option     = get_option( 'slim_seo' ); // phpcs:ignore
 ?>
 
 <div class="ss-field">
@@ -13,7 +13,7 @@ $option     = get_option( 'slim_seo' );
 	<div class="ss-input">
 		<select id="ss-post-type-select">
 			<?php
-			foreach ( $post_types as $post_type_object ) {
+			foreach ( $post_types as $post_type_object ) { // phpcs:ignore
 				printf(
 					'<option value="%s">%s (%s)</option>',
 					esc_attr( $post_type_object->name ),
@@ -25,8 +25,8 @@ $option     = get_option( 'slim_seo' );
 		</select>
 	</div>
 </div>
-<?php foreach ( $post_types as $post_type => $post_type_object ) : ?>
-	<?php $data = $option[ $post_type ] ?? []; ?>
+<?php foreach ( $post_types as $post_type => $post_type_object ) : //phpcs:ignore ?>
+	<?php $data = $option[ $post_type ] ?? []; // phpcs:ignore ?>
 	<div class="ss-post-type-settings ss-post-type-settings--<?= esc_attr( $post_type ) ?>">
 		<div class="ss-field">
 			<div class="ss-label">
@@ -43,9 +43,9 @@ $option     = get_option( 'slim_seo' );
 		<?php
 		if ( $post_type_object->has_archive ) {
 			// Translators: %s - post type singular name.
-			printf( '<h3>' . esc_html__( '%s archive page', 'slim-seo' ) . '</h3>', $post_type_object->labels->singular_name );
+			printf( '<h3>' . esc_html__( '%s archive page', 'slim-seo' ) . '</h3>', $post_type_object->labels->singular_name ); // phpcs:ignore
 
-			$archive_page = Data::get_post_type_archive_page( $post_type );
+			$archive_page = Data::get_post_type_archive_page( $post_type ); // phpcs:ignore
 			if ( $archive_page ) {
 				echo '<p>', wp_kses_post( sprintf(
 					// Translators: %1$s - link to the archive page, %2$s - page title, %3$s - post type slug.

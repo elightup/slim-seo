@@ -92,11 +92,11 @@ class Item {
 			'title'   => $title,
 		];
 
-		$parts = array_map( function( string $part ) use ( $values ): string {
+		$parts = array_map( function ( string $part ) use ( $values ): string {
 			return $values[ $part ] ?? '';
 		}, $parts );
 
-		$separator = apply_filters( 'document_title_separator', '-' );
+		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
 		return implode( " $separator ", $parts );
 	}
 

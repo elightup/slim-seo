@@ -76,7 +76,7 @@ class Bricks {
 			'wpgb-facet',
 		] );
 
-		return array_filter( $data, function( $element ) use ( $skipped_elements ) {
+		return array_filter( $data, function ( $element ) use ( $skipped_elements ) {
 			if ( in_array( $element['name'], $skipped_elements, true ) ) {
 				return false;
 			}

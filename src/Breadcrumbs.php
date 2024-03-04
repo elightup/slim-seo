@@ -95,7 +95,7 @@ class Breadcrumbs {
 		} elseif ( is_singular() ) {
 			$this->add_singular();
 		} elseif ( is_tax() || is_category() || is_tag() ) { // Taxonomy archive.
-			$term     = get_queried_object();
+			$term = get_queried_object();
 			if ( $term ) {
 				$taxonomy = get_taxonomy( $term->taxonomy );
 				if ( ! empty( $taxonomy->object_type ) && 1 === count( $taxonomy->object_type ) ) {

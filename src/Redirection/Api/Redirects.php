@@ -41,7 +41,7 @@ class Redirects extends Base {
 
 	public function get_redirects(): array {
 		$redirects = $this->db_redirects->list();
-		$redirects = array_map( function( $index, $redirect ) {
+		$redirects = array_map( function ( $index, $redirect ) {
 			$redirect['id'] = $index;
 
 			return $redirect;

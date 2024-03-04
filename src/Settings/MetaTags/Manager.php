@@ -14,7 +14,7 @@ class Manager {
 		$items = array_keys( array_filter( $this->get_post_types(), function ( $post_type_object ) {
 			return $post_type_object->has_archive;
 		} ) );
-		$items = array_map( function( $item ) {
+		$items = array_map( function ( $item ) {
 			return "{$item}_archive";
 		}, $items );
 
