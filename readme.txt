@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
 Requires at least: 5.9
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 7.2
-Stable tag: 3.23.1
+Stable tag: 3.23.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -153,6 +153,12 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.23.2 - 2024-03-04 =
+- Fix wrong param types passed to `get_avatar` function
+- Add filter `slim_seo_sitemap_style` to remove sitemap style
+- Fix not loading correct language by user preference
+- Fix quick editing erases Facebook, Twitter images and canonical URL
 
 = 3.23.1 - 2024-01-30 =
 - Fix wrong current URL in schemas when WordPress is installed in a sub-folder
