@@ -23,7 +23,7 @@ class Redirection {
 		}
 
 		$http_host   = $_SERVER['HTTP_HOST'] ?? ''; // @codingStandardsIgnoreLine.
-		$request_uri = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
+		$request_uri = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @codingStandardsIgnoreLine.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
 		$request_url = strtolower( $request_url );
@@ -46,7 +46,9 @@ class Redirection {
 
 			switch ( $redirect['condition'] ) {
 				case 'regex':
-					$regex = '/' . preg_quote( $from, '/' ) . '/i';
+					$from  = str_replace( '\/', '/', $from );
+					$from  = str_replace( '/', '\/', $from );
+					$regex = '/' . $from . '/i';
 
 					if ( preg_match( $regex, $current_url ) ) {
 						$to              = preg_replace( $regex, $to, $current_url );
@@ -97,7 +99,7 @@ class Redirection {
 				return;
 			}
 
-			$to = filter_var( $to, FILTER_VALIDATE_URL ) ? $to : home_url( $to );
+			$to = Helper::url_valid( $to ) ? $to : home_url( $to );
 
 			// phpcs:ignore
 			wp_redirect( $to, $status, 'Slim SEO' );
