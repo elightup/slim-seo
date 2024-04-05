@@ -20,6 +20,8 @@ class Robots {
 		add_action( 'template_redirect', [ $this, 'set_header_noindex' ] );
 		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );
 		add_filter( 'register', [ $this, 'set_link_nofollow' ] );
+
+		add_action( 'do_robotstxt', [ $this, 'add_to_robots_txt' ] );
 	}
 
 	public function modify_robots( $robots ) {
@@ -112,5 +114,15 @@ class Robots {
 
 	public function set_link_nofollow( $link ) {
 		return str_replace( '<a ', '<a rel="nofollow" ', $link );
+	}
+
+	public function add_to_robots_txt(): void {
+		$content   = [];
+		$content[] = 'User-agent: *';
+		$content[] = 'Disallow: /?s=';
+		$content[] = 'Disallow: /page/*/?s=';
+		$content[] = 'Disallow: /search/';
+
+		echo "\n", implode( "\n", $content ), "\n"; // phpcs:ignore
 	}
 }
