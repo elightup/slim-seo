@@ -51,7 +51,7 @@ class Manager {
 		if ( wp_get_environment_type() !== 'production' ) {
 			$flags = $flags | JSON_PRETTY_PRINT;
 		}
-		echo '<script type="application/ld+json">', wp_json_encode( $schema, $flags ), '</script>';
+		echo '<script type="application/ld+json" id="slim-seo-schema">', wp_json_encode( $schema, $flags ), '</script>';
 	}
 
 	private function add_schemas() {
