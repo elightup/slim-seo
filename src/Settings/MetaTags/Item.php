@@ -8,6 +8,7 @@ class Item {
 		'description'    => '',
 		'facebook_image' => '',
 		'twitter_image'  => '',
+		'linkedin_image' => '',
 	];
 
 	public function __construct( string $option_key ) {
@@ -73,6 +74,20 @@ class Item {
 				</p>
 			</div>
 		</div>
+		<div class="ss-field">
+			<div class="ss-label">
+				<label for="ss-linkedin-image-<?= esc_attr( $this->option_key ) ?>"><?php esc_html_e( 'LinkedIn image', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<div class="ss-input-group">
+					<input type="text" id="ss-linkedin-image-<?= esc_attr( $this->option_key ) ?>" name="slim_seo[<?= esc_attr( $this->option_key ) ?>][linkedin_image]" value="<?= esc_attr( $data['linkedin_image'] ); ?>">
+					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+				</div>
+				<p class="description">
+					<?php esc_html_e( 'Recommended size: 1200x630 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ); ?>
+				</p>
+			</div>
+		</div>
 		<?php
 	}
 
@@ -111,6 +126,7 @@ class Item {
 		$data['description']    = sanitize_text_field( $data['description'] );
 		$data['facebook_image'] = esc_url_raw( $data['facebook_image'] );
 		$data['twitter_image']  = esc_url_raw( $data['twitter_image'] );
+		$data['linkedin_image'] = esc_url_raw( $data['linkedin_image'] );
 
 		return array_filter( $data );
 	}

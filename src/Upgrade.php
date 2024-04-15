@@ -24,9 +24,10 @@ class Upgrade {
 			'description'    => $option['home_description'] ?? '',
 			'facebook_image' => $option['home_facebook_image'] ?? '',
 			'twitter_image'  => $option['home_twitter_image'] ?? '',
+			'linkedin_image' => $option['home_linkedin_image'] ?? '',
 		] );
 
-		unset( $option['home_title'], $option['home_description'], $option['home_facebook_image'], $option['home_twitter_image'] );
+		unset( $option['home_title'], $option['home_description'], $option['home_facebook_image'], $option['home_twitter_image'], $option['home_linkedin_image'] );
 		if ( $home_settings ) {
 			$option['home'] = $home_settings;
 		}

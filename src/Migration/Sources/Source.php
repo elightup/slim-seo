@@ -16,6 +16,7 @@ abstract class Source {
 			'description'    => $this->get_post_description( $post_id ),
 			'facebook_image' => $this->get_post_facebook_image( $post_id ),
 			'twitter_image'  => $this->get_post_twitter_image( $post_id ),
+			'linkedin_image' => $this->get_post_linkedin_image( $post_id ),
 			'noindex'        => $this->get_post_noindex( $post_id ),
 		] );
 		if ( $settings ) {
@@ -31,6 +32,7 @@ abstract class Source {
 			'description'    => $this->get_term_description( $term_id ),
 			'facebook_image' => $this->get_term_facebook_image( $term_id ),
 			'twitter_image'  => $this->get_term_twitter_image( $term_id ),
+			'linkedin_image' => $this->get_term_linkedin_image( $term_id ),
 			'noindex'        => $this->get_term_noindex( $term_id ),
 		];
 		$settings = array_filter( $settings );
@@ -64,6 +66,10 @@ abstract class Source {
 		return '';
 	}
 
+	protected function get_post_linkedin_image( $post_id ) {
+		return '';
+	}
+
 	protected function get_post_noindex( $post_id ) {
 		return 0;
 	}
@@ -81,6 +87,10 @@ abstract class Source {
 	}
 
 	protected function get_term_twitter_image( $term_id ) {
+		return '';
+	}
+
+	protected function get_term_linkedin_image( $term_id ) {
 		return '';
 	}
 

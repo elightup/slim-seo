@@ -11,6 +11,7 @@ abstract class Base {
 		'description'    => '',
 		'facebook_image' => '',
 		'twitter_image'  => '',
+		'linkedin_image' => '',
 		'canonical'      => '',
 		'noindex'        => 0,
 	];
@@ -102,6 +103,20 @@ abstract class Base {
 		</div>
 		<div class="ss-field">
 			<div class="ss-label">
+				<label for="ss-linkedin-image"><?php esc_html_e( 'LinkedIn image', 'slim-seo' ); ?></label>
+			</div>
+			<div class="ss-input">
+				<div class="ss-input-group">
+					<input type="text" id="ss-linkedin-image" name="slim_seo[linkedin_image]" value="<?= esc_attr( $data['linkedin_image'] ); ?>">
+					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
+				</div>
+				<p class="description">
+					<?php esc_html_e( 'Recommended size: 1200x630 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ); ?>
+				</p>
+			</div>
+		</div>
+		<div class="ss-field">
+			<div class="ss-label">
 				<label for="ss-canonical"><?php esc_html_e( 'Canonical URL', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ss-input">
@@ -148,6 +163,7 @@ abstract class Base {
 		$data['description']    = sanitize_text_field( $data['description'] );
 		$data['facebook_image'] = esc_url_raw( $data['facebook_image'] );
 		$data['twitter_image']  = esc_url_raw( $data['twitter_image'] );
+		$data['linkedin_image'] = esc_url_raw( $data['linkedin_image'] );
 		$data['canonical']      = esc_url_raw( $data['canonical'] );
 		$data['noindex']        = $data['noindex'] ? 1 : 0;
 

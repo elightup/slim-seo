@@ -10,6 +10,7 @@ class Settings {
 		'footer_code'            => '',
 		'default_facebook_image' => '',
 		'default_twitter_image'  => '',
+		'default_linkedin_image' => '',
 		'facebook_app_id'        => '',
 		'twitter_site'           => '',
 		'features'               => [
@@ -18,6 +19,7 @@ class Settings {
 			'meta_robots',
 			'open_graph',
 			'twitter_cards',
+			'linkedin',
 			'canonical_url',
 			'rel_links',
 			'sitemaps',

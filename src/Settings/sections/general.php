@@ -13,6 +13,8 @@ $features = [
 	'open_graph'       => [ __( 'Open Graph', 'slim-seo' ), sprintf( __( 'Automatically generate <a href="%s" target="_blank">Open Graph tags</a> for sharing on Facebook and other social networks.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/facebook-open-graph-tags/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
 	// Translators: %s: link to the docs.
 	'twitter_cards'    => [ __( 'Twitter cards', 'slim-seo' ), sprintf( __( 'Automatically generate <a href="%s" target="_blank">Twitter cards tags</a> for sharing on Twitter.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/twitter-card-tags/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
+	// Translators: %s: link to the docs.
+	'linkedin'    => [ __( 'LinkedIn', 'slim-seo' ), sprintf( __( 'Automatically generate <a href="%s" target="_blank">LinkedIn meta tags</a> for sharing on LinkedIn.', 'slim-seo' ), 'https://www.linkedin.com/advice/3/how-do-you-specify-images-media-social-sharing-html-skills-html' ) ],
 	'canonical_url'    => [ __( 'Canonical URL', 'slim-seo' ), __( 'Automatically generate canonical URL to avoid duplicated content.', 'slim-seo' ) ],
 	'rel_links'        => [ __( '"rel" links', 'slim-seo' ), __( 'Automatically generate "rel" links for previous and next pages.', 'slim-seo' ) ],
 	// Translators: %1$s: link to the docs, %2$s: sitemap URL.
