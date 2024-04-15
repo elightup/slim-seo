@@ -92,12 +92,14 @@ class Container {
 		$services['web_stories']     = new Integrations\WebStories(
 			$services['open_graph'],
 			$services['twitter_cards'],
+			$services['linkedin'],
 			$services['schema']
 		);
 		$services['ultimate_member'] = new Integrations\UltimateMember(
 			$services['meta_description'],
 			$services['open_graph'],
 			$services['twitter_cards'],
+			$services['linkedin'],
 			$services['meta_robots']
 		);
 

@@ -3,16 +3,19 @@ namespace SlimSEO\Integrations;
 
 use SlimSEO\MetaTags\OpenGraph;
 use SlimSEO\MetaTags\TwitterCards;
+use SlimSEO\MetaTags\LinkedIn;
 use SlimSEO\Schema\Manager;
 
 class WebStories {
 	private $open_graph;
 	private $twitter_cards;
+	private $linkedin;
 	private $schema;
 
-	public function __construct( OpenGraph $open_graph, TwitterCards $twitter_cards, Manager $schema ) {
+	public function __construct( OpenGraph $open_graph, TwitterCards $twitter_cards, LinkedIn $linkedin, Manager $schema ) {
 		$this->open_graph    = $open_graph;
 		$this->twitter_cards = $twitter_cards;
+		$this->linkedin      = $linkedin;
 		$this->schema        = $schema;
 	}
 
@@ -37,6 +40,7 @@ class WebStories {
 	public function output(): void {
 		$this->open_graph->output();
 		$this->twitter_cards->output();
+		$this->linkedin->output();
 		$this->schema->output();
 	}
 }
