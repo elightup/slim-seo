@@ -2,7 +2,7 @@
 namespace SlimSEO\MetaTags;
 
 class LinkedIn {
-	public function setup() {
+	public function setup(): void {
 		add_action( 'wp_head', [ $this, 'output' ] );
 	}
 
@@ -11,7 +11,7 @@ class LinkedIn {
 	 *
 	 * @link https://www.linkedin.com/advice/3/how-do-you-specify-images-media-social-sharing-html-skills-html
 	 */
-	public function output() {
+	public function output(): void {
 		// Generate meta tags author and date for singular pages only.
 		if ( ! is_singular() ) {
 			return;
@@ -35,6 +35,6 @@ class LinkedIn {
 	}
 
 	private function get_date(): string {
-		return get_the_date( 'y-M-d', get_queried_object_id() );
+		return ( string ) gmdate( 'c', strtotime( get_queried_object()->post_date_gmt ) );
 	}
 }
