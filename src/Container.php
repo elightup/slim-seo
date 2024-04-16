@@ -64,6 +64,7 @@ class Container {
 			$services['canonical_url']
 		);
 		$services['twitter_cards'] = new MetaTags\TwitterCards;
+		$services['linkedin']      = new MetaTags\LinkedIn;
 		$services['feed']          = new Feed;
 
 		$services['schema'] = new Schema\Manager(
@@ -89,12 +90,14 @@ class Container {
 		$services['web_stories']     = new Integrations\WebStories(
 			$services['open_graph'],
 			$services['twitter_cards'],
+			$services['linkedin'],
 			$services['schema']
 		);
 		$services['ultimate_member'] = new Integrations\UltimateMember(
 			$services['meta_description'],
 			$services['open_graph'],
 			$services['twitter_cards'],
+			$services['linkedin'],
 			$services['meta_robots']
 		);
 
