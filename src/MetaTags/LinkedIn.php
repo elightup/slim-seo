@@ -31,7 +31,7 @@ class LinkedIn {
 	}
 
 	private function get_author(): string {
-		return get_the_author( get_queried_object_id() );
+		return get_the_author();
 	}
 
 	private function get_date(): string {
