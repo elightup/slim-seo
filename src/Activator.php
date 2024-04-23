@@ -40,8 +40,9 @@ class Activator {
 		$action           = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
 		$checked          = isset( $_POST['checked'] ) && is_array( $_POST['checked'] ) ? count( $_POST['checked'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
 		$is_bulk_activate = $action === 'activate-selected' && $checked > 1;
+		$is_doing_ajax    = defined( 'DOING_AJAX' ) && DOING_AJAX;
 
-		if ( ! $is_plugin || $network_wide || $is_cli || $is_bulk_activate || $this->is_bundled() ) {
+		if ( ! $is_plugin || $network_wide || $is_cli || $is_bulk_activate || $this->is_bundled() || $is_doing_ajax ) {
 			return;
 		}
 		wp_safe_redirect( admin_url( 'options-general.php?page=slim-seo' ) );
