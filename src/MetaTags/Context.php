@@ -67,6 +67,10 @@ trait Context {
 	}
 
 	private function get_queried_object_id() {
+		if ( is_front_page() && current_theme_supports( 'woocommerce' ) ) {
+			return get_option('page_on_front');
+		}
+
 		return $this->queried_object_id ?: get_queried_object_id();
 	}
 }
