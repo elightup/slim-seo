@@ -17,6 +17,8 @@ $features = [
 	'rel_links'        => [ __( '"rel" links', 'slim-seo' ), __( 'Automatically generate "rel" links for previous and next pages.', 'slim-seo' ) ],
 	// Translators: %1$s: link to the docs, %2$s: sitemap URL.
 	'sitemaps'         => [ __( 'Sitemaps', 'slim-seo' ), sprintf( __( 'Automatically generate <a href="%1$s" target="_blank">XML sitemap</a> to help search engine crawl and index the website content. <a href="%2$s" target="_blank">View your sitemap</a>.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/xml-sitemap/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo', home_url( 'sitemap.xml' ) ) ],
+	// Translators: %1$s: link to the docs, %2$s: News sitemap URL.
+	'sitemaps'         => [ __( 'News sitemaps', 'slim-seo' ), sprintf( __( 'Automatically generate <a href="%1$s" target="_blank">XML News sitemap</a> to help search engine crawl and index the news in website content. <a href="%2$s" target="_blank">View your News sitemap</a>.', 'slim-seo' ), 'https://developers.google.com/search/docs/crawling-indexing/sitemaps/news-sitemap', home_url( 'sitemap_news.xml' ) ) ],
 	// Translators: %s: link to the docs.
 	'images_alt'       => [ __( 'Image alt text', 'slim-seo' ), sprintf( __( 'Automatically <a href="%s" target="_blank">generate "alt" text for images</a> when inserting into post content.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/image-alt-text/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
 	// Translators: %s: link to the docs.
