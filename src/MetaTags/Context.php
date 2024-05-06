@@ -14,7 +14,7 @@ trait Context {
 			}
 
 			$this->queried_object_id = get_option( 'page_on_front' );
-			$this->queried_object    = get_post($this->queried_object_id);
+			$this->queried_object    = get_post( $this->queried_object_id );
 
 			return $this->get_singular_value();
 		}
