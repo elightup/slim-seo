@@ -9,7 +9,14 @@ trait Context {
 
 	public function get_value() {
 		if ( is_front_page() ) {
-			return is_page() ? $this->get_singular_value() : $this->get_home_value();
+			if ( ! $this->is_static_homepage() ) {
+				return $this->get_home_value();
+			}
+
+			$this->queried_object_id = get_option( 'page_on_front' );
+			$this->queried_object    = get_post($this->queried_object_id);
+
+			return $this->get_singular_value();
 		}
 
 		// If a page is set as the post type archive (like WooCommerce shop), then get value from that page.
@@ -67,10 +74,10 @@ trait Context {
 	}
 
 	private function get_queried_object_id() {
-		if ( is_front_page() && ( 'page' === get_option('show_on_front') ) ) {
-			return get_option('page_on_front');
-		}
-
 		return $this->queried_object_id ?: get_queried_object_id();
+	}
+
+	private function is_static_homepage(): bool {
+		return get_option( 'show_on_front' ) === 'page' && get_option( 'page_on_front' );
 	}
 }
