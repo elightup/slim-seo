@@ -7,6 +7,7 @@ use WP_Post;
 class PostType {
 	private $post_type;
 	private $page;
+	private $doc;
 
 	public function __construct( string $post_type, int $page = 1 ) {
 		$this->post_type = $post_type;
@@ -21,7 +22,6 @@ class PostType {
 			'ignore_sticky_posts'    => true,
 
 			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 
 			'order'                  => 'DESC',
@@ -125,25 +125,21 @@ class PostType {
 	}
 
 	private function get_images_from_html( string $html ): array {
-		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
-		if ( ! class_exists( 'DOMDocument' ) ) {
+		$this->prepare_dom();
+		if ( empty( $this->doc ) ) {
 			return [];
 		}
 
 		// Set encoding.
 		$html = '<?xml encoding="' . get_bloginfo( 'charset' ) . '"?>' . $html;
 
-		// Do not generate a notice when there's an error.
-		libxml_use_internal_errors( true );
-
-		$doc = new \DOMDocument( $html );
-		$doc->loadHTML( $html );
+		$this->doc->loadHTML( $html );
 
 		// Clear the errors to clean up the memory.
 		libxml_clear_errors();
 
 		$values = [];
-		$images = $doc->getElementsByTagName( 'img' );
+		$images = $this->doc->getElementsByTagName( 'img' );
 		foreach ( $images as $image ) {
 			$src = $image->getAttribute( 'src' );
 			if ( empty( $src ) ) {
@@ -162,6 +158,20 @@ class PostType {
 		}
 
 		return $values;
+	}
+
+	private function prepare_dom() {
+		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
+		if ( ! class_exists( 'DOMDocument' ) ) {
+			return;
+		}
+
+		// Do not generate a notice when there's an error.
+		libxml_use_internal_errors( true );
+
+		if ( empty( $this->doc ) ) {
+			$this->doc = new \DOMDocument();
+		}
 	}
 
 	private function is_internal( string $url ): bool {
