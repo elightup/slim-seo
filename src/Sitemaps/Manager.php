@@ -11,7 +11,7 @@ class Manager {
 		add_action( 'init', [ $this, 'add_rewrite_rules' ], 20 ); // Priority 20 to make sure all post types & taxonomies are registered.
 		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
 		add_action( 'template_redirect', [ $this, 'output' ], 0 );
-		add_action( 'do_robotstxt', [ $this, 'add_to_robots_txt' ] );
+		add_filter( 'robots_txt', [ $this, 'add_to_robots_txt' ], 20 ); // Priority 20 to output it below user-agent rules.
 
 		// Disable core sitemaps. Use `init` instead of `wp_sitemaps_enabled` to "completely" remove core sitemaps functionality, such as registering rewrite rules.
 		remove_action( 'init', 'wp_sitemaps_get_server' );
@@ -113,8 +113,8 @@ class Manager {
 		die;
 	}
 
-	public function add_to_robots_txt(): void {
-		echo "Sitemap: ", esc_url( home_url( 'sitemap.xml' ) ), "\n\n";
+	public function add_to_robots_txt( string $output ): string {
+		return $output . "\nSitemap: " . home_url( 'sitemap.xml' ) . "\n";
 	}
 
 	private function get_post_types(): void {
