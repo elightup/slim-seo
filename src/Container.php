@@ -38,8 +38,6 @@ class Container {
 
 		$services[ 'rest_api' ] = new RestApi;
 
-		$services[ 'register_meta' ] = new RegisterMeta;
-
 		// Admin only.
 		if ( is_admin() ) {
 			$services['link_attributes']    = new LinkAttributes;
