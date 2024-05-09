@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO;
 
-use WP_REST_Request;
-
 class RegisterMeta {
 	public function setup() {
 		add_action( 'rest_api_init', [ $this, 'register_posts_meta_field' ] );
