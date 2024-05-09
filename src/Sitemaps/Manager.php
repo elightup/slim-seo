@@ -114,7 +114,7 @@ class Manager {
 	}
 
 	public function add_to_robots_txt(): void {
-		echo "\nSitemap: ", esc_url( home_url( 'sitemap.xml' ) ), "\n";
+		echo "Sitemap: ", esc_url( home_url( 'sitemap.xml' ) ), "\n\n";
 	}
 
 	private function get_post_types(): void {
