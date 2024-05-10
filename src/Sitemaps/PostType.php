@@ -2,6 +2,7 @@
 namespace SlimSEO\Sitemaps;
 
 use SlimSEO\Helpers\Data;
+use SlimSEO\Helpers\Images;
 use WP_Post;
 
 class PostType {
@@ -54,7 +55,7 @@ class PostType {
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
-			$images = $this->get_post_images( $post );
+			$images = Images::get_post_images( $post );
 			$images = array_map( [ $this, 'normalize_image' ], $images );
 			$images = array_filter( $images );
 			$images = array_filter( $images, [ $this, 'is_internal' ] );
@@ -112,68 +113,6 @@ class PostType {
 		return $this->get_absolute_url( $image );
 	}
 
-	private function get_post_images( WP_Post $post ): array {
-		$images = [];
-
-		// Post thumbnail.
-		$images[] = get_post_thumbnail_id( $post );
-
-		// Get images from post content.
-		$images = array_merge( $images, $this->get_images_from_html( $post->post_content ) );
-
-		return array_filter( $images );
-	}
-
-	private function get_images_from_html( string $html ): array {
-		$this->prepare_dom();
-		if ( empty( $this->doc ) ) {
-			return [];
-		}
-
-		// Set encoding.
-		$html = '<?xml encoding="' . get_bloginfo( 'charset' ) . '"?>' . $html;
-
-		$this->doc->loadHTML( $html );
-
-		// Clear the errors to clean up the memory.
-		libxml_clear_errors();
-
-		$values = [];
-		$images = $this->doc->getElementsByTagName( 'img' );
-		foreach ( $images as $image ) {
-			$src = $image->getAttribute( 'src' );
-			if ( empty( $src ) ) {
-				continue;
-			}
-
-			$class = $image->getAttribute( 'class' );
-
-			// Uploaded images.
-			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) ) {
-				$values[] = (int) $matches[1];
-				continue;
-			}
-
-			$values[] = $src;
-		}
-
-		return $values;
-	}
-
-	private function prepare_dom() {
-		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
-		if ( ! class_exists( 'DOMDocument' ) ) {
-			return;
-		}
-
-		// Do not generate a notice when there's an error.
-		libxml_use_internal_errors( true );
-
-		if ( empty( $this->doc ) ) {
-			$this->doc = new \DOMDocument();
-		}
-	}
-
 	private function is_internal( string $url ): bool {
 		$home_url = untrailingslashit( home_url() );
 		return str_contains( $url, $home_url );
@@ -188,15 +127,15 @@ class PostType {
 
 		// Non-protocol URL.
 		if ( str_starts_with( $url, '//' ) ) {
-			return "{$url_parts['scheme']}:{$url}";
+			return "{$url_parts[ 'scheme' ]}:{$url}";
 		}
 
 		// Relative URL.
-		return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] ) . ltrim( $url, '/' );
+		return $url_parts[ 'scheme' ] . '://' . trailingslashit( $url_parts[ 'host' ] ) . ltrim( $url, '/' );
 	}
 
 	private function is_indexed( WP_Post $post ): bool {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
-		return empty( $data['noindex'] );
+		return empty( $data[ 'noindex' ] );
 	}
 }
