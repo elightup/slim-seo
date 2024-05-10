@@ -20,7 +20,7 @@ class RestApi {
 						'facebook_image' => [ 'type' => 'string' ],
 						'twitter_image'  => [ 'type' => 'string' ],
 						'canonical'      => [ 'type' => 'string' ],
-						'noindex'        => [ 'type' => 'number' ],
+						'noindex'        => [ 'type' => 'boolean' ],
 					],
 				],
 			],
