@@ -36,6 +36,8 @@ class Container {
 		$services['redirection'] = new Redirection\Loader;
 		$services['breadcrumbs'] = new Breadcrumbs;
 
+		$services['rest_api'] = new RestApi;
+
 		// Admin only.
 		if ( is_admin() ) {
 			$services['link_attributes']    = new LinkAttributes;
