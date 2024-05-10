@@ -1,11 +1,11 @@
 === Slim SEO - Fast & Automated WordPress SEO Plugin ===
 Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
-Tags: seo, search engine optimization, schema, sitemap, google, facebook, twitter, meta tags, meta description, open graph, twitter card, xml sitemap
+Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
-Tested up to: 6.5
+Tested up to: 6.5.2
 Requires PHP: 7.2
-Stable tag: 3.23.3
+Stable tag: 3.23.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -153,6 +153,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.23.4 - 2024-05-07 =
+- Add support for LinkedIn author and date meta tags
+- Fix cannot change meta title & description of the shop page if it is set as the homepage
+- Fix activation error on ajax request
 
 = 3.23.3 - 2024-04-08 =
 - Stop bots from crawling internal search result pages

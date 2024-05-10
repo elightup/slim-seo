@@ -21,7 +21,7 @@ class Robots {
 		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );
 		add_filter( 'register', [ $this, 'set_link_nofollow' ] );
 
-		add_action( 'do_robotstxt', [ $this, 'add_to_robots_txt' ] );
+		add_filter( 'robots_txt', [ $this, 'add_to_robots_txt' ] );
 	}
 
 	public function modify_robots( $robots ) {
@@ -116,13 +116,15 @@ class Robots {
 		return str_replace( '<a ', '<a rel="nofollow" ', $link );
 	}
 
-	public function add_to_robots_txt(): void {
+	public function add_to_robots_txt( string $output ): string {
 		$content   = [];
-		$content[] = 'User-agent: *';
 		$content[] = 'Disallow: /?s=';
 		$content[] = 'Disallow: /page/*/?s=';
 		$content[] = 'Disallow: /search/';
 
-		echo "\n", implode( "\n", $content ), "\n"; // phpcs:ignore
+		$content = implode( "\n", $content );
+		$content = apply_filters( 'slim_seo_robots_txt', $content );
+
+		return $output . $content . "\n";
 	}
 }
