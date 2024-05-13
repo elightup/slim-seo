@@ -117,14 +117,13 @@ class Robots {
 	}
 
 	public function add_to_robots_txt( string $output ): string {
-		$content   = [];
-		$content[] = 'Disallow: /?s=';
-		$content[] = 'Disallow: /page/*/?s=';
-		$content[] = 'Disallow: /search/';
+		$content  = "Disallow: /?s=\n";
+		$content .= "Disallow: /page/*/?s=\n";
+		$content .= "Disallow: /search/\n";
 
-		$content = implode( "\n", $content );
 		$content = apply_filters( 'slim_seo_robots_txt', $content );
+		$output  = str_replace( "Allow:", "{$content}Allow:", $output );
 
-		return $output . $content . "\n";
+		return $output;
 	}
 }

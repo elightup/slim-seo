@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
-Tested up to: 6.5.2
+Tested up to: 6.5.3
 Requires PHP: 7.2
-Stable tag: 3.23.4
+Stable tag: 3.24.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -153,6 +153,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.24.0 - 2024-05-10 =
+- Support getting SEO settings for posts and terms via REST API
+- Optimize performance for sitemap
+- Improve output in robots.txt and add a filter to change robots.txt content
 
 = 3.23.4 - 2024-05-07 =
 - Add support for LinkedIn author and date meta tags
