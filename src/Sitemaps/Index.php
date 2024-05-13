@@ -22,6 +22,8 @@ class Index {
 			$this->output_user_sitemap();
 		}
 
+		$this->output_news_sitemap();
+
 		echo '</sitemapindex>';
 	}
 
@@ -69,5 +71,11 @@ class Index {
 			echo "\t\t<loc>", esc_url( home_url( "sitemap-user$index.xml" ) ), "</loc>\n";
 			echo "\t</sitemap>\n";
 		}
+	}
+
+	private function output_news_sitemap() {
+		echo "\t<sitemap>\n";
+		echo "\t\t<loc>", esc_url( home_url( "sitemap-news.xml" ) ), "</loc>\n";
+		echo "\t</sitemap>\n";
 	}
 }
