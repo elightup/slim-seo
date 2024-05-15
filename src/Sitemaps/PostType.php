@@ -32,7 +32,7 @@ class PostType {
 	}
 
 	public function output(): void {
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">', "\n";
 
 		if ( $this->page === 1 ) {
 			$this->output_homepage();
@@ -54,7 +54,7 @@ class PostType {
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
-			if ( 'post' === $this->post_type && $this->is_published_within_2days( $post->post_date_gmt ) ) {
+			if ( 'post' === $this->post_type && $this->is_published_within_2days( $post ) ) {
 				$this->output_news( $post );
 			}
 
@@ -110,11 +110,11 @@ class PostType {
 	private function output_news( WP_Post $post ): void {
 		echo "\t\t<news:news>\n";
 		echo "\t\t\t<news:publication>\n";
-		echo "\t\t\t\t<news:name>", esc_html( the_author_meta( 'user_nicename' , $post->post_author ) ),"</news:name>\n";
-		echo "\t\t\t\t<news:language>", get_locale() ,"</news:language>\n";
+		echo "\t\t\t\t<news:name>", esc_html( get_bloginfo( 'name' ) ),"</news:name>\n";
+		echo "\t\t\t\t<news:language>", esc_html( get_locale() ) ,"</news:language>\n";
 		echo "\t\t\t</news:publication>\n";
-		echo "\t\t\t<news:publication_date>", esc_html( gmdate( 'Y-m-d', strtotime( $post->post_date_gmt ) ) ),"</news:publication_date>\n";
-		echo "\t\t\t<news:title>", $post->post_title ,"</news:title>\n";
+		echo "\t\t\t<news:publication_date>", esc_html( gmdate( 'c', strtotime( $post->post_date_gmt ) ) ),"</news:publication_date>\n";
+		echo "\t\t\t<news:title>", esc_html( $post->post_title ) ,"</news:title>\n";
 		echo "\t\t</news:news>\n";
 	}
 
@@ -217,9 +217,9 @@ class PostType {
 		return empty( $data['noindex'] );
 	}
 
-	private function is_published_within_2days( string $date ): bool {
-		$timestamp             = strtotime( $date );
-		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( date( 'Y-m-d' ) ) );
+	private function is_published_within_2days( WP_Post $post ): bool {
+		$timestamp             = strtotime( $post->post_date_gmt );
+		$two_days_ago_midnight = strtotime('-2 days midnight', strtotime( date('Y-m-d') ) );
 
 		return $timestamp >= $two_days_ago_midnight;
 	}
