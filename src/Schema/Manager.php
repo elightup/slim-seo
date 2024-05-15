@@ -99,8 +99,8 @@ class Manager {
 		if ( ! $logo_id ) {
 			return;
 		}
-		$logo           = new Types\ImageObject( 'logo', home_url( '/' ) );
-		$logo->image_id = $logo_id;
+		$logo = new Types\ImageObject( 'logo', home_url( '/' ) );
+		$logo->set_image_id( $logo_id );
 
 		$this->entities['organization']->add_reference( 'logo', $logo );
 		$this->entities['organization']->add_reference( 'image', $logo );

@@ -2,7 +2,7 @@
 namespace SlimSEO\Schema\Types;
 
 class ImageObject extends Base {
-	public $image_id;
+	private $image_id;
 	private $image_url;
 	public $image;
 
