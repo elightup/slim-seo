@@ -21,7 +21,12 @@ class ImageObject extends Base {
 	}
 
 	public function set_image_url( string $url ): void {
-		$this->image_url = $url;
+		$id = attachment_url_to_postid( $url );
+		if ( $id ) {
+			$this->set_image_id( $id );
+		} else {
+			$this->image_url = $url;
+		}
 	}
 
 	public function generate() {
