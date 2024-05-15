@@ -54,6 +54,10 @@ class PostType {
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
+			if ( 'post' === $this->post_type && $this->is_published_within_2days( $post->post_date_gmt ) ) {
+				$this->output_news( $post );
+			}
+
 			$images = $this->get_post_images( $post );
 			$images = array_map( [ $this, 'normalize_image' ], $images );
 			$images = array_filter( $images );
@@ -102,6 +106,19 @@ class PostType {
 		echo "\t\t\t<image:loc>", esc_url( $url ), "</image:loc>\n";
 		echo "\t\t</image:image>\n";
 	}
+
+	private function output_news( WP_Post $post ): void {
+		echo "\t\t<news:news>\n";
+		echo "\t\t\t<news:publication>\n";
+		echo "\t\t\t\t<news:name>", esc_html( the_author_meta( 'user_nicename' , $post->post_author ) ),"</news:name>\n";
+		echo "\t\t\t\t<news:language>", get_locale() ,"</news:language>\n";
+		echo "\t\t\t</news:publication>\n";
+		echo "\t\t\t<news:publication_date>", esc_html( gmdate( 'Y-m-d', strtotime( $post->post_date_gmt ) ) ),"</news:publication_date>\n";
+		echo "\t\t\t<news:title>", $post->post_title ,"</news:title>\n";
+		echo "\t\t</news:news>\n";
+	}
+
+
 
 	private function normalize_image( $image ): string {
 		// If we get image ID only.
@@ -198,5 +215,12 @@ class PostType {
 	private function is_indexed( WP_Post $post ): bool {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
 		return empty( $data['noindex'] );
+	}
+
+	private function is_published_within_2days( string $date ): bool {
+		$timestamp         = strtotime( $date );
+		$two_days_from_now = time() - ( 2 * 86400 );
+
+		return $timestamp >= $two_days_from_now;
 	}
 }

@@ -104,11 +104,6 @@ class Manager {
 			$sitemap->output();
 		}
 
-		if ( 'news' === $type ) {
-			$sitemap = new News();
-			$sitemap->output();
-		}
-
 		die;
 	}
 
