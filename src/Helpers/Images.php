@@ -9,12 +9,16 @@ class Images {
 
 	public static function get_post_images( WP_Post $post ): array {
 		$images = [];
+		$data   = [];
 
 		// Post thumbnail.
-		$images[] = get_post_thumbnail_id( $post );
+		$data[] = get_post_thumbnail_id( $post );
 
 		// Get images from post content.
-		$images = array_merge( $images, self::get_images_from_html( $post->post_content ) );
+		$data = array_merge( $data, self::get_images_from_html( $post->post_content ) );
+		foreach ( $data as $image ) {
+			$images[] = self::normalize_image( $image );
+		}
 
 		return array_filter( $images );
 	}
@@ -76,4 +80,31 @@ class Images {
 			self::$doc = new \DOMDocument();
 		}
 	}
+
+	private static function normalize_image( $image ): string {
+		// If we get image ID only.
+		if ( is_numeric( $image ) ) {
+			return get_attached_file( $image ) ? wp_get_attachment_image_url( $image, 'full' ) : '';
+		}
+
+		return self::get_absolute_url( $image );
+	}
+
+	private static function get_absolute_url( string $url ): string {
+		if ( wp_parse_url( $url, PHP_URL_SCHEME ) ) {
+			return $url;
+		}
+
+		$url_parts = wp_parse_url( home_url() );
+		// Non-protocol URL.
+		if ( str_starts_with( $url, '//' ) ) {
+			return "{$url_parts[ 'scheme' ]}:{$url}";
+		}
+		if ( empty( $url_parts[ 'port' ] ) ) {
+			return $url_parts[ 'scheme' ] . '://' . trailingslashit( $url_parts[ 'host' ] ) . ltrim( $url, '/' );
+		}
+		// Relative URL.
+		return $url_parts[ 'scheme' ] . '://' . trailingslashit( $url_parts[ 'host' ] . ':' . $url_parts[ 'port' ] ) . ltrim( $url, '/' );
+	}
+
 }

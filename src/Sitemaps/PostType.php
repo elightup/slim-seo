@@ -56,8 +56,6 @@ class PostType {
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
 			$images = Images::get_post_images( $post );
-			$images = array_map( [ $this, 'normalize_image' ], $images );
-			$images = array_filter( $images );
 			$images = array_filter( $images, [ $this, 'is_internal' ] );
 			array_walk( $images, [ $this, 'output_image' ] );
 
@@ -104,34 +102,9 @@ class PostType {
 		echo "\t\t</image:image>\n";
 	}
 
-	private function normalize_image( $image ): string {
-		// If we get image ID only.
-		if ( is_numeric( $image ) ) {
-			return get_attached_file( $image ) ? wp_get_attachment_image_url( $image, 'full' ) : '';
-		}
-
-		return $this->get_absolute_url( $image );
-	}
-
 	private function is_internal( string $url ): bool {
 		$home_url = untrailingslashit( home_url() );
 		return str_contains( $url, $home_url );
-	}
-
-	private function get_absolute_url( string $url ): string {
-		if ( wp_parse_url( $url, PHP_URL_SCHEME ) ) {
-			return $url;
-		}
-
-		$url_parts = wp_parse_url( home_url() );
-
-		// Non-protocol URL.
-		if ( str_starts_with( $url, '//' ) ) {
-			return "{$url_parts[ 'scheme' ]}:{$url}";
-		}
-
-		// Relative URL.
-		return $url_parts[ 'scheme' ] . '://' . trailingslashit( $url_parts[ 'host' ] ) . ltrim( $url, '/' );
 	}
 
 	private function is_indexed( WP_Post $post ): bool {
