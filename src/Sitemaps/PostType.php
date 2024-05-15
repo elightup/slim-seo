@@ -46,6 +46,24 @@ class PostType {
 		] );
 		$query      = new \WP_Query( $query_args );
 
+		$post_images = [];
+		$image_ids   = [];
+
+		// Cache images by IDs.
+		foreach ( $query->posts as $post ) {
+			if ( ! $this->is_indexed( $post ) ) {
+				continue;
+			}
+
+			$images                   = Images::get_post_images( $post );
+			$post_images[ $post->ID ] = $images;
+			$images                   = array_filter( $images, function ( $image ) {
+				return is_numeric( $image );
+			} );
+			$image_ids                = array_merge( $image_ids, $images );
+		}
+		$this->cache_images( $image_ids );
+
 		foreach ( $query->posts as $post ) {
 			if ( ! $this->is_indexed( $post ) ) {
 				continue;
@@ -55,9 +73,14 @@ class PostType {
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
-			$images = Images::get_post_images( $post );
-			$images = array_filter( $images, [ $this, 'is_internal' ] );
-			array_walk( $images, [ $this, 'output_image' ] );
+			// Output post images to create image sitemap. Doesn't generate any queries because images are cached.
+			$images = $post_images[ $post->ID ];
+			foreach ( $images as &$image ) {
+				$image = is_string( $image ) ? $image : wp_get_attachment_url( $image );
+				if ( $this->is_internal( $image ) ) {
+					$this->output_image( $image );
+				}
+			}
 
 			do_action( 'slim_seo_sitemap_post', $post );
 			echo "\t</url>\n";
@@ -110,5 +133,27 @@ class PostType {
 	private function is_indexed( WP_Post $post ): bool {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
 		return empty( $data['noindex'] );
+	}
+
+	private function cache_images( array $image_ids ): void {
+		update_meta_cache( 'post', $image_ids );
+		$this->cache_posts( $image_ids );
+	}
+
+	private function cache_posts( array $post_ids ): void {
+		if ( empty( $post_ids ) ) {
+			return;
+		}
+
+		$post_ids = implode( ',', $post_ids );
+
+		global $wpdb;
+		$sql   = "SELECT * FROM $wpdb->posts WHERE ID IN ($post_ids)";
+		$posts = $wpdb->get_results( $sql );
+
+		foreach ( $posts as $post ) {
+			$post = sanitize_post( $post, 'raw' );
+			wp_cache_add( $post->ID, $post, 'posts' );
+		}
 	}
 }

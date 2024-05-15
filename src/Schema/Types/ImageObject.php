@@ -10,12 +10,16 @@ class ImageObject extends Base {
 
 	public function is_active() {
 		$result = parent::is_active();
-		if ( ! $this->image_id || ! $result ) {
+		if ( ! $result ) {
 			return $result;
 		}
 
-		$this->image = get_post( $this->image_id );
-		return null !== $this->image && get_attached_file( $this->image_id );
+		if ( $this->image_id ) {
+			$this->image = get_post( $this->image_id );
+			return null !== $this->image && get_attached_file( $this->image_id );
+		}
+
+		return !empty( $this->image_url );
 	}
 
 	public function set_image_id( int $id ): void {

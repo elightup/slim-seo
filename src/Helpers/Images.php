@@ -15,7 +15,14 @@ class Images {
 
 		// Get images from post content.
 		$images = array_merge( $images, self::get_images_from_html( $post->post_content ) );
-		$images = array_map( [ __CLASS__, 'normalize_image' ], $images );
+
+		// Ensure all URLs are absolute.
+		foreach ( $images as &$image ) {
+			if ( is_string( $image ) ) {
+				$image = self::get_absolute_url( $image );
+			}
+		}
+
 		return array_filter( $images );
 	}
 
@@ -77,13 +84,8 @@ class Images {
 		}
 	}
 
-	private static function normalize_image( $image ): string {
-		// If we get image ID only.
-		if ( is_numeric( $image ) ) {
-			return get_attached_file( $image ) ? wp_get_attachment_image_url( $image, 'full' ) : '';
-		}
-
-		return self::get_absolute_url( $image );
+	private static function get_url_from_id( $image ): string {
+		return is_string( $image ) ? $image : (string) wp_get_attachment_url( $image );
 	}
 
 	private static function get_absolute_url( string $url ): string {
