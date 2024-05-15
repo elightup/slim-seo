@@ -109,6 +109,6 @@ class PostType {
 
 	private function is_indexed( WP_Post $post ): bool {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
-		return empty( $data[ 'noindex' ] );
+		return empty( $data['noindex'] );
 	}
 }

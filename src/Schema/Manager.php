@@ -114,7 +114,7 @@ class Manager {
 			return;
 		}
 
-		$thumbnail = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
+		$thumbnail   = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
 		$first_image = reset( $images );
 		if ( is_numeric( $first_image ) ) {
 			$thumbnail->set_image_id( (int) $first_image );

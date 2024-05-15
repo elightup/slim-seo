@@ -9,17 +9,13 @@ class Images {
 
 	public static function get_post_images( WP_Post $post ): array {
 		$images = [];
-		$data   = [];
 
 		// Post thumbnail.
-		$data[] = get_post_thumbnail_id( $post );
+		$images[] = get_post_thumbnail_id( $post );
 
 		// Get images from post content.
-		$data = array_merge( $data, self::get_images_from_html( $post->post_content ) );
-		foreach ( $data as $image ) {
-			$images[] = self::normalize_image( $image );
-		}
-
+		$images = array_merge( $images, self::get_images_from_html( $post->post_content ) );
+		$images = array_map( [ __CLASS__, 'normalize_image' ], $images );
 		return array_filter( $images );
 	}
 
@@ -57,7 +53,7 @@ class Images {
 
 			// Uploaded images.
 			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) ) {
-				$values[] = (int) $matches[ 1 ];
+				$values[] = (int) $matches[1];
 				continue;
 			}
 
@@ -100,11 +96,10 @@ class Images {
 		if ( str_starts_with( $url, '//' ) ) {
 			return "{$url_parts[ 'scheme' ]}:{$url}";
 		}
-		if ( empty( $url_parts[ 'port' ] ) ) {
-			return $url_parts[ 'scheme' ] . '://' . trailingslashit( $url_parts[ 'host' ] ) . ltrim( $url, '/' );
+		if ( empty( $url_parts['port'] ) ) {
+			return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] ) . ltrim( $url, '/' );
 		}
 		// Relative URL.
-		return $url_parts[ 'scheme' ] . '://' . trailingslashit( $url_parts[ 'host' ] . ':' . $url_parts[ 'port' ] ) . ltrim( $url, '/' );
+		return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] . ':' . $url_parts['port'] ) . ltrim( $url, '/' );
 	}
-
 }
