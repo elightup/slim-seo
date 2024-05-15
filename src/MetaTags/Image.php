@@ -49,7 +49,7 @@ class Image {
 	}
 
 	public function get_data_from_url( $url ): array {
-		$id = attachment_url_to_postid( $url );
+		$id = Images::get_id_from_url( $url );
 		return $id ? $this->get_data( $id ) : [
 			'src' => $url,
 		];

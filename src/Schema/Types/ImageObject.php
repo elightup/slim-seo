@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
+use SlimSEO\Helpers\Images;
+
 class ImageObject extends Base {
 	private $image_id;
 	private $image_url;
@@ -21,7 +23,7 @@ class ImageObject extends Base {
 	}
 
 	public function set_image_url( string $url ): void {
-		$id = attachment_url_to_postid( $url );
+		$id = Images::get_id_from_url( $url );
 		if ( $id ) {
 			$this->set_image_id( $id );
 		} else {

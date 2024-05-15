@@ -5,6 +5,7 @@ use WP_Post;
 
 class Images {
 	private static $doc;
+	private static $cache = [];
 
 	public static function get_post_images( WP_Post $post ): array {
 		$images = [];
@@ -16,6 +17,14 @@ class Images {
 		$images = array_merge( $images, self::get_images_from_html( $post->post_content ) );
 
 		return array_filter( $images );
+	}
+
+	public static function get_id_from_url( string $url ): int {
+		if ( ! isset( self::$cache[ $url ] ) ) {
+			self::$cache[ $url ] = attachment_url_to_postid( $url );
+		}
+
+		return self::$cache[ $url ];
 	}
 
 	private static function get_images_from_html( string $html ): array {
