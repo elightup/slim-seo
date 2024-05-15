@@ -5,6 +5,7 @@ use SlimSEO\Breadcrumbs;
 use SlimSEO\MetaTags\CanonicalUrl;
 use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
+use SlimSEO\Helpers\Images;
 
 class Manager {
 	private $title;
@@ -79,7 +80,7 @@ class Manager {
 
 		$this->add_logo_schema();
 
-		if ( is_singular() && has_post_thumbnail() ) {
+		if ( is_singular() ) {
 			$this->add_thumbnail_schema();
 		}
 		if ( is_singular( 'post' ) ) {
@@ -98,8 +99,8 @@ class Manager {
 		if ( ! $logo_id ) {
 			return;
 		}
-		$logo           = new Types\ImageObject( 'logo', home_url( '/' ) );
-		$logo->image_id = $logo_id;
+		$logo = new Types\ImageObject( 'logo', home_url( '/' ) );
+		$logo->set_image_id( $logo_id );
 
 		$this->entities['organization']->add_reference( 'logo', $logo );
 		$this->entities['organization']->add_reference( 'image', $logo );
@@ -107,9 +108,19 @@ class Manager {
 	}
 
 	private function add_thumbnail_schema() {
-		$post                = get_queried_object();
-		$thumbnail           = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
-		$thumbnail->image_id = get_post_thumbnail_id( $post );
+		$post   = get_queried_object();
+		$images = Images::get_post_images( $post );
+		if ( empty( $images ) ) {
+			return;
+		}
+
+		$thumbnail   = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
+		$first_image = reset( $images );
+		if ( is_numeric( $first_image ) ) {
+			$thumbnail->set_image_id( (int) $first_image );
+		} else {
+			$thumbnail->set_image_url( $first_image );
+		}
 
 		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
 		$this->entities['webpage']->add_reference( 'image', $thumbnail );

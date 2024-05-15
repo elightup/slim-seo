@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimSEO\Helpers\Images;
+
 class Image {
 	use Context;
 
@@ -24,11 +26,21 @@ class Image {
 	}
 
 	private function get_singular_value(): array {
+		// Get from SEO settings in custom fields.
 		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
 		if ( isset( $data[ $this->meta_key ] ) ) {
 			return $this->get_data_from_url( $data[ $this->meta_key ] );
 		}
-		return has_post_thumbnail() ? $this->get_data( get_post_thumbnail_id() ) : [];
+
+		// Get from thumbnail or content.
+		$images = Images::get_post_images( $this->get_queried_object() );
+		if ( empty( $images ) ) {
+			return [];
+		}
+
+		$first_image = reset( $images );
+		$method      = is_numeric( $first_image ) ? 'get_data' : 'get_data_from_url';
+		return $this->$method( $first_image );
 	}
 
 	private function get_term_value(): array {
@@ -37,7 +49,7 @@ class Image {
 	}
 
 	public function get_data_from_url( $url ): array {
-		$id = attachment_url_to_postid( $url );
+		$id = Images::get_id_from_url( $url );
 		return $id ? $this->get_data( $id ) : [
 			'src' => $url,
 		];
