@@ -5,6 +5,7 @@ use SlimSEO\Breadcrumbs;
 use SlimSEO\MetaTags\CanonicalUrl;
 use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
+use SlimSEO\Helpers\Images;
 
 class Manager {
 	private $title;
@@ -79,7 +80,7 @@ class Manager {
 
 		$this->add_logo_schema();
 
-		if ( is_singular() && has_post_thumbnail() ) {
+		if ( is_singular() ) {
 			$this->add_thumbnail_schema();
 		}
 		if ( is_singular( 'post' ) ) {
@@ -107,9 +108,19 @@ class Manager {
 	}
 
 	private function add_thumbnail_schema() {
-		$post                = get_queried_object();
+		$post   = get_queried_object();
+		$images = Images::get_post_images( $post );
+		if ( empty( $images ) ) {
+			return;
+		}
+
+		$first_image = reset( $images );
+		if ( ! is_numeric( $first_image ) ) {
+			return;
+		}
+
 		$thumbnail           = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
-		$thumbnail->image_id = get_post_thumbnail_id( $post );
+		$thumbnail->image_id = $first_image;
 
 		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
 		$this->entities['webpage']->add_reference( 'image', $thumbnail );
