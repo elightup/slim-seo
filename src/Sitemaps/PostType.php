@@ -27,7 +27,8 @@ class PostType {
 			'order'                  => 'DESC',
 			'orderyby'               => 'date',
 
-			'posts_per_page'         => 2000, // @codingStandardsIgnoreLine.
+			// Set 1000 to compatible with News sitemap structure.
+			'posts_per_page'         => 1000, // @codingStandardsIgnoreLine.
 		], $args ), $args );
 	}
 
