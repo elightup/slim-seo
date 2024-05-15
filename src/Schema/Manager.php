@@ -114,13 +114,13 @@ class Manager {
 			return;
 		}
 
+		$thumbnail = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
 		$first_image = reset( $images );
-		if ( ! is_numeric( $first_image ) ) {
-			return;
+		if ( is_numeric( $first_image ) ) {
+			$thumbnail->set_image_id( (int) $first_image );
+		} else {
+			$thumbnail->set_image_url( $first_image );
 		}
-
-		$thumbnail           = new Types\ImageObject( 'thumbnail', get_permalink( $post ) );
-		$thumbnail->image_id = $first_image;
 
 		$this->entities['webpage']->add_reference( 'primaryImageOfPage', $thumbnail );
 		$this->entities['webpage']->add_reference( 'image', $thumbnail );

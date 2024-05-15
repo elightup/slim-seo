@@ -3,6 +3,7 @@ namespace SlimSEO\Schema\Types;
 
 class ImageObject extends Base {
 	public $image_id;
+	private $image_url;
 	public $image;
 
 	public function is_active() {
@@ -15,18 +16,32 @@ class ImageObject extends Base {
 		return null !== $this->image && get_attached_file( $this->image_id );
 	}
 
+	public function set_image_id( int $id ): void {
+		$this->image_id = $id;
+	}
+
+	public function set_image_url( string $url ): void {
+		$this->image_url = $url;
+	}
+
 	public function generate() {
 		$schema = [
 			'@type' => 'ImageObject',
 			'@id'   => $this->id,
 		];
 		if ( $this->image_id ) {
-			$info   = wp_get_attachment_image_src( $this->image_id, 'full' );
-			$schema = array_merge( $schema, [
+			$info = wp_get_attachment_image_src( $this->image_id, 'full' );
+			return array_merge( $schema, [
 				'caption' => $this->image->post_excerpt,
 				'url'     => $info[0],
 				'width'   => $info[1],
 				'height'  => $info[2],
+			] );
+		}
+
+		if ( $this->image_url ) {
+			return array_merge( $schema, [
+				'url' => $this->image_url,
 			] );
 		}
 
