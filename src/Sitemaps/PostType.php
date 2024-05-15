@@ -218,9 +218,9 @@ class PostType {
 	}
 
 	private function is_published_within_2days( string $date ): bool {
-		$timestamp         = strtotime( $date );
-		$two_days_from_now = time() - ( 2 * 86400 );
+		$timestamp             = strtotime( $date );
+		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( date( 'Y-m-d' ) ) );
 
-		return $timestamp >= $two_days_from_now;
+		return $timestamp >= $two_days_ago_midnight;
 	}
 }
