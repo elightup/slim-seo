@@ -4,7 +4,8 @@ namespace SlimSEO\Helpers;
 use WP_Post;
 
 class Images {
-	public $doc;
+	private static $doc;
+
 	public static function get_post_images( WP_Post $post ): array {
 		$images = [];
 
@@ -17,22 +18,22 @@ class Images {
 		return array_filter( $images );
 	}
 
-	public static function get_images_from_html( string $html ): array {
+	private static function get_images_from_html( string $html ): array {
 		self::prepare_dom();
-		if ( empty( $doc ) ) {
+		if ( empty( self::$doc ) ) {
 			return [];
 		}
 
 		// Set encoding.
 		$html = '<?xml encoding="' . get_bloginfo( 'charset' ) . '"?>' . $html;
 
-		$doc->loadHTML( $html );
+		self::$doc->loadHTML( $html );
 
 		// Clear the errors to clean up the memory.
 		libxml_clear_errors();
 
 		$values = [];
-		$images = $doc->getElementsByTagName( 'img' );
+		$images = self::$doc->getElementsByTagName( 'img' );
 		foreach ( $images as $image ) {
 			$src = $image->getAttribute( 'src' );
 			if ( empty( $src ) ) {
@@ -53,7 +54,7 @@ class Images {
 		return $values;
 	}
 
-	public static function prepare_dom() {
+	private static function prepare_dom() {
 		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
 		if ( ! class_exists( 'DOMDocument' ) ) {
 			return;
@@ -62,8 +63,8 @@ class Images {
 		// Do not generate a notice when there's an error.
 		libxml_use_internal_errors( true );
 
-		if ( empty( $doc ) ) {
-			$doc = new \DOMDocument();
+		if ( empty( self::$doc ) ) {
+			self::$doc = new \DOMDocument();
 		}
 	}
 }
