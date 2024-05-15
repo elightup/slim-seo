@@ -21,18 +21,24 @@ class Manager {
 		$this->get_post_types();
 		$this->get_taxonomies();
 
+		$has_sitemap = false;
+
 		if ( ! empty( $this->post_types ) ) {
 			add_rewrite_rule( 'sitemap-(post-type-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+			$has_sitemap = true;
 		}
 		if ( ! empty( $this->taxonomies ) ) {
 			add_rewrite_rule( 'sitemap-(taxonomy-[^/]+?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+			$has_sitemap = true;
 		}
 		if ( User::is_active() ) {
 			add_rewrite_rule( 'sitemap-(user[^/]*?)\.xml$', 'index.php?ss_sitemap=$matches[1]', 'top' );
+			$has_sitemap = true;
 		}
-		add_rewrite_rule( 'sitemap-news\.xml$', 'index.php?ss_sitemap=news', 'top' );
 
-		add_rewrite_rule( 'sitemap\.xml$', 'index.php?ss_sitemap=index', 'top' );
+		if ( $has_sitemap ) {
+			add_rewrite_rule( 'sitemap\.xml$', 'index.php?ss_sitemap=index', 'top' );
+		}
 	}
 
 	public function add_query_vars( array $vars ): array {
