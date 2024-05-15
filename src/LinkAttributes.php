@@ -44,12 +44,10 @@ class LinkAttributes {
 	}
 
 	public function enqueue_for_block_editor() {
-		$asset = include SLIM_SEO_DIR . 'js/link-attributes/block-editor/dist/index.asset.php';
 		wp_enqueue_script(
 			'ss-link-format',
-			SLIM_SEO_URL . 'js/link-attributes/block-editor/dist/index.js',
-			$asset['dependencies'],
-			$asset['version'],
+			SLIM_SEO_URL . 'js/link-attributes/block-editor/src/index.js',
+			[],
 			true
 		);
 	}

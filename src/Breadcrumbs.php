@@ -25,7 +25,7 @@ class Breadcrumbs {
 	public function setup(): void {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
 
-		register_block_type( SLIM_SEO_DIR . 'js/breadcrumbs/dist/', [
+		register_block_type( SLIM_SEO_DIR . 'js/breadcrumbs/src/', [
 			'render_callback' => [ $this, 'render_block' ],
 		] );
 	}
