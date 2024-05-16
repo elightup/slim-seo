@@ -28,12 +28,13 @@ class PostType {
 			'order'                  => 'DESC',
 			'orderyby'               => 'date',
 
-			'posts_per_page'         => 2000, // @codingStandardsIgnoreLine.
+			// Set 1000 to compatible with News sitemap structure.
+			'posts_per_page'         => 1000, // @codingStandardsIgnoreLine.
 		], $args ), $args );
 	}
 
 	public function output(): void {
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		if ( $this->page === 1 ) {
 			$this->output_homepage();
@@ -72,6 +73,11 @@ class PostType {
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
+
+			// News sitemap for posts published within 2 days.
+			if ( 'post' === $this->post_type && $this->is_published_within_2days( $post ) ) {
+				$this->output_news( $post );
+			}
 
 			// Output post images to create image sitemap. Doesn't generate any queries because images are cached.
 			$images = $post_images[ $post->ID ];
@@ -125,6 +131,17 @@ class PostType {
 		echo "\t\t</image:image>\n";
 	}
 
+	private function output_news( WP_Post $post ): void {
+		echo "\t\t<news:news>\n";
+		echo "\t\t\t<news:publication>\n";
+		echo "\t\t\t\t<news:name>", esc_html( get_bloginfo( 'name' ) ),"</news:name>\n";
+		echo "\t\t\t\t<news:language>", esc_html( get_locale() ) ,"</news:language>\n";
+		echo "\t\t\t</news:publication>\n";
+		echo "\t\t\t<news:publication_date>", esc_html( gmdate( 'c', strtotime( $post->post_date_gmt ) ) ),"</news:publication_date>\n";
+		echo "\t\t\t<news:title>", esc_html( $post->post_title ) ,"</news:title>\n";
+		echo "\t\t</news:news>\n";
+	}
+
 	private function is_internal( string $url ): bool {
 		$home_url = untrailingslashit( home_url() );
 		return str_contains( $url, $home_url );
@@ -155,5 +172,12 @@ class PostType {
 			$post = sanitize_post( $post, 'raw' );
 			wp_cache_add( $post->ID, $post, 'posts' );
 		}
+	}
+
+	private function is_published_within_2days( WP_Post $post ): bool {
+		$timestamp             = strtotime( $post->post_date_gmt );
+		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( date( 'Y-m-d' ) ) );
+
+		return $timestamp >= $two_days_ago_midnight;
 	}
 }
