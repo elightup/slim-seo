@@ -2,6 +2,7 @@
 namespace SlimSEO\Sitemaps;
 
 use SlimSEO\Helpers\Data;
+use SlimSEO\Helpers\Images;
 use WP_Post;
 
 class PostType {
@@ -33,7 +34,7 @@ class PostType {
 	}
 
 	public function output(): void {
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">', "\n";
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		if ( $this->page === 1 ) {
 			$this->output_homepage();
@@ -46,6 +47,24 @@ class PostType {
 		] );
 		$query      = new \WP_Query( $query_args );
 
+		$post_images = [];
+		$image_ids   = [];
+
+		// Cache images by IDs.
+		foreach ( $query->posts as $post ) {
+			if ( ! $this->is_indexed( $post ) ) {
+				continue;
+			}
+
+			$images                   = Images::get_post_images( $post );
+			$post_images[ $post->ID ] = $images;
+			$images                   = array_filter( $images, function ( $image ) {
+				return is_numeric( $image );
+			} );
+			$image_ids                = array_merge( $image_ids, $images );
+		}
+		$this->cache_images( $image_ids );
+
 		foreach ( $query->posts as $post ) {
 			if ( ! $this->is_indexed( $post ) ) {
 				continue;
@@ -55,15 +74,19 @@ class PostType {
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
+			// News sitemap for posts published within 2 days.
 			if ( 'post' === $this->post_type && $this->is_published_within_2days( $post ) ) {
 				$this->output_news( $post );
 			}
 
-			$images = $this->get_post_images( $post );
-			$images = array_map( [ $this, 'normalize_image' ], $images );
-			$images = array_filter( $images );
-			$images = array_filter( $images, [ $this, 'is_internal' ] );
-			array_walk( $images, [ $this, 'output_image' ] );
+			// Output post images to create image sitemap. Doesn't generate any queries because images are cached.
+			$images = $post_images[ $post->ID ];
+			foreach ( $images as &$image ) {
+				$image = is_string( $image ) ? $image : wp_get_attachment_url( $image );
+				if ( $this->is_internal( $image ) ) {
+					$this->output_image( $image );
+				}
+			}
 
 			do_action( 'slim_seo_sitemap_post', $post );
 			echo "\t</url>\n";
@@ -119,101 +142,36 @@ class PostType {
 		echo "\t\t</news:news>\n";
 	}
 
-	private function normalize_image( $image ): string {
-		// If we get image ID only.
-		if ( is_numeric( $image ) ) {
-			return get_attached_file( $image ) ? wp_get_attachment_image_url( $image, 'full' ) : '';
-		}
-
-		return $this->get_absolute_url( $image );
-	}
-
-	private function get_post_images( WP_Post $post ): array {
-		$images = [];
-
-		// Post thumbnail.
-		$images[] = get_post_thumbnail_id( $post );
-
-		// Get images from post content.
-		$images = array_merge( $images, $this->get_images_from_html( $post->post_content ) );
-
-		return array_filter( $images );
-	}
-
-	private function get_images_from_html( string $html ): array {
-		$this->prepare_dom();
-		if ( empty( $this->doc ) ) {
-			return [];
-		}
-
-		// Set encoding.
-		$html = '<?xml encoding="' . get_bloginfo( 'charset' ) . '"?>' . $html;
-
-		$this->doc->loadHTML( $html );
-
-		// Clear the errors to clean up the memory.
-		libxml_clear_errors();
-
-		$values = [];
-		$images = $this->doc->getElementsByTagName( 'img' );
-		foreach ( $images as $image ) {
-			$src = $image->getAttribute( 'src' );
-			if ( empty( $src ) ) {
-				continue;
-			}
-
-			$class = $image->getAttribute( 'class' );
-
-			// Uploaded images.
-			if ( preg_match( '/wp-image-(\d+)/', $class, $matches ) ) {
-				$values[] = (int) $matches[1];
-				continue;
-			}
-
-			$values[] = $src;
-		}
-
-		return $values;
-	}
-
-	private function prepare_dom() {
-		// Use DOMDocument instead of SimpleXML to load non-well-formed HTML.
-		if ( ! class_exists( 'DOMDocument' ) ) {
-			return;
-		}
-
-		// Do not generate a notice when there's an error.
-		libxml_use_internal_errors( true );
-
-		if ( empty( $this->doc ) ) {
-			$this->doc = new \DOMDocument();
-		}
-	}
-
 	private function is_internal( string $url ): bool {
 		$home_url = untrailingslashit( home_url() );
 		return str_contains( $url, $home_url );
 	}
 
-	private function get_absolute_url( string $url ): string {
-		if ( wp_parse_url( $url, PHP_URL_SCHEME ) ) {
-			return $url;
-		}
-
-		$url_parts = wp_parse_url( home_url() );
-
-		// Non-protocol URL.
-		if ( str_starts_with( $url, '//' ) ) {
-			return "{$url_parts['scheme']}:{$url}";
-		}
-
-		// Relative URL.
-		return $url_parts['scheme'] . '://' . trailingslashit( $url_parts['host'] ) . ltrim( $url, '/' );
-	}
-
 	private function is_indexed( WP_Post $post ): bool {
 		$data = get_post_meta( $post->ID, 'slim_seo', true );
 		return empty( $data['noindex'] );
+	}
+
+	private function cache_images( array $image_ids ): void {
+		update_meta_cache( 'post', $image_ids );
+		$this->cache_posts( $image_ids );
+	}
+
+	private function cache_posts( array $post_ids ): void {
+		if ( empty( $post_ids ) ) {
+			return;
+		}
+
+		$post_ids = implode( ',', $post_ids );
+
+		global $wpdb;
+		$sql   = "SELECT * FROM $wpdb->posts WHERE ID IN ($post_ids)";
+		$posts = $wpdb->get_results( $sql );
+
+		foreach ( $posts as $post ) {
+			$post = sanitize_post( $post, 'raw' );
+			wp_cache_add( $post->ID, $post, 'posts' );
+		}
 	}
 
 	private function is_published_within_2days( WP_Post $post ): bool {
