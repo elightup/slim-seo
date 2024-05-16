@@ -19,7 +19,7 @@ class OpenGraph {
 	}
 
 	public function output(): void {
-		$properties = apply_filters( 'slim_seo_open_graph_tags', [
+		$properties = apply_filters( 'slim_seo_open_graph_tags', [ 
 			'og:title',
 			'og:type',
 			'og:image',
@@ -37,8 +37,11 @@ class OpenGraph {
 			'article:tag',
 			'fb:app_id',
 		] );
+		if ( empty( $properties ) || ! is_array( $properties ) ) {
+			return;
+		}
 		foreach ( $properties as $property ) {
-			$short_name = strtr( $property, [
+			$short_name = strtr( $property, [ 
 				'og:' => '',
 				'fb:' => '',
 				':'   => '_',
@@ -81,7 +84,7 @@ class OpenGraph {
 
 	private function get_default_image(): array {
 		$option = get_option( 'slim_seo' );
-		return empty( $option['default_facebook_image'] ) ? [] : $this->image_obj->get_data_from_url( $option['default_facebook_image'] );
+		return empty( $option[ 'default_facebook_image' ] ) ? [] : $this->image_obj->get_data_from_url( $option[ 'default_facebook_image' ] );
 	}
 
 	private function get_description(): string {
@@ -134,7 +137,7 @@ class OpenGraph {
 
 	private function get_app_id(): string {
 		$data = get_option( 'slim_seo' );
-		return empty( $data['facebook_app_id'] ) ? '' : $data['facebook_app_id'];
+		return empty( $data[ 'facebook_app_id' ] ) ? '' : $data[ 'facebook_app_id' ];
 	}
 
 	private function output_tag( string $property, $content ) {
