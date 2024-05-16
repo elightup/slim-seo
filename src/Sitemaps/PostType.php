@@ -119,8 +119,6 @@ class PostType {
 		echo "\t\t</news:news>\n";
 	}
 
-
-
 	private function normalize_image( $image ): string {
 		// If we get image ID only.
 		if ( is_numeric( $image ) ) {
@@ -220,7 +218,7 @@ class PostType {
 
 	private function is_published_within_2days( WP_Post $post ): bool {
 		$timestamp             = strtotime( $post->post_date_gmt );
-		$two_days_ago_midnight = strtotime('-2 days midnight', strtotime( date('Y-m-d') ) );
+		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( date( 'Y-m-d' ) ) );
 
 		return $timestamp >= $two_days_ago_midnight;
 	}
