@@ -20,6 +20,7 @@ class Helper {
 			'mailpoet_form',
 			'gravityview',
 			'civicrm',
+			'contact-form-7',
 
 			// Filter everything.
 			'fe_widget',
