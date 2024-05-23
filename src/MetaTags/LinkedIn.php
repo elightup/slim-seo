@@ -17,24 +17,16 @@ class LinkedIn {
 			return;
 		}
 
-		$author = $this->get_author();
+		$author = get_the_author_meta( 'display_name', get_queried_object()->post_author );
 		$author = apply_filters( 'slim_seo_linkedin_author', $author );
 		if ( $author ) {
 			echo '<meta name="author" content="' . esc_attr( $author ) . '">', "\n";
 		}
 
-		$date = $this->get_date();
+		$date = gmdate( 'c', strtotime( get_queried_object()->post_date_gmt ) );
 		$date = apply_filters( 'slim_seo_linkedin_date', $date );
 		if ( $date ) {
 			echo '<meta name="date" content="' . esc_attr( $date ) . '">', "\n";
 		}
-	}
-
-	private function get_author(): string {
-		return get_the_author();
-	}
-
-	private function get_date(): string {
-		return ( string ) gmdate( 'c', strtotime( get_queried_object()->post_date_gmt ) );
 	}
 }
