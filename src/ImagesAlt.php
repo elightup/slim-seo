@@ -24,7 +24,7 @@ class ImagesAlt {
 			return $attributes;
 		}
 
-		$attributes['alt'] = $attributes['alt'] ?: $this->normalize( $attachment->post_title );
+		$attributes['alt'] = empty( $attributes['alt'] ) ? $this->normalize( $attachment->post_title ) : $attributes['alt'];
 		return $attributes;
 	}
 
