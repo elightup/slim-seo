@@ -9,7 +9,6 @@ class Elementor {
 
 	public function remove_post_types( $post_types ) {
 		unset( $post_types['elementor_library'] );
-		unset( $post_types['e-landing-page'] );
 		return $post_types;
 	}
 }
