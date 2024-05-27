@@ -89,6 +89,7 @@ class Container {
 		$services['metabox']         = new Integrations\MetaBox;
 		$services['affiliatewp']     = new Integrations\AffiliateWP;
 		$services['senseilms']       = new Integrations\SenseiLMS;
+		$services['mylisting']       = new Integrations\MyListing;
 		$services['web_stories']     = new Integrations\WebStories(
 			$services['open_graph'],
 			$services['twitter_cards'],
