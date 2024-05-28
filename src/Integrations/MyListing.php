@@ -47,6 +47,9 @@ class MyListing {
 		if ( 'categories' === get_query_var( 'explore_tab' ) ) {
 			$term = get_term_by( 'slug', get_query_var( 'explore_category' ), 'job_listing_category');
 		}
+		if ( 'tags' === get_query_var( 'explore_tab' ) ) {
+			$term = get_term_by( 'slug', get_query_var( 'explore_tag' ), 'case27_job_listing_tags');
+		}
 
 		if ( $term && ! is_wp_error( $term ) ) {
 			return [ get_term_meta( $term->term_id, 'slim_seo', true ), $term ];
