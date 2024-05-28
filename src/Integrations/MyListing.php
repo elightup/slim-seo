@@ -17,24 +17,30 @@ class MyListing {
 	}
 
 	public function update_meta_title( $title ) {
-		if ( ! get_query_var( 'explore_tab' ) ) {
-			return $title;
+		$data = $this->get_term_data();
+
+		if ( $data ) {
+			return $data[0]['title'] ?: '';
 		}
 
-		list( $data, $term ) = $this->get_listing_data();
-		return $data['title'] ?: '';
+		return $title;
 	}
 
 	public function update_meta_description( $description ) {
-		if ( ! get_query_var( 'explore_tab' ) ) {
-			return $description;
+		$data = $this->get_term_data();
+
+		if ( $data ) {
+			return $data[0]['description'] ? $data[0]['description'] : ( $data[1]->description ? $data[1]->description : '' );
 		}
 
-		list( $data, $term ) = $this->get_listing_data();
-		return $data['description'] ? $data['description'] : ( $term && ! is_wp_error( $term ) ? $term->description : '' );
+		return $description;
 	}
 
-	private function get_listing_data() {
+	private function get_term_data( ) {
+		if ( ! get_query_var( 'explore_tab' ) ) {
+			return false;
+		}
+
 		if ( 'regions' === get_query_var( 'explore_tab' ) ) {
 			$term = get_term_by( 'slug', get_query_var( 'explore_region' ), 'region');
 		}
@@ -42,7 +48,10 @@ class MyListing {
 			$term = get_term_by( 'slug', get_query_var( 'explore_category' ), 'job_listing_category');
 		}
 
-		$data = get_term_meta( $term->term_id, 'slim_seo', true );
-		return [ $data, $term ];
+		if ( $term && ! is_wp_error( $term ) ) {
+			return [ get_term_meta( $term->term_id, 'slim_seo', true ), $term ];
+		}
+
+		return false ;
 	}
 }
