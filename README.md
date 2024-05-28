@@ -28,10 +28,13 @@ The following meta tags are auto-generated and optimized for the best SEO scores
 - [Meta robots tag](https://wpslimseo.com/docs/meta-robots-tag/): decide which pages are indexed and which ones not.
 - [Facebook Open Graph Tags](https://wpslimseo.com/docs/facebook-open-graph-tags/): share your posts on Facebook beautifully.
 - [Twitter Card Tags](https://wpslimseo.com/docs/twitter-card-tags/): share your posts on Twitter beautifully.
+- LinkedIn meta tags
 
 ### 2. [XML Sitemap](https://wpslimseo.com/docs/xml-sitemap/)
 
 Slim SEO automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
+
+Besides the normal XML sitemap, Slim SEO also includes sitemaps for images and Google news.
 
 ### 3. [Breadcrumbs](https://wpslimseo.com/docs/breadcrumbs/)
 

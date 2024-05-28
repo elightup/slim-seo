@@ -5,7 +5,7 @@ Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
 Tested up to: 6.5.3
 Requires PHP: 7.2
-Stable tag: 3.24.0
+Stable tag: 3.25.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,10 +40,13 @@ The following meta tags are auto-generated and optimized for the best SEO scores
 - [Meta robots tag](https://docs.wpslimseo.com/slim-seo/meta-robots-tag/): decide which pages are indexed and which ones not.
 - [Facebook Open Graph Tags](https://docs.wpslimseo.com/slim-seo/facebook-open-graph-tags/): share your posts on Facebook beautifully.
 - [Twitter Card Tags](https://docs.wpslimseo.com/slim-seo/twitter-card-tags/): share your posts on Twitter beautifully.
+- LinkedIn meta tags
 
 #### 2. [XML Sitemap](https://docs.wpslimseo.com/slim-seo/xml-sitemap/)
 
 Slim SEO automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
+
+Besides the normal XML sitemap, Slim SEO also includes sitemaps for images and Google news.
 
 #### 3. [Breadcrumbs](https://docs.wpslimseo.com/slim-seo/breadcrumbs/)
 
@@ -153,6 +156,14 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.25.0 - 2024-05-28 =
+- Add sitemap for Google news. The news sitemap is automatically added to the `sitemap-post-type-post.xml` sitemap. You do not have to change anything. Simply submit your sitemap URL (either `https://example.com/sitemap.xml` or `https://example.com/sitemap-post-type-post.xml` to Google News).
+- Auto get 1st image in the content for the schema and Open Graph if there's no featured image.
+- Fix: get_the_author() returns null for LinkedIn
+- Fix: PHP warning for image alt
+- Fix SEO settings not available for Elementor landing page
+- Fix compatibility with Contact Form 7
 
 = 3.24.0 - 2024-05-10 =
 - Support getting SEO settings for posts and terms via REST API
