@@ -7,7 +7,11 @@ class Images {
 	private static $doc;
 	private static $cache = [];
 
-	public static function get_post_images( WP_Post $post ): array {
+	public static function get_post_images( ?WP_Post $post ): array {
+		if ( ! $post ) {
+			return [];
+		}
+
 		$images = [];
 
 		// Post thumbnail.
