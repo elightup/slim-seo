@@ -22,8 +22,8 @@ class Redirection {
 			return;
 		}
 
-		$http_host   = $_SERVER['HTTP_HOST'] ?? ''; // @codingStandardsIgnoreLine.
-		$request_uri = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @codingStandardsIgnoreLine.
+		$http_host   = $_SERVER['HTTP_HOST'] ?? ''; // @phpcs:ignore.
+		$request_uri = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @phpcs:ignore.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
 		$request_url = strtolower( $request_url );
@@ -115,13 +115,13 @@ class Redirection {
 		}
 
 		$should_redirect = false;
-		$http_host       = $_SERVER['HTTP_HOST'] ?? ''; // @codingStandardsIgnoreLine.
+		$http_host       = $_SERVER['HTTP_HOST'] ?? ''; // @phpcs:ignore.
 		$http_host       = strtolower( $http_host );
 
-		if ( 'www-to-non' === $redirect_www && false !== stripos( $http_host, 'wwww' ) ) {
+		if ( 'www-to-non' === $redirect_www && str_starts_with( $http_host, 'www.' ) ) {
 			$http_host       = substr( $http_host, 4 );
 			$should_redirect = true;
-		} elseif ( 'non-to-www' === $redirect_www && false === stripos( $http_host, 'wwww' ) ) {
+		} elseif ( 'non-to-www' === $redirect_www && ! str_starts_with( $http_host, 'www.' ) ) {
 			$http_host       = 'www.' . $http_host;
 			$should_redirect = true;
 		}

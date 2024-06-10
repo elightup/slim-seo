@@ -1,5 +1,5 @@
 import { RawHTML, useReducer, useState } from '@wordpress/element';
-import { sprintf, __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { Tooltip } from '../helper/misc';
 
 const Settings = () => {
@@ -62,7 +62,7 @@ const Settings = () => {
 						<td>
 							<select id='ss-redirect-www' name={ `${ settingsName }[redirect_www]` } value={ redirectWWW } onChange={ e => setRedirectWWW( prev => e.target.value ) }>
 								<option value=''>{ __( 'Do nothing', 'slim-seo' ) }</option>
-								<option value='www-to-non'>{ __( 'www to non-wwww', 'slim-seo' ) }</option>
+								<option value='www-to-non'>{ __( 'www to non-www', 'slim-seo' ) }</option>
 								<option value='non-to-www'>{ __( 'non-www to www', 'slim-seo' ) }</option>
 							</select>
 						</td>
