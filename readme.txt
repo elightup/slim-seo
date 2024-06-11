@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
-Tested up to: 6.5.3
+Tested up to: 6.5.4
 Requires PHP: 7.2
-Stable tag: 3.25.0
+Stable tag: 3.25.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -156,6 +156,10 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.25.1 - 2024-06-11 =
+- Fix typo in redirection module
+- Check if queried object returns null that causes error for Open Graph
 
 = 3.25.0 - 2024-05-28 =
 - Add sitemap for Google news. The news sitemap is automatically added to the `sitemap-post-type-post.xml` sitemap. You do not have to change anything. Simply submit your sitemap URL (either `https://example.com/sitemap.xml` or `https://example.com/sitemap-post-type-post.xml` to Google News).
