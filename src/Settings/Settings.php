@@ -63,7 +63,7 @@ class Settings {
 			$panes['homepage'] = $this->get_pane( 'homepage' );
 		}
 		if ( $this->meta_tags_manager->get_post_types() ) {
-			$panes['post-types'] = $this->get_pane( 'post-types' );
+			$panes['post-types'] = '<div id="post-types" class="ss-tab-pane"><div id="ss-post-types"></div></div>';
 		}
 
 		$panes['social'] = $this->get_pane( 'social' );
@@ -74,12 +74,18 @@ class Settings {
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
+		wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
 
 		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], filemtime( SLIM_SEO_DIR . '/js/migrate.js' ), true );
 		wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
 			'nonce'          => wp_create_nonce( 'migrate' ),
 			'doneText'       => __( 'Done!', 'slim-seo' ),
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
+		] );
+
+		wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
+			'rest'               => untrailingslashit( rest_url() ),
+			'nonce'              => wp_create_nonce( 'wp_rest' ),
 		] );
 
 		$this->meta_tags_manager->enqueue();
