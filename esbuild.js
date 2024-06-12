@@ -34,6 +34,13 @@ esbuild.build( {
 
 esbuild.build( {
 	...config,
+	entryPoints: [ 'js/post-types/App.js' ],
+	outfile: 'js/post-types.js'
+} );
+
+
+esbuild.build( {
+	...config,
 	entryPoints: [ 'js/meta-tags/src/object.js' ],
 	outfile: 'js/meta-tags/dist/object.js'
 } );

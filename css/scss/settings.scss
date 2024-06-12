@@ -115,12 +115,16 @@
 	.react-tabs__tab-list {
 		flex-direction: column;
 		align-items: start;
+		min-width: 120px;
 		margin-right: 16px;
 		li.react-tabs__tab {
 			padding: 10px 0;
 			border-right: 0;
 			margin: 0;
 		}
+	}
+	.react-tabs__tab-panel {
+		flex: 1
 	}
 }
 

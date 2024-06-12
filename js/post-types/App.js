@@ -1,17 +1,22 @@
-import { render, useState, useEffect } from '@wordpress/element';
+import { render, useEffect ,useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { useApi } from './functions';
-import PostType from './PostType';
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { request } from "./functions";
+import PostType from "./components/PostType";
 
 const App = () => {
-	const postTypes = useApi( 'post_types' );
+	const [ postTypes, setPostTypes ] = useState( [] );
+	const [ option, setOption ] = useState( [] );
 
-	if ( postTypes && Object.entries( postTypes ).length === 0 ) {
+	useEffect( () => {
+		request( 'post_types' ).then( p => setPostTypes( p ) ).then( request( 'option' ).then( o => setOption( o ) ) );
+	}, [] );
+
+	if ( Object.entries( postTypes ).length === 0 ) {
 		return  <div className="ss-none">{ __( 'There are no custom post type.', 'slim-seo' ) }</div>;
 	}
 
-	return postTypes && (
+	return <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
 				{
@@ -20,30 +25,16 @@ const App = () => {
 					) )
 				}
 			</TabList>
-
 			{
 				Object.entries( postTypes ).map( ( [ postTypeId, postType ] ) => (
 					<TabPanel>
-						<PostType key={ postTypeId } postType={ postType }/>
+						<PostType key={ postTypeId } id={ postTypeId } postType={ postType } option={ option[ postTypeId ] || [] } optionArchive={ option[ `${ postTypeId }_archive` ] || [] } />
 					</TabPanel>
 				) )
 			}
-
-			<TabPanel>
-				
-			</TabPanel>
-			<TabPanel>
-				
-			</TabPanel>
 		</Tabs>
-
-		// Object.entries( postTypes ).map( ( [ postTypeId, postType ] ) => (
-		// 	<PostType
-		// 		key={ postTypeId }
-		// 		postType={ postType }
-		// 	/>
-		// ) )
-	);
+		<input type="submit" name="submit" id="submit" className="button button-primary" value={ __( 'Save Changes', 'slim-seo' ) } />
+	</>;
 };
 
 render( <App />, document.getElementById( 'ss-post-types' ) );

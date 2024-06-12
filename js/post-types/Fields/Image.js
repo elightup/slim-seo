@@ -1,0 +1,36 @@
+import { Control } from "@elightup/form";
+import { Button } from "@wordpress/components";
+import { memo, useRef } from "@wordpress/element";
+
+const Image = ( property ) => {
+	const inputRef = useRef();
+	const { id, label, std, className = '' } = property;
+
+	const openMediaPopup = e => {
+		e.preventDefault();
+
+		let frame = wp.media( {
+			multiple: false,
+			title: SSSchema.mediaPopupTitle
+		} );
+
+		frame.open();
+		frame.off( 'select' );
+
+		frame.on( 'select', () => {
+			const url = frame.state().get( 'selection' ).first().toJSON().url;
+			inputRef.current.value += url;
+		} );
+	};
+
+	return (
+		<Control className={ className } label={ label } id={ id }>
+			<div className="sss-input-wrapper">
+				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } />
+				<Button icon="format-image" onClick={ openMediaPopup } className="sss-insert-image" />
+			</div>
+		</Control>
+	);
+};
+
+export default Image;
