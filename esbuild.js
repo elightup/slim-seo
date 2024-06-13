@@ -38,6 +38,12 @@ esbuild.build( {
 	outfile: 'js/post-types.js'
 } );
 
+esbuild.build( {
+	...config,
+	entryPoints: [ 'js/post-types/Single.js' ],
+	outfile: 'js/post-type.js'
+} );
+
 
 esbuild.build( {
 	...config,
