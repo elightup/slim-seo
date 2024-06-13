@@ -9,7 +9,7 @@ const App = () => {
 	const [ option, setOption ] = useState( [] );
 
 	useEffect( () => {
-		request( 'post_types' ).then( p => setPostTypes( p ) ).then( request( 'option' ).then( o => setOption( o ) ) );
+		request( 'post_types' ).then( setPostTypes ).then( request( 'option' ).then( setOption ) );
 	}, [] );
 
 	if ( Object.entries( postTypes ).length === 0 ) {
