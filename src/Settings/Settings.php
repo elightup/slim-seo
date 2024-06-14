@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Settings;
 
+use SlimSEO\Helpers\Data;
+
 class Settings {
 	private $meta_tags_manager;
 
@@ -90,6 +92,7 @@ class Settings {
 			'rest'            => untrailingslashit( rest_url() ),
 			'nonce'           => wp_create_nonce( 'wp_rest' ),
 			'postTypes'       => $this->meta_tags_manager->get_post_types(),
+			'unablePostTypes' => $this->check_unable_post_types(),
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
 		] );
 
@@ -139,5 +142,26 @@ class Settings {
 		include __DIR__ . "/sections/$name.php";
 		echo '</div>';
 		return ob_get_clean();
+	}
+
+	private function check_unable_post_types() {
+		$post_types = $this->meta_tags_manager->get_post_types();
+
+		if ( ! $post_types ) {
+			return;
+		}
+
+		$archive = [];
+		foreach ( $post_types as $key => $post_type ) {
+			$archive_page = Data::get_post_type_archive_page( $key );
+			if ( $archive_page ) {
+				$archive[ $key ] = [
+					'link'       => get_permalink( $archive_page ),
+					'title' => $archive_page->post_title,
+				];
+			}
+		}
+
+		return $archive;
 	}
 }

@@ -27,7 +27,10 @@ const App = () => {
 			{
 				Object.entries( ssPostTypes.postTypes ).map( ( [ postTypeId, postType ] ) => (
 					<TabPanel>
-						<PostTypes key={ postTypeId } id={ postTypeId } postType={ postType } option={ option[ postTypeId ] || [] } optionArchive={ option[ `${ postTypeId }_archive` ] || [] } />
+						{ ssPostTypes.unablePostTypes.hasOwnProperty( postTypeId ) ? 
+							<UnablePostType id={ postTypeId } postType={ ssPostTypes.unablePostTypes[ postTypeId ] } /> :
+							<PostTypes key={ postTypeId } id={ postTypeId } postType={ postType } option={ option[ postTypeId ] || [] } optionArchive={ option[ `${ postTypeId }_archive` ] || [] } />
+						}
 					</TabPanel>
 				) )
 			}
@@ -35,5 +38,17 @@ const App = () => {
 		<input type="submit" name="submit" id="submit" className="button button-primary" value={ __( 'Save Changes', 'slim-seo' ) } />
 	</>;
 };
+
+const UnablePostType = ( { id, postType } ) => {
+	const { link, title } = postType;
+
+	return <>
+		<span>{ __( 'You have a page ','slim-seo' ) }</span>
+		<a href={ link } target="_blank" rel="noopener noreferrer">{ title } </a>
+		<span>{ __( ` that has the same slug as the post type archive slug. So WordPress will set it as the archive page for the `,'slim-seo' ) }</span>
+		<code>{ id }</code>
+		<span>{ __( ` post type.`,'slim-seo' ) }</span>
+	</>;
+}
 
 render( <App />, document.getElementById( 'ss-post-types' ) );
