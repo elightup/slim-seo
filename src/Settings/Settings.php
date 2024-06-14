@@ -38,8 +38,6 @@ class Settings {
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_panes' ], 1 );
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 1 );
 
-		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
-
 		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
 
@@ -89,9 +87,10 @@ class Settings {
 		] );
 
 		wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
-			'rest'      => untrailingslashit( rest_url() ),
-			'nonce'     => wp_create_nonce( 'wp_rest' ),
-			'postTypes' => $this->meta_tags_manager->get_post_types()
+			'rest'            => untrailingslashit( rest_url() ),
+			'nonce'           => wp_create_nonce( 'wp_rest' ),
+			'postTypes'       => $this->meta_tags_manager->get_post_types(),
+			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
 		] );
 
 		$this->meta_tags_manager->enqueue();

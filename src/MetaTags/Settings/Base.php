@@ -20,11 +20,13 @@ abstract class Base {
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/object.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
 
+		wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/posttypes.css', [], filemtime( SLIM_SEO_DIR . '/css/posttypes.css' ) );
 		wp_enqueue_script( 'slim-seo-post-type', SLIM_SEO_URL . 'js/post-type.js', [ 'jquery', 'underscore', 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . 'js/post-type.js' ), true );
-		wp_localize_script( 'slim-seo-post-type', 'ssPostType', [
-			'rest'  => untrailingslashit( rest_url() ),
-			'nonce' => wp_create_nonce( 'wp_rest' ),
-			// 'postmeta' => 
+		wp_localize_script( 'slim-seo-post-type', 'ssPostTypes', [
+			'rest'            => untrailingslashit( rest_url() ),
+			'nonce'           => wp_create_nonce( 'wp_rest' ),
+			'metadata'        => get_metadata( $this->object_type, get_the_ID(), 'slim_seo', true ),
+			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
 		] );
 
 		wp_localize_script( 'slim-seo-meta-tags', 'ss', $this->get_script_params() );
@@ -48,6 +50,7 @@ abstract class Base {
 	public function render() {
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
+
 		<?php if ( $this->title ) : ?>
 			<h2><?= esc_html( $this->title ); ?></h2>
 		<?php endif; ?>
@@ -61,7 +64,6 @@ abstract class Base {
 		}
 
 		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : []; // phpcs:ignore
-
 		// Do not erase existing data when quick editing.
 		if ( isset( $_POST['action'] ) && $_POST['action'] === 'inline-save' ) { // phpcs:ignore
 			$existing_data = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
@@ -69,7 +71,6 @@ abstract class Base {
 		}
 
 		$data = $this->sanitize( $data );
-
 		if ( empty( $data ) ) {
 			delete_metadata( $this->object_type, $object_id, 'slim_seo' );
 		} else {

@@ -2,7 +2,7 @@ import { render, useEffect ,useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { request } from "./functions";
-import PostType from "./components/PostType";
+import PostTypes from "./components/PostTypes";
 
 const App = () => {
 	const [ option, setOption ] = useState( [] );
@@ -18,16 +18,16 @@ const App = () => {
 	return <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
-				{
-					Object.entries( ssPostTypes.postTypes ).map( ( [ postTypeId, postType ] ) => (
-						<Tab>{ postType.label }</Tab>
-					) )
-				}
+			{
+				Object.entries( ssPostTypes.postTypes ).map( ( [ postTypeId, postType ] ) => (
+					<Tab>{ postType.label }</Tab>
+				) )
+			}
 			</TabList>
 			{
 				Object.entries( ssPostTypes.postTypes ).map( ( [ postTypeId, postType ] ) => (
 					<TabPanel>
-						<PostType key={ postTypeId } id={ postTypeId } postType={ postType } option={ option[ postTypeId ] || [] } optionArchive={ option[ `${ postTypeId }_archive` ] || [] } />
+						<PostTypes key={ postTypeId } id={ postTypeId } postType={ postType } option={ option[ postTypeId ] || [] } optionArchive={ option[ `${ postTypeId }_archive` ] || [] } />
 					</TabPanel>
 				) )
 			}

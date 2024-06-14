@@ -4,14 +4,14 @@ import { memo, useRef } from "@wordpress/element";
 
 const Image = ( property ) => {
 	const inputRef = useRef();
-	const { id, label, std, className = '' } = property;
+	const { id, label, std, className = '', mediaPopupTitle } = property;
 
 	const openMediaPopup = e => {
 		e.preventDefault();
 
 		let frame = wp.media( {
 			multiple: false,
-			title: SSSchema.mediaPopupTitle
+			title: mediaPopupTitle
 		} );
 
 		frame.open();
