@@ -5,14 +5,13 @@ import { request } from "./functions";
 import PostType from "./components/PostType";
 
 const App = () => {
-	const [ postTypes, setPostTypes ] = useState( [] );
 	const [ option, setOption ] = useState( [] );
 
 	useEffect( () => {
-		request( 'post_types' ).then( setPostTypes ).then( request( 'option' ).then( setOption ) );
+		request( 'option' ).then( setOption );
 	}, [] );
 
-	if ( Object.entries( postTypes ).length === 0 ) {
+	if ( Object.entries( ssPostTypes.postTypes ).length === 0 ) {
 		return  <div className="ss-none">{ __( 'There are no custom post type.', 'slim-seo' ) }</div>;
 	}
 
@@ -20,13 +19,13 @@ const App = () => {
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
 				{
-					Object.entries( postTypes ).map( ( [ postTypeId, postType ] ) => (
+					Object.entries( ssPostTypes.postTypes ).map( ( [ postTypeId, postType ] ) => (
 						<Tab>{ postType.label }</Tab>
 					) )
 				}
 			</TabList>
 			{
-				Object.entries( postTypes ).map( ( [ postTypeId, postType ] ) => (
+				Object.entries( ssPostTypes.postTypes ).map( ( [ postTypeId, postType ] ) => (
 					<TabPanel>
 						<PostType key={ postTypeId } id={ postTypeId } postType={ postType } option={ option[ postTypeId ] || [] } optionArchive={ option[ `${ postTypeId }_archive` ] || [] } />
 					</TabPanel>

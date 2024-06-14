@@ -8,21 +8,11 @@ use MetaBox;
 
 class PostTypes extends Base {
 	public function register_routes() {
-		register_rest_route( 'slim-seo-post-types', 'post_types', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_post_types' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
-
 		register_rest_route( 'slim-seo-post-types', 'option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
-	}
-
-	public function get_post_types( WP_REST_Request $request ): array {
-		return array_diff_key( Data::get_post_types(), array_flip( [ 'post', 'page' ] ) );
 	}
 
 	public function get_option( WP_REST_Request $request ): array {

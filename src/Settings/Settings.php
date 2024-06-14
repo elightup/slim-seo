@@ -38,6 +38,8 @@ class Settings {
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_panes' ], 1 );
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 1 );
 
+		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
+
 		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
 
@@ -73,6 +75,9 @@ class Settings {
 
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
+		if ( $this->meta_tags_manager->get_post_types() ) {
+			wp_enqueue_style( 'slim-seo-posttypes', SLIM_SEO_URL . 'css/posttypes.css', [], filemtime( SLIM_SEO_DIR . '/css/posttypes.css' ) );
+		}
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
 		wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
 
@@ -84,8 +89,9 @@ class Settings {
 		] );
 
 		wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
-			'rest'               => untrailingslashit( rest_url() ),
-			'nonce'              => wp_create_nonce( 'wp_rest' ),
+			'rest'      => untrailingslashit( rest_url() ),
+			'nonce'     => wp_create_nonce( 'wp_rest' ),
+			'postTypes' => $this->meta_tags_manager->get_post_types()
 		] );
 
 		$this->meta_tags_manager->enqueue();
