@@ -7,8 +7,10 @@ class Images {
 	private static $doc;
 	private static $cache = [];
 
-	public static function get_post_images( ?WP_Post $post ): array {
-		if ( ! $post ) {
+	public static function get_post_images( $post ): array {
+		// Cannot use type hint for function parameter
+		// because some plugins like SureCart changes queried object to StdClass instead of an instance of WP_Post.
+		if ( ! ( $post instanceof WP_Post ) ) {
 			return [];
 		}
 
