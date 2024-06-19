@@ -4,7 +4,7 @@ import { memo, useRef } from "@wordpress/element";
 
 const Image = ( property ) => {
 	const inputRef = useRef();
-	const { id, label, std, className = '', mediaPopupTitle } = property;
+	const { id, label, std, className = '', mediaPopupTitle, ...rest } = property;
 
 	const openMediaPopup = e => {
 		e.preventDefault();
@@ -24,7 +24,7 @@ const Image = ( property ) => {
 	};
 
 	return (
-		<Control className={ className } label={ label } id={ id }>
+		<Control className={ className } label={ label } id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
 				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } />
 				<Button icon="format-image" onClick={ openMediaPopup } className="ss-insert-image" />
