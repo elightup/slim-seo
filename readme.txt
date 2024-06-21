@@ -5,7 +5,7 @@ Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
 Tested up to: 6.5.4
 Requires PHP: 7.2
-Stable tag: 3.25.1
+Stable tag: 3.25.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -156,6 +156,9 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.25.2 - 2024-06-21 =
+- Fix error when getting post images for SureCart products
 
 = 3.25.1 - 2024-06-11 =
 - Fix typo in redirection module
