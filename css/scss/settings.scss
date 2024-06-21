@@ -5,6 +5,7 @@
 @use 'components/feature-box';
 
 /* General */
+
 .settings_page_slim-seo {
 	#wpcontent {
 		padding-left: 0;
@@ -16,6 +17,10 @@
 
 	#poststuff {
 		padding-top: 0;
+	}
+
+	.update-nag {
+		display: none;
 	}
 }
 
