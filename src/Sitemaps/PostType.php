@@ -134,11 +134,11 @@ class PostType {
 	private function output_news( WP_Post $post ): void {
 		echo "\t\t<news:news>\n";
 		echo "\t\t\t<news:publication>\n";
-		echo "\t\t\t\t<news:name>", esc_html( get_bloginfo( 'name' ) ),"</news:name>\n";
-		echo "\t\t\t\t<news:language>", esc_html( get_locale() ) ,"</news:language>\n";
+		echo "\t\t\t\t<news:name>", esc_html( get_bloginfo( 'name' ) ), "</news:name>\n";
+		echo "\t\t\t\t<news:language>", esc_html( $this->get_site_language() ), "</news:language>\n";
 		echo "\t\t\t</news:publication>\n";
-		echo "\t\t\t<news:publication_date>", esc_html( gmdate( 'c', strtotime( $post->post_date_gmt ) ) ),"</news:publication_date>\n";
-		echo "\t\t\t<news:title>", esc_html( $post->post_title ) ,"</news:title>\n";
+		echo "\t\t\t<news:publication_date>", esc_html( gmdate( 'c', strtotime( $post->post_date_gmt ) ) ), "</news:publication_date>\n";
+		echo "\t\t\t<news:title>", esc_html( $post->post_title ), "</news:title>\n";
 		echo "\t\t</news:news>\n";
 	}
 
@@ -179,5 +179,17 @@ class PostType {
 		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( date( 'Y-m-d' ) ) );
 
 		return $timestamp >= $two_days_ago_midnight;
+	}
+
+	private function get_site_language(): string {
+		$locale = get_locale();
+		$locale = str_replace( [ '-', '_' ], '-', strtolower( $locale ) );
+
+		// Exception: For Simplified Chinese, use zh-cn and for Traditional Chinese, use zh-tw.
+		if ( in_array( $locale, [ 'zh-cn', 'zh-tw' ], true ) ) {
+			return $locale;
+		}
+
+		return explode( '-', $locale )[0];
 	}
 }
