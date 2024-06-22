@@ -41,8 +41,16 @@ export class Input {
 	get value() {
 		return this.el ? normalize( this.el.value ) : '';
 	}
+	set value( newValue ) {
+		if ( this.el ) {
+			this.el.value = newValue;
+		}
+	}
+	on( event, callback ) {
+		this.el && this.el.addEventListener( event, callback );
+	}
 	onChange( callback ) {
-		this.el && this.el.addEventListener( 'input', callback );
+		this.on( 'input', callback );
 	}
 }
 
@@ -56,6 +64,8 @@ export class Field {
 
 		this.updateCounter = this.updateCounter.bind( this );
 		this.updatePreview = this.updatePreview.bind( this );
+		this.updateValueFromGenerated = this.updateValueFromGenerated.bind( this );
+		this.resetValueToGenerated = this.resetValueToGenerated.bind( this );
 	}
 	get generated() {
 		if ( !this.ref ) {
@@ -84,10 +94,18 @@ export class Field {
 	}
 	addEventListener() {
 		this.input.onChange( this.updateCounter );
+		this.input.on( 'focus', this.updateValueFromGenerated );
+		this.input.on( 'blur', this.resetValueToGenerated );
 		if ( this.ref ) {
 			this.ref.onChange( this.updateCounter );
 			this.ref.onChange( this.updatePreview );
 		}
+	}
+	updateValueFromGenerated() {
+		this.input.value = this.input.value || this.generated;
+	}
+	resetValueToGenerated() {
+		this.input.value = this.input.value === this.generated ? '' : this.input.value;
 	}
 	init() {
 		if ( !this.input.el ) {
