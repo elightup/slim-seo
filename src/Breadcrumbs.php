@@ -48,19 +48,19 @@ class Breadcrumbs {
 			return '';
 		}
 
-		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
+		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s">', __( 'Breadcrumbs', 'slim-seo' ) );
 
 		// Links.
 		$items    = [];
 		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
-			$items[] = sprintf( $template, esc_url( $item['url'] ), $class, esc_html( wp_strip_all_tags( $item['text'] ) ), $i + 1 );
+			$items[] = sprintf( $template, $item['url'], $class, $item['text'], $i + 1 );
 		}
 
 		// Current page.
 		if ( 'true' === $this->args['display_current'] ) {
-			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', esc_html( wp_strip_all_tags( $this->current ) ) );
+			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', $this->current );
 		}
 
 		$output .= implode( " <span class='breadcrumbs__separator' aria-hidden='true'>{$this->args['separator']}</span> ", $items );
