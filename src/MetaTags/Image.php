@@ -32,6 +32,13 @@ class Image {
 			return $this->get_data_from_url( $data[ $this->meta_key ] );
 		}
 
+		// Get from SEO Post Types settings.
+		$option = get_option( 'slim_seo', [] );
+		$post_type_object = get_queried_object();
+		if ( isset( $option[ $post_type_object->post_type ][ $this->meta_key ] ) ) {
+			return  $this->get_data_from_url( $option[ $post_type_object->post_type ][ $this->meta_key ] );
+		}
+
 		// Get from thumbnail or content.
 		$images = Images::get_post_images( $this->get_queried_object() );
 		if ( empty( $images ) ) {
@@ -50,6 +57,7 @@ class Image {
 
 	public function get_data_from_url( $url ): array {
 		$id = Images::get_id_from_url( $url );
+
 		return $id ? $this->get_data( $id ) : [
 			'src' => $url,
 		];

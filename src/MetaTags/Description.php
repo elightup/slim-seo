@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimTwig\Renderer;
+
 class Description {
 	use Context;
 
@@ -20,6 +22,7 @@ class Description {
 
 	public function output() {
 		$description = $this->get_description();
+
 		if ( $description ) {
 			echo '<meta name="description" content="', esc_attr( $description ), '">', "\n";
 		}
@@ -28,9 +31,17 @@ class Description {
 	public function get_description(): string {
 		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, get_queried_object_id() );
+		$description = $this->render_variable( $description );
 		$description = $this->normalize( $description );
 
 		return $description;
+	}
+
+	private function render_variable( string $description ): string {
+		$renderer = new Renderer;
+		$data = Helper::get_data();
+
+		return $renderer->render( $description, $data );
 	}
 
 	private function normalize( string $description ): string {
@@ -77,6 +88,13 @@ class Description {
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
 			return $data['description'];
+		}
+
+		// Use Post Types settings if avaiable
+		$option = get_option( 'slim_seo', [] );
+		$post_type_object = get_queried_object();
+		if ( isset( $option[ $post_type_object->post_type ]['description'] ) ) {
+			return  $option[ $post_type_object->post_type ]['description'];
 		}
 
 		// Use post excerpt if available.

@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimTwig\Renderer;
+
 class Title {
 	use Context;
 
@@ -29,9 +31,17 @@ class Title {
 
 		$title = $custom_title ?: (string) $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
+		$title = $this->render_variable( $title );
 		$title = Helper::normalize( $title );
 
 		return $title;
+	}
+
+	private function render_variable( string $title ): string {
+		$renderer = new Renderer;
+		$data = Helper::get_data();
+
+		return $renderer->render( $title, $data );
 	}
 
 	private function get_home_value(): string {
@@ -52,7 +62,15 @@ class Title {
 	public function get_singular_value( $post_id = 0 ): string {
 		$post_id = $post_id ?: $this->get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
-		return $data['title'] ?? '';
+		if ( ! empty( $data['title'] ) ) {
+			return $data['title'];
+		}
+
+		$option = get_option( 'slim_seo', [] );
+		$post_type_object = get_queried_object();
+		if ( ! empty( $option[ $post_type_object->post_type ]['title'] ) ) {
+			return  $option[ $post_type_object->post_type ]['title'];
+		}
 	}
 
 	/**
