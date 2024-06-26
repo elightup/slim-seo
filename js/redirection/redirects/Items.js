@@ -1,27 +1,18 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import Paginate from '../components/Paginate';
 import { fetcher, useApi } from '../helper/misc';
 import Header from './Header';
 import Item from './Item';
+import Limit from '../components/Limit';
+import Paginate from '../components/Paginate';
 
 const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulkAction } ) => {
-	const LIMIT = 20;
+	const [ limit, setLimit ] = useState( 20 );
 	const [ offset, setOffset ] = useState( 0 );
 	const [ checkedList, setCheckedList ] = useState( [] );
 	const [ isCheckAll, setIsCheckAll ] = useState( false );
 	const [ remountPaginate, setRemountPaginate ] = useState( 0 );
 	const { result: redirects, mutate } = useApi( 'redirects', {}, { returnMutate: true } );
-
-	const checkAll = () => {
-		setIsCheckAll( !isCheckAll );
-
-		if ( isCheckAll ) {
-			setCheckedList( [] );
-		} else {
-			setCheckedList( redirects.map( redirect => redirect.id ) );
-		}
-	};
 
 	const deleteRedirects = ( ids = [] ) => {
 		fetcher( 'delete_redirects', { ids }, 'POST' ).then( result => {
@@ -80,10 +71,20 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 		filteredRedirects = filteredRedirects.filter( redirect => redirect.type == redirectType );
 	}
 
+	const checkAll = () => {
+		setIsCheckAll( !isCheckAll );
+
+		if ( isCheckAll ) {
+			setCheckedList( [] );
+		} else {
+			setCheckedList( filteredRedirects.slice( offset, offset + limit ).map( redirect => redirect.id ) );
+		}
+	};
+
 	if ( !filteredRedirects.length ) {
 		return <span>{ __( 'No redirects found.', 'slim-seo' ) }</span>;
 	}
-
+	
 	return (
 		<>
 			<table className='ss-table'>
@@ -92,7 +93,7 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 				</thead>
 
 				<tbody>
-					{ filteredRedirects.slice( offset, offset + LIMIT ).map( redirect => <Item key={ redirect.id } redirectItem={ redirect } checkedList={ checkedList } setCheckedList={ setCheckedList } deleteRedirects={ deleteRedirects } updateRedirects={ updateRedirects } /> ) }
+					{ filteredRedirects.slice( offset, offset + limit ).map( redirect => <Item key={ redirect.id } redirectItem={ redirect } checkedList={ checkedList } setCheckedList={ setCheckedList } deleteRedirects={ deleteRedirects } updateRedirects={ updateRedirects } /> ) }
 				</tbody>
 
 				<tfoot>
@@ -100,7 +101,10 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 				</tfoot>
 			</table>
 
-			<Paginate key={ remountPaginate } totalRows={ filteredRedirects.length } limit={ LIMIT } setOffset={ setOffset } />
+			<div className='ss-redirects-footer'>
+				<Limit limit={ limit } setLimit={ setLimit } total={ filteredRedirects.length } setOffset={ setOffset } setIsCheckAll={ setIsCheckAll } setCheckedList={ setCheckedList } />
+				<Paginate key={ remountPaginate } totalRows={ filteredRedirects.length } limit={ limit } offset={ offset } setOffset={ setOffset } setIsCheckAll={ setIsCheckAll } setCheckedList={ setCheckedList } />
+			</div>			
 		</>
 	);
 };

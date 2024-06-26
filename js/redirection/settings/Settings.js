@@ -1,6 +1,6 @@
 import { RawHTML, useReducer, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { Tooltip } from '../helper/misc';
+import { Tooltip, fetcher } from '../helper/misc';
 
 const Settings = () => {
 	const { settings, settingsName } = SSRedirection;
@@ -12,6 +12,20 @@ const Settings = () => {
 	const [ deleteLog404Table, toggleDeleteLog404Table ] = useReducer( onOrOff => !onOrOff, false );
 	const [ redirect404To, setRedirect404To ] = useState( settings[ 'redirect_404_to' ] );
 	const [ redirect404ToURL, setRedirect404ToURL ] = useState( settings[ 'redirect_404_to_url' ] );
+
+	const deleteAllRedirects = e => {
+		e.preventDefault();
+
+		if ( ! confirm( __( 'Are you sure to delete all redirects?', 'slim-seo' ) ) ) {
+			return;
+		}
+
+		fetcher( 'delete_redirects', { ids: 'all' }, 'POST' ).then( result => {
+			if ( result ) {
+				location.reload();
+			}
+		} );
+	};
 
 	return (
 		<>
@@ -129,6 +143,16 @@ const Settings = () => {
 								'custom' === redirect404To
 								&& <input type='text' className='regular-text' name={ `${ settingsName }[redirect_404_to_url]` } value={ redirect404ToURL } onChange={ e => setRedirect404ToURL( e.target.value.trim() ) } />
 							}
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label htmlFor="ss-delete-all-redirects">{ __( 'Delete redirects', 'slim-seo' ) }</label>
+							<Tooltip content={ __( 'Delete all redirects', 'slim-seo' ) } />
+						</th>
+						<td>
+							<button id="ss-delete-all-redirects" className='button button-secondary' onClick={ deleteAllRedirects }>{ __( 'Delete', 'slim-seo' ) }</button>
 						</td>
 					</tr>
 				</tbody>
