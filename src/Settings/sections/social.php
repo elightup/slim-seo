@@ -7,7 +7,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" autocomplete="autocomplete_off_randString" id="ss-default-facebook-image" name="slim_seo[default_facebook_image]" value="<?= esc_attr( $data['default_facebook_image'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_facebook" id="ss-default-facebook-image" name="slim_seo[default_facebook_image]" value="<?= esc_attr( $data['default_facebook_image'] ); ?>">
 			<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 		</div>
 		<p class="description">
@@ -22,7 +22,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" autocomplete="autocomplete_off_randString" id="ss-default-twitter-image" name="slim_seo[default_twitter_image]" value="<?= esc_attr( $data['default_twitter_image'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_twitter" id="ss-default-twitter-image" name="slim_seo[default_twitter_image]" value="<?= esc_attr( $data['default_twitter_image'] ); ?>">
 			<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 		</div>
 		<p class="description">
@@ -40,7 +40,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" autocomplete="autocomplete_off_randString" id="ss-facebook-app-id" name="slim_seo[facebook_app_id]" value="<?= esc_attr( $data['facebook_app_id'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_faceapp" id="ss-facebook-app-id" name="slim_seo[facebook_app_id]" value="<?= esc_attr( $data['facebook_app_id'] ); ?>">
 		</div>
 	</div>
 </div>
@@ -51,7 +51,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" autocomplete="autocomplete_off_randString" id="ss-twitter-site" name="slim_seo[twitter_site]" value="<?= esc_attr( $data['twitter_site'] ); ?>" placeholder="@account_name">
+			<input type="text" autocomplete="autocomplete_off_twitsite" id="ss-twitter-site" name="slim_seo[twitter_site]" value="<?= esc_attr( $data['twitter_site'] ); ?>" placeholder="@account_name">
 		</div>
 	</div>
 </div>
