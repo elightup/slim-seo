@@ -7,7 +7,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" id="ss-default-facebook-image" name="slim_seo[default_facebook_image]" value="<?= esc_attr( $data['default_facebook_image'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_randString" id="ss-default-facebook-image" name="slim_seo[default_facebook_image]" value="<?= esc_attr( $data['default_facebook_image'] ); ?>">
 			<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 		</div>
 		<p class="description">
@@ -22,7 +22,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" id="ss-default-twitter-image" name="slim_seo[default_twitter_image]" value="<?= esc_attr( $data['default_twitter_image'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_randString" id="ss-default-twitter-image" name="slim_seo[default_twitter_image]" value="<?= esc_attr( $data['default_twitter_image'] ); ?>">
 			<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
 		</div>
 		<p class="description">
