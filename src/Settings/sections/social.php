@@ -40,7 +40,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" autocomplete="autocomplete_off_faceapp" id="ss-facebook-app-id" name="slim_seo[facebook_app_id]" value="<?= esc_attr( $data['facebook_app_id'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_facebook_app" id="ss-facebook-app-id" name="slim_seo[facebook_app_id]" value="<?= esc_attr( $data['facebook_app_id'] ); ?>">
 		</div>
 	</div>
 </div>
@@ -51,7 +51,7 @@
 	</div>
 	<div class="ss-input">
 		<div class="ss-input-group">
-			<input type="text" autocomplete="autocomplete_off_twitsite" id="ss-twitter-site" name="slim_seo[twitter_site]" value="<?= esc_attr( $data['twitter_site'] ); ?>" placeholder="@account_name">
+			<input type="text" autocomplete="autocomplete_off_twitter_site" id="ss-twitter-site" name="slim_seo[twitter_site]" value="<?= esc_attr( $data['twitter_site'] ); ?>" placeholder="@account_name">
 		</div>
 	</div>
 </div>
