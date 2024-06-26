@@ -74,6 +74,7 @@ class Bricks {
 
 			// WP Grid Builder.
 			'wpgb-facet',
+			'jet-engine-listing-grid',
 		] );
 
 		return array_filter( $data, function ( $element ) use ( $skipped_elements ) {
