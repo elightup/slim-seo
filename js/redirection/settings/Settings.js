@@ -148,11 +148,10 @@ const Settings = () => {
 
 					<tr>
 						<th scope="row">
-							<label htmlFor="ss-delete-all-redirects">{ __( 'Delete redirects', 'slim-seo' ) }</label>
-							<Tooltip content={ __( 'Delete all redirects', 'slim-seo' ) } />
+							<label htmlFor="ss-delete-all-redirects">{ __( 'Delete all redirects', 'slim-seo' ) }</label>
 						</th>
 						<td>
-							<button id="ss-delete-all-redirects" className='button button-secondary' onClick={ deleteAllRedirects }>{ __( 'Delete', 'slim-seo' ) }</button>
+							<button id="ss-delete-all-redirects" className='button button-link-delete' onClick={ deleteAllRedirects }>{ __( 'Delete', 'slim-seo' ) }</button>
 						</td>
 					</tr>
 				</tbody>
