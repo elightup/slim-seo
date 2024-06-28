@@ -25,6 +25,7 @@ abstract class Base {
 		wp_localize_script( 'slim-seo-post-type', 'ssPostTypes', [
 			'rest'            => untrailingslashit( rest_url() ),
 			'nonce'           => wp_create_nonce( 'wp_rest' ),
+			'title'           => $this->title,
 			'metadata'        => get_metadata( $this->object_type, get_the_ID(), 'slim_seo', true ),
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
 		] );
@@ -71,6 +72,7 @@ abstract class Base {
 		}
 
 		$data = $this->sanitize( $data );
+
 		if ( empty( $data ) ) {
 			delete_metadata( $this->object_type, $object_id, 'slim_seo' );
 		} else {
