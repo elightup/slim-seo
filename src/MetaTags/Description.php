@@ -91,10 +91,10 @@ class Description {
 		}
 
 		// Use Post Types settings if avaiable
-		$option = get_option( 'slim_seo', [] );
-		$post_type_object = get_queried_object();
-		if ( isset( $option[ $post_type_object->post_type ]['description'] ) ) {
-			return  $option[ $post_type_object->post_type ]['description'];
+		$option    = get_option( 'slim_seo', [] );
+		$post_type = get_post_type( $post_id );
+		if ( isset( $option[ $post_type ]['description'] ) ) {
+			return  $option[ $post_type ]['description'];
 		}
 
 		// Use post excerpt if available.

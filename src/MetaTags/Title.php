@@ -66,10 +66,10 @@ class Title {
 			return $data['title'];
 		}
 
-		$option = get_option( 'slim_seo', [] );
-		$post_type_object = get_queried_object();
-		if ( ! empty( $option[ $post_type_object->post_type ]['title'] ) ) {
-			return  $option[ $post_type_object->post_type ]['title'];
+		$option    = get_option( 'slim_seo', [] );
+		$post_type = get_post_type( $post_id );
+		if ( ! empty( $option[ $post_type ]['title'] ) ) {
+			return  $option[ $post_type ]['title'];
 		}
 	}
 
