@@ -32,6 +32,7 @@ class Container {
 		$services['meta_tags_manager'] = new Settings\MetaTags\Manager;
 		$services['settings']          = new Settings\Settings( $services['meta_tags_manager'] );
 		$services['code']              = new Code( $services['settings'] );
+		$services['post_types']        = new Settings\PostTypes\Loader;
 
 		$services['redirection'] = new Redirection\Loader;
 		$services['breadcrumbs'] = new Breadcrumbs;
