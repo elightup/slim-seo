@@ -13,7 +13,7 @@ class CanonicalUrl {
 
 	public function output(): void {
 		$url = $this->get_url();
-		if ( $url ) {
+		if ( $url && filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			echo '<link rel="canonical" href="', esc_url( $url ), '">', "\n";
 		}
 	}
