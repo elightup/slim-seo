@@ -65,6 +65,12 @@ class Redirects extends Base {
 	public function delete_redirects( WP_REST_Request $request ): bool {
 		$ids = $request->get_param( 'ids' );
 
+		if ( 'all' === $ids ) {
+			$this->db_redirects->delete_all();
+
+			return true;
+		}
+
 		$this->db_redirects->delete( $ids );
 
 		return true;

@@ -22,6 +22,11 @@
 	.update-nag {
 		display: none;
 	}
+
+	.button-link-delete,
+	.button-link-delete:hover {
+		border-color: currentColor;
+	}
 }
 
 .ss-content {

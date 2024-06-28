@@ -1,25 +1,34 @@
 import { __ } from '@wordpress/i18n';
 import ReactPaginate from 'react-paginate';
 
-const Paginate = ( { totalRows, limit, setOffset } ) => {
+const Paginate = ( { totalRows, limit, offset, setOffset, setIsCheckAll, setCheckedList } ) => {
 	const pageCount = Math.ceil( totalRows / limit );
 
 	const handlePageClick = e => {
 		const newOffset = ( e.selected * limit ) % totalRows;
 		setOffset( newOffset );
+		setIsCheckAll( false );
+		setCheckedList( [] );
 	};
 
 	return pageCount > 1 && (
-		<ReactPaginate
-			className='ss-paginate'
-			breakLabel='...'
-			nextLabel={ __( 'Next »', 'slim-seo' ) }
-			onPageChange={ handlePageClick }
-			pageRangeDisplayed={ 5 }
-			pageCount={ pageCount }
-			previousLabel={ __( '« Previous', 'slim-seo' ) }
-			renderOnZeroPageCount={ null }
-		/>
+		<div className='ss-paginate'>
+			<ReactPaginate
+				breakLabel='...'
+				nextLabel='»'
+				onPageChange={ handlePageClick }
+				pageRangeDisplayed={ 3 }
+				pageCount={ pageCount }
+				previousLabel='«'
+				renderOnZeroPageCount={ null }
+				forcePage={ offset / limit }
+				pageLinkClassName="button"
+				previousLinkClassName="button"
+				nextLinkClassName="button"
+				breakLinkClassName="button"
+				activeLinkClassName="button-primary"
+			/>
+		</div>
 	);
 };
 

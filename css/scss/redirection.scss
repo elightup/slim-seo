@@ -137,21 +137,22 @@
 	}
 }
 
-.ss-paginate {
+.ss-redirects-footer {
 	display: flex;
-	justify-content: center;
-	gap: 20px;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px;
+	
+	.ss-paginate {
+		ul {
+			margin: 0;
+			display: flex;
+			gap: 4px;
 
-	.disabled {
-		display: none;
-	}
-
-	.selected a {
-		color: inherit;
-	}
-
-	a {
-		cursor: pointer;
+			.disabled {
+				display: none!important;
+			}
+		}
 	}
 }
 

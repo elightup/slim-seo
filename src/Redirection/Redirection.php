@@ -40,7 +40,7 @@ class Redirection {
 				$current_url = rtrim( $url_parts[0], '/' );
 			}
 
-			$from            = $redirect['from'];
+			$from            = Helper::normalize_url( $redirect['from'], false );
 			$to              = $redirect['to'];
 			$should_redirect = false;
 

@@ -109,6 +109,10 @@ class ExportImport extends Base {
 
 			$added = true;
 
+			$redirect['from'] = Helper::normalize_url( $redirect['from'], false );
+			$redirect['to']   = Helper::normalize_url( $redirect['to'], true, true, false );
+			$redirect['note'] = sanitize_text_field( $redirect['note'] );
+
 			$redirects[ uniqid() ] = $redirect;
 		}
 
