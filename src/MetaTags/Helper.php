@@ -67,4 +67,30 @@ class Helper {
 		] );
 		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
 	}
+
+	public static function get_data(): array {
+		$data_object = new Data;
+		return $data_object->collect();
+	}
+
+	public static function get_taxonomies() {
+		$unsupported = [
+			'wp_theme',
+			'wp_template_part_area',
+			'link_category',
+			'nav_menu',
+			'post_format',
+			'mb-views-category',
+		];
+		$taxonomies  = get_taxonomies( [], 'objects' );
+		$taxonomies  = array_diff_key( $taxonomies, array_flip( $unsupported ) );
+		$taxonomies  = array_map( function( $taxonomy ) {
+			return [
+				'slug' => $taxonomy->name,
+				'name' => $taxonomy->label,
+			];
+		}, $taxonomies );
+
+		return array_values( $taxonomies );
+	}
 }
