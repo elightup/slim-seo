@@ -3,7 +3,7 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
-Tested up to: 6.5.4
+Tested up to: 6.5.5
 Requires PHP: 7.2
 Stable tag: 3.25.2
 License: GPL v3
@@ -156,6 +156,14 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 3.25.3 - 2024-07-01 =
+- Add settings for delete all redirects (under Redirection > Settings tab) and add settings for numbers of redirects per page
+- Allow to edit auto-generated meta tags when focusing on inputs
+- Allow to use SVG in breadcrumb Home label & separator
+- Fix conflict with JetEngine and Bricks
+- Disable autocomplete for social settings
+- Fix wrong language code for news sitemap
 
 = 3.25.2 - 2024-06-21 =
 - Fix error when getting post images for SureCart products
