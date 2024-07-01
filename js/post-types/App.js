@@ -1,5 +1,5 @@
-import { render, useEffect ,useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { render, useEffect ,useState, RawHTML } from '@wordpress/element';
+import { sprintf, __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { request } from "./functions";
 import PostType from "./components/PostType";
@@ -42,13 +42,14 @@ const App = () => {
 const UnablePostType = ( { id, postType } ) => {
 	const { link, title } = postType;
 
-	return <>
-		<span>{ __( 'You have a page ','slim-seo' ) }</span>
-		<a href={ link } target="_blank" rel="noopener noreferrer">{ title } </a>
-		<span>{ __( ` that has the same slug as the post type archive slug. So WordPress will set it as the archive page for the `,'slim-seo' ) }</span>
-		<code>{ id }</code>
-		<span>{ __( ` post type.`,'slim-seo' ) }</span>
-	</>;
+	return <RawHTML>{
+		sprintf(
+			__( 'You have a page <a href="%s">%s</a> that has the same slug as the post type archive slug. So WordPress will set it as the archive page for the <code> %s </code> post type.', 'slim-seo' ),
+			link,
+			title,
+			id
+		)
+	}</RawHTML>;
 }
 
 render( <App />, document.getElementById( 'ss-post-types' ) );

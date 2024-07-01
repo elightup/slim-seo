@@ -79,21 +79,22 @@ class Settings {
 			wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
 		}
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
-		wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
+		if ( $this->meta_tags_manager->get_post_types() ) {
+			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
+			wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
+				'rest'            => untrailingslashit( rest_url() ),
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'postTypes'       => $this->meta_tags_manager->get_post_types(),
+				'unablePostTypes' => $this->get_post_types_with_archive_page(),
+				'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
+			] );
+		}
 
 		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], filemtime( SLIM_SEO_DIR . '/js/migrate.js' ), true );
 		wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
 			'nonce'          => wp_create_nonce( 'migrate' ),
 			'doneText'       => __( 'Done!', 'slim-seo' ),
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
-		] );
-
-		wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
-			'rest'            => untrailingslashit( rest_url() ),
-			'nonce'           => wp_create_nonce( 'wp_rest' ),
-			'postTypes'       => $this->meta_tags_manager->get_post_types(),
-			'unablePostTypes' => $this->get_post_types_with_archive_page(),
-			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
 		] );
 
 		$this->meta_tags_manager->enqueue();
@@ -144,11 +145,11 @@ class Settings {
 		return ob_get_clean();
 	}
 
-	private function get_post_types_with_archive_page() {
+	private function get_post_types_with_archive_page(): array {
 		$post_types = $this->meta_tags_manager->get_post_types();
 
 		if ( ! $post_types ) {
-			return;
+			return [];
 		}
 
 		$archive = [];
@@ -156,9 +157,8 @@ class Settings {
 			$archive_page = Data::get_post_type_archive_page( $key );
 			if ( $archive_page ) {
 				$archive[ $key ] = [
-					'link'       => get_permalink( $archive_page ),
-					'title' => $archive_page->post_title,
-				];
+					'link'    => get_permalink( $archive_page ),
+					'title'   => $archive_page->post_title,
 			}
 		}
 

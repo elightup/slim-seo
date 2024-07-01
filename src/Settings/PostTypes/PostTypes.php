@@ -1,12 +1,16 @@
 <?php
-namespace SlimSEO\Settings\PostTypes\Api;
+namespace SlimSEO\Settings\PostTypes;
 use WP_REST_Server;
 use WP_REST_Request;
 
 use SlimSEO\Helpers\Data;
 use MetaBox;
 
-class PostTypes extends Base {
+class PostTypes {
+	public function setup() {
+		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+	}
+
 	public function register_routes() {
 		register_rest_route( 'slim-seo-post-types', 'post_types', [
 			'methods'             => WP_REST_Server::READABLE,
@@ -19,6 +23,10 @@ class PostTypes extends Base {
 			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+	}
+
+	public function has_permission() {
+		return current_user_can( 'manage_options' );
 	}
 
 	public function get_post_types( WP_REST_Request $request ): array {
