@@ -1,10 +1,9 @@
 <?php
-namespace SlimSEO\Settings\PostTypes;
+namespace SlimSEO\Settings;
+
 use WP_REST_Server;
 use WP_REST_Request;
-
 use SlimSEO\Helpers\Data;
-use MetaBox;
 
 class PostTypes {
 	public function setup() {
