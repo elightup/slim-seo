@@ -9,10 +9,12 @@ export const request = async ( apiName, params = {}, method = 'GET', cache = tru
 		return apiCache[ cacheKey ];
 	}
 
-	let url = `${ ssPostTypes.rest }/slim-seo-post-types/${ apiName }`;
 	apiFetch.use( apiFetch.createNonceMiddleware( ssPostTypes.nonce ) );
+	const result = await apiFetch( {
+		url: addQueryArgs( `${ ssPostTypes.rest }/slim-seo-post-types/${ apiName }` , params ),
+		method: method
+	} );
 
-	const result = await apiFetch( { url: addQueryArgs( url, params), method: method } );
 	apiCache[ cacheKey ] = result;
 	return result;
 };

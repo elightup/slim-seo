@@ -155,8 +155,9 @@ class Settings {
 			$archive_page = Data::get_post_type_archive_page( $key );
 			if ( $archive_page ) {
 				$archive[ $key ] = [
-					'link'    => get_permalink( $archive_page ),
-					'title'   => $archive_page->post_title,
+					'link'  => get_permalink( $archive_page ),
+					'title' => $archive_page->post_title,
+					'edit'  => get_edit_post_link( $archive_page ),
 				];
 			}
 		}

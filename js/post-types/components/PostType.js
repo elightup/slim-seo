@@ -1,4 +1,5 @@
 import { __, sprintf } from "@wordpress/i18n";
+import UnablePostTypeArchive from "./Fields/UnablePostTypeArchive";
 import Checkbox from "./Fields/Checkbox";
 import Image from "./Fields/Image";
 import Text from "./Fields/Text";
@@ -50,13 +51,20 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 			option={ option }
 			label={ sprintf( __( 'Singular %s page', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
 		/>
-		{ postType.has_archive &&
-			<Block
-				baseName={ baseNameArchive }
-				option={ optionArchive }
-				label={ sprintf( __( '%s archive page', 'slim-seo' ), postType.labels.singular_name ) }
-				archive={ true }
-			/>
+		{
+			ssPostTypes.unablePostTypes.hasOwnProperty( id )
+			?   <UnablePostTypeArchive
+					id={ id }
+					postType={ ssPostTypes.unablePostTypes[ id ] }
+					label={ sprintf( __( '%s archive page', 'slim-seo' ), postType.labels.singular_name ) }
+				/>
+			:   postType.has_archive &&
+				<Block
+					baseName={ baseNameArchive }
+					option={ optionArchive }
+					label={ sprintf( __( '%s archive page', 'slim-seo' ), postType.labels.singular_name ) }
+					archive={ true }
+				/>
 		}
 	</>;
 };
