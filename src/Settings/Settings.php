@@ -159,6 +159,7 @@ class Settings {
 				$archive[ $key ] = [
 					'link'    => get_permalink( $archive_page ),
 					'title'   => $archive_page->post_title,
+				];
 			}
 		}
 
