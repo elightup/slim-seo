@@ -118,31 +118,8 @@
 .tippy-tooltip {
 	text-align: left;
 }
-/*PostTypes*/
-.ss-vertical-tabs {
-	display: flex;
-	.react-tabs__tab-list {
-		flex-direction: column;
-		align-items: start;
-		min-width: 120px;
-		margin-right: 16px;
-		li.react-tabs__tab {
-			padding: 10px 0;
-			border-right: 0;
-			margin: 0;
-		}
-	}
-	.react-tabs__tab-panel {
-		flex: 1
-	}
-}
 
 /* Misc */
-.ss-none{
-	padding: 16px;
-	border-bottom: 1px solid var(--ss-color-lighter);
-}
-
 p.submit {
 	margin-bottom: 0;
 	padding-bottom: 0;
