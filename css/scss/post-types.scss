@@ -1,0 +1,71 @@
+@import '../../node_modules/@elightup/form/style/form.scss';
+
+#post-types {
+	padding: 0;
+}
+
+#ss-post-types>.button {
+	margin: 24px;
+}
+
+.ss-vertical-tabs {
+	display: flex;
+	border-bottom: var(--ss-border-lighter);
+
+	.react-tabs__tab-list {
+		flex-direction: column;
+		align-items: stretch;
+		min-width: 180px;
+		border-right: var(--ss-border-lighter);
+		margin: 0;
+
+		li.react-tabs__tab {
+			line-height: 1.3;
+			padding: 12px 24px;
+			border-right: 0;
+			border-bottom: var(--ss-border-lighter);
+			margin: 0;
+		}
+
+		.react-tabs__tab--selected {
+			background: var(--ss-color-lighter);
+		}
+	}
+
+	.react-tabs__tab-panel {
+		flex: 1;
+		padding: 24px;
+	}
+}
+
+.ef-control__description {
+	color: var(--ss-color-gray);
+}
+
+.ss-insert-image {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.ef-control .ss-insert-image {
+	box-sizing: border-box;
+	height: 100%;
+	color: var(--ss-color-gray);
+
+	.dashicons {
+		font-size: 16px;
+		width: 16px;
+		height: 16px;
+	}
+
+	&:focus:not(:disabled) {
+		box-shadow: none;
+	}
+}
+
+.ss-input-wrapper {
+	flex: 1;
+	position: relative;
+}

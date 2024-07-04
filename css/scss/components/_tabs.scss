@@ -48,4 +48,10 @@
 	> :first-child {
 		margin-top: 0;
 	}
+
+	> .submit.submit {
+		margin-inline: -24px;
+		padding: 24px 24px 0 24px;
+		border-top: var(--ss-border-lighter);
+	}
 }

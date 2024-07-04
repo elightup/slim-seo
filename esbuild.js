@@ -14,7 +14,8 @@ const config = {
 			'@wordpress/i18n': 'wp.i18n',
 			'@wordpress/element': 'wp.element',
 			'@wordpress/components': 'wp.components',
-			'@wordpress/hooks': 'wp.hooks'
+			'@wordpress/hooks': 'wp.hooks',
+			'@wordpress/api-fetch': 'wp.apiFetch'
 		} ),
 	],
 };
@@ -30,6 +31,13 @@ esbuild.build( {
 	...config,
 	entryPoints: [ 'js/meta-tags/src/settings.js' ],
 	outfile: 'js/meta-tags/dist/settings.js'
+} );
+
+
+esbuild.build( {
+	...config,
+	entryPoints: [ 'js/post-types/App.js' ],
+	outfile: 'js/post-types.js'
 } );
 
 esbuild.build( {
