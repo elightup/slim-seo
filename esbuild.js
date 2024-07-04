@@ -14,7 +14,8 @@ const config = {
 			'@wordpress/i18n': 'wp.i18n',
 			'@wordpress/element': 'wp.element',
 			'@wordpress/components': 'wp.components',
-			'@wordpress/hooks': 'wp.hooks'
+			'@wordpress/hooks': 'wp.hooks',
+			'@wordpress/api-fetch': 'wp.apiFetch'
 		} ),
 	],
 };

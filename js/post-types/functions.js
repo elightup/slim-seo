@@ -1,18 +1,29 @@
 import { addQueryArgs } from '@wordpress/url';
+import apiFetch from '@wordpress/api-fetch';
 
 let apiCache = {};
 
-export const request = async ( apiName, params = {}, method = 'GET', cache = true ) => {
-	const cacheKey = JSON.stringify( { apiName, params, method } );
+export const request = async ( apiName, data = {}, method = 'GET', cache = true ) => {
+	const cacheKey = JSON.stringify( { apiName, data, method } );
 	if ( cache && apiCache[ cacheKey ] ) {
 		return apiCache[ cacheKey ];
 	}
 
-	const result = await wp.apiFetch( {
-		path: addQueryArgs( `/slim-seo/${ apiName }` , params ),
-		method: method
-	} );
+	let options;
 
+	if ( method === 'GET' ) {
+		options = {
+			path: addQueryArgs( `/slim-seo/${ apiName }`, data ),
+		};
+	} else {
+		options = {
+			path: `/slim-seo/${ apiName }`,
+			method,
+			data,
+		}
+	}
+
+	const result = await apiFetch( options );
 	apiCache[ cacheKey ] = result;
 	return result;
 };
