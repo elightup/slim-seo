@@ -2,8 +2,6 @@
 namespace SlimSEO\Settings;
 
 use WP_REST_Server;
-use WP_REST_Request;
-use SlimSEO\Helpers\Data;
 
 class PostTypes {
 	public function setup() {
@@ -11,7 +9,7 @@ class PostTypes {
 	}
 
 	public function register_routes() {
-		register_rest_route( 'slim-seo-post-types/v1', '/option', [
+		register_rest_route( 'slim-seo', '/post-types-option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
@@ -22,7 +20,7 @@ class PostTypes {
 		return current_user_can( 'manage_options' );
 	}
 
-	public function get_option( WP_REST_Request $request ): array {
+	public function get_option(): array {
 		$exclude = array_fill_keys( [
 			'home',
 			'auto_redirection',

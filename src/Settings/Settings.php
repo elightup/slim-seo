@@ -79,9 +79,9 @@ class Settings {
 			wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
 			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
 			wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
-				'postTypes'               => $this->meta_tags_manager->get_post_types(),
-				'postTypeWithArchivePage' => $this->get_post_types_with_archive_page(),
-				'mediaPopupTitle'         => __( 'Select An Image', 'slim-seo-schema' ),
+				'postTypes'                => $this->meta_tags_manager->get_post_types(),
+				'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
+				'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo-schema' ),
 			] );
 		}
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );

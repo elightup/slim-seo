@@ -9,7 +9,7 @@ export const request = async ( apiName, params = {}, method = 'GET', cache = tru
 	}
 
 	const result = await wp.apiFetch( {
-		path: addQueryArgs( `/slim-seo-post-types/v1/${ apiName }` , params ),
+		path: addQueryArgs( `/slim-seo/${ apiName }` , params ),
 		method: method
 	} );
 

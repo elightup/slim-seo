@@ -8,7 +8,7 @@ const App = () => {
 	const [ option, setOption ] = useState( [] );
 
 	useEffect( () => {
-		request( 'option' ).then( setOption );
+		request( 'post-types-option' ).then( setOption );
 	}, [] );
 
 	return <>
