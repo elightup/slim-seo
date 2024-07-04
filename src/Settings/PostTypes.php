@@ -14,8 +14,12 @@ class PostTypes {
 		register_rest_route( 'slim-seo-post-types/v1', '/option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
-			'permission_callback' => 'is_user_logged_in',
+			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+	}
+
+	public function has_permission() {
+		return current_user_can( 'manage_options' );
 	}
 
 	public function get_option( WP_REST_Request $request ): array {

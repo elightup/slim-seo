@@ -77,7 +77,7 @@ class Settings {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
 		if ( $this->meta_tags_manager->get_post_types() ) {
 			wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
-			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
+			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
 			wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
 				'rest'                    => untrailingslashit( rest_url() ),
 				'nonce'                   => wp_create_nonce( 'wp_rest' ),

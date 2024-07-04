@@ -1,4 +1,3 @@
-import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 
 let apiCache = {};
@@ -9,9 +8,8 @@ export const request = async ( apiName, params = {}, method = 'GET', cache = tru
 		return apiCache[ cacheKey ];
 	}
 
-	apiFetch.use( apiFetch.createNonceMiddleware( ssPostTypes.nonce ) );
-	const result = await apiFetch( {
-		url: addQueryArgs( `/wp-json/slim-seo-post-types/v1/${ apiName }` , params ),
+	const result = await wp.apiFetch( {
+		path: addQueryArgs( `/slim-seo-post-types/v1/${ apiName }` , params ),
 		method: method
 	} );
 
