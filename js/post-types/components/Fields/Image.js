@@ -19,7 +19,7 @@ const Image = ( property ) => {
 
 		frame.on( 'select', () => {
 			const url = frame.state().get( 'selection' ).first().toJSON().url;
-			inputRef.current.value += url;
+			inputRef.current.value = url;
 		} );
 	};
 

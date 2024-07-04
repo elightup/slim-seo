@@ -44,13 +44,6 @@
 	color: var(--ss-color-gray);
 }
 
-.ss-inserter {
-	position: absolute;
-	top: 0;
-	right: 0;
-	height: 30px;
-}
-
 .ss-insert-image {
 	position: absolute;
 	top: 0;
@@ -58,7 +51,6 @@
 	right: 0;
 }
 
-.ss-inserter>button,
 .ef-control .ss-insert-image {
 	box-sizing: border-box;
 	height: 100%;

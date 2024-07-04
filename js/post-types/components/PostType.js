@@ -1,5 +1,5 @@
 import { __, sprintf } from "@wordpress/i18n";
-import UnablePostTypeArchive from "./Fields/UnablePostTypeArchive";
+import PostTypeWithArchivePage from "./Fields/PostTypeWithArchivePage";
 import Checkbox from "./Fields/Checkbox";
 import Image from "./Fields/Image";
 import Text from "./Fields/Text";
@@ -46,16 +46,11 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 			label={ __( 'Hide from search results', 'slim-seo' ) }
 			tooltip={ __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
 		/>
-		<Block
-			baseName={ baseName }
-			option={ option }
-			label={ sprintf( __( 'Singular %s page', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
-		/>
 		{
-			ssPostTypes.unablePostTypes.hasOwnProperty( id )
-			?   <UnablePostTypeArchive
+			ssPostTypes.postTypeWithArchivePage.hasOwnProperty( id )
+			?   <PostTypeWithArchivePage
 					id={ id }
-					postType={ ssPostTypes.unablePostTypes[ id ] }
+					postType={ ssPostTypes.postTypeWithArchivePage[ id ] }
 					label={ sprintf( __( '%s archive page', 'slim-seo' ), postType.labels.singular_name ) }
 				/>
 			:   postType.has_archive &&

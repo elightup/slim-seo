@@ -11,25 +11,11 @@ class PostTypes {
 	}
 
 	public function register_routes() {
-		register_rest_route( 'slim-seo-post-types', 'post_types', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_post_types' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
-
-		register_rest_route( 'slim-seo-post-types', 'option', [
+		register_rest_route( 'slim-seo-post-types/v1', '/option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
-			'permission_callback' => [ $this, 'has_permission' ],
+			'permission_callback' => 'is_user_logged_in',
 		] );
-	}
-
-	public function has_permission() {
-		return current_user_can( 'manage_options' );
-	}
-
-	public function get_post_types( WP_REST_Request $request ): array {
-		return array_diff_key( Data::get_post_types(), array_flip( [ 'post', 'page' ] ) );
 	}
 
 	public function get_option( WP_REST_Request $request ): array {

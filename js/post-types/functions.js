@@ -11,7 +11,7 @@ export const request = async ( apiName, params = {}, method = 'GET', cache = tru
 
 	apiFetch.use( apiFetch.createNonceMiddleware( ssPostTypes.nonce ) );
 	const result = await apiFetch( {
-		url: addQueryArgs( `${ ssPostTypes.rest }/slim-seo-post-types/${ apiName }` , params ),
+		url: addQueryArgs( `/wp-json/slim-seo-post-types/v1/${ apiName }` , params ),
 		method: method
 	} );
 
