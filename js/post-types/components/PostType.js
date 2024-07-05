@@ -46,6 +46,11 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 			label={ __( 'Hide from search results', 'slim-seo' ) }
 			tooltip={ __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
 		/>
+		<Block
+			baseName={ baseName }
+			option={ option }
+			label={ sprintf( __( 'Singular %s page', 'slim-seo' ), postType.labels.singular_name ) }
+		/>
 		{
 			ssPostTypes.postTypesWithArchivePage.hasOwnProperty( id )
 			?   <PostTypeWithArchivePage
