@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) || die ?>
+
 <div class="ss-upgrade postbox">
 	<h3 class="hndle"><span class="dashicons dashicons-awards"></span> <?php esc_html_e( 'Want more SEO features?', 'slim-seo' ); ?></h3>
 	<div class="inside">

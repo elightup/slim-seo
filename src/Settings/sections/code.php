@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) || die ?>
+
 <p><?php esc_html_e( 'Use these settings to insert code from Google Tag Manager, Google Analytics or webmaster tools verification.', 'slim-seo' ); ?></p>
 <table class="form-table">
 	<tr>

@@ -1,3 +1,5 @@
+<?php defined( 'ABSPATH' ) || die ?>
+
 <h3><?php esc_attr_e( 'Migrate SEO Data', 'slim-seo' ); ?></h3>
 <p><?php esc_html_e( 'Use the drop down below to choose which plugin you wish to import SEO data from.', 'slim-seo' ); ?></p>
 <strong><?php esc_attr_e( 'Before performing an import, we strongly recommend that you make a backup of your site.', 'slim-seo' ); ?></strong>

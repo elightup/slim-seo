@@ -1,4 +1,6 @@
 <?php
+defined( 'ABSPATH' ) || die;
+
 use SlimSEO\Helpers\UI;
 
 // phpcs:ignore
