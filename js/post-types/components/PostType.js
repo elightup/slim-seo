@@ -49,7 +49,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 		<Block
 			baseName={ baseName }
 			option={ option }
-			label={ sprintf( __( 'Singular %s page', 'slim-seo' ), postType.labels.singular_name ) }
+			label={ sprintf( __( 'Singular %s page', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
 		/>
 		{
 			ssPostTypes.postTypesWithArchivePage.hasOwnProperty( id )

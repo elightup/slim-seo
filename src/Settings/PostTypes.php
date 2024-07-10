@@ -22,7 +22,7 @@ class PostTypes {
 		] );
 
 		register_rest_route( 'slim-seo', 'meta_keys', [
-			'methods'             => \WP_REST_Server::READABLE,
+			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_meta_keys' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
