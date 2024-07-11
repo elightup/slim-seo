@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
 
-use SlimSEO\Helpers\UI;
-
 abstract class Base {
 	protected $object_type;
 	protected $title;
@@ -25,7 +23,7 @@ abstract class Base {
 		wp_enqueue_script( 'slim-seo-post-type', SLIM_SEO_URL . 'js/post-type.js', [ 'jquery', 'underscore', 'wp-element', 'wp-components', 'wp-i18n' ], filemtime( SLIM_SEO_DIR . 'js/post-type.js' ), true );
 		wp_localize_script( 'slim-seo-post-type', 'ssPostType', [
 			'title'           => $this->title,
-			'metadata'        => get_metadata( $this->object_type, get_the_ID(), 'slim_seo', true ),
+			'data'            => $this->get_data(),
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
 		] );
 	}

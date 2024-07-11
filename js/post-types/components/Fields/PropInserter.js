@@ -14,7 +14,7 @@ const sanitizeId = text => slugify( text, { lower: true } )
 	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_` again.
 	;
 
-const PropInserter = ( { inputRef, extraInputRef } ) => {
+const PropInserter = ( { data = 'variables', inputRef, replace = false } ) => {
 	const [ showModal, setShowModal ] = useState( false );
 
 	const handleSelectItem = ( e, onToggle ) => {
@@ -28,9 +28,10 @@ const PropInserter = ( { inputRef, extraInputRef } ) => {
 	};
 
 	const setValue = value => {
-		inputRef.current.value += value;
-		if ( extraInputRef ) {
-			extraInputRef.current.value += value;
+		if ( replace ) {
+			inputRef.current.value = value;
+		} else {
+			inputRef.current.value += value;
 		}
 	};
 
@@ -39,17 +40,17 @@ const PropInserter = ( { inputRef, extraInputRef } ) => {
 			className="ss-dropdown ss-inserter"
 			position="bottom left"
 			renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-			renderContent={ ( { onToggle } ) => <VariableInserter onSelect={ e => handleSelectItem( e, onToggle ) } /> }
+			renderContent={ ( { onToggle } ) => <VariableInserter data={ data } onSelect={ e => handleSelectItem( e, onToggle ) } /> }
 		/>
 		{ showModal && <Modal setShowModal={ setShowModal } setValue={ setValue } /> }
 	</>;
 };
 
-const VariableInserter = ( { onSelect } ) => {
+const VariableInserter = ( { data, onSelect } ) => {
 	const [ items, setItems ] = useState( [] );
 
 	useEffect( () => {
-		request( 'variables' ).then( setItems );
+		request( data ).then( setItems );
 	}, [] );
 
 	return <Inserter items={ items } group={ true } hasSearch={ true } onSelect={ onSelect } />;

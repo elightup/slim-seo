@@ -21,6 +21,12 @@ class PostTypes {
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
+		register_rest_route( 'slim-seo', 'image_variables', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_image_variables' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
+
 		register_rest_route( 'slim-seo', 'meta_keys', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_meta_keys' ],
@@ -128,14 +134,54 @@ class PostTypes {
 				],
 			],
 			[
-				'label'   => __( 'Current page', 'slim-seo-schema' ),
+				'label'   => __( 'Others', 'slim-seo-schema' ),
 				'options' => [
 					'current.title' => __( 'Current page title', 'slim-seo-schema' ),
 					'current.url'   => __( 'Current page URL', 'slim-seo-schema' ),
+					'current.year'  => __( 'Current year', 'slim-seo-schema' ),
+					'current.month' => __( 'Current month', 'slim-seo-schema' ),
+					'current.date'  => __( 'Current date', 'slim-seo-schema' ),
+					'current.day'   => __( 'Current day of the month', 'slim-seo-schema' ),
+					'current.time'  => __( 'Current server time', 'slim-seo-schema' ),
+					'filename'      => __( 'Filename of your attachment file', 'slim-seo-schema' ),
+					'page'          => __( 'Page (pagination)', 'slim-seo-schema' ),
+					'page.total'    => __( 'Total number of pages.', 'slim-seo-schema' ),
+					'separator'     => __( 'Separator Character', 'slim-seo-schema' ),
+					
 				],
 			],
 		];
 		return apply_filters( 'slim_seo_variables', $variables );
+	}
+
+	public function get_image_variables() {
+		$variables = [
+			[
+				'label'   => __( 'Post', 'slim-seo-schema' ),
+				'options' => [
+					'post.thumbnail'     => __( 'Post thumbnail', 'slim-seo-schema' ),
+				],
+			],
+			[
+				'label'   => __( 'Author', 'slim-seo-schema' ),
+				'options' => [
+					'author.avatar'       => __( 'Author avatar', 'slim-seo-schema' ),
+				],
+			],
+			[
+				'label'   => __( 'Current user', 'slim-seo-schema' ),
+				'options' => [
+					'user.avatar'       => __( 'User avatar', 'slim-seo-schema' ),
+				],
+			],
+			[
+				'label'   => __( 'Site', 'slim-seo-schema' ),
+				'options' => [
+					'site.icon'        => __( 'Site icon', 'slim-seo-schema' ),
+				],
+			],
+		];
+		return apply_filters( 'slim_seo_image_variables', $variables );
 	}
 
 	private function get_taxonomies() {
