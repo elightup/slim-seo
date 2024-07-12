@@ -1,7 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-use SlimSEO\Breadcrumbs;
 use SlimSEO\Helpers\Arr;
 use SlimSEO\Helpers\Images;
 

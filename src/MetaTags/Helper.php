@@ -1,7 +1,12 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimTwig\Renderer;
+
 class Helper {
+	private static $renderer;
+	private static $render_data;
+
 	public static function normalize( $text ) {
 		global $shortcode_tags;
 
@@ -68,9 +73,14 @@ class Helper {
 		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
 	}
 
-	public static function get_data(): array {
-		$data_object = new Data;
-		return $data_object->collect();
+	public static function render( $text ): string {
+		if ( ! self::$renderer ) {
+			self::$renderer    = new Renderer;
+			$data_object       = new Data;
+			self::$render_data = $data_object->collect();
+		}
+
+		return self::$renderer->render( $text, self::$render_data );
 	}
 
 	public static function get_taxonomies() {

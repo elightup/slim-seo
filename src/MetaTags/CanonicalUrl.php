@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-use SlimTwig\Renderer;
-
 class CanonicalUrl {
 	use Context;
 
@@ -20,18 +18,11 @@ class CanonicalUrl {
 
 	public function get_url(): string {
 		$url = $this->get_value();
-		$url = $this->render_variables( $url );
+		$url = Helper::render( $url );
 		$url = $this->add_pagination( $url );
 		$url = apply_filters( 'slim_seo_canonical_url', $url );
 
 		return $url;
-	}
-
-	private function render_variables( string $description ): string {
-		$renderer = new Renderer;
-		$data = Helper::get_data();
-
-		return $renderer->render( $description, $data );
 	}
 
 	private function get_home_value(): string {

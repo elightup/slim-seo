@@ -1,7 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-use SlimTwig\Renderer;
 
 class Title {
 	use Context;
@@ -31,17 +30,10 @@ class Title {
 
 		$title = $custom_title ?: (string) $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
-		$title = $this->render_variables( $title );
+		$title = Helper::render( $title );
 		$title = Helper::normalize( $title );
 
 		return $title;
-	}
-
-	private function render_variables( string $title ): string {
-		$renderer = new Renderer;
-		$data = Helper::get_data();
-
-		return $renderer->render( $title, $data );
 	}
 
 	private function get_home_value(): string {

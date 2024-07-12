@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-use SlimTwig\Renderer;
-
 class Description {
 	use Context;
 
@@ -30,17 +28,10 @@ class Description {
 	public function get_description(): string {
 		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, get_queried_object_id() );
-		$description = $this->render_variables( $description );
+		$description = Helper::render( $description );
 		$description = $this->normalize( $description );
 
 		return $description;
-	}
-
-	private function render_variables( string $description ): string {
-		$renderer = new Renderer;
-		$data = Helper::get_data();
-
-		return $renderer->render( $description, $data );
 	}
 
 	private function normalize( string $description ): string {
