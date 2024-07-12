@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimTwig\Renderer;
 use SlimSEO\Helpers\Images;
 
 class Image {
@@ -35,7 +36,7 @@ class Image {
 		// Get from thumbnail or content.
 		$images = Images::get_post_images( $this->get_queried_object() );
 		if ( empty( $images ) ) {
-			return [];
+			return $this->get_from_settings();
 		}
 
 		$first_image = reset( $images );
@@ -64,5 +65,22 @@ class Image {
 			'height' => $image[2],
 			'alt'    => get_post_meta( $id, '_wp_attachment_image_alt', true ) ?: get_the_title( $id ),
 		] : [];
+	}
+
+	private function get_from_settings(): array {
+		$option = get_option( 'slim_seo', [] );
+		$post_type_object = get_queried_object();
+
+		if ( isset( $option[ $post_type_object->post_type ][ $this->meta_key ] ) ) {
+			$url = $this->render_variables( $option[ $post_type_object->post_type ][ $this->meta_key ] );
+			return  $this->get_data_from_url( $url );
+		}
+	}
+
+	private function render_variables( string $title ): string {
+		$renderer = new Renderer;
+		$data = Helper::get_data();
+
+		return $renderer->render( $title, $data );
 	}
 }

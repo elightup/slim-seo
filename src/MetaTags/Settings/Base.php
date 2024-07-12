@@ -83,7 +83,7 @@ abstract class Base {
 		$data['description']    = sanitize_text_field( $data['description'] );
 		$data['facebook_image'] = esc_url_raw( $data['facebook_image'] );
 		$data['twitter_image']  = esc_url_raw( $data['twitter_image'] );
-		$data['canonical']      = esc_url_raw( $data['canonical'] );
+		$data['canonical']      = sanitize_text_field( $data['canonical'] );
 		$data['noindex']        = $data['noindex'] ? 1 : 0;
 
 		return array_filter( $data );
