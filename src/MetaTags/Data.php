@@ -162,7 +162,7 @@ class Data {
 
 		$image_id = reset( $images );
 		if ( ! is_numeric( $image_id ) ) {
-			$image_id = Images::get_id_from_url( $url );
+			$image_id = Images::get_id_from_url( $image_id );
 		}
 
 		return basename( get_attached_file( $image_id ) );

@@ -18,9 +18,9 @@ class CanonicalUrl {
 
 	public function get_url(): string {
 		$url = $this->get_value();
-		$url = Helper::render( $url );
 		$url = $this->add_pagination( $url );
 		$url = apply_filters( 'slim_seo_canonical_url', $url );
+		$url = Helper::render( $url );
 
 		return $url;
 	}

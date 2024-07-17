@@ -26,18 +26,24 @@ class Image {
 	}
 
 	private function get_singular_value(): array {
-		// Get from SEO settings in custom fields.
+		// Use from post SEO settings.
 		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
 		if ( isset( $data[ $this->meta_key ] ) ) {
 			return $this->get_from_post_meta( $data[ $this->meta_key ] );
 		}
 
-		// Get from thumbnail or content.
-		$images = Images::get_post_images( $this->get_queried_object() );
-		if ( empty( $images ) ) {
-			return $this->get_from_settings();
+		// Use from Post Types settings
+		$option = get_option( 'slim_seo', [] );
+		$post   = $this->get_queried_object();
+		if ( isset( $option[ $post->post_type ][ $this->meta_key ] ) ) {
+			return $this->get_from_settings( $option[ $post->post_type ][ $this->meta_key ] );
 		}
 
+		// Use from thumbnail or content.
+		$images = Images::get_post_images( $this->get_queried_object() );
+		if ( empty( $images ) ) {
+			return [];
+		}
 		$first_image = reset( $images );
 		$method      = is_numeric( $first_image ) ? 'get_data' : 'get_data_from_url';
 		return $this->$method( $first_image );
@@ -66,21 +72,17 @@ class Image {
 		] : [];
 	}
 
-	private function get_from_post_meta( $meta_value ) {
+	private function get_from_post_meta( string $meta_value ): array {
 		if ( ! filter_var( $meta_value, FILTER_VALIDATE_URL ) ) {
 			$meta_value = Helper::render( $meta_value );
 		}
 		return $this->get_data_from_url( $meta_value );
 	}
 
-	private function get_from_settings(): array {
-		$option = get_option( 'slim_seo', [] );
-		$post_type_object = get_queried_object();
-
-		if ( isset( $option[ $post_type_object->post_type ][ $this->meta_key ] ) ) {
-			$url = Helper::render( $option[ $post_type_object->post_type ][ $this->meta_key ] );
-			return  $this->get_data_from_url( $url );
+	private function get_from_settings( string $setting ): array {
+		if ( ! filter_var( $setting, FILTER_VALIDATE_URL ) ) {
+			$setting = Helper::render( $setting );
 		}
-		return [];
+		return $this->get_data_from_url( $setting );
 	}
 }
