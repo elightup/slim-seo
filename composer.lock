@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elightup/slim-twig.git",
-                "reference": "36664ba8812b3abb1fc3065a8848334be6318632"
+                "reference": "04ebb63b2d6c857ce842a1f089803abd4a020d80"
             },
             "require-dev": {
                 "phpunit/phpunit": "^11.2"
@@ -29,7 +29,7 @@
                     "Tests\\": "tests/"
                 }
             },
-            "time": "2024-06-24T08:22:44+00:00"
+            "time": "2024-07-18T04:56:26+00:00"
         }
     ],
     "packages-dev": [],
@@ -44,5 +44,5 @@
         "php": ">=7.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

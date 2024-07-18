@@ -2,19 +2,18 @@
 namespace SlimSEO\MetaTags;
 
 use SlimSEO\Helpers\Arr;
-use SlimSEO\Helpers\Images;
 
 class Data {
 	private $data = [];
 
 	public function collect(): array {
 		$this->data = array_merge(
-			[ 'post'   => $this->get_post_data() ],
-			[ 'term'   => $this->get_term_data() ],
+			[ 'post' => $this->get_post_data() ],
+			[ 'term' => $this->get_term_data() ],
 			[ 'author' => $this->get_author_data() ],
-			[ 'user'   => $this->get_user_data() ],
-			[ 'site'   => $this->get_site_data() ],
-			[ 'other'  => $this->get_other_data() ],
+			[ 'user' => $this->get_user_data() ],
+			[ 'site' => $this->get_site_data() ],
+			$this->get_other_data(),
 		);
 
 		// Truncate the post content and set word count.
@@ -44,8 +43,8 @@ class Data {
 			'content'       => $post->post_content,
 			'url'           => get_permalink( $post ),
 			'slug'          => $post->post_name,
-			'date'          => gmdate( 'c', strtotime( $post->post_date_gmt ) ),
-			'modified_date' => gmdate( 'c', strtotime( $post->post_modified_gmt ) ),
+			'date'          => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
+			'modified_date' => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
 			'thumbnail'     => get_the_post_thumbnail_url( $post->ID, 'full' ),
 			'comment_count' => (int) $post->comment_count,
 			'tags'          => $this->get_post_terms( $post, 'post_tag' ),
@@ -63,7 +62,7 @@ class Data {
 		}
 
 		return [
-			'ID'	      => $term->term_id,
+			'ID'          => $term->term_id,
 			'name'        => $term->name,
 			'slug'        => $term->slug,
 			'taxonomy'    => $term->taxonomy,
@@ -127,45 +126,22 @@ class Data {
 	}
 
 	private function get_other_data(): array {
-		global $wp, $wp_query;
-
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$url = $_SERVER['REQUEST_URI'] ?? add_query_arg( [], $wp->request );
-		$url = home_url( $url );
-		$url = esc_url( wp_strip_all_tags( $url ) );
-		$url = strtok( $url, '#' );
-		$url = strtok( $url, '?' );
-		$date = new \DateTime();
-
+		global $wp_query;
 
 		return [
-			'url'   => $url,
-			// 'title' => wp_get_document_title(),
-			'year'      => current_datetime()->format('Y-m-d H:i:s'),
-			'month'     => current_datetime()->format('m'),
-			'date'      => current_datetime()->format('d'),
-			'day'       => $date->format( 'j' ),
-			'time'      => current_time( 'timestamp', true ),
-			'filename'  => $this->get_attr_name(),
-			'page'      => ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1,
-			'pagetotal' => $wp_query->max_num_pages,
-			'separator' => '-',
-			
+			'current' => [
+				'year'     => wp_date( 'Y' ),
+				'month'    => wp_date( 'm' ),
+				'day'      => wp_date( 'j' ),
+				'date'     => wp_date( get_option( 'date_format' ) ),
+				'time'     => wp_date( get_option( 'time_format' ) ),
+			],
+			'pagination' => [
+				'page'  => max( get_query_var( 'paged' ), 1 ),
+				'total' => $wp_query->max_num_pages,
+			],
+			'separator'        => apply_filters( 'document_title_separator', '-' ),
 		];
-	}
-
-	private function get_attr_name() {
-		$images = Images::get_post_images( get_queried_object() );
-		if ( empty( $images ) ) {
-			return '';
-		}
-
-		$image_id = reset( $images );
-		if ( ! is_numeric( $image_id ) ) {
-			$image_id = Images::get_id_from_url( $image_id );
-		}
-
-		return basename( get_attached_file( $image_id ) );
 	}
 
 	private function normalize( $key ) {

@@ -87,6 +87,7 @@ class Helper {
 		$unsupported = [
 			'wp_theme',
 			'wp_template_part_area',
+			'wp_pattern_category',
 			'link_category',
 			'nav_menu',
 			'post_format',
