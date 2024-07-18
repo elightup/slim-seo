@@ -26,24 +26,25 @@ class Image {
 	}
 
 	private function get_singular_value(): array {
-		// Use from post SEO settings.
+		// Get from SEO settings in custom fields.
 		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
 		if ( isset( $data[ $this->meta_key ] ) ) {
 			return $this->get_from_post_meta( $data[ $this->meta_key ] );
 		}
 
-		// Use from Post Types settings
+		// Get from settings.
 		$option = get_option( 'slim_seo', [] );
 		$post   = $this->get_queried_object();
 		if ( isset( $option[ $post->post_type ][ $this->meta_key ] ) ) {
 			return $this->get_from_settings( $option[ $post->post_type ][ $this->meta_key ] );
 		}
 
-		// Use from thumbnail or content.
+		// Get from thumbnail or content.
 		$images = Images::get_post_images( $this->get_queried_object() );
 		if ( empty( $images ) ) {
 			return [];
 		}
+
 		$first_image = reset( $images );
 		$method      = is_numeric( $first_image ) ? 'get_data' : 'get_data_from_url';
 		return $this->$method( $first_image );

@@ -80,7 +80,7 @@ class Description {
 			return $data['description'];
 		}
 
-		// Use Post Types settings if avaiable
+		// Use post types settings if avaiable
 		$option    = get_option( 'slim_seo', [] );
 		$post_type = get_post_type( $post_id );
 		if ( ! empty( $option[ $post_type ]['description'] ) ) {

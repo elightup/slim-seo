@@ -1,7 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-
 class Title {
 	use Context;
 
