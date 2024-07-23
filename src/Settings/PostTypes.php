@@ -107,10 +107,10 @@ class PostTypes {
 					'author.first_name'   => __( 'Author first name', 'slim-seo' ),
 					'author.last_name'    => __( 'Author last name', 'slim-seo' ),
 					'author.display_name' => __( 'Author display name', 'slim-seo' ),
-					'author.username'     => __( 'Author username', 'slim-seo' ),
+					'author.login'        => __( 'Author username', 'slim-seo' ),
 					'author.nickname'     => __( 'Author nickname', 'slim-seo' ),
 					'author.email'        => __( 'Author email', 'slim-seo' ),
-					'author.website_url'  => __( 'Author website URL', 'slim-seo' ),
+					'author.url'          => __( 'Author website URL', 'slim-seo' ),
 					'author.nicename'     => __( 'Author nicename', 'slim-seo' ),
 					'author.description'  => __( 'Author description', 'slim-seo' ),
 					'author.posts_url'    => __( 'Author posts URL', 'slim-seo' ),
@@ -124,10 +124,10 @@ class PostTypes {
 					'user.first_name'   => __( 'User first name', 'slim-seo' ),
 					'user.last_name'    => __( 'User last name', 'slim-seo' ),
 					'user.display_name' => __( 'User display name', 'slim-seo' ),
-					'user.username'     => __( 'User username', 'slim-seo' ),
+					'user.login'        => __( 'User username', 'slim-seo' ),
 					'user.nickname'     => __( 'User nickname', 'slim-seo' ),
 					'user.email'        => __( 'User email', 'slim-seo' ),
-					'user.website_url'  => __( 'User website URL', 'slim-seo' ),
+					'user.url'          => __( 'User website URL', 'slim-seo' ),
 					'user.nicename'     => __( 'User nicename', 'slim-seo' ),
 					'user.description'  => __( 'User description', 'slim-seo' ),
 					'user.posts_url'    => __( 'User posts URL', 'slim-seo' ),
@@ -147,17 +147,14 @@ class PostTypes {
 			[
 				'label'   => __( 'Others', 'slim-seo' ),
 				'options' => [
-					'other.title'     => __( 'Current page title', 'slim-seo' ),
-					'other.url'       => __( 'Current page URL', 'slim-seo' ),
-					'other.year'      => __( 'Current year', 'slim-seo' ),
-					'other.month'     => __( 'Current month', 'slim-seo' ),
-					'other.date'      => __( 'Current date', 'slim-seo' ),
-					'other.day'       => __( 'Current day of the month', 'slim-seo' ),
-					'other.time'      => __( 'Current server time', 'slim-seo' ),
-					'other.filename'  => __( 'Filename of your attachment file', 'slim-seo' ),
-					'other.page'      => __( 'Page (pagination)', 'slim-seo' ),
-					'other.pagetotal' => __( 'Total number of pages.', 'slim-seo' ),
-					'other.separator' => __( 'Separator Character', 'slim-seo' ),
+					'current.year'       => __( 'Current year', 'slim-seo' ),
+					'current.month'      => __( 'Current month', 'slim-seo' ),
+					'current.day'        => __( 'Current day of the month', 'slim-seo' ),
+					'current.date'       => __( 'Current date', 'slim-seo' ),
+					'current.time'       => __( 'Current time', 'slim-seo' ),
+					'pagination.current' => __( 'Current page (pagination)', 'slim-seo' ),
+					'pagination.total'   => __( 'Total number of pages (pagination)', 'slim-seo' ),
+					'separator'          => __( 'Separator character', 'slim-seo' ),
 				],
 			],
 		];
@@ -169,25 +166,25 @@ class PostTypes {
 			[
 				'label'   => __( 'Post', 'slim-seo' ),
 				'options' => [
-					'post.thumbnail'     => __( 'Post thumbnail', 'slim-seo' ),
+					'post.thumbnail' => __( 'Post thumbnail', 'slim-seo' ),
 				],
 			],
 			[
 				'label'   => __( 'Author', 'slim-seo' ),
 				'options' => [
-					'author.avatar'       => __( 'Author avatar', 'slim-seo' ),
+					'author.avatar' => __( 'Author avatar', 'slim-seo' ),
 				],
 			],
 			[
 				'label'   => __( 'Current user', 'slim-seo' ),
 				'options' => [
-					'user.avatar'       => __( 'User avatar', 'slim-seo' ),
+					'user.avatar' => __( 'User avatar', 'slim-seo' ),
 				],
 			],
 			[
 				'label'   => __( 'Site', 'slim-seo' ),
 				'options' => [
-					'site.icon'        => __( 'Site icon', 'slim-seo' ),
+					'site.icon' => __( 'Site icon', 'slim-seo' ),
 				],
 			],
 		];
