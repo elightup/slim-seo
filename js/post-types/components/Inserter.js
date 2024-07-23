@@ -29,7 +29,7 @@ const Items = ( { items } ) => items.map( property => (
 
 const Search = ( { handleSearch } ) => (
 	<div className="ss-dropdown__search">
-		<input onInput={ handleSearch } type="text" placeholder={ __( 'Search...', 'slim-seo-schema' ) } />
+		<input onInput={ handleSearch } type="text" placeholder={ __( 'Search...', 'slim-seo' ) } />
 	</div>
 );
 

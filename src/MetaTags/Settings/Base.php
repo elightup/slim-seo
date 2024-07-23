@@ -24,7 +24,7 @@ abstract class Base {
 		wp_localize_script( 'slim-seo-post-type', 'ssPostType', [
 			'title'           => $this->title,
 			'data'            => $this->get_data(),
-			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo-schema' ),
+			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 		] );
 	}
 

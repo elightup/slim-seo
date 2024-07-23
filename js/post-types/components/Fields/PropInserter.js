@@ -71,7 +71,7 @@ const Modal = ( { setShowModal, setValue } ) => {
 		<div className="ss-modal-overlay" onClick={ hideModal }></div>
 		<div className="ss-modal-body">
 			<h3 className="ss-modal-heading">
-				{ __( 'Select a custom field', 'slim-seo-schema' ) }
+				{ __( 'Select a custom field', 'slim-seo' ) }
 				<span className="ss-modal__close" onClick={ hideModal }>&times;</span>
 			</h3>
 			<Select
