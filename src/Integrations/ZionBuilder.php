@@ -2,6 +2,7 @@
 namespace SlimSEO\Integrations;
 
 use WP_Post;
+use SlimSEO\Helpers\Arr;
 
 class ZionBuilder {
 	public function is_active(): bool {
@@ -9,7 +10,19 @@ class ZionBuilder {
 	}
 
 	public function setup() {
+		add_filter( 'slim_seo_schema_data', [ $this, 'replace_post_content' ] );
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
+	}
+
+	public function replace_post_content( $data ) {
+		$post = is_singular() ? get_queried_object() : get_post();
+		if ( empty( $post ) ) {
+			return $data;
+		}
+		$content = Arr::get( $data, 'post.content', '' );
+		Arr::set( $data, 'post.content', $this->description( $content, $post ) );
+
+		return $data;
 	}
 
 	public function description( $description, WP_Post $post ) {
