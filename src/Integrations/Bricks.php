@@ -11,7 +11,7 @@ class Bricks {
 	}
 
 	public function setup() {
-		add_filter( 'slim_seo_schema_data', [ $this, 'replace_post_content' ] );
+		add_filter( 'slim_seo_data', [ $this, 'replace_post_content' ] );
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );
