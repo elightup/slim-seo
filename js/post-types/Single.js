@@ -22,17 +22,17 @@ const Single = () => {
 			description={ __( 'Recommended length: 50-160 characters.', 'slim-seo' ) }
 		/>
 		<Image
-			id="slim_seo[twitter_image]"
-			label={ __( 'Twitter image', 'slim-seo' ) }
-			std={ ssPostType.data.twitter_image }
-			mediaPopupTitle={ ssPostType.mediaPopupTitle }
-			tooltip={ __( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ) }
-		/>
-		<Image
 			id="slim_seo[facebook_image]"
 			label={ __( 'Facebook image', 'slim-seo' ) }
 			std={ ssPostType.data.facebook_image }
 			description={ __( 'Recommended size: 1200x630 px.', 'slim-seo' ) }
+		/>
+		<Image
+			id="slim_seo[twitter_image]"
+			label={ __( 'Twitter image', 'slim-seo' ) }
+			std={ ssPostType.data.twitter_image }
+			mediaPopupTitle={ ssPostType.mediaPopupTitle }
+			description={ __( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ) }
 		/>
 		<Text
 			id="slim_seo[canonical]"
