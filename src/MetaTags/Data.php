@@ -15,6 +15,7 @@ class Data {
 			[ 'site' => $this->get_site_data() ],
 			$this->get_other_data(),
 		);
+		$this->data = apply_filters( 'slim_seo_data', $this->data );
 
 		// Truncate the post content and set word count.
 		$post_content = Helper::normalize( Arr::get( $this->data, 'post.content', '' ) );

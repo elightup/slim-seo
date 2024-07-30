@@ -19,7 +19,7 @@ const Single = () => {
 			id="slim_seo[description]"
 			label={ __( 'Meta description', 'slim-seo' ) }
 			std={ ssPostType.data.description }
-			description={ __( 'Recommended length: 50-160 characters.', 'slim-seo' ) }
+			description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from post exceprt (if available) or post content.', 'slim-seo' ) }
 		/>
 		<Image
 			id="slim_seo[facebook_image]"
@@ -43,7 +43,7 @@ const Single = () => {
 			id="slim_seo[noindex]"
 			label={ __( ' Hide from search results ', 'slim-seo' ) }
 			std={ ssPostType.data.noindex }
-			description={ __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
+			description={ __( 'This setting will apply noindex robots tag to this post of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
 		/>
 	</>;
 };
