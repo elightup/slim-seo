@@ -41,10 +41,6 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 	const baseName = `slim_seo[${ id }]`;
 	const baseNameArchive = `slim_seo[${ id }_archive]`;
 
-	useEffect( () => {
-		setNoIndex( option.noindex );
-	}, [ option ] );
-
 	const handleChange = e => {
 		setNoIndex( e.target.checked );
 	}
@@ -57,7 +53,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 			tooltip={ __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
 			onChange={ handleChange }
 		/>
-		{ ! noindex &&
+		{ ! noindex && 
 			<Block
 				baseName={ baseName }
 				option={ option }

@@ -5,7 +5,7 @@ import PostType from "./components/PostType";
 import { request } from "./functions";
 
 const App = () => {
-	const [ option, setOption ] = useState( [] );
+	const [ option, setOption ] = useState( null );
 
 	useEffect( () => {
 		request( 'post-types-option' ).then( setOption );
@@ -16,7 +16,7 @@ const App = () => {
 			<TabList>
 				{ Object.values( ssPostTypes.postTypes ).map( postType => <Tab>{ postType.label }</Tab> ) }
 			</TabList>
-			{
+			{ option &&
 				Object.entries( ssPostTypes.postTypes ).map( ( [ postTypeId, postType ] ) => (
 					<TabPanel>
 						{
