@@ -37,8 +37,6 @@ class Oxygen {
 	}
 
 	public function description( $description, WP_Post $post ) {
-		return $this->get_content( $description, $post );
-
 		$content = $this->get_post_content( $post );
 		if ( $content ) {
 			$this->is_auto_genereted = true;
