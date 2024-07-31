@@ -6,6 +6,8 @@ use SlimSEO\MetaTags\Helper;
 use SlimSEO\Helpers\Arr;
 
 class Bricks {
+	private $is_auto_genereted = false;
+
 	public function is_active(): bool {
 		return defined( 'BRICKS_VERSION' );
 	}
@@ -21,6 +23,10 @@ class Bricks {
 	}
 
 	public function replace_post_content( $data ) {
+		if ( $this->is_auto_genereted ) {
+			return $data;
+		}
+
 		$post = is_singular() ? get_queried_object() : get_post();
 		if ( empty( $post ) ) {
 			return $data;
@@ -32,19 +38,23 @@ class Bricks {
 			return $data;
 		}
 
-		Arr::set( $data, 'post.content', $this->description( $content, $post ) );
+		Arr::set( $data, 'post.content', $this->get_content( $content, $post ) );
 
 		return $data;
 	}
 
 	public function description( $description, WP_Post $post ) {
+		return $this->get_content( $description, $post );
+	}
+
+	public function get_content( $content, $post ) {
 		// Get from the post first, then from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
 		if ( empty( $data ) ) {
 			$data = \Bricks\Helpers::get_bricks_data( $post->ID );
 		}
 		if ( empty( $data ) ) {
-			return $description;
+			return $content;
 		}
 
 		$data = $this->remove_elements( $data );
@@ -52,12 +62,13 @@ class Bricks {
 		// Skip shortcodes & blocks inside dynamic data {post_content}.
 		add_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
 
-		$description = \Bricks\Frontend::render_data( $data );
+		$content = \Bricks\Frontend::render_data( $data );
 
 		// Remove the filter.
 		remove_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
 
-		return (string) $description;
+		$this->is_auto_genereted = true;
+		return (string) $content;
 	}
 
 	private function remove_elements( array $data ): array {
