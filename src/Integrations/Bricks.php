@@ -22,7 +22,7 @@ class Bricks {
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 	}
 
-	public function replace_post_content( $data ) {
+	public function replace_post_content( array $data ): array {
 		if ( $this->is_auto_genereted ) {
 			return $data;
 		}
@@ -32,29 +32,37 @@ class Bricks {
 			return $data;
 		}
 		$content = Arr::get( $data, 'post.content', '' );
-
 		// Priority WordPress post content first.
 		if ( $content ) {
 			return $data;
 		}
 
-		Arr::set( $data, 'post.content', $this->get_content( $content, $post ) );
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			Arr::set( $data, 'post.content', $content );
+		}
 
 		return $data;
 	}
 
 	public function description( $description, WP_Post $post ) {
-		return $this->get_content( $description, $post );
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			$this->is_auto_genereted = true;
+			return $content;
+		}
+
+		return $description;
 	}
 
-	public function get_content( $content, $post ) {
+	private function get_post_content( WP_Post $post ): string {
 		// Get from the post first, then from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
 		if ( empty( $data ) ) {
 			$data = \Bricks\Helpers::get_bricks_data( $post->ID );
 		}
 		if ( empty( $data ) ) {
-			return $content;
+			return '';
 		}
 
 		$data = $this->remove_elements( $data );
@@ -67,7 +75,6 @@ class Bricks {
 		// Remove the filter.
 		remove_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
 
-		$this->is_auto_genereted = true;
 		return (string) $content;
 	}
 

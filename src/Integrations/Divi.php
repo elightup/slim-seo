@@ -26,24 +26,32 @@ class Divi {
 		if ( empty( $post ) ) {
 			return $data;
 		}
-		$content = Arr::get( $data, 'post.content', '' );
-		Arr::set( $data, 'post.content', $this->get_content( $content, $post ) );
+
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			Arr::set( $data, 'post.content', $content );
+		}
 
 		return $data;
 	}
 
 	public function description( $description, WP_Post $post ) {
-		return $this->get_content( $description, $post );
-	}
-
-	public function get_content( $content, $post ) {
-		// If the post is built with Divi, then strips all shortcodes, but keep the content.
-		if ( get_post_meta( $post->ID, '_et_builder_version', true ) ) {
-			$content = preg_replace( '~\[/?[^\]]+?/?\]~s', '', $post->post_content );
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			$this->is_auto_genereted = true;
+			return $content;
 		}
 
-		$this->is_auto_genereted = true;
-		return $content;
+		return $description;
+	}
+
+	public function get_post_content( WP_Post $post ):string {
+		// If the post is built with Divi, then strips all shortcodes, but keep the content.
+		if ( get_post_meta( $post->ID, '_et_builder_version', true ) ) {
+			return preg_replace( '~\[/?[^\]]+?/?\]~s', '', $post->post_content );
+		}
+
+		return '';
 	}
 
 	public function remove_post_types( $post_types ) {

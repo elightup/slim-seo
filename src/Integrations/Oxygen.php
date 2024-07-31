@@ -27,25 +27,35 @@ class Oxygen {
 		if ( empty( $post ) ) {
 			return $data;
 		}
-		$content = Arr::get( $data, 'post.content', '' );
-		Arr::set( $data, 'post.content', $this->get_content( $content, $post ) );
+
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			Arr::set( $data, 'post.content', $content );
+		}
 
 		return $data;
 	}
 
 	public function description( $description, WP_Post $post ) {
 		return $this->get_content( $description, $post );
+
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			$this->is_auto_genereted = true;
+			return $content;
+		}
+
+		return $description;
 	}
 
-	public function get_content( $content, $post ) {
+	public function get_post_content( WP_Post $post ): string {
 		// In builder mode.
 		if ( defined( 'SHOW_CT_BUILDER' ) ) {
-			return $content;
+			return '';
 		}
 		$shortcode = get_post_meta( $post->ID, 'ct_builder_shortcodes', true );
 
-		$this->is_auto_genereted = true;
-		return $shortcode ?: $content;
+		return $shortcode ?: '';
 	}
 
 	public function skip_shortcodes( $shortcodes ) {
