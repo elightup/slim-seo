@@ -16,7 +16,7 @@ class ZionBuilder {
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 	}
 
-	public function replace_post_content( $data ) {
+	public function replace_post_content( array $data ): array {
 		if ( $this->is_auto_genereted ) {
 			return $data;
 		}
@@ -25,44 +25,50 @@ class ZionBuilder {
 		if ( empty( $post ) ) {
 			return $data;
 		}
-		$content = Arr::get( $data, 'post.content', '' );
-		Arr::set( $data, 'post.content', $this->get_content( $content, $post ) );
+
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			Arr::set( $data, 'post.content', $content );
+		}
 
 		return $data;
 	}
 
 	public function description( $description, WP_Post $post ) {
-		return $this->get_content( $description, $post );
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			$this->is_auto_genereted = true;
+			return $content;
+		}
+
+		return $description;
 	}
 
-	public function get_content( $content, $post ) {
+	private function get_post_content( WP_Post $post ): string {
 		$post_instance = \ZionBuilder\Plugin::$instance->post_manager->get_post_instance( $post->ID );
 
 		if ( ! $post_instance || $post_instance->is_password_protected() || ! $post_instance->is_built_with_zion() ) {
-			return $content;
+			return '';
 		}
 
 		$post_template_data = $post_instance->get_template_data();
 		if ( empty( $post_template_data ) ) {
-			return $content;
+			return '';
 		}
 
-		$content = $this->get_content_detail( $post_template_data );
-
-		$this->is_auto_genereted = true;
-		return $content;
+		return $this->get_elements_content( $post_template_data );
 	}
 
-	private function get_content_detail( $data ) {
+	private function get_elements_content( array $data ): string {
 		$content = array_map( [ $this, 'get_element_content' ], $data );
 		return implode( ' ', $content );
 	}
 
-	private function get_element_content( $element ) {
+	private function get_element_content( array $element ): string {
 		$content = empty( $element['content'] ) ? '' : $element['content'];
 
 		if ( is_array( $content ) ) {
-			$content = $this->get_content_detail( $content );
+			$content = $this->get_elements_content( $content );
 		}
 
 		if ( ! empty( $element['options'] ) ) {
