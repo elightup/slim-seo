@@ -19,12 +19,22 @@
       "role": "Developer"
     }
   ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:elightup/slim-twig.git"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "SlimSEO\\": "src/"
     }
   },
   "require": {
+    "elightup/slim-twig": "dev-master",
     "php": ">=7.2"
+  },
+  "config": {
+    "allow-plugins": true
   }
 }

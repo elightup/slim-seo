@@ -1,6 +1,7 @@
 import { Control } from "@elightup/form";
 import { Button } from "@wordpress/components";
 import { useRef } from "@wordpress/element";
+import PropInserter from "./PropInserter";
 
 const Image = ( property ) => {
 	const inputRef = useRef();
@@ -28,6 +29,7 @@ const Image = ( property ) => {
 			<div className="ss-input-wrapper">
 				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } />
 				<Button icon="format-image" onClick={ openMediaPopup } className="ss-insert-image" />
+				<PropInserter data="image_variables" inputRef={ inputRef } replace={ true } />
 			</div>
 		</Control>
 	);

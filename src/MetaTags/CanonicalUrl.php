@@ -11,7 +11,7 @@ class CanonicalUrl {
 
 	public function output(): void {
 		$url = $this->get_url();
-		if ( $url ) {
+		if ( $url && filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			echo '<link rel="canonical" href="', esc_url( $url ), '">', "\n";
 		}
 	}
@@ -20,6 +20,7 @@ class CanonicalUrl {
 		$url = $this->get_value();
 		$url = $this->add_pagination( $url );
 		$url = apply_filters( 'slim_seo_canonical_url', $url );
+		$url = Helper::render( $url );
 
 		return $url;
 	}

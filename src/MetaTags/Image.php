@@ -29,7 +29,14 @@ class Image {
 		// Get from SEO settings in custom fields.
 		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
 		if ( isset( $data[ $this->meta_key ] ) ) {
-			return $this->get_data_from_url( $data[ $this->meta_key ] );
+			return $this->get_from_post_meta( $data[ $this->meta_key ] );
+		}
+
+		// Get from settings.
+		$option = get_option( 'slim_seo', [] );
+		$post   = $this->get_queried_object();
+		if ( isset( $option[ $post->post_type ][ $this->meta_key ] ) ) {
+			return $this->get_from_settings( $option[ $post->post_type ][ $this->meta_key ] );
 		}
 
 		// Get from thumbnail or content.
@@ -64,5 +71,19 @@ class Image {
 			'height' => $image[2],
 			'alt'    => get_post_meta( $id, '_wp_attachment_image_alt', true ) ?: get_the_title( $id ),
 		] : [];
+	}
+
+	private function get_from_post_meta( string $meta_value ): array {
+		if ( ! filter_var( $meta_value, FILTER_VALIDATE_URL ) ) {
+			$meta_value = Helper::render( $meta_value );
+		}
+		return $this->get_data_from_url( $meta_value );
+	}
+
+	private function get_from_settings( string $setting ): array {
+		if ( ! filter_var( $setting, FILTER_VALIDATE_URL ) ) {
+			$setting = Helper::render( $setting );
+		}
+		return $this->get_data_from_url( $setting );
 	}
 }

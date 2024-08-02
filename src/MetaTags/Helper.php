@@ -1,7 +1,12 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimTwig\Renderer;
+
 class Helper {
+	private static $renderer;
+	private static $render_data;
+
 	public static function normalize( $text ) {
 		global $shortcode_tags;
 
@@ -66,5 +71,37 @@ class Helper {
 			'mailpoet/subscription-form-block',
 		] );
 		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
+	}
+
+	public static function render( $text ): string {
+		if ( ! self::$renderer ) {
+			self::$renderer    = new Renderer;
+			$data_object       = new Data;
+			self::$render_data = $data_object->collect();
+		}
+
+		return self::$renderer->render( $text, self::$render_data );
+	}
+
+	public static function get_taxonomies() {
+		$unsupported = [
+			'wp_theme',
+			'wp_template_part_area',
+			'wp_pattern_category',
+			'link_category',
+			'nav_menu',
+			'post_format',
+			'mb-views-category',
+		];
+		$taxonomies  = get_taxonomies( [], 'objects' );
+		$taxonomies  = array_diff_key( $taxonomies, array_flip( $unsupported ) );
+		$taxonomies  = array_map( function( $taxonomy ) {
+			return [
+				'slug' => $taxonomy->name,
+				'name' => $taxonomy->label,
+			];
+		}, $taxonomies );
+
+		return array_values( $taxonomies );
 	}
 }

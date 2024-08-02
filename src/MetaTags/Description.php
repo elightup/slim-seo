@@ -28,6 +28,7 @@ class Description {
 	public function get_description(): string {
 		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, get_queried_object_id() );
+		$description = Helper::render( $description );
 		$description = $this->normalize( $description );
 
 		return $description;
@@ -77,6 +78,13 @@ class Description {
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
 			return $data['description'];
+		}
+
+		// Use post types settings if avaiable
+		$option    = get_option( 'slim_seo', [] );
+		$post_type = get_post_type( $post_id );
+		if ( ! empty( $option[ $post_type ]['description'] ) ) {
+			return  $option[ $post_type ]['description'];
 		}
 
 		// Use post excerpt if available.
