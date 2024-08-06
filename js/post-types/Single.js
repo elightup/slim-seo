@@ -14,12 +14,18 @@ const Single = () => {
 			label={ __( 'Meta title', 'slim-seo' ) }
 			std={ ssPostType.data.title }
 			description={ __( 'Recommended length: ≤ 60 characters.', 'slim-seo' ) }
+			check={ true }
+			max={ 60 }
 		/>
 		<Textarea
 			id="slim_seo[description]"
 			label={ __( 'Meta description', 'slim-seo' ) }
 			std={ ssPostType.data.description }
 			description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from post exceprt (if available) or post content.', 'slim-seo' ) }
+			check={ true }
+			min={ 50 }
+			max={ 160 }
+			truncate={ true }
 		/>
 		<Image
 			id="slim_seo[facebook_image]"
