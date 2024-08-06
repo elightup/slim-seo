@@ -8,24 +8,26 @@ const Text = ( property ) => {
 	const inputRef = useRef();
 	let { id, std, className= '', description, check = false, max = 0, ...rest } = property;
 
-	let [ title, setTitle ] = useState( std );
-	let [ wpTitle, setWpTitle ] = useState( null );
+	let [ holder, setHolder ] = useState( std );
 	let [ newDescription, setNewDescription ] = useState( null );
 	let [ newClassName, setNewClassName ] = useState( std.length > max ? 'ss-input-warning': 'ss-input-success' );
 	const { select, subscribe } = wp.data;
 
 	const getTitle = () => {
+		if ( !check ) {
+			return;
+		}
+
 		const editTitle = normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) );
 		if ( !editTitle ) {
 			return;
 		}
 
-		if ( !std && !editTitle.includes( '{{' ) ) {
-			setTitle( editTitle );
+		if ( !inputRef.current.value && !editTitle.includes( '{{' ) ) {
+			setHolder( editTitle );
 			setNewDescription( formatDescription( editTitle ) );
 			setNewClassName( editTitle.length > max ? 'ss-input-warning': 'ss-input-success' );
 		}
-		setWpTitle( formatTitle( editTitle ) );
 	}
 
 	const formatTitle = ( title ) => {
@@ -37,10 +39,24 @@ const Text = ( property ) => {
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description );
 	}
 
-	const handleChange = ( e ) => {
-		setTitle( e.target.value );
-		setNewDescription( formatDescription( e.target.value ) );
-		setNewClassName( e.target.value.length > max ? 'ss-input-warning': 'ss-input-success' );
+	const handleChange  = ( e ) => {
+		if ( !check ) {
+			return;
+		}
+
+		inputRef.current.value = e.target.value;
+		setNewDescription( formatDescription( e.target.value || holder ) );
+		setNewClassName( ( e.target.value || holder ).length > max ? 'ss-input-warning': 'ss-input-success' );
+	}
+
+	const handleClick  = ( e ) => {
+		if ( !check || e.target.value ) {
+			return;
+		}
+
+		inputRef.current.value = holder;
+		setNewDescription( formatDescription( holder ) );
+		setNewClassName( holder > max ? 'ss-input-warning': 'ss-input-success' );
 	}
 
 	useEffect( () => {
@@ -50,8 +66,7 @@ const Text = ( property ) => {
 			}
 			const initTitle = normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) );
 
-			setWpTitle( initTitle );
-			setTitle( std || formatTitle( initTitle ) );
+			setHolder( formatTitle( initTitle ) );
 			setNewDescription( formatDescription( std || formatTitle( initTitle ) ) );
 		}, 200 );
 	}, [] );
@@ -61,7 +76,7 @@ const Text = ( property ) => {
 	return (
 		<Control className={ newClassName } description={ newDescription } id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
-				<input type="text" id={ id } name={ id } defaultValue={ title } ref={ inputRef } placeholder={ wpTitle } onChange={ handleChange } onClick={ handleChange } />
+				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } placeholder={ holder } onChange={ handleChange } onClick={ handleClick } />
 				<PropInserter inputRef={ inputRef } />
 			</div>
 		</Control>
