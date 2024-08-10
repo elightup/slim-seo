@@ -2,9 +2,8 @@ import { Control } from "@elightup/form";
 import { useRef } from "@wordpress/element";
 import PropInserter from "./PropInserter";
 
-const Text = ( property ) => {
+const Text = ( { id, label, std, className= '', ...rest } ) => {
 	const inputRef = useRef();
-	const { id, label, std, className= '', ...rest } = property;
 
 	return (
 		<Control className={ className } label={ label } id={ id } { ...rest }>

@@ -3,9 +3,8 @@ import { Button } from "@wordpress/components";
 import { useRef } from "@wordpress/element";
 import PropInserter from "./PropInserter";
 
-const Image = ( property ) => {
+const Image = ( { id, label, std, className = '', mediaPopupTitle, ...rest } ) => {
 	const inputRef = useRef();
-	const { id, label, std, className = '', mediaPopupTitle, ...rest } = property;
 
 	const openMediaPopup = e => {
 		e.preventDefault();

@@ -4,9 +4,8 @@ import { Control } from "@elightup/form";
 import PropInserter from "./PropInserter";
 import { normalize } from "../../functions";
 
-const Description = ( property ) => {
+const Description = ( { id, description, std, className = '', rows = 2, min = 0, max = 0, truncate = false, ...rest } ) => {
 	const inputRef = useRef();
-	const { id, description, std, className = '', rows = 2, min = 0, max = 0, truncate = false, ...rest } = property;
 
 	let [ suggest, setSuggest ] = useState( std );
 	let [ newDescription, setNewDescription ] = useState( null );
