@@ -18,42 +18,49 @@ const formatTitle = title => {
 const Title = ( { id, std, description, max = 60, ...rest } ) => {
 	const inputRef = useRef();
 
+	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
-	let [ newDescription, setNewDescription ] = useState( null );
-	let [ newClassName, setNewClassName ] = useState( std.length > max ? 'ss-input-warning' : 'ss-input-success' );
 	const wpTitle = document.querySelector( '#title' );
 
-	const updateCounterAndStatus = () => {
-		let value = inputRef.current.value;
-
+	const getClassName = () => {
 		// Do nothing if use variables.
 		if ( value.includes( '{{' ) ) {
-			setNewDescription( description );
-			setNewClassName( '' );
-			return;
+			return '';
 		}
 
-		value = value || placeholder;
-		value = normalize( value );
+		let title = value || placeholder;
+		title = normalize( title );
 
-		console.debug( value, placeholder );
-		const text = sprintf( __( 'Character count: %s. %s', 'slim-seo' ), value.length, description );
-		setNewDescription( text );
-		setNewClassName( value.length > max ? 'ss-input-warning' : 'ss-input-success' );
+		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
-	const handleFocus = e => {
-		inputRef.current.value = inputRef.current.value || placeholder;
+	const getDescription = () => {
+		// Do nothing if use variables.
+		if ( value.includes( '{{' ) ) {
+			return description;
+		}
+
+		let title = value || placeholder;
+		title = normalize( title );
+
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
+	}
+
+	const handleChange = e => {
+		setValue( e.target.value );
+	}
+
+	const handleFocus = () => {
+		setValue( prev => prev || placeholder );
 	};
 
-	const handleBlur = e => {
-		inputRef.current.value = inputRef.current.value === placeholder ? '' : inputRef.current.value;
+	const handleBlur = () => {
+		setValue( prev => prev === placeholder ? '' : prev );
 	};
 
 	const handleTitleChange = () => {
 		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
 		setPlaceholder( formatTitle( title ) );
-		updateCounterAndStatus();
 	};
 
 	// Update placeholder when post title changes.
@@ -76,16 +83,16 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 	}, [] );
 
 	return (
-		<Control className={ newClassName } description={ newDescription } id={ id } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
 				<input
 					type="text"
 					id={ id }
 					name={ id }
-					defaultValue={ std }
+					value={ value }
 					ref={ inputRef }
 					placeholder={ placeholder }
-					onInput={ updateCounterAndStatus }
+					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 				/>
