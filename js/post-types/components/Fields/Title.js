@@ -43,7 +43,7 @@ const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, .
 	}
 
 	const handleChange  = ( e ) => {
-		const ssValue = e.target.value;
+		const ssValue = normalize( e.target.value );
 
 		inputRef.current.value = ssValue;
 		setNewDescription( formatDescription( ssValue || suggest ) );
@@ -61,7 +61,7 @@ const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, .
 	}
 
 	const onChangeTitle = ( e ) => {
-		const wpValue = e.target.value;
+		const wpValue = normalize( e.target.value );
 
 		if ( ! inputRef.current.value ) {
 			setSuggest( formatTitle( wpValue ) );
@@ -72,7 +72,7 @@ const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, .
 
 	useEffect( () => {
 		setTimeout( () => {
-			const initTitle = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : normalize( wpTitle.value );
+			const initTitle = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : wpTitle.value;
 
 			setSuggest( formatTitle( initTitle ) );
 			setNewDescription( formatDescription( std || formatTitle( initTitle ) ) );

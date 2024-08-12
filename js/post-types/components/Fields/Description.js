@@ -53,7 +53,15 @@ const Description = ( { id, description, std, className = '', rows = 2, min = 0,
 		setNewClassName( min > suggest || suggest > max ? 'ss-input-warning': 'ss-input-success' );
 	}
 
-	const onChangeDescription = ( e ) => {}
+	const onChangeDescription = ( e ) => {
+		const wpValue = normalize( e.target.value || e.currentTarget.innerHTML );
+
+		if ( ! inputRef.current.value ) {
+			setSuggest( wpValue );
+		}
+		setNewDescription( formatDescription( wpValue || suggest ) );
+		setNewClassName( min > ( wpValue || suggest ).length || ( wpValue || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
+	}
 
 	useEffect( () => {
 		setTimeout( () => {
@@ -64,10 +72,19 @@ const Description = ( { id, description, std, className = '', rows = 2, min = 0,
 
 			setSuggest( initText );
 			setNewDescription( formatDescription( std || initText ) );
+			setNewClassName( min > ( std || initText ).length || ( std || initText ).length > max ? 'ss-input-warning': 'ss-input-success' );
 		}, 200 );
 
 		if ( wpContent ) {
+			wpExcerpt.addEventListener( 'input', onChangeDescription );
 			wpContent.addEventListener( 'input', onChangeDescription );
+
+			jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
+				if ( editor.id !== 'content' ) {
+					return;
+				}
+				editor.on( 'input keyup', onChangeDescription );
+			} );
 		}
 	}, [] );
 
