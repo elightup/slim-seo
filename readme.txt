@@ -23,7 +23,7 @@ SEO should be an integrated part of WordPress, where users don't need or need ve
 
 So, we made [**Slim SEO**](https://wpslimseo.com).
 
-https://www.youtube.com/watch?v=ZEiIKfz2p2Q
+https://www.youtube.com/watch?v=vnC94TMn3wU
 
 Slim SEO is a full-featured SEO plugin, that's done right! It provides a complete SEO solution for WordPress where the configuration has been done automatically. Users do not need to care about their complex and semantic options.
 
