@@ -2,11 +2,11 @@ import { Control } from "@elightup/form";
 import { useRef } from "@wordpress/element";
 import PropInserter from "./PropInserter";
 
-const Textarea = ( { id, label, std, className = '', rows = 2, ...rest } ) => {
+const Textarea = ( { id, std, rows = 2, ...rest } ) => {
 	const inputRef = useRef();
 
 	return (
-		<Control className={ className } label={ label } id={ id } { ...rest }>
+		<Control id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
 				<textarea defaultValue={ std } id={ id } name={ id } rows={ rows } ref={ inputRef } />
 				<PropInserter inputRef={ inputRef } />

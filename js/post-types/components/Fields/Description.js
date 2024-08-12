@@ -4,7 +4,7 @@ import { Control } from "@elightup/form";
 import PropInserter from "./PropInserter";
 import { normalize } from "../../functions";
 
-const Description = ( { id, description, std, className = '', rows = 2, min = 0, max = 0, truncate = false, isBlockEditor, ...rest } ) => {
+const Description = ( { id, description, std, rows = 2, min = 0, max = 0, truncate = false, isBlockEditor, ...rest } ) => {
 	const inputRef = useRef();
 
 	let [ suggest, setSuggest ] = useState( std );
@@ -53,6 +53,10 @@ const Description = ( { id, description, std, className = '', rows = 2, min = 0,
 		setNewClassName( min > suggest || suggest > max ? 'ss-input-warning': 'ss-input-success' );
 	}
 
+	const handleOnBlur = ( e ) => {
+		inputRef.current.value = inputRef.current.value === e.target.value ? '' : inputRef.current.value;
+	}
+
 	const onChangeDescription = ( e ) => {
 		const wpValue = normalize( e.target.value || e.currentTarget.innerHTML );
 
@@ -65,7 +69,7 @@ const Description = ( { id, description, std, className = '', rows = 2, min = 0,
 
 	useEffect( () => {
 		setTimeout( () => {
-			let initText = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostContent() ) : normalize( wpExcerpt.value || wpContent.value );
+			let initText = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostContent() ) : wpContent ? normalize( wpExcerpt.value || wpContent.value ) : '';
 			if ( truncate ) {
 				initText = initText.substring( 0, max );
 			}
@@ -93,7 +97,7 @@ const Description = ( { id, description, std, className = '', rows = 2, min = 0,
 	return (
 		<Control className={ newClassName } description={ newDescription } id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
-				<textarea defaultValue={ std } id={ id } name={ id } rows={ rows } ref={ inputRef } placeholder={ suggest }  onChange={ handleChange } onClick={ handleClick } />
+				<textarea defaultValue={ std } id={ id } name={ id } rows={ rows } ref={ inputRef } placeholder={ suggest }  onChange={ handleChange } onClick={ handleClick } onBlur = { handleOnBlur } />
 				<PropInserter inputRef={ inputRef } />
 			</div>
 		</Control>

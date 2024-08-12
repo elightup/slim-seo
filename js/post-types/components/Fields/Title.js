@@ -4,7 +4,7 @@ import { Control } from "@elightup/form";
 import PropInserter from "./PropInserter";
 import { normalize } from "../../functions";
 
-const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, ...rest } ) => {
+const Title = ( { id, std, description, max = 0, isBlockEditor, ...rest } ) => {
 	const inputRef = useRef();
 
 	let [ suggest, setSuggest ] = useState( std );
@@ -60,6 +60,10 @@ const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, .
 		setNewClassName( suggest > max ? 'ss-input-warning': 'ss-input-success' );
 	}
 
+	const handleOnBlur = ( e ) => {
+		inputRef.current.value = inputRef.current.value === e.target.value ? '' : inputRef.current.value;
+	}
+
 	const onChangeTitle = ( e ) => {
 		const wpValue = normalize( e.target.value );
 
@@ -72,7 +76,7 @@ const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, .
 
 	useEffect( () => {
 		setTimeout( () => {
-			const initTitle = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : wpTitle.value;
+			const initTitle = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : wpTitle ? normalize( wpTitle.value ) : '';
 
 			setSuggest( formatTitle( initTitle ) );
 			setNewDescription( formatDescription( std || formatTitle( initTitle ) ) );
@@ -89,7 +93,7 @@ const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, .
 	return (
 		<Control className={ newClassName } description={ newDescription } id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
-				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } placeholder={ suggest } onChange={ handleChange } onClick={ handleClick } />
+				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } placeholder={ suggest } onChange={ handleChange } onClick={ handleClick } onBlur={ handleOnBlur } />
 				<PropInserter inputRef={ inputRef } />
 			</div>
 		</Control>
