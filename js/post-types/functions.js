@@ -32,3 +32,5 @@ export const normalize = html => !html ? '' : html
 	.replace( /<[^>]*?>/gm, '' )                        // Remove other HTML tags.
 	.replace( /\s+/gm, ' ' )                            // Remove duplicated white spaces.
 	.trim();
+
+export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );

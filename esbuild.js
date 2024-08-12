@@ -15,6 +15,7 @@ const config = {
 			'@wordpress/element': 'wp.element',
 			'@wordpress/components': 'wp.components',
 			'@wordpress/hooks': 'wp.hooks',
+			'@wordpress/data': 'wp.data',
 			'@wordpress/api-fetch': 'wp.apiFetch'
 		} ),
 	],

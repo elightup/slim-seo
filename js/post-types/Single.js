@@ -1,12 +1,10 @@
 import { render } from '@wordpress/element';
-import { CheckboxControl } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
+import Checkbox from "./components/Fields/Checkbox";
+import Description from "./components/Fields/Description";
+import Image from "./components/Fields/Image";
 import Text from "./components/Fields/Text";
 import Title from "./components/Fields/Title";
-import Image from "./components/Fields/Image";
-import Textarea from "./components/Fields/Textarea";
-import Description from "./components/Fields/Description";
-import Checkbox from "./components/Fields/Checkbox";
 
 const Single = () => {
 	return <>
@@ -16,7 +14,6 @@ const Single = () => {
 			label={ __( 'Meta title', 'slim-seo' ) }
 			std={ ssPostType.data.title }
 			description={ __( 'Recommended length: ≤ 60 characters.', 'slim-seo' ) }
-			max={ 60 }
 		/>
 		<Description
 			id="slim_seo[description]"
