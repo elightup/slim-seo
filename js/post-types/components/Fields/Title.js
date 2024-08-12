@@ -1,6 +1,6 @@
 import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
-import { useEffect, useRef, useState } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
@@ -16,8 +16,6 @@ const formatTitle = title => {
 };
 
 const Title = ( { id, std, description, max = 60, ...rest } ) => {
-	const inputRef = useRef();
-
 	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpTitle = document.querySelector( '#title' );
@@ -28,9 +26,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 			return '';
 		}
 
-		let title = value || placeholder;
-		title = normalize( title );
-
+		let title = normalize( value || placeholder );
 		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
@@ -40,9 +36,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 			return description;
 		}
 
-		let title = value || placeholder;
-		title = normalize( title );
-
+		let title = normalize( value || placeholder );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
 	}
 
@@ -57,6 +51,10 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 	const handleBlur = () => {
 		setValue( prev => prev === placeholder ? '' : prev );
 	};
+
+	const handleInsertVariables = e => {
+		setValue( prev => prev + e );
+	}
 
 	const handleTitleChange = () => {
 		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
@@ -90,13 +88,12 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 					id={ id }
 					name={ id }
 					value={ value }
-					ref={ inputRef }
 					placeholder={ placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 				/>
-				<PropInserter inputRef={ inputRef } />
+				<PropInserter onInsert= { handleInsertVariables } />
 			</div>
 		</Control>
 	);

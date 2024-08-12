@@ -1,104 +1,103 @@
-import { useState, useRef, useEffect } from "@wordpress/element";
+import { useState, useEffect } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
+import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { Control } from "@elightup/form";
 import PropInserter from "./PropInserter";
-import { normalize } from "../../functions";
+import { isBlockEditor, normalize } from "../../functions";
 
-const Description = ( { id, description, std, rows = 2, min = 0, max = 0, truncate = false, isBlockEditor, ...rest } ) => {
-	const inputRef = useRef();
-
-	let [ suggest, setSuggest ] = useState( std );
-	let [ newDescription, setNewDescription ] = useState( null );
-	let [ newClassName, setNewClassName ] = useState( std.length > 160 ? 'ss-input-warning': 'ss-input-success' );
+const Description = ( { id, description, std, rows = 3, min = 0, max = 0, truncate = false, ...rest } ) => {
+	let [ value, setValue ] = useState( std );
+	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
-	const { select, subscribe } = wp.data;
 
-	const getText = () => {
-		let editText = normalize( select( 'core/editor' ).getEditedPostContent() );
-		if ( !editText ) {
-			return;
+	const prepareDescription = ( desc = '' ) => {
+		let description = normalize( desc || value || placeholder );
+		return truncate ? description.substring( 0, max ) : description;
+	};
+
+	const getClassName = () => {
+		// Do nothing if use variables.
+		if ( value.includes( '{{' ) ) {
+			return '';
 		}
 
-		if ( truncate ) {
-			editText = editText.substring( 0, max );
-		}
-		if ( !inputRef.current.value && !editText.includes( '{{' ) ) {
-			setSuggest( editText );
-			setNewDescription( formatDescription( editText ) );
-			setNewClassName( min > editText.length || editText.length > max ? 'ss-input-warning': 'ss-input-success' );
-		}
-	}
+		let description = prepareDescription();
+		return min > description.length || description.length > max ? 'ss-input-warning' : 'ss-input-success';
+	};
 
-	const formatDescription = ( newDescription = '' ) => {
-		return !newDescription.includes( '{{' ) ?
-			  sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description )
-			: description
-	}
-
-	const handleChange = ( e ) => {
-		inputRef.current.value = e.target.value;
-
-		setNewDescription( formatDescription( e.target.value || suggest ) );
-		setNewClassName( min > ( e.target.value || suggest ).length || ( e.target.value || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
-	}
-
-	const handleClick  = ( e ) => {
-		if ( e.target.value ) {
-			return;
+	const getDescription = () => {
+		if ( value.includes( '{{' ) ) {
+			return description;
 		}
 
-		inputRef.current.value = suggest;
-		setNewDescription( formatDescription( suggest ) );
-		setNewClassName( min > suggest || suggest > max ? 'ss-input-warning': 'ss-input-success' );
+		const newDescription = prepareDescription();
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description );
 	}
 
-	const handleOnBlur = ( e ) => {
-		inputRef.current.value = inputRef.current.value === e.target.value ? '' : inputRef.current.value;
+	const handleChange = e => {
+		setValue( e.target.value );
 	}
 
-	const onChangeDescription = ( e ) => {
-		const wpValue = normalize( e.target.value || e.currentTarget.innerHTML );
+	const handleFocus = () => {
+		setValue( prev => prev || placeholder );
+	};
 
-		if ( ! inputRef.current.value ) {
-			setSuggest( wpValue );
-		}
-		setNewDescription( formatDescription( wpValue || suggest ) );
-		setNewClassName( min > ( wpValue || suggest ).length || ( wpValue || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
+	const handleBlur = () => {
+		setValue( prev => prev === placeholder ? '' : prev );
+	};
+
+	const handleInsertVariables = e => {
+		setValue( prev => prev + e );
 	}
 
+	const handleDescriptionChange = () => {
+		const description = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || wpContent.value : '' );
+		setPlaceholder( prepareDescription( description ) );
+	};
+
+	// Update placeholder when post description changes.
 	useEffect( () => {
-		setTimeout( () => {
-			let initText = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostContent() ) : wpContent ? normalize( wpExcerpt.value || wpContent.value ) : '';
-			if ( truncate ) {
-				initText = initText.substring( 0, max );
-			}
+		handleDescriptionChange();
 
-			setSuggest( initText );
-			setNewDescription( formatDescription( std || initText ) );
-			setNewClassName( min > ( std || initText ).length || ( std || initText ).length > max ? 'ss-input-warning': 'ss-input-success' );
-		}, 200 );
-
-		if ( wpContent ) {
-			wpExcerpt.addEventListener( 'input', onChangeDescription );
-			wpContent.addEventListener( 'input', onChangeDescription );
+		if ( isBlockEditor ) {
+			subscribe( handleDescriptionChange );
+		} else if ( wpContent ) {
+			wpExcerpt.addEventListener( 'input', handleDescriptionChange );
+			wpContent.addEventListener( 'input', handleDescriptionChange );
 
 			jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
 				if ( editor.id !== 'content' ) {
 					return;
 				}
-				editor.on( 'input keyup', onChangeDescription );
+				editor.on( 'input keyup', handleDescriptionChange );
 			} );
+		}
+
+		return () => {
+			if ( isBlockEditor ) {
+				unsubscribe( handleDescriptionChange );
+			} else if ( wpContent ) {
+				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
+				wpContent.removeEventListener( 'input', handleDescriptionChange );
+			}
 		}
 	}, [] );
 
-	subscribe( getText );
-
 	return (
-		<Control className={ newClassName } description={ newDescription } id={ id } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
-				<textarea defaultValue={ std } id={ id } name={ id } rows={ rows } ref={ inputRef } placeholder={ suggest }  onChange={ handleChange } onClick={ handleClick } onBlur = { handleOnBlur } />
-				<PropInserter inputRef={ inputRef } />
+				<textarea
+					id={ id }
+					name={ id }
+					rows={ rows }
+					value={ value }
+					placeholder={ placeholder }
+					onChange={ handleChange }
+					onFocus={ handleFocus }
+					onBlur={ handleBlur }
+				/>
+				<PropInserter onInsert= { handleInsertVariables } />
 			</div>
 		</Control>
 	);
