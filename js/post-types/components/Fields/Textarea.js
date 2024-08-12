@@ -2,7 +2,7 @@ import { Control } from "@elightup/form";
 import { useRef } from "@wordpress/element";
 import PropInserter from "./PropInserter";
 
-const Textarea = ( { id, std, rows = 2, ...rest } ) => {
+const Textarea = ( { id, std, rows = 3, ...rest } ) => {
 	const inputRef = useRef();
 
 	return (
