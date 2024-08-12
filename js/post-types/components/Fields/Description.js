@@ -4,12 +4,14 @@ import { Control } from "@elightup/form";
 import PropInserter from "./PropInserter";
 import { normalize } from "../../functions";
 
-const Description = ( { id, description, std, className = '', rows = 2, min = 0, max = 0, truncate = false, ...rest } ) => {
+const Description = ( { id, description, std, className = '', rows = 2, min = 0, max = 0, truncate = false, isBlockEditor, ...rest } ) => {
 	const inputRef = useRef();
 
 	let [ suggest, setSuggest ] = useState( std );
 	let [ newDescription, setNewDescription ] = useState( null );
 	let [ newClassName, setNewClassName ] = useState( std.length > 160 ? 'ss-input-warning': 'ss-input-success' );
+	const wpExcerpt = document.querySelector( '#excerpt' );
+	const wpContent = document.querySelector( '#content' );
 	const { select, subscribe } = wp.data;
 
 	const getText = () => {
@@ -29,7 +31,9 @@ const Description = ( { id, description, std, className = '', rows = 2, min = 0,
 	}
 
 	const formatDescription = ( newDescription = '' ) => {
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description );
+		return !newDescription.includes( '{{' ) ?
+			  sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description )
+			: description
 	}
 
 	const handleChange = ( e ) => {
@@ -49,13 +53,22 @@ const Description = ( { id, description, std, className = '', rows = 2, min = 0,
 		setNewClassName( min > suggest || suggest > max ? 'ss-input-warning': 'ss-input-success' );
 	}
 
+	const onChangeDescription = ( e ) => {}
+
 	useEffect( () => {
 		setTimeout( () => {
-			const initText = normalize( select( 'core/editor' ).getEditedPostContent() );
+			let initText = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostContent() ) : normalize( wpExcerpt.value || wpContent.value );
+			if ( truncate ) {
+				initText = initText.substring( 0, max );
+			}
 
 			setSuggest( initText );
 			setNewDescription( formatDescription( std || initText ) );
 		}, 200 );
+
+		if ( wpContent ) {
+			wpContent.addEventListener( 'input', onChangeDescription );
+		}
 	}, [] );
 
 	subscribe( getText );

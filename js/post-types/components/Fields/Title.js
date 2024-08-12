@@ -4,12 +4,13 @@ import { Control } from "@elightup/form";
 import PropInserter from "./PropInserter";
 import { normalize } from "../../functions";
 
-const Title = ( { id, std, className= '', description, max = 0, ...rest } ) => {
+const Title = ( { id, std, className= '', description, max = 0, isBlockEditor, ...rest } ) => {
 	const inputRef = useRef();
 
 	let [ suggest, setSuggest ] = useState( std );
 	let [ newDescription, setNewDescription ] = useState( null );
 	let [ newClassName, setNewClassName ] = useState( std.length > max ? 'ss-input-warning': 'ss-input-success' );
+	const wpTitle = document.querySelector( '#title' );
 	const { select, subscribe } = wp.data;
 
 	const getTitle = () => {
@@ -18,7 +19,7 @@ const Title = ( { id, std, className= '', description, max = 0, ...rest } ) => {
 			return;
 		}
 
-		if ( !inputRef.current.value && !editTitle.includes( '{{' ) ) {
+		if ( !inputRef.current.value ) {
 			setSuggest( formatTitle( editTitle ) );
 			setNewDescription( formatDescription( editTitle ) );
 			setNewClassName( editTitle.length > max ? 'ss-input-warning': 'ss-input-success' );
@@ -36,13 +37,17 @@ const Title = ( { id, std, className= '', description, max = 0, ...rest } ) => {
 	}
 
 	const formatDescription = ( newDescription = '' ) => {
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description );
+		return !newDescription.includes( '{{' ) ?
+			  sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description )
+			: description
 	}
 
 	const handleChange  = ( e ) => {
-		inputRef.current.value = e.target.value;
-		setNewDescription( formatDescription( e.target.value || suggest ) );
-		setNewClassName( ( e.target.value || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
+		const ssValue = e.target.value;
+
+		inputRef.current.value = ssValue;
+		setNewDescription( formatDescription( ssValue || suggest ) );
+		setNewClassName( ( ssValue || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
 	}
 
 	const handleClick  = ( e ) => {
@@ -55,13 +60,28 @@ const Title = ( { id, std, className= '', description, max = 0, ...rest } ) => {
 		setNewClassName( suggest > max ? 'ss-input-warning': 'ss-input-success' );
 	}
 
+	const onChangeTitle = ( e ) => {
+		const wpValue = e.target.value;
+
+		if ( ! inputRef.current.value ) {
+			setSuggest( formatTitle( wpValue ) );
+		}
+		setNewDescription( formatDescription( wpValue || suggest ) );
+		setNewClassName( ( wpValue || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
+	}
+
 	useEffect( () => {
 		setTimeout( () => {
-			const initTitle = normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) );
+			const initTitle = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : normalize( wpTitle.value );
 
 			setSuggest( formatTitle( initTitle ) );
 			setNewDescription( formatDescription( std || formatTitle( initTitle ) ) );
+			setNewClassName( initTitle.length > max ? 'ss-input-warning': 'ss-input-success' );
 		}, 200 );
+
+		if ( wpTitle ) {
+			wpTitle.addEventListener( 'input', onChangeTitle );
+		}
 	}, [] );
 
 	subscribe( getTitle );
