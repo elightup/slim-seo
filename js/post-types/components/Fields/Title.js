@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect } from "@wordpress/element";
-import { __, sprintf } from "@wordpress/i18n";
 import { Control } from "@elightup/form";
-import PropInserter from "./PropInserter";
+import { useEffect, useRef, useState } from "@wordpress/element";
+import { __, sprintf } from "@wordpress/i18n";
 import { normalize } from "../../functions";
+import PropInserter from "./PropInserter";
 
 const Title = ( { id, std, description, max = 0, isBlockEditor, ...rest } ) => {
 	const inputRef = useRef();
 
-	let [ suggest, setSuggest ] = useState( std );
+	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ newDescription, setNewDescription ] = useState( null );
-	let [ newClassName, setNewClassName ] = useState( std.length > max ? 'ss-input-warning': 'ss-input-success' );
+	let [ newClassName, setNewClassName ] = useState( std.length > max ? 'ss-input-warning' : 'ss-input-success' );
 	const wpTitle = document.querySelector( '#title' );
 	const { select, subscribe } = wp.data;
 
@@ -20,11 +20,10 @@ const Title = ( { id, std, description, max = 0, isBlockEditor, ...rest } ) => {
 		}
 
 		if ( !inputRef.current.value ) {
-			setSuggest( formatTitle( editTitle ) );
-			setNewDescription( formatDescription( editTitle ) );
-			setNewClassName( editTitle.length > max ? 'ss-input-warning': 'ss-input-success' );
+			setPlaceholder( formatTitle( editTitle ) );
+			updateCounterAndStatus( editTitle );
 		}
-	}
+	};
 
 	const formatTitle = ( title ) => {
 		const values = {
@@ -34,53 +33,56 @@ const Title = ( { id, std, description, max = 0, isBlockEditor, ...rest } ) => {
 		};
 
 		return ss.title.parts.map( part => values[ part ] ?? '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
-	}
+	};
 
-	const formatDescription = ( newDescription = '' ) => {
-		return !newDescription.includes( '{{' ) ?
-			  sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description )
-			: description
-	}
+	const updateCounterAndStatus = value => {
+		// Do nothing if use variables.
+		if ( value.includes( '{{' ) ) {
+			setNewDescription( description );
+			setNewClassName( '' );
+			return;
+		}
 
-	const handleChange  = ( e ) => {
+		const text = sprintf( __( 'Character count: %s. %s', 'slim-seo' ), value.length, description );
+		setNewDescription( text );
+		setNewClassName( value.length > max ? 'ss-input-warning' : 'ss-input-success' );
+	};
+
+	const handleInput = ( e ) => {
 		const ssValue = normalize( e.target.value );
 
 		inputRef.current.value = ssValue;
-		setNewDescription( formatDescription( ssValue || suggest ) );
-		setNewClassName( ( ssValue || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
-	}
+		updateCounterAndStatus( ssValue || placeholder );
+	};
 
-	const handleClick  = ( e ) => {
+	const handleFocus = ( e ) => {
 		if ( e.target.value ) {
 			return;
 		}
 
-		inputRef.current.value = suggest;
-		setNewDescription( formatDescription( suggest ) );
-		setNewClassName( suggest > max ? 'ss-input-warning': 'ss-input-success' );
-	}
+		inputRef.current.value = placeholder;
+		updateCounterAndStatus( placeholder );
+	};
 
-	const handleOnBlur = ( e ) => {
+	const handleBlur = ( e ) => {
 		inputRef.current.value = inputRef.current.value === e.target.value ? '' : inputRef.current.value;
-	}
+	};
 
 	const onChangeTitle = ( e ) => {
 		const wpValue = normalize( e.target.value );
 
-		if ( ! inputRef.current.value ) {
-			setSuggest( formatTitle( wpValue ) );
+		if ( !inputRef.current.value ) {
+			setPlaceholder( formatTitle( wpValue ) );
 		}
-		setNewDescription( formatDescription( wpValue || suggest ) );
-		setNewClassName( ( wpValue || suggest ).length > max ? 'ss-input-warning': 'ss-input-success' );
-	}
+		updateCounterAndStatus( wpValue || placeholder );
+	};
 
 	useEffect( () => {
 		setTimeout( () => {
 			const initTitle = isBlockEditor ? normalize( select( 'core/editor' ).getEditedPostAttribute( 'title' ) ) : wpTitle ? normalize( wpTitle.value ) : '';
 
-			setSuggest( formatTitle( initTitle ) );
-			setNewDescription( formatDescription( std || formatTitle( initTitle ) ) );
-			setNewClassName( initTitle.length > max ? 'ss-input-warning': 'ss-input-success' );
+			setPlaceholder( formatTitle( initTitle ) );
+			updateCounterAndStatus( std ||formatTitle( initTitle ) );
 		}, 200 );
 
 		if ( wpTitle ) {
@@ -93,7 +95,17 @@ const Title = ( { id, std, description, max = 0, isBlockEditor, ...rest } ) => {
 	return (
 		<Control className={ newClassName } description={ newDescription } id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
-				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } placeholder={ suggest } onChange={ handleChange } onClick={ handleClick } onBlur={ handleOnBlur } />
+				<input
+					type="text"
+					id={ id }
+					name={ id }
+					defaultValue={ std }
+					ref={ inputRef }
+					placeholder={ placeholder }
+					onInput={ handleInput }
+					onFocus={ handleFocus }
+					onBlur={ handleBlur }
+				/>
 				<PropInserter inputRef={ inputRef } />
 			</div>
 		</Control>
