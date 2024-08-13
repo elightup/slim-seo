@@ -8,19 +8,21 @@ export const request = async ( apiName, data = {}, method = 'GET', cache = true 
 	if ( cache && apiCache[ cacheKey ] ) {
 		return apiCache[ cacheKey ];
 	}
-	let options = {
-		method,
-		headers: { 'X-WP-Nonce': ssPostTypes.nonce, 'Content-Type': 'application/json' },
-	};
-	let url = `${ ssPostTypes.rest }/slim-seo/${ apiName }`;
-	const query = ( new URLSearchParams( data ) ).toString();
 
-	if ( 'POST' === method ) {
-		options.body = JSON.stringify( data );
-	} else if ( query ) {
-		url += ssPostTypes.rest.includes( '?' ) ? `&${ query }` : `?${ query }`;
+	let options;
+	if ( method === 'GET' ) {
+		options = {
+			path: addQueryArgs( `/slim-seo/${ apiName }` , data )
+		}
+	} else {
+		options = {
+			path: `/slim-seo/${ apiName }`,
+			method,
+			data
+		}
 	}
-	const result = await fetch( url, options ).then( response => response.json() );
+
+	const result = await apiFetch( options );
 	apiCache[ cacheKey ] = result;
 	return result;
 };
