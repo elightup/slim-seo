@@ -27,7 +27,6 @@
 		"@babel/preset-react": "^7.17.12",
 		"@wordpress/scripts": "^26.18.0",
 		"babel-loader": "^8.1.0",
-		"camelcase": "^8.0.0",
 		"esbuild": "^0.23.0",
 		"esbuild-plugin-globals": "^0.2.0",
 		"sass": "^1.51.0"

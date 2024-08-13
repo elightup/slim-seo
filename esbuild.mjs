@@ -1,4 +1,3 @@
-import camelCase from 'camelcase';
 import esbuild from "esbuild";
 import GlobalsPlugin from "esbuild-plugin-globals";
 
@@ -12,7 +11,7 @@ const config = {
 		GlobalsPlugin( {
 			react: "React",
 			'react-dom': 'ReactDOM',
-			"@wordpress/.*": name => `wp.${camelCase( name.substring( 11 ) )}`,
+			"@wordpress/.*": name => name === '@wordpress/api-fetch' ? 'wp.apiFetch' : `wp.${ name.substring( 11 ) }`,
 		} ),
 	],
 };
