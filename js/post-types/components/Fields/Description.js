@@ -51,8 +51,10 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 		setValue( prev => prev + e );
 	}
 
-	const handleDescriptionChange = () => {
-		const wpDescription = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || wpContent.value : '' );
+	const handleDescriptionChange = e => {
+		const tinymceDescription  = e ? e.target.value || e.currentTarget.innerHTML : '';
+		const wpDescription       = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || tinymceDescription || wpContent.value : '' );
+
 		setPlaceholder( prepareDescription( wpDescription ) );
 	};
 
