@@ -10,9 +10,10 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
+	let contentEditor;
 
-	const prepare = ( text = '' ) => {
-		text = normalize( text || value || placeholder );
+	const format = text => {
+		text = normalize( text );
 		return truncate ? text.substring( 0, max ) : text;
 	};
 
@@ -22,8 +23,8 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 			return '';
 		}
 
-		const description = prepare();
-		return min > description.length || description.length > max ? 'ss-input-warning' : 'ss-input-success';
+		const desc = normalize( value || placeholder );
+		return min > desc.length || desc.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
 	const getDescription = () => {
@@ -31,8 +32,8 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 			return description;
 		}
 
-		const description = prepare();
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), description.length, description );
+		const desc = normalize( value || placeholder );
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), desc.length, description );
 	};
 
 	const handleChange = e => {
@@ -51,11 +52,20 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 		setValue( prev => prev + value );
 	};
 
-	const handleDescriptionChange = e => {
-		const tinymceDescription = e ? e.target.value || e.currentTarget.innerHTML : '';
-		const wpDescription      = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || tinymceDescription || wpContent.value : '' );
+	const handleDescriptionChange = () => {
+		const desc = getPostExcerpt() || getPostContent();
+		setPlaceholder( format( desc ) );
+	};
 
-		setPlaceholder( prepare( wpDescription ) );
+	const getPostContent = () => {
+		if ( isBlockEditor ) {
+			return wp.data.select( 'core/editor' ).getEditedPostContent();
+		}
+		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
+	};
+
+	const getPostExcerpt = () => {
+		return isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
 	};
 
 	// Update placeholder when post description changes.
@@ -64,16 +74,19 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 
 		if ( isBlockEditor ) {
 			subscribe( handleDescriptionChange );
-		} else if ( wpContent ) {
-			wpExcerpt.addEventListener( 'input', handleDescriptionChange );
-			wpContent.addEventListener( 'input', handleDescriptionChange );
-
-			jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
-				if ( editor.id !== 'content' ) {
-					return;
-				}
-				editor.on( 'input keyup', handleDescriptionChange );
-			} );
+		} else {
+			if ( wpExcerpt ) {
+				wpExcerpt.addEventListener( 'input', handleDescriptionChange );
+			}
+			if ( wpContent ) {
+				jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
+					if ( editor.id !== 'content' ) {
+						return;
+					}
+					contentEditor = editor;
+					editor.on( 'input keyup', handleDescriptionChange );
+				} );
+			}
 		}
 
 		return () => {

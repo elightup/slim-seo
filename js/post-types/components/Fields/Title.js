@@ -5,11 +5,13 @@ import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const formatTitle = title => {
+const format = text => {
+	text = normalize( text );
+
 	const values = {
 		site: ss.site.title,
 		tagline: ss.site.description,
-		title
+		title: text
 	};
 
 	return ss.title.parts.map( part => values[ part ] ?? '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
@@ -58,7 +60,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 
 	const handleTitleChange = () => {
 		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
-		setPlaceholder( formatTitle( title ) );
+		setPlaceholder( format( title ) );
 	};
 
 	// Update placeholder when post title changes.
