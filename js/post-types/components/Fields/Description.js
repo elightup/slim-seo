@@ -5,14 +5,14 @@ import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, description, std, rows = 3, min = 50, max = 160, truncate = false, ...rest } ) => {
+const Description = ( { id, description, std, rows = 3, min = 50, max = 160, truncate = true, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 
-	const prepareDescription = ( desc = '' ) => {
-		const text = normalize( desc || value || placeholder );
+	const prepare = ( text = '' ) => {
+		text = normalize( text || value || placeholder );
 		return truncate ? text.substring( 0, max ) : text;
 	};
 
@@ -22,8 +22,8 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 			return '';
 		}
 
-		const ssDescription = prepareDescription();
-		return min > ssDescription.length || ssDescription.length > max ? 'ss-input-warning' : 'ss-input-success';
+		const description = prepare();
+		return min > description.length || description.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
 	const getDescription = () => {
@@ -31,8 +31,8 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 			return description;
 		}
 
-		const ssDescription = prepareDescription();
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), ssDescription.length, description );
+		const description = prepare();
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), description.length, description );
 	};
 
 	const handleChange = e => {
@@ -55,7 +55,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 		const tinymceDescription = e ? e.target.value || e.currentTarget.innerHTML : '';
 		const wpDescription      = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || tinymceDescription || wpContent.value : '' );
 
-		setPlaceholder( prepareDescription( wpDescription ) );
+		setPlaceholder( prepare( wpDescription ) );
 	};
 
 	// Update placeholder when post description changes.

@@ -20,7 +20,6 @@ const Single = () => {
 			label={ __( 'Meta description', 'slim-seo' ) }
 			std={ ssPostType.data.description }
 			description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from post exceprt (if available) or post content.', 'slim-seo' ) }
-			truncate={ true }
 		/>
 		<Image
 			id="slim_seo[facebook_image]"
