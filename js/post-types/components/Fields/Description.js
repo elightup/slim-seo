@@ -1,18 +1,18 @@
-import { useState, useEffect } from "@wordpress/element";
-import { __, sprintf } from "@wordpress/i18n";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { Control } from "@elightup/form";
-import PropInserter from "./PropInserter";
+import { select, subscribe, unsubscribe } from "@wordpress/data";
+import { useEffect, useState } from "@wordpress/element";
+import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, normalize } from "../../functions";
+import PropInserter from "./PropInserter";
 
-const Description = ( { id, description, std, rows = 3, min = 0, max = 0, truncate = false, ...rest } ) => {
+const Description = ( { id, description, std, rows = 3, min = 50, max = 160, truncate = false, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 
 	const prepareDescription = ( desc = '' ) => {
-		let text = normalize( desc || value || placeholder );
+		const text = normalize( desc || value || placeholder );
 		return truncate ? text.substring( 0, max ) : text;
 	};
 
@@ -33,11 +33,11 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 
 		const ssDescription = prepareDescription();
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), ssDescription.length, description );
-	}
+	};
 
 	const handleChange = e => {
 		setValue( e.target.value );
-	}
+	};
 
 	const handleFocus = () => {
 		setValue( prev => prev || placeholder );
@@ -47,13 +47,13 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 		setValue( prev => prev === placeholder ? '' : prev );
 	};
 
-	const handleInsertVariables = e => {
-		setValue( prev => prev + e );
-	}
+	const handleInsertVariables = value => {
+		setValue( prev => prev + value );
+	};
 
 	const handleDescriptionChange = e => {
-		const tinymceDescription  = e ? e.target.value || e.currentTarget.innerHTML : '';
-		const wpDescription       = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || tinymceDescription || wpContent.value : '' );
+		const tinymceDescription = e ? e.target.value || e.currentTarget.innerHTML : '';
+		const wpDescription      = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || tinymceDescription || wpContent.value : '' );
 
 		setPlaceholder( prepareDescription( wpDescription ) );
 	};
@@ -83,7 +83,7 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
 				wpContent.removeEventListener( 'input', handleDescriptionChange );
 			}
-		}
+		};
 	}, [] );
 
 	return (
@@ -99,7 +99,7 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 				/>
-				<PropInserter onInsert= { handleInsertVariables } />
+				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>
 	);

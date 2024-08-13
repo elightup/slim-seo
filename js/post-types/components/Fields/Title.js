@@ -26,7 +26,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 			return '';
 		}
 
-		let title = normalize( value || placeholder );
+		const title = normalize( value || placeholder );
 		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
@@ -36,13 +36,13 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 			return description;
 		}
 
-		let title = normalize( value || placeholder );
+		const title = normalize( value || placeholder );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
-	}
+	};
 
 	const handleChange = e => {
 		setValue( e.target.value );
-	}
+	};
 
 	const handleFocus = () => {
 		setValue( prev => prev || placeholder );
@@ -52,9 +52,9 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 		setValue( prev => prev === placeholder ? '' : prev );
 	};
 
-	const handleInsertVariables = e => {
-		setValue( prev => prev + e );
-	}
+	const handleInsertVariables = value => {
+		setValue( prev => prev + value );
+	};
 
 	const handleTitleChange = () => {
 		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
@@ -77,7 +77,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 			} else if ( wpTitle ) {
 				wpTitle.removeEventListener( 'input', handleTitleChange );
 			}
-		}
+		};
 	}, [] );
 
 	return (
@@ -93,7 +93,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 				/>
-				<PropInserter onInsert= { handleInsertVariables } />
+				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>
 	);

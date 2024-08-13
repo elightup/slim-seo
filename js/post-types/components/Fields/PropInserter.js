@@ -1,5 +1,5 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useContext, useEffect, useState } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import Select from "react-select";
 import slugify from "slugify";
@@ -28,7 +28,7 @@ const PropInserter = ( { data = 'variables', inputRef, replace = false, onInsert
 	};
 
 	const setValue = value => {
-		if ( !inputRef ) {
+		if ( onInsert ) {
 			onInsert( value );
 			return;
 		}
