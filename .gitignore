@@ -11,6 +11,8 @@ css/meta-tags.css
 css/admin-columns.css
 
 js/redirection.js
+js/post-type.js
+js/post-types.js
 js/link-attributes/block-editor/dist
 js/breadcrumbs/dist
 js/meta-tags/dist

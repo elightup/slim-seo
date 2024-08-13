@@ -1,7 +1,7 @@
 {
 	"scripts": {
 		"watch:css": "sass -s compressed --no-source-map -w css/scss:css",
-		"js:esbuild": "node esbuild",
+		"js:esbuild": "node esbuild.mjs",
 		"js:link": "wp-scripts build js/link-attributes/block-editor/src/index.js --output-path=js/link-attributes/block-editor/dist",
 		"js:breadcrumbs": "wp-scripts build --webpack-src-dir=js/breadcrumbs/src --output-path=js/breadcrumbs/dist",
 		"build:css": "sass -s compressed --no-source-map css/scss:css",
@@ -27,8 +27,9 @@
 		"@babel/preset-react": "^7.17.12",
 		"@wordpress/scripts": "^26.18.0",
 		"babel-loader": "^8.1.0",
-		"esbuild": "^0.15.10",
-		"esbuild-plugin-external-global": "^1.0.1",
+		"camelcase": "^8.0.0",
+		"esbuild": "^0.23.0",
+		"esbuild-plugin-globals": "^0.2.0",
 		"sass": "^1.51.0"
 	},
 	"babel": {
