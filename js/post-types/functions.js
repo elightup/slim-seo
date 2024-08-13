@@ -26,3 +26,11 @@ export const request = async ( apiName, data = {}, method = 'GET', cache = true 
 	apiCache[ cacheKey ] = result;
 	return result;
 };
+
+export const normalize = html => !html ? '' : html
+	.replace( /<(script|style)[^>]*?>.*?<\/\1>/gm, '' ) // Remove <style> & <script>
+	.replace( /<[^>]*?>/gm, '' )                        // Remove other HTML tags.
+	.replace( /\s+/gm, ' ' )                            // Remove duplicated white spaces.
+	.trim();
+
+export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );

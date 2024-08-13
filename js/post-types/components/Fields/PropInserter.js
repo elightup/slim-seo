@@ -1,5 +1,5 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useContext, useEffect, useState } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import Select from "react-select";
 import slugify from "slugify";
@@ -14,7 +14,7 @@ const sanitizeId = text => slugify( text, { lower: true } )
 	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_` again.
 	;
 
-const PropInserter = ( { data = 'variables', inputRef, replace = false } ) => {
+const PropInserter = ( { data = 'variables', inputRef, replace = false, onInsert } ) => {
 	const [ showModal, setShowModal ] = useState( false );
 
 	const handleSelectItem = ( e, onToggle ) => {
@@ -28,6 +28,11 @@ const PropInserter = ( { data = 'variables', inputRef, replace = false } ) => {
 	};
 
 	const setValue = value => {
+		if ( onInsert ) {
+			onInsert( value );
+			return;
+		}
+
 		if ( replace ) {
 			inputRef.current.value = value;
 		} else {

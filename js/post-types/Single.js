@@ -1,21 +1,21 @@
 import { render } from '@wordpress/element';
-import { CheckboxControl } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import Text from "./components/Fields/Text";
-import Image from "./components/Fields/Image";
-import Textarea from "./components/Fields/Textarea";
 import Checkbox from "./components/Fields/Checkbox";
+import Description from "./components/Fields/Description";
+import Image from "./components/Fields/Image";
+import Text from "./components/Fields/Text";
+import Title from "./components/Fields/Title";
 
 const Single = () => {
 	return <>
 		<h2 className="title">{ ssPostType.title }</h2>
-		<Text
+		<Title
 			id="slim_seo[title]"
 			label={ __( 'Meta title', 'slim-seo' ) }
 			std={ ssPostType.data.title }
 			description={ __( 'Recommended length: ≤ 60 characters.', 'slim-seo' ) }
 		/>
-		<Textarea
+		<Description
 			id="slim_seo[description]"
 			label={ __( 'Meta description', 'slim-seo' ) }
 			std={ ssPostType.data.description }

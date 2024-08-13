@@ -166,6 +166,32 @@
 		margin-top: 16px;
 	}
 }
-.ss-label {
-	display: flex;
+
+.ss-input-success label:after,
+.ss-input-warning label:after,
+.ss-input-danger label:after {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	font-size: 8px;
+	line-height: 12px;
+	border-radius: 9px;
+	color: #fff;
+	text-align: center;
+	margin-left: 3px;
+}
+
+.ss-input-success label:after {
+	content: "\2713";
+	background: #70d028;
+}
+
+.ss-input-warning label:after {
+	content: "!";
+	background: #f56e28;
+}
+
+.ss-input-danger label:after {
+	content: "\2717";
+	background: #e53e3e;
 }
