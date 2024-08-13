@@ -12,8 +12,8 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 	const wpContent = document.querySelector( '#content' );
 
 	const prepareDescription = ( desc = '' ) => {
-		let description = normalize( desc || value || placeholder );
-		return truncate ? description.substring( 0, max ) : description;
+		let text = normalize( desc || value || placeholder );
+		return truncate ? text.substring( 0, max ) : text;
 	};
 
 	const getClassName = () => {
@@ -22,8 +22,8 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 			return '';
 		}
 
-		let description = prepareDescription();
-		return min > description.length || description.length > max ? 'ss-input-warning' : 'ss-input-success';
+		const ssDescription = prepareDescription();
+		return min > ssDescription.length || ssDescription.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
 	const getDescription = () => {
@@ -31,8 +31,8 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 			return description;
 		}
 
-		const newDescription = prepareDescription();
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), newDescription.length, description );
+		const ssDescription = prepareDescription();
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), ssDescription.length, description );
 	}
 
 	const handleChange = e => {
@@ -52,8 +52,8 @@ const Description = ( { id, description, std, rows = 3, min = 0, max = 0, trunca
 	}
 
 	const handleDescriptionChange = () => {
-		const description = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || wpContent.value : '' );
-		setPlaceholder( prepareDescription( description ) );
+		const wpDescription = isBlockEditor ? select( 'core/editor' ).getEditedPostContent() : ( wpContent ? wpExcerpt.value || wpContent.value : '' );
+		setPlaceholder( prepareDescription( wpDescription ) );
 	};
 
 	// Update placeholder when post description changes.

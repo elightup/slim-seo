@@ -26,6 +26,10 @@ abstract class Base {
 			'data'            => $this->get_data(),
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 		] );
+		wp_localize_script( 'slim-seo-post-type', 'ssPostTypes', [
+			'rest'            => untrailingslashit( rest_url() ),
+			'nonce'           => wp_create_nonce( 'wp_rest' ),
+		] );
 	}
 
 	protected function get_script_params(): array {
