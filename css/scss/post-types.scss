@@ -38,10 +38,6 @@
 	}
 }
 
-.ef-control__description {
-	color: var(--ss-color-gray);
-}
-
 .ss-insert-image {
 	position: absolute;
 	top: 0;
@@ -194,4 +190,45 @@
 .ss-input-danger label:after {
 	content: "\2717";
 	background: #e53e3e;
+}
+
+.ef-control__description {
+	color: var(--ss-color-gray);
+}
+
+#edittag .ef-control {
+	&__description {
+		color: var(--ss-color-gray);
+	}
+	.ss-inserter {
+		top: 7px;
+		right: 35px;
+	}
+	.ss-insert-image{
+		right: 55px;
+	}
+	@media (min-width: 782px) {
+		.ef-control__label {
+			width: 210px;
+			padding: 8px 10px 8px 0;
+			margin-bottom: 0;
+		}
+
+		.ss-input-wrapper {
+			padding: 8px 10px;
+		}
+
+		.ss-input-wrapper input[type="text"],
+		.ss-input-wrapper textarea,
+		.ss-input-wrapper .ef-control__description,
+		.ss-input-group {
+			width: 95%;
+		}
+	}
+	@media (min-width: 1200px) {
+		.ef-control__label {
+			width: 25%;
+			max-width: 210px;
+		}
+	}
 }

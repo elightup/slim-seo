@@ -10,6 +10,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
+	const wpDescription = document.querySelector( '#description' );
 	let contentEditor;
 
 	const format = text => {
@@ -53,7 +54,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 	};
 
 	const handleDescriptionChange = () => {
-		const desc = getPostExcerpt() || getPostContent();
+		const desc = getPostExcerpt() || getPostContent() || getTermDescription();
 		setPlaceholder( format( desc ) );
 	};
 
@@ -66,6 +67,10 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 
 	const getPostExcerpt = () => {
 		return isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
+	};
+
+	const getTermDescription = () => {
+		return wpDescription ? wpDescription.value : '' ;
 	};
 
 	// Update placeholder when post description changes.
@@ -87,6 +92,9 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 					editor.on( 'input keyup', handleDescriptionChange );
 				} );
 			}
+			if ( wpDescription ) {
+				wpDescription.addEventListener( 'input', handleDescriptionChange );
+			}
 		}
 
 		return () => {
@@ -95,6 +103,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 			} else if ( wpContent ) {
 				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
 				wpContent.removeEventListener( 'input', handleDescriptionChange );
+				wpDescription.removeEventListener( 'input', handleDescriptionChange );
 			}
 		};
 	}, [] );

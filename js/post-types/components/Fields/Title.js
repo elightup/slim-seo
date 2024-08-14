@@ -20,7 +20,7 @@ const format = text => {
 const Title = ( { id, std, description, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
-	const wpTitle = document.querySelector( '#title' );
+	const wpTitle = document.querySelector( '#title' ) || document.querySelector( '#name' );
 
 	const getClassName = () => {
 		// Do nothing if use variables.
