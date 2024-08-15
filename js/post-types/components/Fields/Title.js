@@ -2,20 +2,8 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, normalize } from "../../functions";
+import { isBlockEditor, normalize, formatTitle } from "../../functions";
 import PropInserter from "./PropInserter";
-
-const format = text => {
-	text = normalize( text );
-
-	const values = {
-		site: ss.site.title,
-		tagline: ss.site.description,
-		title: text
-	};
-
-	return ss.title.parts.map( part => values[ part ] ?? '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
-};
 
 const Title = ( { id, std, description, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
@@ -60,7 +48,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 
 	const handleTitleChange = () => {
 		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
-		setPlaceholder( format( title ) );
+		setPlaceholder( formatTitle( title ) );
 	};
 
 	// Update placeholder when post title changes.

@@ -33,4 +33,21 @@ export const normalize = html => !html ? '' : html
 	.replace( /\s+/gm, ' ' )                            // Remove duplicated white spaces.
 	.trim();
 
+export const formatTitle = text => {
+	text = normalize( text );
+
+	const values = {
+		site: ss.site.title,
+		tagline: ss.site.description,
+		title: text
+	};
+
+	return ss.title.parts.map( part => values[ part ] ?? '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
+};
+
+export const formatDescription = ( text, truncate, min, max ) => {
+	text = normalize( text );
+	return truncate ? text.substring( 0, max ) : text;
+};
+
 export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );

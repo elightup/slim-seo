@@ -2,20 +2,13 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, normalize } from "../../functions";
+import { isBlockEditor, normalize, formatDescription } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const Description = ( { id, description, std, rows = 3, min = 50, max = 160, truncate = true, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
-	const wpExcerpt = document.querySelector( '#excerpt' );
-	const wpContent = document.querySelector( '#content' );
-	let contentEditor;
-
-	const format = text => {
-		text = normalize( text );
-		return truncate ? text.substring( 0, max ) : text;
-	};
+	const wpDescription = document.querySelector( '#description' );
 
 	const getClassName = () => {
 		// Do nothing if use variables.
@@ -53,48 +46,21 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 	};
 
 	const handleDescriptionChange = () => {
-		const desc = getPostExcerpt() || getPostContent();
-		setPlaceholder( format( desc ) );
+		const desc = wpDescription ? wpDescription.value : '';
+		setPlaceholder( formatDescription( desc, true, 0, 160 ) );
 	};
 
-	const getPostContent = () => {
-		if ( isBlockEditor ) {
-			return wp.data.select( 'core/editor' ).getEditedPostContent();
-		}
-		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
-	};
-
-	const getPostExcerpt = () => {
-		return isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
-	};
-
-	// Update placeholder when post description changes.
+	// Update placeholder when term description changes.
 	useEffect( () => {
 		handleDescriptionChange();
 
-		if ( isBlockEditor ) {
-			subscribe( handleDescriptionChange );
-		} else {
-			if ( wpExcerpt ) {
-				wpExcerpt.addEventListener( 'input', handleDescriptionChange );
-			}
-			if ( wpContent ) {
-				jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
-					if ( editor.id !== 'content' ) {
-						return;
-					}
-					contentEditor = editor;
-					editor.on( 'input keyup', handleDescriptionChange );
-				} );
-			}
+		if ( wpDescription ) {
+			wpDescription.addEventListener( 'input', handleDescriptionChange );
 		}
 
 		return () => {
-			if ( isBlockEditor ) {
-				unsubscribe( handleDescriptionChange );
-			} else if ( wpContent ) {
-				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
-				wpContent.removeEventListener( 'input', handleDescriptionChange );
+			if ( wpDescription ) {
+				wpDescription.removeEventListener( 'input', handleDescriptionChange );
 			}
 		};
 	}, [] );

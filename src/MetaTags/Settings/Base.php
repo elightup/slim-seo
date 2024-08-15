@@ -46,11 +46,7 @@ abstract class Base {
 	public function render() {
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
-
-		<?php if ( $this->title ) : ?>
-			<h2><?= esc_html( $this->title ); ?></h2>
-		<?php endif; ?>
-			<div id="ss-post-type"></div>
+		<div id="ss-post-type"></div>
 		<?php
 	}
 
