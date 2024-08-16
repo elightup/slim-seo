@@ -3,10 +3,13 @@ import { __ } from "@wordpress/i18n";
 import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
 import Image from "./components/Fields/Image";
+import TermDescription from "./components/Fields/TermDescription";
 import Text from "./components/Fields/Text";
 import Title from "./components/Fields/Title";
 
 const Single = () => {
+	isTermPage = document.querySelector( '#edittag' );
+
 	return <>
 		<h2 className="title">{ ssPostType.title }</h2>
 		<Title
@@ -15,12 +18,21 @@ const Single = () => {
 			std={ ssPostType.data.title }
 			description={ __( 'Recommended length: ≤ 60 characters.', 'slim-seo' ) }
 		/>
-		<Description
-			id="slim_seo[description]"
-			label={ __( 'Meta description', 'slim-seo' ) }
-			std={ ssPostType.data.description }
-			description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from post exceprt (if available) or post content.', 'slim-seo' ) }
-		/>
+		{
+			isTermPage
+				? <TermDescription
+					id="slim_seo[description]"
+					label={ __( 'Meta description', 'slim-seo' ) }
+					std={ ssPostType.data.description }
+					description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ) }
+				/>
+				: <Description
+					id="slim_seo[description]"
+					label={ __( 'Meta description', 'slim-seo' ) }
+					std={ ssPostType.data.description }
+					description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
+				/>
+		}
 		<Image
 			id="slim_seo[facebook_image]"
 			label={ __( 'Facebook image', 'slim-seo' ) }
