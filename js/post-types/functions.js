@@ -45,9 +45,6 @@ export const formatTitle = text => {
 	return ss.title.parts.map( part => values[ part ] ?? '' ).filter( part => part ).join( ` ${ ss.title.separator } ` );
 };
 
-export const formatDescription = ( text, truncate, min, max ) => {
-	text = normalize( text );
-	return truncate ? text.substring( 0, max ) : text;
-};
+export const formatDescription = ( text, max = 160 ) => normalize( text ).substring( 0, max );
 
 export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );

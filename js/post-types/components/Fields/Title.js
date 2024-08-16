@@ -2,7 +2,7 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, normalize, formatTitle } from "../../functions";
+import { formatTitle, isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const Title = ( { id, std, description, max = 60, ...rest } ) => {

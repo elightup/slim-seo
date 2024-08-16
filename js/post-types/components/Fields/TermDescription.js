@@ -1,11 +1,10 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, normalize, formatDescription } from "../../functions";
+import { formatDescription, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, description, std, rows = 3, min = 50, max = 160, truncate = true, ...rest } ) => {
+const TermDescription = ( { id, description, std, rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpDescription = document.querySelector( '#description' );
@@ -47,7 +46,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 
 	const handleDescriptionChange = () => {
 		const desc = wpDescription ? wpDescription.value : '';
-		setPlaceholder( formatDescription( desc, true, 0, 160 ) );
+		setPlaceholder( formatDescription( desc, max ) );
 	};
 
 	// Update placeholder when term description changes.
@@ -84,4 +83,4 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, tru
 	);
 };
 
-export default Description;
+export default TermDescription;
