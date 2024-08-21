@@ -2,7 +2,7 @@ import { render, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import PostType from "./components/PostType";
-import Term from "./components/Term";
+import Taxonomy from "./components/Taxonomy";
 import Block from "./components/Fields/Block";
 import { request } from "./functions";
 
@@ -16,11 +16,11 @@ const App = () => {
 	return <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
-				<Tab >{ __( 'Homepage', 'slim-seo' ) }</Tab>
+				{ ssPostTypes.hasHomepageSettings && <Tab >{ __( 'Homepage', 'slim-seo' ) }</Tab> }
 				{ Object.values( ssPostTypes.postTypes ).map( postType => <Tab>{ postType.label }</Tab> ) }
 				{ Object.values( ssPostTypes.taxonomies ).map( taxonomy => <Tab>{ taxonomy.label }</Tab> ) }
 			</TabList>
-			{ option &&
+			{ option && ssPostTypes.hasHomepageSettings &&
 				<TabPanel>
 					<Block
 						baseName="slim_seo[home]"
@@ -39,10 +39,10 @@ const App = () => {
 				) )
 			}
 			{ option &&
-				Object.entries( ssPostTypes.taxonomies ).map( ( [ termId, term ] ) => (
+				Object.entries( ssPostTypes.taxonomies ).map( ( [ taxonomyId, taxonomy ] ) => (
 					<TabPanel>
 						{
-							<Term key={ termId } id={ termId } term={ term } option={ option[ termId ] || [] } />
+							<Taxonomy key={ taxonomyId } id={ taxonomyId } taxonomy={ taxonomy } option={ option[ taxonomyId ] || [] } />
 						}
 					</TabPanel>
 				) )

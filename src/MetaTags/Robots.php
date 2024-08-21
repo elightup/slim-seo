@@ -100,7 +100,13 @@ class Robots {
 	public function get_term_value( $term_id = 0 ): bool {
 		$term_id = $term_id ?: get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
-		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
+		if( ! empty( $data['noindex'] ) ) {
+			return (bool) $data['noindex'];
+		}
+
+		$option   = get_option( 'slim_seo', [] );
+		$taxonomy = get_term( $term_id )->taxonomy;
+		return (bool) $option[ $taxonomy ]['noindex'] ?? false;
 	}
 
 	/**

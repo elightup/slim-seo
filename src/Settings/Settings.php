@@ -46,9 +46,6 @@ class Settings {
 	public function add_tabs( array $tabs ): array {
 		$tabs['general'] = __( 'Features', 'slim-seo' );
 
-		if ( $this->meta_tags_manager->has_homepage_settings() ) {
-			$tabs['homepage'] = __( 'Homepage', 'slim-seo' );
-		}
 		if ( $this->meta_tags_manager->get_post_types() ) {
 			$tabs['post-types'] = __( 'Post Types', 'slim-seo' );
 		}
@@ -61,9 +58,6 @@ class Settings {
 	public function add_panes( array $panes ): array {
 		$panes['general'] = $this->get_pane( 'general' );
 
-		if ( $this->meta_tags_manager->has_homepage_settings() ) {
-			$panes['homepage'] = $this->get_pane( 'homepage' );
-		}
 		if ( $this->meta_tags_manager->get_post_types() ) {
 			$panes['post-types'] = $this->get_pane( 'post-types' );
 		}
@@ -79,6 +73,7 @@ class Settings {
 			wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
 			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
 			wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
+				'hasHomepageSettings'      => $this->meta_tags_manager->has_homepage_settings(),
 				'postTypes'                => $this->meta_tags_manager->get_post_types(),
 				'taxonomies'               => $this->get_taxonomies(),
 				'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),

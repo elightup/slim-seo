@@ -69,7 +69,14 @@ class Title {
 	public function get_term_value( $term_id = 0 ): string {
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
-		return $data['title'] ?? '';
+
+		if ( ! empty( $data['title'] ) ) {
+			return $data['title'];
+		}
+
+		$option   = get_option( 'slim_seo', [] );
+		$taxonomy = get_term( $term_id )->taxonomy;
+		return $option[ $taxonomy ]['title'] ?? '';
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {

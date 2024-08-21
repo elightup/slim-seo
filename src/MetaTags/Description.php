@@ -104,8 +104,12 @@ class Description {
 			return $data['description'];
 		}
 
-		$term = get_term( $term_id );
-		return $term && ! is_wp_error( $term ) ? $term->description : '';
+		$term   = get_term( $term_id );
+		if( $term && ! is_wp_error( $term ) && ! empty( $term->description ) ) {
+			return $term->description;
+		}
+		$option = get_option( 'slim_seo', [] );
+		return $option[ $term->taxonomy ]['description'] ?? '';
 	}
 
 	private function get_author_value(): string {

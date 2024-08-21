@@ -3,7 +3,7 @@ import { __, sprintf } from "@wordpress/i18n";
 import Block from "./Fields/Block";
 import Checkbox from "./Fields/Checkbox";
 
-const Term = ( { id, term, option } ) => {
+const Taxonomy = ( { id, taxonomy, option } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[${ id }]`;
 
@@ -16,17 +16,17 @@ const Term = ( { id, term, option } ) => {
 			id={ `${ baseName }[noindex]` }
 			std={ option.noindex }
 			label={ __( 'Hide from search results', 'slim-seo' ) }
-			tooltip={ __( 'This setting will apply noindex robots tag to all posts of this term and exclude the term from the sitemap.', 'slim-seo' ) }
+			tooltip={ __( 'This setting will apply noindex robots tag to all posts of this taxonomy and exclude the taxonomy from the sitemap.', 'slim-seo' ) }
 			onChange={ handleChange }
 		/>
 		{ ! noindex && 
 			<Block
 				baseName={ baseName }
 				option={ option }
-				label={ term.labels.singular_name }
+				label={ taxonomy.labels.singular_name }
 			/>
 		}
 	</>;
 };
 
-export default Term;
+export default Taxonomy;
