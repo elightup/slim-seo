@@ -1,4 +1,4 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { __, sprintf } from "@wordpress/i18n";
 import PostTypeWithArchivePage from "./Fields/PostTypeWithArchivePage";
 import Block from "./Fields/Block";

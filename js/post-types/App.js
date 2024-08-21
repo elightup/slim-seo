@@ -23,8 +23,8 @@ const App = () => {
 			{ option &&
 				<TabPanel>
 					<Block
-						baseName="slim_seo[homepage]"
-						option={ option[`homepage`] }
+						baseName="slim_seo[home]"
+						option={ option[`home`] || [] }
 						label="Homepage"
 					/>
 				</TabPanel>

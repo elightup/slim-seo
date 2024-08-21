@@ -40,7 +40,6 @@ class PostTypes {
 
 	public function get_option(): array {
 		$exclude = array_fill_keys( [
-			'home',
 			'auto_redirection',
 			'enable_404_logs',
 			'features',
