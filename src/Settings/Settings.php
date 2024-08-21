@@ -80,6 +80,7 @@ class Settings {
 			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
 			wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
 				'postTypes'                => $this->meta_tags_manager->get_post_types(),
+				'taxonomies'               => $this->get_taxonomies(),
 				'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
 				'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 			] );
@@ -161,5 +162,18 @@ class Settings {
 		}
 
 		return $archive;
+	}
+
+	private function get_taxonomies() {
+		$unsupported = [
+			'wp_theme',
+			'wp_template_part_area',
+			'link_category',
+			'nav_menu',
+			'post_format',
+			'mb-views-category',
+		];
+		$taxonomies  = get_taxonomies( [], 'objects' );
+		return array_diff_key( $taxonomies, array_flip( $unsupported ) );
 	}
 }
