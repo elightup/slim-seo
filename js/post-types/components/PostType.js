@@ -1,8 +1,8 @@
 import { useState } from '@wordpress/element';
 import { __, sprintf } from "@wordpress/i18n";
-import PostTypeWithArchivePage from "./Fields/PostTypeWithArchivePage";
 import Block from "./Fields/Block";
 import Checkbox from "./Fields/Checkbox";
+import PostTypeWithArchivePage from "./Fields/PostTypeWithArchivePage";
 
 const PostType = ( { id, postType, option, optionArchive } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
@@ -18,10 +18,10 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 			id={ `${ baseName }[noindex]` }
 			std={ option.noindex }
 			label={ __( 'Hide from search results', 'slim-seo' ) }
-			tooltip={ __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
+			description={ __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
 			onChange={ handleChange }
 		/>
-		{ ! noindex && 
+		{ ! noindex &&
 			<Block
 				baseName={ baseName }
 				option={ option }
