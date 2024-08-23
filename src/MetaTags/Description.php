@@ -105,6 +105,10 @@ class Description {
 		}
 
 		$term   = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return '';
+		}
+
 		if( $term && ! is_wp_error( $term ) && ! empty( $term->description ) ) {
 			return $term->description;
 		}

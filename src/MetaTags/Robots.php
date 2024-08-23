@@ -98,15 +98,20 @@ class Robots {
 	 * @see AdminColumns/Term.php.
 	 */
 	public function get_term_value( $term_id = 0 ): bool {
-		$term_id = $term_id ?: get_queried_object_id();
-		$data    = get_term_meta( $term_id, 'slim_seo', true );
-		if( ! empty( $data['noindex'] ) ) {
-			return (bool) $data['noindex'];
+		$term_id  = $term_id ?: get_queried_object_id();
+		$option   = get_option( 'slim_seo', [] );
+		$term     = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return false;
 		}
 
-		$option   = get_option( 'slim_seo', [] );
-		$taxonomy = get_term( $term_id )->taxonomy;
-		return (bool) $option[ $taxonomy ]['noindex'] ?? false;
+		$taxonomy = $term->taxonomy;
+		if( ! empty( $option[ $taxonomy ]['noindex'] ) ) {
+			return (bool) $option[ $taxonomy ]['noindex'];
+		}
+
+		$data     = get_term_meta( $term_id, 'slim_seo', true );
+		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
 	}
 
 	/**

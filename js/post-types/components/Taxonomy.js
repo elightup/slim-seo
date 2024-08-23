@@ -21,6 +21,7 @@ const Taxonomy = ( { id, taxonomy, option } ) => {
 		/>
 		{ ! noindex &&
 			<Block
+				type="taxonomy"
 				baseName={ baseName }
 				option={ option }
 				label={ taxonomy.labels.singular_name }

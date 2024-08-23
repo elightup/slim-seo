@@ -53,12 +53,16 @@ class Image {
 	private function get_term_value(): array {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
 		if ( ! empty( $data[ $this->meta_key ] ) ) {
-			return $this->get_from_settings( $data[ $this->meta_key ] );
+			return $this->get_from_post_meta( $data[ $this->meta_key ] );
 		}
 
 		$option   = get_option( 'slim_seo', [] );
-		$taxonomy = get_term( get_queried_object_id() )->taxonomy;
-		return $this->get_from_settings( $option[ $taxonomy ][ $this->meta_key ] ) ?? [];
+		$term = get_term( get_queried_object_id() );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return [];
+		}
+
+		return $this->get_from_settings( $option[ $term->taxonomy ][ $this->meta_key ] ) ?? [];
 	}
 
 	public function get_data_from_url( $url ): array {
