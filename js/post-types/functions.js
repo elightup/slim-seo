@@ -30,6 +30,7 @@ export const request = async ( apiName, data = {}, method = 'GET', cache = true 
 export const normalize = html => !html ? '' : html
 	.replace( /<(script|style)[^>]*?>.*?<\/\1>/gm, '' ) // Remove <style> & <script>
 	.replace( /<[^>]*?>/gm, '' )                        // Remove other HTML tags.
+	.replace(/\[.*?\]/gm, "")                           // Remove shortcode tags.
 	.replace( /\s+/gm, ' ' )                            // Remove duplicated white spaces.
 	.trim();
 
