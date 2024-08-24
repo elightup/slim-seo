@@ -15,14 +15,14 @@ class Image {
 	private function get_home_value(): array {
 		$option = get_option( 'slim_seo', [] );
 		$url    = $option['home'][ $this->meta_key ] ?? '';
-		return $url ? $this->get_data_from_url( $url ) : [];
+		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
 	private function get_post_type_archive_value(): array {
 		$post_type_object = get_queried_object();
 		$option           = get_option( 'slim_seo' );
 		$url              = $option[ "{$post_type_object->name}_archive" ][ $this->meta_key ] ?? '';
-		return $url ? $this->get_data_from_url( $url ) : [];
+		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
 	private function get_singular_value(): array {

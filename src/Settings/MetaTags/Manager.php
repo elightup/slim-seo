@@ -30,7 +30,7 @@ class Manager {
 		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/settings.js', [ 'jquery', 'underscore' ], filemtime( SLIM_SEO_DIR . '/js/meta-tags/dist/settings.js' ), true );
 		wp_localize_script( 'slim-seo-meta-tags', 'ss', [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
-			'homepage'        => $this->items[ 'home' ]->get_data(),
+			'homepage'        => $this->has_homepage_settings() ? $this->items[ 'home' ]->get_data() : [],
 		] );
 	}
 
