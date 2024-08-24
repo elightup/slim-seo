@@ -2,6 +2,7 @@ import { render, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Block from "./components/Fields/Block";
+import Homepage from "./components/Fields/Homepage";
 import PostType from "./components/PostType";
 import Taxonomy from "./components/Taxonomy";
 import { request } from "./functions";
@@ -40,11 +41,7 @@ const App = () => {
 			{
 				ssPostTypes.hasHomepageSettings &&
 				<TabPanel>
-					<Block
-						baseName="slim_seo[home]"
-						option={ option[ `home` ] || [] }
-						label="Homepage"
-					/>
+					<Homepage option={ option[ `home` ] || [] } />
 				</TabPanel>
 			}
 			{ postTypes.length > 1 && <TabPanel /> }

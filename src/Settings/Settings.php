@@ -36,9 +36,9 @@ class Settings {
 	}
 
 	public function setup() {
+		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 1 );
 		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tabs' ], 1 );
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_panes' ], 1 );
-		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 1 );
 
 		add_action( 'slim_seo_save', [ $this, 'save' ], 1 );
 	}
@@ -69,6 +69,7 @@ class Settings {
 
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
+		$this->meta_tags_manager->enqueue();
 		if ( $this->meta_tags_manager->get_post_types() ) {
 			wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
 			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
@@ -88,8 +89,6 @@ class Settings {
 			'doneText'       => __( 'Done!', 'slim-seo' ),
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
-
-		$this->meta_tags_manager->enqueue();
 	}
 
 	public function save() {

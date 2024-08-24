@@ -4,7 +4,7 @@ import Image from "./Image";
 import Text from "./Text";
 import Textarea from "./Textarea";
 
-export default  Block = ( { type, baseName, option, label } ) => {
+export default  Block = ( { type, baseName, option, optionPlaceholder = [], label, onFocus, onBlur } ) => {
 	const description = type === 'taxonomy' ? 'term description' : 'post exceprt (if available) or post content';
 
 	return <>
@@ -13,12 +13,18 @@ export default  Block = ( { type, baseName, option, label } ) => {
 			id={ `${ baseName }[title]` }
 			label={ __( 'Meta title', 'slim-seo' ) }
 			std={ option.title || '' }
+			placeholder = { optionPlaceholder.title || '' }
+			onFocus={ onFocus }
+			onBlur={ onBlur }
 			description={ __( 'Recommended length: ≤ 60 characters.', 'slim-seo' ) }
 		/>
 		<Textarea
 			id={ `${ baseName }[description]` }
 			label={ __( 'Meta description', 'slim-seo' ) }
 			std={ option.description || '' }
+			placeholder = { optionPlaceholder.description || '' }
+			onFocus={ onFocus }
+			onBlur={ onBlur }
 			description={ sprintf( __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from %s.', 'slim-seo' ), description ) }
 		/>
 		<Image

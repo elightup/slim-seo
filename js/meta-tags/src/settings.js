@@ -1,5 +1,3 @@
-import { Field, Input } from "./common";
-
 const select = document.querySelector( '#ss-post-type-select' );
 if ( select ) {
 	select.addEventListener( 'change', e => {
@@ -11,20 +9,33 @@ if ( select ) {
 	document.querySelector( `.ss-post-type-settings--${ select.value }` ).classList.add( 'ss-is-active' );
 }
 
-ss.items.forEach( item => {
-	const TitleInput = new Field(
-		new Input( `#ss-title-${ item }` ),
-		new Input( `#ss-title-preview-${ item }` ),
-		0,
-		60
-	);
-	const Description = new Field(
-		new Input( `#ss-description-${ item }` ),
-		new Input( `#ss-description-preview-${ item }` ),
-		50,
-		160,
-		true
-	);
-	TitleInput.init();
-	Description.init();
-} );
+const openMediaPopup = () => {
+	let frame;
+
+	const clickHandle = e => {
+		e.preventDefault();
+
+		// Create a frame only if needed.
+		if ( !frame ) {
+			frame = wp.media( {
+				multiple: false,
+				title: ss.mediaPopupTitle
+			} );
+		}
+
+		frame.open();
+
+		// Remove all attached 'select' event.
+		frame.off( 'select' );
+
+		// Handle selection.
+		frame.on( 'select', () => {
+			const url = frame.state().get( 'selection' ).first().toJSON().url;
+			e.target.previousElementSibling.value = url;
+		} );
+	};
+
+	const selectButtons = document.querySelectorAll( '.ss-select-image' );
+	selectButtons.forEach( button => button.addEventListener( 'click', clickHandle ) );
+};
+openMediaPopup();

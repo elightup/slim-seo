@@ -11,19 +11,8 @@ class Manager {
 	}
 
 	public function admin_init() {
-		$items = array_keys( array_filter( $this->get_post_types(), function ( $post_type_object ) {
-			return $post_type_object->has_archive;
-		} ) );
-		$items = array_map( function ( $item ) {
-			return "{$item}_archive";
-		}, $items );
-
 		if ( $this->has_homepage_settings() ) {
-			$items[] = 'home';
-		}
-
-		foreach ( $items as $item ) {
-			$this->items[ $item ] = new Item( $item );
+			$this->items[ 'home' ] = new Homepage;
 		}
 	}
 
@@ -41,7 +30,7 @@ class Manager {
 		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/settings.js', [ 'jquery', 'underscore' ], filemtime( SLIM_SEO_DIR . '/js/meta-tags/dist/settings.js' ), true );
 		wp_localize_script( 'slim-seo-meta-tags', 'ss', [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
-			'items'           => array_keys( $this->items ),
+			'homepage'        => $this->items[ 'home' ]->get_data(),
 		] );
 	}
 

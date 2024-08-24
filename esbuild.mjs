@@ -44,13 +44,6 @@ const start = async () => {
 		outfile: 'js/post-type.js'
 	} );
 	await post.watch();
-
-	const object = await esbuild.context( {
-		...config,
-		entryPoints: [ 'js/meta-tags/src/object.js' ],
-		outfile: 'js/meta-tags/dist/object.js'
-	} );
-	await object.watch();
 };
 
 start();
