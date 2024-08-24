@@ -64,10 +64,6 @@
 	}
 }
 
-.ef-control__description {
-	color: var(--ss-color-gray);
-}
-
 .ss-insert-image {
 	position: absolute;
 	top: 0;
@@ -102,6 +98,13 @@
 .ss-input-wrapper {
 	flex: 1;
 	position: relative;
+
+	&:has(.ss-inserter) > input {
+		padding-right: 36px;
+	}
+	&:has(.ss-insert-image) > input {
+		padding-right: calc(36px + 25px);
+	}
 }
 
 .ss-modal-overlay {
@@ -220,4 +223,73 @@
 .ss-input-danger label:after {
 	content: "\2717";
 	background: #e53e3e;
+}
+
+.ef-control__description {
+	color: var(--ss-color-gray);
+}
+
+#edittag .ef-control {
+	.ss-inserter {
+		top: 5px;
+		right: 0;
+	}
+
+	.ss-insert-image {
+		right: 25px;
+	}
+
+	.ef-control__label {
+		font-weight: 600;
+		font-size: 14px;
+	}
+
+	.ef-control__description {
+		font-size: 14px;
+		font-style: normal;
+		color: #646970;
+		margin-top: 4px;
+	}
+
+	@media (min-width: 782px) {
+		.ef-control__label {
+			width: 210px;
+			padding: 8px 10px 8px 0;
+			margin-bottom: 0;
+		}
+
+		.ss-input-wrapper {
+			padding: 8px 10px;
+		}
+
+		.ef-control__description {
+			margin-top: -3px;
+			padding-inline: 10px;
+			width: calc((100% - 20px) * 95 / 100);
+		}
+
+		.ss-input-wrapper input[type="text"],
+		.ss-input-wrapper textarea,
+		.ss-input-wrapper .ef-control__description,
+		.ss-input-group {
+			width: 95%;
+			margin-inline: 0;
+		}
+
+		.ss-inserter {
+			top: 7px;
+			right: calc(5% + 10px);
+		}
+
+		.ss-insert-image {
+			right: calc(5% + 10px + 25px);
+		}
+	}
+
+	@media (min-width: 1200px) {
+		.ef-control__label {
+			width: 25%;
+			max-width: 210px;
+		}
+	}
 }

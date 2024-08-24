@@ -1,16 +1,13 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatDescription, isBlockEditor, normalize } from "../../functions";
+import { formatDescription, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...rest } ) => {
+const TermDescription = ( { id, description, std, rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
-	const wpExcerpt = document.querySelector( '#excerpt' );
-	const wpContent = document.querySelector( '#content' );
-	let contentEditor;
+	const wpDescription = document.querySelector( '#description' );
 
 	const getClassName = () => {
 		// Do nothing if use variables.
@@ -48,52 +45,21 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 	};
 
 	const handleDescriptionChange = () => {
-		const desc = getPostExcerpt() || getPostContent();
+		const desc = wpDescription ? wpDescription.value : '';
 		setPlaceholder( formatDescription( desc, max ) );
 	};
 
-	const getPostContent = () => {
-		if ( isBlockEditor ) {
-			return wp.data.select( 'core/editor' ).getEditedPostContent();
-		}
-		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
-	};
-
-	const getPostExcerpt = () => {
-		return isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
-	};
-
-	// Update placeholder when post description changes.
+	// Update placeholder when term description changes.
 	useEffect( () => {
 		handleDescriptionChange();
 
-		if ( isBlockEditor ) {
-			subscribe( handleDescriptionChange );
-		} else {
-			if ( wpExcerpt ) {
-				wpExcerpt.addEventListener( 'input', handleDescriptionChange );
-			}
-			if ( wpContent ) {
-				jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
-					if ( editor.id !== 'content' ) {
-						return;
-					}
-					contentEditor = editor;
-					editor.on( 'input keyup', handleDescriptionChange );
-				} );
-			}
+		if ( wpDescription ) {
+			wpDescription.addEventListener( 'input', handleDescriptionChange );
 		}
 
 		return () => {
-			if ( isBlockEditor ) {
-				unsubscribe( handleDescriptionChange );
-				return;
-			}
-			if ( wpExcerpt ) {
-				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
-			}
-			if ( wpContent ) {
-				wpContent.removeEventListener( 'input', handleDescriptionChange );
+			if ( wpDescription ) {
+				wpDescription.removeEventListener( 'input', handleDescriptionChange );
 			}
 		};
 	}, [] );
@@ -117,4 +83,4 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 	);
 };
 
-export default Description;
+export default TermDescription;
