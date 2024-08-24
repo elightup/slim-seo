@@ -38,4 +38,3 @@ const openMediaPopup = () => {
 	const selectButtons = document.querySelectorAll( '.ss-select-image' );
 	selectButtons.forEach( button => button.addEventListener( 'click', clickHandle ) );
 };
-openMediaPopup();
