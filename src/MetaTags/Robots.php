@@ -105,13 +105,13 @@ class Robots {
 			return false;
 		}
 
-		$taxonomy = $term->taxonomy;
-		if( ! empty( $option[ $taxonomy ]['noindex'] ) ) {
-			return (bool) $option[ $taxonomy ]['noindex'];
-		}
+		$taxonomy         = $term->taxonomy;
+		$taxonomy_noindex = (bool) ( $option[ $taxonomy ]['noindex'] ?? false );
 
-		$data     = get_term_meta( $term_id, 'slim_seo', true );
-		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
+		$data         = get_term_meta( $term_id, 'slim_seo', true );
+		$term_noindex = (bool) ( $data['noindex'] ?? false );
+
+		return $term_noindex || $taxonomy_noindex;
 	}
 
 	/**

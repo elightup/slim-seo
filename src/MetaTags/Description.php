@@ -104,14 +104,15 @@ class Description {
 			return $data['description'];
 		}
 
-		$term   = get_term( $term_id );
+		$term = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return '';
 		}
 
-		if( $term && ! is_wp_error( $term ) && ! empty( $term->description ) ) {
+		if ( $term->description ) {
 			return $term->description;
 		}
+
 		$option = get_option( 'slim_seo', [] );
 		return $option[ $term->taxonomy ]['description'] ?? '';
 	}
