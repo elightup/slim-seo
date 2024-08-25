@@ -45,42 +45,34 @@ class Settings {
 
 	public function add_tabs( array $tabs ): array {
 		$tabs['general'] = __( 'Features', 'slim-seo' );
-
-		if ( $this->meta_tags_manager->get_post_types() ) {
-			$tabs['post-types'] = __( 'Post Types', 'slim-seo' );
-		}
-
-		$tabs['social'] = __( 'Social', 'slim-seo' );
-		$tabs['tools']  = __( 'Tools', 'slim-seo' );
+		$tabs['content'] = __( 'Content', 'slim-seo' );
+		$tabs['social']  = __( 'Social', 'slim-seo' );
+		$tabs['tools']   = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 
 	public function add_panes( array $panes ): array {
 		$panes['general'] = $this->get_pane( 'general' );
-
-		if ( $this->meta_tags_manager->get_post_types() ) {
-			$panes['post-types'] = $this->get_pane( 'post-types' );
-		}
-
-		$panes['social'] = $this->get_pane( 'social' );
-		$panes['tools']  = $this->get_pane( 'tools' );
+		$panes['content'] = $this->get_pane( 'content' );
+		$panes['social']  = $this->get_pane( 'social' );
+		$panes['tools']   = $this->get_pane( 'tools' );
 		return $panes;
 	}
 
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
 		$this->meta_tags_manager->enqueue();
-		if ( $this->meta_tags_manager->get_post_types() ) {
-			wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
-			wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
-			wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
-				'hasHomepageSettings'      => $this->meta_tags_manager->has_homepage_settings(),
-				'postTypes'                => $this->meta_tags_manager->get_post_types(),
-				'taxonomies'               => $this->get_taxonomies(),
-				'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
-				'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
-			] );
-		}
+
+		wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
+		wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
+		wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
+			'hasHomepageSettings'      => $this->meta_tags_manager->has_homepage_settings(),
+			'postTypes'                => $this->meta_tags_manager->get_post_types(),
+			'taxonomies'               => $this->get_taxonomies(),
+			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
+			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
+		] );
+
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
 
 		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], filemtime( SLIM_SEO_DIR . '/js/migrate.js' ), true );
