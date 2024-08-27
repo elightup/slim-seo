@@ -36,6 +36,10 @@ class Manager {
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
+			'title'           => [
+				'separator' => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
+				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], 'post' ),
+			],
 		] );
 		wp_localize_script( 'slim-seo-post-types', 'ssContent', [
 			'hasHomepageSettings'      => $this->has_homepage_settings(),

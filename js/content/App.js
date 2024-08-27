@@ -17,6 +17,10 @@ const App = () => {
 	const postTypes = Object.entries( ssContent.postTypes );
 	const taxonomies = Object.entries( ssContent.taxonomies );
 
+	if ( Object.keys( option ).length === 0 ) {
+		return null;
+	}
+
 	return <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>

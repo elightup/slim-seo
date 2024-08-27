@@ -6,9 +6,6 @@ export default Homepage = ( { option } ) => {
 		description:  ssContent.homepage.description,
 	};
 
-	const handleFocus = e => e.target.value = e.target.value || e.target.placeholder;
-	const handleBlur = e => e.target.value = e.target.value === e.target.placeholder ? '' : e.target.value;
-
 	return (
 		<Block
 			type="home"
@@ -16,8 +13,6 @@ export default Homepage = ( { option } ) => {
 			baseName="slim_seo[home]"
 			option={ option || [] }
 			optionPlaceholder={ optionPlaceholder }
-			onFocus={ handleFocus }
-			onBlur={ handleBlur }
 		/>
 	);
 };
