@@ -24,17 +24,10 @@ const start = async () => {
 	} );
 	await redirection.watch();
 
-	const settings = await esbuild.context( {
-		...config,
-		entryPoints: [ 'js/meta-tags/src/settings.js' ],
-		outfile: 'js/meta-tags/dist/settings.js'
-	} );
-	await settings.watch();
-
 	const postTypes = await esbuild.context( {
 		...config,
 		entryPoints: [ 'js/content/App.js' ],
-		outfile: 'js/post-types.js'
+		outfile: 'js/content.js'
 	} );
 	await postTypes.watch();
 

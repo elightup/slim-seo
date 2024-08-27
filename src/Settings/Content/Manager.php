@@ -27,7 +27,6 @@ class Manager {
 	public function enqueue() {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], filemtime( SLIM_SEO_DIR . '/css/meta-tags.css' ) );
-		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/settings.js', [ 'jquery', 'underscore' ], filemtime( SLIM_SEO_DIR . '/js/meta-tags/dist/settings.js' ), true );
 
 		wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/content.css', [], filemtime( SLIM_SEO_DIR . '/css/content.css' ) );
 		wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/content.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/content.js' ), true );
@@ -105,7 +104,7 @@ class Manager {
 			'post_format',
 			'mb-views-category',
 		];
-		$taxonomies  = get_taxonomies( [], 'objects' );
+		$taxonomies  = get_taxonomies( [ 'public' => true ], 'objects' );
 		return array_diff_key( $taxonomies, array_flip( $unsupported ) );
 	}
 }
