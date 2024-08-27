@@ -5,7 +5,7 @@ import { __, sprintf } from "@wordpress/i18n";
 import { formatTitle, isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, type = '', std, placeholder = '', isPost = true,  description, max = 60, ...rest } ) => {
+const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  description, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const wpTitle = document.querySelector( '#title' ) || document.querySelector( '#name' );
@@ -53,7 +53,7 @@ const Title = ( { id, type = '', std, placeholder = '', isPost = true,  descript
 
 	// Update newPlaceholder when post title changes.
 	useEffect( () => {
-		if ( ! isPost ) {
+		if ( isSettings ) {
 			return;
 		}
 

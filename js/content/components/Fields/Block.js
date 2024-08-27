@@ -10,7 +10,7 @@ export default Block = ( { type, baseName, option, optionPlaceholder = [], label
 		<h3>{ label }</h3>
 		<Title
 			id={ `${ baseName }[title]` }
-			isPost={ false }
+			isSettings={ true }
 			label={ __( 'Meta title', 'slim-seo' ) }
 			std={ option.title || '' }
 			placeholder={ optionPlaceholder.title || '' }
@@ -18,7 +18,7 @@ export default Block = ( { type, baseName, option, optionPlaceholder = [], label
 		/>
 		<Description
 			id={ `${ baseName }[description]` }
-			isPost={ false }
+			isSettings={ true }
 			label={ __( 'Meta description', 'slim-seo' ) }
 			std={ option.description || '' }
 			placeholder={ optionPlaceholder.description || '' }

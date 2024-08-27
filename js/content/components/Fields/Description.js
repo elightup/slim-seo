@@ -5,7 +5,7 @@ import { __, sprintf } from "@wordpress/i18n";
 import { formatDescription, isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, placeholder = '', std, description, isPost = true, rows = 3, min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, placeholder = '', std, description, isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
@@ -65,7 +65,7 @@ const Description = ( { id, placeholder = '', std, description, isPost = true, r
 
 	// Update newPlaceholder when post description changes.
 	useEffect( () => {
-		if ( ! isPost ) {
+		if ( isSettings ) {
 			return;
 		}
 
