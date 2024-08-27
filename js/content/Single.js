@@ -43,7 +43,7 @@ const Single = () => {
 			id="slim_seo[twitter_image]"
 			label={ __( 'Twitter image', 'slim-seo' ) }
 			std={ ssPostType.data.twitter_image }
-			mediaPopupTitle={ ssPostType.mediaPopupTitle }
+			mediaPopupTitle={ ss.mediaPopupTitle }
 			description={ __( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ) }
 		/>
 		<Text

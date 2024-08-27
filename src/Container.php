@@ -29,10 +29,10 @@ class Container {
 		$services['bricks']         = new Integrations\Bricks;
 		$services['zion']           = new Integrations\ZionBuilder;
 
-		$services['meta_tags_manager'] = new Settings\MetaTags\Manager;
-		$services['settings']          = new Settings\Settings( $services['meta_tags_manager'] );
+		$services['content_manager']   = new Settings\Content\Manager;
+		$services['settings']          = new Settings\Settings( $services['content_manager'] );
 		$services['code']              = new Code( $services['settings'] );
-		$services['post_types']        = new Settings\PostTypes;
+		$services['content']           = new Settings\Content;
 
 		$services['redirection'] = new Redirection\Loader;
 		$services['breadcrumbs'] = new Breadcrumbs;

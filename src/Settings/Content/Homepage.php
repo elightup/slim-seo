@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Settings\MetaTags;
+namespace SlimSEO\Settings\Content;
 
 class Homepage {
 	private $defaults   = [

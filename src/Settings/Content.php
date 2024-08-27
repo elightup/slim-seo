@@ -3,7 +3,7 @@ namespace SlimSEO\Settings;
 
 use WP_REST_Server;
 
-class PostTypes {
+class Content {
 	public function setup() {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}

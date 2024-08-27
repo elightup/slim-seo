@@ -33,14 +33,14 @@ const start = async () => {
 
 	const postTypes = await esbuild.context( {
 		...config,
-		entryPoints: [ 'js/post-types/App.js' ],
+		entryPoints: [ 'js/content/App.js' ],
 		outfile: 'js/post-types.js'
 	} );
 	await postTypes.watch();
 
 	const post = await esbuild.context( {
 		...config,
-		entryPoints: [ 'js/post-types/Single.js' ],
+		entryPoints: [ 'js/content/Single.js' ],
 		outfile: 'js/post-type.js'
 	} );
 	await post.watch();

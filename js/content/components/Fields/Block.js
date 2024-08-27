@@ -31,14 +31,14 @@ export default Block = ( { type, baseName, option, optionPlaceholder = [], label
 			id={ `${ baseName }[facebook_image]` }
 			label={ __( 'Facebook image', 'slim-seo' ) }
 			std={ option.facebook_image || '' }
-			mediaPopupTitle={ ssPostTypes.mediaPopupTitle }
+			mediaPopupTitle={ ss.mediaPopupTitle }
 			description={ __( 'Recommended size: 1200x630 px.', 'slim-seo' ) }
 		/>
 		<Image
 			id={ `${ baseName }[twitter_image]` }
 			label={ __( 'Twitter image', 'slim-seo' ) }
 			std={ option.twitter_image || '' }
-			mediaPopupTitle={ ssPostTypes.mediaPopupTitle }
+			mediaPopupTitle={ ss.mediaPopupTitle }
 			description={ __( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ) }
 		/>
 	</>;

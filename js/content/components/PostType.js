@@ -30,10 +30,10 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 		}
 		{ ! noindex &&
 			(
-				ssPostTypes.postTypesWithArchivePage.hasOwnProperty( id )
+				ssContent.postTypesWithArchivePage.hasOwnProperty( id )
 				?   <PostTypeWithArchivePage
 						id={ id }
-						postType={ ssPostTypes.postTypesWithArchivePage[ id ] }
+						postType={ ssContent.postTypesWithArchivePage[ id ] }
 						label={ sprintf( __( '%s archive page', 'slim-seo' ), postType.labels.singular_name ) }
 					/>
 				:   postType.has_archive &&

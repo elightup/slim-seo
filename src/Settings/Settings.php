@@ -4,7 +4,7 @@ namespace SlimSEO\Settings;
 use SlimSEO\Helpers\Data;
 
 class Settings {
-	private $meta_tags_manager;
+	private $content_manager;
 
 	private $defaults = [
 		'header_code'            => '',
@@ -31,8 +31,8 @@ class Settings {
 		],
 	];
 
-	public function __construct( MetaTags\Manager $meta_tags_manager ) {
-		$this->meta_tags_manager = $meta_tags_manager;
+	public function __construct( Content\Manager $content_manager ) {
+		$this->content_manager = $content_manager;
 	}
 
 	public function setup() {
@@ -61,17 +61,7 @@ class Settings {
 
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
-		$this->meta_tags_manager->enqueue();
-
-		wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/post-types.css', [], filemtime( SLIM_SEO_DIR . '/css/post-types.css' ) );
-		wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/post-types.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/post-types.js' ), true );
-		wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
-			'hasHomepageSettings'      => $this->meta_tags_manager->has_homepage_settings(),
-			'postTypes'                => $this->meta_tags_manager->get_post_types(),
-			'taxonomies'               => $this->get_taxonomies(),
-			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
-			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
-		] );
+		$this->content_manager->enqueue();
 
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
 
@@ -103,7 +93,7 @@ class Settings {
 	private function sanitize( $option, $data ) {
 		$option = array_merge( $this->defaults, $option );
 
-		$this->meta_tags_manager->sanitize( $option, $data );
+		$this->content_manager->sanitize( $option, $data );
 
 		return array_filter( $option );
 	}
@@ -126,40 +116,5 @@ class Settings {
 		include __DIR__ . "/sections/$name.php";
 		echo '</div>';
 		return ob_get_clean();
-	}
-
-	private function get_post_types_with_archive_page(): array {
-		$post_types = $this->meta_tags_manager->get_post_types();
-
-		if ( ! $post_types ) {
-			return [];
-		}
-
-		$archive = [];
-		foreach ( $post_types as $key => $post_type ) {
-			$archive_page = Data::get_post_type_archive_page( $key );
-			if ( $archive_page ) {
-				$archive[ $key ] = [
-					'link'  => get_permalink( $archive_page ),
-					'title' => $archive_page->post_title,
-					'edit'  => get_edit_post_link( $archive_page ),
-				];
-			}
-		}
-
-		return $archive;
-	}
-
-	private function get_taxonomies() {
-		$unsupported = [
-			'wp_theme',
-			'wp_template_part_area',
-			'link_category',
-			'nav_menu',
-			'post_format',
-			'mb-views-category',
-		];
-		$taxonomies  = get_taxonomies( [], 'objects' );
-		return array_diff_key( $taxonomies, array_flip( $unsupported ) );
 	}
 }
