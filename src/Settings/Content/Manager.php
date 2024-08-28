@@ -11,13 +11,19 @@ class Manager {
 	}
 
 	public function admin_init() {
-		$items = array_keys( array_filter( Data::get_post_types(), function ( $post_type_object ) {
-			return $post_type_object->has_archive;
-		} ) );
-		$items = array_map( function ( $item ) {
-			return "{$item}_archive";
-		}, $items );
+		$taxonomies = array_keys( array_filter( Data::get_taxonomies() ) );
+		$post_types = array_keys( array_filter( Data::get_post_types() ) );
 
+		$post_types_archive = array_map( function ( $item ) {
+			return "{$item}_archive";
+		}, $post_types );
+
+
+		$items = array_merge(
+			$post_types,
+			$post_types_archive,
+			$taxonomies
+		);
 		if ( $this->has_homepage_settings() ) {
 			$items[] = 'home';
 		}
