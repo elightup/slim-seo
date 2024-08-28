@@ -16,11 +16,10 @@ abstract class Base {
 	public function enqueue() {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/object.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-		wp_localize_script( 'slim-seo-meta-tags', 'ss', $this->get_script_params() );
 
 		wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/content.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/content.css' ) );
 		wp_enqueue_script( 'slim-seo-post-type', SLIM_SEO_URL . 'js/post-type.js', [ 'jquery', 'underscore', 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch', 'wp-url' ], filemtime( SLIM_SEO_DIR . 'js/post-type.js' ), true );
+		wp_localize_script( 'slim-seo-post-type', 'ss', $this->get_script_params() );
 		wp_localize_script( 'slim-seo-post-type', 'ssPostType', [
 			'title'           => $this->title,
 			'data'            => $this->get_data(),
@@ -46,7 +45,7 @@ abstract class Base {
 	public function render() {
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
-		<div id="ss-post-type"></div>
+		<div id="ss-single"></div>
 		<?php
 	}
 

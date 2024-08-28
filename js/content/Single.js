@@ -60,4 +60,4 @@ const Single = () => {
 	</>;
 };
 
-render( <Single />, document.getElementById( 'ss-post-type' ) );
+render( <Single />, document.getElementById( 'ss-single' ) );
