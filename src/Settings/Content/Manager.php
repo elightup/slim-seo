@@ -11,7 +11,7 @@ class Manager {
 	}
 
 	public function admin_init() {
-		$item = $this->get_content_items();
+		$items = $this->get_content_items();
 
 		foreach ( $items as $item ) {
 			$this->items[ $item ] = new Item( $item );
