@@ -9,11 +9,21 @@ class Data {
 	}
 
 	public static function get_taxonomies() {
+		$unsupported = [
+			'wp_theme',
+			'wp_template_part_area',
+			'link_category',
+			'nav_menu',
+			'post_format',
+			'mb-views-category',
+		];
+
 		$taxonomies = get_taxonomies( [
 			'public'  => true,
 			'show_ui' => true,
 		], 'objects' );
-		unset( $taxonomies['post_format'] );
+		$taxonomies = array_diff_key( $taxonomies, array_flip( $unsupported ) );
+
 		return apply_filters( 'slim_seo_taxonomies', $taxonomies );
 	}
 

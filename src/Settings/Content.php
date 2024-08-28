@@ -9,25 +9,25 @@ class Content {
 	}
 
 	public function register_routes() {
-		register_rest_route( 'slim-seo', 'post-types-option', [
+		register_rest_route( 'slim-seo', '/content/option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'variables', [
+		register_rest_route( 'slim-seo', '/content/variables', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'image_variables', [
+		register_rest_route( 'slim-seo', '/content/image_variables', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_image_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'meta_keys', [
+		register_rest_route( 'slim-seo', '/content/meta_keys', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_meta_keys' ],
 			'permission_callback' => [ $this, 'has_permission' ],

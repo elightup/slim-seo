@@ -28,7 +28,7 @@ const Image = ( { id, std, mediaPopupTitle, ...rest } ) => {
 			<div className="ss-input-wrapper">
 				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } />
 				<Button icon="format-image" onClick={ openMediaPopup } className="ss-insert-image" />
-				<PropInserter data="image_variables" inputRef={ inputRef } replace={ true } />
+				<PropInserter data="content/image_variables" inputRef={ inputRef } replace={ true } />
 			</div>
 		</Control>
 	);

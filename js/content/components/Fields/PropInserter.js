@@ -14,7 +14,7 @@ const sanitizeId = text => slugify( text, { lower: true } )
 	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_` again.
 	;
 
-const PropInserter = ( { data = 'variables', inputRef, replace = false, onInsert } ) => {
+const PropInserter = ( { data = 'content/variables', inputRef, replace = false, onInsert } ) => {
 	const [ showModal, setShowModal ] = useState( false );
 
 	const handleSelectItem = ( e, onToggle ) => {
@@ -64,7 +64,7 @@ const VariableInserter = ( { data, onSelect } ) => {
 const Modal = ( { setShowModal, setValue } ) => {
 	const [ options, setOptions ] = useState( [] );
 	useEffect( () => {
-		request( 'meta_keys' ).then( setOptions );
+		request( 'content/meta_keys' ).then( setOptions );
 	}, [] );
 	const hideModal = () => setShowModal( false );
 	const onSelect = item => {

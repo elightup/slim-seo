@@ -12,7 +12,7 @@ const App = () => {
 	const [ option, setOption ]   = useState( {} );
 
 	useEffect( () => {
-		request( 'post-types-option' ).then( ( res ) => {
+		request( 'content/option' ).then( ( res ) => {
 			setOption( res );
 			setLoading( true );
 		} );

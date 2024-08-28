@@ -1,13 +1,36 @@
 <?php
 namespace SlimSEO\Settings\Content;
 
-class Homepage {
+class Item {
+	private $option_key = '';
 	private $defaults   = [
 		'title'          => '',
 		'description'    => '',
 		'facebook_image' => '',
 		'twitter_image'  => '',
 	];
+
+	public function __construct( string $option_key ) {
+		$this->option_key = $option_key;
+	}
+
+	public function sanitize( array $data ): array {
+		$data = array_merge( $this->defaults, $data );
+
+		$data['title']          = sanitize_text_field( $data['title'] );
+		$data['description']    = sanitize_text_field( $data['description'] );
+		$data['facebook_image'] = sanitize_text_field( $data['facebook_image'] );
+		$data['twitter_image']  = sanitize_text_field( $data['twitter_image'] );
+
+		return array_filter( $data );
+	}
+
+	public function get_home_data(): array {
+		return array_merge( $this->defaults, [
+			'title' => $this->get_default_title(),
+			'description' => $this->get_default_description(),
+		] );
+	}
 
 	private function get_default_title(): string {
 		$parts = apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'post' );
@@ -27,23 +50,5 @@ class Homepage {
 
 	private function get_default_description(): string {
 		return get_bloginfo( 'description' ) ?? '';
-	}
-
-	public function sanitize( array $data ): array {
-		$data = array_merge( $this->defaults, $data );
-
-		$data['title']          = sanitize_text_field( $data['title'] );
-		$data['description']    = sanitize_text_field( $data['description'] );
-		$data['facebook_image'] = sanitize_text_field( $data['facebook_image'] );
-		$data['twitter_image']  = sanitize_text_field( $data['twitter_image'] );
-
-		return array_filter( $data );
-	}
-
-	public function get_data(): array {
-		return array_merge( $this->defaults, [
-			'title' => $this->get_default_title(),
-			'description' => $this->get_default_description(),
-		] );
 	}
 }

@@ -11,13 +11,20 @@ class Manager {
 	}
 
 	public function admin_init() {
-		if ( $this->has_homepage_settings() ) {
-			$this->items[ 'home' ] = new Homepage;
-		}
-	}
+		$items = array_keys( array_filter( Data::get_post_types(), function ( $post_type_object ) {
+			return $post_type_object->has_archive;
+		} ) );
+		$items = array_map( function ( $item ) {
+			return "{$item}_archive";
+		}, $items );
 
-	public function get_post_types(): array {
-		return Data::get_post_types();
+		if ( $this->has_homepage_settings() ) {
+			$items[] = 'home';
+		}
+
+		foreach ( $items as $item ) {
+			$this->items[ $item ] = new Item( $item );
+		}
 	}
 
 	public function get( string $name ): Item {
@@ -32,9 +39,9 @@ class Manager {
 		wp_enqueue_script( 'slim-seo-content', SLIM_SEO_URL . 'js/content.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/content.js' ), true );
 		wp_localize_script( 'slim-seo-content', 'ss', [
 			'hasHomepageSettings'      => $this->has_homepage_settings(),
-			'homepage'                 => $this->has_homepage_settings() ? $this->items[ 'home' ]->get_data() : [],
-			'postTypes'                => $this->get_post_types(),
-			'taxonomies'               => $this->get_taxonomies(),
+			'homepage'                 => $this->has_homepage_settings() ? $this->items[ 'home' ]->get_home_data() : [],
+			'postTypes'                => Data::get_post_types(),
+			'taxonomies'               => Data::get_taxonomies(),
 			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
 			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 			'site'            => [
@@ -42,8 +49,8 @@ class Manager {
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
 			'title'           => [
-				'separator' => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
-				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], 'post' ),
+				'separator'   => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
+				'parts'       => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], 'post' ),
 			],
 		] );
 	}
@@ -54,7 +61,7 @@ class Manager {
 
 	public function sanitize( array &$option, array $data ) {
 		// Post type settings.
-		$post_types = array_keys( $this->get_post_types() );
+		$post_types = array_keys( Data::get_post_types() );
 		foreach ( $post_types as $post_type ) {
 			if ( empty( $data[ $post_type ] ) ) {
 				unset( $option[ $post_type ] );
@@ -76,7 +83,7 @@ class Manager {
 	}
 
 	private function get_post_types_with_archive_page(): array {
-		$post_types = $this->get_post_types();
+		$post_types = Data::get_post_types();
 
 		if ( ! $post_types ) {
 			return [];
@@ -95,18 +102,5 @@ class Manager {
 		}
 
 		return $archive;
-	}
-
-	private function get_taxonomies() {
-		$unsupported = [
-			'wp_theme',
-			'wp_template_part_area',
-			'link_category',
-			'nav_menu',
-			'post_format',
-			'mb-views-category',
-		];
-		$taxonomies  = get_taxonomies( [ 'public' => true ], 'objects' );
-		return array_diff_key( $taxonomies, array_flip( $unsupported ) );
 	}
 }
