@@ -8,16 +8,20 @@ import Taxonomy from "./components/Taxonomy";
 import { request } from "./functions";
 
 const App = () => {
-	const [ option, setOption ] = useState( {} );
+	const [ loading, setLoading ] = useState( false );
+	const [ option, setOption ]   = useState( {} );
 
 	useEffect( () => {
-		request( 'post-types-option' ).then( setOption );
+		request( 'post-types-option' ).then( ( res ) => {
+			setOption( res );
+			setLoading( true );
+		} );
 	}, [] );
 
 	const postTypes = Object.entries( ss.postTypes );
 	const taxonomies = Object.entries( ss.taxonomies );
 
-	if ( Object.keys( option ).length === 0 ) {
+	if ( ! loading ) {
 		return null;
 	}
 
