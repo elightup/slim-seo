@@ -2,8 +2,8 @@ import Block from "./Block";
 
 export default Homepage = ( { option } ) => {
 	const optionPlaceholder = {
-		title: ssContent.homepage.title,
-		description:  ssContent.homepage.description,
+		title: ss.homepage.title,
+		description:  ss.homepage.description,
 	};
 
 	return (

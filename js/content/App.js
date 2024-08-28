@@ -14,8 +14,8 @@ const App = () => {
 		request( 'post-types-option' ).then( setOption );
 	}, [] );
 
-	const postTypes = Object.entries( ssContent.postTypes );
-	const taxonomies = Object.entries( ssContent.taxonomies );
+	const postTypes = Object.entries( ss.postTypes );
+	const taxonomies = Object.entries( ss.taxonomies );
 
 	if ( Object.keys( option ).length === 0 ) {
 		return null;
@@ -24,7 +24,7 @@ const App = () => {
 	return <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
-				{ ssContent.hasHomepageSettings && <Tab>{ __( 'Homepage', 'slim-seo' ) }</Tab> }
+				{ ss.hasHomepageSettings && <Tab>{ __( 'Homepage', 'slim-seo' ) }</Tab> }
 				{
 					postTypes.length > 1 &&
 					<Tab disabled={ true } className="react-tabs__tab ss-tab-heading">
@@ -43,7 +43,7 @@ const App = () => {
 				{ taxonomies.map( ( [ slug, taxonomy ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ taxonomy.label }</Tab> ) }
 			</TabList>
 			{
-				ssContent.hasHomepageSettings &&
+				ss.hasHomepageSettings &&
 				<TabPanel>
 					<Homepage option={ option[ `home` ] || [] } />
 				</TabPanel>

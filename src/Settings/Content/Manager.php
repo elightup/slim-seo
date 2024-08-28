@@ -28,9 +28,14 @@ class Manager {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], filemtime( SLIM_SEO_DIR . '/css/meta-tags.css' ) );
 
-		wp_enqueue_style( 'slim-seo-post-types', SLIM_SEO_URL . 'css/content.css', [], filemtime( SLIM_SEO_DIR . '/css/content.css' ) );
-		wp_enqueue_script( 'slim-seo-post-types', SLIM_SEO_URL . 'js/content.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/content.js' ), true );
-		wp_localize_script( 'slim-seo-post-types', 'ss', [
+		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [], filemtime( SLIM_SEO_DIR . '/css/content.css' ) );
+		wp_enqueue_script( 'slim-seo-content', SLIM_SEO_URL . 'js/content.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/content.js' ), true );
+		wp_localize_script( 'slim-seo-content', 'ss', [
+			'hasHomepageSettings'      => $this->has_homepage_settings(),
+			'homepage'                 => $this->has_homepage_settings() ? $this->items[ 'home' ]->get_data() : [],
+			'postTypes'                => $this->get_post_types(),
+			'taxonomies'               => $this->get_taxonomies(),
+			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
 			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 			'site'            => [
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
@@ -40,13 +45,6 @@ class Manager {
 				'separator' => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
 				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], 'post' ),
 			],
-		] );
-		wp_localize_script( 'slim-seo-post-types', 'ssContent', [
-			'hasHomepageSettings'      => $this->has_homepage_settings(),
-			'homepage'                 => $this->has_homepage_settings() ? $this->items[ 'home' ]->get_data() : [],
-			'postTypes'                => $this->get_post_types(),
-			'taxonomies'               => $this->get_taxonomies(),
-			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
 		] );
 	}
 
