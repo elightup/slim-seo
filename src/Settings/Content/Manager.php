@@ -17,7 +17,7 @@ class Manager {
 	}
 
 	public function get_post_types(): array {
-		return array_diff_key( Data::get_post_types(), array_flip( [ 'post', 'page' ] ) );
+		return Data::get_post_types();
 	}
 
 	public function get( string $name ): Item {
