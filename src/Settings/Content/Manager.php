@@ -11,22 +11,7 @@ class Manager {
 	}
 
 	public function admin_init() {
-		$taxonomies = array_keys( array_filter( Data::get_taxonomies() ) );
-		$post_types = array_keys( array_filter( Data::get_post_types() ) );
-
-		$post_types_archive = array_map( function ( $item ) {
-			return "{$item}_archive";
-		}, $post_types );
-
-
-		$items = array_merge(
-			$post_types,
-			$post_types_archive,
-			$taxonomies
-		);
-		if ( $this->has_homepage_settings() ) {
-			$items[] = 'home';
-		}
+		$item = $this->get_content_items();
 
 		foreach ( $items as $item ) {
 			$this->items[ $item ] = new Item( $item );
@@ -65,16 +50,34 @@ class Manager {
 		return 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' );
 	}
 
+	private function get_content_items() {
+		$taxonomies = array_keys( array_filter( Data::get_taxonomies() ) );
+		$post_types = array_keys( array_filter( Data::get_post_types() ) );
+
+		$post_types_archive = array_map( function ( $item ) {
+			return "{$item}_archive";
+		}, $post_types );
+
+		$items = array_merge(
+			$post_types,
+			$post_types_archive,
+			$taxonomies
+		);
+		if ( $this->has_homepage_settings() ) {
+			$items[] = 'home';
+		}
+
+		return $items;
+	}
+
 	public function sanitize( array &$option, array $data ) {
-		// Post type settings.
-		$post_types = array_keys( Data::get_post_types() );
-		foreach ( $post_types as $post_type ) {
-			if ( empty( $data[ $post_type ] ) ) {
-				unset( $option[ $post_type ] );
+		$items = $this->get_content_items();
+		foreach ( $items as $item ) {
+			if ( empty( $data[ $item ] ) ) {
+				unset( $option[ $item ] );
 			}
 		}
 
-		// Post type archive settings.
 		foreach ( $this->items as $key => $item ) {
 			if ( ! isset( $option[ $key ] ) ) {
 				continue;
