@@ -6,14 +6,6 @@ import slugify from "slugify";
 import { request } from "../../functions";
 import Inserter from "../Inserter";
 
-const sanitizeId = text => slugify( text, { lower: true } )
-	.replace( /[^a-z0-9_]/g, '_' )           // Only accepts alphanumeric and underscores.
-	.replace( /[ _]{2,}/g, '_' )             // Remove duplicated `_`.
-	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_`.
-	.replace( /^\d+/, '' )                   // Don't start with numbers.
-	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_` again.
-	;
-
 const PropInserter = ( { data = 'content/variables', inputRef, replace = false, onInsert } ) => {
 	const [ showModal, setShowModal ] = useState( false );
 
