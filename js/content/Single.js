@@ -1,4 +1,4 @@
-import { render } from '@wordpress/element';
+import { render, createRoot } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
@@ -60,4 +60,6 @@ const Single = () => {
 	</>;
 };
 
-render( <Single />, document.getElementById( 'ss-single' ) );
+const container = document.getElementById( 'ss-single' );
+const root = createRoot( container );
+root.render( <Single /> );

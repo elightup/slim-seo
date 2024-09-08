@@ -1,7 +1,6 @@
-import { render, useEffect, useState } from '@wordpress/element';
+import { createRoot, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import Block from "./components/Fields/Block";
 import Homepage from "./components/Fields/Homepage";
 import PostType from "./components/PostType";
 import Taxonomy from "./components/Taxonomy";
@@ -9,7 +8,7 @@ import { request } from "./functions";
 
 const App = () => {
 	const [ loading, setLoading ] = useState( false );
-	const [ option, setOption ]   = useState( {} );
+	const [ option, setOption ] = useState( {} );
 
 	useEffect( () => {
 		request( 'content/option' ).then( ( res ) => {
@@ -21,7 +20,7 @@ const App = () => {
 	const postTypes = Object.entries( ss.postTypes );
 	const taxonomies = Object.entries( ss.taxonomies );
 
-	if ( ! loading ) {
+	if ( !loading ) {
 		return null;
 	}
 
@@ -77,4 +76,6 @@ const App = () => {
 	</>;
 };
 
-render( <App />, document.getElementById( 'ss-content' ) );
+const container = document.getElementById( 'ss-content' );
+const root = createRoot( container );
+root.render( <App /> );
