@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
 use WP_Term;
 
 class Robots {
