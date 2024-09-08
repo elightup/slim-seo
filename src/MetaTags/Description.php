@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use WP_Term;
+
 class Description {
 	use Context;
 
@@ -97,7 +99,7 @@ class Description {
 	}
 
 	public function get_term_value( $term_id = null ): string {
-		$term_id = $term_id ?: get_queried_object_id();
+		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;

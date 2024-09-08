@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use WP_Term;
+
 class Title {
 	use Context;
 

@@ -2,6 +2,7 @@
 namespace SlimSEO\MetaTags;
 
 use SlimSEO\Helpers\Images;
+use WP_Term;
 
 class Image {
 	use Context;
@@ -62,7 +63,7 @@ class Image {
 			return [];
 		}
 
-		return $this->get_from_settings( $option[ $term->taxonomy ][ $this->meta_key ] ) ?? [];
+		return $this->get_from_settings( $option[ $term->taxonomy ][ $this->meta_key ] ?? '' ) ?? [];
 	}
 
 	public function get_data_from_url( $url ): array {
