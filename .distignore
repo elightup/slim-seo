@@ -22,6 +22,6 @@ css/scss/
 js/redirection/
 js/redirection.js.LICENSE.txt
 
-js/link-attributes/block-editor/src/
 js/breadcrumbs/src/
-js/meta-tags/src/
+js/content/
+js/link-attributes/block-editor/src/
