@@ -11,7 +11,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 
 	const handleChange = e => {
 		setNoIndex( e.target.checked );
-	}
+	};
 
 	return <>
 		<Checkbox
@@ -21,26 +21,27 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 			description={ __( 'This setting will apply noindex robots tag to all posts of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
 			onChange={ handleChange }
 		/>
-		{ ! noindex &&
+		{ !noindex &&
 			<Block
 				baseName={ baseName }
 				option={ option }
-				label={ sprintf( __( 'Singular %s page', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
+				label={ sprintf( __( 'Singular %s', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
+				descriptionInstruction={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
 			/>
 		}
-		{ ! noindex &&
+		{ !noindex &&
 			(
 				ss.postTypesWithArchivePage.hasOwnProperty( id )
-				?   <PostTypeWithArchivePage
+					? <PostTypeWithArchivePage
 						id={ id }
 						postType={ ss.postTypesWithArchivePage[ id ] }
-						label={ sprintf( __( '%s archive page', 'slim-seo' ), postType.labels.singular_name ) }
+						label={ sprintf( __( '%s archive', 'slim-seo' ), postType.labels.singular_name ) }
 					/>
-				:   postType.has_archive &&
+					: postType.has_archive &&
 					<Block
 						baseName={ baseNameArchive }
 						option={ optionArchive }
-						label={ sprintf( __( '%s archive page', 'slim-seo' ), postType.labels.singular_name ) }
+						label={ sprintf( __( '%s archive', 'slim-seo' ), postType.labels.singular_name ) }
 						archive={ true }
 					/>
 			)

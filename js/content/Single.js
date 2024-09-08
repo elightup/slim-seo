@@ -37,14 +37,14 @@ const Single = () => {
 			id="slim_seo[facebook_image]"
 			label={ __( 'Facebook image', 'slim-seo' ) }
 			std={ ss.single.data.facebook_image }
-			description={ __( 'Recommended size: 1200x630 px.', 'slim-seo' ) }
+			description={ __( 'Recommended size: 1200x630 px. Should have 1.91:1 aspect ratio with width ≥ 600 px.', 'slim-seo' ) }
 		/>
 		<Image
 			id="slim_seo[twitter_image]"
 			label={ __( 'Twitter image', 'slim-seo' ) }
 			std={ ss.single.data.twitter_image }
 			mediaPopupTitle={ ss.mediaPopupTitle }
-			description={ __( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ) }
+			description={ __( 'Recommended size: 1200x600 px. Should have 2:1 aspect ratio with width ≥ 300 px and ≤ 4096 px.', 'slim-seo' ) }
 		/>
 		<Text
 			id="slim_seo[canonical]"
@@ -55,7 +55,7 @@ const Single = () => {
 			id="slim_seo[noindex]"
 			label={ __( ' Hide from search results ', 'slim-seo' ) }
 			std={ ss.single.data.noindex }
-			description={ __( 'This setting will apply noindex robots tag to this post of this post type and exclude the post type from the sitemap.', 'slim-seo' ) }
+			description={ __( 'This setting will apply noindex robots tag to this post and exclude it from the sitemap.', 'slim-seo' ) }
 		/>
 	</>;
 };

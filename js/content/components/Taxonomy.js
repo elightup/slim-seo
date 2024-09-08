@@ -9,7 +9,7 @@ const Taxonomy = ( { id, taxonomy, option } ) => {
 
 	const handleChange = e => {
 		setNoIndex( e.target.checked );
-	}
+	};
 
 	return <>
 		<Checkbox
@@ -19,12 +19,12 @@ const Taxonomy = ( { id, taxonomy, option } ) => {
 			description={ __( 'This setting will apply noindex robots tag to all terms of this taxonomy and exclude the taxonomy from the sitemap.', 'slim-seo' ) }
 			onChange={ handleChange }
 		/>
-		{ ! noindex &&
+		{ !noindex &&
 			<Block
-				type="taxonomy"
 				baseName={ baseName }
 				option={ option }
 				label={ taxonomy.labels.singular_name }
+				descriptionInstruction={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ) }
 			/>
 		}
 	</>;
