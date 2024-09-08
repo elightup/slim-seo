@@ -27,7 +27,7 @@ class Description {
 
 	public function get_description(): string {
 		$description = $this->get_value();
-		$description = apply_filters( 'slim_seo_meta_description', $description, get_queried_object_id() );
+		$description = apply_filters( 'slim_seo_meta_description', $description, $this->get_queried_object_id() );
 		$description = Helper::render( $description );
 		$description = $this->normalize( $description );
 
