@@ -26,7 +26,7 @@ const start = async () => {
 
 	const postTypes = await esbuild.context( {
 		...config,
-		entryPoints: [ 'js/content/App.js' ],
+		entryPoints: [ 'js/content/Settings.js' ],
 		outfile: 'js/content.js'
 	} );
 	await postTypes.watch();
