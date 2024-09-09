@@ -1,9 +1,9 @@
 <?php
-namespace SlimSEO\Settings;
+namespace SlimSEO\Settings\Content;
 
 use WP_REST_Server;
 
-class Content {
+class RestApi {
 	public function setup() {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}

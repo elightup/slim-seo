@@ -32,7 +32,7 @@ class Container {
 		$services['content_manager']   = new Settings\Content\Manager;
 		$services['settings']          = new Settings\Settings( $services['content_manager'] );
 		$services['code']              = new Code( $services['settings'] );
-		$services['content']           = new Settings\Content;
+		$services['content_rest_api']  = new Settings\Content\RestApi;
 
 		$services['redirection'] = new Redirection\Loader;
 		$services['breadcrumbs'] = new Breadcrumbs;
