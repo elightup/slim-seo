@@ -1,8 +1,8 @@
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { useApi } from '../helper/misc';
 import Export from '../components/Export';
 import Import from '../components/Import';
+import { useApi } from '../helper/misc';
 import Items from './Items';
 import Update from './Update';
 
@@ -58,8 +58,8 @@ const List = () => {
 								</span>
 							</span>
 						</>
-						: 
-						<div class="ss-import">
+						:
+						<div className="ss-import">
 							<Import />
 						</div>
 				}

@@ -1,8 +1,8 @@
-import { render } from '@wordpress/element';
+import { createRoot } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Redirects from './redirects/Main';
 import Log404 from './404/Main';
+import Redirects from './redirects/Main';
 import Settings from './settings/Settings';
 
 const App = () => {
@@ -34,4 +34,6 @@ const App = () => {
 	);
 };
 
-render( <App />, document.getElementById( 'ss-redirection' ) );
+const container = document.getElementById( 'ss-redirection' );
+const root = createRoot( container );
+root.render( <App /> );
