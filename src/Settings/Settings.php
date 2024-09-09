@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\Settings;
 
-use SlimSEO\Helpers\Data;
-
 class Settings {
 	private $content_manager;
 

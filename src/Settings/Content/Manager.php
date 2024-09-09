@@ -10,7 +10,7 @@ class Manager {
 		add_action( 'admin_init', [ $this, 'admin_init' ] );
 	}
 
-	public function admin_init() {
+	public function admin_init(): void {
 		$items = $this->get_content_items();
 
 		foreach ( $items as $item ) {
@@ -22,7 +22,7 @@ class Manager {
 		return $this->items[ $name ];
 	}
 
-	public function enqueue() {
+	public function enqueue(): void {
 		wp_enqueue_media();
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], filemtime( SLIM_SEO_DIR . '/css/meta-tags.css' ) );
 
@@ -46,16 +46,16 @@ class Manager {
 		] );
 	}
 
-	public function has_homepage_settings() {
+	private function has_homepage_settings(): bool {
 		return 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' );
 	}
 
-	private function get_content_items() {
+	private function get_content_items(): array {
 		$taxonomies = array_keys( array_filter( Data::get_taxonomies() ) );
 		$post_types = array_keys( array_filter( Data::get_post_types() ) );
 
-		$post_types_archive = array_map( function ( $item ) {
-			return "{$item}_archive";
+		$post_types_archive = array_map( function ( $post_type ) {
+			return "{$post_type}_archive";
 		}, $post_types );
 
 		$items = array_merge(
@@ -70,7 +70,7 @@ class Manager {
 		return $items;
 	}
 
-	public function sanitize( array &$option, array $data ) {
+	public function sanitize( array &$option, array $data ): void {
 		$items = $this->get_content_items();
 		foreach ( $items as $item ) {
 			if ( empty( $data[ $item ] ) ) {
