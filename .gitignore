@@ -6,13 +6,13 @@ vendor
 Thumbs.db
 *.LICENSE.txt
 
-css/redirection.css
-css/meta-tags.css
 css/admin-columns.css
+css/content.css
+css/meta-tags.css
+css/redirection.css
 
 js/redirection.js
-js/post-type.js
-js/post-types.js
+js/single.js
+js/content.js
 js/link-attributes/block-editor/dist
 js/breadcrumbs/dist
-js/meta-tags/dist

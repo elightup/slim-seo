@@ -1,6 +1,10 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
+use WP_Term;
+
 class Title {
 	use Context;
 
@@ -69,7 +73,16 @@ class Title {
 	public function get_term_value( $term_id = 0 ): string {
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
-		return $data['title'] ?? '';
+		if ( ! empty( $data['title'] ) ) {
+			return $data['title'];
+		}
+
+		$option   = get_option( 'slim_seo', [] );
+		$term     = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return '';
+		}
+		return $option[ $term->taxonomy ]['title'] ?? '';
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {

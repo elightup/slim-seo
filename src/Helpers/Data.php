@@ -13,7 +13,6 @@ class Data {
 			'public'  => true,
 			'show_ui' => true,
 		], 'objects' );
-		unset( $taxonomies['post_format'] );
 		return apply_filters( 'slim_seo_taxonomies', $taxonomies );
 	}
 

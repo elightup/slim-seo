@@ -1,6 +1,10 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
+use WP_Term;
+
 class Robots {
 	use Context;
 
@@ -46,7 +50,7 @@ class Robots {
 
 	private function indexed() {
 		$value = $this->get_indexed();
-		return apply_filters( 'slim_seo_robots_index', $value, get_queried_object_id() );
+		return apply_filters( 'slim_seo_robots_index', $value, $this->get_queried_object_id() );
 	}
 
 	private function get_indexed() {
@@ -98,9 +102,20 @@ class Robots {
 	 * @see AdminColumns/Term.php.
 	 */
 	public function get_term_value( $term_id = 0 ): bool {
-		$term_id = $term_id ?: get_queried_object_id();
-		$data    = get_term_meta( $term_id, 'slim_seo', true );
-		return isset( $data['noindex'] ) ? (bool) $data['noindex'] : false;
+		$term_id  = $term_id ?: get_queried_object_id();
+		$option   = get_option( 'slim_seo', [] );
+		$term     = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return false;
+		}
+
+		$taxonomy         = $term->taxonomy;
+		$taxonomy_noindex = (bool) ( $option[ $taxonomy ]['noindex'] ?? false );
+
+		$data         = get_term_meta( $term_id, 'slim_seo', true );
+		$term_noindex = (bool) ( $data['noindex'] ?? false );
+
+		return $term_noindex || $taxonomy_noindex;
 	}
 
 	/**

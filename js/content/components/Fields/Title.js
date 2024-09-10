@@ -5,9 +5,9 @@ import { __, sprintf } from "@wordpress/i18n";
 import { formatTitle, isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, std, description, max = 60, ...rest } ) => {
+const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  description, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ placeholder, setPlaceholder ] = useState( std );
+	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const wpTitle = document.querySelector( '#title' ) || document.querySelector( '#name' );
 
 	const getClassName = () => {
@@ -16,7 +16,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 			return '';
 		}
 
-		const title = normalize( value || placeholder );
+		const title = normalize( value || newPlaceholder );
 		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
@@ -26,7 +26,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 			return description;
 		}
 
-		const title = normalize( value || placeholder );
+		const title = normalize( value || newPlaceholder );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
 	};
 
@@ -35,11 +35,11 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 	};
 
 	const handleFocus = () => {
-		setValue( prev => prev || placeholder );
+		setValue( prev => prev || newPlaceholder );
 	};
 
 	const handleBlur = () => {
-		setValue( prev => prev === placeholder ? '' : prev );
+		setValue( prev => prev === newPlaceholder ? '' : prev );
 	};
 
 	const handleInsertVariables = value => {
@@ -48,13 +48,16 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 
 	const handleTitleChange = () => {
 		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
-		setPlaceholder( formatTitle( title ) );
+		setNewPlaceholder( formatTitle( title ) );
 	};
 
-	// Update placeholder when post title changes.
+	// Update newPlaceholder when post title changes.
 	useEffect( () => {
-		handleTitleChange();
+		if ( isSettings ) {
+			return;
+		}
 
+		handleTitleChange();
 		if ( isBlockEditor ) {
 			subscribe( handleTitleChange );
 		} else if ( wpTitle ) {
@@ -78,7 +81,7 @@ const Title = ( { id, std, description, max = 60, ...rest } ) => {
 					id={ id }
 					name={ id }
 					value={ value }
-					placeholder={ placeholder }
+					placeholder={ newPlaceholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }

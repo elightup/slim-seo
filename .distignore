@@ -1,27 +1,27 @@
-node_modules
-.git
-.github
-.gitignore
-.gitattributes
-
 .DS_Store
 Thumbs.db
 
+.git
+.github
+node_modules
+
 .distignore
+.gitignore
 composer.json
 composer.lock
-esbuild.js
+esbuild.mjs
 package-lock.json
 package.json
 phpcs.xml
+pnpm-lock.yaml
 README.md
 
 *.zip
 
 css/scss/
+
+js/breadcrumbs/src/
+js/content/
+js/link-attributes/block-editor/src/
 js/redirection/
 js/redirection.js.LICENSE.txt
-
-js/link-attributes/block-editor/src/
-js/breadcrumbs/src/
-js/meta-tags/src/

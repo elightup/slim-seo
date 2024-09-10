@@ -5,9 +5,9 @@ import { __, sprintf } from "@wordpress/i18n";
 import { formatDescription, isBlockEditor, normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, placeholder = '', std, description, isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ placeholder, setPlaceholder ] = useState( std );
+	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 	let contentEditor;
@@ -18,7 +18,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 			return '';
 		}
 
-		const desc = normalize( value || placeholder );
+		const desc = normalize( value || newPlaceholder );
 		return min > desc.length || desc.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
@@ -27,7 +27,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 			return description;
 		}
 
-		const desc = normalize( value || placeholder );
+		const desc = normalize( value || newPlaceholder );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), desc.length, description );
 	};
 
@@ -36,11 +36,11 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 	};
 
 	const handleFocus = () => {
-		setValue( prev => prev || placeholder );
+		setValue( prev => prev || newPlaceholder );
 	};
 
 	const handleBlur = () => {
-		setValue( prev => prev === placeholder ? '' : prev );
+		setValue( prev => prev === newPlaceholder ? '' : prev );
 	};
 
 	const handleInsertVariables = value => {
@@ -49,7 +49,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 
 	const handleDescriptionChange = () => {
 		const desc = getPostExcerpt() || getPostContent();
-		setPlaceholder( formatDescription( desc, max ) );
+		setNewPlaceholder( formatDescription( desc, max ) );
 	};
 
 	const getPostContent = () => {
@@ -63,10 +63,13 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 		return isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
 	};
 
-	// Update placeholder when post description changes.
+	// Update newPlaceholder when post description changes.
 	useEffect( () => {
-		handleDescriptionChange();
+		if ( isSettings ) {
+			return;
+		}
 
+		handleDescriptionChange();
 		if ( isBlockEditor ) {
 			subscribe( handleDescriptionChange );
 		} else {
@@ -106,7 +109,7 @@ const Description = ( { id, description, std, rows = 3, min = 50, max = 160, ...
 					name={ id }
 					rows={ rows }
 					value={ value }
-					placeholder={ placeholder }
+					placeholder={ newPlaceholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }

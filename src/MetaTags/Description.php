@@ -1,6 +1,10 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
+use WP_Term;
+
 class Description {
 	use Context;
 
@@ -27,7 +31,7 @@ class Description {
 
 	public function get_description(): string {
 		$description = $this->get_value();
-		$description = apply_filters( 'slim_seo_meta_description', $description, get_queried_object_id() );
+		$description = apply_filters( 'slim_seo_meta_description', $description, $this->get_queried_object_id() );
 		$description = Helper::render( $description );
 		$description = $this->normalize( $description );
 
@@ -97,7 +101,7 @@ class Description {
 	}
 
 	public function get_term_value( $term_id = null ): string {
-		$term_id = $term_id ?: get_queried_object_id();
+		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
@@ -105,7 +109,16 @@ class Description {
 		}
 
 		$term = get_term( $term_id );
-		return $term && ! is_wp_error( $term ) ? $term->description : '';
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return '';
+		}
+
+		if ( $term->description ) {
+			return $term->description;
+		}
+
+		$option = get_option( 'slim_seo', [] );
+		return $option[ $term->taxonomy ]['description'] ?? '';
 	}
 
 	private function get_author_value(): string {

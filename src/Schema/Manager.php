@@ -96,7 +96,7 @@ class Manager {
 		if ( current_theme_supports( 'custom-logo' ) && has_custom_logo() ) {
 			$logo_id = get_theme_mod( 'custom_logo' );
 		}
-		if ( ! $logo_id ) {
+		if ( empty( $logo_id ) || ! is_int( $logo_id ) ) {
 			return;
 		}
 		$logo = new Types\ImageObject( 'logo', home_url( '/' ) );

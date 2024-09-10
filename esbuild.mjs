@@ -24,33 +24,19 @@ const start = async () => {
 	} );
 	await redirection.watch();
 
-	const settings = await esbuild.context( {
-		...config,
-		entryPoints: [ 'js/meta-tags/src/settings.js' ],
-		outfile: 'js/meta-tags/dist/settings.js'
-	} );
-	await settings.watch();
-
 	const postTypes = await esbuild.context( {
 		...config,
-		entryPoints: [ 'js/post-types/App.js' ],
-		outfile: 'js/post-types.js'
+		entryPoints: [ 'js/content/Settings.js' ],
+		outfile: 'js/content.js'
 	} );
 	await postTypes.watch();
 
 	const post = await esbuild.context( {
 		...config,
-		entryPoints: [ 'js/post-types/Single.js' ],
-		outfile: 'js/post-type.js'
+		entryPoints: [ 'js/content/Single.js' ],
+		outfile: 'js/single.js'
 	} );
 	await post.watch();
-
-	const object = await esbuild.context( {
-		...config,
-		entryPoints: [ 'js/meta-tags/src/object.js' ],
-		outfile: 'js/meta-tags/dist/object.js'
-	} );
-	await object.watch();
 };
 
 start();
