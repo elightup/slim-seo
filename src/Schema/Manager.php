@@ -6,6 +6,7 @@ use SlimSEO\MetaTags\CanonicalUrl;
 use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
 use SlimSEO\Helpers\Images;
+use WP_User;
 
 class Manager {
 	private $title;
@@ -140,20 +141,25 @@ class Manager {
 
 		$article->add_reference( 'publisher', $this->entities['organization'] );
 
-		$author       = new Types\Person( 'author', get_author_posts_url( $post->post_author ) );
-		$author->user = get_userdata( $post->post_author );
+		$author      = new Types\Person( 'author' );
+		$author_user = get_userdata( $post->post_author );
 
-		if ( ! $author->user ) {
+		if ( ! ( $author_user instanceof WP_User ) ) {
 			return;
 		}
 
+		$author->set_user( $author_user );
 		$this->add_entity( $author );
 		$article->add_reference( 'author', $author );
 	}
 
 	private function add_author_schemas() {
-		$author       = new Types\Person( 'author', get_author_posts_url( get_queried_object_id() ) );
-		$author->user = get_queried_object();
+		$author       = new Types\Person( 'author' );
+		$author_user = get_queried_object();
+		if ( ! ( $author_user instanceof WP_User ) ) {
+			return;
+		}
+		$author->set_user( $author_user );
 		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 
 		$this->add_entity( $author );

@@ -1,13 +1,20 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
+use WP_User;
+
 class Person extends Base {
-	public $user;
+	private $user;
+
+	public function set_user( WP_User $user ) {
+		$this->user = $user;
+		$this->id   = home_url( '/#/schema/person/' . md5( $user->user_login ) );
+	}
 
 	public function generate() {
 		$schema = [
 			'@type'       => 'Person',
-			'@id'         => home_url( '/#/schema/person/' . md5( $this->user->user_login ) ),
+			'@id'         => $this->id,
 			'url'         => $this->user->user_url,
 			'name'        => $this->user->display_name,
 			'description' => $this->user->description,
