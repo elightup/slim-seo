@@ -15,12 +15,10 @@ abstract class Base {
 
 	public function enqueue() {
 		wp_enqueue_media();
-		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], SLIM_SEO_VER );
 
 		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/content.css' ) );
 		wp_enqueue_script( 'slim-seo-single', SLIM_SEO_URL . 'js/single.js', [ 'jquery', 'underscore', 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch', 'wp-url' ], filemtime( SLIM_SEO_DIR . 'js/single.js' ), true );
 		wp_localize_script( 'slim-seo-single', 'ss', $this->get_script_params() );
-
 	}
 
 	protected function get_script_params(): array {
