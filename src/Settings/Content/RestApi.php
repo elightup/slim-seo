@@ -1,33 +1,34 @@
 <?php
-namespace SlimSEO\Settings;
+namespace SlimSEO\Settings\Content;
 
 use WP_REST_Server;
+use SlimSEO\Helpers\Data;
 
-class PostTypes {
+class RestApi {
 	public function setup() {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
 	public function register_routes() {
-		register_rest_route( 'slim-seo', 'post-types-option', [
+		register_rest_route( 'slim-seo', '/content/option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'variables', [
+		register_rest_route( 'slim-seo', '/content/variables', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'image_variables', [
+		register_rest_route( 'slim-seo', '/content/image_variables', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_image_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'meta_keys', [
+		register_rest_route( 'slim-seo', '/content/meta_keys', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_meta_keys' ],
 			'permission_callback' => [ $this, 'has_permission' ],
@@ -40,7 +41,6 @@ class PostTypes {
 
 	public function get_option(): array {
 		$exclude = array_fill_keys( [
-			'home',
 			'auto_redirection',
 			'enable_404_logs',
 			'features',
@@ -58,11 +58,11 @@ class PostTypes {
 	}
 
 	public function get_variables() {
-		$taxonomies = $this->get_taxonomies();
+		$taxonomies = Data::get_taxonomies();
 		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
-			$key                          = $this->normalize( $taxonomy['slug'] );
-			$options[ "post.tax.{$key}" ] = $taxonomy['name'];
+			$key                          = $this->normalize( $taxonomy->name );
+			$options[ "post.tax.{$key}" ] = $taxonomy->label;
 		}
 
 		$variables = [
@@ -191,43 +191,22 @@ class PostTypes {
 		return apply_filters( 'slim_seo_image_variables', $variables );
 	}
 
-	private function get_taxonomies() {
-		$unsupported = [
-			'wp_theme',
-			'wp_template_part_area',
-			'link_category',
-			'nav_menu',
-			'post_format',
-			'mb-views-category',
-		];
-		$taxonomies  = get_taxonomies( [], 'objects' );
-		$taxonomies  = array_diff_key( $taxonomies, array_flip( $unsupported ) );
-		$taxonomies  = array_map( function ( $taxonomy ) {
-			return [
-				'slug' => $taxonomy->name,
-				'name' => $taxonomy->label,
-			];
-		}, $taxonomies );
-
-		return array_values( $taxonomies );
-	}
-
 	public function get_meta_keys() {
 		global $wpdb;
 		$meta_keys = $wpdb->get_col( "SELECT DISTINCT meta_key FROM $wpdb->postmeta ORDER BY meta_key" );
 		$meta_keys = $this->exclude_defaults( $meta_keys );
 		$options   = [];
-		foreach ( $meta_keys as $key => $value ) {
+		foreach ( $meta_keys as $meta_key ) {
 			$options[] = [
-				'value' => $value,
-				'label' => $value,
+				'value' => $meta_key,
+				'label' => $meta_key,
 			];
 		}
 
 		return $options;
 	}
 
-	public function exclude_defaults( $meta_keys ) {
+	private function exclude_defaults( $meta_keys ) {
 		$default = [
 			'_edit_last',
 			'_edit_lock',
@@ -290,7 +269,7 @@ class PostTypes {
 		return array_values( array_diff( $meta_keys, $default ) );
 	}
 
-	private function normalize( $key ) {
+	private function normalize( string $key ): string {
 		return str_replace( '-', '_', $key );
 	}
 }

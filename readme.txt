@@ -5,7 +5,7 @@ Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
 Tested up to: 6.5.5
 Requires PHP: 7.2
-Stable tag: 3.25.2
+Stable tag: 3.25.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -22,6 +22,8 @@ Currently there are many SEO plugins for WordPress in the market. But these plug
 SEO should be an integrated part of WordPress, where users don't need or need very little effort to configure for SEO. The main reason is that not everyone understands the terms of SEO and how to configure them optimally.
 
 So, we made [**Slim SEO**](https://wpslimseo.com).
+
+https://www.youtube.com/watch?v=vnC94TMn3wU
 
 Slim SEO is a full-featured SEO plugin, that's done right! It provides a complete SEO solution for WordPress where the configuration has been done automatically. Users do not need to care about their complex and semantic options.
 

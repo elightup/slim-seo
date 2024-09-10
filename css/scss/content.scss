@@ -1,10 +1,12 @@
+@use 'components/status-icons';
+@use 'components/toggle';
 @import '../../node_modules/@elightup/form/style/form.scss';
 
-#post-types {
+#content {
 	padding: 0;
 }
 
-#ss-post-types>.button {
+#ss-content>.button {
 	margin: 24px;
 }
 
@@ -20,10 +22,9 @@
 		margin: 0;
 
 		li.react-tabs__tab {
-			line-height: 1.3;
+			line-height: 16px;
 			padding: 12px 24px;
 			border-right: 0;
-			border-bottom: var(--ss-border-lighter);
 			margin: 0;
 		}
 
@@ -36,13 +37,56 @@
 		flex: 1;
 		padding: 24px;
 	}
+
+	.ss-tab-heading {
+		display: flex;
+		justify-content: space-between;
+		padding-right: 12px;
+		align-items: center;
+		text-transform: uppercase;
+		font-size: 11px;
+		font-weight: 600;
+		cursor: default;
+
+		&:hover {
+			color: inherit;
+		}
+
+		.dashicons {
+			font-size: 14px;
+			width: 14px;
+			height: 14px;
+			opacity: .5;
+		}
+	}
+
+	.ss-tab-item {
+		text-indent: 16px;
+		font-weight: 400;
+	}
 }
 
-.ss-insert-image {
+.ss-input-wrapper {
+	flex: 1;
+	position: relative;
+
+	&:has(.ss-inserter) > input {
+		padding-right: 36px;
+	}
+	&:has(.ss-select-image) > input {
+		padding-right: calc(36px + 25px);
+	}
+}
+
+
+.ss-select-image {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	right: 25px;
+}
+#social .ss-select-image {
+	right: 0;
 }
 
 .ss-inserter {
@@ -53,7 +97,7 @@
 }
 
 .ss-inserter>button,
-.ef-control .ss-insert-image {
+.ef-control .ss-select-image {
 	box-sizing: border-box;
 	height: 100%;
 	color: var(--ss-color-gray);
@@ -66,18 +110,6 @@
 
 	&:focus:not(:disabled) {
 		box-shadow: none;
-	}
-}
-
-.ss-input-wrapper {
-	flex: 1;
-	position: relative;
-
-	&:has(.ss-inserter) > input {
-		padding-right: 36px;
-	}
-	&:has(.ss-insert-image) > input {
-		padding-right: calc(36px + 25px);
 	}
 }
 
@@ -152,6 +184,7 @@
 	}
 
 	&__item {
+		min-width: 240px;
 		cursor: pointer;
 		margin: 0;
 		padding: 4px 8px;
@@ -209,7 +242,7 @@
 		right: 0;
 	}
 
-	.ss-insert-image {
+	.ss-select-image {
 		right: 25px;
 	}
 
@@ -255,7 +288,7 @@
 			right: calc(5% + 10px);
 		}
 
-		.ss-insert-image {
+		.ss-select-image {
 			right: calc(5% + 10px + 25px);
 		}
 	}
