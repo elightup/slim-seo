@@ -1,3 +1,5 @@
+@use 'components/status-icons';
+@use 'components/toggle';
 @import '../../node_modules/@elightup/form/style/form.scss';
 
 #content {
@@ -64,11 +66,27 @@
 	}
 }
 
-.ss-insert-image {
+.ss-input-wrapper {
+	flex: 1;
+	position: relative;
+
+	&:has(.ss-inserter) > input {
+		padding-right: 36px;
+	}
+	&:has(.ss-select-image) > input {
+		padding-right: calc(36px + 25px);
+	}
+}
+
+
+.ss-select-image {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	right: 25px;
+}
+#social .ss-select-image {
+	right: 0;
 }
 
 .ss-inserter {
@@ -79,7 +97,7 @@
 }
 
 .ss-inserter>button,
-.ef-control .ss-insert-image {
+.ef-control .ss-select-image {
 	box-sizing: border-box;
 	height: 100%;
 	color: var(--ss-color-gray);
@@ -92,18 +110,6 @@
 
 	&:focus:not(:disabled) {
 		box-shadow: none;
-	}
-}
-
-.ss-input-wrapper {
-	flex: 1;
-	position: relative;
-
-	&:has(.ss-inserter) > input {
-		padding-right: 36px;
-	}
-	&:has(.ss-insert-image) > input {
-		padding-right: calc(36px + 25px);
 	}
 }
 
@@ -235,7 +241,7 @@
 		right: 0;
 	}
 
-	.ss-insert-image {
+	.ss-select-image {
 		right: 25px;
 	}
 
@@ -281,7 +287,7 @@
 			right: calc(5% + 10px);
 		}
 
-		.ss-insert-image {
+		.ss-select-image {
 			right: calc(5% + 10px + 25px);
 		}
 	}

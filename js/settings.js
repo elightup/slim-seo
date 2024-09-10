@@ -52,7 +52,7 @@
 			// Handle selection.
 			frame.on( 'select', () => {
 				const url = frame.state().get( 'selection' ).first().toJSON().url;
-				e.target.previousElementSibling.value = url;
+				e.target.parentElement.previousElementSibling.value = url;
 			} );
 		};
 
