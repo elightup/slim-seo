@@ -31,12 +31,27 @@ class Breadcrumbs {
 	}
 
 	public function render_block( $attributes ): string {
+		$attributes['display_current'] = $attributes['display_current'] ? 'true' : 'false';
+
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-			return '<small><i>' . __( 'Due to the limitation of conditional tags in the admin, the preview of the breadcrumbs block is not available.', 'slim-seo' ) . '</i></small>';
+			$this->prepare_for_block_preview( $attributes );
 		}
 
-		$attributes['display_current'] = $attributes['display_current'] ? 'true' : 'false';
 		return $this->render_shortcode( $attributes );
+	}
+
+	private function prepare_for_block_preview( array $args ) {
+		$this->args = wp_parse_args( $args, $this->args );
+
+		// Add sample links: Home » Category » Post title.
+		$this->add_link( home_url( '/' ), $this->args['label_home'] );
+		$this->add_link( '#', __( 'Parent', 'slim-seo' ) );
+
+		if ( 'true' === $this->args['display_current'] ) {
+			$this->current = __( 'Page title', 'slim-seo' );
+		}
+
+		$this->is_parsed = true;
 	}
 
 	public function render_shortcode( $atts ): string {
