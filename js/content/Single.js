@@ -1,5 +1,5 @@
+import { createRoot } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
-import { createRoot } from 'react-dom/client';
 import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
 import Image from "./components/Fields/Image";

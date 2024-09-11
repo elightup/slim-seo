@@ -1,6 +1,5 @@
 import { RawHTML, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from "dot-prop";
 
 const Group = ( { group, searchTerm } ) => {
 	const s = searchTerm.toLowerCase();
@@ -35,12 +34,12 @@ const Search = ( { handleSearch } ) => (
 
 // Get label, including nested groups (where outer group has no label).
 const getLabel = property => {
-	let label = dotProp.get( property, 'label', '' );
+	let label = property?.label || '';
 	if ( label ) {
 		return label;
 	}
 
-	let fields = dotProp.get( property, 'fields', [] );
+	let fields = property?.fields || [];
 	fields.forEach( field => {
 		if ( !label ) {
 			label = getLabel( field );
