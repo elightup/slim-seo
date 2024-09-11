@@ -1,7 +1,7 @@
 import { RawHTML } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
-export default PostTypeWithArchivePage = ( { id, label, postType } ) => {
+export default ( { id, label, postType } ) => {
 	const { link, title, edit } = postType;
 
 	return <>

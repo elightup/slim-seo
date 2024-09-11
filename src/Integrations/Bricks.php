@@ -1,15 +1,19 @@
 <?php
 namespace SlimSEO\Integrations;
 
-use SlimSEO\MetaTags\Helper;
 use WP_Post;
+use SlimSEO\MetaTags\Helper;
+use SlimSEO\Helpers\Arr;
 
 class Bricks {
+	private $is_auto_genereted = false;
+
 	public function is_active(): bool {
 		return defined( 'BRICKS_VERSION' );
 	}
 
 	public function setup() {
+		add_filter( 'slim_seo_data', [ $this, 'replace_post_content' ] );
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );
@@ -18,14 +22,47 @@ class Bricks {
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 	}
 
+	public function replace_post_content( array $data ): array {
+		if ( $this->is_auto_genereted ) {
+			return $data;
+		}
+
+		$post = is_singular() ? get_queried_object() : get_post();
+		if ( empty( $post ) ) {
+			return $data;
+		}
+		$content = Arr::get( $data, 'post.content', '' );
+		// Priority WordPress post content first.
+		if ( $content ) {
+			return $data;
+		}
+
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			Arr::set( $data, 'post.content', $content );
+		}
+
+		return $data;
+	}
+
 	public function description( $description, WP_Post $post ) {
+		$content = $this->get_post_content( $post );
+		if ( $content ) {
+			$this->is_auto_genereted = true;
+			return $content;
+		}
+
+		return $description;
+	}
+
+	private function get_post_content( WP_Post $post ): string {
 		// Get from the post first, then from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
 		if ( empty( $data ) ) {
 			$data = \Bricks\Helpers::get_bricks_data( $post->ID );
 		}
 		if ( empty( $data ) ) {
-			return $description;
+			return '';
 		}
 
 		$data = $this->remove_elements( $data );
@@ -33,12 +70,12 @@ class Bricks {
 		// Skip shortcodes & blocks inside dynamic data {post_content}.
 		add_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
 
-		$description = \Bricks\Frontend::render_data( $data );
+		$content = \Bricks\Frontend::render_data( $data );
 
 		// Remove the filter.
 		remove_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
 
-		return (string) $description;
+		return (string) $content;
 	}
 
 	private function remove_elements( array $data ): array {

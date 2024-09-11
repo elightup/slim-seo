@@ -1,7 +1,10 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
 use SlimSEO\Helpers\Images;
+use WP_Term;
 
 class Image {
 	use Context;
@@ -15,21 +18,28 @@ class Image {
 	private function get_home_value(): array {
 		$option = get_option( 'slim_seo', [] );
 		$url    = $option['home'][ $this->meta_key ] ?? '';
-		return $url ? $this->get_data_from_url( $url ) : [];
+		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
 	private function get_post_type_archive_value(): array {
 		$post_type_object = get_queried_object();
 		$option           = get_option( 'slim_seo' );
 		$url              = $option[ "{$post_type_object->name}_archive" ][ $this->meta_key ] ?? '';
-		return $url ? $this->get_data_from_url( $url ) : [];
+		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
 	private function get_singular_value(): array {
 		// Get from SEO settings in custom fields.
 		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
 		if ( isset( $data[ $this->meta_key ] ) ) {
-			return $this->get_data_from_url( $data[ $this->meta_key ] );
+			return $this->get_from_post_meta( $data[ $this->meta_key ] );
+		}
+
+		// Get from settings.
+		$option = get_option( 'slim_seo', [] );
+		$post   = $this->get_queried_object();
+		if ( isset( $option[ $post->post_type ][ $this->meta_key ] ) ) {
+			return $this->get_from_settings( $option[ $post->post_type ][ $this->meta_key ] );
 		}
 
 		// Get from thumbnail or content.
@@ -45,7 +55,17 @@ class Image {
 
 	private function get_term_value(): array {
 		$data = get_term_meta( get_queried_object_id(), 'slim_seo', true );
-		return isset( $data[ $this->meta_key ] ) ? $this->get_data_from_url( $data[ $this->meta_key ] ) : [];
+		if ( ! empty( $data[ $this->meta_key ] ) ) {
+			return $this->get_from_post_meta( $data[ $this->meta_key ] );
+		}
+
+		$option   = get_option( 'slim_seo', [] );
+		$term = get_term( get_queried_object_id() );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return [];
+		}
+
+		return $this->get_from_settings( $option[ $term->taxonomy ][ $this->meta_key ] ?? '' ) ?? [];
 	}
 
 	public function get_data_from_url( $url ): array {
@@ -64,5 +84,19 @@ class Image {
 			'height' => $image[2],
 			'alt'    => get_post_meta( $id, '_wp_attachment_image_alt', true ) ?: get_the_title( $id ),
 		] : [];
+	}
+
+	private function get_from_post_meta( string $meta_value ): array {
+		if ( ! filter_var( $meta_value, FILTER_VALIDATE_URL ) ) {
+			$meta_value = Helper::render( $meta_value );
+		}
+		return $this->get_data_from_url( $meta_value );
+	}
+
+	private function get_from_settings( string $setting ): array {
+		if ( ! filter_var( $setting, FILTER_VALIDATE_URL ) ) {
+			$setting = Helper::render( $setting );
+		}
+		return $this->get_data_from_url( $setting );
 	}
 }

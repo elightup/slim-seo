@@ -1,10 +1,10 @@
 import { Control } from "@elightup/form";
 import { Button } from "@wordpress/components";
 import { useRef } from "@wordpress/element";
+import PropInserter from "./PropInserter";
 
-const Image = ( property ) => {
+const Image = ( { id, std, mediaPopupTitle, ...rest } ) => {
 	const inputRef = useRef();
-	const { id, label, std, className = '', mediaPopupTitle, ...rest } = property;
 
 	const openMediaPopup = e => {
 		e.preventDefault();
@@ -24,10 +24,11 @@ const Image = ( property ) => {
 	};
 
 	return (
-		<Control className={ className } label={ label } id={ id } { ...rest }>
+		<Control id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
 				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } />
-				<Button icon="format-image" onClick={ openMediaPopup } className="ss-insert-image" />
+				<Button icon="format-image" onClick={ openMediaPopup } className="ss-select-image" />
+				<PropInserter data="content/image_variables" inputRef={ inputRef } replace={ true } />
 			</div>
 		</Control>
 	);

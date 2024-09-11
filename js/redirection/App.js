@@ -1,5 +1,5 @@
-import { createRoot } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { createRoot } from 'react-dom/client';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Log404 from './404/Main';
 import Redirects from './redirects/Main';

@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
 class CanonicalUrl {
 	use Context;
 
@@ -11,7 +13,7 @@ class CanonicalUrl {
 
 	public function output(): void {
 		$url = $this->get_url();
-		if ( $url ) {
+		if ( $url && filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			echo '<link rel="canonical" href="', esc_url( $url ), '">', "\n";
 		}
 	}
@@ -19,7 +21,8 @@ class CanonicalUrl {
 	public function get_url(): string {
 		$url = $this->get_value();
 		$url = $this->add_pagination( $url );
-		$url = apply_filters( 'slim_seo_canonical_url', $url );
+		$url = apply_filters( 'slim_seo_canonical_url', $url, $this->get_queried_object_id() );
+		$url = Helper::render( $url );
 
 		return $url;
 	}

@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
 class RelLinks {
 	use Context;
 

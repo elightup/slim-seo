@@ -1,16 +1,17 @@
-node_modules
-vendor
-.idea
-*.swp
 .DS_Store
 Thumbs.db
+
+*.swp
+.idea
+
+node_modules
+vendor
 *.LICENSE.txt
 
-css/redirection.css
-css/meta-tags.css
 css/admin-columns.css
+css/content.css
+css/redirection.css
 
-js/redirection.js
-js/link-attributes/block-editor/dist
 js/breadcrumbs/dist
-js/meta-tags/dist
+js/build
+js/link-attributes/block-editor/dist

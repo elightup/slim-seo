@@ -1,27 +1,27 @@
-node_modules
-.git
-.github
-.gitignore
-.gitattributes
-
 .DS_Store
 Thumbs.db
 
-.distignore
-composer.json
-composer.lock
-esbuild.js
-package-lock.json
-package.json
-phpcs.xml
-README.md
-
-*.zip
+.git
+.github
+node_modules
 
 css/scss/
+
+js/breadcrumbs/src/
+js/content/
+js/link-attributes/block-editor/src/
 js/redirection/
 js/redirection.js.LICENSE.txt
 
-js/link-attributes/block-editor/src/
-js/breadcrumbs/src/
-js/meta-tags/src/
+.distignore
+.gitignore
+apps.webpack.config.js
+composer.json
+composer.lock
+package-lock.json
+package.json
+phpcs.xml
+pnpm-lock.yaml
+README.md
+
+*.zip

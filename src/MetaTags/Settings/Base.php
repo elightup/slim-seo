@@ -1,7 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
-
-use SlimSEO\Helpers\UI;
+use SlimSEO\Helpers\Assets;
 
 abstract class Base {
 	protected $object_type;
@@ -17,9 +16,9 @@ abstract class Base {
 
 	public function enqueue() {
 		wp_enqueue_media();
-		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], SLIM_SEO_VER );
-		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/object.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
-		wp_localize_script( 'slim-seo-meta-tags', 'ss', $this->get_script_params() );
+
+		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/content.css' ) );
+		Assets::enqueue_build_js( 'single', 'ss', $this->get_script_params() );
 	}
 
 	protected function get_script_params(): array {
@@ -30,92 +29,21 @@ abstract class Base {
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
 			'title'           => [
-				'separator' => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
-				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], $this->object_type ),
+				'separator'   => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
+				'parts'       => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], $this->object_type ),
 			],
+			'single'          => [
+				'title'       => $this->title,
+				'data'        => $this->get_data(),
+			]
 		];
 		return $params;
 	}
 
 	public function render() {
-		$data = $this->get_data();
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
-
-		<?php if ( $this->title ) : ?>
-			<h2><?= esc_html( $this->title ); ?></h2>
-		<?php endif; ?>
-
-		<div class="ss-field">
-			<div class="ss-label">
-				<label for="ss-title"><?php esc_html_e( 'Meta title', 'slim-seo' ); ?></label>
-			</div>
-			<div class="ss-input">
-				<input type="text" id="ss-title" name="slim_seo[title]" value="<?= esc_attr( $data['title'] ); ?>">
-				<p class="description">
-					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
-					<span class="ss-counter">0</span>.
-					<?php esc_html_e( 'Recommended length: ≤ 60 characters.', 'slim-seo' ); ?>
-				</p>
-			</div>
-		</div>
-		<div class="ss-field">
-			<div class="ss-label">
-				<label for="ss-description"><?php esc_html_e( 'Meta description', 'slim-seo' ); ?></label>
-			</div>
-			<div class="ss-input">
-				<textarea id="ss-description" name="slim_seo[description]" rows="3"><?= esc_textarea( $data['description'] ); ?></textarea>
-				<p class="description">
-					<?php esc_html_e( 'Character count:', 'slim-seo' ); ?>
-					<span class="ss-counter">0</span>.
-					<?php esc_html_e( 'Recommended length: 50-160 characters.', 'slim-seo' ); ?>
-				</p>
-			</div>
-		</div>
-		<div class="ss-field">
-			<div class="ss-label">
-				<label for="ss-facebook-image"><?php esc_html_e( 'Facebook image', 'slim-seo' ); ?></label>
-			</div>
-			<div class="ss-input">
-				<div class="ss-input-group">
-					<input type="text" id="ss-facebook-image" name="slim_seo[facebook_image]" value="<?= esc_attr( $data['facebook_image'] ); ?>">
-					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
-				</div>
-				<p class="description">
-					<?php esc_html_e( 'Recommended size: 1200x630 px.', 'slim-seo' ); ?>
-				</p>
-			</div>
-		</div>
-		<div class="ss-field">
-			<div class="ss-label">
-				<label for="ss-twitter-image"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
-			</div>
-			<div class="ss-input">
-				<div class="ss-input-group">
-					<input type="text" id="ss-twitter-image" name="slim_seo[twitter_image]" value="<?= esc_attr( $data['twitter_image'] ); ?>">
-					<button class="ss-select-image button"><?php esc_html_e( 'Select image', 'slim-seo' ); ?></button>
-				</div>
-				<p class="description">
-					<?php esc_html_e( 'Recommended size: 1200x600 px. Should have aspect ratio 2:1 with minimum width of 300 px and maximum width of 4096 px.', 'slim-seo' ); ?>
-				</p>
-			</div>
-		</div>
-		<div class="ss-field">
-			<div class="ss-label">
-				<label for="ss-canonical"><?php esc_html_e( 'Canonical URL', 'slim-seo' ); ?></label>
-			</div>
-			<div class="ss-input">
-				<input type="text" id="ss-canonical" name="slim_seo[canonical]" value="<?= esc_attr( $data['canonical'] ); ?>">
-			</div>
-		</div>
-		<div class="ss-field ss-field-checkbox">
-			<div class="ss-label">
-				<label for="slim_seo[noindex]"><?php esc_html_e( 'Hide from search results', 'slim-seo' ); ?></label>
-			</div>
-			<div class="ss-input">
-				<?php UI::toggle( 'slim_seo[noindex]', 1, $data['noindex'] ); ?>
-			</div>
-		</div>
+		<div id="ss-single"></div>
 		<?php
 	}
 
@@ -146,9 +74,9 @@ abstract class Base {
 
 		$data['title']          = sanitize_text_field( $data['title'] );
 		$data['description']    = sanitize_text_field( $data['description'] );
-		$data['facebook_image'] = esc_url_raw( $data['facebook_image'] );
-		$data['twitter_image']  = esc_url_raw( $data['twitter_image'] );
-		$data['canonical']      = esc_url_raw( $data['canonical'] );
+		$data['facebook_image'] = sanitize_text_field( $data['facebook_image'] );
+		$data['twitter_image']  = sanitize_text_field( $data['twitter_image'] );
+		$data['canonical']      = sanitize_text_field( $data['canonical'] );
 		$data['noindex']        = $data['noindex'] ? 1 : 0;
 
 		return array_filter( $data );

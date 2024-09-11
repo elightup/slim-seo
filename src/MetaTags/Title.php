@@ -1,6 +1,10 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+defined( 'ABSPATH' ) || die;
+
+use WP_Term;
+
 class Title {
 	use Context;
 
@@ -29,6 +33,7 @@ class Title {
 
 		$title = $custom_title ?: (string) $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
+		$title = Helper::render( $title );
 		$title = Helper::normalize( $title );
 
 		return $title;
@@ -52,7 +57,13 @@ class Title {
 	public function get_singular_value( $post_id = 0 ): string {
 		$post_id = $post_id ?: $this->get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
-		return $data['title'] ?? '';
+		if ( ! empty( $data['title'] ) ) {
+			return $data['title'];
+		}
+
+		$option    = get_option( 'slim_seo', [] );
+		$post_type = get_post_type( $post_id );
+		return $option[ $post_type ]['title'] ?? '';
 	}
 
 	/**
@@ -62,7 +73,16 @@ class Title {
 	public function get_term_value( $term_id = 0 ): string {
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
-		return $data['title'] ?? '';
+		if ( ! empty( $data['title'] ) ) {
+			return $data['title'];
+		}
+
+		$option   = get_option( 'slim_seo', [] );
+		$term     = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return '';
+		}
+		return $option[ $term->taxonomy ]['title'] ?? '';
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {
