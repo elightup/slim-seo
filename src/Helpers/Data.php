@@ -3,8 +3,15 @@ namespace SlimSEO\Helpers;
 
 class Data {
 	public static function get_post_types() {
-		$post_types = get_post_types( [ 'public' => true ], 'objects' );
-		unset( $post_types['attachment'] );
+		$post_types  = get_post_types( [ 'public' => true ], 'objects' );
+
+		$unsupported = [
+			'attachment',
+			'e-floating-buttons',
+			'e-landing-page',
+			'zion_template',
+		];
+		$post_types  = array_diff_key( $post_types, array_flip( $unsupported ) );
 		return apply_filters( 'slim_seo_post_types', $post_types );
 	}
 
@@ -13,6 +20,12 @@ class Data {
 			'public'  => true,
 			'show_ui' => true,
 		], 'objects' );
+
+		$unsupported = [
+			'template_tag',
+			'template_bundle',
+		];
+		$taxonomies  = array_diff_key( $taxonomies, array_flip( $unsupported ) );
 		return apply_filters( 'slim_seo_taxonomies', $taxonomies );
 	}
 
