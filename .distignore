@@ -5,19 +5,6 @@ Thumbs.db
 .github
 node_modules
 
-.distignore
-.gitignore
-composer.json
-composer.lock
-esbuild.mjs
-package-lock.json
-package.json
-phpcs.xml
-pnpm-lock.yaml
-README.md
-
-*.zip
-
 css/scss/
 
 js/breadcrumbs/src/
@@ -26,4 +13,15 @@ js/link-attributes/block-editor/src/
 js/redirection/
 js/redirection.js.LICENSE.txt
 
-webpack.config.js
+.distignore
+.gitignore
+apps.webpack.config.js
+composer.json
+composer.lock
+package-lock.json
+package.json
+phpcs.xml
+pnpm-lock.yaml
+README.md
+
+*.zip

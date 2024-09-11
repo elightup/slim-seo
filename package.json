@@ -1,15 +1,11 @@
 {
 	"scripts": {
-		"watch:css": "sass -s compressed --no-source-map -w css/scss:css",
-		"js:esbuild": "node esbuild.mjs",
-		"js:link": "wp-scripts build js/link-attributes/block-editor/src/index.js --output-path=js/link-attributes/block-editor/dist",
+		"css:watch": "sass -s compressed --no-source-map -w css/scss:css",
 		"js:breadcrumbs": "wp-scripts build --webpack-src-dir=js/breadcrumbs/src --output-path=js/breadcrumbs/dist",
 		"build:css": "sass -s compressed --no-source-map css/scss:css",
-		"build:js": "npm run js:esbuild && npm run js:link && npm run js:breadcrumbs",
+		"build:js": "wp-scripts build --config apps.webpack.config.js && npm run js:breadcrumbs",
 		"build": "npm run build:css && npm run build:js",
-		"start": "npm run build",
-		"js:single": "wp-scripts start",
-		"js:single:build": "wp-scripts build"
+		"start": "wp-scripts start --config apps.webpack.config.js"
 	},
 	"dependencies": {
 		"@elightup/form": "file:../../../../form",

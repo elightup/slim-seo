@@ -10,11 +10,13 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Install PHP dependencies
-      run: composer install
+      run: composer install --no-dev
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
     - name: Install NPM dependencies
-      run: npm install --force
+      run: pnpm install
     - name: Build Javascript
-      run: npm run build
+      run: pnpm run build
     - name: WordPress Plugin Deploy
       uses: 10up/action-wordpress-plugin-deploy@master
       env:
