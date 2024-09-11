@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import Block from "./Block";
 
-export default Homepage = ( { option } ) => {
+export default ( { option } ) => {
 	const optionPlaceholder = {
 		title: ss.homepage.title,
 		description: ss.homepage.description,

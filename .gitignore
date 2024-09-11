@@ -11,8 +11,9 @@ css/content.css
 css/meta-tags.css
 css/redirection.css
 
+js/breadcrumbs/dist
+js/build
+js/link-attributes/block-editor/dist
+js/content.js
 js/redirection.js
 js/single.js
-js/content.js
-js/link-attributes/block-editor/dist
-js/breadcrumbs/dist

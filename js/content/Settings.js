@@ -1,5 +1,6 @@
-import { createRoot, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Homepage from "./components/Fields/Homepage";
 import PostType from "./components/PostType";

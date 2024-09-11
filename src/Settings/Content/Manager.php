@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Settings\Content;
 
+use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
 
 class Manager {
@@ -26,8 +27,7 @@ class Manager {
 		wp_enqueue_media();
 
 		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [], filemtime( SLIM_SEO_DIR . '/css/content.css' ) );
-		wp_enqueue_script( 'slim-seo-content', SLIM_SEO_URL . 'js/content.js', [ 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . 'js/content.js' ), true );
-		wp_localize_script( 'slim-seo-content', 'ss', [
+		Assets::enqueue_build_js( 'content', 'ss', [
 			'hasHomepageSettings'      => $this->has_homepage_settings(),
 			'homepage'                 => $this->has_homepage_settings() ? $this->items[ 'home' ]->get_home_data() : [],
 			'postTypes'                => Data::get_post_types(),

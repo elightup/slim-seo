@@ -7,7 +7,9 @@
 		"build:css": "sass -s compressed --no-source-map css/scss:css",
 		"build:js": "npm run js:esbuild && npm run js:link && npm run js:breadcrumbs",
 		"build": "npm run build:css && npm run build:js",
-		"start": "npm run build"
+		"start": "npm run build",
+		"js:single": "wp-scripts start",
+		"js:single:build": "wp-scripts build"
 	},
 	"dependencies": {
 		"@elightup/form": "file:../../../../form",

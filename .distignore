@@ -25,3 +25,5 @@ js/content/
 js/link-attributes/block-editor/src/
 js/redirection/
 js/redirection.js.LICENSE.txt
+
+webpack.config.js

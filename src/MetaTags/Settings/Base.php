@@ -1,5 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
+use SlimSEO\Helpers\Assets;
 
 abstract class Base {
 	protected $object_type;
@@ -17,8 +18,7 @@ abstract class Base {
 		wp_enqueue_media();
 
 		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/content.css' ) );
-		wp_enqueue_script( 'slim-seo-single', SLIM_SEO_URL . 'js/single.js', [ 'jquery', 'underscore', 'wp-element', 'wp-components', 'wp-i18n', 'wp-api-fetch', 'wp-url' ], filemtime( SLIM_SEO_DIR . 'js/single.js' ), true );
-		wp_localize_script( 'slim-seo-single', 'ss', $this->get_script_params() );
+		Assets::enqueue_build_js( 'single', 'ss', $this->get_script_params() );
 	}
 
 	protected function get_script_params(): array {

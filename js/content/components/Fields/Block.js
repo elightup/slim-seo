@@ -3,7 +3,7 @@ import Description from "./Description";
 import Image from "./Image";
 import Title from "./Title";
 
-export default Block = ( { baseName, option, optionPlaceholder = [], label, descriptionInstruction = '', onFocus, onBlur } ) => (
+export default ( { baseName, option, optionPlaceholder = [], label, descriptionInstruction = '', onFocus, onBlur } ) => (
 	<>
 		<h3>{ label }</h3>
 		<Title

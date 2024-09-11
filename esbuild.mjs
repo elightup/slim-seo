@@ -23,20 +23,6 @@ const start = async () => {
 		outfile: 'js/redirection.js'
 	} );
 	await redirection.watch();
-
-	const postTypes = await esbuild.context( {
-		...config,
-		entryPoints: [ 'js/content/Settings.js' ],
-		outfile: 'js/content.js'
-	} );
-	await postTypes.watch();
-
-	const post = await esbuild.context( {
-		...config,
-		entryPoints: [ 'js/content/Single.js' ],
-		outfile: 'js/single.js'
-	} );
-	await post.watch();
 };
 
 start();
