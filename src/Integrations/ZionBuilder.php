@@ -13,6 +13,7 @@ class ZionBuilder {
 
 	public function setup() {
 		add_filter( 'slim_seo_data', [ $this, 'replace_post_content' ] );
+		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 	}
 
@@ -76,5 +77,12 @@ class ZionBuilder {
 		}
 
 		return $content;
+	}
+
+	public function remove_post_types( array $post_types ): array {
+		$unsupported = [
+			'zion_template',
+		];
+		return array_diff_key( $post_types, array_flip( $unsupported ) );
 	}
 }

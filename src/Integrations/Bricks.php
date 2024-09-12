@@ -20,6 +20,7 @@ class Bricks {
 		add_filter( 'bricks/frontend/disable_seo', '__return_true' );
 
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
+		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
 	}
 
 	public function replace_post_content( array $data ): array {
@@ -129,8 +130,18 @@ class Bricks {
 	}
 
 	public function remove_post_types( array $post_types ): array {
-		unset( $post_types['bricks_template'] );
-		return $post_types;
+		$unsupported = [
+			'bricks_template',
+		];
+		return array_diff_key( $post_types, array_flip( $unsupported ) );
+	}
+
+	public function remove_taxonomies( array $taxonomies ): array {
+		$unsupported = [
+			'template_tag',
+			'template_bundle',
+		];
+		return array_diff_key( $taxonomies, array_flip( $unsupported ) );
 	}
 
 	public function skip_shortcodes( string $content ): string {

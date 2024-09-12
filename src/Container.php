@@ -28,6 +28,8 @@ class Container {
 		$services['beaver_builder'] = new Integrations\BeaverBuilder;
 		$services['bricks']         = new Integrations\Bricks;
 		$services['zion']           = new Integrations\ZionBuilder;
+		$services['divi']           = new Integrations\Divi;
+		$services['mylisting']      = new Integrations\MyListing;
 
 		$services['content_manager']   = new Settings\Content\Manager;
 		$services['settings']          = new Settings\Settings( $services['content_manager'] );
@@ -86,7 +88,6 @@ class Container {
 		$services['wpml']            = new Integrations\WPML;
 		$services['translatepress']  = new Integrations\TranslatePress;
 		$services['amp']             = new Integrations\AMP( $services['schema'] );
-		$services['divi']            = new Integrations\Divi;
 		$services['metabox']         = new Integrations\MetaBox;
 		$services['affiliatewp']     = new Integrations\AffiliateWP;
 		$services['senseilms']       = new Integrations\SenseiLMS;
