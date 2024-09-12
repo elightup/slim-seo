@@ -13,8 +13,9 @@ class Divi {
 
 	public function setup() {
 		add_filter( 'slim_seo_data', [ $this, 'replace_post_content' ] );
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
+		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
+		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 	}
 
 	public function replace_post_content( array $data ): array {
@@ -54,8 +55,19 @@ class Divi {
 		return '';
 	}
 
-	public function remove_post_types( $post_types ) {
-		unset( $post_types['et_pb_layout'] );
-		return $post_types;
+	public function remove_post_types( array $post_types ): array {
+		$unsupported = [
+			'et_pb_layout',
+			'project',
+		];
+		return array_diff_key( $post_types, array_flip( $unsupported ) );
+	}
+
+	public function remove_taxonomies( array $taxonomies ): array {
+		$unsupported = [
+			'project_category',
+			'project_tag',
+		];
+		return array_diff_key( $taxonomies, array_flip( $unsupported ) );
 	}
 }

@@ -8,7 +8,11 @@ class Elementor {
 	}
 
 	public function remove_post_types( $post_types ) {
-		unset( $post_types['elementor_library'] );
-		return $post_types;
+		$unsupported = [
+			'elementor_library',
+			'e-floating-buttons',
+			'e-landing-page',
+		];
+		return array_diff_key( $post_types, array_flip( $unsupported ) );
 	}
 }
