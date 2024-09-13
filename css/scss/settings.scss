@@ -38,7 +38,7 @@
 }
 
 .ss-upgrade .dashicons {
-	color: #ef4836;
+	color: var(--ss-color-red);
 }
 
 .notice.notice {
@@ -83,6 +83,10 @@
 	font-size: 16px;
 	width: 16px;
 	height: 16px;
+}
+
+.ss-title__upgrade {
+	color: var(--ss-color-red);
 }
 
 /* Tooltip */
