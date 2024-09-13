@@ -27,7 +27,7 @@ class Item {
 
 	public function get_home_data(): array {
 		return array_merge( $this->defaults, [
-			'title' => $this->get_default_title(),
+			'title'       => $this->get_default_title(),
 			'description' => $this->get_default_description(),
 		] );
 	}

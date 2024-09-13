@@ -90,7 +90,7 @@ class RestApi {
 				'options' => $options,
 			],
 			[
-				'label' => __( 'Term', 'slim-seo' ),
+				'label'   => __( 'Term', 'slim-seo' ),
 				'options' => [
 					'term.ID'          => __( 'Term ID', 'slim-seo' ),
 					'term.name'        => __( 'Term name', 'slim-seo' ),
@@ -98,7 +98,7 @@ class RestApi {
 					'term.taxonomy'    => __( 'Term taxonomy', 'slim-seo' ),
 					'term.description' => __( 'Term description', 'slim-seo' ),
 					'term.url'         => __( 'Term URL', 'slim-seo' ),
-				]
+				],
 			],
 			[
 				'label'   => __( 'Author', 'slim-seo' ),

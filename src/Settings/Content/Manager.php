@@ -29,18 +29,18 @@ class Manager {
 		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [], filemtime( SLIM_SEO_DIR . '/css/content.css' ) );
 		Assets::enqueue_build_js( 'content', 'ss', [
 			'hasHomepageSettings'      => $this->has_homepage_settings(),
-			'homepage'                 => $this->has_homepage_settings() ? $this->items[ 'home' ]->get_home_data() : [],
+			'homepage'                 => $this->has_homepage_settings() ? $this->items['home']->get_home_data() : [],
 			'postTypes'                => Data::get_post_types(),
 			'taxonomies'               => Data::get_taxonomies(),
 			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
 			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
-			'site'            => [
+			'site'                     => [
 				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
 				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
 			],
-			'title'           => [
+			'title'                    => [
 				'separator'   => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
-				'parts'       => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], 'post' ),
+				'parts'     => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], 'post' ),
 			],
 		] );
 	}

@@ -1,3 +1,5 @@
+<?php // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals,WordPress.WP.GlobalVariablesOverride ?>
+
 <?php defined( 'ABSPATH' ) || die ?>
 
 <h3><?php esc_attr_e( 'Migrate SEO Data', 'slim-seo' ); ?></h3>
