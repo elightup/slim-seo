@@ -1,15 +1,16 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use WP_Post;
 use SlimSEO\Helpers\Arr;
 
 class Data {
 	private $data = [];
 
-	public function collect(): array {
+	public function collect( $id = null ): array {
 		$this->data = array_merge(
-			[ 'post' => $this->get_post_data() ],
-			[ 'term' => $this->get_term_data() ],
+			[ 'post' => $this->get_post_data( $id ) ],
+			[ 'term' => $this->get_term_data( $id ) ],
 			[ 'author' => $this->get_author_data() ],
 			[ 'user' => $this->get_user_data() ],
 			[ 'site' => $this->get_site_data() ],
@@ -25,8 +26,13 @@ class Data {
 		return $this->data;
 	}
 
-	private function get_post_data(): array {
-		$post = is_singular() ? get_queried_object() : get_post();
+	private function get_post_data( $id = null ): array {
+		if ( $id ) {
+			$post = get_post( $id );
+		} else {
+			$post = is_singular() ? get_queried_object() : get_post();
+		}
+
 		if ( empty( $post ) ) {
 			return [];
 		}
@@ -50,12 +56,12 @@ class Data {
 			'comment_count' => (int) $post->comment_count,
 			'tags'          => $this->get_post_terms( $post, 'post_tag' ),
 			'categories'    => $this->get_post_terms( $post, 'category' ),
-			'custom_field'  => $this->get_custom_field_data(),
+			'custom_field'  => $this->get_custom_field_data( $post ),
 			'tax'           => $post_tax,
 		];
 	}
 
-	private function get_term_data(): array {
+	private function get_term_data( $id = null ): array {
 		$term = get_queried_object();
 
 		if ( ! ( is_category() || is_tag() || is_tax() ) || empty( $term ) ) {
@@ -116,8 +122,7 @@ class Data {
 		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
 	}
 
-	private function get_custom_field_data() {
-		$post        = is_singular() ? get_queried_object() : get_post();
+	private function get_custom_field_data( WP_Post $post ): array {
 		$meta_values = get_post_meta( $post->ID );
 		$data        = [];
 		foreach ( $meta_values as $key => $value ) {

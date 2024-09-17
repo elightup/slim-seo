@@ -22,6 +22,7 @@ class Post extends Base {
 			$params['title']['parts'] = apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' );
 		}
 
+		$params['single']['ID']   = $this->get_object_id();
 		$params['single']['name'] = get_post_type( $this->get_object_id() );
 
 		return $params;

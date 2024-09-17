@@ -22,6 +22,8 @@ class Term extends Base {
 
 	protected function get_script_params(): array {
 		$params = parent::get_script_params();
+
+		$params['single']['ID']   = $this->get_object_id();
 		$params['single']['name'] = get_term( $this->get_object_id() )->taxonomy;
 
 		return $params;

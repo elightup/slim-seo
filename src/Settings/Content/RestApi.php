@@ -40,6 +40,12 @@ class RestApi {
 			'callback'            => [ $this, 'get_meta_keys' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+
+		register_rest_route( 'slim-seo', '/content/render', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'render' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
 	}
 
 	public function has_permission() {
@@ -67,7 +73,17 @@ class RestApi {
 
 	public function get_single_option( WP_REST_Request $request ): array {
 		$option = $this->get_option();
-		return $option[ $request->get_param( 'name' ) ] ?? [];
+		if ( ! $option[ $request->get_param( 'name' ) ] ) {
+			return [];
+		}
+
+		$id     = $request->get_param( 'ID' );
+		$single = $option[ $request->get_param( 'name' ) ];
+		array_walk( $single, function( &$meta ) use ( $id ) {
+			$meta = Data::render( $meta, $id );
+		} );
+
+		return $single;
 	}
 
 	public function get_variables() {
@@ -284,5 +300,13 @@ class RestApi {
 
 	private function normalize( string $key ): string {
 		return str_replace( '-', '_', $key );
+	}
+
+	public function render( WP_REST_Request $request ): string {
+		if ( ! $request->get_param( 'ID' ) ) {
+			return '';
+		}
+
+		return Data::render( $request->get_param( 'text' ), $request->get_param( 'ID' ) );
 	}
 }
