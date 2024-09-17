@@ -3,8 +3,8 @@
  * Plugin Name:       Slim SEO
  * Plugin URI:        https://wpslimseo.com
  * Description:       A fast and automated SEO plugin for WordPress.
- * Author:            eLightUp
- * Author URI:        https://elightup.com
+ * Author:            Slim SEO
+ * Author URI:        https://wpslimseo.com
  * Version:           3.25.3
  * Text Domain:       slim-seo
  * Domain Path:       /languages

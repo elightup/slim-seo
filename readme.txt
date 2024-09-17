@@ -663,9 +663,9 @@ Other changes:
 
 = 1.5.0 =
 - Added: Added excerpt to pages to let users customize meta description, especially for static homepage.
-- Added: Added support for [JSON-LD structured data](https://github.com/elightup/slim-seo/wiki/JSON-LD). Supported Website data (including search box) and Breadcrumbs.
-- Added: [Redirect author page](https://github.com/elightup/slim-seo/wiki/Auto-Redirection) to homepage if no posts or the website has only one user.
-- Added: Added support for [meta robots tag](https://github.com/elightup/slim-seo/wiki/Meta-Robots-Tag).
+- Added: Added support for [JSON-LD structured data](https://docs.wpslimseo.com/slim-seo/schema/). Supported Website data (including search box) and Breadcrumbs.
+- Added: [Redirect author page](https://docs.wpslimseo.com/slim-seo/redirection/) to homepage if no posts or the website has only one user.
+- Added: Added support for [meta robots tag](https://docs.wpslimseo.com/slim-seo/meta-robots-tag/).
 	- Do not index the follow links:
 		- search results
 		- 404
@@ -686,7 +686,7 @@ Other changes:
 - Changed: Redirect attachment page to the attachment URL (image or file URL) instead of parent post. This allows users to see the full-size image. Works when users insert a gallery into post and they want to see full-size images.
 
 = 1.3.0 =
-- Added: Added breadcrumbs functionality. Use `[slim_seo_breadcrumbs]` shortcode to output in your template files. See [documentation](https://github.com/elightup/slim-seo/wiki/Breadcrumbs).
+- Added: Added breadcrumbs functionality. Use `[slim_seo_breadcrumbs]` shortcode to output in your template files. See [documentation](https://docs.wpslimseo.com/slim-seo/breadcrumbs/).
 
 = 1.2.0 =
 - Added: Added sitemap URL to robots.txt
