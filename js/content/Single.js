@@ -37,7 +37,7 @@ const Single = () => {
 				? <TermDescription
 					id="slim_seo[description]"
 					label={ __( 'Meta description', 'slim-seo' ) }
-					std={ option.description || ss.single.data.description }
+					std={ ss.single.data.description || option.description }
 					description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ) }
 				/>
 				: <Description

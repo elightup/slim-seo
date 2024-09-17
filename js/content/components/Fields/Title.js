@@ -7,7 +7,7 @@ import PropInserter from "./PropInserter";
 
 const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  description, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ preview, setPreview ] = useState( '' );
+	let [ preview, setPreview ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const wpTitle = document.querySelector( '#title' ) || document.querySelector( '#name' );
 
