@@ -1,4 +1,4 @@
-import { createRoot } from '@wordpress/element';
+import { createRoot, useEffect, useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
@@ -6,16 +6,30 @@ import Image from "./components/Fields/Image";
 import TermDescription from "./components/Fields/TermDescription";
 import Text from "./components/Fields/Text";
 import Title from "./components/Fields/Title";
+import { request } from "./functions";
 
 const Single = () => {
+	const [ loading, setLoading ] = useState( false );
+	const [ option, setOption ]   = useState( {} );
 	const isTermPage = document.querySelector( '#edittag' );
+
+	useEffect( () => {
+		request( 'content/single', { name: ss.single.name } ).then( ( res ) => {
+			setOption( res );
+			setLoading( true );
+		} );
+	}, [] );
+
+	if ( !loading ) {
+		return null;
+	}
 
 	return <>
 		<h2 className="title">{ ss.single.title }</h2>
 		<Title
 			id="slim_seo[title]"
 			label={ __( 'Meta title', 'slim-seo' ) }
-			std={ ss.single.data.title }
+			std={ option.title || ss.single.data.title }
 			description={ __( 'Recommended length: ≤ 60 characters.', 'slim-seo' ) }
 		/>
 		{
@@ -23,26 +37,26 @@ const Single = () => {
 				? <TermDescription
 					id="slim_seo[description]"
 					label={ __( 'Meta description', 'slim-seo' ) }
-					std={ ss.single.data.description }
+					std={ option.description || ss.single.data.description }
 					description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ) }
 				/>
 				: <Description
 					id="slim_seo[description]"
 					label={ __( 'Meta description', 'slim-seo' ) }
-					std={ ss.single.data.description }
+					std={ option.description || ss.single.data.description }
 					description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
 				/>
 		}
 		<Image
 			id="slim_seo[facebook_image]"
 			label={ __( 'Facebook image', 'slim-seo' ) }
-			std={ ss.single.data.facebook_image }
+			std={ option.facebook_image || ss.single.data.facebook_image }
 			description={ __( 'Recommended size: 1200x630 px. Should have 1.91:1 aspect ratio with width ≥ 600 px.', 'slim-seo' ) }
 		/>
 		<Image
 			id="slim_seo[twitter_image]"
 			label={ __( 'Twitter image', 'slim-seo' ) }
-			std={ ss.single.data.twitter_image }
+			std={ option.twitter_image || ss.single.data.twitter_image }
 			mediaPopupTitle={ ss.mediaPopupTitle }
 			description={ __( 'Recommended size: 1200x600 px. Should have 2:1 aspect ratio with width ≥ 300 px and ≤ 4096 px.', 'slim-seo' ) }
 		/>

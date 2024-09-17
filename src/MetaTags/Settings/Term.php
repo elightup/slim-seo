@@ -20,6 +20,13 @@ class Term extends Base {
 		}
 	}
 
+	protected function get_script_params(): array {
+		$params = parent::get_script_params();
+		$params['single']['name'] = get_term( $this->get_object_id() )->taxonomy;
+
+		return $params;
+	}
+
 	public function get_types() {
 		$taxonomies = get_taxonomies( [ 'public' => true ] );
 		$taxonomies = apply_filters( 'slim_seo_meta_box_taxonomies', $taxonomies );

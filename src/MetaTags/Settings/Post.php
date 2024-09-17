@@ -18,10 +18,11 @@ class Post extends Base {
 		// @codingStandardsIgnoreLine.
 		$is_home = 'page' === get_option( 'show_on_front' ) && $this->get_object_id() == get_option( 'page_on_front' );
 		$params['isHome'] = $is_home;
-
 		if ( $is_home ) {
 			$params['title']['parts'] = apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' );
 		}
+
+		$params['single']['name'] = get_post_type( $this->get_object_id() );
 
 		return $params;
 	}

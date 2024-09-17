@@ -2,6 +2,7 @@
 namespace SlimSEO\Settings\Content;
 
 use WP_REST_Server;
+use WP_REST_Request;
 use SlimSEO\Helpers\Data;
 
 class RestApi {
@@ -13,6 +14,12 @@ class RestApi {
 		register_rest_route( 'slim-seo', '/content/option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
+
+		register_rest_route( 'slim-seo', '/content/single', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_single_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
@@ -53,8 +60,14 @@ class RestApi {
 			'facebook_app_id',
 			'twitter_site',
 			'default_linkedin_image',
+			'wp_pattern_category'
 		], '' );
 		return array_diff_key( get_option( 'slim_seo' ), $exclude );
+	}
+
+	public function get_single_option( WP_REST_Request $request ): array {
+		$option = $this->get_option();
+		return $option[ $request->get_param( 'name' ) ] ?? [];
 	}
 
 	public function get_variables() {
