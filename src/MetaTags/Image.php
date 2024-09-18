@@ -3,8 +3,10 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
-use SlimSEO\Helpers\Images;
 use WP_Term;
+use SlimSEO\Helpers\Images;
+use SlimSEO\Helpers\Data;
+
 
 class Image {
 	use Context;
@@ -88,14 +90,14 @@ class Image {
 
 	private function get_from_post_meta( string $meta_value ): array {
 		if ( ! filter_var( $meta_value, FILTER_VALIDATE_URL ) ) {
-			$meta_value = Helper::render( $meta_value );
+			$meta_value = Data::render( $meta_value );
 		}
 		return $this->get_data_from_url( $meta_value );
 	}
 
 	private function get_from_settings( string $setting ): array {
 		if ( ! filter_var( $setting, FILTER_VALIDATE_URL ) ) {
-			$setting = Helper::render( $setting );
+			$setting = Data::render( $setting );
 		}
 		return $this->get_data_from_url( $setting );
 	}

@@ -3,6 +3,8 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
+use SlimSEO\Helpers\Data;
+
 class CanonicalUrl {
 	use Context;
 
@@ -22,7 +24,7 @@ class CanonicalUrl {
 		$url = $this->get_value();
 		$url = $this->add_pagination( $url );
 		$url = apply_filters( 'slim_seo_canonical_url', $url, $this->get_queried_object_id() );
-		$url = Helper::render( $url );
+		$url = Data::render( $url );
 
 		return $url;
 	}
