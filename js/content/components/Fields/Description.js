@@ -2,12 +2,13 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatDescription, isBlockEditor, normalize } from "../../functions";
+import { formatDescription, isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const Description = ( { id, placeholder = '', std, description, isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
+	let [ preview, setPreview ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 	let contentEditor;
@@ -33,6 +34,12 @@ const Description = ( { id, placeholder = '', std, description, isSettings = fal
 
 	const handleChange = e => {
 		setValue( e.target.value );
+
+		if ( ! isSettings && e.target.value.includes( '{{' ) ) {
+			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( prev => res ) );
+		} else {
+			setPreview( e.target.value )
+		}
 	};
 
 	const handleFocus = () => {
@@ -45,11 +52,20 @@ const Description = ( { id, placeholder = '', std, description, isSettings = fal
 
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
+		if ( ! isSettings ) {
+			request( 'content/render', { ID: ss.single.ID, text: value } ).then( res => setPreview( prev => prev + res ) );
+		}
 	};
 
 	const handleDescriptionChange = () => {
 		const desc = getPostExcerpt() || getPostContent();
 		setNewPlaceholder( formatDescription( desc, max ) );
+
+		if ( ! isSettings && desc.includes( '{{' ) ) {
+			request( 'content/render', { ID: ss.single.ID, text: formatDescription( desc, max ) } ).then( res => setPreview( prev => res ) );
+		} else {
+			setPreview( desc );
+		}
 	};
 
 	const getPostContent = () => {
@@ -115,6 +131,7 @@ const Description = ( { id, placeholder = '', std, description, isSettings = fal
 					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
+				{ !isSettings && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);

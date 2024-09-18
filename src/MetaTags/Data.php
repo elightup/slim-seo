@@ -62,9 +62,13 @@ class Data {
 	}
 
 	private function get_term_data( $id = null ): array {
-		$term = get_queried_object();
+		if ( $id ) {
+			$term = get_term( $id );
+		} else {
+			$term = get_queried_object();
+		}		
 
-		if ( ! ( is_category() || is_tag() || is_tax() ) || empty( $term ) ) {
+		if ( empty( $term ) || ( ! $id && ! ( is_category() || is_tag() || is_tax() ) ) ) {
 			return [];
 		}
 

@@ -1,11 +1,12 @@
 import { Control } from "@elightup/form";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatDescription, normalize } from "../../functions";
+import { formatDescription, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const TermDescription = ( { id, description, std, rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
+	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	const wpDescription = document.querySelector( '#description' );
 
@@ -30,6 +31,12 @@ const TermDescription = ( { id, description, std, rows = 3, min = 50, max = 160,
 
 	const handleChange = e => {
 		setValue( e.target.value );
+
+		if ( e.target.value.includes( '{{' ) ) {
+			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( prev => res ) );
+		} else {
+			setPreview( e.target.value )
+		}
 	};
 
 	const handleFocus = () => {
@@ -42,11 +49,18 @@ const TermDescription = ( { id, description, std, rows = 3, min = 50, max = 160,
 
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
+		request( 'content/render', { ID: ss.single.ID, text: value } ).then( res => setPreview( prev => prev + res ) );
 	};
 
 	const handleDescriptionChange = () => {
 		const desc = wpDescription ? wpDescription.value : '';
 		setPlaceholder( formatDescription( desc, max ) );
+
+		if ( desc.includes( '{{' ) ) {
+			request( 'content/render', { ID: ss.single.ID, text: formatDescription( desc, max ) } ).then( res => setPreview( prev => res ) );
+		} else {
+			setPreview( desc );
+		}
 	};
 
 	// Update placeholder when term description changes.
@@ -78,6 +92,7 @@ const TermDescription = ( { id, description, std, rows = 3, min = 50, max = 160,
 					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
+				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
 			</div>
 		</Control>
 	);

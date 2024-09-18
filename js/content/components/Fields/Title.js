@@ -2,7 +2,7 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatTitle, isBlockEditor, normalize, request } from "../../functions";
+import { formatTitle, isBlockEditor, normalize, request, renderContent } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  description, max = 60, ...rest } ) => {
@@ -33,8 +33,11 @@ const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  des
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		if ( ! isSettings ) {
+
+		if ( ! isSettings && e.target.value.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( res ) );
+		} else {
+			setPreview( e.target.value )
 		}
 	};
 
@@ -98,7 +101,7 @@ const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  des
 					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
+				{ ! isSettings && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);
