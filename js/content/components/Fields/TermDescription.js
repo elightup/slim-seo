@@ -58,9 +58,6 @@ const TermDescription = ( { id, description = '', std = '', rows = 3, min = 50, 
 		const desc = formatDescription( wpDescription ? wpDescription.value : '', max );
 		setPlaceholder( desc );
 
-		if ( value ) {
-			return;
-		}
 		if ( desc.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: desc } ).then( res => setPreview( res ) );
 		} else {
