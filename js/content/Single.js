@@ -2,16 +2,19 @@ import { createRoot, useEffect, useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
-import Image from "./components/Fields/Image";
+import FacebookImage from './components/Fields/FacebookImage';
 import TermDescription from "./components/Fields/TermDescription";
 import Text from "./components/Fields/Text";
 import Title from "./components/Fields/Title";
+import TwitterImage from './components/Fields/TwitterImage';
 import { request } from "./functions";
 
 const Single = () => {
 	const [ loading, setLoading ] = useState( false );
 	const [ option, setOption ]   = useState( {} );
 	const isTermPage = document.querySelector( '#edittag' );
+
+	const facebookImageInstruction = isTermPage ? '' : __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' );
 
 	useEffect( () => {
 		request( 'content/single', { ID: ss.single.ID, name: ss.single.name } ).then( ( res ) => {
@@ -28,42 +31,34 @@ const Single = () => {
 		<h2 className="title">{ ss.single.title }</h2>
 		<Title
 			id="slim_seo[title]"
-			label={ __( 'Meta title', 'slim-seo' ) }
 			std={ ss.single.data.title }
 			placeholder={ option.title || '' }
-			description={ __( 'Recommended length: ≤ 60 characters.', 'slim-seo' ) }
 		/>
 		{
 			isTermPage
 				? <TermDescription
 					id="slim_seo[description]"
-					label={ __( 'Meta description', 'slim-seo' ) }
 					std={ ss.single.data.description }
 					placeholder={ option.description || '' }
-					description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ) }
+					description={ __( 'Leave empty to autogenerate from the term description.', 'slim-seo' ) }
 				/>
 				: <Description
 					id="slim_seo[description]"
-					label={ __( 'Meta description', 'slim-seo' ) }
 					std={ ss.single.data.description }
 					placeholder={ option.description || '' }
-					description={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
+					description={ __( 'Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
 				/>
 		}
-		<Image
+		<FacebookImage
 			id="slim_seo[facebook_image]"
-			label={ __( 'Facebook image', 'slim-seo' ) }
 			std={ ss.single.data.facebook_image }
 			placeholder={ option.facebook_image || '' }
-			description={ __( 'Recommended size: 1200x630 px. Should have 1.91:1 aspect ratio with width ≥ 600 px.', 'slim-seo' ) }
+			description={ facebookImageInstruction }
 		/>
-		<Image
+		<TwitterImage
 			id="slim_seo[twitter_image]"
-			label={ __( 'Twitter image', 'slim-seo' ) }
 			std={ ss.single.data.twitter_image }
 			placeholder={ option.twitter_image || '' }
-			mediaPopupTitle={ ss.mediaPopupTitle }
-			description={ __( 'Recommended size: 1200x600 px. Should have 2:1 aspect ratio with width ≥ 300 px and ≤ 4096 px.', 'slim-seo' ) }
 		/>
 		<Text
 			id="slim_seo[canonical]"

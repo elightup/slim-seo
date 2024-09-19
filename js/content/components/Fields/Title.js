@@ -2,14 +2,15 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatTitle, isBlockEditor, normalize, request, renderContent } from "../../functions";
+import { formatTitle, isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  description, max = 60, ...rest } ) => {
+const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const wpTitle = document.querySelector( '#title' ) || document.querySelector( '#name' );
+	const description = __( 'Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' );
 
 	const getClassName = () => {
 		// Do nothing if use variables.
@@ -34,10 +35,10 @@ const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  des
 	const handleChange = e => {
 		setValue( e.target.value );
 
-		if ( ! isSettings && e.target.value.includes( '{{' ) ) {
+		if ( !isSettings && e.target.value.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( res ) );
 		} else {
-			setPreview( e.target.value )
+			setPreview( e.target.value );
 		}
 	};
 
@@ -51,7 +52,7 @@ const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  des
 
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
-		if ( ! isSettings ) {
+		if ( !isSettings ) {
 			request( 'content/render', { ID: ss.single.ID, text: value } ).then( res => setPreview( prev => prev + res ) );
 		}
 	};
@@ -88,7 +89,7 @@ const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  des
 	}, [] );
 
 	return (
-		<Control className={ getClassName() } description={ getDescription() } id={ id } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>
 			<div className="ss-input-wrapper">
 				<input
 					type="text"
@@ -101,7 +102,7 @@ const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  des
 					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				{ ! isSettings && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
+				{ !isSettings && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);

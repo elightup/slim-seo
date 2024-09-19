@@ -5,13 +5,15 @@ import { __, sprintf } from "@wordpress/i18n";
 import { formatDescription, isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, placeholder = '', std, description, isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, placeholder = '', std = '', description = '', isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	let [ preview, setPreview ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 	let contentEditor;
+
+	description = sprintf( __( 'Recommended length: 50-160 characters. %s', 'slim-seo' ), description );
 
 	const getClassName = () => {
 		// Do nothing if use variables.
@@ -35,10 +37,10 @@ const Description = ( { id, placeholder = '', std, description, isSettings = fal
 	const handleChange = e => {
 		setValue( e.target.value );
 
-		if ( ! isSettings && e.target.value.includes( '{{' ) ) {
+		if ( !isSettings && e.target.value.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( prev => res ) );
 		} else {
-			setPreview( e.target.value )
+			setPreview( e.target.value );
 		}
 	};
 
@@ -52,7 +54,7 @@ const Description = ( { id, placeholder = '', std, description, isSettings = fal
 
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
-		if ( ! isSettings ) {
+		if ( !isSettings ) {
 			request( 'content/render', { ID: ss.single.ID, text: value } ).then( res => setPreview( prev => prev + res ) );
 		}
 	};
@@ -61,7 +63,7 @@ const Description = ( { id, placeholder = '', std, description, isSettings = fal
 		const desc = getPostExcerpt() || getPostContent();
 		setNewPlaceholder( formatDescription( desc, max ) );
 
-		if ( ! isSettings && desc.includes( '{{' ) ) {
+		if ( !isSettings && desc.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: formatDescription( desc, max ) } ).then( res => setPreview( prev => res ) );
 		} else {
 			setPreview( desc );
@@ -118,7 +120,7 @@ const Description = ( { id, placeholder = '', std, description, isSettings = fal
 	}, [] );
 
 	return (
-		<Control className={ getClassName() } description={ getDescription() } id={ id } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
 			<div className="ss-input-wrapper">
 				<textarea
 					id={ id }

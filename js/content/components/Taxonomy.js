@@ -24,7 +24,7 @@ const Taxonomy = ( { id, taxonomy, option } ) => {
 				baseName={ baseName }
 				option={ option }
 				label={ taxonomy.labels.singular_name }
-				descriptionInstruction={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ) }
+				descriptionInstruction={ __( 'Leave empty to autogenerate from the term description.', 'slim-seo' ) }
 			/>
 		}
 	</>;

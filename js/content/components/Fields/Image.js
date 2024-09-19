@@ -3,7 +3,7 @@ import { Button } from "@wordpress/components";
 import { useRef } from "@wordpress/element";
 import PropInserter from "./PropInserter";
 
-const Image = ( { id, std, mediaPopupTitle, ...rest } ) => {
+const Image = ( { id, std, ...rest } ) => {
 	const inputRef = useRef();
 
 	const openMediaPopup = e => {
@@ -11,7 +11,7 @@ const Image = ( { id, std, mediaPopupTitle, ...rest } ) => {
 
 		let frame = wp.media( {
 			multiple: false,
-			title: mediaPopupTitle
+			title: ss.mediaPopupTitle
 		} );
 
 		frame.open();
