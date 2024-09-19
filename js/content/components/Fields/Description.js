@@ -63,9 +63,6 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 		const desc = formatDescription( getPostExcerpt() || getPostContent(), max );
 		setNewPlaceholder( desc, max );
 
-		if ( value ) {
-			return;
-		}
 		if ( !isSettings && desc.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: desc } ).then( res => setPreview( res ) );
 		} else {
