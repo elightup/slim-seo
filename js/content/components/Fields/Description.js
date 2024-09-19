@@ -40,7 +40,7 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 		if ( !isSettings && e.target.value.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( prev => res ) );
 		} else {
-			setPreview( e.target.value );
+			setPreview( e.target.value || newPlaceholder );
 		}
 	};
 
@@ -60,11 +60,14 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 	};
 
 	const handleDescriptionChange = () => {
-		const desc = getPostExcerpt() || getPostContent();
-		setNewPlaceholder( formatDescription( desc, max ) );
+		const desc = formatDescription( getPostExcerpt() || getPostContent(), max );
+		setNewPlaceholder( desc, max );
 
+		if ( value ) {
+			return;
+		}
 		if ( !isSettings && desc.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: formatDescription( desc, max ) } ).then( res => setPreview( prev => res ) );
+			request( 'content/render', { ID: ss.single.ID, text: desc } ).then( res => setPreview( res ) );
 		} else {
 			setPreview( desc );
 		}

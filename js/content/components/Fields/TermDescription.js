@@ -37,7 +37,7 @@ const TermDescription = ( { id, description = '', std = '', rows = 3, min = 50, 
 		if ( e.target.value.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( prev => res ) );
 		} else {
-			setPreview( e.target.value );
+			setPreview( e.target.value || placeholder );
 		}
 	};
 
@@ -55,11 +55,14 @@ const TermDescription = ( { id, description = '', std = '', rows = 3, min = 50, 
 	};
 
 	const handleDescriptionChange = () => {
-		const desc = wpDescription ? wpDescription.value : '';
-		setPlaceholder( formatDescription( desc, max ) );
+		const desc = formatDescription( wpDescription ? wpDescription.value : '', max );
+		setPlaceholder( desc );
 
+		if ( value ) {
+			return;
+		}
 		if ( desc.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: formatDescription( desc, max ) } ).then( res => setPreview( prev => res ) );
+			request( 'content/render', { ID: ss.single.ID, text: desc } ).then( res => setPreview( res ) );
 		} else {
 			setPreview( desc );
 		}

@@ -38,7 +38,7 @@ const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false,
 		if ( !isSettings && e.target.value.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( res ) );
 		} else {
-			setPreview( e.target.value );
+			setPreview( e.target.value || newPlaceholder );
 		}
 	};
 
@@ -58,8 +58,14 @@ const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false,
 	};
 
 	const handleTitleChange = () => {
-		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
-		setNewPlaceholder( formatTitle( title ) );
+		const title = formatTitle( isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' ) );
+		setNewPlaceholder( title );
+
+		if ( !isSettings && title.includes( '{{' ) ) {
+			request( 'content/render', { ID: ss.single.ID, text: title } ).then( res => setPreview( prev => res ) );
+		} else {
+			setPreview( title );
+		}
 	};
 
 	// Update newPlaceholder when post title changes.
@@ -70,6 +76,8 @@ const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false,
 
 		if ( std.includes( '{{' ) ) {
 			request( 'content/render', { ID: ss.single.ID, text: std } ).then( res => setPreview( res ) );
+		} else {
+			setPreview( std );
 		}
 
 		handleTitleChange();
