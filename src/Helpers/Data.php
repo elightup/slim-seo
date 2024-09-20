@@ -58,6 +58,9 @@ class Data {
 			self::$render_data = Arr::merge_recursive( self::$render_data, $data );
 		}
 
-		return self::$renderer->render( $text, self::$render_data );
+		$value = self::$renderer->render( $text, self::$render_data );
+		$value = preg_replace( '/\s{2,}/', ' ', $value ); // Remove extra spaces.
+
+		return $value;
 	}
 }

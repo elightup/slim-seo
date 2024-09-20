@@ -39,21 +39,18 @@ class Data {
 
 		$post_tax   = [];
 		$taxonomies = Helper::get_taxonomies();
+		unset( $taxonomies['category'], $taxonomies['post_tag'] );
 		foreach ( $taxonomies as $taxonomy ) {
 			$post_tax[ $this->normalize( $taxonomy['slug'] ) ] = $this->get_post_terms( $post, $taxonomy['slug'] );
 		}
 
 		return [
-			'ID'            => $post->ID,
 			'title'         => $post->post_title,
 			'excerpt'       => $post->post_excerpt,
 			'content'       => $post->post_content,
-			'url'           => get_permalink( $post ),
-			'slug'          => $post->post_name,
 			'date'          => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
 			'modified_date' => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
 			'thumbnail'     => get_the_post_thumbnail_url( $post->ID, 'full' ),
-			'comment_count' => (int) $post->comment_count,
 			'tags'          => $this->get_post_terms( $post, 'post_tag' ),
 			'categories'    => $this->get_post_terms( $post, 'category' ),
 			'custom_field'  => $this->get_custom_field_data( $post ),
@@ -66,19 +63,15 @@ class Data {
 			$term = get_term( $id );
 		} else {
 			$term = get_queried_object();
-		}		
+		}
 
 		if ( empty( $term ) || ( ! $id && ! ( is_category() || is_tag() || is_tax() ) ) ) {
 			return [];
 		}
 
 		return [
-			'ID'          => $term->term_id,
 			'name'        => $term->name,
-			'slug'        => $term->slug,
-			'taxonomy'    => $term->taxonomy,
 			'description' => $term->description,
-			'url'         => get_term_link( $term->term_id ),
 		];
 	}
 
@@ -96,18 +89,8 @@ class Data {
 			return [];
 		}
 		return [
-			'ID'           => $user->ID,
-			'first_name'   => $user->first_name,
-			'last_name'    => $user->last_name,
 			'display_name' => $user->display_name,
-			'login'        => $user->user_login,
-			'nickname'     => $user->nickname,
-			'email'        => $user->user_email,
-			'url'          => $user->user_url,
-			'nicename'     => $user->user_nicename,
 			'description'  => $user->description,
-			'posts_url'    => get_author_posts_url( $user->ID ),
-			'avatar'       => get_avatar_url( $user->ID ),
 		];
 	}
 
@@ -115,9 +98,6 @@ class Data {
 		return [
 			'title'       => get_bloginfo( 'name' ),
 			'description' => get_bloginfo( 'description' ),
-			'url'         => home_url( '/' ),
-			'language'    => get_locale(),
-			'icon'        => get_site_icon_url(),
 		];
 	}
 
@@ -136,21 +116,14 @@ class Data {
 	}
 
 	private function get_other_data(): array {
-		global $wp_query;
+		global $wp_query, $page, $paged;
 
 		return [
 			'current' => [
-				'year'     => wp_date( 'Y' ),
-				'month'    => wp_date( 'm' ),
-				'day'      => wp_date( 'j' ),
-				'date'     => wp_date( get_option( 'date_format' ) ),
-				'time'     => wp_date( get_option( 'time_format' ) ),
+				'year' => wp_date( 'Y' ),
 			],
-			'pagination' => [
-				'page'  => max( get_query_var( 'paged' ), 1 ),
-				'total' => $wp_query->max_num_pages,
-			],
-			'separator'        => apply_filters( 'document_title_separator', '-' ),
+			'page'    => $paged >= 2 || $page >= 2 ? sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) ) : '',
+			'sep'     => apply_filters( 'document_title_separator', '-' ),
 		];
 	}
 
