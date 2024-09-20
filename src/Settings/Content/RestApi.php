@@ -244,13 +244,20 @@ class RestApi {
 	}
 
 	private function get_default_post_title( int $post_id ): string {
-		$default   = '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
-		$post_type = get_post_type( $post_id );
-		if ( ! $post_type ) {
+		$is_home = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
+		if ( $is_home ) {
+			$default = '{{ site.title }} {{ sep }} {{ site.description }}';
+			$key     = 'home';
+		} else {
+			$default = '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
+			$key     = get_post_type( $post_id );
+		}
+
+		if ( ! $key ) {
 			return $default;
 		}
 		$option = get_option( 'slim_seo', [] );
-		return Arr::get( $option, "$post_type.title", $default );
+		return Arr::get( $option, "$key.title", $default );
 	}
 
 	private function get_default_term_title( int $term_id ): string {

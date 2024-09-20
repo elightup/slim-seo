@@ -38,7 +38,7 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 		setValue( e.target.value );
 
 		if ( !isSettings && e.target.value.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( prev => res ) );
+			request( 'content/render', { ID: ss.id, text: e.target.value } ).then( res => setPreview( prev => res ) );
 		} else {
 			setPreview( e.target.value || newPlaceholder );
 		}
@@ -55,7 +55,7 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
 		if ( !isSettings ) {
-			request( 'content/render', { ID: ss.single.ID, text: value } ).then( res => setPreview( prev => prev + res ) );
+			request( 'content/render', { ID: ss.id, text: value } ).then( res => setPreview( prev => prev + res ) );
 		}
 	};
 
@@ -64,7 +64,7 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 		setNewPlaceholder( desc, max );
 
 		if ( !isSettings && desc.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: desc } ).then( res => setPreview( res ) );
+			request( 'content/render', { ID: ss.id, text: desc } ).then( res => setPreview( res ) );
 		} else {
 			setPreview( desc );
 		}

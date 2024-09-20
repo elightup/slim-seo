@@ -4,7 +4,6 @@ use SlimSEO\Helpers\Assets;
 
 abstract class Base {
 	protected $object_type;
-	protected $title;
 	protected $defaults = [
 		'title'          => '',
 		'description'    => '',
@@ -14,33 +13,18 @@ abstract class Base {
 		'noindex'        => 0,
 	];
 
-	public function enqueue() {
+	public function enqueue(): void {
 		wp_enqueue_media();
 
 		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/content.css' ) );
-		Assets::enqueue_build_js( 'single', 'ss', $this->get_script_params() );
-	}
-
-	protected function get_script_params(): array {
-		$params = [
+		Assets::enqueue_build_js( 'single', 'ss', [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
-			'site'            => [
-				'title'       => html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' ),
-				'description' => html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' ),
-			],
-			'title'           => [
-				'separator'   => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore
-				'parts'       => apply_filters( 'slim_seo_title_parts', [ 'title', 'site' ], $this->object_type ),
-			],
-			'single'          => [
-				'title'       => $this->title,
-				'data'        => $this->get_data(),
-			]
-		];
-		return $params;
+			'id'              => $this->get_object_id(),
+			'data'            => $this->get_data(),
+		] );
 	}
 
-	public function render() {
+	public function render(): void {
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
 		<div id="ss-single"></div>

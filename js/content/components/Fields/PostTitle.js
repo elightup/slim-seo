@@ -41,7 +41,7 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'content/render_post_title', { ID: ss.single.ID, text: value, title: titleRef.current } ).then( response => {
+		request( 'content/render_post_title', { ID: ss.id, text: value, title: titleRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );

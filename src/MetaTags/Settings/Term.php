@@ -2,15 +2,14 @@
 namespace SlimSEO\MetaTags\Settings;
 
 class Term extends Base {
-	public function setup() {
+	public function setup(): void {
 		$this->object_type = 'term';
-		$this->title       = __( 'Search Engine Optimization', 'slim-seo' );
 
 		// Priority 99 makes sure all taxonomies are registered.
 		add_action( 'init', [ $this, 'register_hooks' ], 99 );
 	}
 
-	public function register_hooks() {
+	public function register_hooks(): void {
 		add_action( 'admin_print_styles-term.php', [ $this, 'enqueue' ] );
 
 		$taxonomies = $this->get_types();
@@ -18,15 +17,6 @@ class Term extends Base {
 			add_action( "{$taxonomy}_edit_form", [ $this, 'render' ] );
 			add_action( "edited_$taxonomy", [ $this, 'save' ] );
 		}
-	}
-
-	protected function get_script_params(): array {
-		$params = parent::get_script_params();
-
-		$params['single']['ID']   = $this->get_object_id();
-		$params['single']['name'] = get_term( $this->get_object_id() )->taxonomy;
-
-		return $params;
 	}
 
 	public function get_types() {

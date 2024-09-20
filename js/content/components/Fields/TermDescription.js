@@ -35,7 +35,7 @@ const TermDescription = ( { id, description = '', std = '', rows = 3, min = 50, 
 		setValue( e.target.value );
 
 		if ( e.target.value.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( prev => res ) );
+			request( 'content/render', { ID: ss.id, text: e.target.value } ).then( res => setPreview( prev => res ) );
 		} else {
 			setPreview( e.target.value || placeholder );
 		}
@@ -51,7 +51,7 @@ const TermDescription = ( { id, description = '', std = '', rows = 3, min = 50, 
 
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
-		request( 'content/render', { ID: ss.single.ID, text: value } ).then( res => setPreview( prev => prev + res ) );
+		request( 'content/render', { ID: ss.id, text: value } ).then( res => setPreview( prev => prev + res ) );
 	};
 
 	const handleDescriptionChange = () => {
@@ -59,7 +59,7 @@ const TermDescription = ( { id, description = '', std = '', rows = 3, min = 50, 
 		setPlaceholder( desc );
 
 		if ( desc.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: desc } ).then( res => setPreview( res ) );
+			request( 'content/render', { ID: ss.id, text: desc } ).then( res => setPreview( res ) );
 		} else {
 			setPreview( desc );
 		}
