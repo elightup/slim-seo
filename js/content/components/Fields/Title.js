@@ -1,11 +1,10 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
-import { useEffect, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatTitle, isBlockEditor, normalize, request } from "../../functions";
+import { normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, type = '', std = '', placeholder = '', max = 60, ...rest } ) => {
+const Title = ( { id, std = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	const description = __( 'Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' );
 
