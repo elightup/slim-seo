@@ -32,7 +32,6 @@ const Single = () => {
 		<PostTitle
 			id="slim_seo[title]"
 			std={ ss.single.data.title }
-			placeholder={ option.title || '' }
 		/>
 		{
 			isTermPage

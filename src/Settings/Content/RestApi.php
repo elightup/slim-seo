@@ -318,7 +318,6 @@ class RestApi {
 
 	public function render_post_title( WP_REST_Request $request ): array {
 		$post_id = (int) $request->get_param( 'ID' );
-		$title   = (string) $request->get_param( 'title' ); // Live post title
 		if ( ! $post_id ) {
 			return [
 				'preview' => '',
@@ -326,18 +325,24 @@ class RestApi {
 			];
 		}
 
+		$text    = (string) $request->get_param( 'text' ); // Manual entered meta title
+		$title   = (string) $request->get_param( 'title' ); // Live post title
+
 		$data = [];
 		if ( $title ) {
 			$data['post'] = [ 'title' => $title ];
 		}
 
-		return [
-			'preview' => Data::render( $request->get_param( 'text' ), $post_id, $data ),
-			'default' => $this->render_default_post_title( $post_id, $title, $data ),
-		];
+		$default = $this->render_default_post_title( $post_id, $data );
+		$preview = Data::render( $text, $post_id, $data );
+		if ( ! $preview ) {
+			$preview = $default;
+		}
+
+		return compact( 'preview', 'default' );
 	}
 
-	private function render_default_post_title( int $post_id, string $title, array $data = [] ): string {
+	private function render_default_post_title( int $post_id, array $data = [] ): string {
 		$option    = get_option( 'slim_seo', [] );
 		$post_type = get_post_type( $post_id );
 		$settings  = $option[ $post_type ]['title'] ?? '{{ post.title }} {{ separator }} {{ site.title }}';
