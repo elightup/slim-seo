@@ -5,14 +5,8 @@ import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const getPostTitle = () => {
-	if ( isBlockEditor ) {
-		return select( 'core/editor' ).getEditedPostAttribute( 'title' );
-	}
-
-	const titleElement = document.querySelector( '#title' );
-	return titleElement ? titleElement.value : '';
-}
+const wpTitle = document.querySelector( '#title' );
+const getPostTitle = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
 
 export default ( { id, type = '', std = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
