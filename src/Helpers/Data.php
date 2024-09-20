@@ -50,11 +50,12 @@ class Data {
 		return $type ? $sources[ $type ] : array_merge( $sources['meta'], $sources['redirection'] );
 	}
 
-	public static function render( $text, $id = null ): string {
+	public static function render( $text, $id = null, array $data = [] ): string {
 		if ( ! self::$renderer ) {
 			self::$renderer    = new Renderer;
 			$data_object       = new MetaData;
 			self::$render_data = $data_object->collect( $id );
+			self::$render_data = Arr::merge_recursive( self::$render_data, $data );
 		}
 
 		return self::$renderer->render( $text, self::$render_data );

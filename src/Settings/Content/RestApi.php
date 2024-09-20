@@ -46,6 +46,12 @@ class RestApi {
 			'callback'            => [ $this, 'render' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+
+		register_rest_route( 'slim-seo', '/content/render_post_title', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'render_post_title' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
 	}
 
 	public function has_permission() {
@@ -308,5 +314,34 @@ class RestApi {
 		}
 
 		return Data::render( $request->get_param( 'text' ), $request->get_param( 'ID' ) );
+	}
+
+	public function render_post_title( WP_REST_Request $request ): array {
+		$post_id = (int) $request->get_param( 'ID' );
+		$title   = (string) $request->get_param( 'title' ); // Live post title
+		if ( ! $post_id ) {
+			return [
+				'preview' => '',
+				'default' => '',
+			];
+		}
+
+		$data = [];
+		if ( $title ) {
+			$data['post'] = [ 'title' => $title ];
+		}
+
+		return [
+			'preview' => Data::render( $request->get_param( 'text' ), $post_id, $data ),
+			'default' => $this->render_default_post_title( $post_id, $title, $data ),
+		];
+	}
+
+	private function render_default_post_title( int $post_id, string $title, array $data = [] ): string {
+		$option    = get_option( 'slim_seo', [] );
+		$post_type = get_post_type( $post_id );
+		$settings  = $option[ $post_type ]['title'] ?? '{{ post.title }} {{ separator }} {{ site.title }}';
+
+		return Data::render( $settings, $post_id, $data );
 	}
 }

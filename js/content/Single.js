@@ -3,9 +3,9 @@ import { __ } from "@wordpress/i18n";
 import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
 import FacebookImage from './components/Fields/FacebookImage';
+import PostTitle from './components/Fields/PostTitle';
 import TermDescription from "./components/Fields/TermDescription";
 import Text from "./components/Fields/Text";
-import Title from "./components/Fields/Title";
 import TwitterImage from './components/Fields/TwitterImage';
 import { request } from "./functions";
 
@@ -29,7 +29,7 @@ const Single = () => {
 
 	return <>
 		<h2 className="title">{ ss.single.title }</h2>
-		<Title
+		<PostTitle
 			id="slim_seo[title]"
 			std={ ss.single.data.title }
 			placeholder={ option.title || '' }
