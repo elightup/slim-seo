@@ -1,23 +1,25 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, request } from "../../functions";
+import { request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const wpTitle = document.querySelector( '#name' );
-const getTermTitle = () => document.querySelector( '#name' ).value;
+const getTitle = () => wpTitle.value;
 
 export default ( { id, std = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( '' );
 	let [ placeholder, setPlaceholder ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	const titleRef = useRef( getTermTitle() );
+	const titleRef = useRef( getTitle() );
+	const inputRef = useRef();
+
+	const requestUpdate = () => setUpdateCount( prev => prev + 1 );
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		setUpdateCount( prev => prev + 1 );
+		requestUpdate();
 	};
 
 	const handleFocus = () => {
@@ -29,50 +31,44 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 	};
 
 	const handleInsertVariables = variable => {
-		setValue( prev => prev + variable );
-		setUpdateCount( prev => prev + 1 );
+		setValue( prev => {
+			// Insert variable at cursor.
+			const cursorPosition = inputRef.current.selectionStart;
+			return prev.slice( 0, cursorPosition ) + variable + prev.slice( cursorPosition );
+		} );
+		requestUpdate();
+		requestUpdate();
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'content/render_post_title', { ID: ss.single.ID, text: value, title: titleRef.current } ).then( response => {
+		request( 'content/render_term_title', { ID: ss.single.ID, text: value, title: titleRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );
 	};
 
 	const handleTitleChange = () => {
-		const postTitle = getTermTitle();
-		if ( titleRef.current === postTitle ) {
+		const title = getTitle();
+		if ( titleRef.current === title ) {
 			return;
 		}
-		titleRef.current = postTitle;
-		setUpdateCount( prev => prev + 1 );
+		titleRef.current = title;
+		requestUpdate();
 	};
 
 	// Trigger refresh preview and placeholder when anything change.
 	// Use debounce technique to avoid sending too many requests.
 	useEffect( () => {
-		const timer = setTimeout( () => {
-			refreshPreviewAndPlaceholder();
-		}, 1000 );
-
+		const timer = setTimeout( refreshPreviewAndPlaceholder, 1000 );
 		return () => clearTimeout( timer );
 	}, [ updateCount ] );
 
 	// Listen for post title changes.
 	useEffect( () => {
-		if ( isBlockEditor ) {
-			subscribe( handleTitleChange );
-		} else if ( wpTitle ) {
-			wpTitle.addEventListener( 'input', handleTitleChange );
-		}
+		wpTitle.addEventListener( 'input', handleTitleChange );
 
 		return () => {
-			if ( isBlockEditor ) {
-				unsubscribe( handleTitleChange );
-			} else if ( wpTitle ) {
-				wpTitle.removeEventListener( 'input', handleTitleChange );
-			}
+			wpTitle.removeEventListener( 'input', handleTitleChange );
 		};
 	}, [] );
 
@@ -91,6 +87,7 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
+					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
 				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>

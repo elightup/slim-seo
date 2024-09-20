@@ -1,17 +1,19 @@
 <?php
 namespace SlimSEO\Settings\Content;
 
-use SlimSEO\MetaTags\Helper;
 use WP_REST_Server;
 use WP_REST_Request;
+use WP_Term;
+use SlimSEO\Helpers\Arr;
+use SlimSEO\MetaTags\Helper;
 use SlimSEO\Helpers\Data;
 
 class RestApi {
-	public function setup() {
+	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
-	public function register_routes() {
+	public function register_routes(): void {
 		register_rest_route( 'slim-seo', '/content/option', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_option' ],
@@ -41,9 +43,15 @@ class RestApi {
 			'callback'            => [ $this, 'render_post_title' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+
+		register_rest_route( 'slim-seo', '/content/render_term_title', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'render_term_title' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
 	}
 
-	public function has_permission() {
+	public function has_permission(): bool {
 		return current_user_can( 'manage_options' );
 	}
 
@@ -150,7 +158,7 @@ class RestApi {
 		return apply_filters( 'slim_seo_image_variables', $variables );
 	}
 
-	public function get_meta_keys() {
+	public function get_meta_keys(): array {
 		global $wpdb;
 		$meta_keys = $wpdb->get_col( "SELECT DISTINCT meta_key FROM $wpdb->postmeta ORDER BY meta_key" );
 		$meta_keys = $this->exclude_defaults( $meta_keys );
@@ -165,7 +173,7 @@ class RestApi {
 		return $options;
 	}
 
-	private function exclude_defaults( $meta_keys ) {
+	private function exclude_defaults( array $meta_keys ): array {
 		$default = [
 			'_edit_last',
 			'_edit_lock',
@@ -202,8 +210,16 @@ class RestApi {
 	}
 
 	public function render_post_title( WP_REST_Request $request ): array {
-		$post_id = (int) $request->get_param( 'ID' );
-		if ( ! $post_id ) {
+		return $this->render_title( $request, 'post' );
+	}
+
+	public function render_term_title( WP_REST_Request $request ): array {
+		return $this->render_title( $request, 'term' );
+	}
+
+	private function render_title( WP_REST_Request $request, string $object_type = 'post' ): array {
+		$id = (int) $request->get_param( 'ID' );
+		if ( ! $id ) {
 			return [
 				'preview' => '',
 				'default' => '',
@@ -211,25 +227,39 @@ class RestApi {
 		}
 
 		$text  = (string) $request->get_param( 'text' ); // Manual entered meta title
-		$title = (string) $request->get_param( 'title' ); // Live post title
+		$title = (string) $request->get_param( 'title' ); // Live title
 
 		$data = [];
 		if ( $title ) {
-			$data['post'] = [ 'title' => $title ];
+			$data[ $object_type ] = [ 'title' => $title ];
 		}
 
-		$default = $this->get_default_post_title( $post_id );
-		$preview = Helper::render( $text, $post_id, $data );
+		$default = $object_type === 'post' ? $this->get_default_post_title( $id ) : $this->get_default_term_title( $id );
+		$preview = Helper::render( $text, $id, $data );
 		if ( ! $preview ) {
-			$preview = Helper::render( $default, $post_id, $data );
+			$preview = Helper::render( $default, $id, $data );
 		}
 
 		return compact( 'preview', 'default' );
 	}
 
 	private function get_default_post_title( int $post_id ): string {
-		$option    = get_option( 'slim_seo', [] );
+		$default   = '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
 		$post_type = get_post_type( $post_id );
-		return $option[ $post_type ]['title'] ?? '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
+		if ( ! $post_type ) {
+			return $default;
+		}
+		$option = get_option( 'slim_seo', [] );
+		return Arr::get( $option, "$post_type.title", $default );
+	}
+
+	private function get_default_term_title( int $term_id ): string {
+		$default = '{{ term.title }} {{ page }} {{ sep }} {{ site.title }}';
+		$term    = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return $default;
+		}
+		$option = get_option( 'slim_seo', [] );
+		return Arr::get( $option, "{$term->taxonomy}.title", $default );
 	}
 }
