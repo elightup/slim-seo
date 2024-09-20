@@ -2,8 +2,12 @@
 namespace SlimSEO\MetaTags;
 
 use SlimTwig\Renderer;
+use SlimSEO\Helpers\Arr;
 
 class Helper {
+	private static $renderer;
+	private static $render_data;
+
 	public static function normalize( $text ) {
 		global $shortcode_tags;
 
@@ -90,5 +94,22 @@ class Helper {
 		}, $taxonomies );
 
 		return array_values( $taxonomies );
+	}
+
+	public static function render( $text, $id = null, array $data = [] ): string {
+		if ( ! self::$renderer ) {
+			self::$renderer    = new Renderer;
+			$data_object       = new Data;
+			self::$render_data = $data_object->collect( $id );
+
+			if ( ! empty( $data ) ) {
+				self::$render_data = Arr::merge_recursive( self::$render_data, $data );
+			}
+		}
+
+		$value = self::$renderer->render( $text, self::$render_data );
+		$value = Helper::normalize( $value );
+
+		return $value;
 	}
 }

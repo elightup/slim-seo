@@ -4,7 +4,6 @@ namespace SlimSEO\MetaTags;
 defined( 'ABSPATH' ) || die;
 
 use WP_Term;
-use SlimSEO\Helpers\Data;
 
 class Description {
 	use Context;
@@ -33,17 +32,14 @@ class Description {
 	public function get_description(): string {
 		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, $this->get_queried_object_id() );
-		$description = Data::render( $description );
-		$description = $this->normalize( $description );
+		$description = Helper::render( $description );
+		$description = $this->check_manual( $description );
 
 		return $description;
 	}
 
-	private function normalize( string $description ): string {
-		$description = Helper::normalize( $description );
-
+	private function check_manual( string $description ): string {
 		$is_manual = apply_filters( 'slim_seo_meta_description_manual', $this->is_manual );
-
 		return $is_manual ? $description : $this->truncate( $description );
 	}
 

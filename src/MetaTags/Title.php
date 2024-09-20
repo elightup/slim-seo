@@ -4,7 +4,6 @@ namespace SlimSEO\MetaTags;
 defined( 'ABSPATH' ) || die;
 
 use WP_Term;
-use SlimSEO\Helpers\Data;
 
 class Title {
 	use Context;
@@ -34,7 +33,7 @@ class Title {
 
 		$title = $custom_title ?: (string) $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
-		$title = Data::render( $title );
+		$title = Helper::render( $title );
 
 		return $title;
 	}
