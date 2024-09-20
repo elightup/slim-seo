@@ -12,14 +12,14 @@ export const request = async ( apiName, data = {}, method = 'GET', cache = true 
 	let options;
 	if ( method === 'GET' ) {
 		options = {
-			path: addQueryArgs( `/slim-seo/${ apiName }` , data )
-		}
+			path: addQueryArgs( `/slim-seo/${ apiName }`, data )
+		};
 	} else {
 		options = {
 			path: `/slim-seo/${ apiName }`,
 			method,
 			data
-		}
+		};
 	}
 
 	const result = await apiFetch( options );
@@ -30,7 +30,7 @@ export const request = async ( apiName, data = {}, method = 'GET', cache = true 
 export const normalize = html => !html ? '' : html
 	.replace( /<(script|style)[^>]*?>.*?<\/\1>/gm, '' ) // Remove <style> & <script>
 	.replace( /<[^>]*?>/gm, '' )                        // Remove other HTML tags.
-	.replace(/\[.*?\]/gm, "")                           // Remove shortcode tags.
+	.replace( /\[.*?\]/gm, "" )                           // Remove shortcode tags.
 	.replace( /\s+/gm, ' ' )                            // Remove duplicated white spaces.
 	.trim();
 

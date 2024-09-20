@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Settings\Content;
 
+use SlimSEO\MetaTags\Helper;
 use WP_REST_Server;
 use WP_REST_Request;
 use SlimSEO\Helpers\Data;
@@ -218,9 +219,9 @@ class RestApi {
 		}
 
 		$default = $this->get_default_post_title( $post_id );
-		$preview = Data::render( $text, $post_id, $data );
+		$preview = Helper::render( $text, $post_id, $data );
 		if ( ! $preview ) {
-			$preview = Data::render( $default, $post_id, $data );
+			$preview = Helper::render( $default, $post_id, $data );
 		}
 
 		return compact( 'preview', 'default' );
