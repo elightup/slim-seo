@@ -1,4 +1,4 @@
-import { createRoot, useEffect, useState } from '@wordpress/element';
+import { createRoot } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
@@ -10,22 +10,9 @@ import TwitterImage from './components/Fields/TwitterImage';
 import { request } from "./functions";
 
 const Single = () => {
-	const [ loading, setLoading ] = useState( false );
-	const [ option, setOption ]   = useState( {} );
 	const isTermPage = document.querySelector( '#edittag' );
 
 	const facebookImageInstruction = isTermPage ? '' : __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' );
-
-	useEffect( () => {
-		request( 'content/single', { ID: ss.single.ID, name: ss.single.name } ).then( ( res ) => {
-			setOption( res );
-			setLoading( true );
-		} );
-	}, [] );
-
-	if ( !loading ) {
-		return null;
-	}
 
 	return <>
 		<h2 className="title">{ ss.single.title }</h2>
@@ -38,26 +25,22 @@ const Single = () => {
 				? <TermDescription
 					id="slim_seo[description]"
 					std={ ss.single.data.description }
-					placeholder={ option.description || '' }
 					description={ __( 'Leave empty to autogenerate from the term description.', 'slim-seo' ) }
 				/>
 				: <Description
 					id="slim_seo[description]"
 					std={ ss.single.data.description }
-					placeholder={ option.description || '' }
 					description={ __( 'Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
 				/>
 		}
 		<FacebookImage
 			id="slim_seo[facebook_image]"
 			std={ ss.single.data.facebook_image }
-			placeholder={ option.facebook_image || '' }
 			description={ facebookImageInstruction }
 		/>
 		<TwitterImage
 			id="slim_seo[twitter_image]"
 			std={ ss.single.data.twitter_image }
-			placeholder={ option.twitter_image || '' }
 		/>
 		<Text
 			id="slim_seo[canonical]"

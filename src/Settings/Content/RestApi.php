@@ -17,12 +17,6 @@ class RestApi {
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', '/content/single', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_single_option' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
-
 		register_rest_route( 'slim-seo', '/content/variables', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_variables' ],
@@ -38,12 +32,6 @@ class RestApi {
 		register_rest_route( 'slim-seo', '/content/meta_keys', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_meta_keys' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
-
-		register_rest_route( 'slim-seo', '/content/render', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'render' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
@@ -75,21 +63,6 @@ class RestApi {
 			'wp_pattern_category',
 		], '' );
 		return array_diff_key( get_option( 'slim_seo' ), $exclude );
-	}
-
-	public function get_single_option( WP_REST_Request $request ): array {
-		$option = $this->get_option();
-		if ( ! $option[ $request->get_param( 'name' ) ] ) {
-			return [];
-		}
-
-		$id     = $request->get_param( 'ID' );
-		$single = $option[ $request->get_param( 'name' ) ];
-		array_walk( $single, function ( &$meta ) use ( $id ) {
-			$meta = Data::render( $meta, $id );
-		} );
-
-		return $single;
 	}
 
 	public function get_variables() {
@@ -225,14 +198,6 @@ class RestApi {
 
 	private function normalize( string $key ): string {
 		return str_replace( '-', '_', $key );
-	}
-
-	public function render( WP_REST_Request $request ): string {
-		if ( ! $request->get_param( 'ID' ) ) {
-			return '';
-		}
-
-		return Data::render( $request->get_param( 'text' ), $request->get_param( 'ID' ) );
 	}
 
 	public function render_post_title( WP_REST_Request $request ): array {
