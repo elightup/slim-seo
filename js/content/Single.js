@@ -4,6 +4,7 @@ import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
 import FacebookImage from './components/Fields/FacebookImage';
 import PostTitle from './components/Fields/PostTitle';
+import TermTitle from './components/Fields/TermTitle';
 import TermDescription from "./components/Fields/TermDescription";
 import Text from "./components/Fields/Text";
 import TwitterImage from './components/Fields/TwitterImage';
@@ -11,15 +12,21 @@ import { request } from "./functions";
 
 const Single = () => {
 	const isTermPage = document.querySelector( '#edittag' );
-
 	const facebookImageInstruction = isTermPage ? '' : __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' );
 
 	return <>
 		<h2 className="title">{ ss.single.title }</h2>
-		<PostTitle
-			id="slim_seo[title]"
-			std={ ss.single.data.title }
-		/>
+		{
+			isTermPage
+				? <TermTitle
+					id="slim_seo[title]"
+					std={ ss.single.data.title }
+				/>
+				: <PostTitle
+					id="slim_seo[title]"
+					std={ ss.single.data.title }
+				/>
+		}
 		{
 			isTermPage
 				? <TermDescription

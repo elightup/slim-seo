@@ -5,15 +5,15 @@ import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const wpTitle = document.querySelector( '#title' );
-const getPostTitle = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
+const wpTitle = document.querySelector( '#name' );
+const getTermTitle = () => document.querySelector( '#name' ).value;
 
 export default ( { id, std = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( '' );
 	let [ placeholder, setPlaceholder ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	const titleRef = useRef( getPostTitle() );
+	const titleRef = useRef( getTermTitle() );
 
 	const handleChange = e => {
 		setValue( e.target.value );
@@ -41,7 +41,7 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 	};
 
 	const handleTitleChange = () => {
-		const postTitle = getPostTitle();
+		const postTitle = getTermTitle();
 		if ( titleRef.current === postTitle ) {
 			return;
 		}

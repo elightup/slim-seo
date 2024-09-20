@@ -5,11 +5,8 @@ import { __, sprintf } from "@wordpress/i18n";
 import { formatTitle, isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false, max = 60, ...rest } ) => {
+const Title = ( { id, type = '', std = '', placeholder = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ preview, setPreview ] = useState( std );
-	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	const wpTitle = document.querySelector( '#title' ) || document.querySelector( '#name' );
 	const description = __( 'Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' );
 
 	const getClassName = () => {
@@ -18,7 +15,7 @@ const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false,
 			return '';
 		}
 
-		const title = normalize( value || newPlaceholder );
+		const title = normalize( value );
 		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
@@ -28,73 +25,17 @@ const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false,
 			return description;
 		}
 
-		const title = normalize( value || newPlaceholder );
+		const title = normalize( value );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
 	};
 
 	const handleChange = e => {
 		setValue( e.target.value );
-
-		if ( !isSettings && e.target.value.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: e.target.value } ).then( res => setPreview( res ) );
-		} else {
-			setPreview( e.target.value || newPlaceholder );
-		}
-	};
-
-	const handleFocus = () => {
-		setValue( prev => prev || newPlaceholder );
-	};
-
-	const handleBlur = () => {
-		setValue( prev => prev === newPlaceholder ? '' : prev );
 	};
 
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
-		if ( !isSettings ) {
-			request( 'content/render', { ID: ss.single.ID, text: value } ).then( res => setPreview( prev => prev + res ) );
-		}
 	};
-
-	const handleTitleChange = () => {
-		const title = formatTitle( isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' ) );
-		setNewPlaceholder( title );
-
-		if ( !isSettings && title.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: title } ).then( res => setPreview( prev => res ) );
-		} else {
-			setPreview( title );
-		}
-	};
-
-	// Update newPlaceholder when post title changes.
-	useEffect( () => {
-		if ( isSettings ) {
-			return;
-		}
-
-		if ( std.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.single.ID, text: std } ).then( res => setPreview( res ) );
-		} else {
-			setPreview( std );
-		}
-
-		handleTitleChange();
-		if ( isBlockEditor ) {
-			subscribe( handleTitleChange );
-		} else if ( wpTitle ) {
-			wpTitle.addEventListener( 'input', handleTitleChange );
-		}
-
-		return () => {
-			if ( isBlockEditor ) {
-				unsubscribe( handleTitleChange );
-			} else if ( wpTitle ) {
-				wpTitle.removeEventListener( 'input', handleTitleChange );
-			}
-		};
-	}, [] );
 
 	return (
 		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>
@@ -104,13 +45,9 @@ const Title = ( { id, type = '', std = '', placeholder = '', isSettings = false,
 					id={ id }
 					name={ id }
 					value={ value }
-					placeholder={ newPlaceholder }
 					onChange={ handleChange }
-					onFocus={ handleFocus }
-					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				{ !isSettings && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);
