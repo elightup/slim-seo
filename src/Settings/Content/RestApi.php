@@ -217,7 +217,7 @@ class RestApi {
 			$data['post'] = [ 'title' => $title ];
 		}
 
-		$default = $this->get_default_post_title( $post_id, $data );
+		$default = $this->get_default_post_title( $post_id );
 		$preview = Data::render( $text, $post_id, $data );
 		if ( ! $preview ) {
 			$preview = Data::render( $default, $post_id, $data );
@@ -226,7 +226,7 @@ class RestApi {
 		return compact( 'preview', 'default' );
 	}
 
-	private function get_default_post_title( int $post_id, array $data = [] ): string {
+	private function get_default_post_title( int $post_id ): string {
 		$option    = get_option( 'slim_seo', [] );
 		$post_type = get_post_type( $post_id );
 		return $option[ $post_type ]['title'] ?? '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';

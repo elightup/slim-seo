@@ -35,7 +35,6 @@ class Title {
 		$title = $custom_title ?: (string) $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
 		$title = Data::render( $title );
-		$title = Helper::normalize( $title );
 
 		return $title;
 	}

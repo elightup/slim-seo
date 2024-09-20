@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Helpers;
 
+use SlimSEO\MetaTags\Helper;
 use SlimTwig\Renderer;
 use SlimSEO\MetaTags\Data as MetaData;
 
@@ -59,7 +60,7 @@ class Data {
 		}
 
 		$value = self::$renderer->render( $text, self::$render_data );
-		$value = preg_replace( '/\s{2,}/', ' ', $value ); // Remove extra spaces.
+		$value = Helper::normalize( $value );
 
 		return $value;
 	}
