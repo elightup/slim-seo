@@ -8,7 +8,7 @@ import PropInserter from "./PropInserter";
 const wpTitle = document.querySelector( '#title' );
 const getPostTitle = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
 
-export default ( { id, type = '', std = '', max = 60, ...rest } ) => {
+export default ( { id, std = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( '' );
 	let [ placeholder, setPlaceholder ] = useState( '' );
@@ -46,15 +46,20 @@ export default ( { id, type = '', std = '', max = 60, ...rest } ) => {
 			return;
 		}
 		titleRef.current = postTitle;
-		refreshPreviewAndPlaceholder();
+		setUpdateCount( prev => prev + 1 );
 	};
 
 	// Trigger refresh preview and placeholder when anything change.
+	// Use debounce technique to avoid sending too many requests.
 	useEffect( () => {
-		refreshPreviewAndPlaceholder();
+		const timer = setTimeout( () => {
+			refreshPreviewAndPlaceholder();
+		}, 1000 );
+
+		return () => clearTimeout( timer );
 	}, [ updateCount ] );
 
-	// Update when post title changes.
+	// Listen for post title changes.
 	useEffect( () => {
 		if ( isBlockEditor ) {
 			subscribe( handleTitleChange );
