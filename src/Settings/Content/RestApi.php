@@ -49,6 +49,18 @@ class RestApi {
 			'callback'            => [ $this, 'render_term_title' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+
+		register_rest_route( 'slim-seo', '/content/render_post_description', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'render_post_description' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
+
+		register_rest_route( 'slim-seo', '/content/render_term_description', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'render_term_description' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
 	}
 
 	public function has_permission(): bool {
@@ -268,5 +280,65 @@ class RestApi {
 		}
 		$option = get_option( 'slim_seo', [] );
 		return Arr::get( $option, "{$term->taxonomy}.title", $default );
+	}
+
+	public function render_post_description( WP_REST_Request $request ): array {
+		return $this->render_description( $request, 'post' );
+	}
+
+	public function render_term_description( WP_REST_Request $request ): array {
+		return $this->render_description( $request, 'term' );
+	}
+
+	private function render_description( WP_REST_Request $request, string $object_type = 'post' ): array {
+		$id = (int) $request->get_param( 'ID' );
+		if ( ! $id ) {
+			return [
+				'preview' => '',
+				'default' => '',
+			];
+		}
+
+		$text        = (string) $request->get_param( 'text' ); // Manual entered meta description
+		$description = (string) $request->get_param( 'description' ); // Live description
+		$data        = [];
+
+		if ( $description && ( 'term' === $object_type ) ) {
+			$data[ $object_type ] = [ 'description' => $description ];
+		}
+		if ( $description && ( 'post' === $object_type ) ) {
+			$data[ $object_type ] = [
+				'excerpt' => $description,
+				'content' => $description,
+			];
+		}
+
+		$default = ( $object_type === 'post' ? $this->get_default_post_description( $id ) : $this->get_default_term_description( $id ) ) ?: $description;
+		$preview = Helper::render( $text, $id, $data );
+		if ( ! $preview ) {
+			$preview = Helper::render( $default, $id, $data ) ?: $description;
+		}
+
+		return compact( 'preview', 'default' );
+	}
+
+	private function get_default_post_desciption( int $post_id ): string {
+		$is_home = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
+		$key     = $is_home ? 'home' : get_post_type( $post_id );
+
+		if ( ! $key ) {
+			return $default;
+		}
+		$option = get_option( 'slim_seo', [] );
+		return $option[ $key ]['description'] ?? '';
+	}
+
+	private function get_default_term_description( int $term_id ): string {
+		$term    = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return $default;
+		}
+		$option = get_option( 'slim_seo', [] );
+		return $option[ $term->taxonomy ]['description'] ?? '';
 	}
 }

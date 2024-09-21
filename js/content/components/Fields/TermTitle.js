@@ -37,7 +37,6 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 			return prev.slice( 0, cursorPosition ) + variable + prev.slice( cursorPosition );
 		} );
 		requestUpdate();
-		requestUpdate();
 	};
 
 	const refreshPreviewAndPlaceholder = () => {

@@ -42,7 +42,6 @@ const Term = () => (
 		<TermDescription
 			id="slim_seo[description]"
 			std={ ss.data.description }
-			description={ __( 'Leave empty to autogenerate from the term description.', 'slim-seo' ) }
 		/>
 		<FacebookImage id="slim_seo[facebook_image]" std={ ss.data.facebook_image } />
 		<TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
