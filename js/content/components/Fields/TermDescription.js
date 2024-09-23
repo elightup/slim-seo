@@ -1,7 +1,7 @@
 import { Control } from "@elightup/form";
 import { useEffect, useState, useRef } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatDescription, normalize, request } from "../../functions";
+import { normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const wpDescription = document.querySelector( '#description' );
@@ -47,11 +47,11 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	};
 
 	const handleDescriptionChange = () => {
-		const description = formatDescription ( getDescription() );
+		const description = getDescription();
 		if ( descriptionRef.current === description ) {
 			return;
 		}
-		descriptionRef.current = formatDescription( description );
+		descriptionRef.current = description;
 		requestUpdate();
 	};
 

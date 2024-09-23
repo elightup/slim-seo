@@ -34,6 +34,4 @@ export const normalize = html => !html ? '' : html
 	.replace( /\s+/gm, ' ' )                            // Remove duplicated white spaces.
 	.trim();
 
-export const formatDescription = ( text, max = 160 ) => normalize( text ).substring( 0, max );
-
 export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
