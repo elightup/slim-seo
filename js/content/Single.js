@@ -4,6 +4,7 @@ import Checkbox from "./components/Fields/Checkbox";
 import Description from "./components/Fields/Description";
 import FacebookImage from './components/Fields/FacebookImage';
 import PostTitle from './components/Fields/PostTitle';
+import PostDescription from "./components/Fields/PostDescription";
 import TermDescription from "./components/Fields/TermDescription";
 import TermTitle from './components/Fields/TermTitle';
 import Text from "./components/Fields/Text";
@@ -14,10 +15,9 @@ const Single = () => document.querySelector( '#edittag' ) ? <Term /> : <Post />;
 const Post = () => (
 	<>
 		<PostTitle id="slim_seo[title]" std={ ss.data.title } />
-		<Description
+		<PostDescription
 			id="slim_seo[description]"
 			std={ ss.data.description }
-			description={ __( 'Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
 		/>
 		<FacebookImage
 			id="slim_seo[facebook_image]"

@@ -322,7 +322,7 @@ class RestApi {
 		return compact( 'preview', 'default' );
 	}
 
-	private function get_default_post_desciption( int $post_id ): string {
+	private function get_default_post_description( int $post_id ): string {
 		$is_home = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
 		$key     = $is_home ? 'home' : get_post_type( $post_id );
 

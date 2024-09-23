@@ -1,19 +1,30 @@
 import { Control } from "@elightup/form";
+import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState, useRef } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatDescription, normalize, request } from "../../functions";
+import { formatDescription, isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const wpDescription = document.querySelector( '#description' );
-const getDescription = () => wpDescription.value;
+const wpExcerpt = document.querySelector( '#excerpt' );
+const wpContent = document.querySelector( '#content' ); // classic editor textarea
 
-const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest } ) => {
-	let [ value, setValue ]     = useState( std );
+const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest } ) => {
+	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	const descriptionRef = useRef( getDescription() );
 	const inputRef = useRef();
+	let contentEditor;
+	
+	const getPostContent = () => {
+		if ( isBlockEditor ) {
+			return wp.data.select( 'core/editor' ).getEditedPostContent();
+		}
+		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
+	};
+	const getPostExcerpt = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
+	const getDescription = () => getPostExcerpt() || getPostContent();
+	const descriptionRef = useRef( getDescription() );
 
 	const requestUpdate = () => setUpdateCount( prev => prev + 1 );
 
@@ -40,7 +51,7 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'content/render_term_description', { ID: ss.id, text: value, description: descriptionRef.current } ).then( response => {
+		request( 'content/render_post_description', { ID: ss.id, text: value, description: descriptionRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );
@@ -63,15 +74,42 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	}, [ updateCount ] );
 
 	useEffect( () => {
-		wpDescription.addEventListener( 'input', handleDescriptionChange );
+		if ( isBlockEditor ) {
+			subscribe( handleDescriptionChange );
+		} else {
+			if ( wpExcerpt ) {
+				wpExcerpt.addEventListener( 'input', handleDescriptionChange );
+			}
+			if ( wpContent ) {
+				wpContent.addEventListener( 'input', handleDescriptionChange );
+
+				jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
+					if ( editor.id !== 'content' ) {
+						return;
+					}
+
+					contentEditor = editor;
+					editor.on( 'input keyup', handleDescriptionChange );
+				} );
+			}
+		}
 
 		return () => {
-			wpDescription.removeEventListener( 'input', handleDescriptionChange );
+			if ( isBlockEditor ) {
+				unsubscribe( handleDescriptionChange );
+				return;
+			}
+			if ( wpExcerpt ) {
+				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
+			}
+			if ( wpContent ) {
+				wpContent.removeEventListener( 'input', handleDescriptionChange );
+			}
 		};
 	}, [] );
 
 	const getClassName = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ), preview.length );
+	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters. Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ), preview.length );
 
 	return (
 		<Control className={ getClassName() } description={ getDescriptionDetail() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
@@ -94,4 +132,4 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	);
 };
 
-export default TermDescription;
+export default PostDescription;

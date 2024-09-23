@@ -36,12 +36,6 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 
 	const handleChange = e => {
 		setValue( e.target.value );
-
-		if ( !isSettings && e.target.value.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.id, text: e.target.value } ).then( res => setPreview( prev => res ) );
-		} else {
-			setPreview( e.target.value || newPlaceholder );
-		}
 	};
 
 	const handleFocus = () => {
@@ -54,20 +48,11 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 
 	const handleInsertVariables = value => {
 		setValue( prev => prev + value );
-		if ( !isSettings ) {
-			request( 'content/render', { ID: ss.id, text: value } ).then( res => setPreview( prev => prev + res ) );
-		}
 	};
 
 	const handleDescriptionChange = () => {
 		const desc = formatDescription( getPostExcerpt() || getPostContent(), max );
 		setNewPlaceholder( desc, max );
-
-		if ( !isSettings && desc.includes( '{{' ) ) {
-			request( 'content/render', { ID: ss.id, text: desc } ).then( res => setPreview( res ) );
-		} else {
-			setPreview( desc );
-		}
 	};
 
 	const getPostContent = () => {
@@ -133,7 +118,6 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				{ !isSettings && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);
