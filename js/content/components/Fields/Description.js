@@ -2,7 +2,7 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatDescription, isBlockEditor, normalize, request } from "../../functions";
+import { isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const Description = ( { id, placeholder = '', std = '', description = '', isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
@@ -51,7 +51,7 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 	};
 
 	const handleDescriptionChange = () => {
-		const desc = formatDescription( getPostExcerpt() || getPostContent(), max );
+		const desc = getPostExcerpt() || getPostContent();
 		setNewPlaceholder( desc, max );
 	};
 
