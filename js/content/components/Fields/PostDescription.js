@@ -5,9 +5,6 @@ import { __, sprintf } from "@wordpress/i18n";
 import { formatDescription, isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const wpExcerpt = document.querySelector( '#excerpt' );
-const wpContent = document.querySelector( '#content' ); // classic editor textarea
-
 const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( std );
@@ -16,15 +13,18 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	const inputRef = useRef();
 	let contentEditor;
 	
-	const getPostContent = () => {
+	const wpExcerpt = document.querySelector( '#excerpt' );
+	const wpContent = document.querySelector( '#content' );
+	const getContent = () => {
 		if ( isBlockEditor ) {
 			return wp.data.select( 'core/editor' ).getEditedPostContent();
 		}
 		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
 	};
-	const getPostExcerpt = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
-	const getDescription = () => getPostExcerpt() || getPostContent();
-	const descriptionRef = useRef( getDescription() );
+	const getExcerpt = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
+
+	const excerptRef = useRef( getExcerpt() );
+	const contentRef = useRef( getContent() );
 
 	const requestUpdate = () => setUpdateCount( prev => prev + 1 );
 
@@ -51,18 +51,21 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'content/render_post_description', { ID: ss.id, text: value, description: descriptionRef.current } ).then( response => {
+		request( 'content/render_post_description', { ID: ss.id, text: value, excerpt: excerptRef.current, content: contentRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );
 	};
 
 	const handleDescriptionChange = () => {
-		const description = formatDescription ( getDescription() );
-		if ( descriptionRef.current === description ) {
+		const excerpt = getExcerpt();
+		const content = getContent();
+		if ( excerptRef.current === excerpt && contentRef.current === content ) {
 			return;
 		}
-		descriptionRef.current = formatDescription( description );
+		excerptRef.current = excerpt
+		contentRef.current = content;
+
 		requestUpdate();
 	};
 
@@ -109,7 +112,7 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	}, [] );
 
 	const getClassName = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters. Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ), preview.length );
+	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters. Leave empty to autogenerate from the post excerpt (if available) or the post content.', 'slim-seo' ), preview.length );
 
 	return (
 		<Control className={ getClassName() } description={ getDescriptionDetail() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>

@@ -9,6 +9,8 @@ use SlimSEO\MetaTags\Helper;
 use SlimSEO\Helpers\Data;
 
 class RestApi {
+	private $is_manual = false;
+
 	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
@@ -282,15 +284,7 @@ class RestApi {
 		return Arr::get( $option, "{$term->taxonomy}.title", $default );
 	}
 
-	public function render_post_description( WP_REST_Request $request ): array {
-		return $this->render_description( $request, 'post' );
-	}
-
 	public function render_term_description( WP_REST_Request $request ): array {
-		return $this->render_description( $request, 'term' );
-	}
-
-	private function render_description( WP_REST_Request $request, string $object_type = 'post' ): array {
 		$id = (int) $request->get_param( 'ID' );
 		if ( ! $id ) {
 			return [
@@ -303,26 +297,64 @@ class RestApi {
 		$description = (string) $request->get_param( 'description' ); // Live description
 		$data        = [];
 
-		if ( $description && ( 'term' === $object_type ) ) {
-			$data[ $object_type ] = [ 'description' => $description ];
+		if ( $description ) {
+			$data[ 'term' ] = [ 'description' => $description ];
 		}
-		if ( $description && ( 'post' === $object_type ) ) {
-			$data[ $object_type ] = [
-				'excerpt' => $description,
-				'content' => $description,
+
+		$default = $this->get_default_term_description( $id );
+		$preview = Helper::render( $text, $id, $data );
+		if ( ! $preview ) {
+			$preview = Helper::render( $default, $id, $data );
+		}
+		$preview = $this->check_manual( $preview );
+
+		return compact( 'preview', 'default' );
+	}
+
+	private function get_default_term_description( int $term_id ): string {
+		$default = '{{ term.description }}';
+		$term    = get_term( $term_id );
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return $default;
+		}
+		$option = get_option( 'slim_seo', [] );
+		return $option[ $term->taxonomy ]['description'] ?? $default;
+	}
+
+	public function render_post_description( WP_REST_Request $request ): array {
+		$id = (int) $request->get_param( 'ID' );
+		if ( ! $id ) {
+			return [
+				'preview' => '',
+				'default' => '',
 			];
 		}
 
-		$default = ( $object_type === 'post' ? $this->get_default_post_description( $id ) : $this->get_default_term_description( $id ) ) ?: $description;
+		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
+		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
+		$content = (string) $request->get_param( 'content' ); // Live content
+		$data    = [];
+
+		if ( $excerpt ) {
+			$data[ 'post' ] = [ 'excerpt' => $excerpt ];
+		}
+		if ( $content ) {
+			$data[ 'post' ] = [ 'content' => $content ];
+		}
+		$data[ 'post' ]     = [ 'auto_description' => $excerpt ?: $content ?: '' ];
+
+		$default = $this->get_default_post_description( $id );
 		$preview = Helper::render( $text, $id, $data );
 		if ( ! $preview ) {
-			$preview = Helper::render( $default, $id, $data ) ?: $description;
+			$preview = Helper::render( $default, $id, $data );
 		}
+		$preview = $this->check_manual( $preview );
 
 		return compact( 'preview', 'default' );
 	}
 
 	private function get_default_post_description( int $post_id ): string {
+		$default = '{{ post.auto_description }}';
 		$is_home = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
 		$key     = $is_home ? 'home' : get_post_type( $post_id );
 
@@ -330,15 +362,15 @@ class RestApi {
 			return $default;
 		}
 		$option = get_option( 'slim_seo', [] );
-		return $option[ $key ]['description'] ?? '';
+		return $option[ $key ]['description'] ?? $default;
 	}
 
-	private function get_default_term_description( int $term_id ): string {
-		$term    = get_term( $term_id );
-		if ( ! ( $term instanceof WP_Term ) ) {
-			return $default;
-		}
-		$option = get_option( 'slim_seo', [] );
-		return $option[ $term->taxonomy ]['description'] ?? '';
+	private function check_manual( string $preview ): string {
+		$is_manual = apply_filters( 'slim_seo_meta_description_manual', $this->is_manual );
+		return $is_manual ? $preview : $this->truncate( $preview );
+	}
+
+	private function truncate( string $text ): string {
+		return mb_substr( $text, 0, 160 );
 	}
 }
