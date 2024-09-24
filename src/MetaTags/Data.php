@@ -45,16 +45,17 @@ class Data {
 		}
 
 		return [
-			'title'         => $post->post_title,
-			'excerpt'       => $post->post_excerpt,
-			'content'       => $post->post_content,
-			'date'          => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
-			'modified_date' => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
-			'thumbnail'     => get_the_post_thumbnail_url( $post->ID, 'full' ),
-			'tags'          => $this->get_post_terms( $post, 'post_tag' ),
-			'categories'    => $this->get_post_terms( $post, 'category' ),
-			'custom_field'  => $this->get_custom_field_data( $post ),
-			'tax'           => $post_tax,
+			'title'            => $post->post_title,
+			'excerpt'          => $post->post_excerpt,
+			'content'          => $post->post_content,
+			'auto_description' => $post->post_excerpt ?: $post->post_content,
+			'date'             => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
+			'modified_date'    => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
+			'thumbnail'        => get_the_post_thumbnail_url( $post->ID, 'full' ),
+			'tags'             => $this->get_post_terms( $post, 'post_tag' ),
+			'categories'       => $this->get_post_terms( $post, 'category' ),
+			'custom_field'     => $this->get_custom_field_data( $post ),
+			'tax'              => $post_tax,
 		];
 	}
 
@@ -70,8 +71,9 @@ class Data {
 		}
 
 		return [
-			'name'        => $term->name,
-			'description' => $term->description,
+			'name'             => $term->name,
+			'description'      => $term->description,
+			'auto_description' => $term->description,
 		];
 	}
 

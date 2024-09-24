@@ -102,15 +102,16 @@ class RestApi {
 		$variables[] = [
 			'label'   => __( 'Post', 'slim-seo' ),
 			'options' => [
-				'post.title'         => __( 'Post title', 'slim-seo' ),
-				'post.excerpt'       => __( 'Post excerpt', 'slim-seo' ),
-				'post.content'       => __( 'Post content', 'slim-seo' ),
-				'post.date'          => __( 'Post date', 'slim-seo' ),
-				'post.modified_date' => __( 'Post modified date', 'slim-seo' ),
-				'post.thumbnail'     => __( 'Post thumbnail', 'slim-seo' ),
-				'post.custom_field'  => __( 'Post custom field', 'slim-seo' ),
-				'post.tags'          => __( 'Post tags', 'slim-seo' ),
-				'post.categories'    => __( 'Post categories', 'slim-seo' ),
+				'post.title'            => __( 'Post title', 'slim-seo' ),
+				'post.excerpt'          => __( 'Post excerpt', 'slim-seo' ),
+				'post.content'          => __( 'Post content', 'slim-seo' ),
+				'post.auto_description' => __( 'Post auto description', 'slim-seo' ),
+				'post.date'             => __( 'Post date', 'slim-seo' ),
+				'post.modified_date'    => __( 'Post modified date', 'slim-seo' ),
+				'post.thumbnail'        => __( 'Post thumbnail', 'slim-seo' ),
+				'post.custom_field'     => __( 'Post custom field', 'slim-seo' ),
+				'post.tags'             => __( 'Post tags', 'slim-seo' ),
+				'post.categories'       => __( 'Post categories', 'slim-seo' ),
 			],
 		];
 		if ( $taxonomy_options ) {
@@ -122,8 +123,9 @@ class RestApi {
 		$variables[]     = [
 			'label'   => __( 'Term', 'slim-seo' ),
 			'options' => [
-				'term.name'        => __( 'Term name', 'slim-seo' ),
-				'term.description' => __( 'Term description', 'slim-seo' ),
+				'term.name'             => __( 'Term name', 'slim-seo' ),
+				'term.description'      => __( 'Term description', 'slim-seo' ),
+				'term.auto_description' => __( 'Term auto description', 'slim-seo' ),
 			],
 		];
 		$variables[] = [
@@ -298,7 +300,8 @@ class RestApi {
 		$data        = [];
 
 		if ( $description ) {
-			$data[ 'term' ] = [ 'description' => $description ];
+			$data[ 'term' ][ 'description' ]      = $description;
+			$data[ 'term' ][ 'auto_description' ] = $description;
 		}
 
 		$default = $this->get_default_term_description( $id );
@@ -312,7 +315,7 @@ class RestApi {
 	}
 
 	private function get_default_term_description( int $term_id ): string {
-		$default = '{{ term.description }}';
+		$default = '{{ term.auto_description }}';
 		$term    = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return $default;
@@ -333,15 +336,17 @@ class RestApi {
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 		$content = (string) $request->get_param( 'content' ); // Live content
-		$data    = [];
+		$data[ 'post' ] = [];
 
 		if ( $excerpt ) {
-			$data[ 'post' ] = [ 'excerpt' => $excerpt ];
+			$data[ 'post' ][ 'excerpt' ] = $excerpt;
 		}
 		if ( $content ) {
-			$data[ 'post' ] = [ 'content' => $content ];
+			$data[ 'post' ][ 'content' ] = $content;
 		}
-		$data[ 'post' ]     = [ 'auto_description' => $excerpt ?: $content ?: '' ];
+		if ( $excerpt || $content ) {
+			$data[ 'post' ][ 'auto_description' ] = $excerpt ?: $content;
+		}
 
 		$default = $this->get_default_post_description( $id );
 		$preview = Helper::render( $text, $id, $data );
