@@ -101,10 +101,9 @@ class Helper {
 			self::$renderer    = new Renderer;
 			$data_object       = new Data;
 			self::$render_data = $data_object->collect( $id );
-
-			if ( ! empty( $data ) ) {
-				self::$render_data = Arr::merge_recursive( self::$render_data, $data );
-			}
+		}
+		if ( ! empty( $data ) ) {
+			self::$render_data = Arr::merge_recursive( self::$render_data, $data );
 		}
 
 		$value = self::$renderer->render( $text, self::$render_data );
