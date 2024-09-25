@@ -301,7 +301,7 @@ class RestApi {
 
 		if ( $description ) {
 			$data[ 'term' ][ 'description' ]      = $description;
-			$data[ 'term' ][ 'auto_description' ] = $description;
+			$data[ 'term' ][ 'auto_description' ] = $this->generate_auto_description( $id, $description );
 		}
 
 		$default = $this->get_default_term_description( $id );
@@ -309,7 +309,6 @@ class RestApi {
 		if ( ! $preview ) {
 			$preview = Helper::render( $default, $id, $data );
 		}
-		$preview = $this->check_manual( $preview );
 
 		return compact( 'preview', 'default' );
 	}
@@ -336,24 +335,20 @@ class RestApi {
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 		$content = (string) $request->get_param( 'content' ); // Live content
-		$data[ 'post' ] = [];
 
-		if ( $excerpt ) {
-			$data[ 'post' ][ 'excerpt' ] = $excerpt;
-		}
-		if ( $content ) {
-			$data[ 'post' ][ 'content' ] = $content;
-		}
-		if ( $excerpt || $content ) {
-			$data[ 'post' ][ 'auto_description' ] = $excerpt ?: $content;
-		}
+		$data = [];
+		$data['post'] = array_filter( [
+			'excerpt'          => $excerpt,
+			'content'          => $content,
+			'auto_description' => $this->generate_auto_description( $id, $excerpt, $content ),
+		] );
+		$data = array_filter( $data );
 
 		$default = $this->get_default_post_description( $id );
 		$preview = Helper::render( $text, $id, $data );
 		if ( ! $preview ) {
 			$preview = Helper::render( $default, $id, $data );
 		}
-		$preview = $this->check_manual( $preview );
 
 		return compact( 'preview', 'default' );
 	}
@@ -370,12 +365,9 @@ class RestApi {
 		return $option[ $key ]['description'] ?? $default;
 	}
 
-	private function check_manual( string $preview ): string {
-		$is_manual = apply_filters( 'slim_seo_meta_description_manual', $this->is_manual );
-		return $is_manual ? $preview : $this->truncate( $preview );
-	}
-
-	private function truncate( string $text ): string {
-		return mb_substr( $text, 0, 160 );
+	private function generate_auto_description( int $id, string $description, string $content = null ): string {
+		$result = $description ?: $content;
+		$result = Helper::render( $result, $id );
+		return mb_substr( $result, 0, 160 );
 	}
 }
