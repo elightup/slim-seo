@@ -335,6 +335,7 @@ class RestApi {
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 		$content = (string) $request->get_param( 'content' ); // Live content
+		$content = apply_filters( 'slim_seo_meta_description_generated', $content, get_post( $id ) );
 
 		$data = [];
 		$data['post'] = array_filter( [
@@ -347,6 +348,7 @@ class RestApi {
 		$default = $this->get_default_post_description( $id );
 		$preview = Helper::render( $text, $id, $data );
 		if ( ! $preview ) {
+
 			$preview = Helper::render( $default, $id, $data );
 		}
 

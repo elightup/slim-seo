@@ -36,6 +36,7 @@ class Data {
 		if ( empty( $post ) ) {
 			return [];
 		}
+		$post_content = apply_filters( 'slim_seo_meta_description_generated', $post->post_content, $post );
 
 		$post_tax   = [];
 		$taxonomies = Helper::get_taxonomies();
@@ -47,8 +48,8 @@ class Data {
 		return [
 			'title'            => $post->post_title,
 			'excerpt'          => $post->post_excerpt,
-			'content'          => $post->post_content,
-			'auto_description' => $this->generate_auto_description( $id, $post->post_excerpt, $post->post_content ),
+			'content'          => $post_content,
+			'auto_description' => $this->generate_auto_description( $id, $post->post_excerpt, $post_content ),
 			'date'             => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
 			'modified_date'    => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
 			'thumbnail'        => get_the_post_thumbnail_url( $post->ID, 'full' ),
@@ -129,7 +130,7 @@ class Data {
 		];
 	}
 
-	private function generate_auto_description( int $id, string $description, string $content = null ): string {
+	private function generate_auto_description( ?int $id, string $description, string $content = null ): string {
 		$result = $description ?: $content;
 		$result = Helper::render( $result, $id );
 		return mb_substr( $result, 0, 160 );
