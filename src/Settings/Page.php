@@ -65,7 +65,7 @@ class Page {
 							<h3 class="hndle"><?php esc_html_e( 'Build advanced schemas', 'slim-seo' ); ?></h3>
 							<div class="inside">
 								<p>
-									<?php
+									<?=
 									// Translators: %1$s - plugin URL, %2$s - plugin name.
 									wp_kses_post( sprintf( __( 'Wanna customize or build advanced schemas for your local business? Check out <a href="%1$s"><strong>%2$s</strong></a>, our powerful & lightweight schema plugin that:', 'slim-seo' ), 'https://elu.to/sss', 'Slim SEO Schema' ) );
 									?>
@@ -89,7 +89,7 @@ class Page {
 							<h3 class="hndle"><?php esc_html_e( 'Build & monitor links', 'slim-seo' ); ?></h3>
 							<div class="inside">
 								<p>
-									<?php
+									<?=
 									// Translators: %1$s - plugin URL, %2$s - plugin name.
 									wp_kses_post( sprintf( __( 'Have trouble building internal links? Check out <a href="%1$s"><strong>%2$s</strong></a>, our plugin that helps you build and monitor links that:', 'slim-seo' ), 'https://elu.to/sslm', 'Slim SEO Link Manager' ) );
 									?>
