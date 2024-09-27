@@ -7,24 +7,25 @@ import FacebookImage from "./FacebookImage";
 import Title from "./Title";
 import TwitterImage from "./TwitterImage";
 
-const HasHomepage = () => {
-	return <>
+const HasHomepage = () => (
+	<>
 		<h3>{ __( 'Homepage', 'slim-seo' ) }</h3>
 		<RawHTML>
 			{ sprintf(
 				__( '<p>You have a page <a href="%s">%s</a> that is set as the homepage.</p><p>To set the meta tags for the page, please <a href="%s">set on the edit page</a>.</p>', 'slim-seo' ),
 				ss.homepage.link,
-				ss.homepage.home_name,
-				ss.homepage.home_edit
+				ss.homepage.name,
+				ss.homepage.edit
 			) }
 		</RawHTML>
-	</>;
-};
+	</>
+);
+
 const NoneHomepage = ( { option } ) => {
 	const baseName = 'slim_seo[home]';
 	let [ titlePreview, setTitlePreview ] = useState( option.title || ss.homepage.title );
 	let [ descriptionPreview, setDescriptionPreview ] = useState( option.description || ss.homepage.description );
-	const optionPlaceholder = {
+	const placeholders = {
 		title: ss.homepage.title,
 		description: ss.homepage.description,
 	};
@@ -47,7 +48,7 @@ const NoneHomepage = ( { option } ) => {
 			request( 'content/render_text', { text: value } ).then( res => {
 				type === 'title' ? setTitlePreview( res ) : setDescriptionPreview( res );
 			} )
-		, 1000 );
+			, 1000 );
 		return () => clearTimeout( timer );
 	};
 
@@ -72,7 +73,7 @@ const NoneHomepage = ( { option } ) => {
 			isSettings={ true }
 			std={ option.title || '' }
 			preview={ titlePreview || '' }
-			placeholder={ optionPlaceholder.title || '' }
+			placeholder={ placeholders.title || '' }
 			onChange={ handleTitleChange }
 		/>
 		<Description
@@ -80,7 +81,7 @@ const NoneHomepage = ( { option } ) => {
 			isSettings={ true }
 			std={ option.description || '' }
 			preview={ descriptionPreview || '' }
-			placeholder={ optionPlaceholder.description || '' }
+			placeholder={ placeholders.description || '' }
 			onChange={ handleDescriptionChange }
 			description={ __( 'Recommended length: 50-160 characters.', 'slim-seo' ) }
 		/>

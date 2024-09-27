@@ -29,30 +29,9 @@ class Item {
 		return array_merge( $this->defaults, [
 			'link'        => get_home_url(),
 			'name'        => get_the_title( get_option('page_on_front') ),
-			'title'       => $this->get_default_title(),
-			'description' => $this->get_default_description(),
+			'title'       => '{{ site.title }} {{ sep }} {{ site.description }}',
+			'description' => '{{ site.description }}',
 			'edit'        => get_edit_post_link( get_option('page_on_front') ),
 		] );
-	}
-
-	private function get_default_title(): string {
-		$parts = apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'post' );
-
-		$values = [
-			'site'    => get_bloginfo( 'name' ),
-			'tagline' => get_bloginfo( 'description' ),
-		];
-
-		$parts = array_map( function ( string $part ) use ( $values ): string {
-			return $values[ $part ] ?? '';
-		}, $parts );
-
-		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
-
-		return implode( " $separator ", $parts );
-	}
-
-	private function get_default_description(): string {
-		return get_bloginfo( 'description' ) ?? '';
 	}
 }
