@@ -1,7 +1,7 @@
 import { Control } from "@elightup/form";
-import { useEffect, useState, useRef } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { normalize, request } from "../../functions";
+import { request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const wpDescription = document.querySelector( '#description' );

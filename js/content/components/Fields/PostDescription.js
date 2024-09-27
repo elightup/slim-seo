@@ -1,8 +1,8 @@
 import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
-import { useEffect, useState, useRef } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, normalize, request } from "../../functions";
+import { isBlockEditor, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest } ) => {
@@ -12,7 +12,7 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	let [ updateCount, setUpdateCount ] = useState( 0 );
 	const inputRef = useRef();
 	let contentEditor;
-	
+
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 	const getContent = () => {
