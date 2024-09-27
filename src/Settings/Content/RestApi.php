@@ -63,6 +63,12 @@ class RestApi {
 			'callback'            => [ $this, 'render_term_description' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+
+		register_rest_route( 'slim-seo', '/content/render_text', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'render_text' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
 	}
 
 	public function has_permission(): bool {
@@ -348,7 +354,6 @@ class RestApi {
 		$default = $this->get_default_post_description( $id );
 		$preview = Helper::render( $text, $id, $data );
 		if ( ! $preview ) {
-
 			$preview = Helper::render( $default, $id, $data );
 		}
 
@@ -371,5 +376,15 @@ class RestApi {
 		$result = $description ?: $content;
 		$result = Helper::render( $result, $id );
 		return mb_substr( $result, 0, 160 );
+	}
+
+	public function render_text( WP_REST_Request $request ): string {
+		$id   = (int) $request->get_param( 'ID' );
+		$text = (string) $request->get_param( 'text' );
+		if( ! $text ) {
+			return '';
+		}
+
+		return Helper::render( $text, $id );
 	}
 }

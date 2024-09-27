@@ -4,8 +4,9 @@ import { __, sprintf } from "@wordpress/i18n";
 import { normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, std = '', max = 60, ...rest } ) => {
+const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
+	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const description = __( 'Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' );
 
 	const getClassName = () => {
@@ -30,10 +31,20 @@ const Title = ( { id, std = '', max = 60, ...rest } ) => {
 
 	const handleChange = e => {
 		setValue( e.target.value );
+		onChange( e.target.value );
 	};
 
-	const handleInsertVariables = value => {
-		setValue( prev => prev + value );
+	const handleFocus = () => {
+		setValue( prev => prev || newPlaceholder );
+	};
+
+	const handleBlur = () => {
+		setValue( prev => prev === newPlaceholder ? '' : prev );
+	};
+
+	const handleInsertVariables = variable => {
+		setValue( prev => prev + variable );
+		onChange(  value + variable );
 	};
 
 	return (
@@ -44,9 +55,13 @@ const Title = ( { id, std = '', max = 60, ...rest } ) => {
 					id={ id }
 					name={ id }
 					value={ value }
+					onBlur={ handleBlur }
+					onFocus={ handleFocus }
 					onChange={ handleChange }
+					placeholder={ newPlaceholder }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
+				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
 			</div>
 		</Control>
 	);

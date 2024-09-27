@@ -27,7 +27,7 @@ const App = () => {
 	return <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
-				{ ss.hasHomepageSettings && <Tab>{ __( 'Homepage', 'slim-seo' ) }</Tab> }
+				<Tab>{ __( 'Homepage', 'slim-seo' ) }</Tab>
 				{
 					postTypes.length > 1 &&
 					<Tab disabled={ true } className="react-tabs__tab ss-tab-heading">
@@ -45,12 +45,9 @@ const App = () => {
 				}
 				{ taxonomies.map( ( [ slug, taxonomy ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ taxonomy.label }</Tab> ) }
 			</TabList>
-			{
-				ss.hasHomepageSettings &&
-				<TabPanel>
-					<Homepage option={ option[ `home` ] || [] } />
-				</TabPanel>
-			}
+			<TabPanel>
+				<Homepage option={ option[ `home` ] || [] } />
+			</TabPanel>
 			{ postTypes.length > 1 && <TabPanel /> }
 			{
 				postTypes.map( ( [ slug, postType ] ) => (

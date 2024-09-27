@@ -5,10 +5,9 @@ import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, normalize, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, placeholder = '', std = '', description = '', isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, std = '', preview = '', placeholder = '', description = '', isSettings = false, rows = 3, min = 50, max = 160, onChange, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	let [ preview, setPreview ] = useState( std );
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 	let contentEditor;
@@ -36,6 +35,7 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 
 	const handleChange = e => {
 		setValue( e.target.value );
+		onChange( e.target.value );
 	};
 
 	const handleFocus = () => {
@@ -46,8 +46,9 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 		setValue( prev => prev === newPlaceholder ? '' : prev );
 	};
 
-	const handleInsertVariables = value => {
-		setValue( prev => prev + value );
+	const handleInsertVariables = variable => {
+		setValue( prev => prev + variable );
+		onChange(  value + variable );
 	};
 
 	const handleDescriptionChange = () => {
@@ -118,6 +119,7 @@ const Description = ( { id, placeholder = '', std = '', description = '', isSett
 					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
+				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
 			</div>
 		</Control>
 	);

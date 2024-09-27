@@ -27,8 +27,11 @@ class Item {
 
 	public function get_home_data(): array {
 		return array_merge( $this->defaults, [
+			'link'        => get_home_url(),
+			'name'        => get_the_title( get_option('page_on_front') ),
 			'title'       => $this->get_default_title(),
 			'description' => $this->get_default_description(),
+			'edit'        => get_edit_post_link( get_option('page_on_front') ),
 		] );
 	}
 
@@ -45,6 +48,7 @@ class Item {
 		}, $parts );
 
 		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
+
 		return implode( " $separator ", $parts );
 	}
 
