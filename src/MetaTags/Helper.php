@@ -55,6 +55,11 @@ class Helper {
 		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
 		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
 
+
+		// Remove lonely separator
+		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
+		$text      = trim( $text, ' ' . $separator );
+
 		// Remove extra white spaces.
 		$text = preg_replace( '/\s+/', ' ', $text );
 		$text = trim( $text );
