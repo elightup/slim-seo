@@ -7,24 +7,20 @@ import Taxonomy from "./components/Taxonomy";
 import { request } from "./functions";
 
 const App = () => {
-	const [ loading, setLoading ] = useState( false );
+	const [ loaded, setLoaded ] = useState( false );
 	const [ option, setOption ] = useState( {} );
 
 	useEffect( () => {
 		request( 'content/option' ).then( ( res ) => {
 			setOption( res );
-			setLoading( true );
+			setLoaded( true );
 		} );
 	}, [] );
 
 	const postTypes = Object.entries( ss.postTypes );
 	const taxonomies = Object.entries( ss.taxonomies );
 
-	if ( !loading ) {
-		return null;
-	}
-
-	return <>
+	return loaded && <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
 				<Tab>{ __( 'Homepage', 'slim-seo' ) }</Tab>
@@ -46,7 +42,7 @@ const App = () => {
 				{ taxonomies.map( ( [ slug, taxonomy ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ taxonomy.label }</Tab> ) }
 			</TabList>
 			<TabPanel>
-				<Homepage option={ option[ `home` ] || [] } />
+				<Homepage option={ option.home || {} } />
 			</TabPanel>
 			{ postTypes.length > 1 && <TabPanel /> }
 			{
