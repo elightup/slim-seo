@@ -58,7 +58,8 @@ class Helper {
 
 		// Remove lonely separator
 		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
-		$text      = trim( $text, ' ' . $separator );
+		$text      = trim( $text );
+		$text      = trim( $text, $separator );
 
 		// Remove extra white spaces.
 		$text = preg_replace( '/\s+/', ' ', $text );
