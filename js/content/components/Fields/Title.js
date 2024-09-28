@@ -7,27 +7,6 @@ import PropInserter from "./PropInserter";
 const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	const description = __( 'Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' );
-
-	const getClassName = () => {
-		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
-			return '';
-		}
-
-		const title = normalize( value );
-		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
-	};
-
-	const getDescription = () => {
-		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
-			return description;
-		}
-
-		const title = normalize( value );
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
-	};
 
 	const handleChange = e => {
 		setValue( e.target.value );
@@ -46,6 +25,10 @@ const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 
 		setValue( prev => prev + variable );
 		onChange(  value + variable );
 	};
+
+	const getClassName   = () => preview.length > max ? 'ss-input-warning' : 'ss-input-success';
+	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' ), preview.length );
+
 
 	return (
 		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>

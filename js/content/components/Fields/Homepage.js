@@ -58,10 +58,10 @@ const NoneHomepage = ( { option } ) => {
 	};
 
 	useEffect( () => {
-		request( 'content/render_text', { text: option.title } ).then( res => {
+		request( 'content/render_text', { text: option.title || ss.homepage.title } ).then( res => {
 			res && setTitlePreview( res );
 		} );
-		request( 'content/render_text', { text: option.description } ).then( res => {
+		request( 'content/render_text', { text: option.description || ss.homepage.description } ).then( res => {
 			res && setDescriptionPreview( res );
 		} );
 	}, [] );
@@ -83,7 +83,6 @@ const NoneHomepage = ( { option } ) => {
 			preview={ descriptionPreview || '' }
 			placeholder={ placeholders.description || '' }
 			onChange={ handleDescriptionChange }
-			description={ __( 'Recommended length: 50-160 characters.', 'slim-seo' ) }
 		/>
 		<FacebookImage
 			id={ `${ baseName }[facebook_image]` }

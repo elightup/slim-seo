@@ -11,27 +11,7 @@ const Description = ( { id, std = '', preview = '', placeholder = '', descriptio
 	const wpExcerpt = document.querySelector( '#excerpt' );
 	const wpContent = document.querySelector( '#content' );
 	let contentEditor;
-
 	description = sprintf( __( 'Recommended length: 50-160 characters. %s', 'slim-seo' ), description );
-
-	const getClassName = () => {
-		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
-			return '';
-		}
-
-		const desc = normalize( value || newPlaceholder );
-		return min > desc.length || desc.length > max ? 'ss-input-warning' : 'ss-input-success';
-	};
-
-	const getDescription = () => {
-		if ( value.includes( '{{' ) ) {
-			return description;
-		}
-
-		const desc = normalize( value || newPlaceholder );
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), desc.length, description );
-	};
 
 	const handleChange = e => {
 		setValue( e.target.value );
@@ -104,6 +84,9 @@ const Description = ( { id, std = '', preview = '', placeholder = '', descriptio
 			}
 		};
 	}, [] );
+
+	const getClassName   = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
+	const getDescription = () => sprintf( __( 'Character count: %s. %s', 'slim-seo' ), preview.length, description );
 
 	return (
 		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
