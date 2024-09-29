@@ -7,10 +7,11 @@ import PropInserter from "./PropInserter";
 const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
+	const description = __( 'Recommended length: ≤ 60 characters.', 'slim-seo' );
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		onChange( e.target.value );
+		onChange && onChange( e.target.value );
 	};
 
 	const handleFocus = () => {
@@ -23,12 +24,26 @@ const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 
 
 	const handleInsertVariables = variable => {
 		setValue( prev => prev + variable );
-		onChange(  value + variable );
+		onChange && onChange(  value + variable );
 	};
 
-	const getClassName   = () => preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' ), preview.length );
+	const getClassName   = () => {
+		const className = onChange ? preview : ( !value.includes( '{{' ) ? value : false )
 
+		// Do nothing if use variables.
+		if ( !className ) {
+			return '';
+		}
+		return className.length > max ? 'ss-input-warning' : 'ss-input-success';
+	}
+	const getDescription = () => {
+		const descriptionEdited = onChange ? preview : ( !value.includes( '{{' ) ? value : false );
+
+		if ( !descriptionEdited ) {
+			return description;
+		}
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), descriptionEdited.length, description );
+	};
 
 	return (
 		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>
@@ -44,7 +59,7 @@ const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 
 					placeholder={ newPlaceholder }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
+				{ onChange && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);
