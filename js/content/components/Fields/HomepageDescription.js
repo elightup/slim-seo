@@ -1,14 +1,14 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
-import { useEffect, useState } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const Description = ( { id, std = '', placeholder = '', description = '', rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
+	let [ preview, setPreview ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	let [ preview, setPreview ] = useState( std || placeholder );
+	const inputRef = useRef();
 
 	const requestUpdate = () => setUpdateCount( prev => prev + 1 );
 
@@ -22,7 +22,11 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
 	const handleInsertVariables = variable => {
-		setValue( prev => prev + variable );
+		setValue( prev => {
+			// Insert variable at cursor.
+			const cursorPosition = inputRef.current.selectionStart;
+			return prev.slice( 0, cursorPosition ) + variable + prev.slice( cursorPosition );
+		} );
 		requestUpdate();
 	};
 
@@ -35,8 +39,8 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 		return () => clearTimeout( timer );
 	}, [ updateCount ] );
 
-	const getClassName   = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters. Leave empty to use the default format.', 'slim-seo' ), preview.length, description );
+	const getClassName = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
+	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters.', 'slim-seo' ), preview.length, description );
 
 	return (
 		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
@@ -50,6 +54,7 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
+					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
 				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>

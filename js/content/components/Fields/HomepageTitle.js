@@ -1,13 +1,14 @@
 import { Control } from "@elightup/form";
-import { useEffect, useState } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { request } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const Title = ( { id, std = '', placeholder = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
+	let [ preview, setPreview ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	let [ preview, setPreview ] = useState( std || placeholder );
+	const inputRef = useRef();
 
 	const requestUpdate = () => setUpdateCount( prev => prev + 1 );
 
@@ -21,7 +22,11 @@ const Title = ( { id, std = '', placeholder = '', max = 60, ...rest } ) => {
 	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
 	const handleInsertVariables = variable => {
-		setValue( prev => prev + variable );
+		setValue( prev => {
+			// Insert variable at cursor.
+			const cursorPosition = inputRef.current.selectionStart;
+			return prev.slice( 0, cursorPosition ) + variable + prev.slice( cursorPosition );
+		} );
 		requestUpdate();
 	};
 
@@ -34,8 +39,8 @@ const Title = ( { id, std = '', placeholder = '', max = 60, ...rest } ) => {
 		return () => clearTimeout( timer );
 	}, [ updateCount ] );
 
-	const getClassName   = () => preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' ), preview.length );
+	const getClassName = () => preview.length > max ? 'ss-input-warning' : 'ss-input-success';
+	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: ≤ 60 characters.', 'slim-seo' ), preview.length );
 
 	return (
 		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>
@@ -49,6 +54,7 @@ const Title = ( { id, std = '', placeholder = '', max = 60, ...rest } ) => {
 					onFocus={ handleFocus }
 					onChange={ handleChange }
 					placeholder={ placeholder }
+					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
 				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>

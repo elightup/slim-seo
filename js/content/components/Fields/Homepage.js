@@ -1,11 +1,11 @@
 import { RawHTML } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import HomepageTitle from "./HomepageTitle";
-import HomepageDescription from "./HomepageDescription";
 import FacebookImage from "./FacebookImage";
+import HomepageDescription from "./HomepageDescription";
+import HomepageTitle from "./HomepageTitle";
 import TwitterImage from "./TwitterImage";
 
-const HasHomepage = () => (
+const StaticPage = () => (
 	<>
 		<h3>{ __( 'Homepage', 'slim-seo' ) }</h3>
 		<RawHTML>
@@ -19,7 +19,7 @@ const HasHomepage = () => (
 	</>
 );
 
-const NoneHomepage = ( { option } ) => {
+const ArchivePage = ( { option } ) => {
 	const baseName = 'slim_seo[home]';
 
 	return <>
@@ -27,12 +27,12 @@ const NoneHomepage = ( { option } ) => {
 		<HomepageTitle
 			id={ `${ baseName }[title]` }
 			std={ option.title || '' }
-			placeholder={ ss.homepage.title || '' }
+			placeholder={ ss.homepage.title }
 		/>
 		<HomepageDescription
 			id={ `${ baseName }[description]` }
 			std={ option.description || '' }
-			placeholder={ ss.homepage.description || '' }
+			placeholder={ ss.homepage.description }
 		/>
 		<FacebookImage
 			id={ `${ baseName }[facebook_image]` }
@@ -45,4 +45,4 @@ const NoneHomepage = ( { option } ) => {
 	</>;
 };
 
-export default ( { option } ) => ss.hasHomepageSettings ? <NoneHomepage option={ option } /> : <HasHomepage />;
+export default ( { option } ) => ss.hasHomepageSettings ? <ArchivePage option={ option } /> : <StaticPage />;
