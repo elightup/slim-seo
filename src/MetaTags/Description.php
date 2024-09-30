@@ -3,8 +3,8 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
-use SlimSEO\Helpers\Arr;
 use WP_Term;
+use SlimSEO\Helpers\Option;
 
 class Description {
 	use Context;
@@ -49,14 +49,12 @@ class Description {
 	}
 
 	private function get_home_value(): string {
-		$option = get_option( 'slim_seo' );
-		return Arr::get( $option, 'home.description', get_bloginfo( 'description' ) );
+		return Option::get( 'home.description', get_bloginfo( 'description' ) );
 	}
 
 	private function get_post_type_archive_value(): string {
 		$post_type_object = get_queried_object();
-		$option           = get_option( 'slim_seo' );
-		return Arr::get( $option, "{$post_type_object->name}_archive.description", '' );
+		return Option::get( "{$post_type_object->name}_archive.description", '' );
 	}
 
 	/**
@@ -86,7 +84,7 @@ class Description {
 		$option    = get_option( 'slim_seo', [] );
 		$post_type = get_post_type( $post_id );
 		if ( ! empty( $option[ $post_type ]['description'] ) ) {
-			return  $option[ $post_type ]['description'];
+			return $option[ $post_type ]['description'];
 		}
 
 		// Use post excerpt if available.
@@ -112,13 +110,11 @@ class Description {
 		}
 
 		// Use taxonomy settings if avaiable, then fallback to the term description
-		$option = get_option( 'slim_seo', [] );
-		return Arr::get( $option, "{$term->taxonomy}.description", $term->description );
+		return Option::get( "{$term->taxonomy}.description", $term->description );
 	}
 
 	private function get_author_value(): string {
 		// Use author settings if avaiable, then fallback to the author description
-		$option = get_option( 'slim_seo', [] );
-		return Arr::get( $option, 'author.description', get_user_meta( get_queried_object_id(), 'description', true ) );
+		return Option::get( 'author.description', get_user_meta( get_queried_object_id(), 'description', true ) );
 	}
 }

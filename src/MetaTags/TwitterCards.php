@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimSEO\Helpers\Option;
+
 class TwitterCards {
 	private $image_obj;
 
@@ -35,12 +37,11 @@ class TwitterCards {
 	}
 
 	private function get_default_image(): array {
-		$option = get_option( 'slim_seo' );
-		return empty( $option['default_twitter_image'] ) ? [] : $this->image_obj->get_data_from_url( $option['default_twitter_image'] );
+		$url = Option::get( 'default_twitter_image', '' );
+		return $url ? $this->image_obj->get_data_from_url( $url ) : [];
 	}
 
 	private function get_site(): string {
-		$option = get_option( 'slim_seo', [] );
-		return $option['twitter_site'] ?? '';
+		return Option::get( 'twitter_site', '' );
 	}
 }

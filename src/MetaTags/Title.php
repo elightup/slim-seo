@@ -3,8 +3,8 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
-use SlimSEO\Helpers\Arr;
 use WP_Term;
+use SlimSEO\Helpers\Option;
 
 class Title {
 	use Context;
@@ -40,14 +40,12 @@ class Title {
 	}
 
 	private function get_home_value(): string {
-		$option = get_option( 'slim_seo' );
-		return Arr::get( $option, 'home.title', '' );
+		return Option::get( 'home.title', '' );
 	}
 
 	private function get_post_type_archive_value(): string {
 		$post_type_object = get_queried_object();
-		$option           = get_option( 'slim_seo' );
-		return Arr::get( $option, "{$post_type_object->name}_archive.title", '' );
+		return Option::get( "{$post_type_object->name}_archive.title", '' );
 	}
 
 	/**
@@ -61,9 +59,8 @@ class Title {
 			return $data['title'];
 		}
 
-		$option    = get_option( 'slim_seo', [] );
 		$post_type = get_post_type( $post_id );
-		return $option[ $post_type ]['title'] ?? '';
+		return Option::get( "{$post_type}.title", '' );
 	}
 
 	/**
@@ -82,8 +79,7 @@ class Title {
 			return '';
 		}
 
-		$option = get_option( 'slim_seo', [] );
-		return Arr::get( $option, "{$term->taxonomy}.title", '' );
+		return Option::get( "{$term->taxonomy}.title", '' );
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {
@@ -91,7 +87,6 @@ class Title {
 	}
 
 	private function get_author_value(): string {
-		$option = get_option( 'slim_seo', [] );
-		return Arr::get( $option, 'author.title', '' );
+		return Option::get( 'author.title', '' );
 	}
 }

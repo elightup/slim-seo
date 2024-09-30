@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimSEO\Helpers\Option;
+
 class OpenGraph {
 	private $title;
 	private $description;
@@ -80,8 +82,8 @@ class OpenGraph {
 	}
 
 	private function get_default_image(): array {
-		$option = get_option( 'slim_seo' );
-		return empty( $option['default_facebook_image'] ) ? [] : $this->image_obj->get_data_from_url( $option['default_facebook_image'] );
+		$url = Option::get( 'default_facebook_image', '' );
+		return $url ? $this->image_obj->get_data_from_url( $url ) : [];
 	}
 
 	private function get_description(): string {
@@ -133,8 +135,7 @@ class OpenGraph {
 	}
 
 	private function get_app_id(): string {
-		$data = get_option( 'slim_seo' );
-		return empty( $data['facebook_app_id'] ) ? '' : $data['facebook_app_id'];
+		return Option::get( 'facebook_app_id', '' );
 	}
 
 	private function output_tag( string $property, $content ) {

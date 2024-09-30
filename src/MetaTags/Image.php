@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || die;
 
 use WP_Term;
 use SlimSEO\Helpers\Images;
-use SlimSEO\Helpers\Arr;
+use SlimSEO\Helpers\Option;
 
 class Image {
 	use Context;
@@ -17,15 +17,13 @@ class Image {
 	}
 
 	private function get_home_value(): array {
-		$option = get_option( 'slim_seo', [] );
-		$url    = Arr::get( $option, "home.{$this->meta_key}", '' );
+		$url = Option::get( "home.{$this->meta_key}", '' );
 		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
 	private function get_post_type_archive_value(): array {
 		$post_type_object = get_queried_object();
-		$option           = get_option( 'slim_seo' );
-		$url              = Arr::get( $option, "{$post_type_object->name}_archive.{$this->meta_key}", '' );
+		$url              = Option::get( "{$post_type_object->name}_archive.{$this->meta_key}", '' );
 		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
@@ -65,13 +63,12 @@ class Image {
 			return [];
 		}
 
-		$option = get_option( 'slim_seo', [] );
-		return $this->get_from_settings( Arr::get( $option, "{$term->taxonomy}.{$this->meta_key}", '' ) ) ?: [];
+		$url = Option::get( "{$term->taxonomy}.{$this->meta_key}", '' );
+		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
 	private function get_author_value(): array {
-		$option = get_option( 'slim_seo', [] );
-		$url    = Arr::get( $option, "author.{$this->meta_key}", '' );
+		$url    = Option::get( "author.{$this->meta_key}", '' );
 		return $url? $this->get_from_settings( $url ) : [];
 	}
 

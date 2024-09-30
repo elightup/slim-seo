@@ -4,7 +4,7 @@ namespace SlimSEO\MetaTags\Settings;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_Term;
-use SlimSEO\Helpers\Arr;
+use SlimSEO\Helpers\Option;
 use SlimSEO\MetaTags\Helper;
 
 class RestApi {
@@ -92,11 +92,7 @@ class RestApi {
 			$key     = get_post_type( $post_id );
 		}
 
-		if ( ! $key ) {
-			return $default;
-		}
-		$option = get_option( 'slim_seo', [] );
-		return Arr::get( $option, "$key.title", $default );
+		return $key ? Option::get( "$key.title", $default ) : $default;
 	}
 
 	private function get_default_term_title( int $term_id ): string {
@@ -105,8 +101,7 @@ class RestApi {
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return $default;
 		}
-		$option = get_option( 'slim_seo', [] );
-		return Arr::get( $option, "{$term->taxonomy}.title", $default );
+		return Option::get( "{$term->taxonomy}.title", $default );
 	}
 
 	public function render_term_description( WP_REST_Request $request ): array {
@@ -142,8 +137,7 @@ class RestApi {
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return $default;
 		}
-		$option = get_option( 'slim_seo', [] );
-		return $option[ $term->taxonomy ]['description'] ?? $default;
+		return Option::get( "{$term->taxonomy}.description", $default );
 	}
 
 	public function render_post_description( WP_REST_Request $request ): array {
@@ -182,11 +176,7 @@ class RestApi {
 		$is_home = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
 		$key     = $is_home ? 'home' : get_post_type( $post_id );
 
-		if ( ! $key ) {
-			return $default;
-		}
-		$option = get_option( 'slim_seo', [] );
-		return $option[ $key ]['description'] ?? $default;
+		return $key ? Option::get( "$key.description", $default ) : $default;
 	}
 
 	private function generate_auto_description( int $id, string $description, string $content = null ): string {
