@@ -127,8 +127,8 @@ class Manager {
 
 	private function get_default_author_metas(): array {
 		return [
-			'title'       => '{{ author.display_name }} {{ author.description }}',
-			'description' => '',
+			'title'       => '{{ author.display_name }} {{ page }} {{ sep }} {{ site.title }}',
+			'description' => '{{ author.description }}',
 		];
 	}
 }
