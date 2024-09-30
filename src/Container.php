@@ -17,8 +17,9 @@ class Container {
 		$services['meta_description'] = new MetaTags\Description;
 		$services['meta_robots']      = new MetaTags\Robots( $services['canonical_url'] );
 
-		$services['settings_post'] = new MetaTags\Settings\Post;
-		$services['settings_term'] = new MetaTags\Settings\Term;
+		$services['settings_post']     = new MetaTags\Settings\Post;
+		$services['settings_term']     = new MetaTags\Settings\Term;
+		$services['settings_rest_api'] = new MetaTags\Settings\RestApi;
 
 		$services['sitemaps']   = new Sitemaps\Manager;
 		$services['images_alt'] = new ImagesAlt;

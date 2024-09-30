@@ -2,6 +2,7 @@
 namespace SlimSEO\MetaTags;
 
 use WP_Post;
+use WP_Post_Type;
 use SlimSEO\Helpers\Arr;
 
 class Data {
@@ -10,6 +11,7 @@ class Data {
 	public function collect( $id = null ): array {
 		$this->data = array_merge(
 			[ 'post' => $this->get_post_data( $id ) ],
+			[ 'post_type' => $this->get_post_type_data() ],
 			[ 'term' => $this->get_term_data( $id ) ],
 			[ 'author' => $this->get_author_data() ],
 			[ 'user' => $this->get_user_data() ],
@@ -57,6 +59,25 @@ class Data {
 			'categories'       => $this->get_post_terms( $post, 'category' ),
 			'custom_field'     => $this->get_custom_field_data( $post ),
 			'tax'              => $post_tax,
+		];
+	}
+
+	private function get_post_type_data(): array {
+		if ( ! is_post_type_archive() ) {
+			return [];
+		}
+		$post_type_object = get_queried_object();
+		if ( ! ( $post_type_object instanceof WP_Post_Type ) ) {
+			return [];
+		}
+
+		$labels = get_post_type_labels( $post_type_object );
+
+		return [
+			'labels' => [
+				'singular' => $labels->singular_name,
+				'plural'   => $labels->name,
+			],
 		];
 	}
 

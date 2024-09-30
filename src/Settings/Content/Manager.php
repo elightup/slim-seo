@@ -33,7 +33,8 @@ class Manager {
 			'postTypes'                => Data::get_post_types(),
 			'taxonomies'               => Data::get_taxonomies(),
 			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
-			'defaultMetaData'          => $this->default_meta_data(),
+			'defaultPostMetas'         => $this->get_default_post_metas(),
+			'defaultTermMetas'         => $this->get_default_term_metas(),
 			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 		] );
 	}
@@ -103,10 +104,23 @@ class Manager {
 		return $archive;
 	}
 
-	public function default_meta_data(): array {
+	private function get_default_post_metas(): array {
 		return [
-			'title'       => '{{ post.title }} {{ page }} {{ sep }} {{ site.description }}',
-			'description' => '{{ post.auto_description }}',
+			'single'  => [
+				'title'       => '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}',
+				'description' => '{{ post.auto_description }}',
+			],
+			'archive' => [
+				'title'       => '{{ post_type.labels.plural }} {{ page }} {{ sep }} {{ site.title }}',
+				'description' => '',
+			],
+		];
+	}
+
+	private function get_default_term_metas(): array {
+		return [
+			'title'       => '{{ term.title }} {{ page }} {{ sep }} {{ site.title }}',
+			'description' => '{{ term.auto_description }}',
 		];
 	}
 }

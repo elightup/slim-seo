@@ -5,7 +5,7 @@ import { __, sprintf } from "@wordpress/i18n";
 import { isBlockEditor, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest } ) => {
+const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
@@ -33,13 +33,8 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 		requestUpdate();
 	};
 
-	const handleFocus = () => {
-		setValue( prev => prev || placeholder );
-	};
-
-	const handleBlur = () => {
-		setValue( prev => prev === placeholder ? '' : prev );
-	};
+	const handleFocus = () => setValue( prev => prev || placeholder );
+	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
 	const handleInsertVariables = variable => {
 		setValue( prev => {
@@ -63,7 +58,7 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 		if ( excerptRef.current === excerpt && contentRef.current === content ) {
 			return;
 		}
-		excerptRef.current = excerpt
+		excerptRef.current = excerpt;
 		contentRef.current = content;
 
 		requestUpdate();
@@ -112,7 +107,7 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	}, [] );
 
 	const getClassName = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters. Leave empty to autogenerate from the post excerpt (if available) or the post content.', 'slim-seo' ), preview.length );
+	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters.', 'slim-seo' ), preview.length );
 
 	return (
 		<Control className={ getClassName() } description={ getDescriptionDetail() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
@@ -120,7 +115,7 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 				<textarea
 					id={ id }
 					name={ id }
-					rows={ rows }
+					rows="3"
 					value={ value }
 					placeholder={ placeholder }
 					onChange={ handleChange }
@@ -129,8 +124,8 @@ const PostDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
 			</div>
+			{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };

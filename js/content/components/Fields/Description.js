@@ -1,47 +1,43 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
-import { useEffect, useState } from "@wordpress/element";
+import { useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, std = '', placeholder = '', description = '', rows = 3, min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, std = '', placeholder = '', min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	description = sprintf( __( 'Recommended length: 50-160 characters. %s', 'slim-seo' ), description );
+	const description = __( 'Recommended length: 50-160 characters.', 'slim-seo' );
+	const inputRef = useRef();
 
-	const handleChange = e => {
-		setValue( e.target.value );
-	};
+	const handleChange = e => setValue( e.target.value );
+	const handleFocus = () => setValue( prev => prev || placeholder );
+	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
-	const handleFocus = () => {
-		setValue( prev => prev || newPlaceholder );
-	};
-
-	const handleBlur = () => {
-		setValue( prev => prev === newPlaceholder ? '' : prev );
-	};
-
-	const handleInsertVariables = variable => {
-		setValue( prev => prev + variable );
-	};
+	const handleInsertVariables = variable => setValue( prev => {
+		// Insert variable at cursor.
+		const cursorPosition = inputRef.current.selectionStart;
+		return prev.slice( 0, cursorPosition ) + variable + prev.slice( cursorPosition );
+	} );
 
 	const getClassName = () => {
+		let desc = value || placeholder;
 		// Do nothing if use variables.
-		if ( !value || value.includes( '{{' ) ) {
+		if ( desc.includes( '{{' ) ) {
 			return '';
 		}
 
-		const desc = normalize( value || newPlaceholder );
+		desc = normalize( desc );
 		return min > desc.length || desc.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
 	const getDescription = () => {
-		if ( !value || value.includes( '{{' ) ) {
+		let desc = value || placeholder;
+		// Do nothing if use variables.
+		if ( desc.includes( '{{' ) ) {
 			return description;
 		}
 
-		const desc = normalize( value || newPlaceholder );
+		desc = normalize( desc );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), desc.length, description );
 	};
 
@@ -51,12 +47,13 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 				<textarea
 					id={ id }
 					name={ id }
-					rows={ rows }
+					rows="3"
 					value={ value }
-					placeholder={ newPlaceholder }
+					placeholder={ placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
+					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>

@@ -1,10 +1,9 @@
 import { createRoot } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import Checkbox from "./components/Fields/Checkbox";
-import Description from "./components/Fields/Description";
 import FacebookImage from './components/Fields/FacebookImage';
-import PostTitle from './components/Fields/PostTitle';
 import PostDescription from "./components/Fields/PostDescription";
+import PostTitle from './components/Fields/PostTitle';
 import TermDescription from "./components/Fields/TermDescription";
 import TermTitle from './components/Fields/TermTitle';
 import Text from "./components/Fields/Text";

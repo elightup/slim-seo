@@ -1,9 +1,9 @@
 import { RawHTML } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import FacebookImage from "./FacebookImage";
-import HomepageDescription from "./HomepageDescription";
-import HomepageTitle from "./HomepageTitle";
-import TwitterImage from "./TwitterImage";
+import FacebookImage from "./Fields/FacebookImage";
+import HomepageDescription from "./Fields/HomepageDescription";
+import HomepageTitle from "./Fields/HomepageTitle";
+import TwitterImage from "./Fields/TwitterImage";
 
 const StaticPage = () => (
 	<>
