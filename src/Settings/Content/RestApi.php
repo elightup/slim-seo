@@ -90,6 +90,13 @@ class RestApi {
 				'options' => $taxonomy_options,
 			];
 		}
+		$variables[] = [
+			'label'   => __( 'Post type labels', 'slim-seo' ),
+			'options' => [
+				'post_type.singular' => __( 'Singular', 'slim-seo' ),
+				'post_type.plural'   => __( 'Plural', 'slim-seo' ),
+			],
+		];
 		$variables[]     = [
 			'label'   => __( 'Term', 'slim-seo' ),
 			'options' => [
