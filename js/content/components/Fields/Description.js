@@ -28,7 +28,7 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 
 	const getClassName = () => {
 		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
+		if ( !value || value.includes( '{{' ) ) {
 			return '';
 		}
 
@@ -37,7 +37,7 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 	};
 
 	const getDescription = () => {
-		if ( value.includes( '{{' ) ) {
+		if ( !value || value.includes( '{{' ) ) {
 			return description;
 		}
 

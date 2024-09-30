@@ -33,6 +33,7 @@ class Manager {
 			'postTypes'                => Data::get_post_types(),
 			'taxonomies'               => Data::get_taxonomies(),
 			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
+			'defaultMetaData'          => $this->default_meta_data(),
 			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 		] );
 	}
@@ -100,5 +101,12 @@ class Manager {
 		}
 
 		return $archive;
+	}
+
+	public function default_meta_data(): array {
+		return [
+			'title'       => '{{ post.title }} {{ page }} {{ sep }} {{ site.description }}',
+			'description' => '{{ post.auto_description }}',
+		];
 	}
 }

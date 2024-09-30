@@ -27,7 +27,7 @@ const Title = ( { id, std = '', preview = '', placeholder = '', max = 60, ...res
 
 	const getClassName   = () => {
 		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
+		if ( !value || value.includes( '{{' ) ) {
 			return '';
 		}
 
@@ -36,7 +36,7 @@ const Title = ( { id, std = '', preview = '', placeholder = '', max = 60, ...res
 	}
 	const getDescription = () => {
 		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
+		if ( !value || value.includes( '{{' ) ) {
 			return description;
 		}
 

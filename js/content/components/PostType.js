@@ -8,6 +8,10 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[${ id }]`;
 	const baseNameArchive = `slim_seo[${ id }_archive]`;
+	const defaultMetaData = {
+		title: ss.defaultMetaData.title,
+		description: ss.defaultMetaData.description,
+	};
 
 	const handleChange = e => {
 		setNoIndex( e.target.checked );
@@ -27,6 +31,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 				option={ option }
 				label={ sprintf( __( 'Singular %s', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
 				descriptionInstruction={ __( 'Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
+				defaultMetaData={ defaultMetaData }
 				facebookImageInstruction={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
 			/>
 		}
@@ -42,6 +47,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 					<Block
 						baseName={ baseNameArchive }
 						option={ optionArchive }
+						defaultMetaData={ defaultMetaData }
 						label={ sprintf( __( '%s archive', 'slim-seo' ), postType.labels.singular_name ) }
 						archive={ true }
 					/>

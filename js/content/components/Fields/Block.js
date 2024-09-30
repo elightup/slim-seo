@@ -6,7 +6,7 @@ import TwitterImage from "./TwitterImage";
 export default ( {
 	baseName,
 	option,
-	optionPlaceholder = [],
+	defaultMetaData = [],
 	label,
 	descriptionInstruction = '',
 	facebookImageInstruction = '',
@@ -16,12 +16,12 @@ export default ( {
 		<Title
 			id={ `${ baseName }[title]` }
 			std={ option.title || '' }
-			placeholder={ optionPlaceholder.title || '' }
+			placeholder={ defaultMetaData.title || '' }
 		/>
 		<Description
 			id={ `${ baseName }[description]` }
 			std={ option.description || '' }
-			placeholder={ optionPlaceholder.description || '' }
+			placeholder={ defaultMetaData.description || '' }
 			description={ descriptionInstruction }
 		/>
 		<FacebookImage
