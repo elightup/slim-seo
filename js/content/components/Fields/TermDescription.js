@@ -84,7 +84,7 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
-			{ preview && <div class="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
+			{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };
