@@ -7,8 +7,8 @@ import PropInserter from "./PropInserter";
 const wpDescription = document.querySelector( '#description' );
 const getDescription = () => wpDescription.value;
 
-const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest } ) => {
-	let [ value, setValue ]     = useState( std );
+const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
+	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
@@ -22,13 +22,8 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 		requestUpdate();
 	};
 
-	const handleFocus = () => {
-		setValue( prev => prev || placeholder );
-	};
-
-	const handleBlur = () => {
-		setValue( prev => prev === placeholder ? '' : prev );
-	};
+	const handleFocus = () => setValue( prev => prev || placeholder );
+	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
 	const handleInsertVariables = variable => {
 		setValue( prev => {
@@ -71,7 +66,7 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 	}, [] );
 
 	const getClassName = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters. Leave empty to autogenerate from the term description.', 'slim-seo' ), preview.length );
+	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters.', 'slim-seo' ), preview.length );
 
 	return (
 		<Control className={ getClassName() } description={ getDescriptionDetail() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
@@ -79,7 +74,7 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 				<textarea
 					id={ id }
 					name={ id }
-					rows={ rows }
+					rows="3"
 					value={ value }
 					placeholder={ placeholder }
 					onChange={ handleChange }
@@ -88,8 +83,8 @@ const TermDescription = ( { id, std = '', rows = 3, min = 50, max = 160, ...rest
 					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
 			</div>
+			{ preview && <div class="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };

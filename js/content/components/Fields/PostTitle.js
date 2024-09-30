@@ -23,13 +23,8 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 		requestUpdate();
 	};
 
-	const handleFocus = () => {
-		setValue( prev => prev || placeholder );
-	};
-
-	const handleBlur = () => {
-		setValue( prev => prev === placeholder ? '' : prev );
-	};
+	const handleFocus = () => setValue( prev => prev || placeholder );
+	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
 	const handleInsertVariables = variable => {
 		setValue( prev => {
@@ -81,7 +76,7 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 	}, [] );
 
 	const getClassName = () => preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: ≤ 60 characters. Leave empty to use the default format.', 'slim-seo' ), preview.length );
+	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: ≤ 60 characters.', 'slim-seo' ), preview.length );
 
 	return (
 		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>
@@ -98,8 +93,8 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				<span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span>
 			</div>
+			{ preview && <div class="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };
