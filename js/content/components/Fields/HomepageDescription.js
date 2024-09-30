@@ -4,7 +4,7 @@ import { __, sprintf } from "@wordpress/i18n";
 import { request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, std = '', placeholder = '', description = '', rows = 3, min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, std = '', placeholder = '', description = '', min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
@@ -18,7 +18,6 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 	};
 
 	const handleFocus = () => setValue( prev => prev || placeholder );
-
 	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
 	const handleInsertVariables = variable => {
@@ -48,7 +47,7 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 				<textarea
 					id={ id }
 					name={ id }
-					rows={ rows }
+					rows="3"
 					value={ value }
 					placeholder={ placeholder }
 					onChange={ handleChange }

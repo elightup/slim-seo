@@ -18,7 +18,6 @@ const Title = ( { id, std = '', placeholder = '', max = 60, ...rest } ) => {
 	};
 
 	const handleFocus = () => setValue( prev => prev || placeholder );
-
 	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
 
 	const handleInsertVariables = variable => {
