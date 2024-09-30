@@ -2,20 +2,16 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, normalize, request } from "../../functions";
+import { normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, std = '', preview = '', placeholder = '', description = '', isSettings = false, rows = 3, min = 50, max = 160, onChange, ...rest } ) => {
+const Description = ( { id, std = '', placeholder = '', description = '', rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	const wpExcerpt = document.querySelector( '#excerpt' );
-	const wpContent = document.querySelector( '#content' );
-	let contentEditor;
 	description = sprintf( __( 'Recommended length: 50-160 characters. %s', 'slim-seo' ), description );
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		onChange && onChange( e.target.value );
 	};
 
 	const handleFocus = () => {
@@ -28,79 +24,25 @@ const Description = ( { id, std = '', preview = '', placeholder = '', descriptio
 
 	const handleInsertVariables = variable => {
 		setValue( prev => prev + variable );
-		onChange && onChange(  value + variable );
 	};
 
-	const handleDescriptionChange = () => {
-		const desc = getPostExcerpt() || getPostContent();
-		setNewPlaceholder( desc, max );
-	};
-
-	const getPostContent = () => {
-		if ( isBlockEditor ) {
-			return wp.data.select( 'core/editor' ).getEditedPostContent();
-		}
-		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
-	};
-
-	const getPostExcerpt = () => {
-		return isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
-	};
-
-	// Update newPlaceholder when post description changes.
-	useEffect( () => {
-		if ( isSettings ) {
-			return;
-		}
-
-		handleDescriptionChange();
-		if ( isBlockEditor ) {
-			subscribe( handleDescriptionChange );
-		} else {
-			if ( wpExcerpt ) {
-				wpExcerpt.addEventListener( 'input', handleDescriptionChange );
-			}
-			if ( wpContent ) {
-				jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
-					if ( editor.id !== 'content' ) {
-						return;
-					}
-					contentEditor = editor;
-					editor.on( 'input keyup', handleDescriptionChange );
-				} );
-			}
-		}
-
-		return () => {
-			if ( isBlockEditor ) {
-				unsubscribe( handleDescriptionChange );
-				return;
-			}
-			if ( wpExcerpt ) {
-				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
-			}
-			if ( wpContent ) {
-				wpContent.removeEventListener( 'input', handleDescriptionChange );
-			}
-		};
-	}, [] );
-
-	const getClassName   = () => {
-		const className = onChange ? preview : ( !value.includes( '{{' ) ? value : false )
-
+	const getClassName = () => {
 		// Do nothing if use variables.
-		if ( !className ) {
+		if ( value.includes( '{{' ) ) {
 			return '';
 		}
-		return min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	}
-	const getDescription = () => {
-		const descriptionEdited = onChange ? preview : ( !value.includes( '{{' ) ? value : false );
 
-		if ( !descriptionEdited ) {
+		const desc = normalize( value || newPlaceholder );
+		return min > desc.length || desc.length > max ? 'ss-input-warning' : 'ss-input-success';
+	};
+
+	const getDescription = () => {
+		if ( value.includes( '{{' ) ) {
 			return description;
 		}
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), descriptionEdited.length, description );
+
+		const desc = normalize( value || newPlaceholder );
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), desc.length, description );
 	};
 
 	return (
@@ -117,7 +59,6 @@ const Description = ( { id, std = '', preview = '', placeholder = '', descriptio
 					onBlur={ handleBlur }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				{ onChange && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);

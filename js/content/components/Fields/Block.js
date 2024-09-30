@@ -15,13 +15,11 @@ export default ( {
 		<h3>{ label }</h3>
 		<Title
 			id={ `${ baseName }[title]` }
-			isSettings={ true }
 			std={ option.title || '' }
 			placeholder={ optionPlaceholder.title || '' }
 		/>
 		<Description
 			id={ `${ baseName }[description]` }
-			isSettings={ true }
 			std={ option.description || '' }
 			placeholder={ optionPlaceholder.description || '' }
 			description={ descriptionInstruction }

@@ -4,14 +4,13 @@ import { __, sprintf } from "@wordpress/i18n";
 import { normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 60, ...rest } ) => {
+const Title = ( { id, std = '', preview = '', placeholder = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
 	const description = __( 'Recommended length: ≤ 60 characters.', 'slim-seo' );
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		onChange && onChange( e.target.value );
 	};
 
 	const handleFocus = () => {
@@ -24,25 +23,25 @@ const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 
 
 	const handleInsertVariables = variable => {
 		setValue( prev => prev + variable );
-		onChange && onChange(  value + variable );
 	};
 
 	const getClassName   = () => {
-		const className = onChange ? preview : ( !value.includes( '{{' ) ? value : false )
-
 		// Do nothing if use variables.
-		if ( !className ) {
+		if ( value.includes( '{{' ) ) {
 			return '';
 		}
-		return className.length > max ? 'ss-input-warning' : 'ss-input-success';
+
+		const title = normalize( value );
+		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
 	}
 	const getDescription = () => {
-		const descriptionEdited = onChange ? preview : ( !value.includes( '{{' ) ? value : false );
-
-		if ( !descriptionEdited ) {
+		// Do nothing if use variables.
+		if ( value.includes( '{{' ) ) {
 			return description;
 		}
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), descriptionEdited.length, description );
+
+		const title = normalize( value );
+		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
 	};
 
 	return (
@@ -59,7 +58,6 @@ const Title = ( { id, std = '', preview = '', placeholder = '', onChange, max = 
 					placeholder={ newPlaceholder }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
-				{ onChange && <span>{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</span> }
 			</div>
 		</Control>
 	);
