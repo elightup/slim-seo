@@ -8,7 +8,6 @@ import PropInserter from "./PropInserter";
 const Description = ( { id, std = '', placeholder = '', description = '', rows = 3, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	description = sprintf( __( 'Recommended length: 50-160 characters. %s', 'slim-seo' ), description );
 
 	const handleChange = e => {
 		setValue( e.target.value );
@@ -42,7 +41,7 @@ const Description = ( { id, std = '', placeholder = '', description = '', rows =
 		}
 
 		const desc = normalize( value || newPlaceholder );
-		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), desc.length, description );
+		return sprintf( __( 'Character count: %s. Recommended length: 50-160 characters.', 'slim-seo' ), desc.length );
 	};
 
 	return (
