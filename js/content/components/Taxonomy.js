@@ -7,9 +7,7 @@ const Taxonomy = ( { id, taxonomy, option } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[${ id }]`;
 
-	const handleChange = e => {
-		setNoIndex( e.target.checked );
-	};
+	const handleChange = e => setNoIndex( e.target.checked );
 
 	return <>
 		<Checkbox
@@ -24,7 +22,7 @@ const Taxonomy = ( { id, taxonomy, option } ) => {
 				baseName={ baseName }
 				option={ option }
 				label={ taxonomy.labels.singular_name }
-				descriptionInstruction={ __( 'Leave empty to autogenerate from the term description.', 'slim-seo' ) }
+				defaultMetas={ ss.defaultTermMetas }
 			/>
 		}
 	</>;
