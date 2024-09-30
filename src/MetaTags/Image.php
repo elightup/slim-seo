@@ -100,4 +100,19 @@ class Image {
 		}
 		return $this->get_data_from_url( $setting );
 	}
+
+	private function get_author_value(): string {
+		$author_avatar = get_avatar_url( get_the_author_meta( 'ID' ) );
+		if ( filter_var( $author_avatar, FILTER_VALIDATE_URL ) ) {
+			return $this->get_data_from_url( $author_avatar );
+		}
+
+		$option = get_option( 'slim_seo', [] );
+		$value  = $option['author'][ $this->meta_key ];
+		if ( ! filter_var( $value, FILTER_VALIDATE_URL ) ) {
+			$value = Helper::render( $setting );
+		}
+
+		return $this->get_data_from_url( $value );
+	}
 }

@@ -87,4 +87,9 @@ class Title {
 	public function set_page_title_as_archive_title( string $title ): string {
 		return $this->queried_object ? get_the_title( $this->queried_object ) : $title;
 	}
+
+	private function get_author_value(): string {
+		$option = get_option( 'slim_seo', [] );
+		return $option['author']['title'] ?? '';
+	}
 }

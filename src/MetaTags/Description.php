@@ -119,6 +119,12 @@ class Description {
 	}
 
 	private function get_author_value(): string {
-		return get_user_meta( get_queried_object_id(), 'description', true );
+		$user_meta =  get_user_meta( get_queried_object_id(), 'description', true );
+		if ( ! empty( $user_meta ) ) {
+			return $user_meta;
+		}
+
+		$option = get_option( 'slim_seo', [] );
+		return $option['author']['description'] ?? '';
 	}
 }

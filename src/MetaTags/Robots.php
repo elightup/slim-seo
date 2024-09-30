@@ -141,4 +141,9 @@ class Robots {
 
 		return $output;
 	}
+
+	private function get_author_value(): bool {
+		$option = get_option( 'slim_seo', [] );
+		return (bool) ( $option['author']['noindex'] ?? false );
+	}
 }
