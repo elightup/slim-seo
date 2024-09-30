@@ -20,7 +20,7 @@ const Author = ( { id, option } ) => {
 		{ !noindex &&
 			<Block
 				baseName={ baseName }
-				label={ __( 'Author archives', 'slim-seo' ) }
+				label={ __( 'Author archive page', 'slim-seo' ) }
 				option={ option }
 				defaultMetas={ ss.defaultAuthorMetas }
 			/>
