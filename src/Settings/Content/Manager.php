@@ -35,6 +35,7 @@ class Manager {
 			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
 			'defaultPostMetas'         => $this->get_default_post_metas(),
 			'defaultTermMetas'         => $this->get_default_term_metas(),
+			'defaultAuthorMetas'       => $this->get_default_author_metas(),
 			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 		] );
 	}
@@ -121,6 +122,13 @@ class Manager {
 		return [
 			'title'       => '{{ term.title }} {{ page }} {{ sep }} {{ site.title }}',
 			'description' => '{{ term.auto_description }}',
+		];
+	}
+
+	private function get_default_author_metas(): array {
+		return [
+			'title'       => '{{ author.display_name }} {{ author.description }}',
+			'description' => '',
 		];
 	}
 }

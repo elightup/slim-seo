@@ -4,6 +4,7 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Homepage from "./components/Homepage";
 import PostType from "./components/PostType";
 import Taxonomy from "./components/Taxonomy";
+import Author from "./components/Author";
 import { request } from "./functions";
 
 const App = () => {
@@ -40,6 +41,11 @@ const App = () => {
 					</Tab>
 				}
 				{ taxonomies.map( ( [ slug, taxonomy ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ taxonomy.label }</Tab> ) }
+				<Tab disabled={ true } className="react-tabs__tab ss-tab-heading">
+					{ __( 'Other', 'slim-seo' ) }
+					<span className="dashicons dashicons-arrow-down-alt2"></span>
+				</Tab>
+				<Tab className="react-tabs__tab ss-tab-item">{ __( 'Author', 'slim-seo' ) }</Tab>
 			</TabList>
 			<TabPanel>
 				<Homepage option={ option.home || {} } />
@@ -64,6 +70,10 @@ const App = () => {
 					</TabPanel>
 				) )
 			}
+			<TabPanel />
+			<TabPanel>
+				<Author option={ option.author || {} } />
+			</TabPanel>
 		</Tabs >
 		<input type="submit" name="submit" className="button button-primary" value={ __( 'Save Changes', 'slim-seo' ) } />
 	</>;
