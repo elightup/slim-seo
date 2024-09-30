@@ -83,9 +83,9 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 					onBlur={ handleBlur }
 					ref={ inputRef }
 				/>
+				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
-			{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };

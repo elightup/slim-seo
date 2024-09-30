@@ -82,9 +82,9 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 					onBlur={ handleBlur }
 					ref={ inputRef }
 				/>
+				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
-			{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };

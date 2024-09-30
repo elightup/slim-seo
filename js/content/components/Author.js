@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import Block from "./Fields/Block";
 import Checkbox from "./Fields/Checkbox";
 
-const Author = ( { id, option } ) => {
+const Author = ( { option } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[author]`;
 

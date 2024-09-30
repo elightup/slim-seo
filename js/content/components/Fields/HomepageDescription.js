@@ -55,9 +55,9 @@ const Description = ( { id, std = '', placeholder = '', description = '', min = 
 					onBlur={ handleBlur }
 					ref={ inputRef }
 				/>
+				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
-			{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };

@@ -55,9 +55,9 @@ const Title = ( { id, std = '', placeholder = '', max = 60, ...rest } ) => {
 					placeholder={ placeholder }
 					ref={ inputRef }
 				/>
+				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
-			{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 		</Control>
 	);
 };
