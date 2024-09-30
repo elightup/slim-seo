@@ -3,6 +3,7 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
+use SlimSEO\Helpers\Arr;
 use WP_Term;
 
 class Title {
@@ -40,13 +41,13 @@ class Title {
 
 	private function get_home_value(): string {
 		$option = get_option( 'slim_seo' );
-		return $option['home']['title'] ?? '';
+		return Arr::get( $option, 'home.title', '' );
 	}
 
 	private function get_post_type_archive_value(): string {
 		$post_type_object = get_queried_object();
 		$option           = get_option( 'slim_seo' );
-		return $option[ "{$post_type_object->name}_archive" ]['title'] ?? '';
+		return Arr::get( $option, "{$post_type_object->name}_archive.title", '' );
 	}
 
 	/**
@@ -76,12 +77,13 @@ class Title {
 			return $data['title'];
 		}
 
-		$option   = get_option( 'slim_seo', [] );
-		$term     = get_term( $term_id );
+		$term = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return '';
 		}
-		return $option[ $term->taxonomy ]['title'] ?? '';
+
+		$option = get_option( 'slim_seo', [] );
+		return Arr::get( $option, "{$term->taxonomy}.title", '' );
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {
@@ -90,6 +92,6 @@ class Title {
 
 	private function get_author_value(): string {
 		$option = get_option( 'slim_seo', [] );
-		return $option['author']['title'] ?? '';
+		return Arr::get( $option, 'author.title', '' );
 	}
 }

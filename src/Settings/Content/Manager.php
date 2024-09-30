@@ -58,6 +58,7 @@ class Manager {
 			$taxonomies
 		);
 		$items[] = 'home';
+		$items[] = 'author';
 
 		return $items;
 	}
@@ -128,7 +129,7 @@ class Manager {
 	private function get_default_author_metas(): array {
 		return [
 			'title'       => '{{ author.display_name }} {{ page }} {{ sep }} {{ site.title }}',
-			'description' => '{{ author.description }}',
+			'description' => '{{ author.auto_description }}',
 		];
 	}
 }

@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags;
 defined( 'ABSPATH' ) || die;
 
 use WP_Term;
+use SlimSEO\Helpers\Arr;
 
 class Robots {
 	use Context;
@@ -77,7 +78,7 @@ class Robots {
 	private function get_post_type_archive_value(): bool {
 		$post_type_object = get_queried_object();
 		$option           = get_option( 'slim_seo' );
-		return (bool) ( $option[ $post_type_object->name ]['noindex'] ?? false );
+		return (bool) Arr::get( $option, "{$post_type_object->name}.noindex", false );
 	}
 
 	/**
@@ -89,7 +90,7 @@ class Robots {
 		$post_type = get_post_type( $post_id );
 
 		$option            = get_option( 'slim_seo' );
-		$post_type_noindex = (bool) ( $option[ $post_type ]['noindex'] ?? false );
+		$post_type_noindex = (bool) Arr::get( $option, "{$post_type}.noindex", false );
 
 		$data         = get_post_meta( $post_id, 'slim_seo', true );
 		$post_noindex = (bool) ( $data['noindex'] ?? false );
@@ -109,8 +110,7 @@ class Robots {
 			return false;
 		}
 
-		$taxonomy         = $term->taxonomy;
-		$taxonomy_noindex = (bool) ( $option[ $taxonomy ]['noindex'] ?? false );
+		$taxonomy_noindex = (bool) Arr::get( $option, "{$term->taxonomy}.noindex", false );
 
 		$data         = get_term_meta( $term_id, 'slim_seo', true );
 		$term_noindex = (bool) ( $data['noindex'] ?? false );
@@ -144,6 +144,6 @@ class Robots {
 
 	private function get_author_value(): bool {
 		$option = get_option( 'slim_seo', [] );
-		return (bool) ( $option['author']['noindex'] ?? false );
+		return (bool) Arr::get( $option, 'author.noindex', false );
 	}
 }

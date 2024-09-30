@@ -113,8 +113,9 @@ class Data {
 			return [];
 		}
 		return [
-			'display_name' => $user->display_name,
-			'description'  => $user->description,
+			'display_name'     => $user->display_name,
+			'description'      => $user->description,
+			'auto_description' => $this->generate_auto_description( $user_id, $user->description ),
 		];
 	}
 
@@ -151,7 +152,7 @@ class Data {
 		];
 	}
 
-	private function generate_auto_description( ?int $id, string $description, string $content = null ): string {
+	private function generate_auto_description( ?int $id, string $description, string $content = '' ): string {
 		$result = $description ?: $content;
 		$result = Helper::render( $result, $id );
 		return mb_substr( $result, 0, 160 );

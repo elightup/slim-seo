@@ -108,12 +108,12 @@ class RestApi {
 		$variables[] = [
 			'label'   => __( 'Author', 'slim-seo' ),
 			'options' => [
-				'author.display_name' => __( 'Author display name', 'slim-seo' ),
-				'author.description'  => __( 'Author description', 'slim-seo' ),
+				'author.display_name'     => __( 'Author display name', 'slim-seo' ),
+				'author.description'      => __( 'Author description', 'slim-seo' ),
+				'author.auto_description' => __( 'Author auto description', 'slim-seo' ),
 			],
 		];
 		$variables[] = [
-
 			'label'   => __( 'Current user', 'slim-seo' ),
 			'options' => [
 				'user.display_name' => __( 'User display name', 'slim-seo' ),
