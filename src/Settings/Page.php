@@ -76,7 +76,7 @@ class Page {
 									<li><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'Supports dynamic data', 'slim-seo' ) ?></li>
 									<li><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'Connects schemas together', 'slim-seo' ) ?></li>
 								</ul>
-								<a class="button button-primary" href="https://elu.to/ssp" target="_blank">
+								<a class="button button-primary" href="https://elu.to/sss" target="_blank">
 									<?php // Translators: %s - plugin name ?>
 									<?= esc_html( sprintf( __( 'Get %s', 'slim-seo' ), 'Slim SEO Schema' ) ); ?> &rarr;
 								</a>
@@ -100,7 +100,7 @@ class Page {
 									<li><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'Auto updates internal links', 'slim-seo' ) ?></li>
 									<li><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'Provides insightful reports', 'slim-seo' ) ?></li>
 								</ul>
-								<a class="button button-primary" href="https://elu.to/ssp" target="_blank">
+								<a class="button button-primary" href="https://elu.to/sslm" target="_blank">
 									<?php // Translators: %s - plugin name ?>
 									<?= esc_html( sprintf( __( 'Get %s', 'slim-seo' ), 'Slim SEO Link Manager' ) ); ?> &rarr;
 								</a>
