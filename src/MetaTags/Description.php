@@ -9,8 +9,6 @@ use SlimSEO\Helpers\Option;
 class Description {
 	use Context;
 
-	private $is_manual = false;
-
 	public function setup() {
 		$this->add_excerpt_to_pages();
 		add_action( 'wp_head', [ $this, 'output' ] );
@@ -34,18 +32,8 @@ class Description {
 		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, $this->get_queried_object_id() );
 		$description = Helper::render( $description );
-		$description = $this->check_manual( $description );
 
 		return $description;
-	}
-
-	private function check_manual( string $description ): string {
-		$is_manual = apply_filters( 'slim_seo_meta_description_manual', $this->is_manual );
-		return $is_manual ? $description : $this->truncate( $description );
-	}
-
-	private function truncate( string $text ): string {
-		return mb_substr( $text, 0, 160 );
 	}
 
 	private function get_home_value(): string {
@@ -76,7 +64,6 @@ class Description {
 		// Use manual entered meta description if available.
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
-			$this->is_manual = true;
 			return $data['description'];
 		}
 
@@ -100,7 +87,6 @@ class Description {
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
-			$this->is_manual = true;
 			return $data['description'];
 		}
 
