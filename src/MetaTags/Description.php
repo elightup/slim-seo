@@ -37,7 +37,7 @@ class Description {
 	}
 
 	private function get_home_value(): string {
-		return Option::get( 'home.description', get_bloginfo( 'description' ) );
+		return Option::get( 'home.description', '{{ site.description }}' );
 	}
 
 	private function get_post_type_archive_value(): string {
@@ -67,20 +67,10 @@ class Description {
 			return $data['description'];
 		}
 
-		// Use post types settings if avaiable
-		$option    = get_option( 'slim_seo', [] );
 		$post_type = get_post_type( $post_id );
-		if ( ! empty( $option[ $post_type ]['description'] ) ) {
-			return $option[ $post_type ]['description'];
-		}
 
-		// Use post excerpt if available.
-		if ( $post->post_excerpt ) {
-			return $post->post_excerpt;
-		}
-
-		// Use post content (which page builders can change) at last.
-		return apply_filters( 'slim_seo_meta_description_generated', $post->post_content, $post );
+		// Use post type settings if avaiable, then fallback to the post auto description
+		return Option::get( "$post_type.description", '{{ post.auto_description }}' );
 	}
 
 	public function get_term_value( $term_id = null ): string {
@@ -95,12 +85,12 @@ class Description {
 			return '';
 		}
 
-		// Use taxonomy settings if avaiable, then fallback to the term description
-		return Option::get( "{$term->taxonomy}.description", $term->description );
+		// Use taxonomy settings if avaiable, then fallback to the term auto description
+		return Option::get( "{$term->taxonomy}.description", '{{ term.auto_description }}' );
 	}
 
 	private function get_author_value(): string {
-		// Use author settings if avaiable, then fallback to the author description
-		return Option::get( 'author.description', get_user_meta( get_queried_object_id(), 'description', true ) );
+		// Use author settings if avaiable, then fallback to the author auto description
+		return Option::get( 'author.description', '{{ author.auto_description }}' );
 	}
 }
