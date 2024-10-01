@@ -120,7 +120,7 @@ class Preview {
 
 		if ( $description ) {
 			$data['term']['description']      = $description;
-			$data['term']['auto_description'] = Helper::generate_auto_description( $id, $description );
+			$data['term']['auto_description'] = Helper::truncate( $description );
 		}
 
 		$default = $this->get_default_term_description( $id );
@@ -156,7 +156,7 @@ class Preview {
 		$data['post'] = array_filter( [
 			'excerpt'          => $excerpt,
 			'content'          => $content,
-			'auto_description' => Helper::generate_auto_description( $id, $excerpt ?: $content ),
+			'auto_description' => Helper::truncate( $excerpt ?: $content ),
 		] );
 		$data         = array_filter( $data );
 

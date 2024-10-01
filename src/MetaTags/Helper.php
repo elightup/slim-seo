@@ -125,8 +125,7 @@ class Helper {
 		return $value;
 	}
 
-	public static function generate_auto_description( ?int $id, string $description ): string {
-		$description = self::render( $description, $id );
-		return mb_substr( $description, 0, 160 );
+	public static function truncate( string $text, int $max = 160 ): string {
+		return mb_substr( $text, 0, $max );
 	}
 }

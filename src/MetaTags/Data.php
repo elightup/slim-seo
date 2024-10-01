@@ -58,7 +58,7 @@ class Data {
 			'title'            => $post->post_title,
 			'excerpt'          => $post->post_excerpt,
 			'content'          => $post_content,
-			'auto_description' => Helper::generate_auto_description( $post->ID, $post->post_excerpt ?: $post_content ),
+			'auto_description' => Helper::truncate( $post->post_excerpt ?: $post_content ),
 			'date'             => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
 			'modified_date'    => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
 			'thumbnail'        => get_the_post_thumbnail_url( $post->ID, 'full' ),
@@ -104,7 +104,7 @@ class Data {
 		return [
 			'name'             => $term->name,
 			'description'      => $term->description,
-			'auto_description' => Helper::generate_auto_description( $term->term_id, $term->description ),
+			'auto_description' => Helper::truncate( $term->description ),
 		];
 	}
 
@@ -124,7 +124,7 @@ class Data {
 		return [
 			'display_name'     => $user->display_name,
 			'description'      => $user->description,
-			'auto_description' => Helper::generate_auto_description( $user_id, $user->description ),
+			'auto_description' => Helper::truncate( $user->description ),
 		];
 	}
 
