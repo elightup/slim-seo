@@ -14,7 +14,7 @@ const Author = ( { option } ) => {
 			id={ `${ baseName }[noindex]` }
 			std={ option.noindex }
 			label={ __( 'Hide from search results', 'slim-seo' ) }
-			description={ __( 'This setting will apply noindex robots tag to author page.', 'slim-seo' ) }
+			description={ __( 'This setting will apply noindex robots tag to author pages.', 'slim-seo' ) }
 			onChange={ handleChange }
 		/>
 		{ !noindex &&

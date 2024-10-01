@@ -1,10 +1,10 @@
 import { createRoot, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import Author from "./components/Author";
 import Homepage from "./components/Homepage";
 import PostType from "./components/PostType";
 import Taxonomy from "./components/Taxonomy";
-import Author from "./components/Author";
 import { request } from "./functions";
 
 const App = () => {
