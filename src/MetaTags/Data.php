@@ -51,7 +51,7 @@ class Data {
 			'title'            => $post->post_title,
 			'excerpt'          => $post->post_excerpt,
 			'content'          => $post_content,
-			'auto_description' => $this->generate_auto_description( $id, $post->post_excerpt, $post_content ),
+			'auto_description' => Helper::generate_auto_description( $id, $post->post_excerpt ?: $post_content ),
 			'date'             => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
 			'modified_date'    => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
 			'thumbnail'        => get_the_post_thumbnail_url( $post->ID, 'full' ),
@@ -95,7 +95,7 @@ class Data {
 		return [
 			'name'             => $term->name,
 			'description'      => $term->description,
-			'auto_description' => $this->generate_auto_description( $id, $term->description ),
+			'auto_description' => Helper::generate_auto_description( $id, $term->description ),
 		];
 	}
 
@@ -115,7 +115,7 @@ class Data {
 		return [
 			'display_name'     => $user->display_name,
 			'description'      => $user->description,
-			'auto_description' => $this->generate_auto_description( $user_id, $user->description ),
+			'auto_description' => Helper::generate_auto_description( $user_id, $user->description ),
 		];
 	}
 
@@ -150,12 +150,6 @@ class Data {
 			'page'    => $paged >= 2 || $page >= 2 ? sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) ) : '',
 			'sep'     => apply_filters( 'document_title_separator', '-' ),
 		];
-	}
-
-	private function generate_auto_description( ?int $id, string $description, string $content = '' ): string {
-		$result = $description ?: $content;
-		$result = Helper::render( $result, $id );
-		return mb_substr( $result, 0, 160 );
 	}
 
 	private function normalize( $key ) {

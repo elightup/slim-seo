@@ -74,10 +74,7 @@ class RestApi {
 		}
 
 		$default = $object_type === 'post' ? $this->get_default_post_title( $id ) : $this->get_default_term_title( $id );
-		$preview = Helper::render( $text, $id, $data );
-		if ( ! $preview ) {
-			$preview = Helper::render( $default, $id, $data );
-		}
+		$preview = Helper::render( $text ?: $default, $id, $data );
 
 		return compact( 'preview', 'default' );
 	}
@@ -88,8 +85,8 @@ class RestApi {
 			$default = '{{ site.title }} {{ sep }} {{ site.description }}';
 			$key     = 'home';
 		} else {
-			$default = '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
-			$key     = get_post_type( $post_id );
+		$default = '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
+		$key     = get_post_type( $post_id );
 		}
 
 		return $key ? Option::get( "$key.title", $default ) : $default;
@@ -119,14 +116,11 @@ class RestApi {
 
 		if ( $description ) {
 			$data[ 'term' ][ 'description' ]      = $description;
-			$data[ 'term' ][ 'auto_description' ] = $this->generate_auto_description( $id, $description );
+			$data[ 'term' ][ 'auto_description' ] = Helper::generate_auto_description( $id, $description );
 		}
 
 		$default = $this->get_default_term_description( $id );
-		$preview = Helper::render( $text, $id, $data );
-		if ( ! $preview ) {
-			$preview = Helper::render( $default, $id, $data );
-		}
+		$preview = Helper::render( $text ?: $default, $id, $data );
 
 		return compact( 'preview', 'default' );
 	}
@@ -158,15 +152,12 @@ class RestApi {
 		$data['post'] = array_filter( [
 			'excerpt'          => $excerpt,
 			'content'          => $content,
-			'auto_description' => $this->generate_auto_description( $id, $excerpt, $content ),
+			'auto_description' => Helper::generate_auto_description( $id, $excerpt ?: $content ),
 		] );
 		$data = array_filter( $data );
 
 		$default = $this->get_default_post_description( $id );
-		$preview = Helper::render( $text, $id, $data );
-		if ( ! $preview ) {
-			$preview = Helper::render( $default, $id, $data );
-		}
+		$preview = Helper::render( $text ?: $default, $id, $data );
 
 		return compact( 'preview', 'default' );
 	}
@@ -177,12 +168,6 @@ class RestApi {
 		$key     = $is_home ? 'home' : get_post_type( $post_id );
 
 		return $key ? Option::get( "$key.description", $default ) : $default;
-	}
-
-	private function generate_auto_description( int $id, string $description, string $content = null ): string {
-		$result = $description ?: $content;
-		$result = Helper::render( $result, $id );
-		return mb_substr( $result, 0, 160 );
 	}
 
 	public function render_text( WP_REST_Request $request ): string {
