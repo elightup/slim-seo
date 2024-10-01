@@ -7,7 +7,7 @@ use WP_Term;
 use SlimSEO\Helpers\Option;
 use SlimSEO\MetaTags\Helper;
 
-class RestApi {
+class Preview {
 	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
