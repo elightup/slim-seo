@@ -121,7 +121,7 @@ class Manager {
 
 	private function get_default_term_metas(): array {
 		return [
-			'title'       => '{{ term.title }} {{ page }} {{ sep }} {{ site.title }}',
+			'title'       => '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}',
 			'description' => '{{ term.auto_description }}',
 		];
 	}

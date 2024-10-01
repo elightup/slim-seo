@@ -93,7 +93,7 @@ class RestApi {
 	}
 
 	private function get_default_term_title( int $term_id ): string {
-		$default = '{{ term.title }} {{ page }} {{ sep }} {{ site.title }}';
+		$default = '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}';
 		$term    = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return $default;
