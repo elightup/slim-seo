@@ -101,11 +101,19 @@ class Helper {
 		return array_values( $taxonomies );
 	}
 
-	public static function render( $text, $id = null, array $data = [] ): string {
+	public static function render( string $text, ?int $post_id = null, ?int $term_id = null, array $data = [] ): string {
 		if ( ! self::$renderer ) {
 			self::$renderer    = new Renderer;
 			$data_object       = new Data;
-			self::$render_data = $data_object->collect( $id );
+
+			if ( $post_id ) {
+				$data_object->set_post_id( $post_id );
+			}
+			if ( $term_id ) {
+				$data_object->set_term_id( $term_id );
+			}
+
+			self::$render_data = $data_object->collect();
 		}
 		if ( ! empty( $data ) ) {
 			self::$render_data = Arr::merge_recursive( self::$render_data, $data );

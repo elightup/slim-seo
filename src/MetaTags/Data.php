@@ -2,17 +2,29 @@
 namespace SlimSEO\MetaTags;
 
 use WP_Post;
+use WP_Term;
 use WP_Post_Type;
 use SlimSEO\Helpers\Arr;
 
 class Data {
 	private $data = [];
 
-	public function collect( $id = null ): array {
+	private $post_id = 0;
+	private $term_id = 0;
+
+	public function set_post_id( int $post_id ): void {
+		$this->post_id = $post_id;
+	}
+
+	public function set_term_id( int $term_id ): void {
+		$this->term_id = $term_id;
+	}
+
+	public function collect(): array {
 		$this->data = array_merge(
-			[ 'post' => $this->get_post_data( $id ) ],
+			[ 'post' => $this->get_post_data() ],
 			[ 'post_type' => $this->get_post_type_data() ],
-			[ 'term' => $this->get_term_data( $id ) ],
+			[ 'term' => $this->get_term_data() ],
 			[ 'author' => $this->get_author_data() ],
 			[ 'user' => $this->get_user_data() ],
 			[ 'site' => $this->get_site_data() ],
@@ -20,17 +32,12 @@ class Data {
 		);
 		$this->data = apply_filters( 'slim_seo_data', $this->data );
 
-		// Truncate the post content and set word count.
-		$post_content = Helper::normalize( Arr::get( $this->data, 'post.content', '' ) );
-		Arr::set( $this->data, 'post.content', $post_content );
-		Arr::set( $this->data, 'post.word_count', str_word_count( $post_content ) );
-
 		return $this->data;
 	}
 
-	private function get_post_data( $id = null ): array {
-		if ( $id ) {
-			$post = get_post( $id );
+	private function get_post_data(): array {
+		if ( $this->post_id ) {
+			$post = get_post( $this->post_id );
 		} else {
 			$post = is_singular() ? get_queried_object() : get_post();
 		}
@@ -51,7 +58,7 @@ class Data {
 			'title'            => $post->post_title,
 			'excerpt'          => $post->post_excerpt,
 			'content'          => $post_content,
-			'auto_description' => Helper::generate_auto_description( $id, $post->post_excerpt ?: $post_content ),
+			'auto_description' => Helper::generate_auto_description( $post->ID, $post->post_excerpt ?: $post_content ),
 			'date'             => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
 			'modified_date'    => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
 			'thumbnail'        => get_the_post_thumbnail_url( $post->ID, 'full' ),
@@ -81,21 +88,23 @@ class Data {
 		];
 	}
 
-	private function get_term_data( $id = null ): array {
-		if ( $id ) {
-			$term = get_term( $id );
-		} else {
+	private function get_term_data(): array {
+		$term = null;
+
+		if ( $this->term_id ) {
+			$term = get_term( $this->term_id );
+		} elseif ( is_category() || is_tag() || is_tax() ) {
 			$term = get_queried_object();
 		}
 
-		if ( empty( $term ) || ( ! $id && ! ( is_category() || is_tag() || is_tax() ) ) ) {
+		if ( ! ( $term instanceof WP_Term ) ) {
 			return [];
 		}
 
 		return [
 			'name'             => $term->name,
 			'description'      => $term->description,
-			'auto_description' => Helper::generate_auto_description( $id, $term->description ),
+			'auto_description' => Helper::generate_auto_description( $term->term_id, $term->description ),
 		];
 	}
 
