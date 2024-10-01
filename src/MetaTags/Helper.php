@@ -55,7 +55,6 @@ class Helper {
 		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
 		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
 
-
 		// Remove lonely separator
 		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
 		$text      = trim( $text );
@@ -92,7 +91,7 @@ class Helper {
 		];
 		$taxonomies  = get_taxonomies( [], 'objects' );
 		$taxonomies  = array_diff_key( $taxonomies, array_flip( $unsupported ) );
-		$taxonomies  = array_map( function( $taxonomy ) {
+		$taxonomies  = array_map( function ( $taxonomy ) {
 			return [
 				'slug' => $taxonomy->name,
 				'name' => $taxonomy->label,
@@ -113,7 +112,7 @@ class Helper {
 		}
 
 		$value = self::$renderer->render( $text, self::$render_data );
-		$value = Helper::normalize( $value );
+		$value = self::normalize( $value );
 
 		return $value;
 	}

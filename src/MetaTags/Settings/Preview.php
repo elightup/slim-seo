@@ -115,8 +115,8 @@ class Preview {
 		$data        = [];
 
 		if ( $description ) {
-			$data[ 'term' ][ 'description' ]      = $description;
-			$data[ 'term' ][ 'auto_description' ] = Helper::generate_auto_description( $id, $description );
+			$data['term']['description']      = $description;
+			$data['term']['auto_description'] = Helper::generate_auto_description( $id, $description );
 		}
 
 		$default = $this->get_default_term_description( $id );
@@ -148,13 +148,13 @@ class Preview {
 		$content = (string) $request->get_param( 'content' ); // Live content
 		$content = apply_filters( 'slim_seo_meta_description_generated', $content, get_post( $id ) );
 
-		$data = [];
+		$data         = [];
 		$data['post'] = array_filter( [
 			'excerpt'          => $excerpt,
 			'content'          => $content,
 			'auto_description' => Helper::generate_auto_description( $id, $excerpt ?: $content ),
 		] );
-		$data = array_filter( $data );
+		$data         = array_filter( $data );
 
 		$default = $this->get_default_post_description( $id );
 		$preview = Helper::render( $text ?: $default, $id, $data );

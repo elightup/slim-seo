@@ -68,8 +68,8 @@ class Image {
 	}
 
 	private function get_author_value(): array {
-		$url    = Option::get( "author.{$this->meta_key}", '' );
-		return $url? $this->get_from_settings( $url ) : [];
+		$url = Option::get( "author.{$this->meta_key}", '' );
+		return $url ? $this->get_from_settings( $url ) : [];
 	}
 
 	public function get_data_from_url( $url ): array {

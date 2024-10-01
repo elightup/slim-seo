@@ -1,5 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
+
 use SlimSEO\Helpers\Assets;
 
 abstract class Base {

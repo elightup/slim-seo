@@ -5,7 +5,7 @@ use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
 
 class Manager {
-	private $defaults   = [
+	private $defaults = [
 		'title'          => '',
 		'description'    => '',
 		'facebook_image' => '',
@@ -36,10 +36,10 @@ class Manager {
 	private function get_home_data(): array {
 		return array_merge( $this->defaults, [
 			'link'        => get_home_url(),
-			'name'        => get_the_title( get_option('page_on_front') ),
+			'name'        => get_the_title( get_option( 'page_on_front' ) ),
 			'title'       => '{{ site.title }} {{ sep }} {{ site.description }}',
 			'description' => '{{ site.description }}',
-			'edit'        => get_edit_post_link( get_option('page_on_front') ),
+			'edit'        => get_edit_post_link( get_option( 'page_on_front' ) ),
 		] );
 	}
 

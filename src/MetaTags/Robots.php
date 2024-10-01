@@ -101,8 +101,8 @@ class Robots {
 	 * @see AdminColumns/Term.php.
 	 */
 	public function get_term_value( $term_id = 0 ): bool {
-		$term_id  = $term_id ?: get_queried_object_id();
-		$term     = get_term( $term_id );
+		$term_id = $term_id ?: get_queried_object_id();
+		$term    = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return false;
 		}
@@ -134,7 +134,7 @@ class Robots {
 		$content .= "Disallow: /search/\n";
 
 		$content = apply_filters( 'slim_seo_robots_txt', $content );
-		$output  = str_replace( "Allow:", "{$content}Allow:", $output );
+		$output  = str_replace( 'Allow:', "{$content}Allow:", $output );
 
 		return $output;
 	}

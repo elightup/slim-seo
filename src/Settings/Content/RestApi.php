@@ -64,7 +64,7 @@ class RestApi {
 
 		$taxonomy_options = [];
 		foreach ( $taxonomies as $taxonomy ) {
-			$key                          = $this->normalize( $taxonomy->name );
+			$key                                   = $this->normalize( $taxonomy->name );
 			$taxonomy_options[ "post.tax.{$key}" ] = $taxonomy->label;
 		}
 
@@ -97,7 +97,7 @@ class RestApi {
 				'post_type.plural'   => __( 'Plural', 'slim-seo' ),
 			],
 		];
-		$variables[]     = [
+		$variables[] = [
 			'label'   => __( 'Term', 'slim-seo' ),
 			'options' => [
 				'term.name'             => __( 'Term name', 'slim-seo' ),
