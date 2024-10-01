@@ -5,23 +5,12 @@ use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
 
 class Manager {
-	private $items = [];
-
-	public function setup() {
-		add_action( 'admin_init', [ $this, 'admin_init' ] );
-	}
-
-	public function admin_init(): void {
-		$items = $this->get_content_items();
-
-		foreach ( $items as $item ) {
-			$this->items[ $item ] = new Item( $item );
-		}
-	}
-
-	public function get( string $name ): Item {
-		return $this->items[ $name ];
-	}
+	private $defaults   = [
+		'title'          => '',
+		'description'    => '',
+		'facebook_image' => '',
+		'twitter_image'  => '',
+	];
 
 	public function enqueue(): void {
 		wp_enqueue_media();
@@ -29,7 +18,7 @@ class Manager {
 		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [], filemtime( SLIM_SEO_DIR . '/css/content.css' ) );
 		Assets::enqueue_build_js( 'content', 'ss', [
 			'hasHomepageSettings'      => $this->has_homepage_settings(),
-			'homepage'                 => $this->items['home']->get_home_data(),
+			'homepage'                 => $this->get_home_data(),
 			'postTypes'                => Data::get_post_types(),
 			'taxonomies'               => Data::get_taxonomies(),
 			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
@@ -42,6 +31,16 @@ class Manager {
 
 	private function has_homepage_settings(): bool {
 		return 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' );
+	}
+
+	private function get_home_data(): array {
+		return array_merge( $this->defaults, [
+			'link'        => get_home_url(),
+			'name'        => get_the_title( get_option('page_on_front') ),
+			'title'       => '{{ site.title }} {{ sep }} {{ site.description }}',
+			'description' => '{{ site.description }}',
+			'edit'        => get_edit_post_link( get_option('page_on_front') ),
+		] );
 	}
 
 	private function get_content_items(): array {
@@ -69,19 +68,25 @@ class Manager {
 			if ( empty( $data[ $item ] ) ) {
 				unset( $option[ $item ] );
 			}
-		}
 
-		foreach ( $this->items as $key => $item ) {
-			if ( ! isset( $option[ $key ] ) ) {
-				continue;
-			}
-			$temp = $item->sanitize( $option[ $key ] );
+			$temp = $item->sanitize_item( $option[ $item ] );
 			if ( empty( $temp ) ) {
-				unset( $option[ $key ] );
+				unset( $option[ $item ] );
 			} else {
-				$option[ $key ] = $temp;
+				$option[ $item ] = $temp;
 			}
 		}
+	}
+
+	private function sanitize_item( array $data ): array {
+		$data = array_merge( $this->defaults, $data );
+
+		$data['title']          = sanitize_text_field( $data['title'] );
+		$data['description']    = sanitize_text_field( $data['description'] );
+		$data['facebook_image'] = sanitize_text_field( $data['facebook_image'] );
+		$data['twitter_image']  = sanitize_text_field( $data['twitter_image'] );
+
+		return array_filter( $data );
 	}
 
 	private function get_post_types_with_archive_page(): array {

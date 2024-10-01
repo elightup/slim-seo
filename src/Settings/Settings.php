@@ -29,11 +29,11 @@ class Settings {
 		],
 	];
 
-	public function __construct( Content\Manager $content_manager ) {
-		$this->content_manager = $content_manager;
+	public function __construct() {
+		$this->content_manager = new Content\Manager;
 	}
 
-	public function setup() {
+	public function setup(): void {
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 1 );
 		add_filter( 'slim_seo_settings_tabs', [ $this, 'add_tabs' ], 1 );
 		add_filter( 'slim_seo_settings_panes', [ $this, 'add_panes' ], 1 );

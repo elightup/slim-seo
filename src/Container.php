@@ -32,8 +32,7 @@ class Container {
 		$services['divi']           = new Integrations\Divi;
 		$services['mylisting']      = new Integrations\MyListing;
 
-		$services['content_manager']   = new Settings\Content\Manager;
-		$services['settings']          = new Settings\Settings( $services['content_manager'] );
+		$services['settings']          = new Settings\Settings;
 		$services['code']              = new Code( $services['settings'] );
 		$services['content_rest_api']  = new Settings\Content\RestApi;
 
