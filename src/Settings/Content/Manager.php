@@ -67,9 +67,10 @@ class Manager {
 		foreach ( $items as $item ) {
 			if ( empty( $data[ $item ] ) ) {
 				unset( $option[ $item ] );
+				continue;
 			}
 
-			$temp = $item->sanitize_item( $option[ $item ] );
+			$temp = $this->sanitize_item( $option[ $item ] );
 			if ( empty( $temp ) ) {
 				unset( $option[ $item ] );
 			} else {
