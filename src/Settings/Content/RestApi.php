@@ -11,25 +11,25 @@ class RestApi {
 
 	public function register_routes(): void {
 		register_rest_route( 'slim-seo', '/content/option', [
-			'methods'             => WP_REST_Server::READABLE,
+			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
 		register_rest_route( 'slim-seo', '/content/variables', [
-			'methods'             => WP_REST_Server::READABLE,
+			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
 		register_rest_route( 'slim-seo', '/content/image_variables', [
-			'methods'             => WP_REST_Server::READABLE,
+			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_image_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
 		register_rest_route( 'slim-seo', '/content/meta_keys', [
-			'methods'             => WP_REST_Server::READABLE,
+			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_meta_keys' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );

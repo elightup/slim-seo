@@ -3,7 +3,7 @@ import { addQueryArgs } from '@wordpress/url';
 
 let apiCache = {};
 
-export const request = async ( apiName, data = {}, method = 'GET', cache = true ) => {
+export const request = async ( apiName, data = {}, method = 'POST', cache = true ) => {
 	const cacheKey = JSON.stringify( { apiName, data, method } );
 	if ( cache && apiCache[ cacheKey ] ) {
 		return apiCache[ cacheKey ];
