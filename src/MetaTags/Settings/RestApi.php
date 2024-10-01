@@ -80,14 +80,14 @@ class RestApi {
 	}
 
 	private function get_default_post_title( int $post_id ): string {
-		$is_home = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
-		if ( $is_home ) {
-			$default = '{{ site.title }} {{ sep }} {{ site.description }}';
-			$key     = 'home';
-		} else {
+		// For static frontpage: don't use page's settings, use WordPress default instead.
+		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
+		if ( $is_static_frontpage ) {
+			return '{{ site.title }} {{ sep }} {{ site.description }}';
+		}
+
 		$default = '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
 		$key     = get_post_type( $post_id );
-		}
 
 		return $key ? Option::get( "$key.title", $default ) : $default;
 	}
@@ -164,8 +164,7 @@ class RestApi {
 
 	private function get_default_post_description( int $post_id ): string {
 		$default = '{{ post.auto_description }}';
-		$is_home = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
-		$key     = $is_home ? 'home' : get_post_type( $post_id );
+		$key     = get_post_type( $post_id );
 
 		return $key ? Option::get( "$key.description", $default ) : $default;
 	}
