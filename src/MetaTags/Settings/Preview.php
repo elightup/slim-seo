@@ -75,9 +75,9 @@ class Preview {
 
 		$default = $object_type === 'post' ? $this->get_default_post_title( $id ) : $this->get_default_term_title( $id );
 		if ( $object_type === 'post' ) {
-			$preview = Helper::render( $text ?: $default, $id, null, $data );
+			$preview = Helper::render( $text ?: $default, $id, 0, $data );
 		} else {
-			$preview = Helper::render( $text ?: $default, null, $id, $data );
+			$preview = Helper::render( $text ?: $default, 0, $id, $data );
 		}
 
 		return compact( 'preview', 'default' );
@@ -124,7 +124,7 @@ class Preview {
 		}
 
 		$default = $this->get_default_term_description( $id );
-		$preview = Helper::render( $text ?: $default, null, $id, $data );
+		$preview = Helper::render( $text ?: $default, 0, $id, $data );
 
 		return compact( 'preview', 'default' );
 	}
@@ -161,7 +161,7 @@ class Preview {
 		$data         = array_filter( $data );
 
 		$default = $this->get_default_post_description( $id );
-		$preview = Helper::render( $text ?: $default, $id, null, $data );
+		$preview = Helper::render( $text ?: $default, $id, 0, $data );
 
 		return compact( 'preview', 'default' );
 	}

@@ -5,10 +5,7 @@ use SlimTwig\Renderer;
 use SlimSEO\Helpers\Arr;
 
 class Helper {
-	private static $renderer;
-	private static $render_data;
-
-	public static function normalize( $text ) {
+	public static function normalize( $text ): string {
 		global $shortcode_tags;
 
 		/**
@@ -101,10 +98,12 @@ class Helper {
 		return array_values( $taxonomies );
 	}
 
-	public static function render( string $text, ?int $post_id = null, ?int $term_id = null, array $data = [] ): string {
-		if ( ! self::$renderer ) {
-			self::$renderer    = new Renderer;
-			$data_object       = new Data;
+	public static function render( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
+		static $cache = [];
+
+		$key = "{$post_id}:{$term_id}";
+		if ( empty( $cache[ $key ] ) ) {
+			$data_object = new Data;
 
 			if ( $post_id ) {
 				$data_object->set_post_id( $post_id );
@@ -113,19 +112,23 @@ class Helper {
 				$data_object->set_term_id( $term_id );
 			}
 
-			self::$render_data = $data_object->collect();
-		}
-		if ( ! empty( $data ) ) {
-			self::$render_data = Arr::merge_recursive( self::$render_data, $data );
+			$cache[ $key ] = $data_object->collect();
 		}
 
-		$value = self::$renderer->render( $text, self::$render_data );
+		$render_data = $cache[ $key ];
+
+		if ( ! empty( $data ) ) {
+			$render_data = Arr::merge_recursive( $render_data, $data );
+		}
+
+		$value = Renderer::render( $text, $render_data );
 		$value = self::normalize( $value );
 
 		return $value;
 	}
 
 	public static function truncate( string $text, int $max = 160 ): string {
+		$text = self::normalize( $text );
 		return mb_substr( $text, 0, $max );
 	}
 }
