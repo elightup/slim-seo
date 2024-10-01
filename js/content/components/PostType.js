@@ -9,9 +9,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 	const baseName = `slim_seo[${ id }]`;
 	const baseNameArchive = `slim_seo[${ id }_archive]`;
 
-	const handleChange = e => {
-		setNoIndex( e.target.checked );
-	};
+	const handleChange = e => setNoIndex( e.target.checked );
 
 	return <>
 		<Checkbox
@@ -26,7 +24,8 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 				baseName={ baseName }
 				option={ option }
 				label={ sprintf( __( 'Singular %s', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
-				descriptionInstruction={ __( 'Recommended length: 50-160 characters. Leave empty to autogenerate from the post exceprt (if available) or the post content.', 'slim-seo' ) }
+				defaultMetas={ ss.defaultPostMetas.single }
+				facebookImageInstruction={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
 			/>
 		}
 		{ !noindex &&
@@ -41,6 +40,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 					<Block
 						baseName={ baseNameArchive }
 						option={ optionArchive }
+						defaultMetas={ ss.defaultPostMetas.archive }
 						label={ sprintf( __( '%s archive', 'slim-seo' ), postType.labels.singular_name ) }
 						archive={ true }
 					/>

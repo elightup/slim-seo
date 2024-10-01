@@ -2,12 +2,10 @@
 namespace SlimSEO\MetaTags;
 
 use SlimTwig\Renderer;
+use SlimSEO\Helpers\Arr;
 
 class Helper {
-	private static $renderer;
-	private static $render_data;
-
-	public static function normalize( $text ) {
+	public static function normalize( $text ): string {
 		global $shortcode_tags;
 
 		/**
@@ -54,6 +52,11 @@ class Helper {
 		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
 		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
 
+		// Remove lonely separator
+		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
+		$text      = trim( $text );
+		$text      = trim( $text, $separator );
+
 		// Remove extra white spaces.
 		$text = preg_replace( '/\s+/', ' ', $text );
 		$text = trim( $text );
@@ -73,16 +76,6 @@ class Helper {
 		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
 	}
 
-	public static function render( $text ): string {
-		if ( ! self::$renderer ) {
-			self::$renderer    = new Renderer;
-			$data_object       = new Data;
-			self::$render_data = $data_object->collect();
-		}
-
-		return self::$renderer->render( $text, self::$render_data );
-	}
-
 	public static function get_taxonomies() {
 		$unsupported = [
 			'wp_theme',
@@ -95,7 +88,7 @@ class Helper {
 		];
 		$taxonomies  = get_taxonomies( [], 'objects' );
 		$taxonomies  = array_diff_key( $taxonomies, array_flip( $unsupported ) );
-		$taxonomies  = array_map( function( $taxonomy ) {
+		$taxonomies  = array_map( function ( $taxonomy ) {
 			return [
 				'slug' => $taxonomy->name,
 				'name' => $taxonomy->label,
@@ -103,5 +96,39 @@ class Helper {
 		}, $taxonomies );
 
 		return array_values( $taxonomies );
+	}
+
+	public static function render( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
+		static $cache = [];
+
+		$key = "{$post_id}:{$term_id}";
+		if ( empty( $cache[ $key ] ) ) {
+			$data_object = new Data;
+
+			if ( $post_id ) {
+				$data_object->set_post_id( $post_id );
+			}
+			if ( $term_id ) {
+				$data_object->set_term_id( $term_id );
+			}
+
+			$cache[ $key ] = $data_object->collect();
+		}
+
+		$render_data = $cache[ $key ];
+
+		if ( ! empty( $data ) ) {
+			$render_data = Arr::merge_recursive( $render_data, $data );
+		}
+
+		$value = Renderer::render( $text, $render_data );
+		$value = self::normalize( $value );
+
+		return $value;
+	}
+
+	public static function truncate( string $text, int $max = 160 ): string {
+		$text = self::normalize( $text );
+		return mb_substr( $text, 0, $max );
 	}
 }

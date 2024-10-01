@@ -1,33 +1,30 @@
 import { createRoot, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import Homepage from "./components/Fields/Homepage";
+import Author from "./components/Author";
+import Homepage from "./components/Homepage";
 import PostType from "./components/PostType";
 import Taxonomy from "./components/Taxonomy";
 import { request } from "./functions";
 
 const App = () => {
-	const [ loading, setLoading ] = useState( false );
+	const [ loaded, setLoaded ] = useState( false );
 	const [ option, setOption ] = useState( {} );
 
 	useEffect( () => {
 		request( 'content/option' ).then( ( res ) => {
 			setOption( res );
-			setLoading( true );
+			setLoaded( true );
 		} );
 	}, [] );
 
 	const postTypes = Object.entries( ss.postTypes );
 	const taxonomies = Object.entries( ss.taxonomies );
 
-	if ( !loading ) {
-		return null;
-	}
-
-	return <>
+	return loaded && <>
 		<Tabs forceRenderTabPanel={ true } className="ss-vertical-tabs">
 			<TabList>
-				{ ss.hasHomepageSettings && <Tab>{ __( 'Homepage', 'slim-seo' ) }</Tab> }
+				<Tab>{ __( 'Homepage', 'slim-seo' ) }</Tab>
 				{
 					postTypes.length > 1 &&
 					<Tab disabled={ true } className="react-tabs__tab ss-tab-heading">
@@ -44,13 +41,15 @@ const App = () => {
 					</Tab>
 				}
 				{ taxonomies.map( ( [ slug, taxonomy ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ taxonomy.label }</Tab> ) }
+				<Tab disabled={ true } className="react-tabs__tab ss-tab-heading">
+					{ __( 'Other', 'slim-seo' ) }
+					<span className="dashicons dashicons-arrow-down-alt2"></span>
+				</Tab>
+				<Tab className="react-tabs__tab ss-tab-item">{ __( 'Author', 'slim-seo' ) }</Tab>
 			</TabList>
-			{
-				ss.hasHomepageSettings &&
-				<TabPanel>
-					<Homepage option={ option[ `home` ] || [] } />
-				</TabPanel>
-			}
+			<TabPanel>
+				<Homepage option={ option.home || {} } />
+			</TabPanel>
 			{ postTypes.length > 1 && <TabPanel /> }
 			{
 				postTypes.map( ( [ slug, postType ] ) => (
@@ -71,6 +70,10 @@ const App = () => {
 					</TabPanel>
 				) )
 			}
+			<TabPanel />
+			<TabPanel>
+				<Author option={ option.author || {} } />
+			</TabPanel>
 		</Tabs >
 		<input type="submit" name="submit" className="button button-primary" value={ __( 'Save Changes', 'slim-seo' ) } />
 	</>;

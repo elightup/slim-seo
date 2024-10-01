@@ -4,11 +4,10 @@ namespace SlimSEO\MetaTags;
 defined( 'ABSPATH' ) || die;
 
 use WP_Term;
+use SlimSEO\Helpers\Option;
 
 class Description {
 	use Context;
-
-	private $is_manual = false;
 
 	public function setup() {
 		$this->add_excerpt_to_pages();
@@ -33,32 +32,17 @@ class Description {
 		$description = $this->get_value();
 		$description = apply_filters( 'slim_seo_meta_description', $description, $this->get_queried_object_id() );
 		$description = Helper::render( $description );
-		$description = $this->normalize( $description );
 
 		return $description;
 	}
 
-	private function normalize( string $description ): string {
-		$description = Helper::normalize( $description );
-
-		$is_manual = apply_filters( 'slim_seo_meta_description_manual', $this->is_manual );
-
-		return $is_manual ? $description : $this->truncate( $description );
-	}
-
-	private function truncate( string $text ): string {
-		return mb_substr( $text, 0, 160 );
-	}
-
 	private function get_home_value(): string {
-		$option = get_option( 'slim_seo' );
-		return $option['home']['description'] ?? get_bloginfo( 'description' );
+		return Option::get( 'home.description', '{{ site.description }}' );
 	}
 
 	private function get_post_type_archive_value(): string {
 		$post_type_object = get_queried_object();
-		$option           = get_option( 'slim_seo' );
-		return $option[ "{$post_type_object->name}_archive" ]['description'] ?? '';
+		return Option::get( "{$post_type_object->name}_archive.description", '' );
 	}
 
 	/**
@@ -80,31 +64,19 @@ class Description {
 		// Use manual entered meta description if available.
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
-			$this->is_manual = true;
 			return $data['description'];
 		}
 
-		// Use post types settings if avaiable
-		$option    = get_option( 'slim_seo', [] );
 		$post_type = get_post_type( $post_id );
-		if ( ! empty( $option[ $post_type ]['description'] ) ) {
-			return  $option[ $post_type ]['description'];
-		}
 
-		// Use post excerpt if available.
-		if ( $post->post_excerpt ) {
-			return $post->post_excerpt;
-		}
-
-		// Use post content (which page builders can change) at last.
-		return apply_filters( 'slim_seo_meta_description_generated', $post->post_content, $post );
+		// Use post type settings if avaiable, then fallback to the post auto description
+		return Option::get( "$post_type.description", '{{ post.auto_description }}' );
 	}
 
 	public function get_term_value( $term_id = null ): string {
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
-			$this->is_manual = true;
 			return $data['description'];
 		}
 
@@ -113,15 +85,12 @@ class Description {
 			return '';
 		}
 
-		if ( $term->description ) {
-			return $term->description;
-		}
-
-		$option = get_option( 'slim_seo', [] );
-		return $option[ $term->taxonomy ]['description'] ?? '';
+		// Use taxonomy settings if avaiable, then fallback to the term auto description
+		return Option::get( "{$term->taxonomy}.description", '{{ term.auto_description }}' );
 	}
 
 	private function get_author_value(): string {
-		return get_user_meta( get_queried_object_id(), 'description', true );
+		// Use author settings if avaiable, then fallback to the author auto description
+		return Option::get( 'author.description', '{{ author.auto_description }}' );
 	}
 }

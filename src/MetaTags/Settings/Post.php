@@ -4,26 +4,12 @@ namespace SlimSEO\MetaTags\Settings;
 use SlimSEO\Helpers\Data;
 
 class Post extends Base {
-	public function setup() {
+	public function setup(): void {
 		$this->object_type = 'post';
 		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
 		add_action( 'admin_print_styles-post-new.php', [ $this, 'enqueue' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
 		add_action( 'save_post', [ $this, 'save' ] );
-	}
-
-	protected function get_script_params(): array {
-		$params = parent::get_script_params();
-
-		// @codingStandardsIgnoreLine.
-		$is_home = 'page' === get_option( 'show_on_front' ) && $this->get_object_id() == get_option( 'page_on_front' );
-		$params['isHome'] = $is_home;
-
-		if ( $is_home ) {
-			$params['title']['parts'] = apply_filters( 'slim_seo_title_parts', [ 'site', 'tagline' ], 'home' );
-		}
-
-		return $params;
 	}
 
 	public function add_meta_box() {

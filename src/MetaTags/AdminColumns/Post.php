@@ -20,19 +20,20 @@ class Post extends Base {
 	 * Render the column.
 	 * The value of meta tags will be applied with filters to make them work in the back end.
 	 */
-	public function render( $column, $post_id ) {
+	public function render( $column, $post_id ): void {
+		$data = get_post_meta( $post_id, 'slim_seo', true ) ?: [];
+
 		switch ( $column ) {
 			case 'meta_title':
-				$title = $this->title->get_singular_value( $post_id );
+				$title = $data['title'] ?? '';
 				$title = apply_filters( 'slim_seo_meta_title', $title, $post_id );
-				$title = Helper::normalize( $title );
+				$title = Helper::render( $title, (int) $post_id );
 				UI::tooltip( $title, "<span class='ss-meta-content'>$title</span>", 'top' );
 				break;
 			case 'meta_description':
-				$data        = get_post_meta( $post_id, 'slim_seo', true ) ?: [];
 				$description = $data['description'] ?? '';
 				$description = apply_filters( 'slim_seo_meta_description', $description, $post_id );
-				$description = Helper::normalize( $description );
+				$description = Helper::render( $description, (int) $post_id );
 				UI::tooltip( $description, "<span class='ss-meta-content'>$description</span>", 'top' );
 				break;
 			case 'index':

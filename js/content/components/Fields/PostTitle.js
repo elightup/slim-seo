@@ -1,18 +1,19 @@
 import { Control } from "@elightup/form";
+import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { request } from "../../functions";
+import { isBlockEditor, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const wpDescription = document.querySelector( '#description' );
-const getDescription = () => wpDescription.value;
+const wpTitle = document.querySelector( '#title' );
+const getTitle = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
 
-const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
+export default ( { id, std = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ preview, setPreview ] = useState( std );
-	let [ placeholder, setPlaceholder ] = useState( std );
+	let [ preview, setPreview ] = useState( '' );
+	let [ placeholder, setPlaceholder ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	const descriptionRef = useRef( getDescription() );
+	const titleRef = useRef( getTitle() );
 	const inputRef = useRef();
 
 	const requestUpdate = () => setUpdateCount( prev => prev + 1 );
@@ -35,18 +36,18 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'content/render_term_description', { ID: ss.id, text: value, description: descriptionRef.current } ).then( response => {
+		request( 'content/render_post_title', { ID: ss.id, text: value, title: titleRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );
 	};
 
-	const handleDescriptionChange = () => {
-		const description = getDescription();
-		if ( descriptionRef.current === description ) {
+	const handleTitleChange = () => {
+		const title = getTitle();
+		if ( titleRef.current === title ) {
 			return;
 		}
-		descriptionRef.current = description;
+		titleRef.current = title;
 		requestUpdate();
 	};
 
@@ -57,24 +58,33 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 		return () => clearTimeout( timer );
 	}, [ updateCount ] );
 
+	// Listen for title changes.
 	useEffect( () => {
-		wpDescription.addEventListener( 'input', handleDescriptionChange );
+		if ( isBlockEditor ) {
+			subscribe( handleTitleChange );
+		} else if ( wpTitle ) {
+			wpTitle.addEventListener( 'input', handleTitleChange );
+		}
 
 		return () => {
-			wpDescription.removeEventListener( 'input', handleDescriptionChange );
+			if ( isBlockEditor ) {
+				unsubscribe( handleTitleChange );
+			} else if ( wpTitle ) {
+				wpTitle.removeEventListener( 'input', handleTitleChange );
+			}
 		};
 	}, [] );
 
-	const getClassName = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters.', 'slim-seo' ), preview.length );
+	const getClassName = () => preview.length > max ? 'ss-input-warning' : 'ss-input-success';
+	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: ≤ 60 characters.', 'slim-seo' ), preview.length );
 
 	return (
-		<Control className={ getClassName() } description={ getDescriptionDetail() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>
 			<div className="ss-input-wrapper">
-				<textarea
+				<input
+					type="text"
 					id={ id }
 					name={ id }
-					rows="3"
 					value={ value }
 					placeholder={ placeholder }
 					onChange={ handleChange }
@@ -88,5 +98,3 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 		</Control>
 	);
 };
-
-export default TermDescription;

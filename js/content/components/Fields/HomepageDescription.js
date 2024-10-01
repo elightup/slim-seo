@@ -4,15 +4,10 @@ import { __, sprintf } from "@wordpress/i18n";
 import { request } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const wpDescription = document.querySelector( '#description' );
-const getDescription = () => wpDescription.value;
-
-const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, std = '', placeholder = '', description = '', min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ preview, setPreview ] = useState( std );
-	let [ placeholder, setPlaceholder ] = useState( std );
+	let [ preview, setPreview ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	const descriptionRef = useRef( getDescription() );
 	const inputRef = useRef();
 
 	const requestUpdate = () => setUpdateCount( prev => prev + 1 );
@@ -34,42 +29,20 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 		requestUpdate();
 	};
 
-	const refreshPreviewAndPlaceholder = () => {
-		request( 'content/render_term_description', { ID: ss.id, text: value, description: descriptionRef.current } ).then( response => {
-			setPreview( response.preview );
-			setPlaceholder( response.default );
-		} );
-	};
+	const refreshPreview = () => request( 'content/render_text', { text: value || placeholder } ).then( res => setPreview( res ) );
 
-	const handleDescriptionChange = () => {
-		const description = getDescription();
-		if ( descriptionRef.current === description ) {
-			return;
-		}
-		descriptionRef.current = description;
-		requestUpdate();
-	};
-
-	// Trigger refresh preview and placeholder when anything change.
+	// Trigger refresh preview when value change.
 	// Use debounce technique to avoid sending too many requests.
 	useEffect( () => {
-		const timer = setTimeout( refreshPreviewAndPlaceholder, 1000 );
+		const timer = setTimeout( refreshPreview, 1000 );
 		return () => clearTimeout( timer );
 	}, [ updateCount ] );
 
-	useEffect( () => {
-		wpDescription.addEventListener( 'input', handleDescriptionChange );
-
-		return () => {
-			wpDescription.removeEventListener( 'input', handleDescriptionChange );
-		};
-	}, [] );
-
 	const getClassName = () => min > preview.length || preview.length > max ? 'ss-input-warning' : 'ss-input-success';
-	const getDescriptionDetail = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters.', 'slim-seo' ), preview.length );
+	const getDescription = () => sprintf( __( 'Character count: %s. Recommended length: 50-160 characters.', 'slim-seo' ), preview.length, description );
 
 	return (
-		<Control className={ getClassName() } description={ getDescriptionDetail() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
 			<div className="ss-input-wrapper">
 				<textarea
 					id={ id }
@@ -89,4 +62,4 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	);
 };
 
-export default TermDescription;
+export default Description;

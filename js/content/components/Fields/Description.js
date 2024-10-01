@@ -1,118 +1,59 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
-import { useEffect, useState } from "@wordpress/element";
+import { useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatDescription, isBlockEditor, normalize } from "../../functions";
+import { normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Description = ( { id, placeholder = '', std, description, isSettings = false, rows = 3, min = 50, max = 160, ...rest } ) => {
+const Description = ( { id, std = '', placeholder = '', min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	const wpExcerpt = document.querySelector( '#excerpt' );
-	const wpContent = document.querySelector( '#content' );
-	let contentEditor;
+	const description = __( 'Recommended length: 50-160 characters.', 'slim-seo' );
+	const inputRef = useRef();
+
+	const handleChange = e => setValue( e.target.value );
+	const handleFocus = () => setValue( prev => prev || placeholder );
+	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
+
+	const handleInsertVariables = variable => setValue( prev => {
+		// Insert variable at cursor.
+		const cursorPosition = inputRef.current.selectionStart;
+		return prev.slice( 0, cursorPosition ) + variable + prev.slice( cursorPosition );
+	} );
 
 	const getClassName = () => {
+		let desc = value || placeholder;
 		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
+		if ( desc.includes( '{{' ) ) {
 			return '';
 		}
 
-		const desc = normalize( value || newPlaceholder );
+		desc = normalize( desc );
 		return min > desc.length || desc.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
 
 	const getDescription = () => {
-		if ( value.includes( '{{' ) ) {
+		let desc = value || placeholder;
+		// Do nothing if use variables.
+		if ( desc.includes( '{{' ) ) {
 			return description;
 		}
 
-		const desc = normalize( value || newPlaceholder );
+		desc = normalize( desc );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), desc.length, description );
 	};
 
-	const handleChange = e => {
-		setValue( e.target.value );
-	};
-
-	const handleFocus = () => {
-		setValue( prev => prev || newPlaceholder );
-	};
-
-	const handleBlur = () => {
-		setValue( prev => prev === newPlaceholder ? '' : prev );
-	};
-
-	const handleInsertVariables = value => {
-		setValue( prev => prev + value );
-	};
-
-	const handleDescriptionChange = () => {
-		const desc = getPostExcerpt() || getPostContent();
-		setNewPlaceholder( formatDescription( desc, max ) );
-	};
-
-	const getPostContent = () => {
-		if ( isBlockEditor ) {
-			return wp.data.select( 'core/editor' ).getEditedPostContent();
-		}
-		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
-	};
-
-	const getPostExcerpt = () => {
-		return isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'excerpt' ) : ( wpExcerpt ? wpExcerpt.value : '' );
-	};
-
-	// Update newPlaceholder when post description changes.
-	useEffect( () => {
-		if ( isSettings ) {
-			return;
-		}
-
-		handleDescriptionChange();
-		if ( isBlockEditor ) {
-			subscribe( handleDescriptionChange );
-		} else {
-			if ( wpExcerpt ) {
-				wpExcerpt.addEventListener( 'input', handleDescriptionChange );
-			}
-			if ( wpContent ) {
-				jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
-					if ( editor.id !== 'content' ) {
-						return;
-					}
-					contentEditor = editor;
-					editor.on( 'input keyup', handleDescriptionChange );
-				} );
-			}
-		}
-
-		return () => {
-			if ( isBlockEditor ) {
-				unsubscribe( handleDescriptionChange );
-				return;
-			}
-			if ( wpExcerpt ) {
-				wpExcerpt.removeEventListener( 'input', handleDescriptionChange );
-			}
-			if ( wpContent ) {
-				wpContent.removeEventListener( 'input', handleDescriptionChange );
-			}
-		};
-	}, [] );
-
 	return (
-		<Control className={ getClassName() } description={ getDescription() } id={ id } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta description', 'slim-seo' ) } { ...rest }>
 			<div className="ss-input-wrapper">
 				<textarea
 					id={ id }
 					name={ id }
-					rows={ rows }
+					rows="3"
 					value={ value }
-					placeholder={ newPlaceholder }
+					placeholder={ placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
+					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>

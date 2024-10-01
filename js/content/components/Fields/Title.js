@@ -1,90 +1,58 @@
 import { Control } from "@elightup/form";
-import { select, subscribe, unsubscribe } from "@wordpress/data";
-import { useEffect, useState } from "@wordpress/element";
+import { useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { formatTitle, isBlockEditor, normalize } from "../../functions";
+import { normalize } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const Title = ( { id, type = '', std, placeholder = '', isSettings = false,  description, max = 60, ...rest } ) => {
+const Title = ( { id, std = '', preview = '', placeholder = '', max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
-	let [ newPlaceholder, setNewPlaceholder ] = useState( placeholder || std );
-	const wpTitle = document.querySelector( '#title' ) || document.querySelector( '#name' );
+	const description = __( 'Recommended length: ≤ 60 characters.', 'slim-seo' );
+	const inputRef = useRef();
+
+	const handleChange = e => setValue( e.target.value );
+	const handleFocus = () => setValue( prev => prev || placeholder );
+	const handleBlur = () => setValue( prev => prev === placeholder ? '' : prev );
+
+	const handleInsertVariables = variable => setValue( prev => {
+		// Insert variable at cursor.
+		const cursorPosition = inputRef.current.selectionStart;
+		return prev.slice( 0, cursorPosition ) + variable + prev.slice( cursorPosition );
+	} );
 
 	const getClassName = () => {
+		let title = value || placeholder;
 		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
+		if ( title.includes( '{{' ) ) {
 			return '';
 		}
 
-		const title = normalize( value || newPlaceholder );
+		title = normalize( value );
 		return title.length > max ? 'ss-input-warning' : 'ss-input-success';
 	};
-
 	const getDescription = () => {
+		let title = value || placeholder;
 		// Do nothing if use variables.
-		if ( value.includes( '{{' ) ) {
+		if ( title.includes( '{{' ) ) {
 			return description;
 		}
 
-		const title = normalize( value || newPlaceholder );
+		title = normalize( value );
 		return sprintf( __( 'Character count: %s. %s', 'slim-seo' ), title.length, description );
 	};
 
-	const handleChange = e => {
-		setValue( e.target.value );
-	};
-
-	const handleFocus = () => {
-		setValue( prev => prev || newPlaceholder );
-	};
-
-	const handleBlur = () => {
-		setValue( prev => prev === newPlaceholder ? '' : prev );
-	};
-
-	const handleInsertVariables = value => {
-		setValue( prev => prev + value );
-	};
-
-	const handleTitleChange = () => {
-		const title = isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
-		setNewPlaceholder( formatTitle( title ) );
-	};
-
-	// Update newPlaceholder when post title changes.
-	useEffect( () => {
-		if ( isSettings ) {
-			return;
-		}
-
-		handleTitleChange();
-		if ( isBlockEditor ) {
-			subscribe( handleTitleChange );
-		} else if ( wpTitle ) {
-			wpTitle.addEventListener( 'input', handleTitleChange );
-		}
-
-		return () => {
-			if ( isBlockEditor ) {
-				unsubscribe( handleTitleChange );
-			} else if ( wpTitle ) {
-				wpTitle.removeEventListener( 'input', handleTitleChange );
-			}
-		};
-	}, [] );
-
 	return (
-		<Control className={ getClassName() } description={ getDescription() } id={ id } { ...rest }>
+		<Control className={ getClassName() } description={ getDescription() } id={ id } label={ __( 'Meta title', 'slim-seo' ) } { ...rest }>
 			<div className="ss-input-wrapper">
 				<input
 					type="text"
 					id={ id }
 					name={ id }
 					value={ value }
-					placeholder={ newPlaceholder }
-					onChange={ handleChange }
-					onFocus={ handleFocus }
 					onBlur={ handleBlur }
+					onFocus={ handleFocus }
+					onChange={ handleChange }
+					placeholder={ placeholder }
+					ref={ inputRef }
 				/>
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>

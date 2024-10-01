@@ -17,8 +17,9 @@ class Container {
 		$services['meta_description'] = new MetaTags\Description;
 		$services['meta_robots']      = new MetaTags\Robots( $services['canonical_url'] );
 
-		$services['settings_post'] = new MetaTags\Settings\Post;
-		$services['settings_term'] = new MetaTags\Settings\Term;
+		$services['settings_post']    = new MetaTags\Settings\Post;
+		$services['settings_term']    = new MetaTags\Settings\Term;
+		$services['settings_preview'] = new MetaTags\Settings\Preview;
 
 		$services['sitemaps']   = new Sitemaps\Manager;
 		$services['images_alt'] = new ImagesAlt;
@@ -31,8 +32,7 @@ class Container {
 		$services['divi']           = new Integrations\Divi;
 		$services['mylisting']      = new Integrations\MyListing;
 
-		$services['content_manager']   = new Settings\Content\Manager;
-		$services['settings']          = new Settings\Settings( $services['content_manager'] );
+		$services['settings']          = new Settings\Settings;
 		$services['code']              = new Code( $services['settings'] );
 		$services['content_rest_api']  = new Settings\Content\RestApi;
 
