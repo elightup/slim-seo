@@ -32,7 +32,7 @@ const App = () => {
 						<span className="dashicons dashicons-arrow-down-alt2"></span>
 					</Tab>
 				}
-				{ postTypes.map( ( [ slug, postType ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ postType.label }</Tab> ) }
+				{ postTypes.map( ( [ slug, postType ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ postType.labels.singular_name }</Tab> ) }
 				{
 					taxonomies.length > 1 &&
 					<Tab disabled={ true } className="react-tabs__tab ss-tab-heading">
@@ -40,9 +40,9 @@ const App = () => {
 						<span className="dashicons dashicons-arrow-down-alt2"></span>
 					</Tab>
 				}
-				{ taxonomies.map( ( [ slug, taxonomy ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ taxonomy.label }</Tab> ) }
+				{ taxonomies.map( ( [ slug, taxonomy ] ) => <Tab key={ slug } className="react-tabs__tab ss-tab-item">{ taxonomy.labels.singular_name }</Tab> ) }
 				<Tab disabled={ true } className="react-tabs__tab ss-tab-heading">
-					{ __( 'Other', 'slim-seo' ) }
+					{ __( 'Other pages', 'slim-seo' ) }
 					<span className="dashicons dashicons-arrow-down-alt2"></span>
 				</Tab>
 				<Tab className="react-tabs__tab ss-tab-item">{ __( 'Author', 'slim-seo' ) }</Tab>
