@@ -111,7 +111,7 @@ class Settings {
 
 		ob_start();
 		echo '<div id="', esc_attr( $name ), '" class="ss-tab-pane">';
-		include __DIR__ . "/sections/$name.php";
+		include __DIR__ . "/tabs/$name.php";
 		echo '</div>';
 		return ob_get_clean();
 	}
