@@ -12,7 +12,7 @@ const App = () => {
 	const [ option, setOption ] = useState( {} );
 
 	useEffect( () => {
-		request( 'content/option' ).then( ( res ) => {
+		request( 'meta-tags/option' ).then( ( res ) => {
 			setOption( res );
 			setLoaded( true );
 		} );
