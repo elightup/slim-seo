@@ -32,9 +32,9 @@ class Container {
 		$services['divi']           = new Integrations\Divi;
 		$services['mylisting']      = new Integrations\MyListing;
 
-		$services['settings']          = new Settings\Settings;
-		$services['code']              = new Code( $services['settings'] );
-		$services['content_rest_api']  = new Settings\Content\RestApi;
+		$services['settings']           = new Settings\Settings;
+		$services['code']               = new Code( $services['settings'] );
+		$services['meta_tags_rest_api'] = new Settings\MetaTags\RestApi;
 
 		$services['redirection'] = new Redirection\Loader;
 		$services['breadcrumbs'] = new Breadcrumbs;

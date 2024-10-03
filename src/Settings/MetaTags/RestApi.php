@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Settings\Content;
+namespace SlimSEO\Settings\MetaTags;
 
 use WP_REST_Server;
 use SlimSEO\Helpers\Data;

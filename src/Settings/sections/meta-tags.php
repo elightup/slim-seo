@@ -1,3 +1,3 @@
 <?php defined( 'ABSPATH' ) || die ?>
 
-<div id="ss-content"></div>
+<div id="ss-meta-tags"></div>

@@ -79,6 +79,6 @@ const App = () => {
 	</>;
 };
 
-const container = document.getElementById( 'ss-content' );
+const container = document.getElementById( 'ss-meta-tags' );
 const root = createRoot( container );
 root.render( <App /> );

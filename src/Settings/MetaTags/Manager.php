@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Settings\Content;
+namespace SlimSEO\Settings\MetaTags;
 
 use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
