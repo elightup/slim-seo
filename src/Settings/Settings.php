@@ -28,6 +28,7 @@ class Settings {
 			'feed',
 			'schema',
 			'redirection',
+			'content_analysis',
 		],
 	];
 
@@ -81,7 +82,7 @@ class Settings {
 			wp_localize_script( 'slim-seo-post-types', 'ssPostTypes', [
 				'postTypes'                => $this->meta_tags_manager->get_post_types(),
 				'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
-				'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo-schema' ),
+				'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 			] );
 		}
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );

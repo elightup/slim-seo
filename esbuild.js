@@ -26,6 +26,12 @@ esbuild.build( {
 	outfile: 'js/redirection.js'
 } );
 
+esbuild.build( {
+	...config,
+	entryPoints: [ 'js/content-analysis/App.js' ],
+	outfile: 'js/content-analysis.js'
+} );
+
 
 esbuild.build( {
 	...config,

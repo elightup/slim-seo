@@ -39,6 +39,8 @@ class Container {
 
 		$services['rest_api'] = new RestApi;
 
+		$services['content_analysis'] = new ContentAnalysis\Loader;
+
 		// Admin only.
 		if ( is_admin() ) {
 			$services['link_attributes']    = new LinkAttributes;

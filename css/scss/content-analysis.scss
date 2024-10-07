@@ -1,0 +1,51 @@
+#content-analysis {
+	.components-form-token-field__label {
+		display: none;
+	}
+}
+
+.ss-content-analysis-component-title {
+	margin-left: 10px;
+}
+
+.ss-content-analysis-table {
+	width: 100%;
+	border-collapse: collapse;
+
+	thead {
+		color: var(--ss-color-gray);
+	}
+
+	tr {
+		border-bottom: var(--ss-border);
+	}
+
+	th,
+	td {
+		padding: 8px;
+		vertical-align: top;
+	}
+
+	th {
+		font-weight: 400;
+		text-align: left;
+	}
+}
+
+.ss-content-analysis-learnmore {
+	text-align: right;
+}
+
+.ss-content-analysis-paragraphs {
+	a {
+		text-decoration: none;
+	}
+}
+
+.ss-content-analysis-no-alt-image {
+	cursor: pointer;
+	
+	img {
+		width: 50px;
+	}
+}

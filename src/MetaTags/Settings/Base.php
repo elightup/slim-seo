@@ -20,6 +20,8 @@ abstract class Base {
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], SLIM_SEO_VER );
 		wp_enqueue_script( 'slim-seo-meta-tags', SLIM_SEO_URL . 'js/meta-tags/dist/object.js', [ 'jquery', 'underscore' ], SLIM_SEO_VER, true );
 		wp_localize_script( 'slim-seo-meta-tags', 'ss', $this->get_script_params() );
+
+		do_action( 'slim_seo_base_enqueue' );
 	}
 
 	protected function get_script_params(): array {
@@ -38,6 +40,32 @@ abstract class Base {
 	}
 
 	public function render() {
+		$tabs = apply_filters( 'slim_seo_metabox_tabs', [] );
+
+		if ( empty( $tabs ) ) {
+			$this->general_tab();
+			return;
+		}
+		?>
+		<nav class="ss-tab-list">
+			<a href="#general" class="ss-tab"><?php esc_html_e( 'General', 'slim-seo' ); ?></a>
+			<?php
+			foreach ( $tabs as $key => $label ) {
+				printf( '<a href="#%s" class="ss-tab">%s</a>', esc_attr( $key ), esc_html( $label ) );
+			}
+			?>
+		</nav>
+
+		<div id="general" class="ss-tab-pane">
+			<?php $this->general_tab(); ?>
+		</div>
+		<?php
+		$panes = apply_filters( 'slim_seo_metabox_panels', [] );
+
+		echo implode( '', $panes ); // @codingStandardsIgnoreLine.
+	}
+
+	public function general_tab() {
 		$data = $this->get_data();
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
