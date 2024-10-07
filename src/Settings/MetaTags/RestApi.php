@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Settings\Content;
+namespace SlimSEO\Settings\MetaTags;
 
 use WP_REST_Server;
 use SlimSEO\Helpers\Data;
@@ -10,25 +10,25 @@ class RestApi {
 	}
 
 	public function register_routes(): void {
-		register_rest_route( 'slim-seo', '/content/option', [
+		register_rest_route( 'slim-seo', 'meta-tags/option', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', '/content/variables', [
+		register_rest_route( 'slim-seo', 'meta-tags/variables', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', '/content/image_variables', [
+		register_rest_route( 'slim-seo', 'meta-tags/image_variables', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_image_variables' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo', '/content/meta_keys', [
+		register_rest_route( 'slim-seo', 'meta-tags/meta_keys', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'get_meta_keys' ],
 			'permission_callback' => [ $this, 'has_permission' ],
