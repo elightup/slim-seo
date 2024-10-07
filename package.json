@@ -8,7 +8,7 @@
 		"start": "wp-scripts start --config apps.webpack.config.js"
 	},
 	"dependencies": {
-		"@elightup/form": "file:../../../../form",
+		"@elightup/form": "^1.0.6",
 		"react-paginate": "^8.1.3",
 		"react-select": "^5.8.0",
 		"react-tabs": "^3.2.1",
