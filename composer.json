@@ -36,5 +36,29 @@
   },
   "config": {
     "allow-plugins": true
+  },
+  "extra": {
+    "dev-files": {
+      "/": [
+        "tests/",
+
+        ".gitignore",
+
+        "composer.*",
+        "phpcs.xml",
+        "phpunit.xml",
+        "slim-twig.php"
+      ]
+    }
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "echo Deleting .git dirs...",
+      "rm -rf vendor/**/**/.git"
+    ],
+    "post-install-cmd": [
+      "echo Deleting .git dirs...",
+      "rm -rf vendor/**/**/.git"
+    ]
   }
 }
