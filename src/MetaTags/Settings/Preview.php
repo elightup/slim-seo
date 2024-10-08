@@ -68,9 +68,18 @@ class Preview {
 		$text  = (string) $request->get_param( 'text' ); // Manual entered meta title
 		$title = (string) $request->get_param( 'title' ); // Live title
 
-		$data = [];
-		if ( $title ) {
-			$data[ $object_type ] = [ 'title' => $title ];
+		if ( $object_type === 'post' ) {
+			$data = [
+				'post' => [
+					'title' => $title,
+				],
+			];
+		} else {
+			$data = [
+				'term' => [
+					'name' => $title,
+				],
+			];
 		}
 
 		$default = $object_type === 'post' ? $this->get_default_post_title( $id ) : $this->get_default_term_title( $id );
@@ -116,12 +125,12 @@ class Preview {
 
 		$text        = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$description = (string) $request->get_param( 'description' ); // Live description
-		$data        = [];
-
-		if ( $description ) {
-			$data['term']['description']      = $description;
-			$data['term']['auto_description'] = Helper::truncate( $description );
-		}
+		$data        = [
+			'term' => [
+				'description'      => $description,
+				'auto_description' => Helper::truncate( $description ),
+			],
+		];
 
 		$default = $this->get_default_term_description( $id );
 		$preview = Helper::render( $text ?: $default, 0, $id, $data );
