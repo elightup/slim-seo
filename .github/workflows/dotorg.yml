@@ -12,6 +12,7 @@ jobs:
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.SSH_KEY }}
+        known_hosts: ${{ secrets.SSH_KNOWN_HOSTS_SLIM_SEO }}
     - uses: actions/checkout@master
     - name: Install PHP dependencies
       run: composer install --no-dev
