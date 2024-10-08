@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
-Tested up to: 6.5.5
+Tested up to: 6.6.2
 Requires PHP: 7.2
-Stable tag: 3.25.3
+Stable tag: 4.0.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -158,6 +158,23 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.0.0 - 2024-10-08 =
+
+**Highlights:**
+
+This version allows you to configure meta tags with dynamic variables, whose value can be changed according to the content or data of the article, website, or in real time. You can set up meta tags more flexibly for homepage, all post types and taxonomies.
+
+Read more about this in our [blog post](https://wpslimseo.com/slim-seo-v4-configuring-meta-tags-with-dynamic-variables/).
+
+Other changes:
+
+- Improve integrations for page builder plugins, removing internal post types and taxonomies from them
+- Do not expose username in the Person schema for a security reason
+- Improve preview for breadcrumbs block
+- Prevent direct access to PHP files
+- Remove link attributes (ability to add nofollow to links) for the block editor as the block editor already supports it
+- Fix non-integer custom logo value breaks schemas in Blocksy theme
 
 = 3.25.3 - 2024-07-01 =
 - Add settings for delete all redirects (under Redirection > Settings tab) and add settings for numbers of redirects per page
