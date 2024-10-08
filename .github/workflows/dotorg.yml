@@ -18,6 +18,8 @@ jobs:
       run: composer install --no-dev
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
+      with:
+        version: 9
     - name: Install NPM dependencies
       run: pnpm install
     - name: Build Javascript
