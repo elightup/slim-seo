@@ -90,4 +90,10 @@ class Helper {
 	public static function url_valid( string $url ): bool {
 		return filter_var( $url, FILTER_VALIDATE_URL ) || str_starts_with( $url, 'http://' ) || str_starts_with( $url, 'https://' );
 	}
+
+	public static function purge_cache() {
+		if ( class_exists( '\LiteSpeed\Purge' ) ) {
+			\LiteSpeed\Purge::purge_all();
+		}
+	}
 }
