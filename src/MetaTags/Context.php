@@ -13,8 +13,9 @@ trait Context {
 				return $this->get_home_value();
 			}
 
-			$this->queried_object_id = get_option( 'page_on_front' );
-			$this->queried_object    = get_post( $this->queried_object_id );
+			$post_id = (int) get_option( 'page_on_front' );
+			QueriedObject::set_id( $post_id );
+			QueriedObject::set( get_post( $post_id ) );
 
 			return $this->get_singular_value();
 		}
@@ -29,8 +30,8 @@ trait Context {
 				return $this->get_post_type_archive_value();
 			}
 
-			$this->queried_object    = $archive_page;
-			$this->queried_object_id = $archive_page->ID;
+			QueriedObject::set( $archive_page );
+			QueriedObject::set_id( $archive_page->ID );
 			return $this->get_singular_value();
 		}
 
@@ -70,11 +71,11 @@ trait Context {
 	}
 
 	private function get_queried_object() {
-		return $this->queried_object ?: get_queried_object();
+		return QueriedObject::get();
 	}
 
 	private function get_queried_object_id() {
-		return $this->queried_object_id ?: get_queried_object_id();
+		return QueriedObject::get_id();
 	}
 
 	private function is_static_homepage(): bool {

@@ -42,6 +42,7 @@ class Title {
 
 	/**
 	 * Make public to allow access from other class.
+	 * Note that returning empty string will use WordPress default title.
 	 * @see AdminColumns/Post.php.
 	 */
 	public function get_singular_value( $post_id = 0 ): string {
@@ -54,7 +55,13 @@ class Title {
 		// For static frontpage: don't use page's settings, use WordPress default instead.
 		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
 		if ( $is_static_frontpage ) {
-			return '{{ site.title }} {{ sep }} {{ site.description }}';
+			return '';
+		}
+
+		// For static blog page: don't use page's settings, use WordPress default instead.
+		$is_static_blog = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_for_posts' );
+		if ( $is_static_blog ) {
+			return '';
 		}
 
 		// Get from admin settings for this post type.
