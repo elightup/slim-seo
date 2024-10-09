@@ -24,14 +24,6 @@ class Title {
 		global $page, $paged;
 
 		$custom_title = $this->get_value();
-
-		// Add a page number if necessary.
-		if ( $custom_title && ( $paged >= 2 || $page >= 2 ) ) {
-			$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
-			// Translators: %s - Page number.
-			$custom_title .= " $separator " . sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) );
-		}
-
 		$title = $custom_title ?: (string) $title;
 		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
 		$title = Helper::render( $title );
