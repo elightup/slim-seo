@@ -140,7 +140,11 @@ class Data {
 		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
 	}
 
-	private function get_custom_field_data( WP_Post $post ): array {
+	private function get_custom_field_data( $post ): array {
+		if ( ! ( $post instanceof WP_Post ) ) {
+			return [];
+		}
+
 		$meta_values = get_post_meta( $post->ID );
 		$data        = [];
 		foreach ( $meta_values as $key => $value ) {
