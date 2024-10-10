@@ -21,11 +21,9 @@ class Title {
 	}
 
 	public function filter_title( $title ): string {
-		global $page, $paged;
-
 		$custom_title = $this->get_value();
 		$title = $custom_title ?: (string) $title;
-		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
+		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
 		$title = Helper::render( $title );
 
 		return $title;
