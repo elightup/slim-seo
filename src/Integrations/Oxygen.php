@@ -8,7 +8,7 @@ class Oxygen {
 		return defined( 'CT_VERSION' );
 	}
 
-	public function setup() {
+	public function setup(): void {
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
