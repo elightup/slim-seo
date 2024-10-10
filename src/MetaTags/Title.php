@@ -56,12 +56,6 @@ class Title {
 			return '';
 		}
 
-		// For static blog page: don't use page's settings, use WordPress default instead.
-		$is_static_blog = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_for_posts' );
-		if ( $is_static_blog ) {
-			return '';
-		}
-
 		// Get from admin settings for this post type.
 		$post_type = get_post_type( $post_id );
 		return Option::get( "{$post_type}.title", '' );
