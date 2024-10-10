@@ -145,7 +145,7 @@ class Data {
 	}
 
 	private function get_other_data(): array {
-		global $wp_query, $page, $paged;
+		global $page, $paged;
 
 		return [
 			'current' => [
