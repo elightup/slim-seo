@@ -10,12 +10,16 @@ class Yoast extends Source {
 	protected function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$title = get_post_meta( $post_id, '_yoast_wpseo_title', true );
+		$title = $this->replace_ss_variables( $title );
+
 		return wpseo_replace_vars( $title, $post );
 	}
 
 	protected function get_post_description( $post_id ) {
 		$post        = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+		$description = $this->replace_ss_variables( $description );
+
 		return wpseo_replace_vars( $description, $post );
 	}
 
@@ -37,6 +41,8 @@ class Yoast extends Source {
 			return '';
 		}
 		$title = $term['wpseo_title'] ?? '';
+		$title = $this->replace_ss_variables( $title );
+
 		return wpseo_replace_vars( $title, $term );
 	}
 
@@ -46,6 +52,8 @@ class Yoast extends Source {
 			return '';
 		}
 		$description = $term['wpseo_desc'] ?? '';
+		$description = $this->replace_ss_variables( $description );
+
 		return wpseo_replace_vars( $description, $term );
 	}
 
@@ -119,5 +127,29 @@ class Yoast extends Source {
 		}
 
 		return $count;
+	}
+
+	private function parse_variables( $text ) {
+		$pattern = '/%%([^%%]+)%%/';
+		preg_match_all($pattern, $text, $matches);
+
+		return $matches;
+	}
+
+	private function replace_ss_variables( $text ) {
+		$variables = [
+			'%%title%%'            => '{{ post.title }}',
+			'%%page%%'             => '{{ page }}',
+			'%%sep%%'              => '{{ sep }}',
+			'%%sitename%%'         => '{{ site.title }}',
+			'%%primary_category%%' => '{{ post.categories }}',
+			'%%term_title%%'       => '{{ term.name }}'
+		];
+		$matches = $this->parse_variables( $text );
+
+		foreach ( $matches[0] as $vari ) {
+			$text = str_replace( $vari, $variables[ $vari ] , $text );
+		}
+		return $text;
 	}
 }
