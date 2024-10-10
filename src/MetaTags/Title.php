@@ -21,19 +21,9 @@ class Title {
 	}
 
 	public function filter_title( $title ): string {
-		global $page, $paged;
-
 		$custom_title = $this->get_value();
-
-		// Add a page number if necessary.
-		if ( $custom_title && ( $paged >= 2 || $page >= 2 ) ) {
-			$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
-			// Translators: %s - Page number.
-			$custom_title .= " $separator " . sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) );
-		}
-
 		$title = $custom_title ?: (string) $title;
-		$title = apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
+		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
 		$title = Helper::render( $title );
 
 		return $title;
@@ -50,6 +40,7 @@ class Title {
 
 	/**
 	 * Make public to allow access from other class.
+	 * Note that returning empty string will use WordPress default title.
 	 * @see AdminColumns/Post.php.
 	 */
 	public function get_singular_value( $post_id = 0 ): string {
@@ -62,7 +53,7 @@ class Title {
 		// For static frontpage: don't use page's settings, use WordPress default instead.
 		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
 		if ( $is_static_frontpage ) {
-			return '{{ site.title }} {{ sep }} {{ site.description }}';
+			return '';
 		}
 
 		// Get from admin settings for this post type.

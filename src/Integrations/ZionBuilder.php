@@ -2,47 +2,19 @@
 namespace SlimSEO\Integrations;
 
 use WP_Post;
-use SlimSEO\Helpers\Arr;
 
 class ZionBuilder {
-	private $is_auto_genereted = false;
-
 	public function is_active(): bool {
 		return class_exists( '\ZionBuilder\Plugin' );
 	}
 
-	public function setup() {
-		add_filter( 'slim_seo_data', [ $this, 'replace_post_content' ] );
+	public function setup(): void {
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
 	}
 
-	public function replace_post_content( array $data ): array {
-		if ( $this->is_auto_genereted ) {
-			return $data;
-		}
-
-		$post = is_singular() ? get_queried_object() : get_post();
-		if ( empty( $post ) ) {
-			return $data;
-		}
-
-		$content = $this->get_post_content( $post );
-		if ( $content ) {
-			Arr::set( $data, 'post.content', $content );
-		}
-
-		return $data;
-	}
-
-	public function description( $description, WP_Post $post ) {
-		$content = $this->get_post_content( $post );
-		if ( $content ) {
-			$this->is_auto_genereted = true;
-			return $content;
-		}
-
-		return $description;
+	public function description( string $description, WP_Post $post ): string {
+		return $this->get_post_content( $post ) ?: $description;
 	}
 
 	private function get_post_content( WP_Post $post ): string {
