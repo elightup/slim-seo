@@ -26,13 +26,13 @@ class Post extends Base {
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $data['title'] ?? '';
-				$title = apply_filters( 'slim_seo_meta_title', $title, $post_id );
+				$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
 				$title = Helper::render( $title, (int) $post_id );
 				UI::tooltip( $title, "<span class='ss-meta-content'>$title</span>", 'top' );
 				break;
 			case 'meta_description':
 				$description = $data['description'] ?? '';
-				$description = apply_filters( 'slim_seo_meta_description', $description, $post_id );
+				$description = (string) apply_filters( 'slim_seo_meta_description', $description, $post_id );
 				$description = Helper::render( $description, (int) $post_id );
 				UI::tooltip( $description, "<span class='ss-meta-content'>$description</span>", 'top' );
 				break;

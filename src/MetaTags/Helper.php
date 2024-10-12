@@ -99,6 +99,10 @@ class Helper {
 	}
 
 	public static function render( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
+		return str_contains( $text, '{{' ) ? self::render_dynamic_variables( $text, $post_id, $term_id, $data ) : $text;
+	}
+
+	private static function render_dynamic_variables( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
 		static $cache = [];
 
 		$key = "{$post_id}:{$term_id}";

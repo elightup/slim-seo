@@ -36,12 +36,7 @@ class Data {
 	}
 
 	private function get_post_data(): array {
-		if ( $this->post_id ) {
-			$post = get_post( $this->post_id );
-		} else {
-			$post = is_singular() ? get_queried_object() : get_post();
-		}
-
+		$post = get_post( $this->post_id ?: QueriedObject::get_id() );
 		if ( empty( $post ) ) {
 			return [];
 		}
@@ -150,7 +145,7 @@ class Data {
 	}
 
 	private function get_other_data(): array {
-		global $wp_query, $page, $paged;
+		global $page, $paged;
 
 		return [
 			'current' => [
