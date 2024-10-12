@@ -20,17 +20,17 @@ class Bricks {
 	}
 
 	public function description( string $description, WP_Post $post ): string {
-		return $this->get_post_content( $post ) ?: $description;
+		return $this->get_post_content( $post ) ?? $description;
 	}
 
-	private function get_post_content( WP_Post $post ): string {
+	private function get_post_content( WP_Post $post ): ?string {
 		// Get from the post first, then from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
 		if ( empty( $data ) ) {
 			$data = \Bricks\Helpers::get_bricks_data( $post->ID );
 		}
 		if ( empty( $data ) ) {
-			return '';
+			return null;
 		}
 
 		$data = $this->remove_elements( $data );
