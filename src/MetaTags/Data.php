@@ -4,7 +4,6 @@ namespace SlimSEO\MetaTags;
 use WP_Post;
 use WP_Term;
 use WP_Post_Type;
-use SlimSEO\Helpers\Arr;
 
 class Data {
 	private $data = [];

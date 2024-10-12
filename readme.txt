@@ -5,7 +5,7 @@ Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
 Tested up to: 6.6.2
 Requires PHP: 7.2
-Stable tag: 4.0.0
+Stable tag: 4.0.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -158,6 +158,13 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.0.1 - 2024-10-12 =
+- Add integration for Forminator
+- Bricks: Ignore elements with scripts, like sliders or counters, to avoid breaking layouts.
+- Fix static blog page returning wrong meta
+- Fix: Redirects list not update after create/update/delete redirect because of Litespeed cache
+- Fix: Surecart product bug
 
 = 4.0.0 - 2024-10-08 =
 
