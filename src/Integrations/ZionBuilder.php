@@ -25,7 +25,7 @@ class ZionBuilder {
 		}
 
 		$data = $post_instance->get_template_data();
-		return this->get_elements_content( $data );
+		return $this->get_elements_content( $data );
 	}
 
 	private function get_elements_content( array $data ): string {
