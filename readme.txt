@@ -5,7 +5,7 @@ Tags: seo, redirection, schema, xml sitemap, header
 Requires at least: 5.9
 Tested up to: 6.6.2
 Requires PHP: 7.2
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -158,6 +158,10 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.0.2 - 2024-10-15 =
+- Fix missing style for MetaTags tab
+- Improve compatibility with page builders
 
 = 4.0.1 - 2024-10-12 =
 - Add integration for Forminator
