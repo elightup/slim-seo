@@ -14,22 +14,18 @@ class ZionBuilder {
 	}
 
 	public function description( string $description, WP_Post $post ): string {
-		return $this->get_post_content( $post ) ?: $description;
+		return $this->get_post_content( $post ) ?? $description;
 	}
 
-	private function get_post_content( WP_Post $post ): string {
+	private function get_post_content( WP_Post $post ): ?string {
 		$post_instance = \ZionBuilder\Plugin::$instance->post_manager->get_post_instance( $post->ID );
 
 		if ( ! $post_instance || $post_instance->is_password_protected() || ! $post_instance->is_built_with_zion() ) {
-			return '';
+			return null;
 		}
 
-		$post_template_data = $post_instance->get_template_data();
-		if ( empty( $post_template_data ) ) {
-			return '';
-		}
-
-		return $this->get_elements_content( $post_template_data );
+		$data = $post_instance->get_template_data();
+		return $this->get_elements_content( $data );
 	}
 
 	private function get_elements_content( array $data ): string {

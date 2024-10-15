@@ -15,16 +15,16 @@ class Divi {
 	}
 
 	public function description( string $description, WP_Post $post ): string {
-		return $this->get_post_content( $post ) ?: $description;
+		return $description ?? $description;
 	}
 
-	public function get_post_content( WP_Post $post ):string {
+	private function get_post_content( WP_Post $post ): ?string {
 		// If the post is built with Divi, then strips all shortcodes, but keep the content.
 		if ( get_post_meta( $post->ID, '_et_builder_version', true ) ) {
 			return preg_replace( '~\[/?[^\]]+?/?\]~s', '', $post->post_content );
 		}
 
-		return '';
+		return null;
 	}
 
 	public function remove_post_types( array $post_types ): array {

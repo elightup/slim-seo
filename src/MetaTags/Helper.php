@@ -99,7 +99,8 @@ class Helper {
 	}
 
 	public static function render( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
-		return str_contains( $text, '{{' ) ? self::render_dynamic_variables( $text, $post_id, $term_id, $data ) : $text;
+		$text = str_contains( $text, '{{' ) ? self::render_dynamic_variables( $text, $post_id, $term_id, $data ) : $text;
+		return self::normalize( $text );
 	}
 
 	private static function render_dynamic_variables( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
@@ -125,10 +126,7 @@ class Helper {
 			$render_data = Arr::merge_recursive( $render_data, $data );
 		}
 
-		$value = Renderer::render( $text, $render_data );
-		$value = self::normalize( $value );
-
-		return $value;
+		return Renderer::render( $text, $render_data );
 	}
 
 	public static function truncate( string $text, int $max = 160 ): string {
