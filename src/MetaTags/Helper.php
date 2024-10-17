@@ -3,9 +3,58 @@ namespace SlimSEO\MetaTags;
 
 use SlimTwig\Renderer;
 use SlimSEO\Helpers\Arr;
+use WP_Block_Type_Registry;
 
 class Helper {
+	private static $allowed_shortcodes = [];
+	private static $allowed_blocks = [];
+
+	private static $ran = false;
+
 	public static function normalize( $text ): string {
+		global $shortcode_tags;
+
+		// Get list of allowed shortcodes and blocks only once.
+		if ( ! self::$ran ) {
+			self::set_allowed_shortcodes();
+			self::set_allowed_blocks();
+		}
+
+		// Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
+		$shortcodes_bak = $shortcode_tags;
+		$shortcode_tags = self::$allowed_shortcodes;
+		$text           = do_shortcode( $text );
+		$shortcode_tags = $shortcodes_bak;                     // Revert the global shortcodes registry.
+		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
+
+		// Render blocks.
+		add_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ], 10, 2 );
+		$text = do_blocks( $text );
+		remove_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ] );
+
+		// Replace HTML tags with spaces.
+		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
+		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
+
+		// Remove lonely separator
+		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
+		$text      = trim( $text );
+		$text      = trim( $text, $separator );
+
+		// Remove extra white spaces.
+		$text = preg_replace( '/\s+/', ' ', $text );
+		$text = trim( $text );
+
+		self::$ran = true;
+
+		return $text;
+	}
+
+	public static function maybe_skip_block( ?string $pre_render, array $block ): ?string {
+		return empty( $block['blockName'] ) || in_array( $block['blockName'], self::$allowed_blocks, true ) ? $pre_render : '';
+	}
+
+	private static function set_allowed_shortcodes(): void {
 		global $shortcode_tags;
 
 		/**
@@ -31,40 +80,13 @@ class Helper {
 			'fe_sort',
 		] );
 
-		$shortcodes_bak = $shortcode_tags;
-
-		// @codingStandardsIgnoreLine.
-		$shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
-		$text           = do_shortcode( $text );      // Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
-
-		// @codingStandardsIgnoreLine.
-		$shortcode_tags = $shortcodes_bak;            // Revert the global shortcodes registry.
-		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
-
-		// Render blocks.
-		if ( function_exists( 'do_blocks' ) ) {
-			add_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ], 10, 2 );
-			$text = do_blocks( $text );
-			remove_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ] );
-		}
-
-		// Replace HTML tags with spaces.
-		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
-		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
-
-		// Remove lonely separator
-		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
-		$text      = trim( $text );
-		$text      = trim( $text, $separator );
-
-		// Remove extra white spaces.
-		$text = preg_replace( '/\s+/', ' ', $text );
-		$text = trim( $text );
-
-		return $text;
+		self::$allowed_shortcodes = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
+		self::$allowed_shortcodes = apply_filters( 'slim_seo_allowed_shortcodes', self::$allowed_shortcodes );
 	}
 
-	public static function maybe_skip_block( ?string $output, array $block ): ?string {
+	private static function set_allowed_blocks(): void {
+		$block_types = array_keys( WP_Block_Type_Registry::get_instance()->get_all_registered() );
+
 		$skipped_blocks = apply_filters( 'slim_seo_skipped_blocks', [
 			'core/query',
 			'core/code',
@@ -73,7 +95,9 @@ class Helper {
 			'ninja-forms/form',
 			'mailpoet/subscription-form-block',
 		] );
-		return in_array( $block['blockName'], $skipped_blocks, true ) ? '' : $output;
+
+		self::$allowed_blocks = array_diff( $block_types,  $skipped_blocks );
+		self::$allowed_blocks = apply_filters( 'slim_seo_allowed_blocks', self::$allowed_blocks );
 	}
 
 	public static function get_taxonomies() {
