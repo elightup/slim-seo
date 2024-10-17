@@ -7,7 +7,7 @@
  * Author URI:        https://wpslimseo.com
  * Version:           4.0.2
  * Text Domain:       slim-seo
- * Domain Path:       /languages
+ * License:           GPL-2
  * GitHub Plugin URI: elightup/slim-seo
  */
 
