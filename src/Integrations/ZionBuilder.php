@@ -10,14 +10,14 @@ class ZionBuilder {
 
 	public function setup(): void {
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
+		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
 	}
 
-	public function description( string $description, WP_Post $post ): string {
-		return $this->get_post_content( $post ) ?? $description;
+	public function filter_content( string $post_content, WP_Post $post ): string {
+		return $this->get_builder_content( $post ) ?? $post_content;
 	}
 
-	private function get_post_content( WP_Post $post ): ?string {
+	private function get_builder_content( WP_Post $post ): ?string {
 		$post_instance = \ZionBuilder\Plugin::$instance->post_manager->get_post_instance( $post->ID );
 
 		if ( ! $post_instance || $post_instance->is_password_protected() || ! $post_instance->is_built_with_zion() ) {

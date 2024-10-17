@@ -10,7 +10,7 @@ class Bricks {
 	}
 
 	public function setup(): void {
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
+		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );
 		add_filter( 'bricks/frontend/disable_seo', '__return_true' );
@@ -19,11 +19,11 @@ class Bricks {
 		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
 	}
 
-	public function description( string $description, WP_Post $post ): string {
-		return $this->get_post_content( $post ) ?? $description;
+	public function filter_content( string $post_content, WP_Post $post ): string {
+		return $this->get_builder_content( $post ) ?? $post_content;
 	}
 
-	private function get_post_content( WP_Post $post ): ?string {
+	private function get_builder_content( WP_Post $post ): ?string {
 		// Get from the post first, then from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
 		if ( empty( $data ) ) {
