@@ -9,16 +9,16 @@ class Oxygen {
 	}
 
 	public function setup(): void {
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
+		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 	}
 
-	public function description( string $description, WP_Post $post ): string {
-		return $this->get_post_content( $post ) ?: $description;
+	public function filter_content( string $post_content, WP_Post $post ): string {
+		return $this->get_builder_content( $post ) ?: $post_content;
 	}
 
-	public function get_post_content( WP_Post $post ): string {
+	public function get_builder_content( WP_Post $post ): string {
 		// In builder mode.
 		if ( defined( 'SHOW_CT_BUILDER' ) ) {
 			return '';

@@ -39,7 +39,7 @@ class Data {
 		if ( empty( $post ) ) {
 			return [];
 		}
-		$post_content = apply_filters( 'slim_seo_meta_description_generated', $post->post_content, $post );
+		$post_content = apply_filters( 'slim_seo_post_content', $post->post_content, $post );
 
 		$post_tax   = [];
 		$taxonomies = Helper::get_taxonomies();

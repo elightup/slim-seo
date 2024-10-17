@@ -13,7 +13,7 @@ class AffiliateWP {
 	public function process() {
 		// Do not generate meta description from the affiliate area page's content, because it contains forms.
 		if ( is_page( affwp_get_affiliate_area_page_id() ) ) {
-			add_filter( 'slim_seo_meta_description_generated', '__return_empty_string' );
+			add_filter( 'slim_seo_post_content', '__return_empty_string' );
 		}
 
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );

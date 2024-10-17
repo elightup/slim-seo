@@ -11,14 +11,14 @@ class Divi {
 	public function setup(): void {
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
+		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
 	}
 
-	public function description( string $description, WP_Post $post ): string {
-		return $description ?? $description;
+	public function filter_content( string $post_content, WP_Post $post ): string {
+		return $this->get_builder_content( $post ) ?? $post_content;
 	}
 
-	private function get_post_content( WP_Post $post ): ?string {
+	private function get_builder_content( WP_Post $post ): ?string {
 		// If the post is built with Divi, then strips all shortcodes, but keep the content.
 		if ( get_post_meta( $post->ID, '_et_builder_version', true ) ) {
 			return preg_replace( '~\[/?[^\]]+?/?\]~s', '', $post->post_content );
