@@ -12,14 +12,14 @@
 		<optgroup value="meta" label="<?php esc_html_e( 'SEO plugins', 'slim-seo' ); ?>">
 			<?php $sources = SlimSEO\Helpers\Data::get_migration_sources( 'meta' ) ?>
 			<?php foreach ( $sources as $id => $source ) : ?>
-				<option value="<?= esc_attr( $id ); ?>"><?= esc_html( $source ); ?></option>
+				<option value="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $source ); ?></option>
 			<?php endforeach ?>
 		</optgroup>
 
 		<optgroup value="redirection" label="<?php esc_html_e( 'Redirection plugins', 'slim-seo' ); ?>">
 			<?php $sources = SlimSEO\Helpers\Data::get_migration_sources( 'redirection' ) ?>
 			<?php foreach ( $sources as $id => $source ) : ?>
-				<option value="<?= esc_attr( $id ); ?>"><?= esc_html( $source ); ?></option>
+				<option value="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $source ); ?></option>
 			<?php endforeach ?>
 		</optgroup>
 	</select>

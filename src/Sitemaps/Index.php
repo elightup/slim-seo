@@ -45,8 +45,10 @@ class Index {
 	}
 
 	private function output_taxonomy_sitemap( $taxonomy ) {
-		$term_count = wp_count_terms( $taxonomy, Taxonomy::get_query_args() );
-		$max_page   = (int) ceil( $term_count / 2000 );
+		$args             = Taxonomy::get_query_args();
+		$args['taxonomy'] = $taxonomy;
+		$term_count       = wp_count_terms( $args );
+		$max_page         = (int) ceil( $term_count / 2000 );
 		for ( $i = 1; $i <= $max_page; $i++ ) {
 			echo "\t<sitemap>\n";
 			$index = 1 === $i ? '' : "-$i";
