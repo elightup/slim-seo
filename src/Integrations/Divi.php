@@ -15,7 +15,7 @@ class Divi {
 	}
 
 	public function description( string $description, WP_Post $post ): string {
-		return $description ?? $description;
+		return $this->get_post_content( $post ) ?? $description;
 	}
 
 	private function get_post_content( WP_Post $post ): ?string {
