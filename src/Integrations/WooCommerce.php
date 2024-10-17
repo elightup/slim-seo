@@ -23,8 +23,7 @@ class WooCommerce {
 		add_filter( 'slim_seo_breadcrumbs_args', [ $this, 'change_breadcrumbs_taxonomy' ] );
 
 		if ( $this->is_skipped_page() ) {
-			add_filter( 'slim_seo_allowed_shortcodes', '__return_empty_array' );
-			add_filter( 'slim_seo_allowed_blocks', '__return_empty_array' );
+			add_filter( 'slim_seo_post_content', '__return_empty_string' );
 		}
 
 		if ( is_singular( 'product' ) ) {
