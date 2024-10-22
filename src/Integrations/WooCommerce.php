@@ -26,6 +26,8 @@ class WooCommerce {
 			add_filter( 'slim_seo_post_content', '__return_empty_string' );
 		}
 
+		add_filter( 'slim_seo_allowed_shortcodes', [ $this, 'exclude_shortcodes' ] );
+
 		if ( is_singular( 'product' ) ) {
 			$this->add_pinterest_pins();
 		}
@@ -38,6 +40,12 @@ class WooCommerce {
 
 	private function is_skipped_page(): bool {
 		return is_cart() || is_checkout() || is_account_page();
+	}
+
+	public function exclude_shortcodes( array $shortcodes ): array {
+		return array_filter( $shortcodes, function ( $callback ): bool {
+			return ! is_string( $callback ) || ! str_starts_with( $callback, 'WC_Shortcodes' );
+		} );
 	}
 
 	private function add_pinterest_pins() {
