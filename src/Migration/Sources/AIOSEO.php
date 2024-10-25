@@ -108,7 +108,7 @@ class AIOSEO extends Source {
 
 		$column = $type === 'twitter' ? 'twitter_image_url' : 'og_image_url';
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return $wpdb->get_var( $wpdb->prepare( "SELECT $column FROM {$wpdb->prefix}aioseo_posts WHERE post_id = %d", $post->ID ) );
 	}
 }

@@ -165,8 +165,10 @@ class PostType {
 		$post_ids = implode( ',', $post_ids );
 
 		global $wpdb;
-		$sql   = "SELECT * FROM $wpdb->posts WHERE ID IN ($post_ids)";
-		$posts = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$sql = "SELECT * FROM $wpdb->posts WHERE ID IN ($post_ids)";
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$posts = $wpdb->get_results( $sql );
 
 		foreach ( $posts as $post ) {
 			$post = sanitize_post( $post, 'raw' );
