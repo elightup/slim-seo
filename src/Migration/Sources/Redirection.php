@@ -12,6 +12,7 @@ class Redirection extends Source {
 
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}redirection_items", ARRAY_A );
 
 		if ( empty( $results ) ) {

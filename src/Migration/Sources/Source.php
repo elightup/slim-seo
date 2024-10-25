@@ -42,6 +42,8 @@ abstract class Source {
 	public function migrate_redirects() {
 	}
 
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.Found
+
 	protected function before_migrate_post( $post_id ) {
 	}
 

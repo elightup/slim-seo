@@ -17,7 +17,7 @@ abstract class Base {
 	public function enqueue(): void {
 		wp_enqueue_media();
 
-		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/content.css' ) );
+		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/meta-tags.css' ) );
 		Assets::enqueue_build_js( 'single', 'ss', [
 			'mediaPopupTitle' => __( 'Select An Image', 'slim-seo' ),
 			'id'              => $this->get_object_id(),
@@ -38,6 +38,7 @@ abstract class Base {
 		}
 
 		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : []; // phpcs:ignore
+		$data = array_merge( $this->defaults, $data );
 
 		// Do not erase existing data when quick editing.
 		if ( isset( $_POST['action'] ) && $_POST['action'] === 'inline-save' ) { // phpcs:ignore

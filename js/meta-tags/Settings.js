@@ -12,7 +12,7 @@ const App = () => {
 	const [ option, setOption ] = useState( {} );
 
 	useEffect( () => {
-		request( 'content/option' ).then( ( res ) => {
+		request( 'meta-tags/option' ).then( ( res ) => {
 			setOption( res );
 			setLoaded( true );
 		} );
@@ -79,6 +79,6 @@ const App = () => {
 	</>;
 };
 
-const container = document.getElementById( 'ss-content' );
+const container = document.getElementById( 'ss-meta-tags' );
 const root = createRoot( container );
 root.render( <App /> );

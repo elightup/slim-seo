@@ -8,11 +8,18 @@ jobs:
     name: New tag
     runs-on: ubuntu-latest
     steps:
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_KEY }}
+        known_hosts: ${{ secrets.SSH_KNOWN_HOSTS_SLIM_SEO }}
     - uses: actions/checkout@master
     - name: Install PHP dependencies
       run: composer install --no-dev
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
+      with:
+        version: 9
     - name: Install NPM dependencies
       run: pnpm install
     - name: Build Javascript

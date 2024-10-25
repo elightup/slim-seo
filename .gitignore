@@ -9,9 +9,11 @@ vendor
 *.LICENSE.txt
 
 css/admin-columns.css
-css/content.css
+css/meta-tags.css
 css/redirection.css
 
 js/breadcrumbs/dist
 js/build
 js/link-attributes/block-editor/dist
+
+phpcs.txt

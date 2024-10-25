@@ -2,11 +2,10 @@ import { Button, Dropdown } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import Select from "react-select";
-import slugify from "slugify";
 import { request } from "../../functions";
 import Inserter from "../Inserter";
 
-const PropInserter = ( { data = 'content/variables', inputRef, replace = false, onInsert } ) => {
+const PropInserter = ( { data = 'meta-tags/variables', inputRef, replace = false, onInsert } ) => {
 	const [ showModal, setShowModal ] = useState( false );
 
 	const handleSelectItem = ( e, onToggle ) => {
@@ -56,7 +55,7 @@ const VariableInserter = ( { data, onSelect } ) => {
 const Modal = ( { setShowModal, setValue } ) => {
 	const [ options, setOptions ] = useState( [] );
 	useEffect( () => {
-		request( 'content/meta_keys' ).then( setOptions );
+		request( 'meta-tags/meta_keys' ).then( setOptions );
 	}, [] );
 	const hideModal = () => setShowModal( false );
 	const onSelect = item => {

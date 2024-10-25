@@ -3,18 +3,14 @@ namespace SlimSEO\Integrations;
 
 use WP_Post;
 use SlimSEO\MetaTags\Helper;
-use SlimSEO\Helpers\Arr;
 
 class Bricks {
-	private $is_auto_genereted = false;
-
 	public function is_active(): bool {
 		return defined( 'BRICKS_VERSION' );
 	}
 
-	public function setup() {
-		add_filter( 'slim_seo_data', [ $this, 'replace_post_content' ] );
-		add_filter( 'slim_seo_meta_description_generated', [ $this, 'description' ], 10, 2 );
+	public function setup(): void {
+		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );
 		add_filter( 'bricks/frontend/disable_seo', '__return_true' );
@@ -23,47 +19,18 @@ class Bricks {
 		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
 	}
 
-	public function replace_post_content( array $data ): array {
-		if ( $this->is_auto_genereted ) {
-			return $data;
-		}
-
-		$post = is_singular() ? get_queried_object() : get_post();
-		if ( empty( $post ) ) {
-			return $data;
-		}
-		$content = Arr::get( $data, 'post.content', '' );
-		// Priority WordPress post content first.
-		if ( $content ) {
-			return $data;
-		}
-
-		$content = $this->get_post_content( $post );
-		if ( $content ) {
-			Arr::set( $data, 'post.content', $content );
-		}
-
-		return $data;
+	public function filter_content( string $post_content, WP_Post $post ): string {
+		return $this->get_builder_content( $post ) ?? $post_content;
 	}
 
-	public function description( $description, WP_Post $post ) {
-		$content = $this->get_post_content( $post );
-		if ( $content ) {
-			$this->is_auto_genereted = true;
-			return $content;
-		}
-
-		return $description;
-	}
-
-	private function get_post_content( WP_Post $post ): string {
+	private function get_builder_content( WP_Post $post ): ?string {
 		// Get from the post first, then from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
 		if ( empty( $data ) ) {
 			$data = \Bricks\Helpers::get_bricks_data( $post->ID );
 		}
 		if ( empty( $data ) ) {
-			return '';
+			return null;
 		}
 
 		$data = $this->remove_elements( $data );
@@ -122,6 +89,14 @@ class Bricks {
 
 			// Ignore element with query loop.
 			if ( ! empty( $element['settings']['hasLoop'] ) ) {
+				return false;
+			}
+
+			// Remove elements with scripts, like sliders or counters, to avoid breaking layouts.
+			$scripts = \Bricks\Elements::get_element( $element, 'scripts' );
+			// Don't count 'bricksBackgroundVideoInit' as it's always enabled for nestable elements.
+			$scripts = array_diff( $scripts, [ 'bricksBackgroundVideoInit' ] );
+			if ( ! empty( $scripts ) ) {
 				return false;
 			}
 

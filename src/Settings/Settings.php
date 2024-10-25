@@ -2,7 +2,7 @@
 namespace SlimSEO\Settings;
 
 class Settings {
-	private $content_manager;
+	private $meta_tags;
 
 	private $defaults = [
 		'header_code'            => '',
@@ -30,7 +30,7 @@ class Settings {
 	];
 
 	public function __construct() {
-		$this->content_manager = new Content\Manager;
+		$this->meta_tags = new MetaTags\Manager;
 	}
 
 	public function setup(): void {
@@ -42,24 +42,24 @@ class Settings {
 	}
 
 	public function add_tabs( array $tabs ): array {
-		$tabs['general'] = __( 'Features', 'slim-seo' );
-		$tabs['content'] = __( 'Content', 'slim-seo' );
-		$tabs['social']  = __( 'Social', 'slim-seo' );
-		$tabs['tools']   = __( 'Tools', 'slim-seo' );
+		$tabs['general']   = __( 'Features', 'slim-seo' );
+		$tabs['meta-tags'] = __( 'Meta Tags', 'slim-seo' );
+		$tabs['social']    = __( 'Social', 'slim-seo' );
+		$tabs['tools']     = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 
 	public function add_panes( array $panes ): array {
-		$panes['general'] = $this->get_pane( 'general' );
-		$panes['content'] = $this->get_pane( 'content' );
-		$panes['social']  = $this->get_pane( 'social' );
-		$panes['tools']   = $this->get_pane( 'tools' );
+		$panes['general']   = $this->get_pane( 'general' );
+		$panes['meta-tags'] = $this->get_pane( 'meta-tags' );
+		$panes['social']    = $this->get_pane( 'social' );
+		$panes['tools']     = $this->get_pane( 'tools' );
 		return $panes;
 	}
 
 	public function enqueue() {
 		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
-		$this->content_manager->enqueue();
+		$this->meta_tags->enqueue();
 
 		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
 
@@ -91,7 +91,7 @@ class Settings {
 	private function sanitize( $option, $data ) {
 		$option = array_merge( $this->defaults, $option );
 
-		$this->content_manager->sanitize( $option, $data );
+		$this->meta_tags->sanitize( $option, $data );
 
 		return array_filter( $option );
 	}
@@ -111,7 +111,7 @@ class Settings {
 
 		ob_start();
 		echo '<div id="', esc_attr( $name ), '" class="ss-tab-pane">';
-		include __DIR__ . "/sections/$name.php";
+		include __DIR__ . "/tabs/$name.php";
 		echo '</div>';
 		return ob_get_clean();
 	}

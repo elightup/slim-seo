@@ -35,7 +35,7 @@ const TermDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'content/render_term_description', { ID: ss.id, text: value, description: descriptionRef.current } ).then( response => {
+		request( 'meta-tags/render_term_description', { ID: ss.id, text: value, description: descriptionRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );

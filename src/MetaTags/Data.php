@@ -4,7 +4,6 @@ namespace SlimSEO\MetaTags;
 use WP_Post;
 use WP_Term;
 use WP_Post_Type;
-use SlimSEO\Helpers\Arr;
 
 class Data {
 	private $data = [];
@@ -28,7 +27,7 @@ class Data {
 			[ 'author' => $this->get_author_data() ],
 			[ 'user' => $this->get_user_data() ],
 			[ 'site' => $this->get_site_data() ],
-			$this->get_other_data(),
+			$this->get_other_data()
 		);
 		$this->data = apply_filters( 'slim_seo_data', $this->data );
 
@@ -36,16 +35,11 @@ class Data {
 	}
 
 	private function get_post_data(): array {
-		if ( $this->post_id ) {
-			$post = get_post( $this->post_id );
-		} else {
-			$post = is_singular() ? get_queried_object() : get_post();
-		}
-
+		$post = get_post( $this->post_id ?: QueriedObject::get_id() );
 		if ( empty( $post ) ) {
 			return [];
 		}
-		$post_content = apply_filters( 'slim_seo_meta_description_generated', $post->post_content, $post );
+		$post_content = apply_filters( 'slim_seo_post_content', $post->post_content, $post );
 
 		$post_tax   = [];
 		$taxonomies = Helper::get_taxonomies();
@@ -140,7 +134,11 @@ class Data {
 		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
 	}
 
-	private function get_custom_field_data( WP_Post $post ): array {
+	private function get_custom_field_data( $post ): array {
+		if ( ! ( $post instanceof WP_Post ) ) {
+			return [];
+		}
+
 		$meta_values = get_post_meta( $post->ID );
 		$data        = [];
 		foreach ( $meta_values as $key => $value ) {
@@ -150,14 +148,15 @@ class Data {
 	}
 
 	private function get_other_data(): array {
-		global $wp_query, $page, $paged;
+		global $page, $paged;
 
 		return [
 			'current' => [
 				'year' => wp_date( 'Y' ),
 			],
+			// Translators: %s - page number
 			'page'    => $paged >= 2 || $page >= 2 ? sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) ) : '',
-			'sep'     => apply_filters( 'document_title_separator', '-' ),
+			'sep'     => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		];
 	}
 

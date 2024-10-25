@@ -197,13 +197,10 @@ class Redirection {
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
 		$request_url = strtolower( $request_url );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$post_id     = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT post_id
-				FROM $wpdb->postmeta
-				WHERE meta_key = '_ss_old_permalink' AND meta_value = %s",
-				$request_url
-			)
+			$wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_ss_old_permalink' AND meta_value = %s", $request_url )
 		);
 
 		if ( empty( $post_id ) ) {

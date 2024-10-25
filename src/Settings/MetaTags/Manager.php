@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Settings\Content;
+namespace SlimSEO\Settings\MetaTags;
 
 use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
@@ -15,8 +15,9 @@ class Manager {
 	public function enqueue(): void {
 		wp_enqueue_media();
 
-		wp_enqueue_style( 'slim-seo-content', SLIM_SEO_URL . 'css/content.css', [], filemtime( SLIM_SEO_DIR . '/css/content.css' ) );
-		Assets::enqueue_build_js( 'content', 'ss', [
+		wp_enqueue_style( 'slim-seo-react-tabs', SLIM_SEO_URL . 'css/react-tabs.css', [], filemtime( SLIM_SEO_DIR . '/css/react-tabs.css' ) );
+		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [], filemtime( SLIM_SEO_DIR . '/css/meta-tags.css' ) );
+		Assets::enqueue_build_js( 'meta-tags', 'ss', [
 			'hasHomepageSettings'      => $this->has_homepage_settings(),
 			'homepage'                 => $this->get_home_data(),
 			'postTypes'                => Data::get_post_types(),

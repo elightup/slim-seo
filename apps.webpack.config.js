@@ -9,8 +9,8 @@ module.exports = {
 	...defaultConfig,
 	...{
 		entry: {
-			single: './js/content/Single.js', // Meta tags for singular pages.
-			content: './js/content/Settings.js', // Settings > Content tab.
+			single: './js/meta-tags/Single.js', // Meta tags for singular pages.
+			"meta-tags": './js/meta-tags/Settings.js', // Settings > Meta Tags tab.
 			redirection: './js/redirection/App.js', // Redirection app.
 		},
 		output: {

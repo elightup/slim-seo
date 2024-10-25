@@ -33,6 +33,8 @@ class Redirects {
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
 
+		Helper::purge_cache();
+
 		return $id;
 	}
 
@@ -42,15 +44,21 @@ class Redirects {
 		}, ARRAY_FILTER_USE_KEY );
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
+
+		Helper::purge_cache();
 	}
 
 	public function delete_all() {
 		delete_option( SLIM_SEO_REDIRECTS, $this->redirects );
+
+		Helper::purge_cache();
 	}
 
 	public function update_all( array $redirects ) {
 		$this->redirects = $redirects;
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
+
+		Helper::purge_cache();
 	}
 }
