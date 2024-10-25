@@ -46,6 +46,9 @@
 			return;
 		}
 
+		e.preventDefault();
+		e.target.disabled = true;
+
 		const noindex = document.querySelector( '#bulk-edit select[name="noindex"]' ).value;
 		const ids = [ ...document.querySelectorAll( '#the-list input[name="post[]"]' ) ]
 			.filter( node => node.checked ).map( node => node.value )
@@ -56,6 +59,6 @@
 			noindex,
 			nonce
 		};
-		fetch( `${ ajaxurl }?${ toQueryString( params ) }` );
+		fetch( `${ ajaxurl }?${ toQueryString( params ) }` ).then( () => e.target.closest( 'form' ).submit() );
 	} );
 } )();
