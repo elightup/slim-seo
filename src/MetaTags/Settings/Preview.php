@@ -94,7 +94,7 @@ class Preview {
 
 	private function get_default_post_title( int $post_id ): string {
 		// For static frontpage: don't use page's settings, use WordPress default instead.
-		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
+		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
 		if ( $is_static_frontpage ) {
 			return '{{ site.title }} {{ sep }} {{ site.description }}';
 		}

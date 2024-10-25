@@ -3,7 +3,7 @@ namespace SlimSEO\Helpers;
 
 class Assets {
 	public static function enqueue_build_js( string $name, string $localized_object = '', array $localized_data = [] ): void {
-		$asset = [
+		$asset      = [
 			'dependencies' => [],
 			'version'      => filemtime( SLIM_SEO_DIR . "js/build/$name.js" ),
 		];

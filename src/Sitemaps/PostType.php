@@ -165,7 +165,9 @@ class PostType {
 		$post_ids = implode( ',', $post_ids );
 
 		global $wpdb;
-		$sql   = "SELECT * FROM $wpdb->posts WHERE ID IN ($post_ids)";
+		$sql = "SELECT * FROM $wpdb->posts WHERE ID IN ($post_ids)";
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$posts = $wpdb->get_results( $sql );
 
 		foreach ( $posts as $post ) {
@@ -176,7 +178,7 @@ class PostType {
 
 	private function is_published_within_2days( WP_Post $post ): bool {
 		$timestamp             = strtotime( $post->post_date_gmt );
-		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( date( 'Y-m-d' ) ) );
+		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( gmdate( 'Y-m-d' ) ) );
 
 		return $timestamp >= $two_days_ago_midnight;
 	}

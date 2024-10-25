@@ -3,10 +3,10 @@ namespace SlimSEO\MetaTags;
 
 class QueriedObject {
 	private static $object = null;
-	private static $id = 0;
+	private static $id     = 0;
 
-	public static function set( $object ): void {
-		self::$object = $object;
+	public static function set( $queried_object ): void {
+		self::$object = $queried_object;
 	}
 
 	public static function get() {

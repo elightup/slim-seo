@@ -7,7 +7,7 @@ use WP_Block_Type_Registry;
 
 class Helper {
 	private static $allowed_shortcodes = [];
-	private static $allowed_blocks = [];
+	private static $allowed_blocks     = [];
 
 	private static $ran = false;
 
@@ -22,9 +22,9 @@ class Helper {
 
 		// Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
 		$shortcodes_bak = $shortcode_tags;
-		$shortcode_tags = self::$allowed_shortcodes;
+		$shortcode_tags = self::$allowed_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$text           = do_shortcode( $text );
-		$shortcode_tags = $shortcodes_bak;                     // Revert the global shortcodes registry.
+		$shortcode_tags = $shortcodes_bak;                     // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
 
 		// Render blocks.
@@ -96,7 +96,7 @@ class Helper {
 			'mailpoet/subscription-form-block',
 		] );
 
-		self::$allowed_blocks = array_diff( $block_types,  $skipped_blocks );
+		self::$allowed_blocks = array_diff( $block_types, $skipped_blocks );
 		self::$allowed_blocks = apply_filters( 'slim_seo_allowed_blocks', self::$allowed_blocks );
 	}
 

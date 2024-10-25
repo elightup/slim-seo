@@ -153,6 +153,7 @@ class RestApi {
 
 	public function get_meta_keys(): array {
 		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$meta_keys = $wpdb->get_col( "SELECT DISTINCT meta_key FROM $wpdb->postmeta ORDER BY meta_key" );
 		$meta_keys = $this->exclude_defaults( $meta_keys );
 		$options   = [];

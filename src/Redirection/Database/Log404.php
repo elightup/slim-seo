@@ -13,7 +13,7 @@ class Log404 {
 		$wpdb->slim_seo_404 = $wpdb->prefix . 'slim_seo_404';
 	}
 
-	public function create_table() {
+	public function create_table(): void {
 		if ( ! Settings::get( 'enable_404_logs' ) ) {
 			return;
 		}
@@ -52,24 +52,21 @@ class Log404 {
 		return get_option( $this->option_name ) ? true : false;
 	}
 
-	public function drop_table() {
+	public function drop_table(): void {
 		global $wpdb;
 
 		delete_option( $this->option_name );
-		// @codingStandardsIgnoreLine.
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->slim_seo_404}" );
 	}
 
 	public function get_log_by_url( string $value ): array {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$row = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT *
-				FROM {$wpdb->slim_seo_404}
-				WHERE `url` = %s",
-				$value
-			),
+			$wpdb->prepare( "SELECT * FROM {$wpdb->slim_seo_404} WHERE `url` = %s", $value ),
 			ARRAY_A
 		);
 
@@ -79,82 +76,55 @@ class Log404 {
 	public function get_total(): int {
 		global $wpdb;
 
-		return $wpdb->get_var(
-			"SELECT COUNT(*)
-			FROM {$wpdb->slim_seo_404}"
-		);
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->slim_seo_404}" );
 	}
 
 	public function list( string $order_by = 'updated_at', string $order = 'DESC', int $limit = 0, int $offset = 0 ): array {
 		global $wpdb;
 
-		$sql_query = "
-			SELECT * 
-			FROM {$wpdb->slim_seo_404} 
-			ORDER BY `{$order_by}` {$order}
-		";
+		$sql_query = "SELECT * FROM {$wpdb->slim_seo_404} ORDER BY `{$order_by}` {$order}";
 
 		if ( $limit ) {
 			$sql_query .= " LIMIT {$limit} OFFSET {$offset}";
 		}
 
-		// @codingStandardsIgnoreStart
-		return $wpdb->get_results(
-			$sql_query,
-			ARRAY_A
-		);
-		// @codingStandardsIgnoreEnd
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return $wpdb->get_results( $sql_query, ARRAY_A );
 	}
 
-	public function add( array $log ) {
+	public function add( array $log ): void {
 		global $wpdb;
 
-		$wpdb->insert(
-			$wpdb->slim_seo_404,
-			$log
-		);
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$wpdb->insert( $wpdb->slim_seo_404, $log );
 	}
 
-	public function update( array $log ) {
+	public function update( array $log ): void {
 		global $wpdb;
 
-		$wpdb->update(
-			$wpdb->slim_seo_404,
-			$log,
-			[ 'id' => $log['id'] ]
-		);
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->update( $wpdb->slim_seo_404, $log, [ 'id' => $log['id'] ] );
 	}
 
-	public function delete_older_logs( int $days ) {
+	public function delete_older_logs( int $days ): void {
 		global $wpdb;
 
-		// @codingStandardsIgnoreStart
-		$wpdb->query(
-			"DELETE FROM {$wpdb->slim_seo_404}
-			WHERE updated_at < NOW() - INTERVAL {$days} DAY"
-		);
-		// @codingStandardsIgnoreEnd
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( "DELETE FROM {$wpdb->slim_seo_404} WHERE updated_at < NOW() - INTERVAL {$days} DAY" );
 	}
 
-	public function delete( int $id ) {
+	public function delete( int $id ): void {
 		global $wpdb;
 
-		// @codingStandardsIgnoreStart
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->slim_seo_404}
-				WHERE `id` = %d",
-
-				$id
-			)
-		);
-		// @codingStandardsIgnoreEnd
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->slim_seo_404} WHERE `id` = %d", $id ) );
 	}
 
-	public function delete_all() {
+	public function delete_all(): void {
 		global $wpdb;
 
-		// @codingStandardsIgnoreLine.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( "DELETE FROM {$wpdb->slim_seo_404}" );
 	}
 }

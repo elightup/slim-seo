@@ -15,3 +15,5 @@ css/redirection.css
 js/breadcrumbs/dist
 js/build
 js/link-attributes/block-editor/dist
+
+phpcs.txt

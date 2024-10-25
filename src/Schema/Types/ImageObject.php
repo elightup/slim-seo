@@ -19,7 +19,7 @@ class ImageObject extends Base {
 			return null !== $this->image && get_attached_file( $this->image_id );
 		}
 
-		return !empty( $this->image_url );
+		return ! empty( $this->image_url );
 	}
 
 	public function set_image_id( int $id ): void {

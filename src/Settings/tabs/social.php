@@ -9,7 +9,7 @@
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">
-			<input type="text" autocomplete="autocomplete_off_facebook" id="ss-default-facebook-image" name="slim_seo[default_facebook_image]" value="<?= esc_attr( $data['default_facebook_image'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_facebook" id="ss-default-facebook-image" name="slim_seo[default_facebook_image]" value="<?php echo esc_attr( $data['default_facebook_image'] ); ?>">
 			<button type="button" class="components-button ss-select-image has-icon">
 				<span class="dashicon dashicons dashicons-format-image"></span>
 			</button>
@@ -26,7 +26,7 @@
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">
-			<input type="text" autocomplete="autocomplete_off_twitter" id="ss-default-twitter-image" name="slim_seo[default_twitter_image]" value="<?= esc_attr( $data['default_twitter_image'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_twitter" id="ss-default-twitter-image" name="slim_seo[default_twitter_image]" value="<?php echo esc_attr( $data['default_twitter_image'] ); ?>">
 			<button type="button" class="components-button ss-select-image has-icon">
 				<span class="dashicon dashicons dashicons-format-image"></span>
 			</button>
@@ -46,7 +46,7 @@
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-group">
-			<input type="text" autocomplete="autocomplete_off_facebook_app" id="ss-facebook-app-id" name="slim_seo[facebook_app_id]" value="<?= esc_attr( $data['facebook_app_id'] ); ?>">
+			<input type="text" autocomplete="autocomplete_off_facebook_app" id="ss-facebook-app-id" name="slim_seo[facebook_app_id]" value="<?php echo esc_attr( $data['facebook_app_id'] ); ?>">
 		</div>
 	</div>
 </div>
@@ -57,7 +57,7 @@
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">
-			<input type="text" autocomplete="autocomplete_off_twitter_site" id="ss-twitter-site" name="slim_seo[twitter_site]" value="<?= esc_attr( $data['twitter_site'] ); ?>" placeholder="@account_name">
+			<input type="text" autocomplete="autocomplete_off_twitter_site" id="ss-twitter-site" name="slim_seo[twitter_site]" value="<?php echo esc_attr( $data['twitter_site'] ); ?>" placeholder="@account_name">
 		</div>
 	</div>
 </div>
