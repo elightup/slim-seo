@@ -38,6 +38,7 @@ abstract class Base {
 		}
 
 		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : []; // phpcs:ignore
+		$data = array_merge( $this->defaults, $data );
 
 		// Do not erase existing data when quick editing.
 		if ( isset( $_POST['action'] ) && $_POST['action'] === 'inline-save' ) { // phpcs:ignore
