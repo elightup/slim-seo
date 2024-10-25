@@ -38,7 +38,7 @@ class Migration {
 	}
 
 	private function get_source_id(): string {
-		$source_id = filter_input( INPUT_GET, 'source_id' );
+		$source_id = sanitize_text_field( filter_input( INPUT_GET, 'source_id' ) );
 		if ( empty( $source_id ) ) {
 			wp_send_json_error( __( 'No platforms selected', 'slim-seo' ), 400 );
 		}
@@ -71,7 +71,8 @@ class Migration {
 
 	public function migrate_posts(): void {
 		session_start();
-		$this->set_source( $_SESSION['source_id'] );
+		$source_id = sanitize_text_field( $_SESSION['source_id'] ?? '' );
+		$this->set_source( $source_id );
 		$posts = $this->get_posts();
 		if ( empty( $posts ) ) {
 			wp_send_json_success( [
@@ -83,18 +84,21 @@ class Migration {
 			$this->migrate_post( $post_id );
 		}
 
-		$_SESSION['processed'] += count( $posts );
+		if ( isset( $_SESSION['processed'] ) ) {
+			$_SESSION['processed'] += count( $posts );
+		}
 
 		wp_send_json_success( [
 			// Translators: %d is the number of processed posts.
-			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), $_SESSION['processed'] ),
+			'message' => sprintf( __( 'Processed %d posts...', 'slim-seo' ), intval( $_SESSION['processed'] ?? 0 ) ),
 			'type'    => 'continue',
 		] );
 	}
 
 	public function migrate_terms(): void {
 		session_start();
-		$this->set_source( $_SESSION['source_id'] );
+		$source_id = sanitize_text_field( $_SESSION['source_id'] ?? '' );
+		$this->set_source( $source_id );
 		$terms = $this->get_terms();
 
 		if ( empty( $terms ) ) {
@@ -108,18 +112,21 @@ class Migration {
 			$this->migrate_term( $term_id );
 		}
 
-		$_SESSION['processed'] += count( $terms );
+		if ( isset( $_SESSION['processed'] ) ) {
+			$_SESSION['processed'] += count( $terms );
+		}
 
 		wp_send_json_success( [
 			// Translators: %d is the number of processed items.
-			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), $_SESSION['processed'] ),
+			'message' => sprintf( __( 'Processed %d terms...', 'slim-seo' ), intval( $_SESSION['processed'] ?? 0 ) ),
 			'type'    => 'continue',
 		] );
 	}
 
 	public function migrate_redirects() {
 		session_start();
-		$this->set_source( $_SESSION['source_id'] );
+		$source_id = sanitize_text_field( $_SESSION['source_id'] ?? '' );
+		$this->set_source( $source_id );
 		$count = $this->source->migrate_redirects();
 
 		if ( empty( $count ) ) {
@@ -149,7 +156,7 @@ class Migration {
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
 			'fields'         => 'ids',
-			'offset'         => $_SESSION['processed'],
+			'offset'         => intval( $_SESSION['processed'] ?? 0 ),
 		] );
 
 		return $query->posts;
@@ -161,7 +168,7 @@ class Migration {
 			'hide_empty' => false,
 			'fields'     => 'ids',
 			'number'     => $this->threshold,
-			'offset'     => $_SESSION['processed'],
+			'offset'     => intval( $_SESSION['processed'] ?? 0 ),
 		] );
 	}
 }

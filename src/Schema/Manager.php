@@ -154,7 +154,7 @@ class Manager {
 	}
 
 	private function add_author_schemas() {
-		$author       = new Types\Person( 'author' );
+		$author      = new Types\Person( 'author' );
 		$author_user = get_queried_object();
 		if ( ! ( $author_user instanceof WP_User ) ) {
 			return;

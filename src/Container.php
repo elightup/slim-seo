@@ -31,7 +31,7 @@ class Container {
 		$services['zion']           = new Integrations\ZionBuilder;
 		$services['divi']           = new Integrations\Divi;
 		$services['mylisting']      = new Integrations\MyListing;
-		$services['forminator']      = new Integrations\Forminator;
+		$services['forminator']     = new Integrations\Forminator;
 
 		$services['settings']           = new Settings\Settings;
 		$services['code']               = new Code( $services['settings'] );

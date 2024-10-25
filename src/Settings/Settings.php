@@ -42,10 +42,10 @@ class Settings {
 	}
 
 	public function add_tabs( array $tabs ): array {
-		$tabs['general'] = __( 'Features', 'slim-seo' );
+		$tabs['general']   = __( 'Features', 'slim-seo' );
 		$tabs['meta-tags'] = __( 'Meta Tags', 'slim-seo' );
-		$tabs['social']  = __( 'Social', 'slim-seo' );
-		$tabs['tools']   = __( 'Tools', 'slim-seo' );
+		$tabs['social']    = __( 'Social', 'slim-seo' );
+		$tabs['tools']     = __( 'Tools', 'slim-seo' );
 		return $tabs;
 	}
 

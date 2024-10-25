@@ -106,16 +106,15 @@ class AIOSEO extends Source {
 	private function getAioImage( $type, $post ) {
 		global $wpdb;
 
-		$column = 'og_image_url';
-		if ( 'twitter' === $type ) {
-			$column = 'twitter_image_url';
-		}
+		$column = $type === 'twitter' ? 'twitter_image_url' : 'og_image_url';
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		return $wpdb->get_var( $wpdb->prepare( "SELECT $column FROM {$wpdb->prefix}aioseo_posts WHERE post_id = %d", $post->ID ) );
 	}
 }
 
 if ( class_exists( 'AIOSEO\Plugin\Common\Social\Image' ) ) {
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 	class ExtImage extends Common\Social\Image {
 		public function __get( $name ) {
 			$method = ( 'get' . ucfirst( $name ) );
@@ -124,7 +123,7 @@ if ( class_exists( 'AIOSEO\Plugin\Common\Social\Image' ) ) {
 			}
 		}
 		public function getThumbnailSize() {
-			return $this->thumbnailSize;
+			return $this->thumbnailSize; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		}
 	}
 }

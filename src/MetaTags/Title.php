@@ -22,9 +22,9 @@ class Title {
 
 	public function filter_title( $title ): string {
 		$custom_title = $this->get_value();
-		$title = $custom_title ?: (string) $title;
-		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
-		$title = Helper::render( $title );
+		$title        = $custom_title ?: (string) $title;
+		$title        = (string) apply_filters( 'slim_seo_meta_title', $title, $this->get_queried_object_id() );
+		$title        = Helper::render( $title );
 
 		return $title;
 	}
@@ -44,14 +44,14 @@ class Title {
 	 * @see AdminColumns/Post.php.
 	 */
 	public function get_singular_value( $post_id = 0 ): string {
-		$post_id = $post_id ?: $this->get_queried_object_id();
+		$post_id = (int) ( $post_id ?: $this->get_queried_object_id() );
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
 			return $data['title'];
 		}
 
 		// For static frontpage: don't use page's settings, use WordPress default instead.
-		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' );
+		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
 		if ( $is_static_frontpage ) {
 			return '';
 		}

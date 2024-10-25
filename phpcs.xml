@@ -35,6 +35,8 @@
 	<exclude-pattern>/.github/*</exclude-pattern>
 	<exclude-pattern>*.min.js</exclude-pattern>
 	<exclude-pattern>node_modules</exclude-pattern>
+	<exclude-pattern>js/build</exclude-pattern>
+	<exclude-pattern>js/breadcrumbbs/dist</exclude-pattern>
 
 
 	<rule ref="WordPress">
