@@ -10,7 +10,7 @@ class Yoast extends Source {
 	protected function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$title = get_post_meta( $post_id, '_yoast_wpseo_title', true );
-		$title = $this->replace_ss_variables( $title );
+		$title = $this->replace_with_slim_seo_variables( $title );
 
 		return wpseo_replace_vars( $title, $post );
 	}
@@ -18,7 +18,7 @@ class Yoast extends Source {
 	protected function get_post_description( $post_id ) {
 		$post        = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
-		$description = $this->replace_ss_variables( $description );
+		$description = $this->replace_with_slim_seo_variables( $description );
 
 		return wpseo_replace_vars( $description, $post );
 	}
@@ -41,7 +41,7 @@ class Yoast extends Source {
 			return '';
 		}
 		$title = $term['wpseo_title'] ?? '';
-		$title = $this->replace_ss_variables( $title );
+		$title = $this->replace_with_slim_seo_variables( $title );
 
 		return wpseo_replace_vars( $title, $term );
 	}
@@ -52,7 +52,7 @@ class Yoast extends Source {
 			return '';
 		}
 		$description = $term['wpseo_desc'] ?? '';
-		$description = $this->replace_ss_variables( $description );
+		$description = $this->replace_with_slim_seo_variables( $description );
 
 		return wpseo_replace_vars( $description, $term );
 	}
@@ -136,14 +136,28 @@ class Yoast extends Source {
 		return $matches;
 	}
 
-	private function replace_ss_variables( $text ) {
+	private function replace_with_slim_seo_variables( string $text ): string {
 		$variables = [
-			'%%title%%'            => '{{ post.title }}',
-			'%%page%%'             => '{{ page }}',
-			'%%sep%%'              => '{{ sep }}',
-			'%%sitename%%'         => '{{ site.title }}',
-			'%%primary_category%%' => '{{ post.categories }}',
-			'%%term_title%%'       => '{{ term.name }}'
+			'%%title%%'                => '{{ post.title }}',
+			'%%page%%'                 => '{{ page }}',
+			'%%sep%%'                  => '{{ sep }}',
+			'%%sitename%%'             => '{{ site.title }}',
+			'%%term_title%%'           => '{{ term.name }}',
+			'%%date%%'                 => '{{ post.date }}',
+			'%%sitedesc%%'             => '{{ site.description }}',
+			'%%excerpt%%'              => '{{ post.excerpt }}',
+			'%%excerpt_only%%'         => '{{ post.excerpt }}',
+			'%%tag%%'                  => '{{ post.tags }}',
+			'%%category%%'             => '{{ post.categories }}',
+			'%%primary_category%%'     => '{{ post.categories }}',
+			'%%category_description%%' => '{{ term.description }}',
+			'%%term_description%%'     => '{{ term.description }}',
+			'%%searchphrase%%'         => '{{ name }}',
+			'%%pt_single%%'            => '{{ post_type.singular }}',
+			'%%pt_plural%%'            => '{{ post_type.plural }}',
+			'%%name%%'                 => '{{ author.display_name }}',
+			'%%user_description%%'     => '{{ author.description }}',
+			'%%pagenumber%%'           => '{{ page }}',
 		];
 		$matches = $this->parse_variables( $text );
 
