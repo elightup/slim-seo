@@ -145,7 +145,6 @@ class Yoast extends Source {
 			'%%primary_category%%'     => '{{ post.categories }}',
 			'%%category_description%%' => '{{ term.description }}',
 			'%%term_description%%'     => '{{ term.description }}',
-			'%%searchphrase%%'         => '{{ name }}',
 			'%%pt_single%%'            => '{{ post_type.singular }}',
 			'%%pt_plural%%'            => '{{ post_type.plural }}',
 			'%%name%%'                 => '{{ author.display_name }}',
