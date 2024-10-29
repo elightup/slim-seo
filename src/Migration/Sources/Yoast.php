@@ -129,13 +129,6 @@ class Yoast extends Source {
 		return $count;
 	}
 
-	private function parse_variables( $text ) {
-		$pattern = '/%%([^%%]+)%%/';
-		preg_match_all($pattern, $text, $matches);
-
-		return $matches;
-	}
-
 	private function replace_with_slim_seo_variables( string $text ): string {
 		$variables = [
 			'%%title%%'                => '{{ post.title }}',
@@ -159,7 +152,7 @@ class Yoast extends Source {
 			'%%user_description%%'     => '{{ author.description }}',
 			'%%pagenumber%%'           => '{{ page }}',
 		];
-		$matches = $this->parse_variables( $text );
+		$matches = Helpers::parse_variables( $text );
 
 		foreach ( $matches[0] as $vari ) {
 			$text = str_replace( $vari, $variables[ $vari ] , $text );
