@@ -155,4 +155,44 @@ class RankMath extends Source {
 
 		return $count;
 	}
+
+	private function replace_with_slim_seo_variables( string $text ): string {
+		$variables = [
+			'%title%'            => '{{ post.title }}',
+			'%sep%'              => '{{ sep }}',
+			'%sitename%'         => '{{ site.title }}',
+			'%currentyear%'      => '{{ current.year }}',
+			'%sitedesc%'         => '{{ site.description }}',
+			'%excerpt%'          => '{{ post.excerpt }}',
+			'%excerpt_only%'     => '{{ post.excerpt }}',
+			'%post_thumbnail%'   => '{{ post.thumbnail }}',
+			'%date%'             => '{{ post.date }}',
+			'%date(F j, Y)%'     => '{{ post.date }}',
+			'%date(Y-m-d)%'      => '{{ post.date }}',
+			'%date(m/d/Y)%'      => '{{ post.date }}',
+			'%date(d/m/Y)%'      => '{{ post.date }}',
+			'%modified%'         => '{{ post.modified_date }}',
+			'%modified(F j, Y)%' => '{{ post.modified_date }}',
+			'%modified(Y-m-d)%'  => '{{ post.modified_date }}',
+			'%modified(m/d/Y)%'  => '{{ post.modified_date }}',
+			'%modified(d/m/Y)%'  => '{{ post.modified_date }}',
+			'%tag%'              => '{{ post.tags }}',
+			'%tags%'             => '{{ post.tags }}',
+			'%category%'         => '{{ post.categories }}',
+			'%categories%'       => '{{ post.categories }}',
+			'%term_description%' => '{{ term.description }}',
+			'%pt_single%'        => '{{ post_type.singular }}',
+			'%pt_plural%'        => '{{ post_type.plural }}',
+			'%name%'             => '{{ author.display_name }}',
+			'%user_description%' => '{{ author.description }}',
+			'%page%'             => '{{ page }}',
+			'%pagenumber%'       => '{{ page }}',
+		];
+		$matches = Helpers::parse_variables( $text );
+
+		foreach ( $matches[0] as $vari ) {
+			$text = str_replace( $vari, $variables[ $vari ] , $text );
+		}
+		return $text;
+	}
 }
