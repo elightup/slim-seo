@@ -171,7 +171,6 @@ class RankMath extends Source {
 			'%sitename%'         => '{{ site.title }}',
 			'%currentyear%'      => '{{ current.year }}',
 			'%sitedesc%'         => '{{ site.description }}',
-			'%excerpt%'          => '{{ post.excerpt }}',
 			'%excerpt_only%'     => '{{ post.excerpt }}',
 			'%post_thumbnail%'   => '{{ post.thumbnail }}',
 			'%date%'             => '{{ post.date }}',
@@ -193,8 +192,6 @@ class RankMath extends Source {
 			'%pt_plural%'        => '{{ post_type.plural }}',
 			'%name%'             => '{{ author.display_name }}',
 			'%user_description%' => '{{ author.description }}',
-			'%page%'             => '{{ page }}',
-			'%pagenumber%'       => '{{ page }}',
 		];
 
 		return strtr( $text, $variables );
