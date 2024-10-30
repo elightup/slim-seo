@@ -27,12 +27,16 @@ class RankMath extends Source {
 	protected function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
 		$title = get_post_meta( $post_id, 'rank_math_title', true );
+		$title = $this->replace_with_slim_seo_variables( $title );
+
 		return RMHelper::replace_vars( $title, $post );
 	}
 
 	protected function get_post_description( $post_id ) {
 		$post        = get_post( $post_id, ARRAY_A );
 		$description = get_post_meta( $post_id, 'rank_math_description', true );
+		$description = $this->replace_with_slim_seo_variables( $description );
+
 		return RMHelper::replace_vars( $description, $post );
 	}
 
@@ -59,6 +63,8 @@ class RankMath extends Source {
 			return '';
 		}
 		$title = get_term_meta( $term_id, 'rank_math_title', true );
+		$title = $this->replace_with_slim_seo_variables( $title );
+
 		return RMHelper::replace_vars( $title, $term );
 	}
 
@@ -68,6 +74,8 @@ class RankMath extends Source {
 			return '';
 		}
 		$description = get_term_meta( $term_id, 'rank_math_description', true );
+		$description = $this->replace_with_slim_seo_variables( $description );
+
 		return RMHelper::replace_vars( $description, $term );
 	}
 
@@ -188,11 +196,7 @@ class RankMath extends Source {
 			'%page%'             => '{{ page }}',
 			'%pagenumber%'       => '{{ page }}',
 		];
-		$matches = Helpers::parse_variables( $text );
 
-		foreach ( $matches[0] as $vari ) {
-			$text = str_replace( $vari, $variables[ $vari ] , $text );
-		}
-		return $text;
+		return strtr( $text, $variables );
 	}
 }
