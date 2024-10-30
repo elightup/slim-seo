@@ -146,13 +146,9 @@ class Yoast extends Source {
 			'%%pt_single%%'            => '{{ post_type.singular }}',
 			'%%pt_plural%%'            => '{{ post_type.plural }}',
 			'%%name%%'                 => '{{ author.display_name }}',
-			'%%user_description%%'     => '{{ author.description }}',,
+			'%%user_description%%'     => '{{ author.description }}',
 		];
-		$matches = Helpers::parse_variables( $text );
 
-		foreach ( $matches[0] as $vari ) {
-			$text = str_replace( $vari, $variables[ $vari ] , $text );
-		}
-		return $text;
+		return strtr( $text, $variables );
 	}
 }
