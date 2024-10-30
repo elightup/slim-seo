@@ -138,18 +138,15 @@ class Yoast extends Source {
 			'%%term_title%%'           => '{{ term.name }}',
 			'%%date%%'                 => '{{ post.date }}',
 			'%%sitedesc%%'             => '{{ site.description }}',
-			'%%excerpt%%'              => '{{ post.excerpt }}',
 			'%%excerpt_only%%'         => '{{ post.excerpt }}',
 			'%%tag%%'                  => '{{ post.tags }}',
 			'%%category%%'             => '{{ post.categories }}',
-			'%%primary_category%%'     => '{{ post.categories }}',
 			'%%category_description%%' => '{{ term.description }}',
 			'%%term_description%%'     => '{{ term.description }}',
 			'%%pt_single%%'            => '{{ post_type.singular }}',
 			'%%pt_plural%%'            => '{{ post_type.plural }}',
 			'%%name%%'                 => '{{ author.display_name }}',
-			'%%user_description%%'     => '{{ author.description }}',
-			'%%pagenumber%%'           => '{{ page }}',
+			'%%user_description%%'     => '{{ author.description }}',,
 		];
 		$matches = Helpers::parse_variables( $text );
 
