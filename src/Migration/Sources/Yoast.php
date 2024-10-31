@@ -41,7 +41,7 @@ class Yoast extends Source {
 			return '';
 		}
 		$title = $term['wpseo_title'] ?? '';
-		$title = $this->replace_with_slim_seo_variables( $title );
+		$title = $this->replace_with_slim_seo_variables( $title, 'term' );
 
 		return wpseo_replace_vars( $title, $term );
 	}
@@ -52,7 +52,7 @@ class Yoast extends Source {
 			return '';
 		}
 		$description = $term['wpseo_desc'] ?? '';
-		$description = $this->replace_with_slim_seo_variables( $description );
+		$description = $this->replace_with_slim_seo_variables( $description, 'term' );
 
 		return wpseo_replace_vars( $description, $term );
 	}
@@ -129,7 +129,7 @@ class Yoast extends Source {
 		return $count;
 	}
 
-	private function replace_with_slim_seo_variables( string $text ): string {
+	private function replace_with_slim_seo_variables( string $text, string $type = 'post' ): string {
 		$variables = [
 			'%%title%%'                => '{{ post.title }}',
 			'%%page%%'                 => '{{ page }}',
@@ -138,6 +138,7 @@ class Yoast extends Source {
 			'%%term_title%%'           => '{{ term.name }}',
 			'%%date%%'                 => '{{ post.date }}',
 			'%%sitedesc%%'             => '{{ site.description }}',
+			'%%excerpt%%'              => '{{ post.auto_description }}',
 			'%%excerpt_only%%'         => '{{ post.excerpt }}',
 			'%%tag%%'                  => '{{ post.tags }}',
 			'%%category%%'             => '{{ post.categories }}',
@@ -148,6 +149,10 @@ class Yoast extends Source {
 			'%%name%%'                 => '{{ author.display_name }}',
 			'%%user_description%%'     => '{{ author.description }}',
 		];
+
+		if ( $type === 'term' ) {
+			$variables['%%excerpt%%'] = '{{ term.auto_description }}';
+		}
 
 		return strtr( $text, $variables );
 	}
