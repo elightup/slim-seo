@@ -9,7 +9,7 @@ class Yoast extends Source {
 
 	protected function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
-		$title = get_post_meta( $post_id, '_yoast_wpseo_title', true );
+		$title = (string) get_post_meta( $post_id, '_yoast_wpseo_title', true );
 		$title = $this->replace_with_slim_seo_variables( $title );
 
 		return wpseo_replace_vars( $title, $post );
@@ -17,7 +17,7 @@ class Yoast extends Source {
 
 	protected function get_post_description( $post_id ) {
 		$post        = get_post( $post_id, ARRAY_A );
-		$description = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+		$description = (string) get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
 		$description = $this->replace_with_slim_seo_variables( $description );
 
 		return wpseo_replace_vars( $description, $post );
@@ -40,7 +40,7 @@ class Yoast extends Source {
 		if ( ! $term ) {
 			return '';
 		}
-		$title = $term['wpseo_title'] ?? '';
+		$title = (string) ( $term['wpseo_title'] ?? '' );
 		$title = $this->replace_with_slim_seo_variables( $title, 'term' );
 
 		return wpseo_replace_vars( $title, $term );
@@ -51,7 +51,7 @@ class Yoast extends Source {
 		if ( ! $term ) {
 			return '';
 		}
-		$description = $term['wpseo_desc'] ?? '';
+		$description = (string) ( $term['wpseo_desc'] ?? '' );
 		$description = $this->replace_with_slim_seo_variables( $description, 'term' );
 
 		return wpseo_replace_vars( $description, $term );
