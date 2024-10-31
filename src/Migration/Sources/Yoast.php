@@ -132,22 +132,22 @@ class Yoast extends Source {
 	private function replace_with_slim_seo_variables( string $text, string $type = 'post' ): string {
 		$variables = [
 			'%%title%%'                => '{{ post.title }}',
-			'%%page%%'                 => '{{ page }}',
-			'%%sep%%'                  => '{{ sep }}',
-			'%%sitename%%'             => '{{ site.title }}',
-			'%%term_title%%'           => '{{ term.name }}',
-			'%%date%%'                 => '{{ post.date }}',
-			'%%sitedesc%%'             => '{{ site.description }}',
 			'%%excerpt%%'              => '{{ post.auto_description }}',
 			'%%excerpt_only%%'         => '{{ post.excerpt }}',
+			'%%date%%'                 => '{{ post.date }}',
 			'%%tag%%'                  => '{{ post.tags }}',
 			'%%category%%'             => '{{ post.categories }}',
+			'%%term_title%%'           => '{{ term.name }}',
 			'%%category_description%%' => '{{ term.description }}',
 			'%%term_description%%'     => '{{ term.description }}',
+			'%%sitename%%'             => '{{ site.title }}',
+			'%%sitedesc%%'             => '{{ site.description }}',
 			'%%pt_single%%'            => '{{ post_type.singular }}',
 			'%%pt_plural%%'            => '{{ post_type.plural }}',
 			'%%name%%'                 => '{{ author.display_name }}',
 			'%%user_description%%'     => '{{ author.description }}',
+			'%%page%%'                 => '{{ page }}',
+			'%%sep%%'                  => '{{ sep }}',
 		];
 
 		if ( $type === 'term' ) {
