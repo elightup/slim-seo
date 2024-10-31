@@ -9,13 +9,17 @@ class Yoast extends Source {
 
 	protected function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
-		$title = get_post_meta( $post_id, '_yoast_wpseo_title', true );
+		$title = (string) get_post_meta( $post_id, '_yoast_wpseo_title', true );
+		$title = $this->replace_with_slim_seo_variables( $title );
+
 		return wpseo_replace_vars( $title, $post );
 	}
 
 	protected function get_post_description( $post_id ) {
 		$post        = get_post( $post_id, ARRAY_A );
-		$description = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+		$description = (string) get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+		$description = $this->replace_with_slim_seo_variables( $description );
+
 		return wpseo_replace_vars( $description, $post );
 	}
 
@@ -36,7 +40,9 @@ class Yoast extends Source {
 		if ( ! $term ) {
 			return '';
 		}
-		$title = $term['wpseo_title'] ?? '';
+		$title = (string) ( $term['wpseo_title'] ?? '' );
+		$title = $this->replace_with_slim_seo_variables( $title, 'term' );
+
 		return wpseo_replace_vars( $title, $term );
 	}
 
@@ -45,7 +51,9 @@ class Yoast extends Source {
 		if ( ! $term ) {
 			return '';
 		}
-		$description = $term['wpseo_desc'] ?? '';
+		$description = (string) ( $term['wpseo_desc'] ?? '' );
+		$description = $this->replace_with_slim_seo_variables( $description, 'term' );
+
 		return wpseo_replace_vars( $description, $term );
 	}
 
@@ -119,5 +127,33 @@ class Yoast extends Source {
 		}
 
 		return $count;
+	}
+
+	private function replace_with_slim_seo_variables( string $text, string $type = 'post' ): string {
+		$variables = [
+			'%%title%%'                => '{{ post.title }}',
+			'%%excerpt%%'              => '{{ post.auto_description }}',
+			'%%excerpt_only%%'         => '{{ post.excerpt }}',
+			'%%date%%'                 => '{{ post.date }}',
+			'%%tag%%'                  => '{{ post.tags }}',
+			'%%category%%'             => '{{ post.categories }}',
+			'%%term_title%%'           => '{{ term.name }}',
+			'%%category_description%%' => '{{ term.description }}',
+			'%%term_description%%'     => '{{ term.description }}',
+			'%%sitename%%'             => '{{ site.title }}',
+			'%%sitedesc%%'             => '{{ site.description }}',
+			'%%pt_single%%'            => '{{ post_type.singular }}',
+			'%%pt_plural%%'            => '{{ post_type.plural }}',
+			'%%name%%'                 => '{{ author.display_name }}',
+			'%%user_description%%'     => '{{ author.description }}',
+			'%%page%%'                 => '{{ page }}',
+			'%%sep%%'                  => '{{ sep }}',
+		];
+
+		if ( $type === 'term' ) {
+			$variables['%%excerpt%%'] = '{{ term.auto_description }}';
+		}
+
+		return strtr( $text, $variables );
 	}
 }
