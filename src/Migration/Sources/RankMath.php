@@ -26,13 +26,17 @@ class RankMath extends Source {
 
 	protected function get_post_title( $post_id ) {
 		$post  = get_post( $post_id, ARRAY_A );
-		$title = get_post_meta( $post_id, 'rank_math_title', true );
+		$title = (string) get_post_meta( $post_id, 'rank_math_title', true );
+		$title = $this->replace_with_slim_seo_variables( $title );
+
 		return RMHelper::replace_vars( $title, $post );
 	}
 
 	protected function get_post_description( $post_id ) {
 		$post        = get_post( $post_id, ARRAY_A );
-		$description = get_post_meta( $post_id, 'rank_math_description', true );
+		$description = (string) get_post_meta( $post_id, 'rank_math_description', true );
+		$description = $this->replace_with_slim_seo_variables( $description );
+
 		return RMHelper::replace_vars( $description, $post );
 	}
 
@@ -58,7 +62,9 @@ class RankMath extends Source {
 		if ( ! $term ) {
 			return '';
 		}
-		$title = get_term_meta( $term_id, 'rank_math_title', true );
+		$title = (string) get_term_meta( $term_id, 'rank_math_title', true );
+		$title = $this->replace_with_slim_seo_variables( $title, 'term' );
+
 		return RMHelper::replace_vars( $title, $term );
 	}
 
@@ -67,7 +73,9 @@ class RankMath extends Source {
 		if ( ! $term ) {
 			return '';
 		}
-		$description = get_term_meta( $term_id, 'rank_math_description', true );
+		$description = (string) get_term_meta( $term_id, 'rank_math_description', true );
+		$description = $this->replace_with_slim_seo_variables( $description, 'term' );
+
 		return RMHelper::replace_vars( $description, $term );
 	}
 
@@ -90,7 +98,6 @@ class RankMath extends Source {
 
 	public function migrate_redirects() {
 		$count = 0;
-
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -154,5 +161,44 @@ class RankMath extends Source {
 		}
 
 		return $count;
+	}
+
+	private function replace_with_slim_seo_variables( string $text, string $type = 'post' ): string {
+		$variables = [
+			'%title%'            => '{{ post.title }}',
+			'%excerpt%'          => '{{ post.auto_description }}',
+			'%excerpt_only%'     => '{{ post.excerpt }}',
+			'%post_thumbnail%'   => '{{ post.thumbnail }}',
+			'%date%'             => '{{ post.date }}',
+			'%date(F j, Y)%'     => '{{ post.date }}',
+			'%date(Y-m-d)%'      => '{{ post.date }}',
+			'%date(m/d/Y)%'      => '{{ post.date }}',
+			'%date(d/m/Y)%'      => '{{ post.date }}',
+			'%modified%'         => '{{ post.modified_date }}',
+			'%modified(F j, Y)%' => '{{ post.modified_date }}',
+			'%modified(Y-m-d)%'  => '{{ post.modified_date }}',
+			'%modified(m/d/Y)%'  => '{{ post.modified_date }}',
+			'%modified(d/m/Y)%'  => '{{ post.modified_date }}',
+			'%tag%'              => '{{ post.tags }}',
+			'%tags%'             => '{{ post.tags }}',
+			'%category%'         => '{{ post.categories }}',
+			'%categories%'       => '{{ post.categories }}',
+			'%term_description%' => '{{ term.description }}',
+			'%pt_single%'        => '{{ post_type.singular }}',
+			'%pt_plural%'        => '{{ post_type.plural }}',
+			'%name%'             => '{{ author.display_name }}',
+			'%user_description%' => '{{ author.description }}',
+			'%sitename%'         => '{{ site.title }}',
+			'%sitedesc%'         => '{{ site.description }}',
+			'%currentyear%'      => '{{ current.year }}',
+			'%page%'             => '{{ page }}',
+			'%sep%'              => '{{ sep }}',
+		];
+
+		if ( $type === 'term' ) {
+			$variables['%excerpt%'] = '{{ term.auto_description }}';
+		}
+
+		return strtr( $text, $variables );
 	}
 }
