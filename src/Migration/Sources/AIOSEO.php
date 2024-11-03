@@ -19,14 +19,14 @@ class AIOSEO extends Source {
 		$title     = new Common\Meta\Title;
 		$meta_data = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return empty( $meta_data->title ) ? '' : $title->helpers->prepare( $meta_data->title, $post_id );
+		return empty( $meta_data->title ) ? '' : $title->helpers->prepare( $this->replace_with_slim_seo_variables( $meta_data->title ), $post_id );
 	}
 
 	protected function get_post_description( $post_id ) {
 		$description = new Common\Meta\Description;
 		$meta_data   = aioseo()->meta->metaData->getMetaData( $this->post );
 
-		return empty( $meta_data->description ) ? '' : $description->helpers->prepare( $meta_data->description, $post_id, false, false );
+		return empty( $meta_data->description ) ? '' : $description->helpers->prepare( $this->replace_with_slim_seo_variables( $meta_data->description ), $post_id, false, false );
 	}
 
 	protected function get_post_facebook_image( $post_id ) {
@@ -110,6 +110,23 @@ class AIOSEO extends Source {
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return $wpdb->get_var( $wpdb->prepare( "SELECT $column FROM {$wpdb->prefix}aioseo_posts WHERE post_id = %d", $post->ID ) );
+	}
+
+	private function replace_with_slim_seo_variables( string $text ): string {
+		$variables = [
+			'#post_title'        => '{{ post.title }}',
+			'#post_excerpt'      => '{{ post.auto_description }}',
+			'#post_excerpt_only' => '{{ post.excerpt }}',
+			'#post_date'         => '{{ post.date }}',
+			'#post_content'      => '{{ post.content }}',
+			'#categories'        => '{{ post.categories }}',
+			'#site_title'        => '{{ site.title }}',
+			'#current_year'      => '{{ current.year }}',
+			'#author_name'       => '{{ author.display_name }}',
+			'#separator_sa'      => '{{ sep }}',
+		];
+
+		return strtr( $text, $variables );
 	}
 }
 
