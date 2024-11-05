@@ -10,7 +10,7 @@ class TwitterCards {
 		$this->image_obj = new Image( 'twitter_image' );
 	}
 
-	public function setup() {
+	public function setup(): void {
 		add_action( 'wp_head', [ $this, 'output' ] );
 	}
 
@@ -19,20 +19,21 @@ class TwitterCards {
 	 *
 	 * @link https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started
 	 */
-	public function output() {
-		echo '<meta name="twitter:card" content="summary_large_image">', "\n";
+	public function output(): void {
+		$type = apply_filters( 'slim_seo_twitter_card_type', 'summary_large_image' );
+		echo '<meta name="twitter:card" content="', esc_attr( $type ), '">', "\n";
 
 		$image = $this->image_obj->get_value() ?: $this->get_default_image();
 		$image = $image['src'] ?? '';
 		$image = apply_filters( 'slim_seo_twitter_card_image', $image );
 		if ( ! empty( $image ) ) {
-			echo '<meta name="twitter:image" content="' . esc_url( $image ) . '">', "\n";
+			echo '<meta name="twitter:image" content="', esc_url( $image ), '">', "\n";
 		}
 
 		$site = $this->get_site();
 		$site = apply_filters( 'slim_seo_twitter_card_site', $site );
 		if ( $site ) {
-			echo '<meta name="twitter:site" content="' . esc_attr( $site ) . '">', "\n";
+			echo '<meta name="twitter:site" content="', esc_attr( $site ), '">', "\n";
 		}
 	}
 
