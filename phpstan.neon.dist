@@ -1,0 +1,13 @@
+parameters:
+	level: 5
+	paths:
+		- src
+	scanDirectories:
+		- ../../../wp-includes
+		- ../../../wp-admin
+		- ../../themes/bricks
+		- ../woocommerce
+		- ../wordpress-seo
+		- ../wp-seopress
+	ignoreErrors:
+		- '#Constant [A-Z0-9_]+ not found.#'

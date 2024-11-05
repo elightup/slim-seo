@@ -59,6 +59,7 @@
     "post-install-cmd": [
       "echo Deleting .git dirs...",
       "rm -rf vendor/**/**/.git"
-    ]
+    ],
+    "phpstan": "phpstan --memory-limit=2048M > phpstan.txt"
   }
 }

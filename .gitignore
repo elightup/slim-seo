@@ -17,3 +17,5 @@ js/build
 js/link-attributes/block-editor/dist
 
 phpcs.txt
+phpstan.neon
+phpstan.txt

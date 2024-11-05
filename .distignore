@@ -20,6 +20,7 @@ composer.lock
 package-lock.json
 package.json
 phpcs.xml
+phpstan.neon.dist
 pnpm-lock.yaml
 README.md
 
