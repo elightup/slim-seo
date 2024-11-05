@@ -1,5 +1,8 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/elightup/slim-seo/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/elightup/slim-seo/?branch=master)
+![WordPress Plugin Downloads](https://img.shields.io/wordpress/plugin/dt/slim-seo)
+![WordPress Plugin Active Installs](https://img.shields.io/wordpress/plugin/installs/slim-seo)
+![WordPress Plugin Rating](https://img.shields.io/wordpress/plugin/rating/slim-seo)
 [![Version](https://img.shields.io/wordpress/plugin/v/slim-seo.svg)](https://wpslimseo.com)
+![WordPress Plugin Last Updated](https://img.shields.io/wordpress/plugin/last-updated/slim-seo)
 
 # Slim SEO - A Fast & Automated SEO Plugin For WordPress
 
