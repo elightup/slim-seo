@@ -46,13 +46,13 @@ Schema is a way that describes structured data for search engines. Based on the 
 
 Slim SEO automatically adds structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-#### 5. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
+### 5. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
 
 - Setting up redirection rules easily
 - Auto redirect non-www to www and vice versa
 - 404 link monitoring
 
-#### 6. And many more
+### 6. And many more
 
 - [Inserting Google Analytics, Facebook pixel or any code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
 - Auto prevent scraping content from [RSS feed](https://docs.wpslimseo.com/slim-seo/rss-feed/)
@@ -60,7 +60,7 @@ Slim SEO automatically adds structured data to the website via JSON-LD which mak
 - [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
 - Auto redirect if post slug changed
 
-### Premium plugins
+## Premium plugins
 
 - [Slim SEO Schema](https://wpslimseo.com/products/slim-seo-schema/) - An advanced, powerful and flexible plugin to add schemas to WordPress.
 - [Slim SEO Link Manager](https://wpslimseo.com/products/slim-seo-link-manager/) - Build internal link easier in WordPress with real-time reports.
@@ -122,12 +122,6 @@ Twitter inherits some tags from Open Graph such as title, description and image.
 If your homepage is a static page, then it's treated like a normal page. The meta description is generated from page content, and the featured image will be used for Open Graph tags.
 
 If your homepage shows latest posts, then it's already done automatically by the plugin.
-
-**Can I change the meta tags manually?**
-
-It's not available at the moment. Our purpose is provide a configuration-free SEO plugin for WordPress, so you don't get lost in the options. We might improve the plugin later to add essential options. But for now, it's zero configuration.
-
-If you need custom settings, we recommend using Yoast SEO plugin.
 
 **Where is my XML sitemap?**
 

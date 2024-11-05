@@ -1,11 +1,11 @@
 === Slim SEO - Fast & Automated WordPress SEO Plugin ===
 Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
-Tags: seo, redirection, schema, xml sitemap, header
+Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.6.2
 Requires PHP: 7.2
-Stable tag: 4.0.3
+Stable tag: 4.0.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -158,6 +158,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.0.4 - 2024-11-05 =
+- Improve migration from other SEO plugins: migrate dynamic variables instead of their values
+- Add filter `slim_seo_twitter_card_type` for twitter card type
+- Fix quick/bulk edit not working
 
 = 4.0.2 - 2024-10-17 =
 - Fix Divi and WooCommerce compatibility
