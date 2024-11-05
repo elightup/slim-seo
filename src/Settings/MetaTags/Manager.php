@@ -66,7 +66,7 @@ class Manager {
 	public function sanitize( array &$option, array $data ): void {
 		$items = $this->get_content_items();
 		foreach ( $items as $item ) {
-			if ( empty( $data[ $item ] ) ) {
+			if ( empty( $data[ $item ] ) || ! is_array( $data[ $item ] ) || empty( $option[ $item ] ) || ! is_array( $option[ $item ] ) ) {
 				unset( $option[ $item ] );
 				continue;
 			}

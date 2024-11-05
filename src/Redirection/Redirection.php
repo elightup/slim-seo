@@ -199,7 +199,7 @@ class Redirection {
 		$request_url = strtolower( $request_url );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$post_id     = (int) $wpdb->get_var(
+		$post_id = (int) $wpdb->get_var(
 			$wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_ss_old_permalink' AND meta_value = %s", $request_url )
 		);
 
