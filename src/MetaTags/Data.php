@@ -139,7 +139,7 @@ class Data {
 			return [];
 		}
 
-		$meta_values = get_post_meta( $post->ID );
+		$meta_values = get_post_meta( $post->ID ) ?: [];
 		$data        = [];
 		foreach ( $meta_values as $key => $value ) {
 			$data[ $key ] = reset( $value );
