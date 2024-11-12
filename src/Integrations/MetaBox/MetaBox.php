@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Integrations;
+namespace SlimSEO\Integrations\MetaBox;
 
 class MetaBox {
 	private $variables;
@@ -12,6 +12,8 @@ class MetaBox {
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 		add_filter( 'slim_seo_skipped_blocks', [ $this, 'skip_blocks' ] );
 		add_filter( 'slim_seo_variables', [ $this, 'add_variables' ] );
+		add_filter( 'slim_seo_data', [ $this, 'add_data' ] );
+		
 	}
 
 	public function skip_shortcodes( array $shortcodes ): array {
@@ -45,6 +47,20 @@ class MetaBox {
 		return $this->variables;
 	}
 
+	public function add_data( $data ) {
+		$meta_boxes = $this->get_meta_boxes();
+
+		$mb = [];
+		foreach ( $meta_boxes as $meta_box ) {
+			$key        = Id::normalize( $meta_box->id );
+			$mb[ $key ] = new Renderer( $meta_box );
+		}
+
+		$data['mb'] = $mb;
+
+		return $data;
+	}
+
 	private function get_meta_boxes() {
 		$meta_boxes = rwmb_get_registry( 'meta_box' )->all();
 		$meta_boxes = array_filter( $meta_boxes, [ $this, 'remove_built_in' ] );
@@ -76,7 +92,7 @@ class MetaBox {
 	}
 
 	private function add_group( $meta_box ) {
-		$key               = $this->normalize( $meta_box->id );
+		$key               = Id::normalize( $meta_box->id );
 		$this->variables[] = [
 			'label'   => "[Meta Box] {$meta_box->title}",
 			'options' => $this->add_fields( $meta_box->fields, "mb.$key" ),
@@ -89,7 +105,7 @@ class MetaBox {
 		$sub_indent = $indent . str_repeat( '&nbsp;', 5 );
 
 		foreach ( $fields as $field ) {
-			$key   = $this->normalize( $field['id'] );
+			$key   = Id::normalize( $field['id'] );
 			$id    = "$base_id.$key";
 			$label = "{$indent}{$field['name']}";
 
@@ -109,9 +125,5 @@ class MetaBox {
 
 	private function has_value( $field ) {
 		return ! in_array( $field['type'], [ 'heading', 'divider', 'custom_html', 'button' ], true );
-	}
-
-	public static function normalize( $id ) {
-		return str_replace( '-', '_', $id );
 	}
 }
