@@ -8,11 +8,21 @@ class Base {
 
 	public static function parse( $value, $field ) {
 		self::$field = $field;
-		return $field['clone'] ? array_map( [ static::class, 'get_clone_value' ], (array) $value ) : static::get_clone_value( $value );
+		// Only get the 1st item.
+		if ( $field['clone'] ) {
+			$value = (array) $value;
+			$value = reset( $value );
+		}
+		return static::get_clone_value( $value );
 	}
 
 	public static function get_clone_value( $clone ) {
-		return self::$field['multiple'] ? array_map( [ static::class, 'get_single_value' ], (array) $clone ) : static::get_single_value( $clone );
+		// Only get the 1st item.
+		if ( self::$field['multiple'] ) {
+			$clone = (array) $clone;
+			$clone = reset( $clone );
+		}
+		return static::get_single_value( $clone );
 	}
 
 	public static function get_single_value( $value ) {

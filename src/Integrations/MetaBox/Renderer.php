@@ -2,19 +2,20 @@
 namespace SlimSEO\Integrations\MetaBox;
 
 use SlimSEO\Helpers\Arr;
+use RW_Meta_Box;
 
 class Renderer {
 	protected $meta_box;
 	protected $not_supported = [ 'background', 'fieldset_text', 'text_list', 'sidebar' ];
 
-	public function __construct( $meta_box ) {
+	public function __construct( RW_Meta_Box $meta_box ) {
 		$this->meta_box = $meta_box;
 	}
 
 	/**
 	 * Must return true to make __get works.
 	 */
-	public function __isset( $name ) {
+	public function __isset( $name ): bool {
 		return true;
 	}
 
@@ -32,7 +33,7 @@ class Renderer {
 		return $this->get_data( $field );
 	}
 
-	private function get_data( $field ) {
+	private function get_data( array $field ) {
 		$object_id = $this->get_object_id();
 		if ( ! $object_id ) {
 			return null;
@@ -45,10 +46,6 @@ class Renderer {
 			return $this->parse_field_value( $value, $field );
 		}
 		$value = $this->parse_group_value( $value, $field );
-
-		if ( is_array( $value ) ) {
-			$value = $value[0];
-		}
 
 		return $value;
 	}
@@ -97,14 +94,11 @@ class Renderer {
 
 	private function parse_group_value( $value, $field ) {
 		if ( $field['clone'] ) {
-			if ( is_array( $value ) ) {
-				foreach ( $value as $k => $clone ) {
-					$value[ $k ] = $this->parse_group_clone_value( $clone, $field );
-				}
-			}
-		} else {
-			$value = $this->parse_group_clone_value( $value, $field );
+			$value = (array) $value;
+			$value = reset( $value );
 		}
+
+		$value = $this->parse_group_clone_value( $value, $field );
 		return $value;
 	}
 
