@@ -10,11 +10,11 @@ class MetaBox {
 		return defined( 'RWMB_VER' );
 	}
 
-	public function setup() {
+	public function setup(): void {
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 		add_filter( 'slim_seo_skipped_blocks', [ $this, 'skip_blocks' ] );
 		add_filter( 'slim_seo_variables', [ $this, 'add_variables' ] );
-		add_filter( 'slim_seo_data', [ $this, 'add_data' ] );
+		add_filter( 'slim_seo_data', [ $this, 'add_data' ], 10, 3 );
 	}
 
 	public function skip_shortcodes( array $shortcodes ): array {
@@ -48,13 +48,13 @@ class MetaBox {
 		return $this->variables;
 	}
 
-	public function add_data( array $data ): array {
+	public function add_data( array $data, int $post_id, int $term_id ): array {
 		$meta_boxes = $this->get_meta_boxes();
 
 		$mb = [];
 		foreach ( $meta_boxes as $meta_box ) {
 			$key        = Id::normalize( $meta_box->id );
-			$mb[ $key ] = new Renderer( $meta_box );
+			$mb[ $key ] = new Renderer( $meta_box, $post_id, $term_id );
 		}
 
 		$data['mb'] = $mb;

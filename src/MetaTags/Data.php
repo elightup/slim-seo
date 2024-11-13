@@ -29,7 +29,7 @@ class Data {
 			[ 'site' => $this->get_site_data() ],
 			$this->get_other_data()
 		);
-		$this->data = apply_filters( 'slim_seo_data', $this->data );
+		$this->data = apply_filters( 'slim_seo_data', $this->data, $this->post_id, $this->term_id );
 
 		return $this->data;
 	}
