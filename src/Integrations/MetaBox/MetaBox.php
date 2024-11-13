@@ -42,7 +42,7 @@ class MetaBox {
 
 	public function add_variables( array $variables ): array {
 		$this->variables = $variables;
-		$meta_boxes = $this->get_meta_boxes();
+		$meta_boxes      = $this->get_meta_boxes();
 		array_walk( $meta_boxes, [ $this, 'add_group' ] );
 
 		return $this->variables;
@@ -111,7 +111,9 @@ class MetaBox {
 			$label = "{$indent}{$field['name']}";
 
 			if ( in_array( $field['type'], [ 'map', 'osm' ], true ) ) {
-				$options[ $id . '.latitude' ]  = sprintf( __( '%s (latitude)', 'slim-seo' ), $label );
+				// Translators: %s - Field name.
+				$options[ $id . '.latitude' ] = sprintf( __( '%s (latitude)', 'slim-seo' ), $label );
+				// Translators: %s - Field name.
 				$options[ $id . '.longitude' ] = sprintf( __( '%s (longitude)', 'slim-seo' ), $label );
 			} else {
 				$options[ $id ] = $label;

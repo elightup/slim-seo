@@ -78,7 +78,7 @@ class Renderer {
 			return '';
 		}
 
-		$mb_settings_pages = apply_filters( 'mb_settings_pages', [] );
+		$mb_settings_pages = apply_filters( 'mb_settings_pages', [] ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		if ( empty( $mb_settings_pages ) ) {
 			return '';
 		}
