@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Integrations\MetaBox;
 
+use RW_Meta_Box;
+
 class MetaBox {
 	private $variables;
 
@@ -13,7 +15,6 @@ class MetaBox {
 		add_filter( 'slim_seo_skipped_blocks', [ $this, 'skip_blocks' ] );
 		add_filter( 'slim_seo_variables', [ $this, 'add_variables' ] );
 		add_filter( 'slim_seo_data', [ $this, 'add_data' ] );
-		
 	}
 
 	public function skip_shortcodes( array $shortcodes ): array {
@@ -47,7 +48,7 @@ class MetaBox {
 		return $this->variables;
 	}
 
-	public function add_data( $data ) {
+	public function add_data( array $data ): array {
 		$meta_boxes = $this->get_meta_boxes();
 
 		$mb = [];
@@ -61,14 +62,14 @@ class MetaBox {
 		return $data;
 	}
 
-	private function get_meta_boxes() {
+	private function get_meta_boxes(): array {
 		$meta_boxes = rwmb_get_registry( 'meta_box' )->all();
 		$meta_boxes = array_filter( $meta_boxes, [ $this, 'remove_built_in' ] );
 
 		return $meta_boxes;
 	}
 
-	private function remove_built_in( $meta_box ) {
+	private function remove_built_in( RW_Meta_Box $meta_box ): bool {
 		$built_in = [
 			// MB Favorite Posts.
 			'mbfp-preview-section',
@@ -91,7 +92,7 @@ class MetaBox {
 		return ! in_array( $meta_box->id, $built_in, true ) && ! $is_relationship;
 	}
 
-	private function add_group( $meta_box ) {
+	private function add_group( RW_Meta_Box $meta_box ): void {
 		$key               = Id::normalize( $meta_box->id );
 		$this->variables[] = [
 			'label'   => "[Meta Box] {$meta_box->title}",
@@ -99,7 +100,7 @@ class MetaBox {
 		];
 	}
 
-	private function add_fields( $fields, $base_id = '', $indent = '' ) {
+	private function add_fields( array $fields, string $base_id = '', string $indent = '' ): array {
 		$options    = [];
 		$fields     = array_filter( $fields, [ $this, 'has_value' ] );
 		$sub_indent = $indent . str_repeat( '&nbsp;', 5 );
@@ -110,8 +111,8 @@ class MetaBox {
 			$label = "{$indent}{$field['name']}";
 
 			if ( in_array( $field['type'], [ 'map', 'osm' ], true ) ) {
-				$options[ $id . '.latitude' ]  = sprintf( __( '%s (latitude)', 'slim-seo-schema' ), $label );
-				$options[ $id . '.longitude' ] = sprintf( __( '%s (longitude)', 'slim-seo-schema' ), $label );
+				$options[ $id . '.latitude' ]  = sprintf( __( '%s (latitude)', 'slim-seo' ), $label );
+				$options[ $id . '.longitude' ] = sprintf( __( '%s (longitude)', 'slim-seo' ), $label );
 			} else {
 				$options[ $id ] = $label;
 			}
@@ -123,7 +124,7 @@ class MetaBox {
 		return $options;
 	}
 
-	private function has_value( $field ) {
+	private function has_value( array $field ): bool {
 		return ! in_array( $field['type'], [ 'heading', 'divider', 'custom_html', 'button' ], true );
 	}
 }
