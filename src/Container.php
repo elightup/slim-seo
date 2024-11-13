@@ -32,6 +32,7 @@ class Container {
 		$services['divi']           = new Integrations\Divi;
 		$services['mylisting']      = new Integrations\MyListing;
 		$services['forminator']     = new Integrations\Forminator;
+		$services['meta_box']       = new Integrations\MetaBox\MetaBox;
 
 		$services['settings']           = new Settings\Settings;
 		$services['code']               = new Code( $services['settings'] );
@@ -89,7 +90,6 @@ class Container {
 		$services['wpml']            = new Integrations\WPML;
 		$services['translatepress']  = new Integrations\TranslatePress;
 		$services['amp']             = new Integrations\AMP( $services['schema'] );
-		$services['metabox']         = new Integrations\MetaBox;
 		$services['affiliatewp']     = new Integrations\AffiliateWP;
 		$services['senseilms']       = new Integrations\SenseiLMS;
 		$services['web_stories']     = new Integrations\WebStories(
