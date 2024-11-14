@@ -9,6 +9,7 @@ class PostType {
 	private $post_type;
 	private $page;
 	private $doc;
+	private $post_images = [];
 
 	public function __construct( string $post_type, int $page = 1 ) {
 		$this->post_type = $post_type;
@@ -47,23 +48,7 @@ class PostType {
 		] );
 		$query      = new \WP_Query( $query_args );
 
-		$post_images = [];
-		$image_ids   = [];
-
-		// Cache images by IDs.
-		foreach ( $query->posts as $post ) {
-			if ( ! $this->is_indexed( $post ) ) {
-				continue;
-			}
-
-			$images                   = Images::get_post_images( $post );
-			$post_images[ $post->ID ] = $images;
-			$images                   = array_filter( $images, function ( $image ) {
-				return is_numeric( $image );
-			} );
-			$image_ids                = array_merge( $image_ids, $images );
-		}
-		$this->cache_images( $image_ids );
+		$this->get_and_cache_images( $query->posts );
 
 		foreach ( $query->posts as $post ) {
 			if ( ! $this->is_indexed( $post ) ) {
@@ -74,19 +59,8 @@ class PostType {
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
-			// News sitemap for posts published within 2 days.
-			if ( 'post' === $this->post_type && $this->is_published_within_2days( $post ) ) {
-				$this->output_news( $post );
-			}
-
-			// Output post images to create image sitemap. Doesn't generate any queries because images are cached.
-			$images = $post_images[ $post->ID ];
-			foreach ( $images as &$image ) {
-				$image = is_string( $image ) ? $image : wp_get_attachment_url( $image );
-				if ( $this->is_internal( $image ) ) {
-					$this->output_image( $image );
-				}
-			}
+			$this->output_news( $post );
+			$this->output_images( $post );
 
 			do_action( 'slim_seo_sitemap_post', $post );
 			echo "\t</url>\n";
@@ -125,13 +99,47 @@ class PostType {
 		echo "\t</url>\n";
 	}
 
-	private function output_image( string $url ): void {
-		echo "\t\t<image:image>\n";
-		echo "\t\t\t<image:loc>", esc_url( $url ), "</image:loc>\n";
-		echo "\t\t</image:image>\n";
+	private function get_and_cache_images( array $posts ): void {
+		if ( ! $this->is_enabled_image() ) {
+			return;
+		}
+		$image_ids = [];
+
+		// Cache images by IDs.
+		foreach ( $posts as $post ) {
+			if ( ! $this->is_indexed( $post ) ) {
+				continue;
+			}
+
+			$images                         = Images::get_post_images( $post );
+			$this->post_images[ $post->ID ] = $images;
+			$images                         = array_filter( $images, function ( $image ): bool {
+				return is_numeric( $image );
+			} );
+			$image_ids                      = array_merge( $image_ids, $images );
+		}
+		$this->cache_images( $image_ids );
+	}
+
+	private function output_images( WP_Post $post ): void {
+		$images = $this->post_images[ $post->ID ] ?? [];
+		foreach ( $images as &$image ) {
+			$image = is_string( $image ) ? $image : wp_get_attachment_url( $image );
+			if ( ! $this->is_internal( $image ) ) {
+				continue;
+			}
+			echo "\t\t<image:image>\n";
+			echo "\t\t\t<image:loc>", esc_url( $image ), "</image:loc>\n";
+			echo "\t\t</image:image>\n";
+		}
 	}
 
 	private function output_news( WP_Post $post ): void {
+		// News sitemap for posts published within 2 days only.
+		if ( ! $this->is_enabled_news() || ! $this->is_published_within_2days( $post ) ) {
+			return;
+		}
+
 		echo "\t\t<news:news>\n";
 		echo "\t\t\t<news:publication>\n";
 		echo "\t\t\t\t<news:name>", esc_html( get_bloginfo( 'name' ) ), "</news:name>\n";
@@ -193,5 +201,16 @@ class PostType {
 		}
 
 		return explode( '-', $locale )[0];
+	}
+
+	private function is_enabled_news(): bool {
+		if ( 'post' !== $this->post_type ) {
+			return false;
+		}
+		return apply_filters( 'slim_seo_sitemap_news', true );
+	}
+
+	private function is_enabled_image(): bool {
+		return apply_filters( 'slim_seo_sitemap_image', true );
 	}
 }
