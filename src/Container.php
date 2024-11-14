@@ -92,6 +92,7 @@ class Container {
 		$services['amp']             = new Integrations\AMP( $services['schema'] );
 		$services['affiliatewp']     = new Integrations\AffiliateWP;
 		$services['senseilms']       = new Integrations\SenseiLMS;
+		$services['wpforo']          = new Integrations\WPForo;
 		$services['web_stories']     = new Integrations\WebStories(
 			$services['open_graph'],
 			$services['twitter_cards'],
