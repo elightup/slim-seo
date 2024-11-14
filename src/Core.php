@@ -2,16 +2,9 @@
 namespace SlimSEO;
 
 class Core {
-	public function setup() {
-		$this->load_textdomain();
-
+	public function setup(): void {
 		add_filter( 'plugin_action_links_slim-seo/slim-seo.php', [ $this, 'add_plugin_action_links' ] );
 		add_filter( 'plugin_row_meta', [ $this, 'add_plugin_meta_links' ], 10, 2 );
-	}
-
-	private function load_textdomain() {
-		unload_textdomain( 'slim-seo' );
-		load_plugin_textdomain( 'slim-seo', false, basename( dirname( __DIR__ ) ) . '/languages/' );
 	}
 
 	public function add_plugin_action_links( array $links ): array {

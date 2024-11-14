@@ -10,7 +10,7 @@ class Breadcrumbs {
 	private $current   = '';
 	private $is_parsed = false;
 
-	public function __construct() {
+	public function setup(): void {
 		$this->args = [
 			'separator'       => '&raquo;',
 			'taxonomy'        => 'category',
@@ -20,9 +20,7 @@ class Breadcrumbs {
 			'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
 			'label_404'       => __( 'Page not found', 'slim-seo' ),
 		];
-	}
 
-	public function setup(): void {
 		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
 
 		register_block_type( SLIM_SEO_DIR . 'js/breadcrumbs/dist/', [
