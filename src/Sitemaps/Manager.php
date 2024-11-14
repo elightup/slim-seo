@@ -120,7 +120,7 @@ class Manager {
 	private function get_post_types(): void {
 		$option     = get_option( 'slim_seo' );
 		$post_types = array_keys( Data::get_post_types() );
-		$post_types = array_filter( $post_types, function ( $post_type ) use ( $option ) {
+		$post_types = array_filter( $post_types, function ( $post_type ) use ( $option ): bool {
 			return empty( $option[ $post_type ]['noindex'] );
 		} );
 
@@ -128,7 +128,11 @@ class Manager {
 	}
 
 	private function get_taxonomies(): void {
+		$option     = get_option( 'slim_seo' );
 		$taxonomies = array_keys( Data::get_taxonomies() );
+		$taxonomies = array_filter( $taxonomies, function ( $taxonomy ) use ( $option ): bool {
+			return empty( $option[ $taxonomy ]['noindex'] );
+		} );
 
 		$this->taxonomies = (array) apply_filters( 'slim_seo_sitemap_taxonomies', $taxonomies );
 	}
