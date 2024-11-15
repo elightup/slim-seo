@@ -1,9 +1,6 @@
 <?php
 namespace SlimSEO\Integrations\ACF;
 
-use SlimSEO\Renderer\ActiveVariable;
-use SlimSEO\Renderer\CloneableProps;
-
 class Renderer {
 	protected $field_objects;
 
