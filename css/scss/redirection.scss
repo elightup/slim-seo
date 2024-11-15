@@ -142,16 +142,16 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 12px;
-	
-	.ss-paginate {
-		ul {
-			margin: 0;
-			display: flex;
-			gap: 4px;
+}
 
-			.disabled {
-				display: none!important;
-			}
+.ss-paginate {
+	ul {
+		margin: 0;
+		display: flex;
+		gap: 4px;
+
+		.disabled {
+			display: none!important;
 		}
 	}
 }

@@ -6,9 +6,16 @@ const Paginate = ( { totalRows, limit, offset, setOffset, setIsCheckAll, setChec
 
 	const handlePageClick = e => {
 		const newOffset = ( e.selected * limit ) % totalRows;
+		
 		setOffset( newOffset );
-		setIsCheckAll( false );
-		setCheckedList( [] );
+
+		if ( 'undefined' !== typeof setIsCheckAll ) {
+			setIsCheckAll( false );
+		}
+
+		if ( 'undefined' !== typeof setCheckedList ) {
+			setCheckedList( [] );
+		}		
 	};
 
 	return pageCount > 1 && (
