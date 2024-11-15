@@ -11,6 +11,21 @@ class Breadcrumbs {
 	private $is_parsed = false;
 
 	public function setup(): void {
+		$this->setup_args();
+
+		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
+
+		register_block_type( SLIM_SEO_DIR . 'js/breadcrumbs/dist/', [
+			'render_callback' => [ $this, 'render_block' ],
+		] );
+	}
+
+	/**
+	 * Setup args for breadcrumbs.
+	 * Make it a public method to be called in Slim SEO Schema.
+	 * Separate it into a method to call it after "init" hook to avoid loading text domain too early in WordPress 6.7.
+	 */
+	public function setup_args(): void {
 		$this->args = [
 			'separator'       => '&raquo;',
 			'taxonomy'        => 'category',
@@ -20,12 +35,6 @@ class Breadcrumbs {
 			'label_search'    => __( 'Search Results for &#8220;%s&#8221;', 'slim-seo' ),
 			'label_404'       => __( 'Page not found', 'slim-seo' ),
 		];
-
-		add_shortcode( 'slim_seo_breadcrumbs', [ $this, 'render_shortcode' ] );
-
-		register_block_type( SLIM_SEO_DIR . 'js/breadcrumbs/dist/', [
-			'render_callback' => [ $this, 'render_block' ],
-		] );
 	}
 
 	public function render_block( $attributes ): string {
