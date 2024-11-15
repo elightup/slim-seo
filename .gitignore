@@ -9,6 +9,7 @@ vendor
 *.LICENSE.txt
 
 css/admin-columns.css
+css/link-attributes.css
 css/meta-tags.css
 css/redirection.css
 

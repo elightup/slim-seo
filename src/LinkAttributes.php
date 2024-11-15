@@ -61,7 +61,7 @@ class LinkAttributes {
 		}
 
 		wp_enqueue_style( 'slim-seo-link-attributes', SLIM_SEO_URL . 'css/link-attributes.css', [], filemtime( SLIM_SEO_DIR . '/css/link-attributes.css' ) );
-		Assets::enqueue_build_js( 'block-editor-link-attributes', 'SSLinkAttributes', [
+		Assets::enqueue_build_js( 'link-attributes', 'SSLinkAttributes', [
 			'wpVersion' => $wp_version,
 		] );
 	}

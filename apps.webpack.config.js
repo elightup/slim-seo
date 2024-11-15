@@ -12,7 +12,7 @@ module.exports = {
 			single: './js/meta-tags/Single.js', // Meta tags for singular pages.
 			"meta-tags": './js/meta-tags/Settings.js', // Settings > Meta Tags tab.
 			redirection: './js/redirection/App.js', // Redirection app.
-			"block-editor-link-attributes": './js/link-attributes/block-editor.js', // Link attributes in Block Editor
+			"link-attributes": './js/link-attributes/block-editor/index.js', // Link attributes in Block Editor
 		},
 		output: {
 			path: path.resolve( __dirname, 'js/build' ),
