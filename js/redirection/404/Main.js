@@ -11,7 +11,7 @@ const Main = () => {
 	return (
 		<>
 			<Items limit={ LIMIT } offset={ offset } />
-			<Paginate totalRows={ totalRows } limit={ LIMIT } setOffset={ setOffset } />
+			<Paginate totalRows={ totalRows } limit={ LIMIT } offset={ offset } setOffset={ setOffset } />
 		</>
 	);
 };
