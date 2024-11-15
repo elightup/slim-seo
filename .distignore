@@ -8,6 +8,8 @@ node_modules
 css/scss/
 
 js/breadcrumbs/src/
+js/link-attributes/block-editor/
+js/link-attributes/block-editor.js
 js/meta-tags/
 js/redirection/
 js/redirection.js.LICENSE.txt
