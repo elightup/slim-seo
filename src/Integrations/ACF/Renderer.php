@@ -26,28 +26,28 @@ class Renderer {
 	}
 
 	private function get_data( $field ) {
-		if ( ! in_array( $field['type'], [ 'group', 'repeater', 'flexible_content' ]  ) ) {
+		if ( ! in_array( $field['type'], [ 'group', 'repeater', 'flexible_content' ] ) ) {
 			return $this->parse_normal_field_value( $field['value'], $field );
 		}
-		$value = $this->parse_group_value( $field['value'], $field );
+		$value = $this->parse_field_value( $field['value'], $field );
+
+		return $value;
+	}
+
+	private function parse_field_value( $value, $field ) {
+		if ( 'repeater' === $field['type'] ) {
+			$value = (array) $value;
+			$value = reset( $value );
+		} elseif ( 'flexible_content' === $field['type'] ) {
+			$value = $this->parse_flexible_value( $value, $field );
+		} else {
+			$value = $this->parse_group_value( $value, $field );
+		}
 
 		return $value;
 	}
 
 	private function parse_group_value( $value, $field ) {
-		if ( $field['type'] === 'repeater' ) {
-			$value = (array) $value;
-			$value = reset( $value );
-		} elseif ( $field['type'] === 'flexible_content' ) {
-			$value = $this->parse_flexible_value( $value, $field );
-		} else {
-			$value = $this->parse_group_clone_value( $value, $field );
-		}
-
-		return $value;
-	}
-
-	private function parse_group_clone_value( $value, $field ) {
 		foreach ( $field['sub_fields'] as $child ) {
 			if ( ! isset( $value[ $child['name'] ] ) ) {
 				continue;
@@ -55,8 +55,8 @@ class Renderer {
 
 			$child_value = $value[ $child['name'] ];
 
-			if ( ! empty( $child['sub_fields'] ) ) {
-				$child_value = $this->parse_group_value( $child_value, $child );
+			if ( ! empty( $child['sub_fields'] ) || ! empty( $child['layouts'] ) ) {
+				$child_value = $this->parse_field_value( $child_value, $child );
 			} else {
 				$child_value = $this->parse_normal_field_value( $child_value, $child );
 			}
@@ -68,8 +68,25 @@ class Renderer {
 	}
 
 	private function parse_flexible_value( $value, $field ) {
-		//
-		return $value;
+		$new_value = [];
+		foreach ( $value as $data ) {
+			$layout_field = [];
+
+			foreach ( $field['layouts'] as $layout_data ) {
+				if ( $data['acf_fc_layout'] === $layout_data['name'] ) {
+					$layout_field = $layout_data;
+					break;
+				}
+			}
+
+			if ( empty( $layout_field ) ) {
+				continue;
+			}
+			$layout_field['type'] = $layout_field['type'] ?? 'group';
+			$new_value[ $data['acf_fc_layout'] ] = $this->parse_field_value( $data, $layout_field );
+		}
+
+		return $new_value;
 	}
 
 	private function parse_normal_field_value( $value, $field ) {

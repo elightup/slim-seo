@@ -47,7 +47,7 @@ class ACF {
 		}
 
 		if ( ! empty( $field_objects ) ) {
-			$data['acf'] = new Renderer( $field_objects, $post_id, $term_id );
+			$data['acf'] = new Renderer( $field_objects );
 		}
 
 		return $data;
