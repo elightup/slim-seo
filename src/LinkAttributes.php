@@ -1,10 +1,14 @@
 <?php
 namespace SlimSEO;
 
+use SlimSEO\Helpers\Assets;
+
 class LinkAttributes {
 	public function setup(): void {
 		// Replace default WordPress wplink (classic editor) script.
 		add_action( 'wp_enqueue_editor', [ $this, 'enqueue_for_classic_editor' ] );
+		// Replace default WordPress link (block editor)
+		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_for_block_editor' ] );
 	}
 
 	public function enqueue_for_classic_editor(): void {
@@ -12,9 +16,9 @@ class LinkAttributes {
 
 		wp_enqueue_script(
 			'wplink',
-			SLIM_SEO_URL . 'js/link-attributes.js',
+			SLIM_SEO_URL . 'js/link-attributes/classic-editor.js',
 			[ 'jquery', 'wp-a11y' ],
-			filemtime( SLIM_SEO_DIR . 'js/link-attributes.js' ),
+			filemtime( SLIM_SEO_DIR . 'js/link-attributes/classic-editor.js' ),
 			true
 		);
 
@@ -40,5 +44,25 @@ class LinkAttributes {
 				'ugc'            => esc_html__( 'Add rel="ugc" to link', 'slim-seo' ),
 			]
 		);
+	}
+
+	public function enqueue_for_block_editor() {
+		$wp_version = get_bloginfo( 'version' );
+
+		if ( version_compare( $wp_version, '6.3', '<' ) ) {
+			return;
+		}
+
+		if (
+			version_compare( $wp_version, '6.6', '<' )
+			&& file_exists( ABSPATH . 'wp-includes/js/dist/vendor/react-jsx-runtime.min.js' )
+		) {
+			wp_enqueue_script( 'react-jsx-runtime', includes_url( 'js/dist/vendor/react-jsx-runtime.min.js' ), [ 'react' ] ); // phpcs:ignore
+		}
+
+		wp_enqueue_style( 'slim-seo-link-attributes', SLIM_SEO_URL . 'css/link-attributes.css', [], filemtime( SLIM_SEO_DIR . '/css/link-attributes.css' ) );
+		Assets::enqueue_build_js( 'link-attributes', 'SSLinkAttributes', [
+			'wpVersion' => $wp_version,
+		] );
 	}
 }
