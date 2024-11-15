@@ -35,6 +35,7 @@ class Renderer {
 		if ( 'repeater' === $field['type'] ) {
 			$value = (array) $value;
 			$value = reset( $value );
+			$value = $this->parse_group_value( $value, $field );
 		} elseif ( 'flexible_content' === $field['type'] ) {
 			$value = $this->parse_flexible_value( $value, $field );
 		} else {
