@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.6.2
+Tested up to: 6.7
 Requires PHP: 7.2
-Stable tag: 4.0.4
+Stable tag: 4.1.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,17 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.1.0 - 2024-11-16 =
+- Support [Meta Box](https://metabox.io)'s custom fields for dynamic variables, including groups and settings pages
+- Re-add options to add "rel" attribute (nofollow, ugc, sponsored) to links in the block editor
+- Add integration with wpForo plugin
+- Add filters for toggle news & image sitemap
+- Fix: 404 logs pagination error
+- Fix languages loaded too early in WordPress 6.7
+- Fix zoom feature in WP 6.7 not working because the breadcrumb block uses API version 2
+- Fix not excluding taxonomies from the sitemap when enable the option "Hide from search engines" in the Meta Tags settings page
+- Fix PHP warning when getting all post metas
 
 = 4.0.4 - 2024-11-05 =
 - Improve migration from other SEO plugins: migrate dynamic variables instead of their values
