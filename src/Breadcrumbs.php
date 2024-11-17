@@ -5,7 +5,7 @@ use SlimSEO\Helpers\Data;
 use WP_Term;
 
 class Breadcrumbs {
-	private $args;
+	private $args      = [];
 	private $links     = [];
 	private $current   = '';
 	private $is_parsed = false;
