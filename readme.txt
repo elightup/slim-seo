@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.7
 Requires PHP: 7.2
-Stable tag: 4.1.0
+Stable tag: 4.1.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,9 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.1.1 - 2024-11-17 =
+- Fix breadcrumbs issue
 
 = 4.1.0 - 2024-11-16 =
 - Support [Meta Box](https://metabox.io)'s custom fields for dynamic variables, including groups and settings pages
