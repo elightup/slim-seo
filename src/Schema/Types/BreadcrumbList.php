@@ -9,6 +9,7 @@ class BreadcrumbList extends Base {
 			return false;
 		}
 
+		$this->source->setup_args();
 		$this->source->parse();
 		$links = $this->source->get_links();
 		return ! empty( $links );
