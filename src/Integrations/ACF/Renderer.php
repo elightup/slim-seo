@@ -88,36 +88,6 @@ class Renderer {
 		return $value;
 	}
 
-	private function parse_flexible_value( $value, $field ) {
-		$return_value = [];
-
-		// Flexible content can have multi blocks, each block can have multi values, we need to get first value in each block
-		foreach ( $value as $data ) {
-			if( ! array_key_exists( $data['acf_fc_layout'], $return_value ) ) {
-				$return_value[ $data['acf_fc_layout'] ] = $data;
-			}
-		}
-
-		foreach ( $return_value as $key => $data ) {
-			$layout_field = [];
-
-			foreach ( $field['layouts'] as $layout_data ) {
-				if ( $data['acf_fc_layout'] === $layout_data['name'] ) {
-					$layout_field = $layout_data;
-					break;
-				}
-			}
-
-			if ( empty( $layout_field ) ) {
-				continue;
-			}
-			$layout_field['type'] = $layout_field['type'] ?? 'group';
-			$return_value[ $key ] = $this->parse_field_value( $data, $layout_field );
-		}
-
-		return $return_value;
-	}
-
 	private function parse_normal_field_value( $value, $field ) {
 		switch ( $field['type'] ) {
 			case 'select':
