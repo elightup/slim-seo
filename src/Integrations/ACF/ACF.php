@@ -67,25 +67,25 @@ class ACF {
 		$sub_indent = $indent . str_repeat( '&nbsp;', 5 );
 
 		foreach ( $fields as $field ) {
-			$field_name     = $field['name'];
-			$id             = "$base_id.{$field_name}";
-			$label          = "{$indent}{$field['label']}";
+			$field_name = $field['name'];
+			$id         = "$base_id.{$field_name}";
+			$label      = "{$indent}{$field['label']}";
 
 			if ( 'google_map' === $field['type'] ) {
 				// Translators: %s - Field name.
-				$options[ $id . '.address' ]  = sprintf( __( '%s (address)', 'slim-seo' ), $label );
+				$options[ $id . '.address' ] = sprintf( __( '%s (address)', 'slim-seo' ), $label );
 				// Translators: %s - Field name.
-				$options[ $id . '.lat' ]      = sprintf( __( '%s (latitude)', 'slim-seo' ), $label );
+				$options[ $id . '.lat' ] = sprintf( __( '%s (latitude)', 'slim-seo' ), $label );
 				// Translators: %s - Field name.
-				$options[ $id . '.lng' ]      = sprintf( __( '%s (longitude)', 'slim-seo' ), $label );
+				$options[ $id . '.lng' ] = sprintf( __( '%s (longitude)', 'slim-seo' ), $label );
 				// Translators: %s - Field name.
-				$options[ $id . '.name' ]     = sprintf( __( '%s (name)', 'slim-seo' ), $label );
+				$options[ $id . '.name' ] = sprintf( __( '%s (name)', 'slim-seo' ), $label );
 				// Translators: %s - Field name.
-				$options[ $id . '.city' ]     = sprintf( __( '%s (city)', 'slim-seo' ), $label );
+				$options[ $id . '.city' ] = sprintf( __( '%s (city)', 'slim-seo' ), $label );
 				// Translators: %s - Field name.
-				$options[ $id . '.state' ]    = sprintf( __( '%s (state)', 'slim-seo' ), $label );
+				$options[ $id . '.state' ] = sprintf( __( '%s (state)', 'slim-seo' ), $label );
 				// Translators: %s - Field name.
-				$options[ $id . '.country' ]  = sprintf( __( '%s (country)', 'slim-seo' ), $label );
+				$options[ $id . '.country' ] = sprintf( __( '%s (country)', 'slim-seo' ), $label );
 				// Translators: %s - Field name.
 				$options[ $id . '.country_short' ] = sprintf( __( '%s (country short name)', 'slim-seo' ), $label );
 			} else {
