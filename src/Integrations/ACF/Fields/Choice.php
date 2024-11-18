@@ -9,8 +9,6 @@ class Choice extends Base {
 			return $value['label'];
 		}
 
-		$value = is_array( $value ) ? reset( $value ) : $value;
-
 		return $value['label'] ?? $value;
 	}
 }

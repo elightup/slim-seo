@@ -9,12 +9,7 @@ class User extends Base {
 			return null;
 		}
 
-		// Select multiple values.
-		if ( is_array( $value ) && empty( $value['display_name'] ) ) {
-			$value = reset( $value );
-		}
-
-		if ( is_array( $value ) ) {
+		if ( isset( $value['display_name'] ) ) {
 			$value = $value['display_name'] ?? null;
 		} elseif ( is_numeric( $value ) ) {
 			$user  = get_userdata( $value );

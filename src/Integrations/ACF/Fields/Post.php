@@ -9,8 +9,7 @@ class Post extends Base {
 			return null;
 		}
 
-		$post = is_array( $value ) ? reset( $value ) : $value;
-		$post = get_post( $post );
+		$post = get_post( $value );
 
 		return $post ? $post->post_title : null;
 	}

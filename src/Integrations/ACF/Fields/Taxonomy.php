@@ -9,8 +9,7 @@ class Taxonomy extends Base {
 			return null;
 		}
 
-		$term = is_array( $value ) ? reset( $value ) : $value;
-		$term = get_term( $term );
+		$term = get_term( $value );
 
 		return $term ? $term->name : null;
 	}
