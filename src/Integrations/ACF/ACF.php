@@ -26,7 +26,7 @@ class ACF {
 		$post = is_singular() ? get_queried_object() : get_post();
 
 		if ( empty( $post ) ) {
-			return [];
+			return $data;
 		}
 		$field_objects = get_field_objects( $post->ID ) ?: [];
 
