@@ -26,6 +26,7 @@ class Settings {
 			'feed',
 			'schema',
 			'redirection',
+			'no_category_base',
 		],
 	];
 
