@@ -23,7 +23,7 @@ class Renderer {
 	}
 
 	private function parse_field_value( $value, $field ) {
-		if ( ! in_array( $field['type'], [ 'group', 'repeater', 'flexible_content' ] ) ) {
+		if ( empty( $field['sub_fields'] ) && empty( $field['layouts'] ) ) {
 			return $this->parse_normal_field_value( $field['value'], $field );
 		}
 

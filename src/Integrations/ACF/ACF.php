@@ -10,7 +10,7 @@ class ACF {
 
 	public function setup(): void {
 		add_filter( 'slim_seo_variables', [ $this, 'add_variables' ] );
-		add_filter( 'slim_seo_data', [ $this, 'add_data' ] );
+		add_filter( 'slim_seo_data', [ $this, 'add_data' ], 10, 3 );
 	}
 
 	public function add_variables( array $variables ): array {
@@ -22,12 +22,14 @@ class ACF {
 		return $this->variables;
 	}
 
-	public function add_data( array $data ): array {
-		$post = is_singular() ? get_queried_object() : get_post();
+	public function add_data( array $data, int $post_id, int $term_id ): array {
+		$post_id = $post_id ?: ( is_singular() ? get_queried_object_id() : get_the_ID() );
 
-		if ( empty( $post ) ) {
+		if ( empty( $post_id ) ) {
 			return $data;
 		}
+
+		$post          = get_post( $post_id );
 		$field_objects = get_field_objects( $post->ID ) ?: [];
 
 		// Option fields.
