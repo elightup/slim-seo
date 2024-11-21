@@ -34,6 +34,7 @@ class Container {
 		$services['forminator']     = new Integrations\Forminator;
 		$services['meta_box']       = new Integrations\MetaBox\MetaBox;
 		$services['woocommerce']    = new Integrations\WooCommerce;
+		$services['acf']            = new Integrations\ACF\ACF;
 
 		$services['settings']           = new Settings\Settings;
 		$services['code']               = new Code( $services['settings'] );
