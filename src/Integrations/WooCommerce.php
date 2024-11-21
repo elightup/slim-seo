@@ -176,8 +176,7 @@ class WooCommerce {
 		$review_count = $product->get_review_count();
 
 		$status = strtolower( $product->get_stock_status() );
-		$status = $this->get_statuses()[ $status ] ?? 'InStock';
-		$stock  = "https://schema.org/$status";
+		$stock  = $this->get_stock_statuses()[ $status ] ?? 'In Stock';
 
 		$data['product'] = compact(
 			'price',
@@ -197,39 +196,39 @@ class WooCommerce {
 		return $data;
 	}
 
-	private function get_statuses(): array {
+	private function get_stock_statuses(): array {
 		return [
 			// WooCommerce built-in statuses.
-			'instock'              => 'InStock',
-			'outofstock'           => 'OutOfStock',
-			'onbackorder'          => 'BackOrder',
+			'instock'              => 'In Stock',
+			'outofstock'           => 'Out OfStock',
+			'onbackorder'          => 'Back Order',
 
 			// Developers can register product custom stock statuses (supported by Google) with variations.
 			'discontinued'         => 'Discontinued',
 
-			'instoreonly'          => 'InStoreOnly',
-			'in_store_only'        => 'InStoreOnly',
-			'in-store-only'        => 'InStoreOnly',
+			'instoreonly'          => 'In Store Only',
+			'in_store_only'        => 'In Store Only',
+			'in-store-only'        => 'In Store Only',
 
-			'limitedavailability'  => 'LimitedAvailability',
-			'limited_availability' => 'LimitedAvailability',
-			'limited-availability' => 'LimitedAvailability',
+			'limitedavailability'  => 'Limited Availability',
+			'limited_availability' => 'Limited Availability',
+			'limited-availability' => 'Limited Availability',
 
-			'onlineonly'           => 'OnlineOnly',
-			'online_only'          => 'OnlineOnly',
-			'online-only'          => 'OnlineOnly',
+			'onlineonly'           => 'Online Only',
+			'online_only'          => 'Online Only',
+			'online-only'          => 'Online Only',
 
-			'preorder'             => 'PreOrder',
-			'pre_order'            => 'PreOrder',
-			'pre-order'            => 'PreOrder',
+			'preorder'             => 'Pre Order',
+			'pre_order'            => 'Pre Order',
+			'pre-order'            => 'Pre Order',
 
-			'presale'              => 'PreSale',
-			'pre_sale'             => 'PreSale',
-			'pre-sale'             => 'PreSale',
+			'presale'              => 'Pre Sale',
+			'pre_sale'             => 'Pre Sale',
+			'pre-sale'             => 'Pre Sale',
 
-			'soldout'              => 'SoldOut',
-			'sold_out'             => 'SoldOut',
-			'sold-out'             => 'SoldOut',
+			'soldout'              => 'Sold Out',
+			'sold_out'             => 'Sold Out',
+			'sold-out'             => 'Sold Out',
 		];
 	}
 
