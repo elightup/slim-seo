@@ -176,7 +176,7 @@ class WooCommerce {
 		$review_count = $product->get_review_count();
 
 		$status = strtolower( $product->get_stock_status() );
-		$stock  = $this->get_stock_statuses()[ $status ] ?? 'In Stock';
+		$stock  = $this->get_stock_statuses()[ $status ] ?? __( 'In stock', 'slim-seo' );
 
 		$data['product'] = compact(
 			'price',
@@ -199,37 +199,36 @@ class WooCommerce {
 	private function get_stock_statuses(): array {
 		return [
 			// WooCommerce built-in statuses.
-			'instock'              => 'In Stock',
-			'outofstock'           => 'Out OfStock',
-			'onbackorder'          => 'Back Order',
+			'instock'              => __( 'In stock', 'slim-seo' ),
+			'outofstock'           => __( 'Out of stock', 'slim-seo' ),
+			'onbackorder'          => __( 'Back order', 'slim-seo' ),
 
 			// Developers can register product custom stock statuses (supported by Google) with variations.
-			'discontinued'         => 'Discontinued',
+			'discontinued'         => __( 'Discontinued', 'slim-seo' ),
 
-			'instoreonly'          => 'In Store Only',
-			'in_store_only'        => 'In Store Only',
-			'in-store-only'        => 'In Store Only',
+			'instoreonly'          => __( 'In store only', 'slim-seo' ),
+			'in_store_only'        => __( 'In store only', 'slim-seo' ),
+			'in-store-only'        => __( 'In store only', 'slim-seo' ),
 
-			'limitedavailability'  => 'Limited Availability',
-			'limited_availability' => 'Limited Availability',
-			'limited-availability' => 'Limited Availability',
+			'limitedavailability'  => __( 'Limited availability', 'slim-seo' ),
+			'limited_availability' => __( 'Limited availability', 'slim-seo' ),
+			'limited-availability' => __( 'Limited availability', 'slim-seo' ),
 
-			'onlineonly'           => 'Online Only',
-			'online_only'          => 'Online Only',
-			'online-only'          => 'Online Only',
+			'onlineonly'           => __( 'Online only', 'slim-seo' ),
+			'online_only'          => __( 'Online only', 'slim-seo' ),
+			'online-only'          => __( 'Online only', 'slim-seo' ),
 
-			'preorder'             => 'Pre Order',
-			'pre_order'            => 'Pre Order',
-			'pre-order'            => 'Pre Order',
+			'preorder'             => __( 'Pre order', 'slim-seo' ),
+			'pre_order'            => __( 'Pre order', 'slim-seo' ),
+			'pre-order'            => __( 'Pre order', 'slim-seo' ),
 
-			'presale'              => 'Pre Sale',
-			'pre_sale'             => 'Pre Sale',
-			'pre-sale'             => 'Pre Sale',
+			'presale'              => __( 'Pre sale', 'slim-seo' ),
+			'pre_sale'             => __( 'Pre sale', 'slim-seo' ),
+			'pre-sale'             => __( 'Pre sale', 'slim-seo' ),
 
-			'soldout'              => 'Sold Out',
-			'sold_out'             => 'Sold Out',
-			'sold-out'             => 'Sold Out',
+			'soldout'              => __( 'Sold out', 'slim-seo' ),
+			'sold_out'             => __( 'Sold out', 'slim-seo' ),
+			'sold-out'             => __( 'Sold out', 'slim-seo' ),
 		];
 	}
-
 }
