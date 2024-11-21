@@ -33,6 +33,7 @@ class Container {
 		$services['mylisting']      = new Integrations\MyListing;
 		$services['forminator']     = new Integrations\Forminator;
 		$services['meta_box']       = new Integrations\MetaBox\MetaBox;
+		$services['woocommerce']    = new Integrations\WooCommerce;
 		$services['acf']            = new Integrations\ACF\ACF;
 
 		$services['settings']           = new Settings\Settings;
@@ -82,7 +83,6 @@ class Container {
 			$services['canonical_url']
 		);
 
-		$services['woocommerce']     = new Integrations\WooCommerce;
 		$services['auto_listings']   = new Integrations\AutoListings;
 		$services['genesis']         = new Integrations\Genesis;
 		$services['lifterlms']       = new Integrations\LifterLMS;
