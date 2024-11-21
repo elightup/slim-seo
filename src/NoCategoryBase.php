@@ -5,13 +5,13 @@ class NoCategoryBase {
 	protected $option_name = 'ss_no_category_base';
 
 	public function setup(): void {
-		add_action( 'created_category', [ $this, 'no_category_base_refresh_rules' ] );
-		add_action( 'delete_category', [ $this, 'no_category_base_refresh_rules' ] );
-		add_action( 'edited_category', [ $this, 'no_category_base_refresh_rules' ] );
-		add_action( 'init', [ $this, 'no_category_base_permastruct' ] );
-		add_filter( 'category_rewrite_rules', [ $this, 'no_category_base_rewrite_rules' ] );
-		add_filter( 'query_vars', [ $this, 'no_category_base_query_vars' ] );
-		add_filter( 'request', [ $this, 'no_category_base_request' ] );
+		add_action( 'created_category', [ $this, 'refresh_rewrite_rules' ] );
+		add_action( 'delete_category', [ $this, 'refresh_rewrite_rules' ] );
+		add_action( 'edited_category', [ $this, 'refresh_rewrite_rules' ] );
+		add_action( 'init', [ $this, 'set_category_permastruct' ] );
+		add_filter( 'category_rewrite_rules', [ $this, 'set_category_rewrite_rules' ] );
+		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
+		add_filter( 'request', [ $this, 'redirect' ] );
 
 		$this->activate();
 	}
@@ -21,9 +21,9 @@ class NoCategoryBase {
 			return;
 		}
 
-		update_option( $this->option_name, 1, false );
+		update_option( $this->option_name, 1 );
 
-		$this->no_category_base_refresh_rules();
+		$this->refresh_rewrite_rules();
 	}
 
 	public function deactivate(): void {
@@ -33,22 +33,22 @@ class NoCategoryBase {
 
 		delete_option( $this->option_name );
 
-		$this->no_category_base_refresh_rules();
+		$this->refresh_rewrite_rules();
 	}
 
-	public function no_category_base_refresh_rules() {
+	public function refresh_rewrite_rules(): void {
 		global $wp_rewrite;
 
 		$wp_rewrite->flush_rules();
 	}
 
-	public function no_category_base_permastruct() {
+	public function set_category_permastruct(): void {
 		global $wp_rewrite;
 
 		$wp_rewrite->extra_permastructs['category']['struct'] = '%category%';
 	}
 
-	public function no_category_base_rewrite_rules( $category_rewrite ) {
+	public function set_category_rewrite_rules( $category_rewrite ): array {
 		global $wp_rewrite;
 
 		$category_rewrite = [];
@@ -89,23 +89,19 @@ class NoCategoryBase {
 		return $category_rewrite;
 	}
 
-	public function no_category_base_query_vars( $public_query_vars ) {
+	public function add_query_vars( array $public_query_vars ): array {
 		$public_query_vars[] = 'category_redirect';
 
 		return $public_query_vars;
 	}
 
-	public function no_category_base_request( $query_vars ) {
-		if ( isset( $query_vars['category_redirect'] ) ) {
-			$cat_link = trailingslashit( get_option( 'home' ) ) . user_trailingslashit( $query_vars['category_redirect'], 'category' );
-
-			status_header( 301 );
-
-			header( "Location: $cat_link" );
-
-			exit();
+	public function redirect( array $query_vars ) {
+		if ( empty( $query_vars['category_redirect'] ) ) {
+			return $query_vars;
 		}
 
-		return $query_vars;
+		$cat_link = trailingslashit( get_option( 'home' ) ) . user_trailingslashit( $query_vars['category_redirect'], 'category' );
+		wp_safe_redirect( $cat_link, 301, 'Slim SEO' );
+		die;
 	}
 }
