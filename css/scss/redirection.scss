@@ -217,6 +217,30 @@
 	}
 }
 
+.ss-to-wrapper {
+	position: relative;
+
+	ul {
+		position: absolute;
+		left: 0;
+		right: 0;
+		border: 1px solid #ccc;
+		background: #fff;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		max-height: 150px;
+		overflow-y: auto;
+		z-index: 1000;
+
+		li {
+			padding: 8px;
+			cursor: pointer;
+			border-bottom: 1px solid #eee;
+		}
+	}
+}
+
 @keyframes ss-spin {
 	0% {
 		transform: rotate(0deg);

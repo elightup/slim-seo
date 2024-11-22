@@ -4,6 +4,7 @@ namespace SlimSEO\Redirection\Api;
 use WP_REST_Server;
 use WP_REST_Request;
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Helpers\Data as DataHelpers;
 
 class Redirects extends Base {
 	protected $db_redirects;
@@ -35,6 +36,12 @@ class Redirects extends Base {
 		register_rest_route( 'slim-seo-redirection', 'delete_redirects', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'delete_redirects' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
+
+		register_rest_route( 'slim-seo-redirection', 'posts', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_posts' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 	}
@@ -74,5 +81,23 @@ class Redirects extends Base {
 		$this->db_redirects->delete( $ids );
 
 		return true;
+	}
+
+	public function get_posts(): array {
+		$posts = DataHelpers::get_posts();
+		$pages = [];
+
+		if ( empty( $posts ) ) {
+			return $pages;
+		}
+
+		foreach ( $posts as $post ) {
+			$pages[] = [
+				'title' => $post->post_title,
+				'url'   => get_permalink( $post->ID ),
+			];
+		}
+
+		return $pages;
 	}
 }

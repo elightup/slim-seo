@@ -43,4 +43,14 @@ class Data {
 
 		return $type ? $sources[ $type ] : array_merge( $sources['meta'], $sources['redirection'] );
 	}
+
+	public static function get_posts( array $args = [] ): array {
+		$posts = get_posts( array_merge( [
+			'post_type'      => array_keys( self::get_post_types() ),
+			'post_status'    => [ 'publish' ],
+			'posts_per_page' => -1,
+		], $args ) );
+
+		return $posts;
+	}
 }
