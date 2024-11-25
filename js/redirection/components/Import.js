@@ -2,6 +2,7 @@ import { Modal } from '@wordpress/components';
 import { useReducer, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { fetcher } from "../helper/misc";
+import Sample from './Sample';
 
 const Import = () => {
 	const [ upload, toggleUpload ] = useReducer( upload => !upload, false );
@@ -44,6 +45,7 @@ const Import = () => {
 							loading ? __( 'Submitting...', 'slim-seo' ) : __( 'Submit', 'slim-seo' )
 						}
 					</button>
+					<Sample />			
 				</Modal>
 			}
 		</>

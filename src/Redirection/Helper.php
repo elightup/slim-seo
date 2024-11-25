@@ -96,4 +96,28 @@ class Helper {
 			\LiteSpeed\Purge::purge_all();
 		}
 	}
+
+	public static function csv_header(): array {
+		return [
+			esc_html( __( 'Type', 'slim-seo' ) ),
+			esc_html( __( 'Condition', 'slim-seo' ) ),
+			esc_html( __( 'From', 'slim-seo' ) ),
+			esc_html( __( 'To', 'slim-seo' ) ),
+			esc_html( __( 'Note', 'slim-seo' ) ),
+			esc_html( __( 'Enable', 'slim-seo' ) ),
+			esc_html( __( 'Ignore Parameters', 'slim-seo' ) ),
+		];
+	}
+
+	public static function csv_sample_data(): array {
+		return [
+			'type'             => 301,
+			'condition'        => 'exact-match',
+			'from'             => 'https://yoursite.com/old-post',
+			'to'               => 'https://yoursite.com/new-post',
+			'note'             => '',
+			'enable'           => 1,
+			'ignoreParameters' => 0,
+		];
+	}
 }

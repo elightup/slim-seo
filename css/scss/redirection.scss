@@ -217,6 +217,26 @@
 	}
 }
 
+.ss-upload {
+	.components-modal__frame {
+		width: 900px;
+	}
+
+	.ss-redirect-import-instructions {
+		margin-top: 10px;
+	
+		table {
+			border-collapse: collapse;
+			width: 100%;
+
+			th, td {
+				border: 1px solid #ddd;
+				padding: 5px;
+			}
+		}
+	}
+}
+
 @keyframes ss-spin {
 	0% {
 		transform: rotate(0deg);

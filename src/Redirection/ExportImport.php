@@ -26,6 +26,12 @@ class ExportImport extends Base {
 			'callback'            => [ $this, 'import' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
+
+		register_rest_route( 'slim-seo-redirection', 'sample', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'sample' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
 	}
 
 	public function export() {
@@ -37,15 +43,7 @@ class ExportImport extends Base {
 
 		$file_name = 'slimseo-redirects.csv';
 		$data      = [];
-		$header    = [
-			esc_html( __( 'Type', 'slim-seo' ) ),
-			esc_html( __( 'Condition', 'slim-seo' ) ),
-			esc_html( __( 'From', 'slim-seo' ) ),
-			esc_html( __( 'To', 'slim-seo' ) ),
-			esc_html( __( 'Note', 'slim-seo' ) ),
-			esc_html( __( 'Enable', 'slim-seo' ) ),
-			esc_html( __( 'Ignore Parameters', 'slim-seo' ) ),
-		];
+		$header    = Helper::csv_header();
 
 		foreach ( $redirects as $redirect ) {
 			$data[] = [
@@ -123,5 +121,15 @@ class ExportImport extends Base {
 		$this->db_redirects->update_all( $redirects );
 
 		return true;
+	}
+
+	public function sample() {
+		$file_name = 'slimseo-redirects.csv';
+		$data      = array_merge( [ Helper::csv_header() ], [ array_values( Helper::csv_sample_data() ) ] );
+
+		return [
+			'filename' => $file_name,
+			'data'     => $data,
+		];
 	}
 }
