@@ -45,6 +45,8 @@ class Container {
 
 		$services['rest_api'] = new RestApi;
 
+		$services['no_category_base'] = new NoCategoryBase;
+
 		// Admin only.
 		if ( is_admin() ) {
 			$services['link_attributes']    = new LinkAttributes;
@@ -118,6 +120,10 @@ class Container {
 		$settings = $this->services['settings'];
 		foreach ( $this->services as $id => $service ) {
 			if ( ! $settings->is_feature_active( $id ) ) {
+				if ( method_exists( $service, 'deactivate' ) ) {
+					$service->deactivate();
+				}
+
 				continue;
 			}
 
