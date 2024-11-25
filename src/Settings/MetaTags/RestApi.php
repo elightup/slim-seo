@@ -55,7 +55,7 @@ class RestApi {
 			'default_linkedin_image',
 			'wp_pattern_category',
 		], '' );
-		return array_diff_key( get_option( 'slim_seo' ), $exclude );
+		return array_diff_key( get_option( 'slim_seo', [] ), $exclude );
 	}
 
 	public function get_variables() {
