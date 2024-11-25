@@ -2,7 +2,7 @@
 namespace SlimSEO;
 
 class NoCategoryBase {
-	protected $option_name = 'ss_no_category_base';
+	protected $option_name = 'no_category_base';
 
 	public function setup(): void {
 		add_action( 'created_category', [ $this, 'refresh_rewrite_rules' ] );
@@ -17,21 +17,29 @@ class NoCategoryBase {
 	}
 
 	public function activate(): void {
-		if ( get_option( $this->option_name, false ) ) {
+		$option = get_option( 'slim_seo', [] );
+
+		if ( ! empty( $option[ $this->option_name ] ) ) {
 			return;
 		}
 
-		update_option( $this->option_name, 1 );
+		$option[ $this->option_name ] = 1;
+
+		update_option( 'slim_seo', $option );
 
 		$this->refresh_rewrite_rules();
 	}
 
 	public function deactivate(): void {
-		if ( ! get_option( $this->option_name, false ) ) {
+		$option = get_option( 'slim_seo', [] );
+
+		if ( empty( $option[ $this->option_name ] ) ) {
 			return;
 		}
 
-		delete_option( $this->option_name );
+		unset( $option[ $this->option_name ] );
+
+		update_option( 'slim_seo', $option );
 
 		$this->refresh_rewrite_rules();
 	}
