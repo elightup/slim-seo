@@ -105,14 +105,7 @@ class Settings {
 		// Set features OFF by default
 		if ( empty( $option['features'] ) ) {
 			$features_off = [ 'no_category_base' ];
-
-			if ( in_array( $feature, $features_off, true ) ) {
-				$index = array_search( $feature, $features, true );
-
-				if ( isset( $features[ $index ] ) ) {
-					unset( $features[ $index ] );
-				}
-			}
+			$features     = array_diff( $features, $features_off );
 		}
 
 		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
