@@ -125,7 +125,7 @@ class ExportImport extends Base {
 
 	public function sample() {
 		$file_name = 'slimseo-redirects.csv';
-		$data      = array_merge( [ Helper::csv_header() ], [ array_values( Helper::csv_sample_data() ) ] );
+		$data      = array_merge( [ Helper::csv_header() ], Helper::csv_sample_data() );
 
 		return [
 			'filename' => $file_name,

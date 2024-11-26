@@ -111,13 +111,42 @@ class Helper {
 
 	public static function csv_sample_data(): array {
 		return [
-			'type'             => 301,
-			'condition'        => 'exact-match',
-			'from'             => 'https://yoursite.com/old-post',
-			'to'               => 'https://yoursite.com/new-post',
-			'note'             => '',
-			'enable'           => 1,
-			'ignoreParameters' => 0,
+			[
+				'301',
+				'exact-match',
+				'old-post',
+				'https://example.com/new-post/',
+				'',
+				'1',
+				'0',
+			],
+			[
+				'302',
+				'start-with',
+				'go',
+				'https://example.com/resources/',
+				'',
+				'1',
+				'1',
+			],
+			[
+				'301',
+				'contain',
+				'slim-seo',
+				'https://wpslimseo.com',
+				'',
+				'1',
+				'1',
+			],
+			[
+				'301',
+				'regex',
+				'blog/(.*)',
+				'https://example.com/$1/',
+				'',
+				'1',
+				'0',
+			],
 		];
 	}
 }
