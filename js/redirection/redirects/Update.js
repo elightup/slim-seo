@@ -2,6 +2,7 @@ import { Button, Modal } from '@wordpress/components';
 import { useEffect, useReducer, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tooltip, fetcher, useApi } from '../helper/misc';
+import ToInput from './ToInput';
 
 const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) => {
 	const [ redirect, setRedirect ] = useState( {} );
@@ -117,7 +118,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 									{ __( 'To URL', 'slim-seo' ) }
 									<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
 								</label>
-								<input id='ss-to' type='text' value={ redirect.to } onChange={ handleChange( 'to' ) } />
+								<ToInput value={ redirect.to } setRedirect={ setRedirect } />
 							</div>
 						}
 
