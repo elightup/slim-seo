@@ -83,9 +83,14 @@ class Redirects extends Base {
 		return true;
 	}
 
-	public function get_posts(): array {
-		$posts = DataHelpers::get_posts();
-		$pages = [];
+	public function get_posts( WP_REST_Request $request ): array {
+		$search = $request->get_param( 'search' );
+		$pages  = [];
+		$posts  = DataHelpers::get_posts( [
+			's'              => $search,
+			'posts_per_page' => 10,
+
+		] );
 
 		if ( empty( $posts ) ) {
 			return $pages;
