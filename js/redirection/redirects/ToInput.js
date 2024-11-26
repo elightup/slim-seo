@@ -17,7 +17,7 @@ const ToInput = ( { value, setRedirect } ) => {
 
 			fetcher( 'posts', { search: value } ).then( result => {
 				setSuggestions( prev => result );
-	
+
 				setLoading( false );
 
 				if ( 0 === result.length ) {
@@ -34,7 +34,7 @@ const ToInput = ( { value, setRedirect } ) => {
 
 	const handleSuggestionClick = suggestion => {
 		setDropdownVisible( false );
-		setUrl( suggestion.url );		
+		setUrl( suggestion.url );
 		setRedirect( prev => ( { ...prev, to: suggestion.url } ) );
 	};
 
@@ -58,26 +58,20 @@ const ToInput = ( { value, setRedirect } ) => {
 
 			{
 				isDropdownVisible &&
-				(
-					<ul>
-						{
-							loading
-								? <li>{ __( 'Loading...', 'slim-seo' ) }</li>
-								: suggestions.length > 0
-									? (
-										suggestions.map( ( suggestion, index ) => (
-											<li key={ index } onClick={ () => handleSuggestionClick( suggestion ) } onMouseDown={ e => e.preventDefault() }>
-												{ suggestion.title } - { suggestion.url }
-											</li>
-										) )
-									)
-									: ''
-						}
-					</ul>
-				)
+				<ul>
+					{
+						loading
+							? <li>{ __( 'Loading...', 'slim-seo' ) }</li>
+							: suggestions.map( suggestion => (
+								<li key={ suggestion.url } onClick={ () => handleSuggestionClick( suggestion ) } onMouseDown={ e => e.preventDefault() }>
+									{ suggestion.title } - { suggestion.url }
+								</li>
+							) )
+					}
+				</ul>
 			}
 		</div>
 	);
-}
+};
 
 export default ToInput;
