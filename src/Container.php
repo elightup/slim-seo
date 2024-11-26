@@ -33,6 +33,8 @@ class Container {
 		$services['mylisting']      = new Integrations\MyListing;
 		$services['forminator']     = new Integrations\Forminator;
 		$services['meta_box']       = new Integrations\MetaBox\MetaBox;
+		$services['woocommerce']    = new Integrations\WooCommerce;
+		$services['acf']            = new Integrations\ACF\ACF;
 
 		$services['settings']           = new Settings\Settings;
 		$services['code']               = new Code( $services['settings'] );
@@ -42,6 +44,8 @@ class Container {
 		$services['breadcrumbs'] = new Breadcrumbs;
 
 		$services['rest_api'] = new RestApi;
+
+		$services['no_category_base'] = new NoCategoryBase;
 
 		// Admin only.
 		if ( is_admin() ) {
@@ -81,7 +85,6 @@ class Container {
 			$services['canonical_url']
 		);
 
-		$services['woocommerce']     = new Integrations\WooCommerce;
 		$services['auto_listings']   = new Integrations\AutoListings;
 		$services['genesis']         = new Integrations\Genesis;
 		$services['lifterlms']       = new Integrations\LifterLMS;
@@ -117,6 +120,10 @@ class Container {
 		$settings = $this->services['settings'];
 		foreach ( $this->services as $id => $service ) {
 			if ( ! $settings->is_feature_active( $id ) ) {
+				if ( method_exists( $service, 'deactivate' ) ) {
+					$service->deactivate();
+				}
+
 				continue;
 			}
 

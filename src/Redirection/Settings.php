@@ -41,6 +41,7 @@ class Settings {
 			'settings'           => self::list(),
 			'redirectTypes'      => Helper::redirect_types(),
 			'conditionOptions'   => Helper::condition_options(),
+			'csvSampleData'      => Helper::csv_sample_data(),
 			'isLog404TableExist' => $this->db_log->table_exists(),
 			'permalinkUrl'       => admin_url( 'options-permalink.php' ),
 			'defaultRedirect'    => [

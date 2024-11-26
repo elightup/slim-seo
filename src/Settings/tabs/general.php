@@ -1,9 +1,9 @@
 <?php
+// phpcs:ignoreFile
 defined( 'ABSPATH' ) || die;
 
 use SlimSEO\Helpers\UI;
 
-// phpcs:ignore
 $features = [
 	// Translators: %s: link to the docs.
 	'meta_title'       => [ __( 'Meta title', 'slim-seo' ), sprintf( __( 'Automatically generate <a href="%s" target="_blank">meta title tag</a>.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/meta-title-tag/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
@@ -29,11 +29,11 @@ $features = [
 	'schema'           => [ __( 'Schema', 'slim-seo' ), sprintf( __( 'Automatically <a href="%s" target="_blank">generate unified schema graph</a> to help search engines understand the website structure.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/schema/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
 	// Translators: %s: link to the docs.
 	'redirection'      => [ __( 'Redirection', 'slim-seo' ), sprintf( __( '<a href="%s" target="_blank">Create redirects</a> for broken pages, unimportant pages, or old URLs to existing working URLs.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/redirection/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
+	'no_category_base' => [ __( 'No category base', 'slim-seo' ), sprintf( __( 'Remove /category/ from your category link (e.g: yoursite.com/category/slim-seo/ to yoursite.com/slim-seo/).', 'slim-seo' ) ) ],
 ];
 
 echo '<p>', esc_html__( 'Toggle the features you want to use on your website.', 'slim-seo' ), '</p>';
 
-// phpcs:ignore
 foreach ( $features as $key => $text ) {
 	UI::feature_box( 'slim_seo[features][]', $key, $this->is_feature_active( $key ), $text[0], $text[1] );
 }

@@ -26,6 +26,7 @@ class Settings {
 			'feed',
 			'schema',
 			'redirection',
+			'no_category_base',
 		],
 	];
 
@@ -100,6 +101,12 @@ class Settings {
 		$defaults = $this->defaults['features'];
 		$option   = get_option( 'slim_seo' );
 		$features = $option['features'] ?? $defaults;
+
+		// Set features OFF by default
+		if ( empty( $option['features'] ) ) {
+			$features_off = [ 'no_category_base' ];
+			$features     = array_diff( $features, $features_off );
+		}
 
 		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
 	}
