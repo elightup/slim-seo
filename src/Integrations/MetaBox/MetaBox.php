@@ -69,7 +69,7 @@ class MetaBox {
 		return $meta_boxes;
 	}
 
-	private function remove_built_in( RW_Meta_Box $meta_box ): bool {
+	private function remove_built_in( $meta_box ): bool {
 		$built_in = [
 			// MB Favorite Posts.
 			'mbfp-preview-section',
