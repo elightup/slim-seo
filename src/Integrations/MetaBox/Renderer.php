@@ -2,7 +2,6 @@
 namespace SlimSEO\Integrations\MetaBox;
 
 use SlimSEO\Helpers\Arr;
-use RW_Meta_Box;
 
 class Renderer {
 	private $meta_box;
@@ -10,7 +9,7 @@ class Renderer {
 	private $term_id = 0;
 	private $not_supported = [ 'background', 'fieldset_text', 'text_list', 'sidebar' ];
 
-	public function __construct( RW_Meta_Box $meta_box, int $post_id, int $term_id ) {
+	public function __construct( $meta_box, int $post_id, int $term_id ) {
 		$this->meta_box = $meta_box;
 		$this->post_id  = $post_id;
 		$this->term_id  = $term_id;

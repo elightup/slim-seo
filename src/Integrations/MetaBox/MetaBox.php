@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\Integrations\MetaBox;
 
-use RW_Meta_Box;
-
 class MetaBox {
 	private $variables;
 
@@ -69,7 +67,7 @@ class MetaBox {
 		return $meta_boxes;
 	}
 
-	private function remove_built_in( RW_Meta_Box $meta_box ): bool {
+	private function remove_built_in( $meta_box ): bool {
 		$built_in = [
 			// MB Favorite Posts.
 			'mbfp-preview-section',
@@ -92,7 +90,7 @@ class MetaBox {
 		return ! in_array( $meta_box->id, $built_in, true ) && ! $is_relationship;
 	}
 
-	private function add_group( RW_Meta_Box $meta_box ): void {
+	private function add_group( $meta_box ): void {
 		$key               = Id::normalize( $meta_box->id );
 		$this->variables[] = [
 			'label'   => "[Meta Box] {$meta_box->title}",
