@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.7
 Requires PHP: 7.2
-Stable tag: 4.1.1
+Stable tag: 4.2.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,16 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.2.0 - 2024-12-03 =
+
+Highlights: this version adds a new feature that allows you to remove `/category/` base from the category permalink.
+
+Other changes:
+- Add support for ACF and WooCommerce fields from the dynamic variables for meta tags
+- Allow you to select a post/page as the destination when creating a redirect
+- Add sample data for importing redirections
+- Fix conflicts with GT3 themes
 
 = 4.1.1 - 2024-11-17 =
 - Fix breadcrumbs issue
