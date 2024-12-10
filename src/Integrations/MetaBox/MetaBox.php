@@ -5,7 +5,7 @@ class MetaBox {
 	private $variables;
 
 	public function is_active(): bool {
-		return defined( 'RWMB_VER' );
+		return defined( 'RWMB_VER' ) && function_exists( 'rwmb_get_registry' );
 	}
 
 	public function setup(): void {
