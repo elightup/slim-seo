@@ -22,7 +22,7 @@ class WPForo {
 				continue;
 			}
 			$instance = $callback['function'][0];
-			if ( ! str_contains( get_class( $instance ), 'SlimSEO' ) ) {
+			if ( ! is_object( $instance ) || ! str_contains( get_class( $instance ), 'SlimSEO' ) ) {
 				continue;
 			}
 
