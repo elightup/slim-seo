@@ -37,6 +37,9 @@ class Image {
 		// Get from settings.
 		$option = get_option( 'slim_seo', [] );
 		$post   = $this->get_queried_object();
+		if ( empty( $post ) ) {
+			return [];
+		}
 		if ( isset( $option[ $post->post_type ][ $this->meta_key ] ) ) {
 			return $this->get_from_settings( $option[ $post->post_type ][ $this->meta_key ] );
 		}
