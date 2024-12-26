@@ -78,6 +78,7 @@ class Helper {
 			'fe_widget',
 			'fe_chips',
 			'fe_sort',
+			'dokan-dashboard',
 		] );
 
 		self::$allowed_shortcodes = array_diff_key( $shortcode_tags, array_flip( $skipped_shortcodes ) );
