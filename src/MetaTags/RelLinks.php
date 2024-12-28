@@ -30,6 +30,9 @@ class RelLinks {
 		$links = [];
 
 		global $wp_query;
+		$per_page = apply_filters('slim_seo_per_page', get_query_var('posts_per_page') );
+		$wp_query->set('posts_per_page', $per_page );
+
 		$paged = max( 1, get_query_var( 'paged' ) );
 		if ( $paged > 1 ) {
 			$links['prev'] = $this->build_link( $url, $paged - 1 );
