@@ -39,26 +39,4 @@
 				row.querySelector( 'input[name="slim_seo[noindex]"]' ).checked = !!data.noindex;
 			} );
 	};
-
-	// Bulk edit.
-	document.addEventListener( 'click', e => {
-		if ( 'bulk_edit' !== e.target.id ) {
-			return;
-		}
-
-		e.preventDefault();
-		e.target.disabled = true;
-
-		const noindex = document.querySelector( '#bulk-edit select[name="noindex"]' ).value;
-		const ids = [ ...document.querySelectorAll( '#the-list input[name="post[]"]' ) ]
-			.filter( node => node.checked ).map( node => node.value )
-			.join( ',' );
-		const params = {
-			action: `ss_save_bulk_${ ssObjectType }`,
-			ids,
-			noindex,
-			nonce
-		};
-		fetch( `${ ajaxurl }?${ toQueryString( params ) }` ).then( () => e.target.closest( 'form' ).submit() );
-	} );
 } )();

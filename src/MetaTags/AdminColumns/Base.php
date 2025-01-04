@@ -38,7 +38,7 @@ abstract class Base {
 
 		// Bulk edit.
 		add_action( 'bulk_edit_custom_box', [ $this, 'output_bulk_edit_fields' ] );
-		add_action( "wp_ajax_ss_save_bulk_{$this->object_type}", [ $this, 'save_bulk_edit' ] );
+		add_action( 'bulk_edit_posts', [ $this, 'save_bulk_edit' ], 10, 2 );
 	}
 
 	public function enqueue() {
@@ -142,36 +142,28 @@ abstract class Base {
 		wp_send_json_success( $data );
 	}
 
-	public function save_bulk_edit() {
-		check_ajax_referer( 'save', 'nonce' );
-
-		$ids = wp_parse_id_list( wp_unslash( $_GET['ids'] ?? '' ) );
-		if ( empty( $ids ) || ! isset( $_GET['noindex'] ) ) {
-			wp_send_json_error();
+	public function save_bulk_edit( $updated, $shared_post_data ) {
+		if ( empty( $updated ) || ! isset( $shared_post_data['noindex'] ) ) {
+			return;
 		}
 
-		$noindex = (int) $_GET['noindex'];
-		if ( ! in_array( $noindex, [ -1, 0, 1 ], true ) ) {
-			wp_send_json_error();
+		$noindex = (int) $shared_post_data['noindex'];
+		if ( ! in_array( $noindex, [ -1, 0, 1 ], true ) || $noindex === -1 ) {
+			return;
 		}
 
-		// Not changed.
-		if ( $noindex === -1 ) {
-			wp_send_json_success();
-		}
-
-		foreach ( $ids as $id ) {
+		foreach ( $updated as $id ) {
 			$data            = get_metadata( $this->object_type, $id, 'slim_seo', true ) ?: [];
 			$data['noindex'] = $noindex;
 
 			$data = array_filter( $data );
+
 			if ( empty( $data ) ) {
 				delete_metadata( $this->object_type, $id, 'slim_seo' );
 			} else {
 				update_metadata( $this->object_type, $id, 'slim_seo', $data );
 			}
 		}
-		wp_send_json_success();
 	}
 
 	abstract protected function is_screen(): bool;
