@@ -30,7 +30,12 @@ class Robots {
 	}
 
 	public function modify_robots( $robots ) {
-		if ( $this->indexed() ) {
+		$comment_and_reply = false;
+		if ( is_date() || ( is_singular('post') && get_query_var('cpage' ) ) || isset( $_GET['replytocom'] ) ) {
+			$comment_and_reply = true;
+		}
+
+		if ( $this->indexed() && ! $comment_and_reply ) {
 			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
 			return $robots;
