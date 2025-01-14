@@ -11,7 +11,7 @@ class Description {
 
 	public function setup() {
 		$this->add_excerpt_to_pages();
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'wp_head', [ $this, 'output' ], 1 );
 	}
 
 	/**
