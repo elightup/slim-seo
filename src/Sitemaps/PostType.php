@@ -57,7 +57,7 @@ class PostType {
 
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
-			echo "\t\t<lastmod>", esc_html( gmdate( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
+			echo "\t\t<lastmod>", esc_html( wp_date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
 
 			$this->output_news( $post );
 			$this->output_images( $post );
@@ -145,7 +145,7 @@ class PostType {
 		echo "\t\t\t\t<news:name>", esc_html( get_bloginfo( 'name' ) ), "</news:name>\n";
 		echo "\t\t\t\t<news:language>", esc_html( $this->get_site_language() ), "</news:language>\n";
 		echo "\t\t\t</news:publication>\n";
-		echo "\t\t\t<news:publication_date>", esc_html( gmdate( 'c', strtotime( $post->post_date_gmt ) ) ), "</news:publication_date>\n";
+		echo "\t\t\t<news:publication_date>", esc_html( wp_date( 'c', strtotime( $post->post_date_gmt ) ) ), "</news:publication_date>\n";
 		echo "\t\t\t<news:title>", esc_html( $post->post_title ), "</news:title>\n";
 		echo "\t\t</news:news>\n";
 	}
@@ -186,7 +186,7 @@ class PostType {
 
 	private function is_published_within_2days( WP_Post $post ): bool {
 		$timestamp             = strtotime( $post->post_date_gmt );
-		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( gmdate( 'Y-m-d' ) ) );
+		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( wp_date( 'Y-m-d' ) ) );
 
 		return $timestamp >= $two_days_ago_midnight;
 	}

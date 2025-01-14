@@ -21,8 +21,17 @@ class Person extends Base {
 			'givenName'   => $this->user->first_name,
 			'familyName'  => $this->user->last_name,
 			'image'       => get_avatar_url( $this->user->ID ),
+			'mainEntity'  => $this->generate_mainentity(),
 		];
 
 		return $schema;
+	}
+
+	private function generate_mainentity() {
+		return [
+			'@type' => 'Person',
+			'@id'   => $this->id,
+			'name'  => $this->user->display_name,
+		];
 	}
 }

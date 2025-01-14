@@ -43,10 +43,11 @@ class ImageObject extends Base {
 		if ( $this->image_id ) {
 			$info = wp_get_attachment_image_src( $this->image_id, 'full' );
 			return array_merge( $schema, [
-				'caption' => $this->image->post_excerpt,
-				'url'     => $info[0],
-				'width'   => $info[1],
-				'height'  => $info[2],
+				'caption'    => $this->image->post_excerpt,
+				'url'        => $info[0],
+				'contentUrl' => $info[0],
+				'width'      => $info[1],
+				'height'     => $info[2],
 			] );
 		}
 

@@ -73,6 +73,14 @@ class Manager {
 		$webpage->description = $this->description;
 		$webpage->add_reference( 'isPartOf', $website );
 		$webpage->add_reference( 'breadcrumb', $breadcrumb_list );
+		if ( is_singular( 'post' ) ) {
+			$read_action = new Types\ReadAction( null, null );
+			$webpage->add_reference( 'potentialAction', $read_action );
+		}
+		if ( is_front_page() ) {
+			$about = new Types\About( 'organization', null );
+			$webpage->add_reference( 'about', $about );
+		}
 		$this->add_entity( $webpage );
 
 		$organization = new Types\Organization( null, home_url( '/' ) );
@@ -160,7 +168,6 @@ class Manager {
 			return;
 		}
 		$author->set_user( $author_user );
-		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
 
 		$this->add_entity( $author );
 	}
