@@ -30,12 +30,7 @@ class Robots {
 	}
 
 	public function modify_robots( $robots ) {
-		$comment_and_reply = false;
-		if ( is_date() || ( is_singular('post') && get_query_var('cpage' ) ) || isset( $_GET['replytocom'] ) ) {
-			$comment_and_reply = true;
-		}
-
-		if ( $this->indexed() && ! $comment_and_reply ) {
+		if ( $this->indexed() ) {
 			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
 			return $robots;
@@ -73,6 +68,11 @@ class Robots {
 		// Do not index pages with no content.
 		global $wp_query;
 		if ( ! is_front_page() && ! $wp_query->post_count ) {
+			return false;
+		}
+
+		// Do not index comment pages and replytocom
+		if ( is_singular('post') && get_query_var('cpage' ) || isset( $_GET['replytocom'] ) ) {
 			return false;
 		}
 
