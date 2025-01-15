@@ -95,6 +95,10 @@ class Breadcrumbs {
 		return apply_filters( 'slim_seo_breadcrumbs_links', $this->links );
 	}
 
+	public function get_current_page(): string {
+		return $this->args['display_current'] === 'true' ? $this->current : '';
+	}
+
 	public function parse(): void {
 		if ( $this->is_parsed ) {
 			return;

@@ -16,14 +16,25 @@ class BreadcrumbList extends Base {
 	}
 
 	public function generate() {
-		$links = $this->source->get_links();
-		$list  = [];
-		foreach ( $links as $i => $link ) {
+		$links    = $this->source->get_links();
+		$list     = [];
+		$position = 1;
+		foreach ( $links as $link ) {
 			$list[] = [
 				'@type'    => 'ListItem',
-				'position' => ( $i + 1 ),
+				'position' => $position,
 				'name'     => $link['text'],
 				'item'     => $link['url'],
+			];
+			$position++;
+		}
+
+		$current_page = $this->source->get_current_page();
+		if ( $current_page ) {
+			$list[] = [
+				'@type'    => 'ListItem',
+				'position' => $position,
+				'name'     => $current_page,
 			];
 		}
 
