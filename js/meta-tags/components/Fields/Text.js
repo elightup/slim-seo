@@ -9,7 +9,7 @@ const Text = ( { id, std, placeholder, onFocus, onBlur, ...rest } ) => {
 		<Control id={ id } { ...rest }>
 			<div className="ss-input-wrapper">
 				<input type="text" id={ id } name={ id } defaultValue={ std } ref={ inputRef } onFocus={ onFocus } onBlur={ onBlur } placeholder={ placeholder } />
-				<PropInserter inputRef={ inputRef } />
+				{ id !== 'slim_seo[canonical]' && <PropInserter inputRef={ inputRef } /> }
 			</div>
 		</Control>
 	);
