@@ -65,14 +65,14 @@ class Robots {
 			return false;
 		}
 
-		// Do not index pages with no content.
-		global $wp_query;
-		if ( ! is_front_page() && ! $wp_query->post_count ) {
+		// Do not index comment pages and replytocom
+		if ( is_singular() && get_query_var('cpage' ) || isset( $_GET['replytocom'] ) ) {
 			return false;
 		}
 
-		// Do not index comment pages and replytocom
-		if ( is_singular('post') && get_query_var('cpage' ) || isset( $_GET['replytocom'] ) ) {
+		// Do not index pages with no content.
+		global $wp_query;
+		if ( ! is_front_page() && ! $wp_query->post_count ) {
 			return false;
 		}
 
