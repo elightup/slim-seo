@@ -41,10 +41,10 @@ class UltimateMember {
 			return;
 		}
 
-		remove_action( 'wp_head', [ $this->description, 'output' ] );
-		remove_action( 'wp_head', [ $this->open_graph, 'output' ] );
-		remove_action( 'wp_head', [ $this->twitter_cards, 'output' ] );
-		remove_action( 'wp_head', [ $this->linkedin, 'output' ] );
+		remove_action( 'slim_seo_head', [ $this->description, 'output' ] );
+		remove_action( 'slim_seo_head', [ $this->open_graph, 'output' ] );
+		remove_action( 'slim_seo_head', [ $this->twitter_cards, 'output' ] );
+		remove_action( 'slim_seo_head', [ $this->linkedin, 'output' ] );
 		remove_filter( 'wp_robots', [ $this->robots, 'modify_robots' ] );
 	}
 }

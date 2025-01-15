@@ -7,7 +7,7 @@ class RelLinks {
 	use Context;
 
 	public function setup() {
-		add_action( 'wp_head', [ $this, 'output' ], 1 );
+		add_action( 'slim_seo_head', [ $this, 'output' ] );
 	}
 
 	public function output() {
