@@ -8,13 +8,7 @@ class CanonicalUrl {
 
 	public function setup() {
 		remove_action( 'wp_head', 'rel_canonical' );
-
-		add_action( 'wp_head', [ $this, 'slim_seo_head' ], 1 );
 		add_action( 'slim_seo_head', [ $this, 'output' ] );
-	}
-
-	public function slim_seo_head() {
-		do_action( 'slim_seo_head' );
 	}
 
 	public function output(): void {

@@ -12,7 +12,7 @@ class Container {
 
 		$services['upgrade'] = new Upgrade;
 
-		$services['slim_seo_head']    = new MetaTags\SlimSEOHead;
+		$services['meta_tags_hook']   = new MetaTags\Hook;
 		$services['canonical_url']    = new MetaTags\CanonicalUrl;
 		$services['meta_title']       = new MetaTags\Title;
 		$services['meta_description'] = new MetaTags\Description;
@@ -96,7 +96,7 @@ class Container {
 		$services['amp']             = new Integrations\AMP( $services['schema'] );
 		$services['affiliatewp']     = new Integrations\AffiliateWP;
 		$services['senseilms']       = new Integrations\SenseiLMS;
-		$services['wpforo']          = new Integrations\WPForo( $services['slim_seo_head'] );
+		$services['wpforo']          = new Integrations\WPForo( $services['meta_tags_hook'] );
 		$services['web_stories']     = new Integrations\WebStories(
 			$services['open_graph'],
 			$services['twitter_cards'],
@@ -104,11 +104,7 @@ class Container {
 			$services['schema']
 		);
 		$services['ultimate_member'] = new Integrations\UltimateMember(
-			$services['slim_seo_head'],
-			$services['meta_description'],
-			$services['open_graph'],
-			$services['twitter_cards'],
-			$services['linkedin'],
+			$services['meta_tags_hook'],
 			$services['meta_robots']
 		);
 

@@ -1,15 +1,13 @@
 <?php
 namespace SlimSEO\Integrations;
 
-use SlimSEO\MetaTags\SlimSEOHead;
+use SlimSEO\MetaTags\Hook;
 
 class WPForo {
-	private $head;
+	private $hook;
 
-	public function __construct(
-		SlimSEOHead $slim_seo_head
-	) {
-		$this->head = $slim_seo_head;
+	public function __construct( Hook $hook ) {
+		$this->hook = $hook;
 	}
 
 	public function is_active(): bool {
@@ -21,10 +19,8 @@ class WPForo {
 	}
 
 	public function process(): void {
-		if ( ! wpforo_setting( 'seo', 'seo_meta' ) || ! is_wpforo_page() ) {
-			return;
+		if ( wpforo_setting( 'seo', 'seo_meta' ) && is_wpforo_page() ) {
+			$this->hook->remove();
 		}
-
-		remove_action( 'wp_head', [ $this->head, 'slim_seo_head' ], 1 );
 	}
 }
