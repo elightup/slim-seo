@@ -73,7 +73,7 @@ class Manager {
 		$webpage->description = $this->description;
 		$webpage->add_reference( 'isPartOf', $website );
 		$webpage->add_reference( 'breadcrumb', $breadcrumb_list );
-		if ( is_singular( 'post' ) || is_page() ) {
+		if ( is_singular( [ 'post', 'page' ] ) ) {
 			$read_action = new Types\ReadAction( null, $this->canonical_url->get_url() );
 			$webpage->add_reference( 'potentialAction', $read_action );
 		}
@@ -168,7 +168,6 @@ class Manager {
 			return;
 		}
 		$author->set_user( $author_user );
-		$author->add_reference( 'mainEntity', $author );
 		$this->entities['webpage']->add_reference( 'mainEntity', $author );
 
 		$this->add_entity( $author );
