@@ -73,9 +73,17 @@ class Manager {
 		$webpage->description = $this->description;
 		$webpage->add_reference( 'isPartOf', $website );
 		$webpage->add_reference( 'breadcrumb', $breadcrumb_list );
-		$this->add_entity( $webpage );
+		if ( is_singular( [ 'post', 'page' ] ) ) {
+			$read_action = new Types\ReadAction( null, $this->canonical_url->get_url() );
+			$webpage->add_reference( 'potentialAction', $read_action );
+		}
 
 		$organization = new Types\Organization( null, home_url( '/' ) );
+		if ( is_front_page() ) {
+			$webpage->add_reference( 'about', $organization );
+		}
+		$this->add_entity( $webpage );
+
 		$website->add_reference( 'publisher', $organization );
 		$this->add_entity( $organization );
 
@@ -160,7 +168,7 @@ class Manager {
 			return;
 		}
 		$author->set_user( $author_user );
-		$author->add_reference( 'mainEntityOfPage', $this->entities['webpage'] );
+		$this->entities['webpage']->add_reference( 'mainEntity', $author );
 
 		$this->add_entity( $author );
 	}

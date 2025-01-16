@@ -10,7 +10,7 @@ class WebPage extends Base {
 			'@type'       => 'WebPage',
 			'@id'         => $this->id,
 			'url'         => $this->url,
-			'inLanguage'  => get_locale(),
+			'inLanguage'  => get_bloginfo( 'language' ),
 			'name'        => $this->title->get_title(),
 			'description' => $this->description->get_description(),
 		];
@@ -28,8 +28,8 @@ class WebPage extends Base {
 		}
 
 		if ( is_singular() ) {
-			$schema['datePublished'] = gmdate( 'c', strtotime( get_queried_object()->post_date_gmt ) );
-			$schema['dateModified']  = gmdate( 'c', strtotime( get_queried_object()->post_modified_gmt ) );
+			$schema['datePublished'] = wp_date( 'c', strtotime( get_queried_object()->post_date_gmt ) );
+			$schema['dateModified']  = wp_date( 'c', strtotime( get_queried_object()->post_modified_gmt ) );
 		}
 
 		return $schema;
