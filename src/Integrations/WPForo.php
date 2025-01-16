@@ -1,7 +1,17 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use SlimSEO\MetaTags\SlimSEOHead;
+
 class WPForo {
+	private $head;
+
+	public function __construct(
+		SlimSEOHead $slim_seo_head
+	) {
+		$this->head = $slim_seo_head;
+	}
+
 	public function is_active(): bool {
 		return defined( 'WPFORO_VERSION' );
 	}
@@ -15,18 +25,6 @@ class WPForo {
 			return;
 		}
 
-		// Remove all Slim SEO hooks to 'wp_head' to output meta tags.
-		global $wp_filter;
-		foreach ( $wp_filter['wp_head'][10] as $callback ) {
-			if ( ! is_array( $callback['function'] ) ) {
-				continue;
-			}
-			$instance = $callback['function'][0];
-			if ( ! is_object( $instance ) || ! str_contains( get_class( $instance ), 'SlimSEO' ) ) {
-				continue;
-			}
-
-			remove_filter( 'wp_head', $callback['function'] );
-		}
+		remove_action( 'wp_head', [ $this->head, 'slim_seo_head' ], 1 );
 	}
 }
