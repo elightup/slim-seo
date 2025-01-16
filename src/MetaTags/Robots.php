@@ -66,7 +66,7 @@ class Robots {
 		}
 
 		// Do not index comment pages and replytocom
-		if ( is_singular() && get_query_var('cpage' ) || isset( $_GET['replytocom'] ) ) {
+		if ( is_singular() && ( get_query_var('cpage' ) || isset( $_GET['replytocom'] ) ) ) {
 			return false;
 		}
 
