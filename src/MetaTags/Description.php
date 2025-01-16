@@ -11,7 +11,7 @@ class Description {
 
 	public function setup() {
 		$this->add_excerpt_to_pages();
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'slim_seo_head', [ $this, 'output' ] );
 	}
 
 	/**

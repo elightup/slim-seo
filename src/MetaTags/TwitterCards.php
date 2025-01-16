@@ -11,7 +11,7 @@ class TwitterCards {
 	}
 
 	public function setup(): void {
-		add_action( 'wp_head', [ $this, 'output' ] );
+		add_action( 'slim_seo_head', [ $this, 'output' ] );
 	}
 
 	/**

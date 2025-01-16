@@ -45,7 +45,7 @@ class Robots {
 	}
 
 	private function remove_canonical_link() {
-		remove_action( 'wp_head', [ $this->url, 'output' ] );
+		remove_action( 'slim_seo_head', [ $this->url, 'output' ] );
 		remove_action( 'wp_head', 'rel_canonical' );
 	}
 
