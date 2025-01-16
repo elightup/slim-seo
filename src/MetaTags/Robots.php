@@ -29,7 +29,7 @@ class Robots {
 		add_filter( 'robots_txt', [ $this, 'add_to_robots_txt' ] );
 	}
 
-	public function modify_robots( $robots ) {
+	public function modify_robots( array $robots ): array {
 		if ( $this->indexed() ) {
 			$robots['max-snippet']       = '-1';
 			$robots['max-video-preview'] = '-1';
@@ -38,10 +38,7 @@ class Robots {
 
 		// No index.
 		$this->remove_canonical_link();
-		return [
-			'noindex' => true,
-			'follow'  => true,
-		];
+		return wp_robots_no_robots( $robots );
 	}
 
 	private function remove_canonical_link() {
@@ -54,9 +51,9 @@ class Robots {
 		return apply_filters( 'slim_seo_robots_index', $value, $this->get_queried_object_id() );
 	}
 
-	private function get_indexed() {
-		// Do not index search or 404 page.
-		if ( is_search() || is_404() ) {
+	private function get_indexed(): bool {
+		// Do not index 404 page.
+		if ( is_404() ) {
 			return false;
 		}
 
@@ -65,8 +62,8 @@ class Robots {
 			return false;
 		}
 
-		// Do not index comment pages and replytocom
-		if ( is_singular() && ( get_query_var('cpage' ) || isset( $_GET['replytocom'] ) ) ) {
+		// Do not index comment pages.
+		if ( is_singular() && get_query_var('cpage' ) ) {
 			return false;
 		}
 
