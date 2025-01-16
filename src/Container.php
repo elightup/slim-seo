@@ -12,6 +12,7 @@ class Container {
 
 		$services['upgrade'] = new Upgrade;
 
+		$services['slim_seo_head']    = new MetaTags\SlimSEOHead;
 		$services['canonical_url']    = new MetaTags\CanonicalUrl;
 		$services['meta_title']       = new MetaTags\Title;
 		$services['meta_description'] = new MetaTags\Description;
@@ -103,6 +104,7 @@ class Container {
 			$services['schema']
 		);
 		$services['ultimate_member'] = new Integrations\UltimateMember(
+			$services['slim_seo_head'],
 			$services['meta_description'],
 			$services['open_graph'],
 			$services['twitter_cards'],

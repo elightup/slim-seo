@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use SlimSEO\MetaTags\SlimSEOHead;
 use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\OpenGraph;
 use SlimSEO\MetaTags\Robots;
@@ -8,6 +9,7 @@ use SlimSEO\MetaTags\TwitterCards;
 use SlimSEO\MetaTags\LinkedIn;
 
 class UltimateMember {
+	private $head;
 	private $description;
 	private $open_graph;
 	private $twitter_cards;
@@ -15,12 +17,14 @@ class UltimateMember {
 	private $robots;
 
 	public function __construct(
+		SlimSEOHead $slim_seo_head,
 		Description $description,
 		OpenGraph $open_graph,
 		TwitterCards $twitter_cards,
 		LinkedIn $linkedin,
 		Robots $robots
 	) {
+		$this->head          = $slim_seo_head;
 		$this->description   = $description;
 		$this->open_graph    = $open_graph;
 		$this->twitter_cards = $twitter_cards;
@@ -41,10 +45,7 @@ class UltimateMember {
 			return;
 		}
 
-		remove_action( 'slim_seo_head', [ $this->description, 'output' ] );
-		remove_action( 'slim_seo_head', [ $this->open_graph, 'output' ] );
-		remove_action( 'slim_seo_head', [ $this->twitter_cards, 'output' ] );
-		remove_action( 'slim_seo_head', [ $this->linkedin, 'output' ] );
+		remove_action( 'wp_head', [ $this->head, 'slim_seo_head' ], 1 );
 		remove_filter( 'wp_robots', [ $this->robots, 'modify_robots' ] );
 	}
 }
