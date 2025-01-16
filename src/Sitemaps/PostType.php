@@ -186,7 +186,7 @@ class PostType {
 
 	private function is_published_within_2days( WP_Post $post ): bool {
 		$timestamp             = strtotime( $post->post_date_gmt );
-		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( wp_date( 'Y-m-d' ) ) );
+		$two_days_ago_midnight = strtotime( '-2 days midnight', strtotime( gmdate( 'Y-m-d' ) ) );
 
 		return $timestamp >= $two_days_ago_midnight;
 	}
