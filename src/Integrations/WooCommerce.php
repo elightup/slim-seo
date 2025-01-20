@@ -36,7 +36,9 @@ class WooCommerce {
 	}
 
 	public function change_breadcrumbs_taxonomy( array $args ): array {
-		$args['taxonomy'] = 'product_cat';
+		if ( is_singular( 'product' ) ) {
+			$args['taxonomy'] = 'product_cat';
+		}
 		return $args;
 	}
 
