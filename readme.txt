@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.7.1
 Requires PHP: 7.2
-Stable tag: 4.2.1
+Stable tag: 4.2.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,15 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.2.2 - 2025-01-20 =
+- Improve schemas
+- Move meta tags to the top of <head> section
+- Add current month variable
+- Not index comment pages
+- Fix wrong taxonomy for non-product page when WooCommerce is active
+- Fix compatibility issue with Dokan
+- Fix bug with bulk edit
 
 = 4.2.1 - 2024-12-16 =
 - Show post type & taxonomy slugs in the Meta Tags tab to avoid confusion if 2 post types/taxonomies have same labels.
