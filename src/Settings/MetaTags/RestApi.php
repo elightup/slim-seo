@@ -130,9 +130,10 @@ class RestApi {
 		$variables[] = [
 			'label'   => __( 'Others', 'slim-seo' ),
 			'options' => [
-				'current.year' => __( 'Current year', 'slim-seo' ),
-				'page'         => __( 'Current page number', 'slim-seo' ),
-				'sep'          => __( 'Separator character', 'slim-seo' ),
+				'current.year'  => __( 'Current year', 'slim-seo' ),
+				'current.month' => __( 'Current month', 'slim-seo' ),
+				'page'          => __( 'Current page number', 'slim-seo' ),
+				'sep'           => __( 'Separator character', 'slim-seo' ),
 			],
 		];
 

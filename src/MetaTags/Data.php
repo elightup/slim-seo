@@ -152,7 +152,8 @@ class Data {
 
 		return [
 			'current' => [
-				'year' => wp_date( 'Y' ),
+				'year'  => wp_date( 'Y' ),
+				'month' => wp_date( 'm' ),
 			],
 			// Translators: %s - page number
 			'page'    => $paged >= 2 || $page >= 2 ? sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) ) : '',
