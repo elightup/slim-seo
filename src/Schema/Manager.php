@@ -71,6 +71,8 @@ class Manager {
 		$webpage              = new Types\WebPage( null, $this->canonical_url->get_url() );
 		$webpage->title       = $this->title;
 		$webpage->description = $this->description;
+		$this->add_entity( $webpage );
+
 		$webpage->add_reference( 'isPartOf', $website );
 		$webpage->add_reference( 'breadcrumb', $breadcrumb_list );
 		if ( is_singular( [ 'post', 'page' ] ) ) {
@@ -83,7 +85,6 @@ class Manager {
 		if ( is_front_page() ) {
 			$webpage->add_reference( 'about', $organization );
 		}
-		$this->add_entity( $webpage );
 
 		$website->add_reference( 'publisher', $organization );
 		$this->add_entity( $organization );
