@@ -76,6 +76,7 @@ class Manager {
 		if ( is_singular( [ 'post', 'page' ] ) ) {
 			$read_action = new Types\ReadAction( null, $this->canonical_url->get_url() );
 			$webpage->add_reference( 'potentialAction', $read_action );
+			$this->add_entity( $read_action );
 		}
 
 		$organization = new Types\Organization( null, home_url( '/' ) );
