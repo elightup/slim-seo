@@ -116,7 +116,7 @@ class Breadcrumbs {
 
 		if ( is_home() ) { // Static blog page.
 			$this->current = single_post_title( '', false );
-		} elseif ( is_post_type_archive() ) {
+		} elseif ( is_post_type_archive() && ! is_search() ) {
 			$this->current = post_type_archive_title( '', false );
 		} elseif ( is_singular() ) {
 			$this->add_singular();
