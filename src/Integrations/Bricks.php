@@ -82,6 +82,9 @@ class Bricks {
 			// WP Grid Builder.
 			'wpgb-facet',
 			'jet-engine-listing-grid',
+
+			// HappyFiles.
+			'happyfiles-gallery',
 		] );
 
 		return array_filter( $data, function ( $element ) use ( $skipped_elements ) {
