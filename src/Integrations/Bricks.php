@@ -56,6 +56,7 @@ class Bricks {
 			'facebook-page',
 			'form',
 			'icon',
+			'image',
 			'map',
 			'nav-menu',
 			'pagination',
