@@ -37,7 +37,7 @@ class CanonicalUrl {
 			return $data['canonical'];
 		}
 
-		$url = get_permalink( $this->get_queried_object() );
+		$url = (string) get_permalink( $this->get_queried_object() );
 
 		$page = get_query_var( 'page', 0 );
 		if ( $page < 2 ) {
