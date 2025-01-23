@@ -116,8 +116,15 @@ class Breadcrumbs {
 
 		if ( is_home() ) { // Static blog page.
 			$this->current = single_post_title( '', false );
-		} elseif ( is_post_type_archive() && ! is_search() ) {
+		} elseif ( is_post_type_archive() ) {
 			$this->current = post_type_archive_title( '', false );
+
+			// Post type archive can be used as the search results page (like in WooCommerce).
+			// In that case, we need to show both the post type archive title and the search results.
+			if ( is_search() ) {
+				$this->add_post_type_archive_link( get_queried_object()->name );
+				$this->current = sprintf( $this->args['label_search'], get_search_query() );
+			}
 		} elseif ( is_singular() ) {
 			$this->add_singular();
 		} elseif ( is_tax() || is_category() || is_tag() ) { // Taxonomy archive.
