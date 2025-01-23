@@ -57,6 +57,7 @@ class Bricks {
 			'form',
 			'icon',
 			'image',
+			'image-gallery',
 			'map',
 			'nav-menu',
 			'pagination',
