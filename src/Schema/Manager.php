@@ -71,18 +71,20 @@ class Manager {
 		$webpage              = new Types\WebPage( null, $this->canonical_url->get_url() );
 		$webpage->title       = $this->title;
 		$webpage->description = $this->description;
+		$this->add_entity( $webpage );
+
 		$webpage->add_reference( 'isPartOf', $website );
 		$webpage->add_reference( 'breadcrumb', $breadcrumb_list );
 		if ( is_singular( [ 'post', 'page' ] ) ) {
 			$read_action = new Types\ReadAction( null, $this->canonical_url->get_url() );
 			$webpage->add_reference( 'potentialAction', $read_action );
+			$this->add_entity( $read_action );
 		}
 
 		$organization = new Types\Organization( null, home_url( '/' ) );
 		if ( is_front_page() ) {
 			$webpage->add_reference( 'about', $organization );
 		}
-		$this->add_entity( $webpage );
 
 		$website->add_reference( 'publisher', $organization );
 		$this->add_entity( $organization );

@@ -33,7 +33,23 @@ class CanonicalUrl {
 
 	private function get_singular_value(): string {
 		$data = get_post_meta( $this->get_queried_object_id(), 'slim_seo', true );
-		return $data['canonical'] ?? (string) wp_get_canonical_url( $this->get_queried_object() );
+		if ( ! empty( $data['canonical'] ) ) {
+			return $data['canonical'];
+		}
+
+		$url = (string) get_permalink( $this->get_queried_object() );
+
+		$page = get_query_var( 'page', 0 );
+		if ( $page < 2 ) {
+			return $url;
+		}
+		if ( get_option( 'permalink_structure' ) ) {
+			$url = trailingslashit( $url ) . user_trailingslashit( $page, 'single_paged' );
+		} else {
+			$url = add_query_arg( 'page', $page, $url );
+		}
+
+		return $url;
 	}
 
 	private function get_term_value(): string {
@@ -41,8 +57,8 @@ class CanonicalUrl {
 		if ( ! empty( $data['canonical'] ) ) {
 			return $data['canonical'];
 		}
-		$term_link = get_term_link( $this->get_queried_object() );
-		return is_string( $term_link ) ? $term_link : '';
+		$url = get_term_link( $this->get_queried_object() );
+		return is_string( $url ) ? $url : '';
 	}
 
 	private function get_post_type_archive_value(): string {
