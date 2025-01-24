@@ -73,6 +73,20 @@ class Description {
 		return Option::get( "$post_type.description", '{{ post.auto_description }}' );
 	}
 
+	/**
+	 * Get the rendered meta description, after parsing dynamic variables
+	 * Make public to allow access from other class.
+	 * @see \SlimSEO\MetaTags\AdminColumns\Post::render()
+	 * @see \SlimSEO\RestApi::prepare_value_for_post()
+	 */
+	public function get_rendered_singular_value( int $post_id = 0 ): string {
+		$description = $this->get_singular_value( $post_id );
+		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $post_id );
+		$description = Helper::render( $description, $post_id );
+
+		return $description;
+	}
+
 	public function get_term_value( $term_id = null ): string {
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
@@ -87,6 +101,19 @@ class Description {
 
 		// Use taxonomy settings if avaiable, then fallback to the term auto description
 		return Option::get( "{$term->taxonomy}.description", '{{ term.auto_description }}' );
+	}
+
+	/**
+	 * Get the rendered meta description, after parsing dynamic variables
+	 * Make public to allow access from other class.
+	 * @see \SlimSEO\MetaTags\AdminColumns\Term::render()
+	 */
+	public function get_rendered_term_value( int $term_id = 0 ): string {
+		$description = $this->get_term_value( $term_id );
+		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $term_id );
+		$description = Helper::render( $description, 0, $term_id );
+
+		return $description;
 	}
 
 	private function get_author_value(): string {

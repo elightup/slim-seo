@@ -49,9 +49,14 @@ class RestApi {
 	}
 
 	public function prepare_value_for_post( $value, WP_REST_Request $request, array $args ): array {
+		$post = get_post();
+		if ( ! $post ) {
+			return [];
+		}
+
 		$parsed_value = [
-			'title'       => $this->get_post_meta_title(),
-			'description' => $this->get_post_meta_description(),
+			'title'       => $this->title->get_rendered_singular_value( $post->ID ),
+			'description' => $this->description->get_rendered_singular_value( $post->ID ),
 		];
 		$value = array_merge( (array) $value, $parsed_value );
 
@@ -67,32 +72,5 @@ class RestApi {
 		$value = array_map( [ Helper::class, 'render' ], $value );
 
 		return $value;
-	}
-
-	private function get_post_meta_title(): string {
-		$post = get_post();
-		if ( empty( $post ) ) {
-			return '';
-		}
-
-		$title = $this->title->get_singular_value( $post->ID );
-		$title = $title ?: '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
-		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post->ID );
-		$title = Helper::render( $title, $post->ID );
-
-		return $title;
-	}
-
-	private function get_post_meta_description(): string {
-		$post = get_post();
-		if ( empty( $post ) ) {
-			return '';
-		}
-
-		$description = $this->description->get_singular_value( $post->ID );
-		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $post->ID );
-		$description = Helper::render( $description, $post->ID );
-
-		return $description;
 	}
 }

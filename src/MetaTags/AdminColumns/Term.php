@@ -21,20 +21,16 @@ class Term extends Base {
 	 * The value of meta tags will be applied with filters to make them work in the back end.
 	 */
 	public function render( $output, $column, $term_id ) {
-		$data = get_term_meta( $term_id, 'slim_seo', true ) ?: [];
+		$term_id = (int) $term_id;
 
 		switch ( $column ) {
 			case 'meta_title':
-				$title = $data['title'] ?? '';
-				$title = (string) apply_filters( 'slim_seo_meta_title', $title, $term_id );
-				$title = Helper::render( $title, 0, (int) $term_id );
+				$title = $this->title->get_rendered_term_value( $term_id );
 				ob_start();
 				UI::tooltip( $title, "<span class='ss-meta-content'>$title</span>", 'top' );
 				return ob_get_clean();
 			case 'meta_description':
-				$description = $data['description'] ?? '';
-				$description = (string) apply_filters( 'slim_seo_meta_description', $description, $term_id );
-				$description = Helper::render( $description, 0, (int) $term_id );
+				$description = $this->description->get_rendered_term_value( $term_id );
 				ob_start();
 				UI::tooltip( $description, "<span class='ss-meta-content'>$description</span>", 'top' );
 				return ob_get_clean();

@@ -62,6 +62,20 @@ class Title {
 	}
 
 	/**
+	 * Get the rendered meta title, after parsing dynamic variables
+	 * Make public to allow access from other class.
+	 * @see \SlimSEO\MetaTags\AdminColumns\Post::render()
+	 * @see \SlimSEO\RestApi::prepare_value_for_post()
+	 */
+	public function get_rendered_singular_value( int $post_id = 0 ): string {
+		$title = $this->get_singular_value( $post_id ) ?: '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
+		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
+		$title = Helper::render( $title, $post_id );
+
+		return $title;
+	}
+
+	/**
 	 * Make public to allow access from other class.
 	 * @see AdminColumns/Term.php.
 	 */
@@ -78,6 +92,19 @@ class Title {
 		}
 
 		return Option::get( "{$term->taxonomy}.title", '' );
+	}
+
+	/**
+	 * Get the rendered meta title, after parsing dynamic variables
+	 * Make public to allow access from other class.
+	 * @see \SlimSEO\MetaTags\AdminColumns\Term::render()
+	 */
+	public function get_rendered_term_value( int $term_id = 0 ): string {
+		$title = $this->get_term_value( $term_id ) ?: '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}';
+		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $term_id );
+		$title = Helper::render( $title, 0, $term_id );
+
+		return $title;
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {
