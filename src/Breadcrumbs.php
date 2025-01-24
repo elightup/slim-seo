@@ -96,7 +96,7 @@ class Breadcrumbs {
 	}
 
 	public function get_current_page(): string {
-		return $this->args['display_current'] === 'true' ? $this->current : '';
+		return $this->args['display_current'] === 'true' ? (string) $this->current : '';
 	}
 
 	public function parse(): void {
