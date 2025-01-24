@@ -55,20 +55,11 @@ class RestApi {
 		];
 		$value = array_merge( (array) $value, $parsed_value );
 
-		return $this->prepare_value( $value, $request, $args );
+		// Let WordPress prepare the value first. It will auto format the value as defined in the schema.
+		return WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
 	}
 
 	public function prepare_value_for_term( $value, WP_REST_Request $request, array $args ): array {
-		$defaults = [
-			'title'       => $this->title->get_term_value(),
-			'description' => $this->description->get_term_value(),
-		];
-		$value = array_merge( $defaults, (array) $value );
-
-		return $this->prepare_value( $value, $request, $args );
-	}
-
-	private function prepare_value( $value, WP_REST_Request $request, array $args ): array {
 		// Let WordPress prepare the value first. It will auto format the value as defined in the schema.
 		$value = WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
 
