@@ -44,7 +44,7 @@ class Container {
 		$services['redirection'] = new Redirection\Loader;
 		$services['breadcrumbs'] = new Breadcrumbs;
 
-		$services['rest_api'] = new RestApi;
+		$services['rest_api'] = new RestApi( $services['meta_title'], $services['meta_description'] );
 
 		$services['no_category_base'] = new NoCategoryBase;
 
