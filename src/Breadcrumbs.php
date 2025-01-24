@@ -96,7 +96,7 @@ class Breadcrumbs {
 	}
 
 	public function get_current_page(): string {
-		return $this->args['display_current'] === 'true' ? $this->current : '';
+		return $this->args['display_current'] === 'true' ? (string) $this->current : '';
 	}
 
 	public function parse(): void {
@@ -115,9 +115,9 @@ class Breadcrumbs {
 		$this->add_link( home_url( '/' ), $this->args['label_home'] );
 
 		if ( is_home() ) { // Static blog page.
-			$this->current = single_post_title( '', false ) ?? '';
+			$this->current = single_post_title( '', false );
 		} elseif ( is_post_type_archive() ) {
-			$this->current = post_type_archive_title( '', false ) ?? '';
+			$this->current = post_type_archive_title( '', false );
 
 			// Post type archive can be used as the search results page (like in WooCommerce).
 			// In that case, we need to show both the post type archive title and the search results.
@@ -137,7 +137,7 @@ class Breadcrumbs {
 
 				$this->add_term_ancestors( $term );
 			}
-			$this->current = single_term_title( '', false ) ?? '';
+			$this->current = single_term_title( '', false );
 		} elseif ( is_search() ) {
 			$this->current = sprintf( $this->args['label_search'], get_search_query() );
 		} elseif ( is_404() ) {
