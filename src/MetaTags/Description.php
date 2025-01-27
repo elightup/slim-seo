@@ -17,7 +17,7 @@ class Description {
 		'author'       => '{{ author.auto_description }}',
 	];
 
-	public function setup() {
+	public function setup(): void {
 		$this->add_excerpt_to_pages();
 		add_action( 'slim_seo_head', [ $this, 'output' ] );
 	}
@@ -25,11 +25,11 @@ class Description {
 	/**
 	 * Add excerpt to pages to let users customize meta description.
 	 */
-	public function add_excerpt_to_pages() {
+	public function add_excerpt_to_pages(): void {
 		add_post_type_support( 'page', 'excerpt' );
 	}
 
-	public function output() {
+	public function output(): void {
 		$description = $this->get_description();
 		if ( $description ) {
 			echo '<meta name="description" content="', esc_attr( $description ), '">', "\n";

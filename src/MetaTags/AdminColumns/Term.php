@@ -2,7 +2,6 @@
 namespace SlimSEO\MetaTags\AdminColumns;
 
 use SlimSEO\Helpers\UI;
-use SlimSEO\MetaTags\Helper;
 
 class Term extends Base {
 	protected $object_type = 'term';
