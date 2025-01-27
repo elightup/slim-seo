@@ -9,6 +9,14 @@ use SlimSEO\Helpers\Option;
 class Description {
 	use Context;
 
+	const DEFAULTS = [
+		'home'         => '{{ site.description }}',
+		'post'         => '{{ post.auto_description }}',
+		'post_archive' => '',
+		'term'         => '{{ term.auto_description }}',
+		'author'       => '{{ author.auto_description }}',
+	];
+
 	public function setup() {
 		$this->add_excerpt_to_pages();
 		add_action( 'slim_seo_head', [ $this, 'output' ] );
@@ -37,12 +45,12 @@ class Description {
 	}
 
 	private function get_home_value(): string {
-		return Option::get( 'home.description', '{{ site.description }}' );
+		return Option::get( 'home.description', self::DEFAULTS['home'] );
 	}
 
 	private function get_post_type_archive_value(): string {
 		$post_type_object = get_queried_object();
-		return Option::get( "{$post_type_object->name}_archive.description", '' );
+		return Option::get( "{$post_type_object->name}_archive.description", self::DEFAULTS['post_archive'] );
 	}
 
 	/**
@@ -70,7 +78,7 @@ class Description {
 		$post_type = get_post_type( $post_id );
 
 		// Use post type settings if avaiable, then fallback to the post auto description
-		return Option::get( "$post_type.description", '{{ post.auto_description }}' );
+		return Option::get( "$post_type.description", self::DEFAULTS['post'] );
 	}
 
 	/**
@@ -100,7 +108,7 @@ class Description {
 		}
 
 		// Use taxonomy settings if avaiable, then fallback to the term auto description
-		return Option::get( "{$term->taxonomy}.description", '{{ term.auto_description }}' );
+		return Option::get( "{$term->taxonomy}.description", self::DEFAULTS['term'] );
 	}
 
 	/**
@@ -118,6 +126,6 @@ class Description {
 
 	private function get_author_value(): string {
 		// Use author settings if avaiable, then fallback to the author auto description
-		return Option::get( 'author.description', '{{ author.auto_description }}' );
+		return Option::get( 'author.description', self::DEFAULTS['author'] );
 	}
 }

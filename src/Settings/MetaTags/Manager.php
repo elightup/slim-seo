@@ -3,6 +3,7 @@ namespace SlimSEO\Settings\MetaTags;
 
 use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
+use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
 
 class Manager {
@@ -40,7 +41,7 @@ class Manager {
 			'link'        => get_home_url(),
 			'name'        => get_the_title( get_option( 'page_on_front' ) ),
 			'title'       => Title::DEFAULTS['home'],
-			'description' => '{{ site.description }}',
+			'description' => Description::DEFAULTS['home'],
 			'edit'        => get_edit_post_link( get_option( 'page_on_front' ) ),
 		] );
 	}
@@ -118,11 +119,11 @@ class Manager {
 		return [
 			'single'  => [
 				'title'       => Title::DEFAULTS['post'],
-				'description' => '{{ post.auto_description }}',
+				'description' => Description::DEFAULTS['post'],
 			],
 			'archive' => [
 				'title'       => Title::DEFAULTS['post_archive'],
-				'description' => '',
+				'description' => Description::DEFAULTS['post_archive'],
 			],
 		];
 	}
@@ -130,14 +131,14 @@ class Manager {
 	private function get_default_term_metas(): array {
 		return [
 			'title'       => Title::DEFAULTS['term'],
-			'description' => '{{ term.auto_description }}',
+			'description' => Description::DEFAULTS['term'],
 		];
 	}
 
 	private function get_default_author_metas(): array {
 		return [
 			'title'       => Title::DEFAULTS['author'],
-			'description' => '{{ author.auto_description }}',
+			'description' => Description::DEFAULTS['author'],
 		];
 	}
 }

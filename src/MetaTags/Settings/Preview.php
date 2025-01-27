@@ -6,6 +6,7 @@ use WP_REST_Request;
 use WP_Term;
 use SlimSEO\Helpers\Option;
 use SlimSEO\MetaTags\Helper;
+use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
 
 class Preview {
@@ -140,7 +141,7 @@ class Preview {
 	}
 
 	private function get_default_term_description( int $term_id ): string {
-		$default = '{{ term.auto_description }}';
+		$default = Description::DEFAULTS['term'];
 		$term    = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return $default;
@@ -177,7 +178,7 @@ class Preview {
 	}
 
 	private function get_default_post_description( int $post_id ): string {
-		$default = '{{ post.auto_description }}';
+		$default = Description::DEFAULTS['post'];
 		$key     = get_post_type( $post_id );
 
 		return $key ? Option::get( "$key.description", $default ) : $default;
