@@ -9,7 +9,15 @@ use SlimSEO\Helpers\Option;
 class Title {
 	use Context;
 
-	public function setup() {
+	const DEFAULTS = [
+		'home'         => '{{ site.title }} {{ sep }} {{ site.description }}',
+		'post'         => '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}',
+		'post_archive' => '{{ post_type.labels.plural }} {{ page }} {{ sep }} {{ site.title }}',
+		'term'         => '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}',
+		'author'       => '{{ author.display_name }} {{ page }} {{ sep }} {{ site.title }}',
+	];
+
+	public function setup(): void {
 		add_theme_support( 'title-tag' );
 		add_filter( 'pre_get_document_title', [ $this, 'filter_title' ] );
 
@@ -68,7 +76,7 @@ class Title {
 	 * @see \SlimSEO\RestApi::prepare_value_for_post()
 	 */
 	public function get_rendered_singular_value( int $post_id = 0 ): string {
-		$title = $this->get_singular_value( $post_id ) ?: '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
+		$title = $this->get_singular_value( $post_id ) ?: self::DEFAULTS['post'];
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
 		$title = Helper::render( $title, $post_id );
 
@@ -100,7 +108,7 @@ class Title {
 	 * @see \SlimSEO\MetaTags\AdminColumns\Term::render()
 	 */
 	public function get_rendered_term_value( int $term_id = 0 ): string {
-		$title = $this->get_term_value( $term_id ) ?: '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}';
+		$title = $this->get_term_value( $term_id ) ?: self::DEFAULTS['term'];
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $term_id );
 		$title = Helper::render( $title, 0, $term_id );
 
