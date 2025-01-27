@@ -6,6 +6,8 @@ use WP_REST_Request;
 use WP_Term;
 use SlimSEO\Helpers\Option;
 use SlimSEO\MetaTags\Helper;
+use SlimSEO\MetaTags\Description;
+use SlimSEO\MetaTags\Title;
 
 class Preview {
 	public function setup(): void {
@@ -96,17 +98,17 @@ class Preview {
 		// For static frontpage: don't use page's settings, use WordPress default instead.
 		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
 		if ( $is_static_frontpage ) {
-			return '{{ site.title }} {{ sep }} {{ site.description }}';
+			return Title::DEFAULTS['home'];
 		}
 
-		$default = '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}';
+		$default = Title::DEFAULTS['post'];
 		$key     = get_post_type( $post_id );
 
 		return $key ? Option::get( "$key.title", $default ) : $default;
 	}
 
 	private function get_default_term_title( int $term_id ): string {
-		$default = '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}';
+		$default = Title::DEFAULTS['term'];
 		$term    = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return $default;
@@ -139,7 +141,7 @@ class Preview {
 	}
 
 	private function get_default_term_description( int $term_id ): string {
-		$default = '{{ term.auto_description }}';
+		$default = Description::DEFAULTS['term'];
 		$term    = get_term( $term_id );
 		if ( ! ( $term instanceof WP_Term ) ) {
 			return $default;
@@ -176,7 +178,7 @@ class Preview {
 	}
 
 	private function get_default_post_description( int $post_id ): string {
-		$default = '{{ post.auto_description }}';
+		$default = Description::DEFAULTS['post'];
 		$key     = get_post_type( $post_id );
 
 		return $key ? Option::get( "$key.description", $default ) : $default;

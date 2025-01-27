@@ -2,7 +2,6 @@
 namespace SlimSEO\MetaTags\AdminColumns;
 
 use SlimSEO\Helpers\UI;
-use SlimSEO\MetaTags\Helper;
 
 class Post extends Base {
 	protected $object_type = 'post';
@@ -21,19 +20,15 @@ class Post extends Base {
 	 * The value of meta tags will be applied with filters to make them work in the back end.
 	 */
 	public function render( $column, $post_id ): void {
-		$data = get_post_meta( $post_id, 'slim_seo', true ) ?: [];
+		$post_id = (int) $post_id;
 
 		switch ( $column ) {
 			case 'meta_title':
-				$title = $data['title'] ?? '';
-				$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
-				$title = Helper::render( $title, (int) $post_id );
+				$title = $this->title->get_rendered_singular_value( $post_id );
 				UI::tooltip( $title, "<span class='ss-meta-content'>$title</span>", 'top' );
 				break;
 			case 'meta_description':
-				$description = $data['description'] ?? '';
-				$description = (string) apply_filters( 'slim_seo_meta_description', $description, $post_id );
-				$description = Helper::render( $description, (int) $post_id );
+				$description = $this->description->get_rendered_singular_value( $post_id );
 				UI::tooltip( $description, "<span class='ss-meta-content'>$description</span>", 'top' );
 				break;
 			case 'index':

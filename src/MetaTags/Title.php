@@ -9,7 +9,15 @@ use SlimSEO\Helpers\Option;
 class Title {
 	use Context;
 
-	public function setup() {
+	const DEFAULTS = [
+		'home'         => '{{ site.title }} {{ sep }} {{ site.description }}',
+		'post'         => '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}',
+		'post_archive' => '{{ post_type.labels.plural }} {{ page }} {{ sep }} {{ site.title }}',
+		'term'         => '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}',
+		'author'       => '{{ author.display_name }} {{ page }} {{ sep }} {{ site.title }}',
+	];
+
+	public function setup(): void {
 		add_theme_support( 'title-tag' );
 		add_filter( 'pre_get_document_title', [ $this, 'filter_title' ] );
 
@@ -39,12 +47,11 @@ class Title {
 	}
 
 	/**
-	 * Make public to allow access from other class.
+	 * Get singular post/page/post type meta title.
 	 * Note that returning empty string will use WordPress default title.
-	 * @see AdminColumns/Post.php.
 	 */
-	public function get_singular_value( $post_id = 0 ): string {
-		$post_id = (int) ( $post_id ?: $this->get_queried_object_id() );
+	private function get_singular_value( int $post_id = 0 ): string {
+		$post_id = $post_id ?: $this->get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
 			return $data['title'];
@@ -59,6 +66,20 @@ class Title {
 		// Get from admin settings for this post type.
 		$post_type = get_post_type( $post_id );
 		return Option::get( "{$post_type}.title", '' );
+	}
+
+	/**
+	 * Get the rendered meta title, after parsing dynamic variables
+	 * Make public to allow access from other class.
+	 * @see \SlimSEO\MetaTags\AdminColumns\Post::render()
+	 * @see \SlimSEO\RestApi::prepare_value_for_post()
+	 */
+	public function get_rendered_singular_value( int $post_id = 0 ): string {
+		$title = $this->get_singular_value( $post_id ) ?: self::DEFAULTS['post'];
+		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
+		$title = Helper::render( $title, $post_id );
+
+		return $title;
 	}
 
 	/**
@@ -78,6 +99,19 @@ class Title {
 		}
 
 		return Option::get( "{$term->taxonomy}.title", '' );
+	}
+
+	/**
+	 * Get the rendered meta title, after parsing dynamic variables
+	 * Make public to allow access from other class.
+	 * @see \SlimSEO\MetaTags\AdminColumns\Term::render()
+	 */
+	public function get_rendered_term_value( int $term_id = 0 ): string {
+		$title = $this->get_term_value( $term_id ) ?: self::DEFAULTS['term'];
+		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $term_id );
+		$title = Helper::render( $title, 0, $term_id );
+
+		return $title;
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {

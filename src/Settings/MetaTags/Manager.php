@@ -3,6 +3,8 @@ namespace SlimSEO\Settings\MetaTags;
 
 use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
+use SlimSEO\MetaTags\Description;
+use SlimSEO\MetaTags\Title;
 
 class Manager {
 	private $defaults = [
@@ -38,8 +40,8 @@ class Manager {
 		return array_merge( $this->defaults, [
 			'link'        => get_home_url(),
 			'name'        => get_the_title( get_option( 'page_on_front' ) ),
-			'title'       => '{{ site.title }} {{ sep }} {{ site.description }}',
-			'description' => '{{ site.description }}',
+			'title'       => Title::DEFAULTS['home'],
+			'description' => Description::DEFAULTS['home'],
 			'edit'        => get_edit_post_link( get_option( 'page_on_front' ) ),
 		] );
 	}
@@ -116,27 +118,27 @@ class Manager {
 	private function get_default_post_metas(): array {
 		return [
 			'single'  => [
-				'title'       => '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}',
-				'description' => '{{ post.auto_description }}',
+				'title'       => Title::DEFAULTS['post'],
+				'description' => Description::DEFAULTS['post'],
 			],
 			'archive' => [
-				'title'       => '{{ post_type.labels.plural }} {{ page }} {{ sep }} {{ site.title }}',
-				'description' => '',
+				'title'       => Title::DEFAULTS['post_archive'],
+				'description' => Description::DEFAULTS['post_archive'],
 			],
 		];
 	}
 
 	private function get_default_term_metas(): array {
 		return [
-			'title'       => '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}',
-			'description' => '{{ term.auto_description }}',
+			'title'       => Title::DEFAULTS['term'],
+			'description' => Description::DEFAULTS['term'],
 		];
 	}
 
 	private function get_default_author_metas(): array {
 		return [
-			'title'       => '{{ author.display_name }} {{ page }} {{ sep }} {{ site.title }}',
-			'description' => '{{ author.auto_description }}',
+			'title'       => Title::DEFAULTS['author'],
+			'description' => Description::DEFAULTS['author'],
 		];
 	}
 }
