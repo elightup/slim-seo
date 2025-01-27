@@ -47,12 +47,11 @@ class Title {
 	}
 
 	/**
-	 * Make public to allow access from other class.
+	 * Get singular post/page/post type meta title.
 	 * Note that returning empty string will use WordPress default title.
-	 * @see AdminColumns/Post.php.
 	 */
-	public function get_singular_value( $post_id = 0 ): string {
-		$post_id = (int) ( $post_id ?: $this->get_queried_object_id() );
+	private function get_singular_value( int $post_id = 0 ): string {
+		$post_id = $post_id ?: $this->get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
 			return $data['title'];
