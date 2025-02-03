@@ -226,6 +226,9 @@ class Breadcrumbs {
 		// Otherwise get from the post type archive settings.
 		$archive_page = Data::get_post_type_archive_page( $post_type );
 		if ( $archive_page ) {
+			if ( $archive_page->post_status !== 'publish' ) {
+				return;
+			}
 			$text = get_the_title( $archive_page );
 		}
 
