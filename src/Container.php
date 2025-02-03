@@ -66,6 +66,7 @@ class Container {
 				$services['meta_description'],
 				$services['meta_robots']
 			);
+			$services['file_renaming']      = new Integrations\FileRenamingOnUpload;
 			return;
 		}
 
