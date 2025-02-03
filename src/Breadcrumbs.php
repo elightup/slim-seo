@@ -2,12 +2,33 @@
 namespace SlimSEO;
 
 use SlimSEO\Helpers\Data;
+use WP_Post;
+use WP_Post_Type;
 use WP_Term;
 
 class Breadcrumbs {
-	private $args      = [];
-	private $links     = [];
-	private $current   = '';
+	/**
+	 * Breadcrumbs arguments, used for both displaying and for schemas.
+	 * @var array<string>
+	 */
+	private $args = [];
+
+	/**
+	 * Breadcrumbs links.
+	 * @var array<int, array{url: string, text: string}>
+	 */
+	private $links = [];
+
+	/**
+	 * Current page title, e.g. the last item in the breadcrumbs.
+	 * @var string|null
+	 */
+	private $current = '';
+
+	/**
+	 * Whether the breadcrumbs are parsed.
+	 * @var bool
+	 */
 	private $is_parsed = false;
 
 	public function setup(): void {
@@ -47,7 +68,7 @@ class Breadcrumbs {
 		return $this->render_shortcode( $attributes );
 	}
 
-	private function prepare_for_block_preview( array $args ) {
+	private function prepare_for_block_preview( array $args ): void {
 		$this->args = wp_parse_args( $args, $this->args );
 
 		// Add sample links: Home » Category » Post title.
@@ -122,14 +143,17 @@ class Breadcrumbs {
 			// Post type archive can be used as the search results page (like in WooCommerce).
 			// In that case, we need to show both the post type archive title and the search results.
 			if ( is_search() ) {
-				$this->add_post_type_archive_link( get_queried_object()->name );
+				$post_type_object = get_queried_object();
+				if ( $post_type_object instanceof WP_Post_Type ) {
+					$this->add_post_type_archive_link( $post_type_object->name );
+				}
 				$this->current = sprintf( $this->args['label_search'], get_search_query() );
 			}
 		} elseif ( is_singular() ) {
 			$this->add_singular();
 		} elseif ( is_tax() || is_category() || is_tag() ) { // Taxonomy archive.
 			$term = get_queried_object();
-			if ( $term ) {
+			if ( $term instanceof WP_Term ) {
 				$taxonomy = get_taxonomy( $term->taxonomy );
 				if ( ! empty( $taxonomy->object_type ) && 1 === count( $taxonomy->object_type ) ) {
 					$this->add_post_type_archive_link( reset( $taxonomy->object_type ) );
@@ -152,7 +176,11 @@ class Breadcrumbs {
 	}
 
 	private function add_singular(): void {
-		$post          = get_queried_object();
+		$post = get_queried_object();
+		if ( ! ( $post instanceof WP_Post ) ) {
+			return;
+		}
+
 		$this->current = single_post_title( '', false );
 
 		$this->add_post_type_archive_link( $post->post_type );
@@ -189,8 +217,10 @@ class Breadcrumbs {
 		}
 
 		$post_type_object = get_post_type_object( $post_type );
-		$link             = get_post_type_archive_link( $post_type );
-		$text             = $post_type_object->labels->name;
+		if ( ! ( $post_type_object instanceof WP_Post_Type ) ) {
+			return;
+		}
+		$text = $post_type_object->labels->name;
 
 		// If a page is set as the post type archive (like WooCommerce shop), then get title from that page.
 		// Otherwise get from the post type archive settings.
@@ -199,6 +229,7 @@ class Breadcrumbs {
 			$text = get_the_title( $archive_page );
 		}
 
+		$link = get_post_type_archive_link( $post_type );
 		if ( $link ) {
 			$this->add_link( $link, $text );
 		}
