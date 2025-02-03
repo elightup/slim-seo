@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.7.1
 Requires PHP: 7.2
-Stable tag: 4.2.2
+Stable tag: 4.3.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,15 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.3.0 - 2025-02-03 =
+- Always show the meta tags in admin post table columns because the settings for post types with dynamic variables can be different from the WordPress default. Previously, the plugin only show meta tags if the post has custom settings.
+- Improve the Rest API support, which now returns parsed meta tags with dynamic variables
+- Add the integration for Kadence product family
+- Improve the schema structure
+- Improve the compatibility with Bricks, excluding image and gallery elements
+- Improve the breadcrumbs for WooCommerce's search results page
+- Fix breadcrumbs issue which causes errors for SureCart or Elementor
 
 = 4.2.2 - 2025-01-20 =
 - Improve schemas
