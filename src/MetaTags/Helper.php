@@ -29,7 +29,9 @@ class Helper {
 
 		// Render blocks.
 		add_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ], 10, 2 );
-		$text = do_blocks( $text );
+		if ( ! defined( 'BRICKS_VERSION' ) ) {
+			$text = do_blocks( $text );
+		}
 		remove_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ] );
 
 		// Replace HTML tags with spaces.
