@@ -56,6 +56,8 @@ abstract class Base {
 		$columns['meta_description'] = esc_html__( 'Meta desc.', 'slim-seo' );
 		$columns['index']            = esc_html__( 'Index', 'slim-seo' );
 
+		$columns = apply_filters( 'slim_seo_admin_columns', $columns );
+
 		return $columns;
 	}
 
