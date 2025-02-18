@@ -37,6 +37,8 @@ class Post extends Base {
 				echo $index ? '<span class="ss-success"></span>' : '<span class="ss-danger"></span>';
 				break;
 		}
+
+		do_action( 'slim_seo_admin_column_render', $column, $post_id );
 	}
 
 	protected function is_screen(): bool {

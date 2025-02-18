@@ -27,6 +27,7 @@ class Settings {
 			'schema',
 			'redirection',
 			'no_category_base',
+			'content_analysis',
 		],
 	];
 
