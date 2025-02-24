@@ -8,6 +8,7 @@ use SlimSEO\Helpers\Option;
 
 class Description {
 	use Context;
+	protected $is_manual = false;
 
 	const DEFAULTS = [
 		'home'         => '{{ site.description }}',
@@ -54,8 +55,9 @@ class Description {
 	}
 
 	private function get_singular_value( int $post_id = 0 ): string {
-		$post_id = $post_id ?: $this->get_queried_object_id();
+		$this->is_manual = false;
 
+		$post_id = $post_id ?: $this->get_queried_object_id();
 		// Prevent showing description on password protected posts
 		if ( post_password_required( $post_id ) ) {
 			return '';
@@ -64,6 +66,7 @@ class Description {
 		// Use manual entered meta description if available.
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
+			$this->is_manual = true;
 			return $data['description'];
 		}
 
@@ -84,13 +87,16 @@ class Description {
 		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $post_id );
 		$description = Helper::render( $description, $post_id );
 
-		return $description;
+		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $description : $description;
 	}
 
 	public function get_term_value( $term_id = null ): string {
+		$this->is_manual = false;
+
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
+			$this->is_manual = true;
 			return $data['description'];
 		}
 
@@ -113,7 +119,7 @@ class Description {
 		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $term_id );
 		$description = Helper::render( $description, 0, $term_id );
 
-		return $description;
+		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $description : $description;
 	}
 
 	private function get_author_value(): string {

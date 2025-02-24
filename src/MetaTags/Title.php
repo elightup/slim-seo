@@ -8,6 +8,8 @@ use SlimSEO\Helpers\Option;
 
 class Title {
 	use Context;
+	protected $is_home   = false;
+	protected $is_manual = false;
 
 	const DEFAULTS = [
 		'home'         => '{{ site.title }} {{ sep }} {{ site.description }}',
@@ -51,15 +53,20 @@ class Title {
 	 * Note that returning empty string will use WordPress default title.
 	 */
 	private function get_singular_value( int $post_id = 0 ): string {
+		$this->is_home   = false;
+		$this->is_manual = false;
+
 		$post_id = $post_id ?: $this->get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
+			$this->is_manual = true;
 			return $data['title'];
 		}
 
 		// For static frontpage: don't use page's settings, use WordPress default instead.
 		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
 		if ( $is_static_frontpage ) {
+			$this->is_home = true;
 			return '';
 		}
 
@@ -76,10 +83,13 @@ class Title {
 	 */
 	public function get_rendered_singular_value( int $post_id = 0 ): string {
 		$title = $this->get_singular_value( $post_id ) ?: self::DEFAULTS['post'];
+		if( $this->is_home ) {
+			$title = self::DEFAULTS['home'];
+		}
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
 		$title = Helper::render( $title, $post_id );
 
-		return $title;
+		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $title : $title;
 	}
 
 	/**
@@ -87,9 +97,12 @@ class Title {
 	 * @see AdminColumns/Term.php.
 	 */
 	public function get_term_value( $term_id = 0 ): string {
+		$this->is_manual = false;
+
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
+			$this->is_manual = true;
 			return $data['title'];
 		}
 
@@ -111,7 +124,7 @@ class Title {
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $term_id );
 		$title = Helper::render( $title, 0, $term_id );
 
-		return $title;
+		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $title : $title;
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {
