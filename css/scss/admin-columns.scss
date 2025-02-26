@@ -6,15 +6,36 @@
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 }
+
 .column-index.column-index {
 	width: 48px;
 	text-align: center;
+}
+
+.column-meta_title:has(.ss-manual-content),
+.column-meta_description:has(.ss-manual-content) {
+	position: relative;
+
+	.ss-tooltip:nth-of-type(1) {
+		position: absolute;
+		left: -2px;
+		top: 8px;
+	}
+}
+
+.ss-manual-content {
+	display: inline-block;
+	background: #fe9a00;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
 }
 
 /* WooCommerce */
 .post-type-product .column-meta_title {
 	width: 6%;
 }
+
 .post-type-product .column-meta_description {
 	width: 10%;
 }

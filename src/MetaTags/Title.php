@@ -9,6 +9,9 @@ use SlimSEO\Helpers\Option;
 class Title {
 	use Context;
 
+	private $is_home   = false;
+	private $is_manual = false;
+
 	const DEFAULTS = [
 		'home'         => '{{ site.title }} {{ sep }} {{ site.description }}',
 		'post'         => '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}',
@@ -51,15 +54,20 @@ class Title {
 	 * Note that returning empty string will use WordPress default title.
 	 */
 	private function get_singular_value( int $post_id = 0 ): string {
+		$this->is_home   = false;
+		$this->is_manual = false;
+
 		$post_id = $post_id ?: $this->get_queried_object_id();
 		$data    = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
+			$this->is_manual = true;
 			return $data['title'];
 		}
 
 		// For static frontpage: don't use page's settings, use WordPress default instead.
 		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
 		if ( $is_static_frontpage ) {
+			$this->is_home = true;
 			return '';
 		}
 
@@ -76,6 +84,9 @@ class Title {
 	 */
 	public function get_rendered_singular_value( int $post_id = 0 ): string {
 		$title = $this->get_singular_value( $post_id ) ?: self::DEFAULTS['post'];
+		if ( $this->is_home ) {
+			$title = self::DEFAULTS['home'];
+		}
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
 		$title = Helper::render( $title, $post_id );
 
@@ -87,9 +98,12 @@ class Title {
 	 * @see AdminColumns/Term.php.
 	 */
 	public function get_term_value( $term_id = 0 ): string {
+		$this->is_manual = false;
+
 		$term_id = $term_id ?: $this->get_queried_object_id();
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
+			$this->is_manual = true;
 			return $data['title'];
 		}
 
@@ -120,5 +134,9 @@ class Title {
 
 	private function get_author_value(): string {
 		return Option::get( 'author.title', '' );
+	}
+
+	public function check_is_manual(): bool {
+		return $this->is_manual;
 	}
 }

@@ -13,6 +13,7 @@ abstract class Base {
 	protected $robots;
 	protected $object_type;
 	protected $types;
+	protected $manual_indicator = '<span class="ss-manual-content"></span>';
 
 	public function __construct( Settings $settings, Title $title, Description $description, Robots $robots ) {
 		$this->settings    = $settings;
