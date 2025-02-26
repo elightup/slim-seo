@@ -86,8 +86,14 @@ class Helper {
 	}
 
 	private static function set_allowed_blocks(): void {
-		$block_types = array_keys( WP_Block_Type_Registry::get_instance()->get_all_registered() );
+		$block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
 
+		// Do not parse dynamic blocks.
+		$block_types = array_filter( $block_types, function ($block) {
+			return ! $block->is_dynamic();
+		} );
+
+		$block_names    = array_keys( $block_types );
 		$skipped_blocks = apply_filters( 'slim_seo_skipped_blocks', [
 			'core/query',
 			'core/code',
@@ -97,7 +103,7 @@ class Helper {
 			'mailpoet/subscription-form-block',
 		] );
 
-		self::$allowed_blocks = array_diff( $block_types, $skipped_blocks );
+		self::$allowed_blocks = array_diff( $block_names, $skipped_blocks );
 		self::$allowed_blocks = apply_filters( 'slim_seo_allowed_blocks', self::$allowed_blocks );
 	}
 
