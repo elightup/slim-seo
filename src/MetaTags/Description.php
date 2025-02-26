@@ -8,7 +8,7 @@ use SlimSEO\Helpers\Option;
 
 class Description {
 	use Context;
-	protected $is_manual = false;
+	private $is_manual = false;
 
 	const DEFAULTS = [
 		'home'         => '{{ site.description }}',
@@ -127,7 +127,7 @@ class Description {
 		return Option::get( 'author.description', self::DEFAULTS['author'] );
 	}
 
-	public function check_is_manual() {
+	public function check_is_manual(): bool {
 		return $this->is_manual;
 	}
 }

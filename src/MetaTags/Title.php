@@ -8,8 +8,8 @@ use SlimSEO\Helpers\Option;
 
 class Title {
 	use Context;
-	protected $is_home   = false;
-	protected $is_manual = false;
+	private $is_home   = false;
+	private $is_manual = false;
 
 	const DEFAULTS = [
 		'home'         => '{{ site.title }} {{ sep }} {{ site.description }}',
@@ -83,7 +83,7 @@ class Title {
 	 */
 	public function get_rendered_singular_value( int $post_id = 0 ): string {
 		$title = $this->get_singular_value( $post_id ) ?: self::DEFAULTS['post'];
-		if( $this->is_home ) {
+		if ( $this->is_home ) {
 			$title = self::DEFAULTS['home'];
 		}
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
@@ -135,7 +135,7 @@ class Title {
 		return Option::get( 'author.title', '' );
 	}
 
-	public function check_is_manual() {
+	public function check_is_manual(): bool {
 		return $this->is_manual;
 	}
 }

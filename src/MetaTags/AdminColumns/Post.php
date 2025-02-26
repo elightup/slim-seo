@@ -24,13 +24,17 @@ class Post extends Base {
 
 		switch ( $column ) {
 			case 'meta_title':
-				$title = $this->title->get_rendered_singular_value( $post_id );
-				$this->title->check_is_manual() ? UI::tooltip( __( 'Manual title', 'slim-seo' ), $this->manual_indicator, 'top' ) : '';
+				$title  = $this->title->get_rendered_singular_value( $post_id );
+				if ( $this->title->check_is_manual() ) {
+					UI::tooltip( __( 'Manual title', 'slim-seo' ), $this->manual_indicator, 'top' );
+				}
 				UI::tooltip( $title, "<span class='ss-meta-content'>$title</span>", 'top' );
 				break;
 			case 'meta_description':
 				$description = $this->description->get_rendered_singular_value( $post_id );
-				$this->description->check_is_manual() ? UI::tooltip( __( 'Manual description', 'slim-seo' ), $this->manual_indicator, 'top' ) : '';
+				if ( $this->description->check_is_manual() ) {
+					UI::tooltip( __( 'Manual description', 'slim-seo' ), $this->manual_indicator, 'top' );
+				}
 				UI::tooltip( $description, "<span class='ss-meta-content'>$description</span>", 'top' );
 				break;
 			case 'index':
