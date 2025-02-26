@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags;
 use SlimTwig\Renderer;
 use SlimSEO\Helpers\Arr;
 use WP_Block_Type_Registry;
+use WP_Block_Type;
 
 class Helper {
 	private static $allowed_shortcodes = [];
@@ -89,18 +90,13 @@ class Helper {
 		$block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
 
 		// Do not parse dynamic blocks.
-		$block_types = array_filter( $block_types, function ($block) {
+		$block_types = array_filter( $block_types, function ( WP_Block_Type $block ): bool {
 			return ! $block->is_dynamic();
 		} );
 
 		$block_names    = array_keys( $block_types );
 		$skipped_blocks = apply_filters( 'slim_seo_skipped_blocks', [
-			'core/query',
 			'core/code',
-			'fluentfom/guten-block',
-			'wpforms/form-selector',
-			'ninja-forms/form',
-			'mailpoet/subscription-form-block',
 		] );
 
 		self::$allowed_blocks = array_diff( $block_names, $skipped_blocks );
