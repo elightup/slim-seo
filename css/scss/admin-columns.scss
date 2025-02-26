@@ -10,6 +10,24 @@
 	width: 48px;
 	text-align: center;
 }
+.column-meta_title:has( .ss-manual-content ) , .column-meta_description:has( .ss-manual-content ) {
+	position: relative;
+	.ss-tooltip:nth-of-type(1) {
+		position: absolute;
+	}
+	.ss-tooltip:nth-of-type(2) {
+		position: absolute;
+		left: 20px;
+	}
+}
+.ss-manual-content{
+	display: inline-block;
+	background: yellow;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	border: 1px solid #d2d200;
+}
 
 /* WooCommerce */
 .post-type-product .column-meta_title {

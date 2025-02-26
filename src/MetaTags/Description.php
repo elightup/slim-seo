@@ -87,7 +87,7 @@ class Description {
 		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $post_id );
 		$description = Helper::render( $description, $post_id );
 
-		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $description : $description;
+		return $description;
 	}
 
 	public function get_term_value( $term_id = null ): string {
@@ -119,11 +119,15 @@ class Description {
 		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $term_id );
 		$description = Helper::render( $description, 0, $term_id );
 
-		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $description : $description;
+		return $description;
 	}
 
 	private function get_author_value(): string {
 		// Use author settings if avaiable, then fallback to the author auto description
 		return Option::get( 'author.description', self::DEFAULTS['author'] );
+	}
+
+	public function check_is_manual() {
+		return $this->is_manual;
 	}
 }

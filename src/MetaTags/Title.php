@@ -89,7 +89,7 @@ class Title {
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
 		$title = Helper::render( $title, $post_id );
 
-		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $title : $title;
+		return $title;
 	}
 
 	/**
@@ -124,7 +124,7 @@ class Title {
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $term_id );
 		$title = Helper::render( $title, 0, $term_id );
 
-		return $this->is_manual ? '<span class="ss-manual-content"></span>' . $title : $title;
+		return $title;
 	}
 
 	public function set_page_title_as_archive_title( string $title ): string {
@@ -133,5 +133,9 @@ class Title {
 
 	private function get_author_value(): string {
 		return Option::get( 'author.title', '' );
+	}
+
+	public function check_is_manual() {
+		return $this->is_manual;
 	}
 }
