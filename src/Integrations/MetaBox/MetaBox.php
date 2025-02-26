@@ -10,7 +10,6 @@ class MetaBox {
 
 	public function setup(): void {
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
-		add_filter( 'slim_seo_skipped_blocks', [ $this, 'skip_blocks' ] );
 		add_filter( 'slim_seo_variables', [ $this, 'add_variables' ] );
 		add_filter( 'slim_seo_data', [ $this, 'add_data' ], 10, 3 );
 	}
@@ -25,16 +24,6 @@ class MetaBox {
 			'mb_user_profile_info',
 			'mb_relationships',         // MB Relationships.
 			'mbfp-button',              // MB Favorite Posts.
-		] );
-	}
-
-	public function skip_blocks( array $blocks ): array {
-		return array_merge( $blocks, [
-			'meta-box/submission-form',   // MB Frontend Submission.
-			'meta-box/user-dashboard',
-			'meta-box/login-form',        // MB User Profile.
-			'meta-box/profile-form',
-			'meta-box/registration-form',
 		] );
 	}
 
