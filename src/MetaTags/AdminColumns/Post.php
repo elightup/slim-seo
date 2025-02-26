@@ -24,7 +24,7 @@ class Post extends Base {
 
 		switch ( $column ) {
 			case 'meta_title':
-				$title  = $this->title->get_rendered_singular_value( $post_id );
+				$title = $this->title->get_rendered_singular_value( $post_id );
 				if ( $this->title->check_is_manual() ) {
 					UI::tooltip( __( 'Manual title', 'slim-seo' ), $this->manual_indicator, 'top' );
 				}

@@ -8,6 +8,7 @@ use SlimSEO\Helpers\Option;
 
 class Title {
 	use Context;
+
 	private $is_home   = false;
 	private $is_manual = false;
 

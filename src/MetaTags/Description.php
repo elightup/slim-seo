@@ -8,6 +8,7 @@ use SlimSEO\Helpers\Option;
 
 class Description {
 	use Context;
+
 	private $is_manual = false;
 
 	const DEFAULTS = [
