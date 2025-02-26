@@ -97,6 +97,11 @@ class Bricks {
 				return false;
 			}
 
+			// Ignore popups.
+			if ( $this->is_popup( $element ) ) {
+				return false;
+			}
+
 			// Remove elements with scripts, like sliders or counters, to avoid breaking layouts.
 			$scripts = \Bricks\Elements::get_element( $element, 'scripts' );
 			// Don't count 'bricksBackgroundVideoInit' as it's always enabled for nestable elements.
@@ -107,6 +112,20 @@ class Bricks {
 
 			return true;
 		} );
+	}
+
+	private function is_popup( array $element ): bool {
+		if ( empty( $element['name'] ) || $element['name'] !== 'template' ) {
+			return false;
+		}
+
+		$template_id = isset( $element['settings']['template'] ) ? intval( $element['settings']['template'] ) : 0;
+		if ( ! $template_id ) {
+			return false;
+		}
+
+		$template_type = \Bricks\Templates::get_template_type( $template_id );
+		return $template_type === 'popup';
 	}
 
 	public function remove_post_types( array $post_types ): array {
