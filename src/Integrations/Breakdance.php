@@ -2,7 +2,6 @@
 namespace SlimSEO\Integrations;
 
 use WP_Post;
-use SlimSEO\MetaTags\Helper;
 
 class Breakdance {
 	public function is_active(): bool {
