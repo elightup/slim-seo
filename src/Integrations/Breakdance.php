@@ -11,7 +11,6 @@ class Breakdance {
 
 	public function setup(): void {
 		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
-
 	}
 
 	public function filter_content( string $post_content, WP_Post $post ): string {
@@ -19,23 +18,6 @@ class Breakdance {
 	}
 
 	private function get_builder_content( WP_Post $post ): ?string {
-		$content = \Breakdance\Admin\get_mode( $post->ID ) === 'breakdance' ? \Breakdance\Data\get_tree_as_html( $post->ID ) : '';
-		$content = wp_strip_all_tags( $content );
-
-		if ( empty( $content ) ) {
-			return null;
-		}
-
-		// // Skip shortcodes & blocks inside dynamic content {post_content}.
-		add_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
-
-		// // Remove the filter.
-		remove_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
-
-		return (string) $content;
-	}
-
-	public function skip_shortcodes( string $content ): string {
-		return Helper::normalize( $content );
+		return \Breakdance\Admin\get_mode( $post->ID ) === 'breakdance' ? \Breakdance\Data\get_tree_as_html( $post->ID ) : null;
 	}
 }
