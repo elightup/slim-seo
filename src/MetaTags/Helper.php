@@ -37,14 +37,14 @@ class Helper {
 		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
 		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
 
-		// Remove lonely separator
-		$separator = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
-		$text      = trim( $text );
-		$text      = trim( $text, $separator );
-
 		// Remove extra white spaces.
 		$text = preg_replace( '/\s+/', ' ', $text );
-		$text = trim( $text );
+
+		// Remove lonely & repeated separator for meta title.
+		$sep  = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
+		$text = explode( $sep, $text );
+		$text = array_filter( array_map( 'trim', $text ) ); // Remove empty strings.
+		$text = implode( " $sep ", $text );
 
 		self::$ran = true;
 

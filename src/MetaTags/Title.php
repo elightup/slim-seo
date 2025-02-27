@@ -14,10 +14,10 @@ class Title {
 
 	const DEFAULTS = [
 		'home'         => '{{ site.title }} {{ sep }} {{ site.description }}',
-		'post'         => '{{ post.title }} {{ page }} {{ sep }} {{ site.title }}',
-		'post_archive' => '{{ post_type.labels.plural }} {{ page }} {{ sep }} {{ site.title }}',
-		'term'         => '{{ term.name }} {{ page }} {{ sep }} {{ site.title }}',
-		'author'       => '{{ author.display_name }} {{ page }} {{ sep }} {{ site.title }}',
+		'post'         => '{{ post.title }} {{ sep }} {{ page }} {{ sep }} {{ site.title }}',
+		'post_archive' => '{{ post_type.labels.plural }} {{ sep }} {{ page }} {{ sep }} {{ site.title }}',
+		'term'         => '{{ term.name }} {{ sep }} {{ page }} {{ sep }} {{ site.title }}',
+		'author'       => '{{ author.display_name }} {{ sep }} {{ page }} {{ sep }} {{ site.title }}',
 	];
 
 	public function setup(): void {
