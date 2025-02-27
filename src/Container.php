@@ -28,6 +28,7 @@ class Container {
 		$services['oxygen']         = new Integrations\Oxygen;
 		$services['elementor']      = new Integrations\Elementor;
 		$services['beaver_builder'] = new Integrations\BeaverBuilder;
+		$services['breakdance']     = new Integrations\Breakdance;
 		$services['bricks']         = new Integrations\Bricks;
 		$services['zion']           = new Integrations\ZionBuilder;
 		$services['divi']           = new Integrations\Divi;
