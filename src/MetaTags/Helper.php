@@ -64,6 +64,7 @@ class Helper {
 		 */
 		$skipped_shortcodes = apply_filters( 'slim_seo_skipped_shortcodes', [
 			'happyforms',
+			'jet_fb_form',
 			'contact',      // Very Simple Contact Form.
 			'edd_invoices',
 			'velocity',
