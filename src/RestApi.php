@@ -61,12 +61,17 @@ class RestApi {
 		$value = array_merge( (array) $value, $parsed_value );
 
 		// Let WordPress prepare the value first. It will auto format the value as defined in the schema.
-		return WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
+		$value = (array) WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
+
+		// Render dynamic variables.
+		$value = array_map( [ Helper::class, 'render' ], $value );
+
+		return $value;
 	}
 
 	public function prepare_value_for_term( $value, WP_REST_Request $request, array $args ): array {
 		// Let WordPress prepare the value first. It will auto format the value as defined in the schema.
-		$value = WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
+		$value = (array) WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
 
 		// Render dynamic variables.
 		$value = array_map( [ Helper::class, 'render' ], $value );
