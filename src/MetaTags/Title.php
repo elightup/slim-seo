@@ -54,7 +54,7 @@ class Title {
 	 * Note that returning empty string will use WordPress default title.
 	 */
 	private function get_singular_value( int $post_id = 0 ): string {
-		$this->is_home   = false;
+		$this->is_home   = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
 		$this->is_manual = false;
 
 		$post_id = $post_id ?: $this->get_queried_object_id();
@@ -65,9 +65,7 @@ class Title {
 		}
 
 		// For static frontpage: don't use page's settings, use WordPress default instead.
-		$is_static_frontpage = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
-		if ( $is_static_frontpage ) {
-			$this->is_home = true;
+		if ( $this->is_home ) {
 			return '';
 		}
 
@@ -83,10 +81,7 @@ class Title {
 	 * @see \SlimSEO\RestApi::prepare_value_for_post()
 	 */
 	public function get_rendered_singular_value( int $post_id = 0 ): string {
-		$title = $this->get_singular_value( $post_id ) ?: self::DEFAULTS['post'];
-		if ( $this->is_home ) {
-			$title = self::DEFAULTS['home'];
-		}
+		$title = $this->get_singular_value( $post_id ) ?: ( $this->is_home ? self::DEFAULTS['home'] : self::DEFAULTS['post'] );
 		$title = (string) apply_filters( 'slim_seo_meta_title', $title, $post_id );
 		$title = Helper::render( $title, $post_id );
 
