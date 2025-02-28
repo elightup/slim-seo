@@ -84,8 +84,8 @@ class ImagesAlt {
 		// Remove hyphens, underscores & extra spaces.
 		$alt = preg_replace( '%\s*[-_\s]+\s*%', ' ', $alt );
 
-		// Capitalize first letter of every word (other letters lower case).
-		$alt = ucwords( strtolower( $alt ) );
+		// Capitalize the first letter.
+		$alt = ucfirst( strtolower( $alt ) );
 
 		return $alt;
 	}
