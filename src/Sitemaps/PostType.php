@@ -55,6 +55,10 @@ class PostType {
 				continue;
 			}
 
+			if ( apply_filters( 'slim_seo_sitemap_post_ignore', false, $post ) ) {
+				continue;
+			}
+
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( get_permalink( $post ) ), "</loc>\n";
 			echo "\t\t<lastmod>", esc_html( wp_date( 'c', strtotime( $post->post_modified_gmt ) ) ), "</lastmod>\n";
