@@ -2,5 +2,10 @@
 	<custom-fields>
 		<custom-field action="translate">slim_seo</custom-field>
 	</custom-fields>
+	<admin-texts>
+	<key name="slim_seo">
+		<key name="*"/>
+	</key>
+  </admin-texts>
 </wpml-config>
 
