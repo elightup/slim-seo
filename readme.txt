@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.7.1
+Tested up to: 6.7.2
 Requires PHP: 7.2
-Stable tag: 4.3.0
+Stable tag: 4.4.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,20 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.4.0 - 2025-03-03 =
+
+Highlights:
+- This version adds an integration with Breakdance page builder plugin, which allows the plugin to parse content from Breakdance for generating meta description.
+- Since this version, Slim SEO won't parse all dynamic blocks when parsing the content to generate meta description. This avoids breaking layout, especially when those blocks have logic or enqueue CSS/JS. This change will fix a lot of issues with plugins that use dynamic blocks like form plugins (JetForm Builder, Forminator, etc.).
+- For meta title and meta description in the admin post list table, now the plugin will display a small indicator if the post has manual title or description.
+
+Other changes:
+- Improve integration with WPML, allowing to translate settings like meta tags into different languages. Requires WPML String Translation plugin.
+- Capitalize only 1st letter in image alt to work better with all languages.
+- Fix missing posts in alternate languages in the sitemap that don't have translations in the default language (with Polylang).
+- Fix missing separator in title for paginated pages
+- Fix issue with REST API
 
 = 4.3.0 - 2025-02-03 =
 - Always show the meta tags in admin post table columns because the settings for post types with dynamic variables can be different from the WordPress default. Previously, the plugin only show meta tags if the post has custom settings.
