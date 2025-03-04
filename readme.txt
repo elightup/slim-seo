@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.7.2
 Requires PHP: 7.2
-Stable tag: 4.4.0
+Stable tag: 4.4.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.4.1 - 2025-03-04 =
+- Improve Woo integration, avoid page builders to parse content for Woo's pages to generate meta description (cart, checkout, my account)
+- Fix for JetEngine custom DB table for meta storage
+- Fix wrong og:url
 
 = 4.4.0 - 2025-03-03 =
 
