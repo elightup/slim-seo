@@ -41,8 +41,9 @@ class Helper {
 		$text = preg_replace( '/\s+/', ' ', $text );
 
 		// Remove lonely & repeated separator for meta title.
+		// {{ sep }} wasn't replaced yet, so we can use it to explode the text.
 		$sep  = apply_filters( 'document_title_separator', '-' ); // phpcs:ignore
-		$text = explode( $sep, $text );
+		$text = explode( '{{ sep }}', $text );
 		$text = array_filter( array_map( 'trim', $text ) ); // Remove empty strings.
 		$text = implode( " $sep ", $text );
 

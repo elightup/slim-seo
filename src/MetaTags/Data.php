@@ -160,7 +160,7 @@ class Data {
 			],
 			// Translators: %s - page number
 			'page'    => $paged >= 2 || $page >= 2 ? sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) ) : '',
-			'sep'     => apply_filters( 'document_title_separator', '-' ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			'sep'     => '{{ sep }}', // Do not replace it yet. See Helper::normalize().
 		];
 	}
 
