@@ -12,6 +12,15 @@ class Post extends Base {
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
 
+	public function enqueue(): void {
+		$post_types = $this->get_types();
+		$screen     = get_current_screen();
+
+		if ( in_array( $screen->post_type, $post_types ) ) {
+			parent::enqueue();
+		}
+	}
+
 	public function add_meta_box() {
 		$context  = apply_filters( 'slim_seo_meta_box_context', 'normal' );
 		$priority = apply_filters( 'slim_seo_meta_box_priority', 'low' );
