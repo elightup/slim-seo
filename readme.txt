@@ -169,11 +169,13 @@ Add the following constant in your `wp-config.php` file:
 = 4.4.0 - 2025-03-03 =
 
 Highlights:
+
 - This version adds an integration with Breakdance page builder plugin, which allows the plugin to parse content from Breakdance for generating meta description.
 - Since this version, Slim SEO won't parse all dynamic blocks when parsing the content to generate meta description. This avoids breaking layout, especially when those blocks have logic or enqueue CSS/JS. This change will fix a lot of issues with plugins that use dynamic blocks like form plugins (JetForm Builder, Forminator, etc.).
 - For meta title and meta description in the admin post list table, now the plugin will display a small indicator if the post has manual title or description.
 
 Other changes:
+
 - Improve integration with WPML, allowing to translate settings like meta tags into different languages. Requires WPML String Translation plugin.
 - Capitalize only 1st letter in image alt to work better with all languages.
 - Fix missing posts in alternate languages in the sitemap that don't have translations in the default language (with Polylang).
