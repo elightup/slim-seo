@@ -7,7 +7,7 @@ class SenseiLMS {
 	}
 
 	public function setup() {
-		add_action( 'slim_seo_skipped_shortcodes', [ $this, 'process' ] );
+		add_action( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 	}
 
 	/**
