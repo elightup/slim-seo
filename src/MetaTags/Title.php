@@ -54,11 +54,12 @@ class Title {
 	 * Note that returning empty string will use WordPress default title.
 	 */
 	private function get_singular_value( int $post_id = 0 ): string {
+		$post_id = $post_id ?: $this->get_queried_object_id();
+
 		$this->is_home   = 'page' === get_option( 'show_on_front' ) && $post_id === (int) get_option( 'page_on_front' );
 		$this->is_manual = false;
 
-		$post_id = $post_id ?: $this->get_queried_object_id();
-		$data    = get_post_meta( $post_id, 'slim_seo', true );
+		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
 			$this->is_manual = true;
 			return $data['title'];
