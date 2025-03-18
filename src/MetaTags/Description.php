@@ -90,8 +90,7 @@ class Description {
 		$post         = get_post( $post_id );
 		$post_content = apply_filters( 'slim_seo_post_content', $post->post_content, $post );
 		$data         = [];
-		$data[ get_post_type( $post_id ) ] = array_filter( [
-			'excerpt'          => $post->post_excerpt,
+		$data['post'] = array_filter( [
 			'content'          => $post_content,
 			'auto_description' => Helper::truncate( $post->post_excerpt ?: $post_content ),
 		] );
