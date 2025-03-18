@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-// defined( 'ABSPATH' ) || die;
+defined( 'ABSPATH' ) || die;
 
 use WP_Term;
 use SlimSEO\Helpers\Option;
