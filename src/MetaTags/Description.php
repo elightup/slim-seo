@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-defined( 'ABSPATH' ) || die;
+// defined( 'ABSPATH' ) || die;
 
 use WP_Term;
 use SlimSEO\Helpers\Option;
@@ -84,11 +84,19 @@ class Description {
 	 * @see \SlimSEO\RestApi::prepare_value_for_post()
 	 */
 	public function get_rendered_singular_value( int $post_id = 0 ): string {
-		$description = $this->get_singular_value( $post_id );
-		$description = (string) apply_filters( 'slim_seo_meta_description', $description, $post_id );
-		$description = Helper::render( $description, $post_id );
+		$description  = $this->get_singular_value( $post_id );
+		$description  = (string) apply_filters( 'slim_seo_meta_description', $description, $post_id );
 
-		return $description;
+		$post         = get_post( $post_id );
+		$post_content = apply_filters( 'slim_seo_post_content', $post->post_content, $post );
+		$data         = [];
+		$data[ get_post_type( $post_id ) ] = array_filter( [
+			'excerpt'          => $post->post_excerpt,
+			'content'          => $post_content,
+			'auto_description' => Helper::truncate( $post->post_excerpt ?: $post_content ),
+		] );
+
+		return Helper::render( $description, $post_id, 0, $data );
 	}
 
 	public function get_term_value( $term_id = null ): string {
