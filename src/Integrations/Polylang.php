@@ -13,6 +13,7 @@ class Polylang {
 		add_filter( 'slim_seo_sitemap_post_ignore', [ $this, 'ignore_translations' ], 10, 2 );
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
+		add_action( 'slim_seo_settings_enqueue', [ $this, 'add_language_for_js' ] );
 	}
 
 	public function query_all_translations( array $args ): array {
@@ -47,5 +48,13 @@ class Polylang {
 				esc_url( get_term_link( $term_id ) )
 			);
 		}
+	}
+
+	public function add_language_for_js(): void {
+		wp_add_inline_script( 'slim-seo-build-meta-tags', 'var ssLang = "' . $this->get_admin_language() . '";', 'before' );
+	}
+
+	private function get_admin_language(): string {
+		return PLL()->filter_lang ? PLL()->filter_lang->slug : '';
 	}
 }

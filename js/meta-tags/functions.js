@@ -1,5 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
-import { addQueryArgs, getQueryArg } from '@wordpress/url';
+import { addQueryArgs } from '@wordpress/url';
 
 let apiCache = {};
 
@@ -9,16 +9,14 @@ export const request = async ( apiName, data = {}, method = 'POST', cache = true
 		return apiCache[ cacheKey ];
 	}
 
-	const lang = getQueryArg( location.href, 'lang' );
-
 	let options;
 	if ( method === 'GET' ) {
 		options = {
-			path: addQueryArgs( `/slim-seo/${ apiName }`, { ...data, lang } )
+			path: addQueryArgs( `/slim-seo/${ apiName }`, { ...data, lang: window.ssLang } )
 		};
 	} else {
 		options = {
-			path: addQueryArgs( `/slim-seo/${ apiName }`, { lang } ),
+			path: addQueryArgs( `/slim-seo/${ apiName }`, { lang: window.ssLang } ),
 			method,
 			data
 		};

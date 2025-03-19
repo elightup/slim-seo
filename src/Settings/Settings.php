@@ -70,6 +70,8 @@ class Settings {
 			'doneText'       => __( 'Done!', 'slim-seo' ),
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
+
+		do_action( 'slim_seo_settings_enqueue' );
 	}
 
 	public function save() {
