@@ -14,6 +14,17 @@ class Polylang {
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
 		add_action( 'slim_seo_settings_enqueue', [ $this, 'add_language_for_js' ] );
+
+		// Register translatable options
+		new \PLL_Translate_Option(
+			'slim_seo',
+			[
+				'*' => 1, // Translate all fields
+			],
+			[
+				'context' => 'Slim SEO',
+			]
+		);
 	}
 
 	public function query_all_translations( array $args ): array {
