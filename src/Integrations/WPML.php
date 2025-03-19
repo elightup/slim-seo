@@ -9,6 +9,8 @@ class WPML {
 	public function setup() {
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
+
+		do_action( 'wpml_multilingual_options', 'slim_seo' );
 	}
 
 	public function add_post_links( $post ) {

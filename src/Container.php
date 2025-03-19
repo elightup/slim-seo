@@ -40,6 +40,7 @@ class Container {
 		$services['kadence']         = new Integrations\Kadence;
 		$services['visual_composer'] = new Integrations\VisualComposer;
 		$services['polylang']        = new Integrations\Polylang;
+		$services['wpml']            = new Integrations\WPML;
 
 		$services['settings']           = new Settings\Settings;
 		$services['code']               = new Code( $services['settings'] );
@@ -94,7 +95,6 @@ class Container {
 		$services['genesis']         = new Integrations\Genesis;
 		$services['lifterlms']       = new Integrations\LifterLMS;
 		$services['jetpack']         = new Integrations\Jetpack;
-		$services['wpml']            = new Integrations\WPML;
 		$services['translatepress']  = new Integrations\TranslatePress;
 		$services['amp']             = new Integrations\AMP( $services['schema'] );
 		$services['affiliatewp']     = new Integrations\AffiliateWP;
