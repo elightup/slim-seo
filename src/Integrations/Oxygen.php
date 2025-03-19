@@ -15,6 +15,10 @@ class Oxygen {
 	}
 
 	public function filter_content( string $post_content, WP_Post $post ): string {
+		if( Helper::is_woo_active() && WooCommerce::$skipped_page ) {
+			return $post_content;
+		}
+
 		return $this->get_builder_content( $post ) ?: $post_content;
 	}
 
