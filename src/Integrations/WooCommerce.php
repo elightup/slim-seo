@@ -4,7 +4,6 @@ namespace SlimSEO\Integrations;
 use WP_Post;
 
 class WooCommerce {
-	public static $skipped_page = false;
 	private $tags = [
 		'product:price:amount',
 		'product:price:currency',
@@ -38,14 +37,9 @@ class WooCommerce {
 	}
 
 	public function filter_content( string $post_content, WP_Post $post ): string {
-		self::$skipped_page = false;
 		if ( ! $this->is_skipped_page( $post ) ) {
 			return $post_content;
 		}
-
-		// Need to skip this page to other page builders
-		// So they don't try to parse their content of these pages, which can be very complicated and troublesome.
-		self::$skipped_page = true;
 
 		return '';
 	}
