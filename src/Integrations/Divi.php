@@ -4,7 +4,6 @@ namespace SlimSEO\Integrations;
 use WP_Post;
 
 class Divi {
-
 	public function is_active(): bool {
 		return defined( 'ET_BUILDER_VERSION' );
 	}
@@ -26,10 +25,6 @@ class Divi {
 		}
 
 		return null;
-	}
-	public function is_woo_skipped_page(): bool {
-		$woo = new WooCommerce;
-		return $woo->is_active() && $woo->skipped_page;
 	}
 
 	public function remove_post_types( array $post_types ): array {
