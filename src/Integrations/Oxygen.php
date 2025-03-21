@@ -15,7 +15,7 @@ class Oxygen {
 	}
 
 	public function filter_content( string $post_content, WP_Post $post ): string {
-		return ! $post_content ? '' : ( $this->get_builder_content( $post ) ?? $post_content );
+		return empty( $post_content ) ? '' : ( $this->get_builder_content( $post ) ?? $post_content );
 	}
 
 	public function get_builder_content( WP_Post $post ): string {

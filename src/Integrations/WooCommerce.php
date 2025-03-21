@@ -43,7 +43,6 @@ class WooCommerce {
 
 		// Return empty so other page builders will skip this page
 		// So they don't try to parse their content of these pages, which can be very complicated and troublesome.
-
 		return '';
 	}
 
