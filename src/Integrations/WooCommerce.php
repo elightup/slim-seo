@@ -41,9 +41,8 @@ class WooCommerce {
 			return $post_content;
 		}
 
-		// Remove all filters that might be added for other page builders
+		// Return empty so other page builders will skip this page
 		// So they don't try to parse their content of these pages, which can be very complicated and troublesome.
-		remove_all_filters( 'slim_seo_post_content' );
 		return '';
 	}
 
