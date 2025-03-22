@@ -8,6 +8,7 @@ use SlimSEO\Helpers\Option;
 use SlimSEO\MetaTags\Helper;
 use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
+use SlimSEO\MetaTags\Data;
 
 class Preview {
 	public function setup(): void {
@@ -161,7 +162,7 @@ class Preview {
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 		$content = (string) $request->get_param( 'content' ); // Live content
-		$content = apply_filters( 'slim_seo_post_content', $content, get_post( $id ) );
+		$content = Data::get_post_content( $id, $content );
 
 		$data         = [];
 		$data['post'] = array_filter( [

@@ -25,9 +25,7 @@ class WooCommerce {
 		add_filter( 'slim_seo_breadcrumbs_args', [ $this, 'change_breadcrumbs_taxonomy' ] );
 		add_filter( 'slim_seo_allowed_shortcodes', [ $this, 'exclude_shortcodes' ] );
 
-		// Priority 1 to run before all page builders that trying to parse content of WooCommerce pages.
-		// We need to tell Slim SEO not to parse content of these pages, and remove all filters that might be added for other page builders.
-		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 1, 2 );
+		add_filter( 'slim_seo_no_post_content', [ $this, 'no_post_content' ], 1, 2 );
 	}
 
 	public function process(): void {
@@ -36,15 +34,8 @@ class WooCommerce {
 		}
 	}
 
-	public function filter_content( string $post_content, WP_Post $post ): string {
-		if ( ! $this->is_skipped_page( $post ) ) {
-			return $post_content;
-		}
-
-		// Remove all filters that might be added for other page builders
-		// So they don't try to parse their content of these pages, which can be very complicated and troublesome.
-		remove_all_filters( 'slim_seo_post_content' );
-		return '';
+	public function no_post_content( bool $skip, int $post_id ): bool {
+		return $this->is_skipped_page( $post_id ) ? true : $skip;
 	}
 
 	public function change_breadcrumbs_taxonomy( array $args ): array {
@@ -58,9 +49,9 @@ class WooCommerce {
 	 * Check whether to skip parsing content for these pages.
 	 * Need to check for both front end and back end (need to show meta tags in admin columns).
 	 */
-	private function is_skipped_page( WP_Post $post ): bool {
+	private function is_skipped_page( int $post_id ): bool {
 		$pages = array_map( 'wc_get_page_id', [ 'cart', 'checkout', 'myaccount' ] );
-		return is_cart() || is_checkout() || is_account_page() || in_array( $post->ID, $pages );
+		return is_cart() || is_checkout() || is_account_page() || in_array( $post_id, $pages );
 	}
 
 	public function exclude_shortcodes( array $shortcodes ): array {

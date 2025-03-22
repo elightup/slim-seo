@@ -39,7 +39,7 @@ class Data {
 		if ( empty( $post ) ) {
 			return [];
 		}
-		$post_content = apply_filters( 'slim_seo_post_content', $post->post_content, $post );
+		$post_content = self::get_post_content( $post->ID );
 
 		$post_tax   = [];
 		$taxonomies = Helper::get_taxonomies();
@@ -166,5 +166,28 @@ class Data {
 
 	private function normalize( $key ) {
 		return str_replace( '-', '_', $key );
+	}
+
+	/**
+	 * Get post content with filters for page builders to modify the content.
+	 * Also has a filter to skip the content for certain pages, like WooCommerce checkout, cart, account, etc.
+	 *
+	 * @param int $post_id Post ID.
+	 * @param string $content Optional. Custom post content, used for live preview when the new content is not saved yet.
+	 * @return string
+	 */
+	public static function get_post_content( int $post_id = 0, string $content = '' ): string {
+		if ( apply_filters( 'slim_seo_no_post_content', false, $post_id ) ) {
+			return '';
+		}
+
+		$post = get_post( $post_id );
+		if ( empty( $post ) ) {
+			return '';
+		}
+
+		$content = $content ?: $post->post_content;
+
+		return (string) apply_filters( 'slim_seo_post_content', $content, $post );
 	}
 }
