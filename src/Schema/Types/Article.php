@@ -20,11 +20,6 @@ class Article extends Base {
 		$schema['wordCount'] = str_word_count( $content );
 
 		if ( 'post' === $post->post_type ) {
-			$tags = get_the_tags();
-			if ( is_array( $tags ) ) {
-				$schema['keywords'] = wp_list_pluck( $tags, 'name' );
-			}
-
 			$categories = get_the_category();
 			if ( is_array( $categories ) ) {
 				$schema['articleSection'] = wp_list_pluck( $categories, 'name' );
