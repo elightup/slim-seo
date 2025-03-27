@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.7.2
 Requires PHP: 7.2
-Stable tag: 4.4.1
+Stable tag: 4.5.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,19 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.5.0 - 2025-03-27 =
+
+Highlights:
+
+- This version improves the integration for Polylang and WPML, allowing you to switch languages for the settings page and enter different settings per language.
+- Add support for Visual Composer (WPBakery Page Builder) and Tagdiv Composer (Newspaper theme)
+
+Other changes:
+- Exclude Beaver Builder shortcode by default
+- Do not enqueue JS for non-supported post types in the admin
+- Fix the integration for Sensei LMS
+- Fix issues with WooCommerce integration to not parsing content of pages below cart/checkout/my account pages in admin page table list
 
 = 4.4.1 - 2025-03-04 =
 - Improve Woo integration, avoid page builders to parse content for Woo's pages to generate meta description (cart, checkout, my account)
