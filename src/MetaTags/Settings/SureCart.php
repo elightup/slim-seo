@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
 
-use SlimSEO\Helpers\Data;
-
 class SureCart extends Base {
 	public function is_active(): bool {
 		return is_plugin_active('surecart/surecart.php');
