@@ -240,7 +240,7 @@ Other changes:
 - Fix: 404 logs pagination error
 - Fix languages loaded too early in WordPress 6.7
 - Fix zoom feature in WP 6.7 not working because the breadcrumb block uses API version 2
-- Fix not excluding taxonomies from the sitemap when enable the option "Hide from search engines" in the Meta Tags settings page
+- Fix not excluding taxonomies issue from the sitemap when enable the option "Hide from search engines" in the Meta Tags settings page
 - Fix PHP warning when getting all post metas
 
 = 4.0.4 - 2024-11-05 =
