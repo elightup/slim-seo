@@ -42,11 +42,12 @@ class SureCart extends Base {
 		$variables[] = [
 			'label'   => 'SureCart',
 			'options' => [
-				'productsc.price'          => __( 'Price', 'slim-seo' ),
-				'productsc.sku'            => __( 'SKU', 'slim-seo' ),
-				'productsc.stock'          => __( 'Stock status', 'slim-seo' ),
-				'productsc.currency'       => __( 'Currency', 'slim-seo' ),
-				'productsc.offer_count'    => __( 'Offer count (variable product)', 'slim-seo' ),
+				'productsc.sku'         => __( 'SKU', 'slim-seo' ),
+				'productsc.name'        => __( 'Name', 'slim-seo' ),
+				'productsc.price'       => __( 'Price', 'slim-seo' ),
+				'productsc.stock'       => __( 'Stock status', 'slim-seo' ),
+				'productsc.currency'    => __( 'Currency', 'slim-seo' ),
+				'productsc.offer_count' => __( 'Offer count (variable product)', 'slim-seo' ),
 			],
 		];
 
@@ -66,6 +67,7 @@ class SureCart extends Base {
 		}
 
 		$sku      = $product->sku;
+		$name     = $product->name;
 		$currency = $product->metrics->currency;
 		$price    = $product->display_amount;
 		$stock    = __( 'In stock', 'slim-seo' );
@@ -74,17 +76,16 @@ class SureCart extends Base {
 		}
 
 		$offer_count = 0;
-		if ( $product->variant_options ) {
-			array_walk( $product->variant_options->data, function ( $data ) use ( &$offer_count ) {
-				$offer_count += count( $data['values'] );
-			} );
+		if ( $product->variants ) {
+			$offer_count = count( $product->variants->data );
 		}
 
 		$data['productsc'] = compact(
-			'price',
-			'offer_count',
 			'sku',
+			'name',
+			'price',
 			'stock',
+			'offer_count',
 			'currency',
 		);
 
