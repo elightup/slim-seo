@@ -102,6 +102,11 @@ class Bricks {
 				return false;
 			}
 
+			// Ignore components.
+			if ( ! empty( $element['cid'] ) ) {
+				return false;
+			}
+
 			// Remove elements with scripts, like sliders or counters, to avoid breaking layouts.
 			$scripts = \Bricks\Elements::get_element( $element, 'scripts' );
 			// Don't count 'bricksBackgroundVideoInit' as it's always enabled for nestable elements.
