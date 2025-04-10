@@ -3,6 +3,7 @@ namespace SlimSEO\Integrations;
 
 use WP_Post;
 use SlimSEO\MetaTags\Helper;
+use Bricks\Element;
 
 class Bricks {
 	public function is_active(): bool {
@@ -33,12 +34,14 @@ class Bricks {
 			return null;
 		}
 
-		$data = $this->remove_elements( $data );
-
 		// Skip shortcodes & blocks inside dynamic data {post_content}.
 		add_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
 
+		add_filter( 'bricks/element/render', [ $this, 'skip_render_element' ], 10, 2 );
+
 		$content = \Bricks\Frontend::render_data( $data );
+
+		remove_filter( 'bricks/element/render', [ $this, 'skip_render_element' ], 10, 2 );
 
 		// Remove the filter.
 		remove_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
@@ -46,7 +49,11 @@ class Bricks {
 		return (string) $content;
 	}
 
-	private function remove_elements( array $data ): array {
+	public function skip_render_element( bool $render_element, Element $element ): bool {
+		if ( ! $render_element ) {
+			return $render_element;
+		}
+
 		// Skip these elements as their content are not suitable for meta description.
 		$skipped_elements = apply_filters( 'slim_seo_bricks_skipped_elements', [
 			// Bricks.
@@ -87,44 +94,41 @@ class Bricks {
 			'happyfiles-gallery',
 		] );
 
-		return array_filter( $data, function ( $element ) use ( $skipped_elements ) {
-			if ( in_array( $element['name'], $skipped_elements, true ) ) {
-				return false;
-			}
-
-			// Ignore element with query loop.
-			if ( ! empty( $element['settings']['hasLoop'] ) ) {
-				return false;
-			}
-
-			// Ignore popups.
-			if ( $this->is_popup( $element ) ) {
-				return false;
-			}
-
-			// Ignore components.
-			if ( ! empty( $element['cid'] ) ) {
-				return false;
-			}
-
-			// Remove elements with scripts, like sliders or counters, to avoid breaking layouts.
-			$scripts = \Bricks\Elements::get_element( $element, 'scripts' );
-			// Don't count 'bricksBackgroundVideoInit' as it's always enabled for nestable elements.
-			$scripts = array_diff( $scripts, [ 'bricksBackgroundVideoInit' ] );
-			if ( ! empty( $scripts ) ) {
-				return false;
-			}
-
-			return true;
-		} );
-	}
-
-	private function is_popup( array $element ): bool {
-		if ( empty( $element['name'] ) || $element['name'] !== 'template' ) {
+		if ( in_array( $element->name, $skipped_elements ) ) {
 			return false;
 		}
 
-		$template_id = isset( $element['settings']['template'] ) ? intval( $element['settings']['template'] ) : 0;
+		// Ignore element with query loop.
+		if ( ! empty( $element->settings['hasLoop'] ) ) {
+			return false;
+		}
+
+		// Ignore popups.
+		if ( $this->is_popup( $element ) ) {
+			return false;
+		}
+
+		// Ignore components.
+		if ( $element->cid ) {
+			return false;
+		}
+
+		// Remove elements with scripts, like sliders or counters, to avoid breaking layouts.
+		// Don't count 'bricksBackgroundVideoInit' as it's always enabled for nestable elements.
+		$scripts = array_diff( $element->scripts, [ 'bricksBackgroundVideoInit' ] );
+		if ( ! empty( $scripts ) ) {
+			return false;
+		}
+
+		return $render_element;
+	}
+
+	private function is_popup( Element $element ): bool {
+		if ( $element->name !== 'template' ) {
+			return false;
+		}
+
+		$template_id = isset( $element->settings['template'] ) ? intval( $element->settings['template'] ) : 0;
 		if ( ! $template_id ) {
 			return false;
 		}
