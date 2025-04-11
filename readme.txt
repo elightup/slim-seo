@@ -76,12 +76,19 @@ Slim SEO automatically adds the some structured data to the website via JSON-LD 
 - [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
 - Auto redirect if post slug changed
 
-### Premium plugins
+### Slim SEO Pro
 
-- [Slim SEO Schema](https://wpslimseo.com/products/slim-seo-schema/) - An advanced, powerful and flexible plugin to add schemas to WordPress.
-- [Slim SEO Link Manager](https://wpslimseo.com/products/slim-seo-link-manager/) - Build internal link easier in WordPress with real-time reports.
+Upgrade to [Slim SEO Pro](https://elu.to/wrp) to have access to advanced SEO features without complexity:
 
-[View all](https://wpslimseo.com/products/)
+- Visual schema builder
+- 30+ pre-built schema types
+- Custom schema with JSON-LD
+- Contextual link suggestions
+- Real-time link health monitoring
+- Broken link repair
+- Link updater
+
+[Get Slim SEO Pro now](https://elu.to/wrp).
 
 ### Who should use Slim SEO?
 
