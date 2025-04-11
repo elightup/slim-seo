@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.7.2
 Requires PHP: 7.2
-Stable tag: 4.5.0
+Stable tag: 4.5.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,13 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.5.1 - 2025-04-11 =
+
+- To avoid issues with Bricks, from now the plugin doesn't parse the content from Bricks for generating meta tags if the post uses a template. In this case the plugin always use the post content.
+- Fix rendering meta tags in the admin post list table as Bricks doesn't support parsing dynamic tags in the admin.
+- Ignore Bricks components when parsing meta tags
+- Fix core/heading block is excluded from parsing for meta tags
 
 = 4.5.0 - 2025-03-27 =
 
