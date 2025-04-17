@@ -51,6 +51,11 @@ class Bricks {
 			return $render_element;
 		}
 
+		// Ignore Nested loop.
+		if ( is_array( $render_element ) ) {
+			return false;
+		}
+
 		// Skip these elements as their content are not suitable for meta description.
 		$skipped_elements = apply_filters( 'slim_seo_bricks_skipped_elements', [
 			// Bricks.
