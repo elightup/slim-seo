@@ -46,9 +46,14 @@ class Bricks {
 		return (string) $content;
 	}
 
-	public function skip_render_element( bool $render_element, Element $element ): bool {
+	public function skip_render_element( $render_element, Element $element ): bool {
 		if ( ! $render_element ) {
 			return $render_element;
+		}
+
+		// Ignore nested loop. In this case $render_element is an array of loop IDs.
+		if ( is_array( $render_element ) ) {
+			return false;
 		}
 
 		// Skip these elements as their content are not suitable for meta description.
