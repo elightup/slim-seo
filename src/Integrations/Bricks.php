@@ -51,7 +51,7 @@ class Bricks {
 			return $render_element;
 		}
 
-		// Ignore Nested loop.
+		// Ignore nested loop. In this case $render_element is an array of loop IDs.
 		if ( is_array( $render_element ) ) {
 			return false;
 		}
