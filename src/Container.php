@@ -21,6 +21,7 @@ class Container {
 		$services['settings_post']    = new MetaTags\Settings\Post;
 		$services['settings_term']    = new MetaTags\Settings\Term;
 		$services['settings_preview'] = new MetaTags\Settings\Preview;
+		$services['surecart']         = new MetaTags\Settings\SureCart;
 
 		$services['sitemaps']   = new Sitemaps\Manager;
 		$services['images_alt'] = new ImagesAlt;
