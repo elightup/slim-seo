@@ -19,12 +19,6 @@
       "role": "Developer"
     }
   ],
-  "repositories": [
-    {
-      "type": "github",
-      "url": "https://github.com/elightup/slim-twig"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "SlimSEO\\": "src/"

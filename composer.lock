@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0087e94420aae84a6ed51179bc79e075",
+    "content-hash": "ae064411106ee768a4eef1e325d4d977",
     "packages": [
         {
             "name": "elightup/slim-twig",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:elightup/slim-twig.git",
+                "url": "https://github.com/elightup/slim-twig.git",
                 "reference": "04ebb63b2d6c857ce842a1f089803abd4a020d80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/04ebb63b2d6c857ce842a1f089803abd4a020d80",
+                "reference": "04ebb63b2d6c857ce842a1f089803abd4a020d80",
+                "shasum": ""
             },
             "require-dev": {
                 "phpunit/phpunit": "^11.2"
@@ -24,10 +30,10 @@
                     "SlimTwig\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "issues": "https://github.com/elightup/slim-twig/issues",
+                "source": "https://github.com/elightup/slim-twig/tree/master"
             },
             "time": "2024-07-18T04:56:26+00:00"
         }
@@ -43,6 +49,6 @@
     "platform": {
         "php": ">=7.2"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
