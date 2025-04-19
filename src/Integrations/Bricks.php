@@ -6,6 +6,7 @@ use SlimSEO\MetaTags\Helper;
 use Bricks\Element;
 
 class Bricks {
+	private $per_page;
 	public function is_active(): bool {
 		return defined( 'BRICKS_VERSION' );
 	}
@@ -18,6 +19,11 @@ class Bricks {
 
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
+
+		add_filter( 'bricks/posts/query_vars', [ $this, 'set_per_page' ] );
+		add_filter( 'bricks/terms/query_vars', [ $this, 'set_per_page' ] );
+		add_filter( 'bricks/users/query_vars', [ $this, 'set_per_page' ] );
+		add_filter( 'slim_seo_per_page', [ $this, 'get_per_page' ], 10 );
 	}
 
 	public function filter_content( string $post_content, WP_Post $post ): string {
@@ -137,6 +143,15 @@ class Bricks {
 
 		$template_type = \Bricks\Templates::get_template_type( $template_id );
 		return $template_type === 'popup';
+	}
+
+	public function get_per_page( $per_page ) {
+		return $this->per_page ?? $per_page;
+	}
+
+	public function set_per_page( $query_vars ) {
+	    $this->per_page = $query_vars['posts_per_page'];
+	    return $query_vars;
 	}
 
 	public function remove_post_types( array $post_types ): array {
