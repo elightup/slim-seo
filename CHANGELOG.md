@@ -1,3 +1,7 @@
+### 4.5.2 - 2025-04-19
+- Fix Bricks compatibility when using with nested loops
+- Ignore Divi's `layout_category` post type
+
 ### 4.5.1 - 2025-04-11
 
 - To avoid issues with Bricks, from now the plugin doesn't parse the content from Bricks for generating meta tags if the post uses a template. In this case the plugin always use the post content.

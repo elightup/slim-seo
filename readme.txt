@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.7.2
+Tested up to: 6.8
 Requires PHP: 7.2
-Stable tag: 4.5.1
+Stable tag: 4.5.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,10 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.5.2 - 2025-04-19 =
+- Fix Bricks compatibility when using with nested loops
+- Ignore Divi's `layout_category` post type
 
 = 4.5.1 - 2025-04-11 =
 
