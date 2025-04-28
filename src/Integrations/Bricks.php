@@ -12,16 +12,37 @@ class Bricks {
 
 	public function setup(): void {
 		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
+		add_filter( 'slim_seo_no_post_content', [ $this, 'no_post_content' ], 1, 2 );
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );
 		add_filter( 'bricks/frontend/disable_seo', '__return_true' );
 
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
+
 	}
 
 	public function filter_content( string $post_content, WP_Post $post ): string {
 		return $this->get_builder_content( $post ) ?? $post_content;
+	}
+
+	public function no_post_content( bool $skip, int $post_id ): bool {
+		$data = get_post_meta( $post_id, BRICKS_DB_PAGE_CONTENT, true );
+		if ( empty( $data ) ) {
+			return true;
+		}
+
+		$skipped_elements = [
+			'wpgb-facet',
+		];
+
+		foreach ( $data as $element ) {
+			if ( in_array( $element['name'], $skipped_elements ) ) {
+				return true;
+			}
+		}
+
+		return $skip;
 	}
 
 	private function get_builder_content( WP_Post $post ): ?string {
