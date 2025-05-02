@@ -106,8 +106,9 @@ class Data {
 		return $this->get_user( get_current_user_id() );
 	}
 
-	private function get_author_data() {
-		return $this->get_user( get_the_author_meta( 'ID' ) );
+	private function get_author_data(): array {
+		$post = get_post( $this->post_id ?: QueriedObject::get_id() );
+		return empty( $post ) ? [] : $this->get_user( $post->post_author );
 	}
 
 	private function get_user( $user_id ) {
