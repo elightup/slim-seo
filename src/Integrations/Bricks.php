@@ -9,16 +9,13 @@ class Bricks {
 
 	private $skipped_elements = [
 		// Bricks.
-		'audio',
 		'code',
 		'divider',
 		'facebook-page',
 		'form',
 		'icon',
 		'image',
-		'image-gallery',
 		'map',
-		'nav-menu',
 		'pagination',
 		'pie-chart',
 		'post-author',
@@ -28,21 +25,13 @@ class Bricks {
 		'post-taxonomy',
 		'post-sharing',
 		'post-title',
-		'posts',
 		'related-posts',
-		'search',
-		'sidebar',
-		'shortcode',
 		'social-icons',
-		'svg',
 		'video',
-		'wordpress',
 
 		// Extra elements.
 		'wpgb-facet',
 		'jet-engine-listing-grid',
-		'xproslider',
-		'xproslidercontrol',
 		'happyfiles-gallery',
 	];
 
@@ -104,6 +93,13 @@ class Bricks {
 	}
 
 	private function should_render( $element ): bool {
+		$element_data = \Bricks\Elements::get_element( (array) $element );
+
+		// Ignore all elements in certain categories.
+		if ( in_array( Data::get( $element_data, 'category' ), [ 'media', 'query', 'wordpress', 'extras' ], true ) ) {
+			return false;
+		}
+
 		if ( in_array( Data::get( $element, 'name' ), $this->skipped_elements ) ) {
 			return false;
 		}
@@ -125,7 +121,7 @@ class Bricks {
 
 		// Remove elements with scripts, like sliders or counters, to avoid breaking layouts.
 		// Don't count 'bricksBackgroundVideoInit' as it's always enabled for nestable elements.
-		$scripts = (array) Data::get( $element, 'scripts', [] );
+		$scripts = (array) Data::get( $element_data, 'scripts', [] );
 		$scripts = array_diff( $scripts, [ 'bricksBackgroundVideoInit' ] );
 		if ( ! empty( $scripts ) ) {
 			return false;
