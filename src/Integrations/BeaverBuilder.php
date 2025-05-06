@@ -11,12 +11,18 @@ class BeaverBuilder {
 		add_filter( 'fl_theme_disable_schema', '__return_true' );
 
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
+		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
 	}
 
 	public function remove_post_types( array $post_types ): array {
 		unset( $post_types['fl-builder-template'] );
 		return $post_types;
+	}
+
+	public function remove_taxonomies( array $taxonomies ): array {
+		unset( $taxonomies['fl-builder-template-category'] );
+		return $taxonomies;
 	}
 
 	public function skip_shortcodes( array $shortcodes ): array {
