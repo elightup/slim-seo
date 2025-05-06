@@ -1,6 +1,6 @@
 ### 4.5.2 - 2025-04-19
 - Fix Bricks compatibility when using with nested loops
-- Ignore Divi's `layout_category` post type
+- Ignore Divi's `layout_category` taxonomy
 
 ### 4.5.1 - 2025-04-11
 
