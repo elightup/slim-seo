@@ -25,12 +25,28 @@ class ACF {
 	public function add_data( array $data, int $post_id, int $term_id ): array {
 		$post_id = $post_id ?: ( is_singular() ? get_queried_object_id() : get_the_ID() );
 
-		if ( empty( $post_id ) ) {
+		if ( empty( $post_id ) && empty( $term_id ) ) {
 			return $data;
 		}
 
-		$post          = get_post( $post_id );
-		$field_objects = get_field_objects( $post->ID ) ?: [];
+		if ( $post_id ) {
+			$post          = get_post( $post_id );
+			$field_objects = get_field_objects( $post->ID ) ?: [];
+
+			// Post author fields.
+			$author_field_objects = get_field_objects( 'user_' . $post->post_author );
+			if ( ! empty( $author_field_objects ) ) {
+				$field_objects    = array_merge( $author_field_objects, $field_objects );
+			}
+		}
+
+		if ( $term_id ) {
+			$term     = get_term( $term_id );
+			$taxonomy = $term->taxonomy;
+
+			$term_key = "{$taxonomy}_{$term_id}";
+			$field_objects = get_field_objects( $term_key );
+		}
 
 		// Option fields.
 		if ( function_exists( 'acf_add_options_page' ) ) {
@@ -39,13 +55,6 @@ class ACF {
 			if ( ! empty( $option_field_objects ) ) {
 				$field_objects = array_merge( $option_field_objects, $field_objects );
 			}
-		}
-
-		// Post author fields.
-		$author_field_objects = get_field_objects( 'user_' . $post->post_author );
-
-		if ( ! empty( $author_field_objects ) ) {
-			$field_objects = array_merge( $author_field_objects, $field_objects );
 		}
 
 		if ( ! empty( $field_objects ) ) {
