@@ -1,16 +1,58 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use SlimTwig\Data;
 use WP_Post;
 use SlimSEO\MetaTags\Helper;
-use Bricks\Element;
 
 class Bricks {
+
+	private $skipped_elements = [
+		// Bricks.
+		'audio',
+		'code',
+		'divider',
+		'facebook-page',
+		'form',
+		'icon',
+		'image',
+		'image-gallery',
+		'map',
+		'nav-menu',
+		'pagination',
+		'pie-chart',
+		'post-author',
+		'post-comments',
+		'post-meta',
+		'post-navigation',
+		'post-taxonomy',
+		'post-sharing',
+		'post-title',
+		'posts',
+		'related-posts',
+		'search',
+		'sidebar',
+		'shortcode',
+		'social-icons',
+		'svg',
+		'video',
+		'wordpress',
+
+		// Extra elements.
+		'wpgb-facet',
+		'jet-engine-listing-grid',
+		'xproslider',
+		'xproslidercontrol',
+		'happyfiles-gallery',
+	];
+
 	public function is_active(): bool {
 		return defined( 'BRICKS_VERSION' );
 	}
 
 	public function setup(): void {
+		$this->skipped_elements = apply_filters( 'slim_seo_bricks_skipped_elements', $this->skipped_elements );
+
 		add_filter( 'slim_seo_post_content', [ $this, 'filter_content' ], 10, 2 );
 
 		add_filter( 'bricks/frontend/disable_opengraph', '__return_true' );
@@ -25,11 +67,13 @@ class Bricks {
 	}
 
 	private function get_builder_content( WP_Post $post ): ?string {
-		// Get from the post first, then from the template.
+		// Get from the post only, don't get from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
 		if ( empty( $data ) ) {
 			return null;
 		}
+
+		$data = array_filter( $data, [ $this, 'should_render' ] );
 
 		// Skip shortcodes & blocks inside dynamic data {post_content}.
 		add_filter( 'the_content', [ $this, 'skip_shortcodes' ], 5 );
@@ -46,7 +90,7 @@ class Bricks {
 		return (string) $content;
 	}
 
-	public function skip_render_element( $render_element, Element $element ): bool {
+	public function skip_render_element( $render_element, $element ): bool {
 		if ( ! $render_element ) {
 			return $render_element;
 		}
@@ -56,52 +100,16 @@ class Bricks {
 			return false;
 		}
 
-		// Skip these elements as their content are not suitable for meta description.
-		$skipped_elements = apply_filters( 'slim_seo_bricks_skipped_elements', [
-			// Bricks.
-			'audio',
-			'code',
-			'divider',
-			'facebook-page',
-			'form',
-			'icon',
-			'image',
-			'image-gallery',
-			'map',
-			'nav-menu',
-			'pagination',
-			'pie-chart',
-			'post-author',
-			'post-comments',
-			'post-meta',
-			'post-navigation',
-			'post-taxonomy',
-			'post-sharing',
-			'post-title',
-			'posts',
-			'related-posts',
-			'search',
-			'sidebar',
-			'shortcode',
-			'social-icons',
-			'svg',
-			'video',
-			'wordpress',
+		return $this->should_render( $element ) ? $render_element : false;
+	}
 
-			// WP Grid Builder.
-			'wpgb-facet',
-			'jet-engine-listing-grid',
-
-			// HappyFiles.
-			'happyfiles-gallery',
-		] );
-
-		if ( in_array( $element->name, $skipped_elements ) ) {
+	private function should_render( $element ): bool {
+		if ( in_array( Data::get( $element, 'name' ), $this->skipped_elements ) ) {
 			return false;
 		}
 
 		// Ignore element with query loop.
-		if ( ! empty( $element->settings['hasLoop'] ) ) {
+		if ( Data::get( $element, 'settings.hasLoop' ) ) {
 			return false;
 		}
 
@@ -111,26 +119,27 @@ class Bricks {
 		}
 
 		// Ignore components.
-		if ( $element->cid ) {
+		if ( Data::get( $element, 'cid' ) ) {
 			return false;
 		}
 
 		// Remove elements with scripts, like sliders or counters, to avoid breaking layouts.
 		// Don't count 'bricksBackgroundVideoInit' as it's always enabled for nestable elements.
-		$scripts = array_diff( $element->scripts, [ 'bricksBackgroundVideoInit' ] );
+		$scripts = (array) Data::get( $element, 'scripts', [] );
+		$scripts = array_diff( $scripts, [ 'bricksBackgroundVideoInit' ] );
 		if ( ! empty( $scripts ) ) {
 			return false;
 		}
 
-		return $render_element;
+		return true;
 	}
 
-	private function is_popup( Element $element ): bool {
-		if ( $element->name !== 'template' ) {
+	private function is_popup( $element ): bool {
+		if ( Data::get( $element, 'name' ) !== 'template' ) {
 			return false;
 		}
 
-		$template_id = isset( $element->settings['template'] ) ? intval( $element->settings['template'] ) : 0;
+		$template_id = intval( Data::get( $element, 'settings.template' ) );
 		if ( ! $template_id ) {
 			return false;
 		}
