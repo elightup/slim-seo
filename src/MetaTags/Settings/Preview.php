@@ -71,13 +71,8 @@ class Preview {
 		$text  = (string) $request->get_param( 'text' ); // Manual entered meta title
 		$title = (string) $request->get_param( 'title' ); // Live title
 
-		if ( $object_type === 'post' ) {
-			$data = [
-				'post' => [
-					'title' => $title,
-				],
-			];
-		} else {
+		$data = [];
+		if ( $object_type === 'term' ) {
 			$data = [
 				'term' => [
 					'name' => $title,
