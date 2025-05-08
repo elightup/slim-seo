@@ -1,4 +1,11 @@
+### 4.5.3 - 2025-05-08
+
+- Improve getting post author ID
+- Beaver Builder integration: remove `fl-builder-template-category` taxonomy
+- Improve integrations with Bricks
+
 ### 4.5.2 - 2025-04-19
+
 - Fix Bricks compatibility when using with nested loops
 - Ignore Divi's `layout_category` taxonomy
 
@@ -17,12 +24,14 @@ Highlights:
 - Add support for Visual Composer (WPBakery Page Builder) and Tagdiv Composer (Newspaper theme)
 
 Other changes:
+
 - Exclude Beaver Builder shortcode by default
 - Do not enqueue JS for non-supported post types in the admin
 - Fix the integration for Sensei LMS
 - Fix issues with WooCommerce integration to not parsing content of pages below cart/checkout/my account pages in admin page table list
 
 ### 4.4.1 - 2025-03-04
+
 - Improve Woo integration, avoid page builders to parse content for Woo's pages to generate meta description (cart, checkout, my account)
 - Fix for JetEngine custom DB table for meta storage
 - Fix wrong og:url
@@ -44,6 +53,7 @@ Other changes:
 - Fix issue with REST API
 
 ### 4.3.0 - 2025-02-03
+
 - Always show the meta tags in admin post table columns because the settings for post types with dynamic variables can be different from the WordPress default. Previously, the plugin only show meta tags if the post has custom settings.
 - Improve the Rest API support, which now returns parsed meta tags with dynamic variables
 - Add the integration for Kadence product family
@@ -53,6 +63,7 @@ Other changes:
 - Fix breadcrumbs issue which causes errors for SureCart or Elementor
 
 ### 4.2.2 - 2025-01-20
+
 - Improve schemas
 - Move meta tags to the top of <head> section
 - Add current month variable
@@ -62,6 +73,7 @@ Other changes:
 - Fix bug with bulk edit
 
 ### 4.2.1 - 2024-12-16
+
 - Show post type & taxonomy slugs in the Meta Tags tab to avoid confusion if 2 post types/taxonomies have same labels.
 - Improve compatibility for WPForo
 - Fix compatibility with old versions of Meta Box
@@ -72,13 +84,15 @@ Other changes:
 Highlights: this version adds a new feature that allows you to remove `/category/` base from the category permalink.
 
 Other changes:
+
 - Add support for ACF and WooCommerce fields from the dynamic variables for meta tags
 - Allow you to select a post/page as the destination when creating a redirect
 - Add sample data for importing redirections
 - Fix conflicts with GT3 themes
 
 ### 4.1.1 - 2024-11-17
-- Fix breadcrumbs issue
+
+Fix breadcrumbs issue
 
 ### 4.1.0 - 2024-11-16
 - Support [Meta Box](https://metabox.io)'s custom fields for dynamic variables, including groups and settings pages

@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.8
+Tested up to: 6.8.1
 Requires PHP: 7.2
-Stable tag: 4.5.2
+Stable tag: 4.5.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -168,7 +168,14 @@ Add the following constant in your `wp-config.php` file:
 
 == Changelog ==
 
+= 4.5.3 - 2025-05-08 =
+
+- Improve getting post author ID
+- Beaver Builder integration: remove `fl-builder-template-category` taxonomy
+- Improve integrations with Bricks
+
 = 4.5.2 - 2025-04-19 =
+
 - Fix Bricks compatibility when using with nested loops
 - Ignore Divi's `layout_category` taxonomy
 
@@ -187,6 +194,7 @@ Highlights:
 - Add support for Visual Composer (WPBakery Page Builder) and Tagdiv Composer (Newspaper theme)
 
 Other changes:
+
 - Exclude Beaver Builder shortcode by default
 - Do not enqueue JS for non-supported post types in the admin
 - Fix the integration for Sensei LMS
@@ -212,90 +220,5 @@ Other changes:
 - Fix missing posts in alternate languages in the sitemap that don't have translations in the default language (with Polylang).
 - Fix missing separator in title for paginated pages
 - Fix issue with REST API
-
-= 4.3.0 - 2025-02-03 =
-- Always show the meta tags in admin post table columns because the settings for post types with dynamic variables can be different from the WordPress default. Previously, the plugin only show meta tags if the post has custom settings.
-- Improve the Rest API support, which now returns parsed meta tags with dynamic variables
-- Add the integration for Kadence product family
-- Improve the schema structure
-- Improve the compatibility with Bricks, excluding image and gallery elements
-- Improve the breadcrumbs for WooCommerce's search results page
-- Fix breadcrumbs issue which causes errors for SureCart or Elementor
-
-= 4.2.2 - 2025-01-20 =
-- Improve schemas
-- Move meta tags to the top of <head> section
-- Add current month variable
-- Not index comment pages
-- Fix wrong taxonomy for non-product page when WooCommerce is active
-- Fix compatibility issue with Dokan
-- Fix bug with bulk edit
-
-= 4.2.1 - 2024-12-16 =
-- Show post type & taxonomy slugs in the Meta Tags tab to avoid confusion if 2 post types/taxonomies have same labels.
-- Improve compatibility for WPForo
-- Fix compatibility with old versions of Meta Box
-- Fix reading post_type on null – Image.php
-
-= 4.2.0 - 2024-12-03 =
-
-Highlights: this version adds a new feature that allows you to remove `/category/` base from the category permalink.
-
-Other changes:
-- Add support for ACF and WooCommerce fields from the dynamic variables for meta tags
-- Allow you to select a post/page as the destination when creating a redirect
-- Add sample data for importing redirections
-- Fix conflicts with GT3 themes
-
-= 4.1.1 - 2024-11-17 =
-- Fix breadcrumbs issue
-
-= 4.1.0 - 2024-11-16 =
-- Support [Meta Box](https://metabox.io)'s custom fields for dynamic variables, including groups and settings pages
-- Re-add options to add "rel" attribute (nofollow, ugc, sponsored) to links in the block editor
-- Add integration with wpForo plugin
-- Add filters for toggle news & image sitemap
-- Fix: 404 logs pagination error
-- Fix languages loaded too early in WordPress 6.7
-- Fix zoom feature in WP 6.7 not working because the breadcrumb block uses API version 2
-- Fix not excluding taxonomies issue from the sitemap when enable the option "Hide from search engines" in the Meta Tags settings page
-- Fix PHP warning when getting all post metas
-
-= 4.0.4 - 2024-11-05 =
-- Improve migration from other SEO plugins: migrate dynamic variables instead of their values
-- Add filter `slim_seo_twitter_card_type` for twitter card type
-- Fix quick/bulk edit not working
-
-= 4.0.2 - 2024-10-17 =
-- Fix Divi and WooCommerce compatibility
-- Fix empty Meta Tags tab on WordPress < 6.6
-
-= 4.0.2 - 2024-10-15 =
-- Fix missing style for MetaTags tab
-- Improve compatibility with page builders
-
-= 4.0.1 - 2024-10-12 =
-- Add integration for Forminator
-- Bricks: Ignore elements with scripts, like sliders or counters, to avoid breaking layouts.
-- Fix static blog page returning wrong meta
-- Fix: Redirects list not update after create/update/delete redirect because of Litespeed cache
-- Fix: Surecart product bug
-
-= 4.0.0 - 2024-10-08 =
-
-**Highlights:**
-
-This version allows you to configure meta tags with dynamic variables, whose value can be changed according to the content or data of the article, website, or in real time. You can set up meta tags more flexibly for homepage, all post types and taxonomies.
-
-Read more about this in our [blog post](https://wpslimseo.com/slim-seo-v4-configuring-meta-tags-with-dynamic-variables/).
-
-Other changes:
-
-- Improve integrations for page builder plugins, removing internal post types and taxonomies from them
-- Do not expose username in the Person schema for a security reason
-- Improve preview for breadcrumbs block
-- Prevent direct access to PHP files
-- Remove link attributes (ability to add nofollow to links) for the block editor as the block editor already supports it
-- Fix non-integer custom logo value breaks schemas in Blocksy theme
 
 For full changelog, see [here](https://github.com/elightup/slim-seo/blob/master/CHANGELOG.md).
