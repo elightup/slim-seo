@@ -58,7 +58,7 @@ class Bricks {
 	private function get_builder_content( WP_Post $post ): ?string {
 		// Get from the post only, don't get from the template.
 		$data = get_post_meta( $post->ID, BRICKS_DB_PAGE_CONTENT, true );
-		if ( empty( $data ) ) {
+		if ( empty( $data ) || ! is_array( $data ) ) {
 			return null;
 		}
 
