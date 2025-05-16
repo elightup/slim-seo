@@ -36,7 +36,7 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 			// Add new redirect.
 			redirect.id = id;
 			let newRedirects = [ ...redirects ];
-			newRedirects.push( redirect );
+			newRedirects.unshift( redirect );
 			mutate( newRedirects, { revalidate: false } );
 		} );
 	};
