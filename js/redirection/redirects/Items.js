@@ -11,6 +11,8 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 	const [ offset, setOffset ] = useState( 0 );
 	const [ checkedList, setCheckedList ] = useState( [] );
 	const [ isCheckAll, setIsCheckAll ] = useState( false );
+	const [ orderBy, setOrderBy ] = useState( '' );
+	const [ order, setOrder ] = useState( 'DESC' );
 	const [ remountPaginate, setRemountPaginate ] = useState( 0 );
 	const { result: redirects, mutate } = useApi( 'redirects', {}, { returnMutate: true } );
 
@@ -71,6 +73,26 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 		filteredRedirects = filteredRedirects.filter( redirect => redirect.type == redirectType );
 	}
 
+	if ( orderBy ) {
+		filteredRedirects.sort( ( redirect1, redirect2 ) => {
+			const val1 = redirect1[ orderBy ];
+			const val2 = redirect2[ orderBy ];
+
+			if ( val1 == null ) return order === 'DESC' ? 1 : -1;
+			if ( val2 == null ) return order === 'DESC' ? -1 : 1;
+
+			let result;
+
+			if ( typeof val1 === 'string' ) {
+				result = val1.localeCompare( val2 );
+			} else {
+				result = val1 - val2;
+			}
+
+			return order === 'DESC' ? -result : result;
+		} );
+	}
+
 	const checkAll = () => {
 		setIsCheckAll( !isCheckAll );
 
@@ -89,7 +111,13 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 		<>
 			<table className='ss-table'>
 				<thead>
-					<Header isCheckAll={ isCheckAll } checkAll={ checkAll } />
+					<Header
+						orderBy={ orderBy }
+						setOrderBy={ setOrderBy }
+						order={ order }
+						setOrder={ setOrder }
+						isCheckAll={ isCheckAll }
+						checkAll={ checkAll } />
 				</thead>
 
 				<tbody>
@@ -97,7 +125,13 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 				</tbody>
 
 				<tfoot>
-					<Header isCheckAll={ isCheckAll } checkAll={ checkAll } />
+					<Header
+						orderBy={ orderBy }
+						setOrderBy={ setOrderBy }
+						order={ order }
+						setOrder={ setOrder }
+						isCheckAll={ isCheckAll }
+						checkAll={ checkAll } />
 				</tfoot>
 			</table>
 
