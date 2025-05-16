@@ -1,31 +1,54 @@
 import { __ } from '@wordpress/i18n';
 import { Tooltip } from '../helper/misc';
+import TableHeader from './TableHeader';
 
-const Header = ( { isCheckAll, checkAll } ) => {
+const Header = ( { orderBy, setOrderBy, order, setOrder, isCheckAll, checkAll } ) => {
 	return (
 		<tr>
 			<th className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onChange={ checkAll } /></th>
-			<th className='ss-redirect__type'>
-				{ __( 'Type', 'slim-seo' ) }
-				<Tooltip content={ __( 'Redirect type', 'slim-seo' ) } />
-			</th>
-			<th className='ss-redirect__url'>
-				{ __( 'From URL', 'slim-seo' ) }
-				<Tooltip content={ __( 'URL to redirect', 'slim-seo' ) } />
-			</th>
-			<th className='ss-redirect__url'>
-				{ __( 'To URL', 'slim-seo' ) }
-				<Tooltip content={ __( 'Destination URL', 'slim-seo' ) } />
-			</th>
-			<th className='ss-redirect__note'>
-				{ __( 'Note', 'slim-seo' ) }
-				<Tooltip content={ __( 'Something to reminds you about the redirects', 'slim-seo' ) } />
-			</th>
-			<th className='ss-redirect__enable'>
-				{ __( 'Enable', 'slim-seo' ) }
-				<Tooltip content={ __( 'Is the redirect enabled?', 'slim-seo' ) } />
-			</th>
-			<th className='ss-redirect__actions'>{ __( 'Actions', 'slim-seo' ) }</th>
+			<TableHeader
+				className='ss-redirect__type'
+				text={ __( 'Type', 'slim-seo' ) }
+				type='type'
+				orderBy={ orderBy }
+				setOrderBy={ setOrderBy }
+				order={ order }
+				setOrder={ setOrder }
+				tooltip={ __( 'Redirect type', 'slim-seo' ) } />
+			<TableHeader
+				className='ss-redirect__url'
+				text={ __( 'From URL', 'slim-seo' ) }
+				type='from'
+				orderBy={ orderBy }
+				setOrderBy={ setOrderBy }
+				order={ order }
+				setOrder={ setOrder }
+				tooltip={ __( 'URL to redirect', 'slim-seo' ) } />
+			<TableHeader
+				className='ss-redirect__url'
+				text={ __( 'To URL', 'slim-seo' ) }
+				type='to'
+				orderBy={ orderBy }
+				setOrderBy={ setOrderBy }
+				order={ order }
+				setOrder={ setOrder }
+				tooltip={ __( 'Destination URL', 'slim-seo' ) } />
+			<TableHeader
+				className='ss-redirect__note'
+				text={ __( 'Note', 'slim-seo' ) }
+				tooltip={ __( 'Something to reminds you about the redirects', 'slim-seo' ) } />
+			<TableHeader
+				className='ss-redirect__enable'
+				text={ __( 'Enable', 'slim-seo' ) }
+				type='enable'
+				orderBy={ orderBy }
+				setOrderBy={ setOrderBy }
+				order={ order }
+				setOrder={ setOrder }
+				tooltip={ __( 'Is the redirect enabled?', 'slim-seo' ) } />
+			<TableHeader
+				className='ss-redirect__actions'
+				text={ __( 'Actions', 'slim-seo' ) } />
 		</tr>
 	);
 };
