@@ -21,7 +21,7 @@ class Data {
 
 	public function collect(): array {
 		$this->data = array_merge(
-			[ 'post' => $this->get_post_data() ],
+			[ 'post' => new Data\Post( $this->post_id ) ],
 			[ 'post_type' => $this->get_post_type_data() ],
 			[ 'term' => $this->get_term_data() ],
 			[ 'author' => $this->get_author_data() ],
