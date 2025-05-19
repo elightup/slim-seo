@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.8.1
 Requires PHP: 7.2
-Stable tag: 4.5.3
+Stable tag: 4.5.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.5.4 - 2025-05-19 =
+
+- Add type safe check for Bricks
+- Escape output of breadcrumbs
 
 = 4.5.3 - 2025-05-08 =
 

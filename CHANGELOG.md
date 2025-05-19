@@ -1,3 +1,8 @@
+### 4.5.4 - 2025-05-19
+
+- Add type safe check for Bricks
+- Escape output of breadcrumbs
+
 ### 4.5.3 - 2025-05-08
 
 - Improve getting post author ID
