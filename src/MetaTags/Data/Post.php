@@ -7,9 +7,11 @@ use SlimSEO\MetaTags\Data;
 
 class Post {
 	private $post;
+	private $live_data;
 
-	public function __construct( int $post_id = 0 ) {
-		$this->post = get_post( $post_id ?: QueriedObject::get_id() );
+	public function __construct( int $post_id = 0, array $live_data = [] ) {
+		$this->post      = get_post( $post_id ?: QueriedObject::get_id() );
+		$this->live_data = $live_data;
 	}
 
 	/**
@@ -25,8 +27,8 @@ class Post {
 		}
 
 		$data  = [
-			'title'         => $this->post->post_title,
-			'excerpt'       => $this->post->post_excerpt,
+			'title'         => $this->live_data['post']['title'] ?? $this->post->post_title,
+			'excerpt'       => $this->live_data['post']['excerpt'] ?? $this->post->post_excerpt,
 			'date'          => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_date_gmt ) ),
 			'modified_date' => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_modified_gmt ) ),
 		];
@@ -36,11 +38,11 @@ class Post {
 	}
 
 	private function get_content(): string {
-		return Data::get_post_content( $this->post->ID );
+		return $this->live_data['post']['content'] ?? Data::get_post_content( $this->post->ID );
 	}
 
 	private function get_auto_description(): string {
-		return Helper::truncate( $this->post->post_excerpt ?: $this->get_content() );
+		return $this->live_data['post']['auto_description'] ?? Helper::truncate( $this->post->post_excerpt  ?: $this->get_content() );
 	}
 
 	private function get_thumbnail() {

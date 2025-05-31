@@ -72,7 +72,13 @@ class Preview {
 		$title = (string) $request->get_param( 'title' ); // Live title
 
 		$data = [];
-		if ( $object_type === 'term' ) {
+		if ( $object_type === 'post' ) {
+			$data = [
+				'post' => [
+					'title' => $title,
+				],
+			];
+		} else {
 			$data = [
 				'term' => [
 					'name' => $title,

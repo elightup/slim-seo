@@ -19,11 +19,11 @@ class Data {
 		$this->term_id = $term_id;
 	}
 
-	public function collect(): array {
+	public function collect( $live_data ): array {
 		$this->data = array_merge(
-			[ 'post' => new Data\Post( $this->post_id ) ],
+			[ 'post' => new Data\Post( $this->post_id, $live_data ) ],
+			[ 'term' => new Data\Term( $this->term_id, $live_data ) ],
 			[ 'post_type' => $this->get_post_type_data() ],
-			[ 'term' => $this->get_term_data() ],
 			[ 'author' => $this->get_author_data() ],
 			[ 'user' => $this->get_user_data() ],
 			[ 'site' => $this->get_site_data() ],
@@ -32,35 +32,6 @@ class Data {
 		$this->data = apply_filters( 'slim_seo_data', $this->data, $this->post_id, $this->term_id );
 
 		return $this->data;
-	}
-
-	private function get_post_data(): array {
-		$post = get_post( $this->post_id ?: QueriedObject::get_id() );
-		if ( empty( $post ) ) {
-			return [];
-		}
-		$post_content = self::get_post_content( $post->ID );
-
-		$post_tax   = [];
-		$taxonomies = Helper::get_taxonomies();
-		unset( $taxonomies['category'], $taxonomies['post_tag'] );
-		foreach ( $taxonomies as $taxonomy ) {
-			$post_tax[ $this->normalize( $taxonomy['slug'] ) ] = $this->get_post_terms( $post, $taxonomy['slug'] );
-		}
-
-		return [
-			'title'            => $post->post_title,
-			'excerpt'          => $post->post_excerpt,
-			'content'          => $post_content,
-			'auto_description' => Helper::truncate( $post->post_excerpt ?: $post_content ),
-			'date'             => wp_date( get_option( 'date_format' ), strtotime( $post->post_date_gmt ) ),
-			'modified_date'    => wp_date( get_option( 'date_format' ), strtotime( $post->post_modified_gmt ) ),
-			'thumbnail'        => get_the_post_thumbnail_url( $post->ID, 'full' ),
-			'tags'             => $this->get_post_terms( $post, 'post_tag' ),
-			'categories'       => $this->get_post_terms( $post, 'category' ),
-			'custom_field'     => $this->get_custom_field_data( $post ),
-			'tax'              => $post_tax,
-		];
 	}
 
 	private function get_post_type_data(): array {
@@ -79,26 +50,6 @@ class Data {
 				'singular' => $labels->singular_name,
 				'plural'   => $labels->name,
 			],
-		];
-	}
-
-	private function get_term_data(): array {
-		$term = null;
-
-		if ( $this->term_id ) {
-			$term = get_term( $this->term_id );
-		} elseif ( is_category() || is_tag() || is_tax() ) {
-			$term = get_queried_object();
-		}
-
-		if ( ! ( $term instanceof WP_Term ) ) {
-			return [];
-		}
-
-		return [
-			'name'             => $term->name,
-			'description'      => $term->description,
-			'auto_description' => Helper::truncate( $term->description ),
 		];
 	}
 
