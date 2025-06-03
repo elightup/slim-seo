@@ -11,6 +11,7 @@ class WPML {
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
 
 		do_action( 'wpml_multilingual_options', 'slim_seo' );
+		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'adjust_fields' ] );
 	}
 
 	public function add_post_links( $post ) {
@@ -56,5 +57,19 @@ class WPML {
 	private function get_languages() {
 		// @codingStandardsIgnoreLine.
 		return array_keys( apply_filters( 'wpml_active_languages', null, [ 'skip_missing' => true ] ) );
+	}
+
+	public function adjust_fields( array $fields ): array {
+		foreach ( $fields as &$field ) {
+			$key = preg_replace( '/^(field-)(.*)(-0)$/', '$2', $field['field_type'] );
+
+			if ( $key === 'title' ) {
+				$field['purpose'] = 'seo_title';
+			} elseif ( $key === 'description' ) {
+				$field['purpose'] = 'seo_meta_description';
+			}
+		}
+
+		return $fields;
 	}
 }
