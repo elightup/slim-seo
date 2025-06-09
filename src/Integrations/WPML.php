@@ -61,11 +61,11 @@ class WPML {
 
 	public function adjust_fields( array $fields ): array {
 		foreach ( $fields as &$field ) {
-            if ( $field['field_type'] === 'field-slim_seo-0-title' ) {
-                $field['purpose'] = 'seo_title';
-            } elseif ( $field['field_type'] === 'field-slim_seo-0-description' ) {
-                $field['purpose'] = 'seo_meta_description';
-            }
+			if ( $field['field_type'] === 'field-slim_seo-0-title' ) {
+				$field['purpose'] = 'seo_title';
+			} elseif ( $field['field_type'] === 'field-slim_seo-0-description' ) {
+				$field['purpose'] = 'seo_meta_description';
+			}
 		}
 
 		return $fields;
