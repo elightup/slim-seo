@@ -1,3 +1,9 @@
+### 4.5.5 - 2025-06-09
+
+- Add support for WPML's new feature: auto limit words for SEO fields
+- Allow to sort redirects by table header
+- Fix SQL injection issue with Redirection logs
+
 ### 4.5.4 - 2025-05-19
 
 - Add type safe check for Bricks

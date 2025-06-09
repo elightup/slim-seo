@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.8.1
 Requires PHP: 7.2
-Stable tag: 4.5.4
+Stable tag: 4.5.5
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,12 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.5.5 - 2025-06-09 =
+
+- Add support for WPML's new feature: auto limit words for SEO fields
+- Allow to sort redirects by table header
+- Fix SQL injection issue with Redirection logs
 
 = 4.5.4 - 2025-05-19 =
 
