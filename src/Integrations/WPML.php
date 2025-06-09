@@ -61,13 +61,11 @@ class WPML {
 
 	public function adjust_fields( array $fields ): array {
 		foreach ( $fields as &$field ) {
-			$key = preg_replace( '/^(field-)(.*)(-0)$/', '$2', $field['field_type'] );
-
-			if ( $key === 'title' ) {
-				$field['purpose'] = 'seo_title';
-			} elseif ( $key === 'description' ) {
-				$field['purpose'] = 'seo_meta_description';
-			}
+            if ( $field['field_type'] === 'field-slim_seo-0-title' ) {
+                $field['purpose'] = 'seo_title';
+            } elseif ( $field['field_type'] === 'field-slim_seo-0-description' ) {
+                $field['purpose'] = 'seo_meta_description';
+            }
 		}
 
 		return $fields;
