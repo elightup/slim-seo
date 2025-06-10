@@ -29,9 +29,14 @@ class Elementor {
 			'elementor-template',
 			'elementor_login',
 			'elementor_register',
+			'login_html_shortcode',
 		];
-		return array_walk( $skipped_page, function ( $page ) use ( $post_content ) {
-			return str_contains( $post_content, $page );
-		} );
+
+		foreach ( $skipped_page as $page ) {
+			if ( str_contains( $post_content, $page ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
