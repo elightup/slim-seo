@@ -24,19 +24,18 @@ class Elementor {
 			return true;
 		}
 
-		$post_content = $post->post_content;
-		$skipped_page = [
+		$elements     = [
 			'elementor-template',
 			'elementor_login',
 			'elementor_register',
 			'login_html_shortcode',
 		];
 
-		foreach ( $skipped_page as $page ) {
-			if ( str_contains( $post_content, $page ) ) {
+		foreach ( $elements as $element ) {
+			if ( str_contains( $post->post_content, $element ) ) {
 				return true;
 			}
 		}
-		return false;
+		return $skip;
 	}
 }
