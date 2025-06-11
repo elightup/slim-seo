@@ -24,7 +24,7 @@ class Elementor {
 			return true;
 		}
 
-		$elements     = [
+		$elements = [
 			'elementor-template',
 			'elementor_login',
 			'elementor_register',
