@@ -13,6 +13,8 @@ class BeaverBuilder {
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 		add_filter( 'slim_seo_taxonomies', [ $this, 'remove_taxonomies' ] );
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
+
+		add_filter( 'slim_seo_allowed_blocks', [ $this, 'allowed_blocks' ] );
 	}
 
 	public function remove_post_types( array $post_types ): array {
@@ -28,5 +30,10 @@ class BeaverBuilder {
 	public function skip_shortcodes( array $shortcodes ): array {
 		$shortcodes[] = 'fl_builder_insert_layout';
 		return $shortcodes;
+	}
+
+	public function allowed_blocks( array $blocks ): array {
+		$blocks[] = 'fl-builder/layout';
+		return $blocks;
 	}
 }
