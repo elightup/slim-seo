@@ -1,3 +1,7 @@
+### 4.5.6 - 2025-06-19
+
+- Ignore Elementor pages if it contains login, register shortcodes or templates, to avoid conflict with their logic
+
 ### 4.5.5 - 2025-06-09
 
 - Add support for WPML's new feature: auto limit words for SEO fields

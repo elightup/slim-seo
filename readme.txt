@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2
 Donate link: https://wpslimseo.com/products/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.8.1
+Tested up to: 6.8.2
 Requires PHP: 7.2
-Stable tag: 4.5.5
+Stable tag: 4.5.6
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,10 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.5.6 - 2025-06-19 =
+
+- Ignore Elementor pages if it contains login, register shortcodes or templates, to avoid conflict with their logic
 
 = 4.5.5 - 2025-06-09 =
 
