@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.8.2
 Requires PHP: 7.2
-Stable tag: 4.5.6
+Stable tag: 4.5.7
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -168,9 +168,13 @@ Add the following constant in your `wp-config.php` file:
 
 == Changelog ==
 
+= 4.5.7 - 2025-06-19 =
+
+Fix not rendering description for posts built with Beaver Builder because BB's block `fl-builder/layout` is ignored.
+
 = 4.5.6 - 2025-06-19 =
 
-- Ignore Elementor pages if it contains login, register shortcodes or templates, to avoid conflict with their logic
+Ignore Elementor pages if it contains login, register shortcodes or templates, to avoid conflict with their logic
 
 = 4.5.5 - 2025-06-09 =
 

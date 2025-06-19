@@ -1,6 +1,10 @@
+### 4.5.7 - 2025-06-19
+
+Fix not rendering description for posts built with Beaver Builder because BB's block `fl-builder/layout` is ignored.
+
 ### 4.5.6 - 2025-06-19
 
-- Ignore Elementor pages if it contains login, register shortcodes or templates, to avoid conflict with their logic
+Ignore Elementor pages if it contains login, register shortcodes or templates, to avoid conflict with their logic
 
 ### 4.5.5 - 2025-06-09
 
