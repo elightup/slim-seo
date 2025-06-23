@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae064411106ee768a4eef1e325d4d977",
+    "content-hash": "3d40c9fe58378ccd78d21ca03093278d",
     "packages": [
         {
             "name": "elightup/slim-twig",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/slim-twig.git",
-                "reference": "04ebb63b2d6c857ce842a1f089803abd4a020d80"
+                "reference": "c5ced434e08cb5d29175d17718ecc4562165f8cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/04ebb63b2d6c857ce842a1f089803abd4a020d80",
-                "reference": "04ebb63b2d6c857ce842a1f089803abd4a020d80",
+                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/c5ced434e08cb5d29175d17718ecc4562165f8cb",
+                "reference": "c5ced434e08cb5d29175d17718ecc4562165f8cb",
                 "shasum": ""
             },
             "require-dev": {
@@ -30,12 +30,16 @@
                     "SlimTwig\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
-            "support": {
-                "issues": "https://github.com/elightup/slim-twig/issues",
-                "source": "https://github.com/elightup/slim-twig/tree/master"
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                }
             },
-            "time": "2024-07-18T04:56:26+00:00"
+            "support": {
+                "source": "https://github.com/elightup/slim-twig/tree/master",
+                "issues": "https://github.com/elightup/slim-twig/issues"
+            },
+            "time": "2025-06-23T02:58:23+00:00"
         }
     ],
     "packages-dev": [],
@@ -49,6 +53,8 @@
     "platform": {
         "php": ">=7.2"
     },
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

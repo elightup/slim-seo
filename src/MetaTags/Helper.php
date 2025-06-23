@@ -2,7 +2,6 @@
 namespace SlimSEO\MetaTags;
 
 use SlimTwig\Renderer;
-use SlimSEO\Helpers\Arr;
 use WP_Block_Type_Registry;
 use WP_Block_Type;
 
@@ -151,10 +150,10 @@ class Helper {
 
 		$render_data = $cache[ $key ];
 
-		if ( ! empty( $data ) ) {
-			$render_data = Arr::merge_recursive( $render_data, $data );
-		}
+		// Render with live data first, non-rendered variables will be kept as they are.
+		$text = Renderer::render( $text, $data );
 
+		// Then render with existing data.
 		return Renderer::render( $text, $render_data );
 	}
 
