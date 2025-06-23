@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d40c9fe58378ccd78d21ca03093278d",
+    "content-hash": "ae064411106ee768a4eef1e325d4d977",
     "packages": [
         {
             "name": "elightup/slim-twig",
@@ -30,14 +30,10 @@
                     "SlimTwig\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "support": {
-                "source": "https://github.com/elightup/slim-twig/tree/master",
-                "issues": "https://github.com/elightup/slim-twig/issues"
+                "issues": "https://github.com/elightup/slim-twig/issues",
+                "source": "https://github.com/elightup/slim-twig/tree/master"
             },
             "time": "2025-06-23T02:58:23+00:00"
         }
@@ -53,8 +49,6 @@
     "platform": {
         "php": ">=7.2"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
