@@ -39,6 +39,7 @@ class Divi {
 		$unsupported = [
 			'project_category',
 			'project_tag',
+			'layout_category',
 		];
 		return array_diff_key( $taxonomies, array_flip( $unsupported ) );
 	}
