@@ -80,26 +80,6 @@ class Data {
 		];
 	}
 
-	private function get_post_terms( $post, $taxonomy ) {
-		$terms = get_the_terms( $post, $taxonomy );
-		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
-	}
-
-	private function get_custom_field_data( $post ): array {
-		if ( ! ( $post instanceof WP_Post ) ) {
-			return [];
-		}
-
-		$meta_values = get_post_meta( $post->ID ) ?: [];
-		$data        = [];
-		foreach ( $meta_values as $key => $value ) {
-			// Plugins like JetEngine can hook to "get_{$object_type}_metadata" to add its data from custom table
-			// which might not follow WordPress standards of auto serialization/unserialization for arrays
-			// so we will add a check to bypass invalid values here.
-			$data[ $key ] = is_array( $value ) ? reset( $value ) : '';
-		}
-		return $data;
-	}
 
 	private function get_other_data(): array {
 		global $page, $paged;
@@ -113,10 +93,6 @@ class Data {
 			'page'    => $paged >= 2 || $page >= 2 ? sprintf( __( 'Page %s', 'slim-seo' ), max( $paged, $page ) ) : '',
 			'sep'     => '{{ sep }}', // Do not replace it yet. See Helper::normalize().
 		];
-	}
-
-	private function normalize( $key ) {
-		return str_replace( '-', '_', $key );
 	}
 
 	/**
