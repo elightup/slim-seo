@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/slim-twig.git",
-                "reference": "5ea75910eb7c1e8d5293d61ef4284af8d4196691"
+                "reference": "c5ced434e08cb5d29175d17718ecc4562165f8cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/5ea75910eb7c1e8d5293d61ef4284af8d4196691",
-                "reference": "5ea75910eb7c1e8d5293d61ef4284af8d4196691",
+                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/c5ced434e08cb5d29175d17718ecc4562165f8cb",
+                "reference": "c5ced434e08cb5d29175d17718ecc4562165f8cb",
                 "shasum": ""
             },
             "require-dev": {
@@ -39,7 +39,7 @@
                 "source": "https://github.com/elightup/slim-twig/tree/master",
                 "issues": "https://github.com/elightup/slim-twig/issues"
             },
-            "time": "2025-06-23T02:51:04+00:00"
+            "time": "2025-06-23T02:58:23+00:00"
         }
     ],
     "packages-dev": [],
