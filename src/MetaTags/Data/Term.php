@@ -3,15 +3,15 @@ namespace SlimSEO\MetaTags\Data;
 
 use SlimSEO\MetaTags\QueriedObject;
 use SlimSEO\MetaTags\Helper;
-use SlimSEO\MetaTags\Data;
+use WP_Term;
 
 class Term {
 	private $term;
-	private $live_data;
+	private $data;
 
-	public function __construct( int $term_id = 0, array $live_data = [] ) {
-		$this->term      = get_term( $term_id ) ?: QueriedObject::get();
-		$this->live_data = $live_data;
+	public function __construct( int $term_id = 0, array $data = [] ) {
+		$this->term = get_term( $term_id ?: QueriedObject::get_id() );
+		$this->data = $data;
 	}
 
 	/**
@@ -22,23 +22,16 @@ class Term {
 	}
 
 	public function __get( string $name ) {
-		if ( ! $this->term ) {
+		if ( ! ( $this->term instanceof WP_Term ) ) {
 			return '';
 		}
 
-		$data  = [
-			'name'    => $this->live_data['term']['name'] ?? $this->term->name,
+		$data  =  [
+			'name'             => $this->data['name'] ?? $this->term->name,
+			'description'      => $this->data['description'] ?? $this->term->description,
+			'auto_description' => $this->data['auto_description'] ?? Helper::truncate( $this->term->description ),
 		];
-		$method = "get_$name";
 
-		return $data[ $name ] ?? $this->$method();
-	}
-
-	private function get_description(): string {
-		return $this->live_data['term']['description'] ?? $this->term->description;
-	}
-
-	private function get_auto_description(): string {
-		return $this->live_data['term']['auto_description'] ?? Helper::truncate( $this->term->description );
+		return $data[ $name ] ?? '';
 	}
 }

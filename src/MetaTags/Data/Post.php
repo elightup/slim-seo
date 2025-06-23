@@ -7,11 +7,11 @@ use SlimSEO\MetaTags\Data;
 
 class Post {
 	private $post;
-	private $live_data;
+	private $data;
 
-	public function __construct( int $post_id = 0, array $live_data = [] ) {
-		$this->post      = get_post( $post_id ?: QueriedObject::get_id() );
-		$this->live_data = $live_data;
+	public function __construct( int $post_id = 0, array $data = [] ) {
+		$this->post = get_post( $post_id ?: QueriedObject::get_id() );
+		$this->data = $data;
 	}
 
 	/**
@@ -22,27 +22,27 @@ class Post {
 	}
 
 	public function __get( string $name ) {
-		if ( ! $this->post ) {
+		if ( empty( $this->post ) ) {
 			return '';
 		}
 
 		$data  = [
-			'title'         => $this->live_data['post']['title'] ?? $this->post->post_title,
-			'excerpt'       => $this->live_data['post']['excerpt'] ?? $this->post->post_excerpt,
+			'title'         => $this->data['title'] ?? $this->post->post_title,
+			'excerpt'       => $this->data['excerpt'] ?? $this->post->post_excerpt,
 			'date'          => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_date_gmt ) ),
 			'modified_date' => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_modified_gmt ) ),
 		];
 		$method = "get_$name";
 
-		return $data[ $name ] ?? $this->$method();
+		return $data[ $name ] ?? ( method_exists( $this, $method ) ? $this->$method() : '' );
 	}
 
 	private function get_content(): string {
-		return $this->live_data['post']['content'] ?? Data::get_post_content( $this->post->ID );
+		return $this->data['content'] ?? Data::get_post_content( $this->post->ID );
 	}
 
 	private function get_auto_description(): string {
-		return $this->live_data['post']['auto_description'] ?? Helper::truncate( $this->post->post_excerpt  ?: $this->get_content() );
+		return $this->data['auto_description'] ?? Helper::truncate( $this->post->post_excerpt  ?: $this->get_content() );
 	}
 
 	private function get_thumbnail() {
@@ -58,10 +58,6 @@ class Post {
 	}
 
 	private function get_custom_field(): array {
-		if ( ! ( $this->post instanceof WP_Post ) ) {
-			return [];
-		}
-
 		$meta_values = get_post_meta( $this->post->ID ) ?: [];
 		$data        = [];
 		foreach ( $meta_values as $key => $value ) {
