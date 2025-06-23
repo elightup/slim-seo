@@ -1,10 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags;
 
-use WP_Post;
-use WP_Term;
 use WP_Post_Type;
-
 class Data {
 	private $data = [];
 
@@ -19,10 +16,10 @@ class Data {
 		$this->term_id = $term_id;
 	}
 
-	public function collect( $live_data ): array {
+	public function collect(): array {
 		$this->data = array_merge(
-			[ 'post' => new Data\Post( $this->post_id, $live_data ) ],
-			[ 'term' => new Data\Term( $this->term_id, $live_data ) ],
+			[ 'post' => new Data\Post( $this->post_id ) ],
+			[ 'term' => new Data\Term( $this->term_id ) ],
 			[ 'post_type' => $this->get_post_type_data() ],
 			[ 'author' => $this->get_author_data() ],
 			[ 'user' => $this->get_user_data() ],

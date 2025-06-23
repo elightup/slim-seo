@@ -2,7 +2,6 @@
 namespace SlimSEO\MetaTags;
 
 use SlimTwig\Renderer;
-use SlimSEO\Helpers\Arr;
 use WP_Block_Type_Registry;
 use WP_Block_Type;
 
@@ -132,7 +131,7 @@ class Helper {
 		return self::normalize( $text );
 	}
 
-	private static function render_dynamic_variables( string $text, int $post_id = 0, int $term_id = 0, array $live_data = [] ): string {
+	private static function render_dynamic_variables( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
 		static $cache = [];
 
 		$key = "{$post_id}:{$term_id}";
@@ -146,16 +145,15 @@ class Helper {
 				$data_object->set_term_id( $term_id );
 			}
 
-			$cache[ $key ] = $data_object->collect( $live_data );
+			$cache[ $key ] = $data_object->collect();
 		}
+
 		$render_data = $cache[ $key ];
-		unset( $live_data['post'] );
-		unset( $live_data['term'] );
 
-		if ( ! empty( $live_data ) ) {
-			$render_data = Arr::merge_recursive( $render_data, $live_data );
-		}
+		// Render with live data first, non-rendered variables will be kept as they are.
+		$text = Renderer::render( $text, $data );
 
+		// Then render with existing data.
 		return Renderer::render( $text, $render_data );
 	}
 

@@ -7,11 +7,9 @@ use WP_Term;
 
 class Term {
 	private $term;
-	private $data;
 
-	public function __construct( int $term_id = 0, array $data = [] ) {
+	public function __construct( int $term_id = 0 ) {
 		$this->term = get_term( $term_id ?: QueriedObject::get_id() );
-		$this->data = $data;
 	}
 
 	/**
@@ -27,9 +25,9 @@ class Term {
 		}
 
 		$data  =  [
-			'name'             => $this->data['name'] ?? $this->term->name,
-			'description'      => $this->data['description'] ?? $this->term->description,
-			'auto_description' => $this->data['auto_description'] ?? Helper::truncate( $this->term->description ),
+			'name'             => $this->term->name,
+			'description'      => $this->term->description,
+			'auto_description' => Helper::truncate( $this->term->description ),
 		];
 
 		return $data[ $name ] ?? '';
