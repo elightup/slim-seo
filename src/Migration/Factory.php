@@ -14,6 +14,8 @@ class Factory {
 				return new Sources\RankMath;
 			case 'seopress':
 				return new Sources\SEOPress;
+			case 'squirrly':
+				return new Sources\SquirrlySEO;
 			case 'redirection':
 				return new Sources\Redirection;
 			case '301-redirects':

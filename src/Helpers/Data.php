@@ -34,6 +34,7 @@ class Data {
 				'seo-framework' => __( 'The SEO Framework', 'slim-seo' ),
 				'rank-math'     => __( 'Rank Math', 'slim-seo' ),
 				'seopress'      => __( 'SEOPress', 'slim-seo' ),
+				'squirrly'      => __( 'Squirrly SEO', 'slim-seo' ),
 			],
 			'redirection' => [
 				'redirection'   => _x( 'Redirection', 'Plugin Name', 'slim-seo' ),
