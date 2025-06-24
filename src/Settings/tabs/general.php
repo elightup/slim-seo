@@ -31,11 +31,21 @@ $features = [
 	'redirection'      => [ __( 'Redirection', 'slim-seo' ), sprintf( __( '<a href="%s" target="_blank">Create redirects</a> for broken pages, unimportant pages, or old URLs to existing working URLs.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/redirection/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
 	'no_category_base' => [ __( 'No category base', 'slim-seo' ), sprintf( __( 'Remove /category/ from your category link (e.g: yoursite.com/category/slim-seo/ to yoursite.com/slim-seo/).', 'slim-seo' ) ) ],
 ];
+?>
 
-echo '<p>', esc_html__( 'Toggle the features you want to use on your website.', 'slim-seo' ), '</p>';
+<p><?php esc_html_e( 'Toggle the features you want to use on your website.', 'slim-seo' );?></p>
 
-foreach ( $features as $key => $text ) {
-	UI::feature_box( 'slim_seo[features][]', $key, $this->is_feature_active( $key ), $text[0], $text[1] );
-}
+<div class="ss-general-tab-content">
+	<div class="ss-features">
+		<?php
+		foreach ( $features as $key => $text ) {
+			UI::feature_box( 'slim_seo[features][]', $key, $this->is_feature_active( $key ), $text[0], $text[1] );
+		}
+		?>
+	</div>
 
+	<?php do_action( 'slim_seo_general_tab_content' ); ?>
+</div>
+
+<?php
 submit_button( __( 'Save Changes', 'slim-seo' ) );
