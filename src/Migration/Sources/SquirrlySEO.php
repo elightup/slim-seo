@@ -3,6 +3,7 @@ namespace SlimSEO\Migration\Sources;
 
 class SquirrlySEO extends Source {
 	protected $constant = 'SQ_VERSION';
+	private $object = 'post';
 	private $post;
 	private $term;
 
@@ -11,14 +12,20 @@ class SquirrlySEO extends Source {
 	}
 
 	protected function before_migrate_term( $term_id ) {
+		$this->object = 'term';
 		$this->term = $this->before_migrate( $term_id );
 	}
 
 	private function before_migrate( $object_id ) {
 		global $wpdb;
 		$table = $wpdb->prefix . _SQ_DB_;
-		$seo = $wpdb->get_var( $wpdb->prepare( "SELECT seo FROM `$table` WHERE `url` = %s", get_term_link( $object_id ) ) );
 
+		$link = get_permalink( $object_id );
+		if( 'term' === $this->object ) {
+			$link = get_term_link( $object_id );
+		}
+
+		$seo = $wpdb->get_var( $wpdb->prepare( "SELECT seo FROM `$table` WHERE `url` = %s", $link ) );
 		return \SQ_Classes_ObjController::getDomain( 'SQ_Models_Domain_Sq', maybe_unserialize( $seo ) );
 	}
 
