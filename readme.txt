@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.8.2
 Requires PHP: 7.2
-Stable tag: 4.5.7
+Stable tag: 4.6.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,12 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.6.0 - 2025-06-30 =
+
+- Add support for migrating data from Squirrly SEO
+- Disable LinkedIn tags by default as many users don't config the `display_name` for authors, which will expose authors' usernames. For those who want to use LinkedIn tags, please use this snippet: `add_filter( 'slim_seo_linkedin_tags', '__return_true' );`
+- Improve the performance of parsing dynamic tags
 
 = 4.5.7 - 2025-06-19 =
 

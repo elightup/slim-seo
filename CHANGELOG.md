@@ -1,3 +1,9 @@
+### 4.6.0 - 2025-06-30
+
+- Add support for migrating data from Squirrly SEO
+- Disable LinkedIn tags by default as many users don't config the `display_name` for authors, which will expose authors' usernames. For those who want to use LinkedIn tags, please use this snippet: `add_filter( 'slim_seo_linkedin_tags', '__return_true' );`
+- Improve the performance of parsing dynamic tags
+
 ### 4.5.7 - 2025-06-19
 
 Fix not rendering description for posts built with Beaver Builder because BB's block `fl-builder/layout` is ignored.
