@@ -12,6 +12,8 @@ class Container {
 
 		$services['upgrade'] = new Upgrade;
 
+		$services['featured_plugins'] = new FeaturedPlugins;
+
 		$services['meta_tags_hook']   = new MetaTags\Hook;
 		$services['canonical_url']    = new MetaTags\CanonicalUrl;
 		$services['meta_title']       = new MetaTags\Title;
