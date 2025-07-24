@@ -5,7 +5,7 @@
  * Description: A fast and automated SEO plugin for WordPress.
  * Author:      Slim SEO
  * Author URI:  https://wpslimseo.com
- * Version:     4.6.0
+ * Version:     4.6.1
  * License:     GPL v3
  *
  * Copyright (C) 2010-2025 Tran Ngoc Tuan Anh. All rights reserved.
@@ -32,7 +32,7 @@ define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
 define( 'SLIM_SEO_REDIRECTS', 'ss_redirects' );
 define( 'SLIM_SEO_DELETE_404_LOGS_ACTION', 'delete_404_logs' );
-define( 'SLIM_SEO_VER', '4.6.0' );
+define( 'SLIM_SEO_VER', '4.6.1' );
 define( 'SLIM_SEO_DB_VER', 1 );
 
 require __DIR__ . '/vendor/autoload.php';
