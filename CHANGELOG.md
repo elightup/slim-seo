@@ -1,4 +1,10 @@
+### 4.6.2 - 2025-07-24
+
+Fix normalizing URL when saving to the database
+
 ### 4.6.1 - 2025-07-24
+
+- Fix normalizing URL when saving to the database
 
 - Fix normalizing URL when saving to the database
 - Remove duplicated HTML input names for toggles
