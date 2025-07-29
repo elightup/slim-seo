@@ -14,8 +14,9 @@ class WPML {
 		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'adjust_fields' ] );
 	}
 
-	public function add_post_links( $post ) {
-		$languages = $this->get_languages();
+	public function add_post_links( \WP_Post $post ): void {
+		$original_url = get_permalink( $post );
+		$languages    = $this->get_languages();
 
 		foreach ( $languages as $language ) {
 			// @codingStandardsIgnoreLine.
@@ -25,7 +26,11 @@ class WPML {
 			}
 
 			// @codingStandardsIgnoreLine.
-			$url = apply_filters( 'wpml_permalink', get_permalink( $post_id ), $language, true );
+			$url = apply_filters( 'wpml_permalink', $original_url, $language, true );
+			if ( $url === $original_url ) {
+				continue;
+			}
+
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
 				esc_attr( $language ),
@@ -34,8 +39,9 @@ class WPML {
 		}
 	}
 
-	public function add_term_links( $term ) {
-		$languages = $this->get_languages();
+	public function add_term_links( \WP_Term $term ): void {
+		$original_url = get_term_link( $term );
+		$languages    = $this->get_languages();
 
 		foreach ( $languages as $language ) {
 			// @codingStandardsIgnoreLine.
@@ -45,7 +51,11 @@ class WPML {
 			}
 
 			// @codingStandardsIgnoreLine.
-			$url = apply_filters( 'wpml_permalink', get_term_link( $term_id ), $language, true );
+			$url = apply_filters( 'wpml_permalink', $original_url, $language, true );
+			if ( $url === $original_url ) {
+				continue;
+			}
+
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
 				esc_attr( $language ),

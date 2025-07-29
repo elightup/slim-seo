@@ -32,12 +32,15 @@ class TranslatePress {
 			 * We have to use the Yoast SEO's filter name to make it work.
 			 * This will be removed when TranslatePress adds support for Slim SEO's hooks.
 			 */
-			$url = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
+			$translated_url = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
+			if ( $translated_url === $url ) {
+				continue;
+			}
 
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
 				esc_attr( $language ),
-				esc_url( $url )
+				esc_url( $translated_url )
 			);
 		}
 	}
