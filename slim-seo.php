@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: Slim SEO
- * Plugin URI:  https://wpslimseo.com
+ * Plugin URI:  https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
  * Description: A fast and automated SEO plugin for WordPress.
  * Author:      Slim SEO
- * Author URI:  https://wpslimseo.com
+ * Author URI:  https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
  * Version:     4.6.1
  * License:     GPL v3
  *
