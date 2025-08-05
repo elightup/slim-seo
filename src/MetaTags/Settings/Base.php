@@ -25,13 +25,6 @@ abstract class Base {
 		] );
 	}
 
-	public function general_tab(): void {
-		wp_nonce_field( 'save', 'ss_nonce' );
-		?>
-		<div id="ss-single"></div>
-		<?php
-	}
-
 	public function render(): void {
 		$tabs = apply_filters( 'slim_seo_metabox_tabs', [] );
 
@@ -56,7 +49,14 @@ abstract class Base {
 
 		<?php
 		$panes = apply_filters( 'slim_seo_metabox_panels', [] );
-		echo implode( '', $panes ); // @codingStandardsIgnoreLine.
+		echo implode( '', $panes ); // phpcs:ignore
+	}
+
+	public function general_tab(): void {
+		wp_nonce_field( 'save', 'ss_nonce' );
+		?>
+		<div id="ss-single"></div>
+		<?php
 	}
 
 	public function save( $object_id ) {
