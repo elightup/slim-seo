@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.8.2
 Requires PHP: 7.2
-Stable tag: 4.6.1
+Stable tag: 4.6.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,10 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+### 4.6.2 - 2025-08-13
+
+- Multilingual sitemap: only output translated versions if available
 
 = 4.6.1 - 2025-07-29 =
 
