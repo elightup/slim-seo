@@ -2,14 +2,17 @@
 namespace SlimSEO\Integrations;
 
 class TranslatePress {
-	private $trp;
+	private $url_converter;
+	private $settings;
 
 	public function is_active(): bool {
 		return defined( 'TRP_PLUGIN_VERSION' );
 	}
 
-	public function setup() {
-		$this->trp = \TRP_Translate_Press::get_trp_instance();
+	public function setup(): void {
+		$trp                 = \TRP_Translate_Press::get_trp_instance();
+		$this->url_converter = $trp->get_component( 'url_converter' );
+		$this->settings      = $trp->get_component( 'settings' );
 
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
@@ -46,16 +49,11 @@ class TranslatePress {
 	}
 
 	public function get_url( string $url, string $language ): string {
-		// Remove TranslatePress callback for this hook to avoid potential errors.
-		remove_all_actions( 'wpseo_sitemap_url' );
-
-		$url_converter = $this->trp->get_component( 'url_converter' );
-		return $url_converter->get_url_for_language( $language, $url, '' );
+		return $this->url_converter->get_url_for_language( $language, $url, '' );
 	}
 
 	private function get_languages(): array {
-		$trp_settings = $this->trp->get_component( 'settings' );
-		$settings     = $trp_settings->get_settings();
+		$settings = $this->settings->get_settings();
 
 		return array_diff( $settings['publish-languages'], [ $settings['default-language'] ] );
 	}
