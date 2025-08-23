@@ -12,16 +12,19 @@
 }
 
 .ss-success:after {
-	content: "\2713";
+	content: "✓";
 	background: #70d028;
 }
 
 .ss-warning:after {
 	content: "!";
 	background: #fe9a00;
+	border-radius: 0;
+	height: 10.3932px; // 12 * \/3
+	clip-path: polygon(50% 0%, 0 100%, 100% 100%);
 }
 
 .ss-danger:after {
-	content: "\2717";
+	content: "✕";
 	background: #e53e3e;
 }
