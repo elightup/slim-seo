@@ -30,7 +30,6 @@ class Settings {
 	public function enqueue() {
 		$this->db_log->create_table();
 
-		wp_enqueue_style( 'slim-seo-react-tabs', SLIM_SEO_URL . 'css/react-tabs.css', [], filemtime( SLIM_SEO_DIR . '/css/react-tabs.css' ) );
 		wp_enqueue_style( 'slim-seo-redirection', SLIM_SEO_URL . 'css/redirection.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/redirection.css' ) );
 
 		Assets::enqueue_build_js( 'redirection', 'SSRedirection', [
