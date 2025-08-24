@@ -1,5 +1,5 @@
-=== Slim SEO - Fast & Automated WordPress SEO Plugin ===
-Contributors: elightup, rilwis, hungviet91, barcavn2
+=== Slim SEO - A Fast & Automated SEO Plugin For WordPress ===
+Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
@@ -87,6 +87,8 @@ Upgrade to [Slim SEO Pro](https://elu.to/wrp) to have access to advanced SEO fea
 - Real-time link health monitoring
 - Broken link repair
 - Link updater
+- View search performance with Google Search Console integration
+- Improve your content with writing assistant
 
 [Get Slim SEO Pro now](https://elu.to/wrp).
 
