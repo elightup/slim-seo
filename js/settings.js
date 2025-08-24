@@ -18,17 +18,37 @@
 		document.querySelector( e.target.getAttribute( 'href' ) ).classList.add( 'ss-is-active' );
 	}
 
-	function activateFirstTab() {
-		const hash = location.hash || tabs[ 0 ].getAttribute( 'href' );
+	function activateTab( tab ) {
+		const tabElement = document.querySelector( `a[href="${ tab }"]` );
+		const paneElement = document.querySelector( tab );
 
-		document.querySelector( `a[href="${ hash }"]` ).classList.add( 'ss-is-active' );
-		document.querySelector( hash ).classList.add( 'ss-is-active' );
+		if ( !tabElement || !paneElement ) {
+			return false;
+		}
+
+		tabElement.classList.add( 'ss-is-active' );
+		paneElement.classList.add( 'ss-is-active' );
+
+		return true;
+	}
+
+	function activateDefaultTab() {
+		let hash = location.hash;
+		let result = false;
+
+		if ( hash ) {
+			result = activateTab( hash );
+		}
+
+		if ( !result ) {
+			hash = tabs[ 0 ].getAttribute( 'href' );
+			activateTab( hash );
+		}
 	}
 
 	document.querySelector( '.ss-tab-list' ).addEventListener( 'click', clickHandle );
 
-	activateFirstTab();
-
+	activateDefaultTab();
 
 	const openMediaPopup = () => {
 		let frame;
