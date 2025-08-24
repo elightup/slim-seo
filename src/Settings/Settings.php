@@ -58,11 +58,8 @@ class Settings {
 		return $panes;
 	}
 
-	public function enqueue() {
-		wp_enqueue_style( 'slim-seo-settings', SLIM_SEO_URL . 'css/settings.css', [], filemtime( SLIM_SEO_DIR . '/css/settings.css' ) );
+	public function enqueue(): void {
 		$this->meta_tags->enqueue();
-
-		wp_enqueue_script( 'slim-seo-settings', SLIM_SEO_URL . 'js/settings.js', [], filemtime( SLIM_SEO_DIR . '/js/settings.js' ), true );
 
 		wp_enqueue_script( 'slim-seo-migrate', SLIM_SEO_URL . 'js/migrate.js', [], filemtime( SLIM_SEO_DIR . '/js/migrate.js' ), true );
 		wp_localize_script( 'slim-seo-migrate', 'ssMigration', [
