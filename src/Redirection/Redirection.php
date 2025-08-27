@@ -9,6 +9,7 @@ class Redirection {
 	public function __construct( DbRedirects $db_redirects ) {
 		$this->db_redirects = $db_redirects;
 
+		add_action( 'login_init', [ $this, 'redirect' ], 1 );
 		add_action( 'template_redirect', [ $this, 'redirect' ], 1 );
 		add_action( 'template_redirect', [ $this, 'redirect_www' ], 5 );
 		add_action( 'template_redirect', [ $this, 'auto_redirection' ], 10 );

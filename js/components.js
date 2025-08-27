@@ -1,3 +1,27 @@
+/*
+## Purpose
+
+Global JS components that are used across Slim SEO free and pro pages.
+- Admin settings page: Settings > Slim SEO
+- Edit post: All posts > Add new/Edit post
+
+## Components
+
+Only general, multi-purpose components are included here:
+
+- Tabs: used for settings page and SEO meta box when any premium plugin is active
+
+## How to use
+
+In all plugins, enqueue the following file:
+
+```php
+wp_enqueue_script( 'slim-seo-components', 'https://cdn.jsdelivr.net/gh/elightup/slim-seo@master/js/components.js', [], '1.0.0', true );
+```
+
+Replace version with the latest version of the plugin.
+*/
+
 ( function( document, location ) {
 	const tabs = document.querySelectorAll( '.ss-tab' ),
 		panes = document.querySelectorAll( '.ss-tab-pane' );
@@ -49,36 +73,4 @@
 	document.querySelector( '.ss-tab-list' ).addEventListener( 'click', clickHandle );
 
 	activateDefaultTab();
-
-	const openMediaPopup = () => {
-		let frame;
-
-		const clickHandle = e => {
-			e.preventDefault();
-
-			// Create a frame only if needed.
-			if ( !frame ) {
-				frame = wp.media( {
-					multiple: false,
-					title: ss.mediaPopupTitle
-				} );
-			}
-
-			frame.open();
-
-			// Remove all attached 'select' event.
-			frame.off( 'select' );
-
-			// Handle selection.
-			frame.on( 'select', () => {
-				const url = frame.state().get( 'selection' ).first().toJSON().url;
-				e.target.parentElement.previousElementSibling.value = url;
-			} );
-		};
-
-		const selectButtons = document.querySelectorAll( '.ss-select-image' );
-		selectButtons.forEach( button => button.addEventListener( 'click', clickHandle ) );
-	};
-	openMediaPopup();
-
 } )( document, location );

@@ -2,6 +2,10 @@
 namespace SlimSEO\MetaTags;
 
 class LinkedIn {
+	public function is_active(): bool {
+		return apply_filters( 'slim_seo_linkedin_tags', false );
+	}
+
 	public function setup(): void {
 		add_action( 'slim_seo_head', [ $this, 'output' ] );
 	}

@@ -1,14 +1,12 @@
 <?php
 /**
- * Plugin Name:       Slim SEO
- * Plugin URI:        https://wpslimseo.com
- * Description:       A fast and automated SEO plugin for WordPress.
- * Author:            Slim SEO
- * Author URI:        https://wpslimseo.com
- * Version:           4.5.0
- * Text Domain:       slim-seo
- * License:           GPL v3
- * GitHub Plugin URI: elightup/slim-seo
+ * Plugin Name: Slim SEO
+ * Plugin URI:  https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
+ * Description: A fast and automated SEO plugin for WordPress.
+ * Author:      Slim SEO
+ * Author URI:  https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
+ * Version:     4.6.2
+ * License:     GPL v3
  *
  * Copyright (C) 2010-2025 Tran Ngoc Tuan Anh. All rights reserved.
  *
@@ -34,7 +32,7 @@ define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
 define( 'SLIM_SEO_REDIRECTS', 'ss_redirects' );
 define( 'SLIM_SEO_DELETE_404_LOGS_ACTION', 'delete_404_logs' );
-define( 'SLIM_SEO_VER', '4.5.0' );
+define( 'SLIM_SEO_VER', '4.6.2' );
 define( 'SLIM_SEO_DB_VER', 1 );
 
 require __DIR__ . '/vendor/autoload.php';

@@ -1,0 +1,43 @@
+/*
+## Purpose
+
+Global CSS components that are used across Slim SEO free and pro pages.
+- Admin settings page: Settings > Slim SEO
+- Columns in post list table: All posts
+- Edit post: All posts > Add new/Edit post
+- Edit term: All posts > Categories/Tags > Add new/Edit term
+
+## Components
+
+Variables and only general, multi-purpose components are included here.
+
+## How to use
+
+In all plugins, enqueue the following file:
+
+```php
+wp_enqueue_style( 'slim-seo-components', 'https://cdn.jsdelivr.net/gh/elightup/slim-seo@master/css/components.css', [], '1.0.0' );
+```
+
+Replace version with the latest version of the plugin.
+*/
+
+@use 'components/variables';
+
+/*
+- Index column in post list table
+- Edit post: writing assistant, link manager (no follow column)
+*/
+@use 'components/status-icons';
+
+/*
+- Settings page
+- Tabs for SEO meta box when any premium plugin is active
+*/
+@use 'components/tabs';
+
+/*
+- Settings page: redirection, meta tags
+- Edit post: link manager
+*/
+@use 'react-tabs';

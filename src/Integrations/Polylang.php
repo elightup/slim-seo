@@ -39,7 +39,7 @@ class Polylang {
 		return $ignore || $is_translation;
 	}
 
-	public function add_post_links( $post ) {
+	public function add_post_links( \WP_Post $post ): void {
 		$translations = pll_get_post_translations( $post->ID );
 		foreach ( $translations as $code => $post_id ) {
 			printf(
@@ -50,7 +50,7 @@ class Polylang {
 		}
 	}
 
-	public function add_term_links( $term ) {
+	public function add_term_links( \WP_Term $term ): void {
 		$translations = pll_get_term_translations( $term->term_id );
 		foreach ( $translations as $code => $term_id ) {
 			printf(

@@ -91,22 +91,23 @@ class Breadcrumbs {
 			return '';
 		}
 
-		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s">', __( 'Breadcrumbs', 'slim-seo' ) );
+		$output = sprintf( '<nav class="breadcrumbs" aria-label="%s">', esc_attr__( 'Breadcrumbs', 'slim-seo' ) );
 
 		// Links.
 		$items    = [];
 		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
-			$items[] = sprintf( $template, $item['url'], $class, $item['text'], $i + 1 );
+			$items[] = sprintf( $template, esc_url( $item['url'] ), esc_attr( $class ), esc_html( $item['text'] ), $i + 1 );
 		}
 
 		// Current page.
 		if ( 'true' === $this->args['display_current'] ) {
-			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', $this->current );
+			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', esc_html( $this->current ) );
 		}
 
-		$output .= implode( " <span class='breadcrumbs__separator' aria-hidden='true'>{$this->args['separator']}</span> ", $items );
+		$sep     = esc_html( $this->args['separator'] );
+		$output .= implode( " <span class='breadcrumbs__separator' aria-hidden='true'>{$sep}</span> ", $items );
 		$output .= '</nav>';
 
 		return $output;

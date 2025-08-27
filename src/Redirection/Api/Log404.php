@@ -49,10 +49,20 @@ class Log404 extends Base {
 	}
 
 	public function get_logs( WP_REST_Request $request ): array {
-		$order_by = sanitize_text_field( $request->get_param( 'orderBy' ) );
-		$sort     = sanitize_text_field( $request->get_param( 'sort' ) );
-		$limit    = (int) $request->get_param( 'limit' );
-		$offset   = (int) $request->get_param( 'offset' );
+		$order_by         = sanitize_text_field( $request->get_param( 'orderBy' ) );
+		$sort             = sanitize_text_field( $request->get_param( 'sort' ) );
+		$limit            = (int) $request->get_param( 'limit' );
+		$offset           = (int) $request->get_param( 'offset' );
+		$allowed_order_by = [ 'updated_at', 'hit', 'created_at' ];
+		$allowed_sort     = [ 'asc', 'desc' ];
+
+		if ( ! in_array( $order_by, $allowed_order_by, true ) ) {
+			$order_by = 'updated_at';
+		}
+
+		if ( ! in_array( $sort, $allowed_sort, true ) ) {
+			$sort = 'desc';
+		}
 
 		return $this->db_log->list( $order_by, $sort, $limit, $offset );
 	}

@@ -2,7 +2,6 @@
 namespace SlimSEO\MetaTags;
 
 use SlimTwig\Renderer;
-use SlimSEO\Helpers\Arr;
 use WP_Block_Type_Registry;
 use WP_Block_Type;
 
@@ -91,9 +90,9 @@ class Helper {
 	private static function set_allowed_blocks(): void {
 		$block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
 
-		// Do not parse dynamic blocks.
+		// Do not parse dynamic blocks, except core/heading (which is dynamic!)
 		$block_types = array_filter( $block_types, function ( WP_Block_Type $block ): bool {
-			return ! $block->is_dynamic();
+			return $block->name === 'core/heading' || ! $block->is_dynamic();
 		} );
 
 		$block_names    = array_keys( $block_types );
@@ -151,10 +150,10 @@ class Helper {
 
 		$render_data = $cache[ $key ];
 
-		if ( ! empty( $data ) ) {
-			$render_data = Arr::merge_recursive( $render_data, $data );
-		}
+		// Render with live data first, non-rendered variables will be kept as they are.
+		$text = Renderer::render( $text, $data );
 
+		// Then render with existing data.
 		return Renderer::render( $text, $render_data );
 	}
 
