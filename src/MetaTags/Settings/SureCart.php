@@ -13,8 +13,10 @@ class SureCart extends Base {
 
 		add_action( 'admin_print_styles-surecart_page_sc-products', [ $this, 'enqueue' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
-		add_action( 'save_post', [ $this, 'save' ] );
+		// add_action( 'add_meta_box_sc_product', [ $this, 'add_meta_box' ] );
+		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 
+		add_action( 'save_post', [ $this, 'save' ] );
 		add_filter( 'slim_seo_variables', [ $this, 'add_variables' ] );
 		add_filter( 'slim_seo_data', [ $this, 'add_data' ], 10, 3 );
 	}
@@ -25,6 +27,7 @@ class SureCart extends Base {
 
 	public function add_meta_box() {
 		$post_types = $this->get_types();
+
 		foreach ( $post_types as $post_type ) {
 			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ $this, 'render' ], $post_type, 'normal', 'low' );
 		}
@@ -36,6 +39,13 @@ class SureCart extends Base {
 
 	protected function get_object_id() {
 		return get_the_ID();
+	}
+
+	public function remove_post_types( array $post_types ): array {
+		$unsupported = [
+			'sc_upsell',
+		];
+		return array_diff_key( $post_types, array_flip( $unsupported ) );
 	}
 
 	public function add_variables( $variables ) {

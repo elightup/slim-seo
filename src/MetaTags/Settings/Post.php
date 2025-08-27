@@ -33,17 +33,9 @@ class Post extends Base {
 
 	public function get_types() {
 		$post_types = array_keys( Data::get_post_types() );
-		$post_types = array_diff( $post_types, $this->ignore_post_types() );
 		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );
 
 		return $post_types;
-	}
-
-	public function ignore_post_types(){
-		return [
-			'sc_product',
-			'sc_upsell',
-		];
 	}
 
 	protected function get_object_id() {
