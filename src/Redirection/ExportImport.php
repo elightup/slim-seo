@@ -91,6 +91,10 @@ class ExportImport extends Base {
 		$added            = false;
 
 		for ( $i = 1; $i < $redirects_amount; $i++ ) {
+			if ( empty( $rows[ $i ] ) ) {
+				continue;
+			}
+
 			$redirect = array_combine( [
 				'type',
 				'condition',
