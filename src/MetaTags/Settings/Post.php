@@ -8,7 +8,9 @@ class Post extends Base {
 		$this->object_type = 'post';
 		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
 		add_action( 'admin_print_styles-post-new.php', [ $this, 'enqueue' ] );
-		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
+		add_action( 'slim_seo_metabox_tabs', [ $this, 'tabs' ], 10 );
+		add_action( 'slim_seo_metabox_panels', [ $this, 'panels' ], 10 );
+		add_action( 'slim_seo_metabox_content', [ $this, 'content' ], 10 );
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
 
@@ -16,26 +18,42 @@ class Post extends Base {
 		$post_types = $this->get_types();
 		$screen     = get_current_screen();
 
-		if ( in_array( $screen->post_type, $post_types ) ) {
+		if ( in_array( $screen->post_type, $post_types, true ) ) {
 			parent::enqueue();
 		}
 	}
 
-	public function add_meta_box() {
-		$context  = apply_filters( 'slim_seo_meta_box_context', 'normal' );
-		$priority = apply_filters( 'slim_seo_meta_box_priority', 'low' );
+	public function tabs( $tabs ) {
+		$tabs['general'] = esc_html__( 'General', 'slim-seo' );
 
-		$post_types = $this->get_types();
-		foreach ( $post_types as $post_type ) {
-			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ $this, 'render' ], $post_type, $context, $priority );
-		}
+		return $tabs;
+	}
+
+	public function content() {
+		wp_nonce_field( 'save', 'ss_nonce' );
+		?>
+
+		<div id="ss-single"></div>
+
+		<?php
+	}
+
+	public function panels( $panels ) {
+		ob_start();
+		?>
+
+		<div id="general" class="ss-tab-pane">
+			<?php $this->content(); ?>
+		</div>
+
+		<?php
+		$panels['general'] = ob_get_clean();
+
+		return $panels;
 	}
 
 	public function get_types() {
-		$post_types = array_keys( Data::get_post_types() );
-		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );
-
-		return $post_types;
+		return Data::get_metabox_post_types();
 	}
 
 	protected function get_object_id() {

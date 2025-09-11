@@ -26,30 +26,10 @@ abstract class Base {
 	}
 
 	public function render(): void {
-		$tabs = apply_filters( 'slim_seo_metabox_tabs', [] );
-
-		if ( empty( $tabs ) ) {
-			$this->general_tab();
-			return;
-		}
+		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
-
-		<nav class="ss-tab-list">
-			<a href="#general" class="ss-tab"><?php esc_html_e( 'General', 'slim-seo' ); ?></a>
-			<?php
-			foreach ( $tabs as $key => $label ) {
-				printf( '<a href="#%s" class="ss-tab">%s</a>', esc_attr( $key ), esc_html( $label ) );
-			}
-			?>
-		</nav>
-
-		<div id="general" class="ss-tab-pane">
-			<?php $this->general_tab(); ?>
-		</div>
-
+		<div id="ss-single"></div>
 		<?php
-		$panes = apply_filters( 'slim_seo_metabox_panels', [] );
-		echo implode( '', $panes ); // phpcs:ignore
 	}
 
 	public function general_tab(): void {
