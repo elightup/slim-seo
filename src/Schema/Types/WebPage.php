@@ -15,7 +15,7 @@ class WebPage extends Base {
 			'description' => $this->description->get_description(),
 		];
 
-		if ( is_post_type_archive() || is_tax() || is_category() || is_tag() || is_date() ) {
+		if ( is_post_type_archive() || is_tax() || is_category() || is_tag() || is_date() || is_home() ) {
 			$schema['@type'] = 'CollectionPage';
 		}
 
