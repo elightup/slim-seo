@@ -120,7 +120,10 @@ class Container {
 		do_action( 'slim_seo_init', $this );
 
 		Settings\Page::setup();
+		Settings\Post::setup();
+
 		$settings = $this->services['settings'];
+
 		foreach ( $this->services as $id => $service ) {
 			if ( ! $settings->is_feature_active( $id ) ) {
 				if ( method_exists( $service, 'deactivate' ) ) {
