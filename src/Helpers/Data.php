@@ -55,7 +55,7 @@ class Data {
 		return $posts;
 	}
 
-	public static function get_metabox_post_types() {
+	public static function get_meta_box_post_types(): array {
 		$post_types = array_keys( self::get_post_types() );
 		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );
 

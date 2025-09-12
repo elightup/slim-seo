@@ -25,20 +25,6 @@ abstract class Base {
 		] );
 	}
 
-	public function render(): void {
-		wp_nonce_field( 'save', 'ss_nonce' );
-		?>
-		<div id="ss-single"></div>
-		<?php
-	}
-
-	public function general_tab(): void {
-		wp_nonce_field( 'save', 'ss_nonce' );
-		?>
-		<div id="ss-single"></div>
-		<?php
-	}
-
 	public function save( $object_id ) {
 		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) || empty( $_POST ) ) {
 			return;

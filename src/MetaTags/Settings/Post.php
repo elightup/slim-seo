@@ -8,9 +8,9 @@ class Post extends Base {
 		$this->object_type = 'post';
 		add_action( 'admin_print_styles-post.php', [ $this, 'enqueue' ] );
 		add_action( 'admin_print_styles-post-new.php', [ $this, 'enqueue' ] );
-		add_action( 'slim_seo_metabox_tabs', [ $this, 'tabs' ], 10 );
-		add_action( 'slim_seo_metabox_panels', [ $this, 'panels' ], 10 );
-		add_action( 'slim_seo_metabox_content', [ $this, 'content' ], 10 );
+		add_filter( 'slim_seo_meta_box_tabs', [ $this, 'tabs' ], 10 );
+		add_filter( 'slim_seo_meta_box_panels', [ $this, 'panels' ], 10 );
+		add_action( 'slim_seo_meta_box_content', [ $this, 'content' ], 10 );
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
 
@@ -23,13 +23,13 @@ class Post extends Base {
 		}
 	}
 
-	public function tabs( $tabs ) {
+	public function tabs( array $tabs ): array {
 		$tabs['general'] = esc_html__( 'General', 'slim-seo' );
 
 		return $tabs;
 	}
 
-	public function content() {
+	public function content(): void {
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
 
@@ -38,7 +38,7 @@ class Post extends Base {
 		<?php
 	}
 
-	public function panels( $panels ) {
+	public function panels( array $panels ): array {
 		ob_start();
 		?>
 
@@ -53,7 +53,7 @@ class Post extends Base {
 	}
 
 	public function get_types() {
-		return Data::get_metabox_post_types();
+		return Data::get_meta_box_post_types();
 	}
 
 	protected function get_object_id() {

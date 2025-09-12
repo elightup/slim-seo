@@ -11,7 +11,7 @@ class Post {
 	}
 
 	public static function enqueue(): void {
-		$tabs = apply_filters( 'slim_seo_metabox_tabs', [] );
+		$tabs = apply_filters( 'slim_seo_meta_box_tabs', [] );
 
 		if ( count( $tabs ) > 1 ) {
 			wp_enqueue_script( 'slim-seo-components', 'https://cdn.jsdelivr.net/gh/elightup/slim-seo@master/js/components.js', [], '1.0.0', true );
@@ -21,7 +21,7 @@ class Post {
 	public static function add_meta_box() {
 		$context    = apply_filters( 'slim_seo_meta_box_context', 'normal' );
 		$priority   = apply_filters( 'slim_seo_meta_box_priority', 'low' );
-		$post_types = Data::get_metabox_post_types();
+		$post_types = Data::get_meta_box_post_types();
 
 		foreach ( $post_types as $post_type ) {
 			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ __CLASS__, 'render' ], $post_type, $context, $priority );
@@ -29,14 +29,14 @@ class Post {
 	}
 
 	public static function render(): void {
-		$tabs = apply_filters( 'slim_seo_metabox_tabs', [] );
+		$tabs = apply_filters( 'slim_seo_meta_box_tabs', [] );
 
 		if ( empty( $tabs ) ) {
 			return;
 		}
 
 		if ( 1 === count( $tabs ) ) {
-			do_action( 'slim_seo_metabox_content' );
+			do_action( 'slim_seo_meta_box_content' );
 
 			return;
 		}
@@ -51,7 +51,7 @@ class Post {
 		</nav>
 
 		<?php
-		$panes = apply_filters( 'slim_seo_metabox_panels', [] );
+		$panes = apply_filters( 'slim_seo_meta_box_panels', [] );
 
 		echo implode( '', $panes ); // phpcs:ignore
 	}

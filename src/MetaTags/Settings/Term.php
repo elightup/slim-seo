@@ -9,6 +9,13 @@ class Term extends Base {
 		add_action( 'init', [ $this, 'register_hooks' ], 99 );
 	}
 
+	public function render(): void {
+		wp_nonce_field( 'save', 'ss_nonce' );
+		?>
+		<div id="ss-single"></div>
+		<?php
+	}
+
 	public function register_hooks(): void {
 		add_action( 'admin_print_styles-term.php', [ $this, 'enqueue' ] );
 
