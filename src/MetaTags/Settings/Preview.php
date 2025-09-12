@@ -19,35 +19,41 @@ class Preview {
 		register_rest_route( 'slim-seo', 'meta-tags/render_post_title', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_title' ],
-			'permission_callback' => [ $this, 'has_permission' ],
+			'permission_callback' => [ $this, 'has_post_permission' ],
 		] );
 
 		register_rest_route( 'slim-seo', 'meta-tags/render_term_title', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_title' ],
-			'permission_callback' => [ $this, 'has_permission' ],
+			'permission_callback' => [ $this, 'has_term_permission' ],
 		] );
 
 		register_rest_route( 'slim-seo', 'meta-tags/render_post_description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_description' ],
-			'permission_callback' => [ $this, 'has_permission' ],
+			'permission_callback' => [ $this, 'has_post_permission' ],
 		] );
 
 		register_rest_route( 'slim-seo', 'meta-tags/render_term_description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_description' ],
-			'permission_callback' => [ $this, 'has_permission' ],
+			'permission_callback' => [ $this, 'has_term_permission' ],
 		] );
 
 		register_rest_route( 'slim-seo', 'meta-tags/render_text', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_text' ],
-			'permission_callback' => [ $this, 'has_permission' ],
+			'permission_callback' => [ $this, 'has_post_permission' ],
 		] );
 	}
 
-	public function has_permission(): bool {
+	public function has_post_permission( WP_REST_Request $request ): bool {
+		$post_id = (int) $request->get_param('ID');
+
+		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
+	}
+
+	public function has_term_permission(): bool {
 		return current_user_can( 'edit_posts' );
 	}
 
