@@ -51,8 +51,8 @@ class Post {
 		</nav>
 
 		<?php
-		$panes = apply_filters( 'slim_seo_meta_box_panels', [] );
+		$panels = apply_filters( 'slim_seo_meta_box_panels', [] );
 
-		echo implode( '', $panes ); // phpcs:ignore
+		echo implode( '', $panels ); // phpcs:ignore
 	}
 }
