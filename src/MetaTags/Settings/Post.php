@@ -15,21 +15,26 @@ class Post extends Base {
 	}
 
 	public function enqueue(): void {
-		$post_types = $this->get_types();
-		$screen     = get_current_screen();
-
-		if ( in_array( $screen->post_type, $post_types, true ) ) {
+		if ( $this->is_valid() ) {
 			parent::enqueue();
 		}
 	}
 
 	public function tabs( array $tabs ): array {
+		if ( ! $this->is_valid() ) {
+			return $tabs;
+		}
+
 		$tabs['general'] = esc_html__( 'General', 'slim-seo' );
 
 		return $tabs;
 	}
 
 	public function content(): void {
+		if ( ! $this->is_valid() ) {
+			return;
+		}
+
 		wp_nonce_field( 'save', 'ss_nonce' );
 		?>
 
@@ -39,6 +44,10 @@ class Post extends Base {
 	}
 
 	public function panels( array $panels ): array {
+		if ( ! $this->is_valid() ) {
+			return $panels;
+		}
+
 		ob_start();
 		?>
 
@@ -50,6 +59,13 @@ class Post extends Base {
 		$panels['general'] = ob_get_clean();
 
 		return $panels;
+	}
+
+	public function is_valid(): bool {
+		$post_types = $this->get_types();
+		$screen     = get_current_screen();
+
+		return in_array( $screen->post_type, $post_types, true );
 	}
 
 	public function get_types() {
