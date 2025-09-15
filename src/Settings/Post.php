@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\Settings;
 
-use SlimSEO\Helpers\Data;
-
 class Post {
 	public static function setup(): void {
 		add_action( 'admin_print_styles-post.php', [ __CLASS__, 'enqueue' ] );
@@ -19,12 +17,18 @@ class Post {
 	}
 
 	public static function add_meta_box() {
+		$tabs = apply_filters( 'slim_seo_meta_box_tabs', [] );
+
+		if ( empty( $tabs ) ) {
+			return;
+		}
+
 		$context    = apply_filters( 'slim_seo_meta_box_context', 'normal' );
 		$priority   = apply_filters( 'slim_seo_meta_box_priority', 'low' );
-		$post_types = Data::get_meta_box_post_types();
+		$post_types = self::get_post_types();
 
 		foreach ( $post_types as $post_type ) {
-			add_meta_box( 'slim-seo', __( 'Search Engine Optimization', 'slim-seo' ), [ __CLASS__, 'render' ], $post_type, $context, $priority );
+			add_meta_box( 'slim-seo', apply_filters( 'slim_seo_meta_box_title', __( 'Search Engine Optimization', 'slim-seo' ) ), [ __CLASS__, 'render' ], $post_type, $context, $priority );
 		}
 	}
 
@@ -54,5 +58,17 @@ class Post {
 		$panels = apply_filters( 'slim_seo_meta_box_panels', [] );
 
 		echo implode( '', $panels ); // phpcs:ignore
+	}
+
+	public static function get_post_types(): array {
+		$post_types = get_post_types( [ 'public' => true ], 'objects' );
+
+		unset( $post_types['attachment'] );
+
+		$post_types = apply_filters( 'slim_seo_post_types', $post_types );
+		$post_types = array_keys( $post_types );
+		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );
+
+		return $post_types;
 	}
 }
