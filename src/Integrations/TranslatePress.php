@@ -42,7 +42,7 @@ class TranslatePress {
 
 			printf(
 				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
-				esc_attr( $language ),
+				esc_attr( str_replace( '_', '-', $language ) ),
 				esc_url( $translated_url )
 			);
 		}
