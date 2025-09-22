@@ -1,6 +1,9 @@
 <?php
 namespace SlimSEO;
 
+use eLightUp\SlimSEO\Common\Settings\Page as SettingsPage;
+use eLightUp\SlimSEO\Common\Settings\Post as SettingsPost;
+
 class Container {
 	private $services = [];
 
@@ -119,8 +122,8 @@ class Container {
 	public function init() {
 		do_action( 'slim_seo_init', $this );
 
-		Settings\Page::setup();
-		Settings\Post::setup();
+		SettingsPage::setup();
+		SettingsPost::setup();
 
 		$settings = $this->services['settings'];
 
