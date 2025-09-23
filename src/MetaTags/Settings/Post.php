@@ -13,10 +13,6 @@ class Post extends Base {
 		add_action( 'save_post', [ $this, 'save' ] );
 	}
 
-	public function enqueue(): void {
-		parent::enqueue();
-	}
-
 	public function tabs( array $tabs ): array {
 		$tabs['general'] = esc_html__( 'General', 'slim-seo' );
 
@@ -37,11 +33,11 @@ class Post extends Base {
 		return $panels;
 	}
 
-	public function get_types() {
+	public function get_types(): array {
 		return Data::get_meta_box_post_types();
 	}
 
-	protected function get_object_id() {
-		return get_the_ID();
+	protected function get_object_id(): int {
+		return (int) get_the_ID();
 	}
 }
