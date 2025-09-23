@@ -26,6 +26,7 @@
   },
   "require": {
     "elightup/slim-twig": "dev-master",
+    "elightup/slim-seo-common": "dev-master",
     "php": ">=7.2"
   },
   "config": {

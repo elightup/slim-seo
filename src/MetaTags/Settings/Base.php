@@ -25,7 +25,7 @@ abstract class Base {
 		] );
 	}
 
-	public function save( $object_id ) {
+	public function save( int $object_id ): void {
 		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) || empty( $_POST ) ) {
 			return;
 		}
@@ -48,7 +48,7 @@ abstract class Base {
 		}
 	}
 
-	private function sanitize( $data ) {
+	private function sanitize( array $data ): array {
 		$data = array_merge( $this->defaults, $data );
 
 		$data['title']          = sanitize_text_field( $data['title'] );
@@ -61,13 +61,13 @@ abstract class Base {
 		return array_filter( $data );
 	}
 
-	private function get_data() {
+	private function get_data(): array {
 		$data = get_metadata( $this->object_type, $this->get_object_id(), 'slim_seo', true );
 		$data = is_array( $data ) && ! empty( $data ) ? $data : [];
 
 		return array_merge( $this->defaults, $data );
 	}
 
-	abstract public function get_types();
-	abstract protected function get_object_id();
+	abstract public function get_types(): array;
+	abstract protected function get_object_id(): int;
 }

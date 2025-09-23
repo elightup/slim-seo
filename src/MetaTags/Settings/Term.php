@@ -20,20 +20,21 @@ class Term extends Base {
 		add_action( 'admin_print_styles-term.php', [ $this, 'enqueue' ] );
 
 		$taxonomies = $this->get_types();
+
 		foreach ( $taxonomies as $taxonomy ) {
 			add_action( "{$taxonomy}_edit_form", [ $this, 'render' ] );
 			add_action( "edited_$taxonomy", [ $this, 'save' ] );
 		}
 	}
 
-	public function get_types() {
+	public function get_types(): array {
 		$taxonomies = get_taxonomies( [ 'public' => true ] );
 		$taxonomies = apply_filters( 'slim_seo_meta_box_taxonomies', $taxonomies );
 
 		return $taxonomies;
 	}
 
-	protected function get_object_id() {
-		return filter_input( INPUT_GET, 'tag_ID', FILTER_SANITIZE_NUMBER_INT );
+	protected function get_object_id(): int {
+		return (int) filter_input( INPUT_GET, 'tag_ID', FILTER_SANITIZE_NUMBER_INT );
 	}
 }
