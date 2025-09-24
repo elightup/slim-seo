@@ -4,8 +4,41 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae064411106ee768a4eef1e325d4d977",
+    "content-hash": "22b2089a9ad06b3b423db439c0900d7f",
     "packages": [
+        {
+            "name": "elightup/slim-seo-common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elightup/slim-seo-common.git",
+                "reference": "5033b1bbc10f29f50de95d3c6574e0d863cdf2bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/5033b1bbc10f29f50de95d3c6574e0d863cdf2bf",
+                "reference": "5033b1bbc10f29f50de95d3c6574e0d863cdf2bf",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "eLightUp\\SlimSEO\\Common\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Common code for Slim SEO plugins",
+            "homepage": "https://wpslimseo.com",
+            "support": {
+                "issues": "https://github.com/elightup/slim-seo-common/issues",
+                "source": "https://github.com/elightup/slim-seo-common/tree/master"
+            },
+            "time": "2025-09-24T02:57:39+00:00"
+        },
         {
             "name": "elightup/slim-twig",
             "version": "dev-master",
@@ -42,6 +75,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "elightup/slim-seo-common": 20,
         "elightup/slim-twig": 20
     },
     "prefer-stable": false,

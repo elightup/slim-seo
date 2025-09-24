@@ -1,21 +1,9 @@
 <?php
 namespace SlimSEO\Helpers;
 
+use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
+
 class Data {
-	public static function get_post_types() {
-		$post_types = get_post_types( [ 'public' => true ], 'objects' );
-		unset( $post_types['attachment'] );
-		return apply_filters( 'slim_seo_post_types', $post_types );
-	}
-
-	public static function get_taxonomies() {
-		$taxonomies = get_taxonomies( [
-			'public'  => true,
-			'show_ui' => true,
-		], 'objects' );
-		return apply_filters( 'slim_seo_taxonomies', $taxonomies );
-	}
-
 	public static function get_post_type_archive_page( string $post_type ) {
 		$post_type_object = get_post_type_object( $post_type );
 		if ( ! $post_type_object || ! is_string( $post_type_object->has_archive ) ) {
@@ -47,7 +35,7 @@ class Data {
 
 	public static function get_posts( array $args = [] ): array {
 		$posts = get_posts( array_merge( [
-			'post_type'      => array_keys( self::get_post_types() ),
+			'post_type'      => array_keys( CommonHelpersData::get_post_types() ),
 			'post_status'    => [ 'publish' ],
 			'posts_per_page' => -1,
 		], $args ) );
@@ -56,7 +44,7 @@ class Data {
 	}
 
 	public static function get_meta_box_post_types(): array {
-		$post_types = array_keys( self::get_post_types() );
+		$post_types = array_keys( CommonHelpersData::get_post_types() );
 		$post_types = apply_filters( 'slim_seo_meta_box_post_types', $post_types );
 
 		return $post_types;
