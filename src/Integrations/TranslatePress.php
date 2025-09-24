@@ -28,24 +28,73 @@ class TranslatePress {
 	}
 
 	private function add_links( string $url ): void {
-		$languages = $this->get_languages();
-		foreach ( $languages as $language ) {
-			/**
-			 * Hack: TranslatePress checks current filter to bypass translating URLs in sitemaps.
-			 * We have to use the Yoast SEO's filter name to make it work.
-			 * This will be removed when TranslatePress adds support for Slim SEO's hooks.
-			 */
-			$translated_url = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
-			if ( $translated_url === $url ) {
-				continue;
-			}
+		$urls = $this->get_all_translation_urls( $url );
+		$this->output_all_hreflang_links( $urls );
+		echo "\t</url>\n"; // Close the default URL.
 
-			printf(
-				"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
-				esc_attr( str_replace( '_', '-', $language ) ),
-				esc_url( $translated_url )
-			);
+		// Google requires each translation to be in a separate <url> element with all the hreflang links.
+		$translations = array_values( array_diff( $urls, [ $url ] ) );
+		$count        = count( $translations );
+		foreach ( $translations as $index => $translation ) {
+			echo "\t<url>\n";
+			echo "\t\t<loc>", esc_url( $translation ), "</loc>\n";
+			$this->output_all_hreflang_links( $urls );
+
+			// Do not close the last translation.
+			if ( $index < $count - 1 ) {
+				echo "\t</url>\n";
+			}
 		}
+	}
+
+	private function output_all_hreflang_links( array $urls ): void {
+		// Cache the output to avoid printing the same output multiple times.
+		static $output = '';
+		if ( $output ) {
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			return;
+		}
+
+		ob_start();
+		$default_url      = '';
+		$default_language = $this->get_default_language();
+
+		foreach ( $urls as $language => $url ) {
+			$this->output_hreflang_link( $language, $url );
+
+			if ( $language === $default_language ) {
+				$default_url = $url;
+			}
+		}
+
+		if ( $default_url ) {
+			$this->output_hreflang_link( 'x-default', $default_url );
+		}
+
+		$output = ob_get_clean();
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	private function output_hreflang_link( string $language, string $url ): void {
+		$language = str_replace( '_', '-', $language );
+
+		printf(
+			"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
+			esc_attr( $language ),
+			esc_url( $url )
+		);
+	}
+
+	private function get_all_translation_urls( string $url ): array {
+		$languages = $this->get_languages();
+		$urls      = [];
+
+		foreach ( $languages as $language ) {
+			$translated_url    = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
+			$urls[ $language ] = $translated_url;
+		}
+
+		return $urls;
 	}
 
 	public function get_url( string $url, string $language ): string {
@@ -55,6 +104,12 @@ class TranslatePress {
 	private function get_languages(): array {
 		$settings = $this->settings->get_settings();
 
-		return array_diff( $settings['publish-languages'], [ $settings['default-language'] ] );
+		return $settings['publish-languages'];
+	}
+
+	private function get_default_language(): string {
+		$settings = $this->settings->get_settings();
+
+		return $settings['default-language'];
 	}
 }
