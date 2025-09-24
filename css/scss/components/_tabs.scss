@@ -12,7 +12,6 @@
 
 .ss-tab-list {
 	border-bottom: var(--ss-border);
-	padding-inline: 24px;
 	display: flex;
 	align-items: center;
 	gap: 24px;
@@ -39,7 +38,7 @@
 
 .ss-tab-pane {
 	display: none;
-	padding: 24px;
+	padding-block: 24px;
 
 	&.ss-is-active {
 		display: block;
@@ -53,5 +52,16 @@
 		margin-inline: -24px;
 		padding: 24px 24px 0 24px;
 		border-top: var(--ss-border-lighter);
+	}
+}
+
+// Add inline padding to tabs and panes in settings page.
+.settings_page_slim-seo {
+	.ss-tab-list {
+		padding-inline: 24px;
+	}
+
+	.ss-tab-pane {
+		padding-inline: 24px;
 	}
 }
