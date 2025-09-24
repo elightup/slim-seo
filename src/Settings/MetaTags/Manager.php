@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Settings\MetaTags;
 
+use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
 use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
 use SlimSEO\MetaTags\Description;
@@ -21,8 +22,8 @@ class Manager {
 		Assets::enqueue_build_js( 'meta-tags', 'ss', [
 			'hasHomepageSettings'      => $this->has_homepage_settings(),
 			'homepage'                 => $this->get_home_data(),
-			'postTypes'                => Data::get_post_types(),
-			'taxonomies'               => Data::get_taxonomies(),
+			'postTypes'                => CommonHelpersData::get_post_types(),
+			'taxonomies'               => CommonHelpersData::get_taxonomies(),
 			'postTypesWithArchivePage' => $this->get_post_types_with_archive_page(),
 			'defaultPostMetas'         => $this->get_default_post_metas(),
 			'defaultTermMetas'         => $this->get_default_term_metas(),
@@ -46,8 +47,8 @@ class Manager {
 	}
 
 	private function get_content_items(): array {
-		$taxonomies = array_keys( array_filter( Data::get_taxonomies() ) );
-		$post_types = array_keys( array_filter( Data::get_post_types() ) );
+		$taxonomies = array_keys( array_filter( CommonHelpersData::get_taxonomies() ) );
+		$post_types = array_keys( array_filter( CommonHelpersData::get_post_types() ) );
 
 		$post_types_archive = array_map( function ( $post_type ) {
 			return "{$post_type}_archive";
@@ -93,7 +94,7 @@ class Manager {
 	}
 
 	private function get_post_types_with_archive_page(): array {
-		$post_types = Data::get_post_types();
+		$post_types = CommonHelpersData::get_post_types();
 
 		if ( ! $post_types ) {
 			return [];

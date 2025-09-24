@@ -2,7 +2,7 @@
 namespace SlimSEO\Settings\MetaTags;
 
 use WP_REST_Server;
-use SlimSEO\Helpers\Data;
+use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
 
 class RestApi {
 	public function setup(): void {
@@ -59,7 +59,7 @@ class RestApi {
 	}
 
 	public function get_variables() {
-		$taxonomies = Data::get_taxonomies();
+		$taxonomies = CommonHelpersData::get_taxonomies();
 		unset( $taxonomies['category'], $taxonomies['post_tag'] );
 
 		$taxonomy_options = [];

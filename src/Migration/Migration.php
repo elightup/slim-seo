@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Migration;
 
+use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
 use SlimSEO\Helpers\Data;
 use SlimSEO\Migration\Sources\Source;
 
@@ -151,7 +152,7 @@ class Migration {
 
 	private function get_posts(): array {
 		$query = new \WP_Query( [
-			'post_type'      => array_keys( Data::get_post_types() ),
+			'post_type'      => array_keys( CommonHelpersData::get_post_types() ),
 			'post_status'    => 'any',
 			'posts_per_page' => $this->threshold,
 			'no_found_rows'  => true,
@@ -164,7 +165,7 @@ class Migration {
 
 	private function get_terms(): array {
 		return get_terms( [
-			'taxonomy'   => array_keys( Data::get_taxonomies() ),
+			'taxonomy'   => array_keys( CommonHelpersData::get_taxonomies() ),
 			'hide_empty' => false,
 			'fields'     => 'ids',
 			'number'     => $this->threshold,
