@@ -20,14 +20,17 @@ class TranslatePress {
 	}
 
 	public function add_post_links( \WP_Post $post ): void {
-		$this->add_links( get_permalink( $post ) );
+		$extra = [
+			'lastmod' => wp_date( 'c', strtotime( $post->post_modified_gmt ) ),
+		];
+		$this->add_links( get_permalink( $post ), $extra );
 	}
 
 	public function add_term_links( \WP_Term $term ): void {
 		$this->add_links( get_term_link( $term ) );
 	}
 
-	private function add_links( string $url ): void {
+	private function add_links( string $url, array $extra = [] ): void {
 		$urls = $this->get_all_translation_urls( $url );
 		$this->output_all_hreflang_links( $urls );
 		echo "\t</url>\n"; // Close the default URL.
@@ -38,6 +41,13 @@ class TranslatePress {
 		foreach ( $translations as $index => $translation ) {
 			echo "\t<url>\n";
 			echo "\t\t<loc>", esc_url( $translation ), "</loc>\n";
+
+			// Output the extra attributes: lastmod, etc.
+			foreach ( $extra as $key => $value ) {
+				// Translators: %1$s is the key, %2$s is the value.
+				printf( "\t\t<%1\$s>%2\$s</%1\$s>\n", esc_attr( $key ), esc_html( $value ) );
+			}
+
 			$this->output_all_hreflang_links( $urls );
 
 			// Do not close the last translation.
