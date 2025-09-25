@@ -10,6 +10,7 @@ class WPML {
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
 
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		do_action( 'wpml_multilingual_options', 'slim_seo' );
 		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'adjust_fields' ] );
 	}
@@ -19,13 +20,13 @@ class WPML {
 		$languages    = $this->get_languages();
 
 		foreach ( $languages as $language ) {
-			// @codingStandardsIgnoreLine.
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			$post_id = apply_filters( 'wpml_object_id', $post->ID, $post->post_type, false, $language );
 			if ( ! $post_id ) {
 				continue;
 			}
 
-			// @codingStandardsIgnoreLine.
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			$url = apply_filters( 'wpml_permalink', $original_url, $language, true );
 			if ( $url === $original_url ) {
 				continue;
@@ -44,13 +45,13 @@ class WPML {
 		$languages    = $this->get_languages();
 
 		foreach ( $languages as $language ) {
-			// @codingStandardsIgnoreLine.
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			$term_id = apply_filters( 'wpml_object_id', $term->term_id, $term->taxonomy, false, $language );
 			if ( ! $term_id ) {
 				continue;
 			}
 
-			// @codingStandardsIgnoreLine.
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			$url = apply_filters( 'wpml_permalink', $original_url, $language, true );
 			if ( $url === $original_url ) {
 				continue;
@@ -65,7 +66,7 @@ class WPML {
 	}
 
 	private function get_languages() {
-		// @codingStandardsIgnoreLine.
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		return array_keys( apply_filters( 'wpml_active_languages', null, [ 'skip_missing' => true ] ) );
 	}
 
