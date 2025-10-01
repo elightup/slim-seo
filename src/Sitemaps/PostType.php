@@ -74,8 +74,7 @@ class PostType {
 	}
 
 	private function output_homepage(): void {
-		$is_static_homepage = get_option( 'show_on_front' ) === 'page' && get_option( 'page_on_front' );
-		if ( $this->post_type !== 'page' || $is_static_homepage ) {
+		if ( $this->post_type !== 'page' || Data::has_static_homepage() ) {
 			return;
 		}
 		echo "\t<url>\n";

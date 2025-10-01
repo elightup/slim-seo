@@ -20,7 +20,7 @@ class Manager {
 
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . '/css/meta-tags.css' ) );
 		Assets::enqueue_build_js( 'meta-tags', 'ss', [
-			'hasHomepageSettings'      => $this->has_homepage_settings(),
+			'hasHomepageSettings'      => ! Data::has_static_homepage(),
 			'homepage'                 => $this->get_home_data(),
 			'postTypes'                => CommonHelpersData::get_post_types(),
 			'taxonomies'               => CommonHelpersData::get_taxonomies(),
@@ -30,10 +30,6 @@ class Manager {
 			'defaultAuthorMetas'       => $this->get_default_author_metas(),
 			'mediaPopupTitle'          => __( 'Select An Image', 'slim-seo' ),
 		] );
-	}
-
-	private function has_homepage_settings(): bool {
-		return 'page' !== get_option( 'show_on_front' ) || ! get_option( 'page_on_front' );
 	}
 
 	private function get_home_data(): array {
