@@ -27,12 +27,17 @@ class WPML {
 		$translations   = $this->get_translations( $url, $object_id, $object_type, $type );
 		$hreflang_links = $this->get_hreflang_links( $translations );
 		echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "\t</url>\n";    // Close the default URL.
 
 		// Google requires each translation to be in a separate <url> element with all the hreflang links.
 		$translations = array_filter( $translations, function( array $translation ) use ( $url ): bool {
 			return $translation['url'] !== $url;
 		} );
+		if ( empty( $translations ) ) {
+			return;
+		}
+
+		echo "\t</url>\n"; // Close the default URL.
+
 		$translations = array_values( $translations );
 		$count        = count( $translations );
 		foreach ( $translations as $index => $translation ) {

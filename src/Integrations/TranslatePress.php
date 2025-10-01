@@ -44,10 +44,15 @@ class TranslatePress {
 		$urls           = $this->get_all_translation_urls( $url );
 		$hreflang_links = $this->get_hreflang_links( $urls );
 		echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "\t</url>\n";    // Close the default URL.
 
 		// Google requires each translation to be in a separate <url> element with all the hreflang links.
 		$translations = array_values( array_diff( $urls, [ $url ] ) );
+		if ( empty( $translations ) ) {
+			return;
+		}
+
+		echo "\t</url>\n"; // Close the default URL.
+
 		$count        = count( $translations );
 		foreach ( $translations as $index => $translation ) {
 			echo "\t<url>\n";
