@@ -31,9 +31,10 @@ class TranslatePress {
 	}
 
 	private function add_links( string $url, array $extra = [] ): void {
-		$urls = $this->get_all_translation_urls( $url );
-		$this->output_all_hreflang_links( $urls );
-		echo "\t</url>\n"; // Close the default URL.
+		$urls           = $this->get_all_translation_urls( $url );
+		$hreflang_links = $this->get_hreflang_links( $urls );
+		echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo "\t</url>\n";    // Close the default URL.
 
 		// Google requires each translation to be in a separate <url> element with all the hreflang links.
 		$translations = array_values( array_diff( $urls, [ $url ] ) );
@@ -44,11 +45,10 @@ class TranslatePress {
 
 			// Output the extra attributes: lastmod, etc.
 			foreach ( $extra as $key => $value ) {
-				// Translators: %1$s is the key, %2$s is the value.
 				printf( "\t\t<%1\$s>%2\$s</%1\$s>\n", esc_html( $key ), esc_html( $value ) );
 			}
 
-			$this->output_all_hreflang_links( $urls );
+			echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			// Do not close the last translation.
 			if ( $index < $count - 1 ) {
@@ -57,20 +57,13 @@ class TranslatePress {
 		}
 	}
 
-	private function output_all_hreflang_links( array $urls ): void {
-		// Cache the output to avoid printing the same output multiple times.
-		static $output = '';
-		if ( $output ) {
-			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			return;
-		}
-
-		ob_start();
+	private function get_hreflang_links( array $urls ): string {
+		$links            = '';
 		$default_url      = '';
 		$default_language = $this->get_default_language();
 
 		foreach ( $urls as $language => $url ) {
-			$this->output_hreflang_link( $language, $url );
+			$links .= $this->get_hreflang_link( $language, $url );
 
 			if ( $language === $default_language ) {
 				$default_url = $url;
@@ -78,17 +71,16 @@ class TranslatePress {
 		}
 
 		if ( $default_url ) {
-			$this->output_hreflang_link( 'x-default', $default_url );
+			$links .= $this->get_hreflang_link( 'x-default', $default_url );
 		}
 
-		$output = ob_get_clean();
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		return $links;
 	}
 
-	private function output_hreflang_link( string $language, string $url ): void {
+	private function get_hreflang_link( string $language, string $url ): string {
 		$language = str_replace( '_', '-', $language );
 
-		printf(
+		return sprintf(
 			"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
 			esc_attr( $language ),
 			esc_url( $url )
