@@ -16,6 +16,8 @@ class TranslatePress {
 
 		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
 		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
+		add_action( 'slim_seo_sitemap_homepage', [ $this, 'add_homepage_links' ] );
+		add_action( 'slim_seo_sitemap_post_type_archive', [ $this, 'add_post_type_archive_links' ] );
 		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );  // phpcs:ignore
 	}
 
@@ -28,6 +30,14 @@ class TranslatePress {
 
 	public function add_term_links( \WP_Term $term ): void {
 		$this->add_links( get_term_link( $term ) );
+	}
+
+	public function add_homepage_links(): void {
+		$this->add_links( home_url( '/' ) );
+	}
+
+	public function add_post_type_archive_links( string $url ): void {
+		$this->add_links( $url );
 	}
 
 	private function add_links( string $url, array $extra = [] ): void {
