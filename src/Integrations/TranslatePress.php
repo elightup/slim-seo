@@ -45,7 +45,7 @@ class TranslatePress {
 			// Output the extra attributes: lastmod, etc.
 			foreach ( $extra as $key => $value ) {
 				// Translators: %1$s is the key, %2$s is the value.
-				printf( "\t\t<%1\$s>%2\$s</%1\$s>\n", esc_attr( $key ), esc_html( $value ) );
+				printf( "\t\t<%1\$s>%2\$s</%1\$s>\n", esc_html( $key ), esc_html( $value ) );
 			}
 
 			$this->output_all_hreflang_links( $urls );
