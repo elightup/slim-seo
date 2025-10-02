@@ -12,8 +12,7 @@ class WPML {
 	}
 
 	public function setup(): void {
-		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
-		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
+		$this->setup_sitemap_hooks();
 
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		do_action( 'wpml_multilingual_options', 'slim_seo' );

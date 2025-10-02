@@ -12,10 +12,9 @@ class Polylang {
 	}
 
 	public function setup(): void {
+		$this->setup_sitemap_hooks();
 		add_filter( 'slim_seo_sitemap_post_type_query_args', [ $this, 'query_all_translations' ] );
 		add_filter( 'slim_seo_sitemap_post_ignore', [ $this, 'ignore_translations' ], 10, 2 );
-		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
-		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
 		add_action( 'slim_seo_settings_enqueue', [ $this, 'add_language_for_js' ] );
 
 		// Register translatable options

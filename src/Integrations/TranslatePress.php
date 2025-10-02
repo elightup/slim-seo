@@ -18,10 +18,7 @@ class TranslatePress {
 		$this->url_converter = $trp->get_component( 'url_converter' );
 		$this->settings      = $trp->get_component( 'settings' );
 
-		add_action( 'slim_seo_sitemap_post', [ $this, 'add_post_links' ] );
-		add_action( 'slim_seo_sitemap_term', [ $this, 'add_term_links' ] );
-		add_action( 'slim_seo_sitemap_homepage', [ $this, 'add_homepage_links' ] );
-		add_action( 'slim_seo_sitemap_post_type_archive', [ $this, 'add_post_type_archive_links' ] );
+		$this->setup_sitemap_hooks();
 		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );  // phpcs:ignore
 	}
 

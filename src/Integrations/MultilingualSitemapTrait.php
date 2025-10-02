@@ -2,6 +2,15 @@
 namespace SlimSEO\Integrations;
 
 trait MultilingualSitemapTrait {
+	private function setup_sitemap_hooks(): void {
+		$types = [ 'post', 'term', 'homepage', 'post_type_archive' ];
+		foreach ( $types as $type ) {
+			if ( method_exists( $this, "add_{$type}_links" ) ) {
+				add_action( "slim_seo_sitemap_$type", [ $this, "add_{$type}_links" ] );
+			}
+		}
+	}
+
 	private function add_links( string $url, array $translations ): void {
 		$hreflang_links = $this->get_hreflang_links( $translations );
 		echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
