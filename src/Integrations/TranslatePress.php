@@ -1,7 +1,11 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use WP_Post;
+use WP_Term;
+
 class TranslatePress {
+	use MultilingualSitemapTrait;
 	private $url_converter;
 	private $settings;
 
@@ -21,97 +25,46 @@ class TranslatePress {
 		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );  // phpcs:ignore
 	}
 
-	public function add_post_links( \WP_Post $post ): void {
-		$extra = [
-			'lastmod' => wp_date( 'c', strtotime( $post->post_modified_gmt ) ),
-		];
-		$this->add_links( get_permalink( $post ), $extra );
+	public function add_post_links( WP_Post $post ): void {
+		$url          = get_permalink( $post );
+		$translations = $this->get_translations( $url, $post );
+		$this->add_links( $url, $translations );
 	}
 
-	public function add_term_links( \WP_Term $term ): void {
-		$this->add_links( get_term_link( $term ) );
+	public function add_term_links( WP_Term $term ): void {
+		$url          = get_term_link( $term );
+		$translations = $this->get_translations( $url );
+		$this->add_links( $url, $translations );
 	}
 
 	public function add_homepage_links(): void {
-		$this->add_links( home_url( '/' ) );
+		$url          = home_url( '/' );
+		$translations = $this->get_translations( $url );
+		$this->add_links( $url, $translations );
 	}
 
 	public function add_post_type_archive_links( string $url ): void {
-		$this->add_links( $url );
+		$translations = $this->get_translations( $url );
+		$this->add_links( $url, $translations );
 	}
 
-	private function add_links( string $url, array $extra = [] ): void {
-		$urls           = $this->get_all_translation_urls( $url );
-		$hreflang_links = $this->get_hreflang_links( $urls );
-		echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-		// Google requires each translation to be in a separate <url> element with all the hreflang links.
-		$translations = array_values( array_diff( $urls, [ $url ] ) );
-		if ( empty( $translations ) ) {
-			return;
-		}
-
-		echo "\t</url>\n"; // Close the default URL.
-
-		$count        = count( $translations );
-		foreach ( $translations as $index => $translation ) {
-			echo "\t<url>\n";
-			echo "\t\t<loc>", esc_url( $translation ), "</loc>\n";
-
-			// Output the extra attributes: lastmod, etc.
-			foreach ( $extra as $key => $value ) {
-				printf( "\t\t<%1\$s>%2\$s</%1\$s>\n", esc_html( $key ), esc_html( $value ) );
-			}
-
-			echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-			// Do not close the last translation.
-			if ( $index < $count - 1 ) {
-				echo "\t</url>\n";
-			}
-		}
-	}
-
-	private function get_hreflang_links( array $urls ): string {
-		$links            = '';
-		$default_url      = '';
-		$default_language = $this->get_default_language();
-
-		foreach ( $urls as $language => $url ) {
-			$links .= $this->get_hreflang_link( $language, $url );
-
-			if ( $language === $default_language ) {
-				$default_url = $url;
-			}
-		}
-
-		if ( $default_url ) {
-			$links .= $this->get_hreflang_link( 'x-default', $default_url );
-		}
-
-		return $links;
-	}
-
-	private function get_hreflang_link( string $language, string $url ): string {
-		$language = str_replace( '_', '-', $language );
-
-		return sprintf(
-			"\t\t<xhtml:link rel=\"alternate\" hreflang=\"%s\" href=\"%s\"/>\n",
-			esc_attr( $language ),
-			esc_url( $url )
-		);
-	}
-
-	private function get_all_translation_urls( string $url ): array {
+	private function get_translations( string $url, ?WP_Post $post = null ): array {
 		$languages = $this->get_languages();
-		$urls      = [];
+		$translations = [];
 
 		foreach ( $languages as $language ) {
-			$translated_url    = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
-			$urls[ $language ] = $translated_url;
+			$translated_url = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
+			$translation = [
+				'language' => $language,
+				'url'      => $translated_url,
+			];
+			if ( $post ) {
+				$translation['lastmod'] = wp_date( 'c', strtotime( $post->post_modified_gmt ) );
+			}
+			$translations[] = $translation;
 		}
 
-		return $urls;
+		return $translations;
 	}
 
 	public function get_url( string $url, string $language ): string {
