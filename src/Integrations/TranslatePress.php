@@ -22,27 +22,20 @@ class TranslatePress {
 		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );  // phpcs:ignore
 	}
 
-	public function add_post_links( WP_Post $post ): void {
-		$url          = get_permalink( $post );
-		$translations = $this->get_translations( $url, $post );
-		$this->add_links( $url, $translations );
+	public function get_post_translations( WP_Post $post ): array {
+		return $this->get_translations( get_permalink( $post ), $post );
 	}
 
-	public function add_term_links( WP_Term $term ): void {
-		$url          = get_term_link( $term );
-		$translations = $this->get_translations( $url );
-		$this->add_links( $url, $translations );
+	public function get_term_translations( WP_Term $term ): array {
+		return $this->get_translations( get_term_link( $term ) );
 	}
 
-	public function add_homepage_links(): void {
-		$url          = home_url( '/' );
-		$translations = $this->get_translations( $url );
-		$this->add_links( $url, $translations );
+	public function get_homepage_translations(): array {
+		return $this->get_translations( home_url( '/' ) );
 	}
 
-	public function add_post_type_archive_links( string $url ): void {
-		$translations = $this->get_translations( $url );
-		$this->add_links( $url, $translations );
+	public function get_post_type_archive_translations( string $url ): array {
+		return $this->get_translations( $url );
 	}
 
 	private function get_translations( string $url, ?WP_Post $post = null ): array {

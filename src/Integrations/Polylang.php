@@ -41,16 +41,6 @@ class Polylang {
 		return $ignore || $is_translation;
 	}
 
-	public function add_post_links( WP_Post $post ): void {
-		$translations = $this->get_post_translations( $post );
-		$this->add_links( get_permalink( $post ), $translations );
-	}
-
-	public function add_term_links( WP_Term $term ): void {
-		$translations = $this->get_term_translations( $term );
-		$this->add_links( get_term_link( $term ), $translations );
-	}
-
 	private function get_post_translations( WP_Post $post ): array {
 		$translations = pll_get_post_translations( $post->ID );
 		$return       = [];

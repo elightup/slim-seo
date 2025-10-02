@@ -1,14 +1,44 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use WP_Post;
+use WP_Term;
+
 trait MultilingualSitemapTrait {
 	private function setup_sitemap_hooks(): void {
 		$types = [ 'post', 'term', 'homepage', 'post_type_archive' ];
 		foreach ( $types as $type ) {
-			if ( method_exists( $this, "add_{$type}_links" ) ) {
-				add_action( "slim_seo_sitemap_$type", [ $this, "add_{$type}_links" ] );
-			}
+			add_action( "slim_seo_sitemap_$type", [ $this, "add_{$type}_links" ] );
 		}
+	}
+
+	public function add_post_links( WP_Post $post ): void {
+		$url          = get_permalink( $post );
+		$translations = $this->get_post_translations( $post );
+		$this->add_links( $url, $translations );
+	}
+
+	public function add_term_links( WP_Term $term ): void {
+		$url          = get_term_link( $term );
+		$translations = $this->get_term_translations( $term );
+		$this->add_links( $url, $translations );
+	}
+
+	public function add_homepage_links(): void {
+		if ( ! method_exists( $this, 'get_homepage_translations' ) ) {
+			return;
+		}
+		$url          = home_url( '/' );
+		$translations = $this->get_homepage_translations();
+		$this->add_links( $url, $translations );
+	}
+
+	public function add_post_type_archive_links( string $url ): void {
+		if ( ! method_exists( $this, 'get_post_type_archive_translations' ) ) {
+			return;
+		}
+		$translations = $this->get_post_type_archive_translations( $url );
+		$this->add_links( $url, $translations );
 	}
 
 	private function add_links( string $url, array $translations ): void {

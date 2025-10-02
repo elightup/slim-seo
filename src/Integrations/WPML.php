@@ -19,16 +19,12 @@ class WPML {
 		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'adjust_fields' ] );
 	}
 
-	public function add_post_links( WP_Post $post ): void {
-		$url          = get_permalink( $post );
-		$translations = $this->get_translations( $url, $post->ID, 'post', $post->post_type );
-		$this->add_links( $url, $translations );
+	public function get_post_translations( WP_Post $post ): array {
+		return $this->get_translations( get_permalink( $post ), $post->ID, 'post', $post->post_type );
 	}
 
-	public function add_term_links( WP_Term $term ): void {
-		$url          = get_term_link( $term );
-		$translations = $this->get_translations( $url, $term->term_id, 'term', $term->taxonomy );
-		$this->add_links( $url, $translations );
+	public function get_term_translations( WP_Term $term ): array {
+		return $this->get_translations( get_term_link( $term ), $term->term_id, 'term', $term->taxonomy );
 	}
 
 	private function get_translations( string $url, int $object_id, string $object_type, string $type ): array {
