@@ -3,6 +3,7 @@ namespace SlimSEO\Integrations;
 
 use WP_Post;
 use WP_Term;
+use PLL_Language;
 
 class Polylang {
 	use MultilingualSitemapTrait;
@@ -46,7 +47,7 @@ class Polylang {
 		$return       = [];
 		foreach ( $translations as $code => $post_id ) {
 			$return[] = [
-				'language' => $code,
+				'language' => $this->from_code_to_locale( $code ),
 				'url'      => get_permalink( $post_id ),
 				'lastmod'  => get_post_modified_time( 'c', true, $post_id ),
 			];
@@ -60,7 +61,7 @@ class Polylang {
 		$return       = [];
 		foreach ( $translations as $code => $term_id ) {
 			$return[] = [
-				'language' => $code,
+				'language' => $this->from_code_to_locale( $code ),
 				'url'      => get_term_link( $term_id ),
 			];
 		}
@@ -68,12 +69,43 @@ class Polylang {
 		return $return;
 	}
 
+	private function get_homepage_translations(): array {
+		$languages = $this->get_languages();
+		$return    = [];
+		foreach ( $languages as $language ) {
+			$return[] = [
+				'language' => $language->locale,
+				'url'      => pll_home_url( $language->slug ),
+			];
+		}
+		return $return;
+	}
+
+	/**
+	 * Get list of language objects. Need to pass empty 'fields' parameter to get the objects.
+	 *
+	 * @return PLL_Language[]
+	 */
 	private function get_languages(): array {
-		return pll_languages_list( [ 'fields' => 'locale' ] );
+		return pll_languages_list( [ 'fields' => '' ] );
 	}
 
 	private function get_default_language(): string {
 		return pll_default_language( 'locale' );
+	}
+
+	private function from_code_to_locale( string $code ): string {
+		static $map = [];
+		if ( ! empty( $map ) ) {
+			return $map[ $code ] ?? '';
+		}
+
+		$languages = $this->get_languages();
+		foreach ( $languages as $language ) {
+			$map[ $language->slug ] = $language->locale;
+		}
+
+		return $map[ $code ] ?? '';
 	}
 
 	public function add_language_for_js(): void {
