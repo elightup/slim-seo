@@ -33,10 +33,11 @@ trait MultilingualSitemapTrait {
 		$this->add_links( $url, $translations );
 	}
 
-	public function add_post_type_archive_links( string $url ): void {
+	public function add_post_type_archive_links( string $post_type ): void {
 		if ( ! method_exists( $this, 'get_post_type_archive_translations' ) ) {
 			return;
 		}
+		$url          = get_post_type_archive_link( $post_type );
 		$translations = $this->get_post_type_archive_translations( $url );
 		$this->add_links( $url, $translations );
 	}

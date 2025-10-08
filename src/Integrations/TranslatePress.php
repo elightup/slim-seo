@@ -34,8 +34,8 @@ class TranslatePress {
 		return $this->get_translations( home_url( '/' ) );
 	}
 
-	public function get_post_type_archive_translations( string $url ): array {
-		return $this->get_translations( $url );
+	public function get_post_type_archive_translations( string $post_type ): array {
+		return $this->get_translations( get_post_type_archive_link( $post_type ) );
 	}
 
 	private function get_translations( string $url, ?WP_Post $post = null ): array {

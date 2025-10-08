@@ -81,13 +81,30 @@ class Polylang {
 		return $return;
 	}
 
+	public function get_post_type_archive_translations( string $post_type ): array {
+		$languages = $this->get_languages();
+		$return    = [];
+		foreach ( $languages as $language ) {
+			PLL()->curlang = $language; // Switch the language to get the correct archive link.
+			$url           = get_post_type_archive_link( $post_type );
+			if ( ! $url ) {
+				continue;
+			}
+			$return[] = [
+				'language' => $language->locale,
+				'url'      => $url,
+			];
+		}
+		return $return;
+	}
+
 	/**
 	 * Get list of language objects. Need to pass empty 'fields' parameter to get the objects.
 	 *
 	 * @return PLL_Language[]
 	 */
 	private function get_languages(): array {
-		return pll_languages_list( [ 'fields' => '' ] );
+		return wp_list_filter( PLL()->model->get_languages_list(), [ 'active' => false ], 'NOT' );
 	}
 
 	private function get_default_language(): string {

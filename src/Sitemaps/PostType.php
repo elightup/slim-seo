@@ -103,7 +103,7 @@ class PostType {
 		echo "\t<url>\n";
 		echo "\t\t<loc>", esc_url( $url ), "</loc>\n";
 
-		do_action( 'slim_seo_sitemap_post_type_archive', $url );
+		do_action( 'slim_seo_sitemap_post_type_archive', $this->post_type );
 		echo "\t</url>\n";
 	}
 
