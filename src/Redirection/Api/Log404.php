@@ -19,36 +19,36 @@ class Log404 extends Base {
 			return;
 		}
 
-		register_rest_route( 'slim-seo-redirection', 'total_logs', [
+		register_rest_route( 'slim-seo-redirection', 'records/total', [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_total' ],
+			'callback'            => [ $this, 'total' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo-redirection', 'logs', [
+		register_rest_route( 'slim-seo-redirection', 'records/list', [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_logs' ],
+			'callback'            => [ $this, 'list' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo-redirection', 'delete_log', [
+		register_rest_route( 'slim-seo-redirection', 'records/delete', [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'delete_log' ],
+			'callback'            => [ $this, 'delete' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
-		register_rest_route( 'slim-seo-redirection', 'delete_logs', [
+		register_rest_route( 'slim-seo-redirection', 'records/delete-all', [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'delete_logs' ],
+			'callback'            => [ $this, 'delete_all' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 	}
 
-	public function get_total(): int {
+	public function total(): int {
 		return $this->db_log->get_total();
 	}
 
-	public function get_logs( WP_REST_Request $request ): array {
+	public function list( WP_REST_Request $request ): array {
 		$order_by         = sanitize_text_field( $request->get_param( 'orderBy' ) );
 		$sort             = sanitize_text_field( $request->get_param( 'sort' ) );
 		$limit            = (int) $request->get_param( 'limit' );
@@ -67,7 +67,7 @@ class Log404 extends Base {
 		return $this->db_log->list( $order_by, $sort, $limit, $offset );
 	}
 
-	public function delete_log( WP_REST_Request $request ) {
+	public function delete( WP_REST_Request $request ) {
 		$id = (int) $request->get_param( 'id' );
 
 		$this->db_log->delete( $id );
@@ -75,7 +75,7 @@ class Log404 extends Base {
 		return true;
 	}
 
-	public function delete_logs() {
+	public function delete_all() {
 		$this->db_log->delete_all();
 
 		return true;
