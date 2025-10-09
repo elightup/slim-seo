@@ -6,7 +6,7 @@ import Item from './Item';
 
 const Items = ( { limit, offset } ) => {
 	const [ order, setOrder ] = useState( { orderBy: 'updated_at', sort: 'desc' } );
-	const { result: logs, mutate } = useApi( 'logs', { orderBy: order.orderBy, sort: order.sort, limit, offset }, { returnMutate: true, options: { revalidateIfStale: false } } );
+	const { result: logs, mutate } = useApi( 'records/list', { orderBy: order.orderBy, sort: order.sort, limit, offset }, { returnMutate: true, options: { revalidateIfStale: false } } );
 
 	const changeOrder = by => e => {
 		e.preventDefault();
@@ -16,7 +16,7 @@ const Items = ( { limit, offset } ) => {
 	};
 
 	const deleteLog = log => {
-		fetcher( 'delete_log', { id: log.id } ).then( result => {
+		fetcher( 'records/delete', { id: log.id } ).then( result => {
 			mutate( logs.filter( l => {
 				return l.id != log.id;
 			} ) );
@@ -30,7 +30,7 @@ const Items = ( { limit, offset } ) => {
 			return;
 		}
 
-		fetcher( 'delete_logs', {} ).then( result => {
+		fetcher( 'records/delete-all', {} ).then( result => {
 			mutate( {} );
 		} );
 	}

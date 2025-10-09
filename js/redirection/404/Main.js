@@ -5,7 +5,7 @@ import Items from './Items';
 
 const Main = () => {
 	const LIMIT = 20;
-	const totalRows = useApi( 'total_logs' );
+	const totalRows = useApi( 'records/total' );
 	const [ offset, setOffset ] = useState( 0 );
 
 	return (
