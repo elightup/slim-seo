@@ -38,7 +38,7 @@ trait MultilingualSitemapTrait {
 			return;
 		}
 		$url          = get_post_type_archive_link( $post_type );
-		$translations = $this->get_post_type_archive_translations( $url );
+		$translations = $this->get_post_type_archive_translations( $post_type );
 		$this->add_links( $url, $translations );
 	}
 
