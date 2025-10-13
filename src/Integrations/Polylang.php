@@ -81,7 +81,7 @@ class Polylang {
 		return $return;
 	}
 
-	public function get_post_type_archive_translations( string $post_type ): array {
+	private function get_post_type_archive_translations( string $post_type ): array {
 		$languages = $this->get_languages();
 		$return    = [];
 		foreach ( $languages as $language ) {

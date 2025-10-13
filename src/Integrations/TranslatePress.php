@@ -21,19 +21,19 @@ class TranslatePress {
 		$this->setup_sitemap_hooks();
 	}
 
-	public function get_post_translations( WP_Post $post ): array {
+	private function get_post_translations( WP_Post $post ): array {
 		return $this->get_translations( get_permalink( $post ), $post );
 	}
 
-	public function get_term_translations( WP_Term $term ): array {
+	private function get_term_translations( WP_Term $term ): array {
 		return $this->get_translations( get_term_link( $term ) );
 	}
 
-	public function get_homepage_translations(): array {
+	private function get_homepage_translations(): array {
 		return $this->get_translations( home_url( '/' ) );
 	}
 
-	public function get_post_type_archive_translations( string $post_type ): array {
+	private function get_post_type_archive_translations( string $post_type ): array {
 		return $this->get_translations( get_post_type_archive_link( $post_type ) );
 	}
 
