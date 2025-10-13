@@ -19,7 +19,6 @@ class TranslatePress {
 		$this->settings      = $trp->get_component( 'settings' );
 
 		$this->setup_sitemap_hooks();
-		add_filter( 'wpseo_sitemap_url', [ $this, 'get_url' ], 0, 2 );  // phpcs:ignore
 	}
 
 	public function get_post_translations( WP_Post $post ): array {
@@ -43,7 +42,7 @@ class TranslatePress {
 		$translations = [];
 
 		foreach ( $languages as $language ) {
-			$translated_url = apply_filters( 'wpseo_sitemap_url', $url, $language ); // phpcs:ignore
+			$translated_url = $this->get_url( $url, $language );
 			$translation = [
 				'language' => $language,
 				'url'      => $translated_url,
@@ -57,7 +56,7 @@ class TranslatePress {
 		return $translations;
 	}
 
-	public function get_url( string $url, string $language ): string {
+	private function get_url( string $url, string $language ): string {
 		return $this->url_converter->get_url_for_language( $language, $url, '' );
 	}
 
