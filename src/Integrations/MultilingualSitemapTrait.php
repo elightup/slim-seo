@@ -25,18 +25,12 @@ trait MultilingualSitemapTrait {
 	}
 
 	public function add_homepage_links(): void {
-		if ( ! method_exists( $this, 'get_homepage_translations' ) ) {
-			return;
-		}
 		$url          = home_url( '/' );
 		$translations = $this->get_homepage_translations();
 		$this->add_links( $url, $translations );
 	}
 
 	public function add_post_type_archive_links( string $post_type ): void {
-		if ( ! method_exists( $this, 'get_post_type_archive_translations' ) ) {
-			return;
-		}
 		$url          = get_post_type_archive_link( $post_type );
 		$translations = $this->get_post_type_archive_translations( $post_type );
 		$this->add_links( $url, $translations );
