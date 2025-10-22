@@ -24,15 +24,18 @@ class ACF {
 
 	public function add_data( array $data, int $post_id, int $term_id ): array {
 		$field_objects = [];
-		if ( $term_id ) {
+		if ( $post_id ) {
+			// Specify a post ID.
+			$field_objects = $this->get_post_field_objects( $post_id );
+		} elseif ( $term_id ) {
 			// Specify a term ID.
 			$field_objects = $this->get_term_field_objects( $term_id );
-		} elseif ( ( is_tax() || is_category() || is_tag() ) && ! $post_id )  {
-			// Not specify a term ID, but on a term archive page and no post ID.
+		} elseif ( is_tax() || is_category() || is_tag() ) {
+			// On a term archive page.
 			$field_objects = $this->get_term_field_objects( get_queried_object_id() );
 		} else {
-			// Fallback to get post field objects.
-			$post_id = $post_id ?: ( is_singular() ? get_queried_object_id() : get_the_ID() );
+			// Fallback to get post field objects from the current post.
+			$post_id = is_singular() ? get_queried_object_id() : (int) get_the_ID();
 			$field_objects = $this->get_post_field_objects( $post_id );
 		}
 
