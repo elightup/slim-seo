@@ -1,11 +1,11 @@
 === Slim SEO - A Fast & Automated SEO Plugin For WordPress ===
 Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
-Donate link: https://wpslimseo.com/products/
+Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.8.2
+Tested up to: 6.8.3
 Requires PHP: 7.2
-Stable tag: 4.6.2
+Stable tag: 4.7.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,7 +170,23 @@ Add the following constant in your `wp-config.php` file:
 
 == Changelog ==
 
-### 4.6.2 - 2025-08-13
+= 4.7.0 - 2025-10-22 =
+
+**Highlights:**
+
+- Merge the SEO settings meta box of the Free version and Pro version into a single one.
+- Improve the output of multilingual sitemap. Now it will output all alternate hreflang URLs as separated entries to strictly follow Google's rules. Also added `x-default` link.
+
+**Other changes:**
+
+- Set blog page's schema type to CollectionPage
+- Ensure users can read the post to preview the meta title & description
+- Fix compatibility with Patchstack due to REST API endpoint names
+- Fix activate first tab not working when hash is not a valid tab
+- Fix import redirects
+- Fix getting terms' values for ACF fields
+
+= 4.6.2 - 2025-08-13 =
 
 - Multilingual sitemap: only output translated versions if available
 

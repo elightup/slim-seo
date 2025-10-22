@@ -1,3 +1,19 @@
+### 4.7.0 - 2025-10-22
+
+**Highlights:**
+
+- Merge the SEO settings meta box of the Free version and Pro version into a single one.
+- Improve the output of multilingual sitemap. Now it will output all alternate hreflang URLs as separated entries to strictly follow Google's rules. Also added `x-default` link.
+
+**Other changes:**
+
+- Set blog page's schema type to CollectionPage
+- Ensure users can read the post to preview the meta title & description
+- Fix compatibility with Patchstack due to REST API endpoint names
+- Fix activate first tab not working when hash is not a valid tab
+- Fix import redirects
+- Fix getting terms' values for ACF fields
+
 ### 4.6.2 - 2025-08-13
 
 - Multilingual sitemap: only output translated versions if available
