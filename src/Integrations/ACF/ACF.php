@@ -23,14 +23,21 @@ class ACF {
 	}
 
 	public function add_data( array $data, int $post_id, int $term_id ): array {
-		$post_id = $post_id ?: ( is_singular() ? get_queried_object_id() : get_the_ID() );
-
-		if ( empty( $post_id ) ) {
-			return $data;
+		$field_objects = [];
+		if ( $post_id ) {
+			// Specify a post ID.
+			$field_objects = $this->get_post_field_objects( $post_id );
+		} elseif ( $term_id ) {
+			// Specify a term ID.
+			$field_objects = $this->get_term_field_objects( $term_id );
+		} elseif ( is_tax() || is_category() || is_tag() ) {
+			// On a term archive page.
+			$field_objects = $this->get_term_field_objects( get_queried_object_id() );
+		} else {
+			// Fallback to get post field objects from the current post.
+			$post_id = is_singular() ? get_queried_object_id() : (int) get_the_ID();
+			$field_objects = $this->get_post_field_objects( $post_id );
 		}
-
-		$post          = get_post( $post_id );
-		$field_objects = get_field_objects( $post->ID ) ?: [];
 
 		// Option fields.
 		if ( function_exists( 'acf_add_options_page' ) ) {
@@ -41,18 +48,37 @@ class ACF {
 			}
 		}
 
-		// Post author fields.
-		$author_field_objects = get_field_objects( 'user_' . $post->post_author );
-
-		if ( ! empty( $author_field_objects ) ) {
-			$field_objects = array_merge( $author_field_objects, $field_objects );
-		}
-
 		if ( ! empty( $field_objects ) ) {
 			$data['acf'] = new Renderer( $field_objects );
 		}
 
 		return $data;
+	}
+
+	private function get_post_field_objects( int $post_id ): array {
+		if ( ! $post_id ) {
+			return [];
+		}
+
+		$field_objects = get_field_objects( $post_id ) ?: [];
+
+		// Post author fields.
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return $field_objects;
+		}
+
+		$author_field_objects = get_field_objects( 'user_' . $post->post_author ) ?: [];
+
+		return array_merge( $author_field_objects, $field_objects );
+	}
+
+	private function get_term_field_objects( int $term_id ): array {
+		if ( ! $term_id ) {
+			return [];
+		}
+
+		return get_field_objects( "term_$term_id" ) ?: [];
 	}
 
 	private function add_group( array $field_group ): void {
