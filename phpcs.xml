@@ -86,7 +86,7 @@
 	<!-- Set the minimum supported WP version. This is used by several sniffs.
 		 The minimum version set here should be in line with the minimum WP version
 		 as set in the "Requires at least" tag in the readme.txt file. -->
-	<config name="minimum_supported_wp_version" value="5.9"/>
+	<config name="minimum_supported_wp_version" value="6.5"/>
 
 	<!-- Verify that everything in the global namespace is prefixed with a plugin specific prefix.
 		 Multiple valid prefixes can be provided as a comma-delimited list. -->

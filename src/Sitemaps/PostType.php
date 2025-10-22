@@ -74,11 +74,13 @@ class PostType {
 	}
 
 	private function output_homepage(): void {
-		if ( 'page' !== $this->post_type || 'posts' !== get_option( 'show_on_front' ) ) {
+		if ( $this->post_type !== 'page' || Data::has_static_homepage() ) {
 			return;
 		}
 		echo "\t<url>\n";
 		echo "\t\t<loc>", esc_url( home_url( '/' ) ), "</loc>\n";
+
+		do_action( 'slim_seo_sitemap_homepage' );
 		echo "\t</url>\n";
 	}
 
@@ -100,6 +102,8 @@ class PostType {
 		}
 		echo "\t<url>\n";
 		echo "\t\t<loc>", esc_url( $url ), "</loc>\n";
+
+		do_action( 'slim_seo_sitemap_post_type_archive', $this->post_type );
 		echo "\t</url>\n";
 	}
 

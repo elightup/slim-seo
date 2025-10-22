@@ -9,7 +9,7 @@ trait Context {
 
 	public function get_value() {
 		if ( is_front_page() ) {
-			if ( ! $this->is_static_homepage() ) {
+			if ( ! Data::has_static_homepage() ) {
 				return $this->get_home_value();
 			}
 
@@ -76,9 +76,5 @@ trait Context {
 
 	private function get_queried_object_id() {
 		return QueriedObject::get_id();
-	}
-
-	private function is_static_homepage(): bool {
-		return get_option( 'show_on_front' ) === 'page' && get_option( 'page_on_front' );
 	}
 }

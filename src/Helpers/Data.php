@@ -49,4 +49,8 @@ class Data {
 
 		return $post_types;
 	}
+
+	public static function has_static_homepage(): bool {
+		return get_option( 'show_on_front' ) === 'page' && get_option( 'page_on_front' );
+	}
 }
