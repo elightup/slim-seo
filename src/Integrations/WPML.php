@@ -49,8 +49,14 @@ class WPML {
 		$translations = [];
 		$archive_url  = get_post_type_archive_link( $post_type );
 
+		$current_language = apply_filters( 'wpml_current_language', null );
 		foreach ( $languages as $language ) {
-			$url = apply_filters( 'wpml_permalink', $archive_url, $language, true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			do_action( 'wpml_switch_language', $language );         // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$url = get_post_type_archive_link( $post_type );
+			do_action( 'wpml_switch_language', $current_language ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+
+			// TODO: Uncomment this when WPML is fixed.
+			// $url = apply_filters( 'wpml_permalink', $archive_url, $language, true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			if ( ! $url || $url === $archive_url ) {
 				continue;
 			}
