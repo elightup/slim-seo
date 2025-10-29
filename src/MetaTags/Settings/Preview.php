@@ -40,10 +40,11 @@ class Preview {
 			'permission_callback' => [ $this, 'has_term_permission' ],
 		] );
 
+		// Render text for homepage title and description.
 		register_rest_route( 'slim-seo', 'meta-tags/render_text', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_text' ],
-			'permission_callback' => [ $this, 'has_post_permission' ],
+			'permission_callback' => [ $this, 'has_admin_permission' ],
 		] );
 	}
 
@@ -51,6 +52,10 @@ class Preview {
 		$post_id = (int) $request->get_param('ID');
 
 		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
+	}
+
+	public function has_admin_permission(): bool {
+		return current_user_can( 'manage_options' );
 	}
 
 	public function has_term_permission(): bool {
@@ -193,8 +198,7 @@ class Preview {
 	}
 
 	public function render_text( WP_REST_Request $request ): string {
-		$id   = (int) $request->get_param( 'ID' );
 		$text = (string) $request->get_param( 'text' );
-		return Helper::render( $text, $id );
+		return Helper::render( $text );
 	}
 }
