@@ -11,54 +11,56 @@ use SlimSEO\MetaTags\Title;
 use SlimSEO\MetaTags\Data;
 
 class Preview {
+	const ROUTE_PREFIX = 'meta-tags/preview/';
+
 	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
 	public function register_routes(): void {
-		register_rest_route( 'slim-seo', 'meta-tags/render_post_title', [
+		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'post-title', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_title' ],
-			'permission_callback' => [ $this, 'has_post_permission' ],
+			'permission_callback' => [ $this, 'can_edit_post' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'meta-tags/render_term_title', [
+		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'term-title', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_title' ],
-			'permission_callback' => [ $this, 'has_term_permission' ],
+			'permission_callback' => [ $this, 'can_edit_term' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'meta-tags/render_post_description', [
+		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'post-description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_description' ],
-			'permission_callback' => [ $this, 'has_post_permission' ],
+			'permission_callback' => [ $this, 'can_edit_post' ],
 		] );
 
-		register_rest_route( 'slim-seo', 'meta-tags/render_term_description', [
+		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'term-description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_description' ],
-			'permission_callback' => [ $this, 'has_term_permission' ],
+			'permission_callback' => [ $this, 'can_edit_term' ],
 		] );
 
 		// Render text for homepage title and description.
-		register_rest_route( 'slim-seo', 'meta-tags/render_text', [
+		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'homepage', [
 			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'render_text' ],
-			'permission_callback' => [ $this, 'has_admin_permission' ],
+			'callback'            => [ $this, 'render_homepage_text' ],
+			'permission_callback' => [ $this, 'can_edit_homepage' ],
 		] );
 	}
 
-	public function has_post_permission( WP_REST_Request $request ): bool {
+	public function can_edit_post( WP_REST_Request $request ): bool {
 		$post_id = (int) $request->get_param('ID');
 
 		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
 	}
 
-	public function has_admin_permission(): bool {
+	public function can_edit_homepage(): bool {
 		return current_user_can( 'manage_options' );
 	}
 
-	public function has_term_permission(): bool {
+	public function can_edit_term(): bool {
 		return current_user_can( 'edit_posts' );
 	}
 
@@ -197,7 +199,7 @@ class Preview {
 		return $key ? Option::get( "$key.description", $default ) : $default;
 	}
 
-	public function render_text( WP_REST_Request $request ): string {
+	public function render_homepage_text( WP_REST_Request $request ): string {
 		$text = (string) $request->get_param( 'text' );
 		return Helper::render( $text );
 	}

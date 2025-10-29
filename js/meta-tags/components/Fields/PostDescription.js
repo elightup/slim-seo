@@ -46,7 +46,7 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'meta-tags/render_post_description', { ID: ss.id, text: value, excerpt: excerptRef.current, content: contentRef.current } ).then( response => {
+		request( 'meta-tags/preview/post-description', { ID: ss.id, text: value, excerpt: excerptRef.current, content: contentRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );

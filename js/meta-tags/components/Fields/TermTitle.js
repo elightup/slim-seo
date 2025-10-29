@@ -35,7 +35,7 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 	};
 
 	const refreshPreviewAndPlaceholder = () => {
-		request( 'meta-tags/render_term_title', { ID: ss.id, text: value, title: titleRef.current } ).then( response => {
+		request( 'meta-tags/preview/term-title', { ID: ss.id, text: value, title: titleRef.current } ).then( response => {
 			setPreview( response.preview );
 			setPlaceholder( response.default );
 		} );

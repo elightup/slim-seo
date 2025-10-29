@@ -29,7 +29,7 @@ const Title = ( { id, std = '', placeholder = '', max = 60, ...rest } ) => {
 		requestUpdate();
 	};
 
-	const refreshPreview = () => request( 'meta-tags/render_text', { text: value || placeholder } ).then( res => setPreview( res ) );
+	const refreshPreview = () => request( 'meta-tags/preview/homepage', { text: value || placeholder } ).then( res => setPreview( res ) );
 
 	// Trigger refresh preview when value change.
 	// Use debounce technique to avoid sending too many requests.
