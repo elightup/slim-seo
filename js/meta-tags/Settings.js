@@ -10,10 +10,12 @@ import { request } from "./functions";
 const App = () => {
 	const [ loaded, setLoaded ] = useState( false );
 	const [ option, setOption ] = useState( {} );
+	const [ social, setSocial ] = useState( false );
 
 	useEffect( () => {
 		request( 'meta-tags/option' ).then( ( res ) => {
 			setOption( res );
+			setSocial( [ 'open_graph', 'twitter_cards' ].some( key => res.features.includes( key ) ) );
 			setLoaded( true );
 		} );
 	}, [] );
@@ -48,14 +50,14 @@ const App = () => {
 				<Tab className="react-tabs__tab ss-tab-item">{ __( 'Author', 'slim-seo' ) }</Tab>
 			</TabList>
 			<TabPanel>
-				<Homepage option={ option.home || {} } />
+				<Homepage option={ option.home || {} } social={ social } />
 			</TabPanel>
 			{ postTypes.length > 1 && <TabPanel /> }
 			{
 				postTypes.map( ( [ slug, postType ] ) => (
 					<TabPanel key={ slug }>
 						{
-							<PostType id={ slug } postType={ postType } option={ option[ slug ] || [] } optionArchive={ option[ `${ slug }_archive` ] || [] } />
+							<PostType id={ slug } postType={ postType } option={ option[ slug ] || [] } optionArchive={ option[ `${ slug }_archive` ] || [] } social={ social } />
 						}
 					</TabPanel>
 				) )
@@ -65,14 +67,14 @@ const App = () => {
 				taxonomies.map( ( [ slug, taxonomy ] ) => (
 					<TabPanel key={ slug }>
 						{
-							<Taxonomy id={ slug } taxonomy={ taxonomy } option={ option[ slug ] || [] } />
+							<Taxonomy id={ slug } taxonomy={ taxonomy } option={ option[ slug ] || [] } social={ social } />
 						}
 					</TabPanel>
 				) )
 			}
 			<TabPanel />
 			<TabPanel>
-				<Author option={ option.author || {} } />
+				<Author option={ option.author || {} } social={ social } />
 			</TabPanel>
 		</Tabs >
 		<input type="submit" name="submit" className="button button-primary" value={ __( 'Save Changes', 'slim-seo' ) } />

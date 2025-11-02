@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import Block from "./Fields/Block";
 import Checkbox from "./Fields/Checkbox";
 
-const Author = ( { option } ) => {
+const Author = ( { option, social } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[author]`;
 
@@ -23,6 +23,7 @@ const Author = ( { option } ) => {
 				label={ __( 'Author archive page', 'slim-seo' ) }
 				option={ option }
 				defaultMetas={ ss.defaultAuthorMetas }
+				social={ social }
 			/>
 		}
 	</>;

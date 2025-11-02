@@ -8,6 +8,7 @@ export default ( {
 	option,
 	defaultMetas = {},
 	label,
+	social,
 	facebookImageInstruction = '',
 } ) => (
 	<>
@@ -22,14 +23,18 @@ export default ( {
 			std={ option.description || '' }
 			placeholder={ defaultMetas.description }
 		/>
-		<FacebookImage
-			id={ `${ baseName }[facebook_image]` }
-			std={ option.facebook_image || '' }
-			description={ facebookImageInstruction }
-		/>
-		<TwitterImage
-			id={ `${ baseName }[twitter_image]` }
-			std={ option.twitter_image || '' }
-		/>
+		{ social &&
+			<>
+				<FacebookImage
+					id={ `${ baseName }[facebook_image]` }
+					std={ option.facebook_image || '' }
+					description={ facebookImageInstruction }
+				/>
+				<TwitterImage
+					id={ `${ baseName }[twitter_image]` }
+					std={ option.twitter_image || '' }
+				/>
+			</>
+		}
 	</>
 );

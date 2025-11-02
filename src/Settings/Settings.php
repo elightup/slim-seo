@@ -96,7 +96,7 @@ class Settings {
 		return array_filter( $option );
 	}
 
-	public function is_feature_active( $feature ) {
+	public function is_feature_active( $feature ): bool {
 		$defaults = $this->defaults['features'];
 		$option   = get_option( 'slim_seo' );
 		$features = $option['features'] ?? $defaults;
@@ -114,11 +114,16 @@ class Settings {
 		$data = get_option( 'slim_seo' );
 		$data = $data ? $data : [];
 		$data = array_merge( $this->defaults, $data );
+		$data['is_social'] = $this->is_social();
 
 		ob_start();
 		echo '<div id="', esc_attr( $name ), '" class="ss-tab-pane">';
 		include __DIR__ . "/tabs/$name.php";
 		echo '</div>';
 		return ob_get_clean();
+	}
+
+	private function is_social(): bool {
+		return $this->is_feature_active( 'open_graph' ) || $this->is_feature_active( 'twitter_cards' );
 	}
 }

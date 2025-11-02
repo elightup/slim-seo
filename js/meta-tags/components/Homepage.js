@@ -19,7 +19,7 @@ const StaticPage = () => (
 	</>
 );
 
-const ArchivePage = ( { option } ) => {
+const ArchivePage = ( { option, social } ) => {
 	const baseName = 'slim_seo[home]';
 
 	return <>
@@ -34,15 +34,19 @@ const ArchivePage = ( { option } ) => {
 			std={ option.description || '' }
 			placeholder={ ss.homepage.description }
 		/>
-		<FacebookImage
-			id={ `${ baseName }[facebook_image]` }
-			std={ option.facebook_image || '' }
-		/>
-		<TwitterImage
-			id={ `${ baseName }[twitter_image]` }
-			std={ option.twitter_image || '' }
-		/>
+		{ social &&
+			<>
+				<FacebookImage
+					id={ `${ baseName }[facebook_image]` }
+					std={ option.facebook_image || '' }
+				/>
+				<TwitterImage
+					id={ `${ baseName }[twitter_image]` }
+					std={ option.twitter_image || '' }
+				/>
+			</>
+		}
 	</>;
 };
 
-export default ( { option } ) => ss.hasHomepageSettings ? <ArchivePage option={ option } /> : <StaticPage />;
+export default ( { option, social } ) => ss.hasHomepageSettings ? <ArchivePage option={ option } social={ social } /> : <StaticPage />;

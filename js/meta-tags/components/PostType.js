@@ -4,7 +4,7 @@ import Block from "./Fields/Block";
 import Checkbox from "./Fields/Checkbox";
 import PostTypeWithArchivePage from "./Fields/PostTypeWithArchivePage";
 
-const PostType = ( { id, postType, option, optionArchive } ) => {
+const PostType = ( { id, postType, option, optionArchive,  social } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[${ id }]`;
 	const baseNameArchive = `slim_seo[${ id }_archive]`;
@@ -25,6 +25,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 				option={ option }
 				label={ sprintf( __( 'Singular %s', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
 				defaultMetas={ ss.defaultPostMetas.single }
+				social={ social }
 				facebookImageInstruction={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
 			/>
 		}
@@ -43,6 +44,7 @@ const PostType = ( { id, postType, option, optionArchive } ) => {
 						defaultMetas={ ss.defaultPostMetas.archive }
 						label={ sprintf( __( '%s archive', 'slim-seo' ), postType.labels.singular_name ) }
 						archive={ true }
+						social={ social }
 					/>
 			)
 		}
