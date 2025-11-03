@@ -29,15 +29,17 @@ const Post = ( { social } ) => (
 			id="slim_seo[description]"
 			std={ ss.data.description }
 		/>
-		{ social &&
-			<>
-				<FacebookImage
-					id="slim_seo[facebook_image]"
-					std={ ss.data.facebook_image }
-					description={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
-				/>
-				<TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
-			</>
+		{
+			social && (
+				<>
+					<FacebookImage
+						id="slim_seo[facebook_image]"
+						std={ ss.data.facebook_image }
+						description={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
+					/>
+					<TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
+				</>
+			)
 		}
 		<Text id="slim_seo[canonical]" label={ __( 'Canonical URL', 'slim-seo' ) } std={ ss.data.canonical } />
 		<Checkbox
@@ -57,11 +59,13 @@ const Term = ( { social } ) => (
 			id="slim_seo[description]"
 			std={ ss.data.description }
 		/>
-		{ social &&
-			<>
-				<FacebookImage id="slim_seo[facebook_image]" std={ ss.data.facebook_image } />
-				<TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
-			</>
+		{
+			social && (
+				<>
+					<FacebookImage id="slim_seo[facebook_image]" std={ ss.data.facebook_image } />
+					<TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
+				</>
+			)
 		}
 		<Text id="slim_seo[canonical]" label={ __( 'Canonical URL', 'slim-seo' ) } std={ ss.data.canonical } />
 		<Checkbox

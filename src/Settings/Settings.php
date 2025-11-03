@@ -114,7 +114,6 @@ class Settings {
 		$data = get_option( 'slim_seo' );
 		$data = $data ? $data : [];
 		$data = array_merge( $this->defaults, $data );
-		$data['is_social'] = $this->is_social();
 
 		ob_start();
 		echo '<div id="', esc_attr( $name ), '" class="ss-tab-pane">';

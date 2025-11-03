@@ -1,6 +1,6 @@
 <?php defined( 'ABSPATH' ) || die ?>
 
-<?php if( $data['is_social'] ): ?>
+<?php if( $this->is_social() ): ?>
 	<h3><?php esc_attr_e( 'Default Social Images', 'slim-seo' ); ?></h3>
 	<p><?php esc_html_e( 'These images are used when the post/page being shared does not have featured image or social images set up.', 'slim-seo' ); ?></p>
 
