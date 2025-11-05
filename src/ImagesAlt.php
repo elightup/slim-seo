@@ -83,9 +83,14 @@ class ImagesAlt {
 	private function normalize( string $alt ): string {
 		// Remove hyphens, underscores & extra spaces.
 		$alt = preg_replace( '%\s*[-_\s]+\s*%', ' ', $alt );
+		// Remove numbers from the end.
+		$alt = preg_replace( '%\s\d+$%', '', $alt );
 
 		// Capitalize the first letter.
-		$alt = ucfirst( strtolower( $alt ) );
+		$alt = ucfirst( $alt );
+
+		// Trim spaces.
+		$alt = trim( $alt );
 
 		return $alt;
 	}
