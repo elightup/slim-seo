@@ -96,7 +96,7 @@ class Settings {
 		return array_filter( $option );
 	}
 
-	public function is_feature_active( $feature ): bool {
+	public function is_feature_active( string $feature ): bool {
 		$defaults = $this->defaults['features'];
 		$option   = get_option( 'slim_seo' );
 		$features = $option['features'] ?? $defaults;
@@ -120,9 +120,5 @@ class Settings {
 		include __DIR__ . "/tabs/$name.php";
 		echo '</div>';
 		return ob_get_clean();
-	}
-
-	private function is_social(): bool {
-		return $this->is_feature_active( 'open_graph' ) || $this->is_feature_active( 'twitter_cards' );
 	}
 }
