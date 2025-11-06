@@ -10,12 +10,18 @@ import { request } from "./functions";
 const App = () => {
 	const [ loaded, setLoaded ] = useState( false );
 	const [ option, setOption ] = useState( {} );
-	const [ social, setSocial ] = useState( false );
+	const [ social, setSocial ] = useState( {
+		facebook: false,
+		twitter: false,
+	} );
 
 	useEffect( () => {
 		request( 'meta-tags/option' ).then( ( res ) => {
 			setOption( res );
-			setSocial( [ 'open_graph', 'twitter_cards' ].some( key => res.features.includes( key ) ) );
+			setSocial( {
+				facebook: res.features.includes( 'open_graph' ),
+				twitter: res.features.includes( 'twitter_cards' ),
+			} );
 			setLoaded( true );
 		} );
 	}, [] );

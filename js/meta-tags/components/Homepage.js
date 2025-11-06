@@ -34,19 +34,17 @@ const ArchivePage = ( { option, social } ) => {
 			std={ option.description || '' }
 			placeholder={ ss.homepage.description }
 		/>
-		{
-			social && (
-				<>
-					<FacebookImage
-						id={ `${ baseName }[facebook_image]` }
-						std={ option.facebook_image || '' }
-					/>
-					<TwitterImage
-						id={ `${ baseName }[twitter_image]` }
-						std={ option.twitter_image || '' }
-					/>
-				</>
-			)
+		{ social.facebook &&
+			<FacebookImage
+				id={ `${ baseName }[facebook_image]` }
+				std={ option.facebook_image || '' }
+			/>
+		}
+		{ social.twitter &&
+			<TwitterImage
+				id={ `${ baseName }[twitter_image]` }
+				std={ option.twitter_image || '' }
+			/>
 		}
 	</>;
 };

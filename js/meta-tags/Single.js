@@ -11,11 +11,17 @@ import Text from "./components/Fields/Text";
 import TwitterImage from './components/Fields/TwitterImage';
 
 const Single = () => {
-	const [ social, setSocial ] = useState( false );
+	const [ social, setSocial ] = useState( {
+		facebook: false,
+		twitter: false,
+	} );
 
 	useEffect( () => {
 		request( 'meta-tags/option' ).then( ( res ) => {
-			setSocial( [ 'open_graph', 'twitter_cards' ].some( key => res.features.includes( key ) ) );
+			setSocial( {
+				facebook: res.features.includes( 'open_graph' ),
+				twitter: res.features.includes( 'twitter_cards' ),
+			} );
 		} );
 	}, [] );
 
@@ -30,16 +36,15 @@ const Post = ( { social } ) => (
 			std={ ss.data.description }
 		/>
 		{
-			social && (
-				<>
-					<FacebookImage
-						id="slim_seo[facebook_image]"
-						std={ ss.data.facebook_image }
-						description={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
-					/>
-					<TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
-				</>
-			)
+			social.facebook &&
+				<FacebookImage
+					id="slim_seo[facebook_image]"
+					std={ ss.data.facebook_image }
+					description={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
+				/>
+		}
+		{
+			social.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
 		}
 		<Text id="slim_seo[canonical]" label={ __( 'Canonical URL', 'slim-seo' ) } std={ ss.data.canonical } />
 		<Checkbox
@@ -60,12 +65,10 @@ const Term = ( { social } ) => (
 			std={ ss.data.description }
 		/>
 		{
-			social && (
-				<>
-					<FacebookImage id="slim_seo[facebook_image]" std={ ss.data.facebook_image } />
-					<TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
-				</>
-			)
+			social.facebook && <FacebookImage id="slim_seo[facebook_image]" std={ ss.data.facebook_image } />
+		}
+		{
+			social.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
 		}
 		<Text id="slim_seo[canonical]" label={ __( 'Canonical URL', 'slim-seo' ) } std={ ss.data.canonical } />
 		<Checkbox
