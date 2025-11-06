@@ -1,3 +1,9 @@
+### 4.7.1 - 2025-11-06
+
+- Remove inputs for Facebook/Twitter image if the Open Graph/Twitter Cards are disabled.
+- Remove numbers from the end of alt text, and capitalize the 1st letter only, keeping other characters unchanged
+- WPML integration: fix getting post type archive URL
+
 ### 4.7.0 - 2025-10-22
 
 **Highlights:**
