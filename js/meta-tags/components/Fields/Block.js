@@ -23,14 +23,16 @@ export default ( {
 			std={ option.description || '' }
 			placeholder={ defaultMetas.description }
 		/>
-		{ social.facebook &&
+		{
+			social.facebook &&
 			<FacebookImage
 				id={ `${ baseName }[facebook_image]` }
 				std={ option.facebook_image || '' }
 				description={ facebookImageInstruction }
 			/>
 		}
-		{ social.twitter &&
+		{
+			social.twitter &&
 			<TwitterImage
 				id={ `${ baseName }[twitter_image]` }
 				std={ option.twitter_image || '' }

@@ -4,7 +4,7 @@ import Block from "./Fields/Block";
 import Checkbox from "./Fields/Checkbox";
 import PostTypeWithArchivePage from "./Fields/PostTypeWithArchivePage";
 
-const PostType = ( { id, postType, option, optionArchive,  social } ) => {
+const PostType = ( { id, postType, option, optionArchive, social } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[${ id }]`;
 	const baseNameArchive = `slim_seo[${ id }_archive]`;

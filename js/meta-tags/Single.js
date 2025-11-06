@@ -1,6 +1,5 @@
 import { createRoot, useEffect, useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
-import { request } from "./functions";
 import Checkbox from "./components/Fields/Checkbox";
 import FacebookImage from './components/Fields/FacebookImage';
 import PostDescription from "./components/Fields/PostDescription";
@@ -9,6 +8,7 @@ import TermDescription from "./components/Fields/TermDescription";
 import TermTitle from './components/Fields/TermTitle';
 import Text from "./components/Fields/Text";
 import TwitterImage from './components/Fields/TwitterImage';
+import { request } from "./functions";
 
 const Single = () => {
 	const [ social, setSocial ] = useState( {
@@ -26,7 +26,7 @@ const Single = () => {
 	}, [] );
 
 	return document.querySelector( '#edittag' ) ? <Term social={ social } /> : <Post social={ social } />;
-}
+};
 
 const Post = ( { social } ) => (
 	<>
@@ -37,11 +37,11 @@ const Post = ( { social } ) => (
 		/>
 		{
 			social.facebook &&
-				<FacebookImage
-					id="slim_seo[facebook_image]"
-					std={ ss.data.facebook_image }
-					description={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
-				/>
+			<FacebookImage
+				id="slim_seo[facebook_image]"
+				std={ ss.data.facebook_image }
+				description={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
+			/>
 		}
 		{
 			social.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
