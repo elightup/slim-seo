@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import Block from "./Fields/Block";
 import Checkbox from "./Fields/Checkbox";
 
-const Taxonomy = ( { id, taxonomy, option } ) => {
+const Taxonomy = ( { id, taxonomy, option, social } ) => {
 	const [ noindex, setNoIndex ] = useState( option.noindex || false );
 	const baseName = `slim_seo[${ id }]`;
 
@@ -23,6 +23,7 @@ const Taxonomy = ( { id, taxonomy, option } ) => {
 				option={ option }
 				label={ taxonomy.labels.singular_name }
 				defaultMetas={ ss.defaultTermMetas }
+				social={ social }
 			/>
 		}
 	</>;

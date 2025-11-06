@@ -43,7 +43,6 @@ class RestApi {
 		$exclude = array_fill_keys( [
 			'auto_redirection',
 			'enable_404_logs',
-			'features',
 			'footer_code',
 			'force_trailing_slash',
 			'header_code',

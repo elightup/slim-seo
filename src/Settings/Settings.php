@@ -96,7 +96,7 @@ class Settings {
 		return array_filter( $option );
 	}
 
-	public function is_feature_active( $feature ) {
+	public function is_feature_active( string $feature ): bool {
 		$defaults = $this->defaults['features'];
 		$option   = get_option( 'slim_seo' );
 		$features = $option['features'] ?? $defaults;
