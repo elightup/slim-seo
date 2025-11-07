@@ -17,10 +17,15 @@ const Single = () => {
 	} );
 
 	useEffect( () => {
-		request( 'meta-tags/option' ).then( ( res ) => {
+		request( 'meta-tags/option' ).then( response => {
+			let features = [ 'open_graph', 'twitter_cards' ];
+			if ( response?.features && Array.isArray( response.features ) ) {
+				features = response.features;
+			}
+
 			setSocial( {
-				facebook: !!res?.features?.includes( 'open_graph' ),
-				twitter: !!res?.features?.includes( 'twitter_cards' ),
+				facebook: features.includes( 'open_graph' ),
+				twitter: features.includes( 'twitter_cards' ),
 			} );
 		} );
 	}, [] );
