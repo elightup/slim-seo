@@ -1,3 +1,7 @@
+### 4.7.3 - 2025-11-07
+
+Fix Facebook/Twitter image fields not showing with default settings
+
 ### 4.7.2 - 2025-11-07
 
 - Schema: fix warning when an image is deleted

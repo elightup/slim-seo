@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.8.3
 Requires PHP: 7.2
-Stable tag: 4.7.2
+Stable tag: 4.7.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -169,6 +169,10 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.7.3 - 2025-11-07 =
+
+Fix Facebook/Twitter image fields not showing with default settings
 
 = 4.7.2 - 2025-11-07 =
 
