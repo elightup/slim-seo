@@ -1,3 +1,8 @@
+### 4.7.2 - 2025-11-07
+
+- Schema: fix warning when an image is deleted
+- Fix JS error when using default settings
+
 ### 4.7.1 - 2025-11-06
 
 - Remove inputs for Facebook/Twitter image if the Open Graph/Twitter Cards are disabled.
