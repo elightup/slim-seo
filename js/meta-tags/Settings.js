@@ -19,8 +19,8 @@ const App = () => {
 		request( 'meta-tags/option' ).then( ( res ) => {
 			setOption( res );
 			setSocial( {
-				facebook: res.features.includes( 'open_graph' ),
-				twitter: res.features.includes( 'twitter_cards' ),
+				facebook: !!res?.features?.includes( 'open_graph' ),
+				twitter: !!res?.features?.includes( 'twitter_cards' ),
 			} );
 			setLoaded( true );
 		} );

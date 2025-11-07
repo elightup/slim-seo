@@ -19,11 +19,13 @@ const Single = () => {
 	useEffect( () => {
 		request( 'meta-tags/option' ).then( ( res ) => {
 			setSocial( {
-				facebook: res.features.includes( 'open_graph' ),
-				twitter: res.features.includes( 'twitter_cards' ),
+				facebook: !!res?.features?.includes( 'open_graph' ),
+				twitter: !!res?.features?.includes( 'twitter_cards' ),
 			} );
 		} );
 	}, [] );
+
+	console.debug( social );
 
 	return document.querySelector( '#edittag' ) ? <Term social={ social } /> : <Post social={ social } />;
 };
