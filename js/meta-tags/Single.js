@@ -25,8 +25,6 @@ const Single = () => {
 		} );
 	}, [] );
 
-	console.debug( social );
-
 	return document.querySelector( '#edittag' ) ? <Term social={ social } /> : <Post social={ social } />;
 };
 
