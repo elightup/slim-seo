@@ -1,7 +1,8 @@
 import { Button, Modal } from '@wordpress/components';
 import { useEffect, useReducer, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Tooltip, fetcher, useApi } from '../helper/misc';
+import { Tooltip } from '../../helper/Tooltip';
+import { fetcher, useApi } from '../helper/misc';
 import ToInput from './ToInput';
 
 const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) => {

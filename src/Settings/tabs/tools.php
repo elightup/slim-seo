@@ -30,7 +30,14 @@
 	<div id="posts-status"></div>
 	<div id="terms-status"></div>
 	<div id="redirects-status"></div>
+	<div id="robots-status"></div>
 	<div id="done-status"></div>
 </div>
 
+<hr />
+
+<div id="ss-robots"></div>
+
 <?php do_action( 'slim_seo_tools_tab_content' ); ?>
+
+<?php submit_button( __( 'Save Changes', 'slim-seo' ) ); ?>

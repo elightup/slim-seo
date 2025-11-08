@@ -3,6 +3,7 @@
 		doneStatus = document.querySelector( '#done-status' ),
 		termStatus = document.querySelector( '#terms-status' ),
 		redirectsStatus = document.querySelector( '#redirects-status' ),
+		robotsStatus = document.querySelector( '#robots-status' ),
 		sourceSelect = document.querySelector( '#source' ),
 		button = document.querySelector( '#process' );
 
@@ -29,6 +30,8 @@
 			}
 
 			await handleMigrateRedirects();
+
+			await handleMigrateRobots();
 
 			doneMigration();
 		} catch ( message ) {
@@ -61,6 +64,12 @@
 		const response = await get( `${ ajaxurl }?action=ss_migrate_redirects` );
 
 		printMessage( redirectsStatus, response.data.message );
+	};
+
+	const handleMigrateRobots = async () => {
+		const response = await get( `${ ajaxurl }?action=ss_migrate_robots` );
+
+		printMessage( robotsStatus, response.data.message );
 	};
 
 	const get = async ( url ) => {

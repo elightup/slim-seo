@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { Tooltip } from '../helper/misc';
+import { Tooltip } from '../../helper/Tooltip';
 
 const Header = ( { order, changeOrder } ) => {
 	const { orderBy, sort } = order;
