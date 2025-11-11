@@ -8,7 +8,7 @@ class Manager {
 	private $taxonomies = [];
 
 	public function setup(): void {
-		add_action( 'init', [ $this, 'add_rewrite_rules' ], 20 ); // Priority 20 to make sure all post types & taxonomies are registered.
+		add_action( 'init', [ $this, 'add_rewrite_rules' ], 9999 ); // Priority 9999 to make sure all post types & taxonomies are registered.
 		add_filter( 'query_vars', [ $this, 'add_query_vars' ] );
 		add_action( 'template_redirect', [ $this, 'output' ], 0 );
 		add_filter( 'robots_txt', [ $this, 'add_to_robots_txt' ], 20 ); // Priority 20 to output it below user-agent rules.
