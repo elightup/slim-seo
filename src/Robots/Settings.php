@@ -6,31 +6,19 @@ use SlimSEO\Helpers\Assets;
 class Settings {
 	public function __construct() {
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
-		add_filter( 'slim_seo_option', [ $this, 'option_saved' ], 10, 2 );
+		add_filter( 'slim_seo_option', [ $this, 'save' ], 10, 2 );
 	}
 
 	public function enqueue(): void {
 		Assets::enqueue_build_js( 'robots', 'SSRobots', [
 			'settingsName' => 'slim_seo',
 			'settings'     => self::list(),
-			'fileExists'   => $this->file_exists(),
+			'fileExists'   => file_exists( ABSPATH . 'robots.txt' ),
 		] );
 	}
 
-	private function file_exists(): bool {
-		return file_exists( ABSPATH . 'robots.txt' ) ? true : false;
-	}
-
-	public function option_saved( array $option, array $data ): array {
-		$checkboxes = [
-			'robots_txt_editable',
-		];
-
-		foreach ( $checkboxes as $checkbox ) {
-			if ( empty( $data[ $checkbox ] ) ) {
-				$option[ $checkbox ] = -1;
-			}
-		}
+	public function save( array $option, array $data ): array {
+		$option['robots_txt_editable'] = empty( $data['robots_txt_editable'] ) ? 0 : 1;
 
 		return $option;
 	}
