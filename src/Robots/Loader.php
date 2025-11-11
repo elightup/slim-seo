@@ -11,12 +11,12 @@ class Loader {
 	}
 
 	public function robots_txt( string $content ): string {
-		if ( ! Settings::get( 'enable_edit_robots' ) ) {
+		if ( ! Settings::get( 'robots_txt_editable' ) ) {
 			return $content;
 		}
 
-		$custom_robots = Settings::get( 'custom_robots' );
+		$robots_txt_content = Settings::get( 'robots_txt_content' );
 
-		return $custom_robots ?: $content;
+		return $robots_txt_content ?: $content;
 	}
 }

@@ -1,10 +1,9 @@
 import { createRoot, useReducer } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { Tooltip } from '../helper/Tooltip';
 
 const App = () => {
 	const { settings, settingsName } = SSRobots;
-	const [ enableEditRobots, toggleEnableEditRobots ] = useReducer( onOrOff => !onOrOff, !!settings[ 'enable_edit_robots' ] );
+	const [ editable, toggleEditable ] = useReducer( onOrOff => !onOrOff, !!settings[ 'robots_txt_editable' ] );
 
 	return SSRobots.fileExists
 		? <p>{ __( 'There is a physical robots.txt file already exists in your web root. Please edit it directly.', 'slim-seo' ) }</p>
@@ -12,23 +11,22 @@ const App = () => {
 			<>
 				<div className="ef-control">
 					<div className="ef-control__label">
-						<label htmlFor="ss-enable-edit-robots">{ __( 'Enable edit robots.txt', 'slim-seo' ) }</label>
-						<Tooltip content={ __( 'Enable to edit robots.txt file', 'slim-seo' ) } />
+						<label htmlFor="ss-robots-txt-editable">{ __( 'Enable editing?', 'slim-seo' ) }</label>
 					</div>
 					<div className="ef-control__input">
 						<label className='ss-toggle'>
-							<input id='ss-enable-edit-robots' type='checkbox' name={ `${ settingsName }[enable_edit_robots]` } value='1' checked={ enableEditRobots } onChange={ toggleEnableEditRobots } />
+							<input id='ss-robots-txt-editable' type='checkbox' name={ `${ settingsName }[robots_txt_editable]` } value='1' checked={ editable } onChange={ toggleEditable } />
 							<div className='ss-toggle__switch'></div>
 						</label>
 					</div>
 				</div>
 				{
-					enableEditRobots && (
+					editable && (
 						<div className="ef-control">
 							<div className="ef-control__label" />
 							<div className="ef-control__input">
-								<textarea className="large-text" rows="10" name={ `${ settingsName }[custom_robots]` } defaultValue={ settings[ 'custom_robots' ] } />
-								<p className="description">{ __( 'Enter content of robots.txt. Leave the field empty to let WordPress handle the contents dynamically.', 'slim-seo' ) }</p>
+								<textarea className="large-text" rows="10" name={ `${ settingsName }[robots_txt_content]` } defaultValue={ settings[ 'robots_txt_content' ] } />
+								<p className="description">{ __( 'Enter content for the robots.txt file. Leave empty to let the plugin handle the content automatically.', 'slim-seo' ) }</p>
 							</div>
 						</div>
 					)

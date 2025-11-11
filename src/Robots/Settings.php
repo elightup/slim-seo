@@ -23,7 +23,7 @@ class Settings {
 
 	public function option_saved( array $option, array $data ): array {
 		$checkboxes = [
-			'enable_edit_robots',
+			'robots_txt_editable',
 		];
 
 		foreach ( $checkboxes as $checkbox ) {
@@ -38,8 +38,8 @@ class Settings {
 	public static function list(): array {
 		$saved_settings = get_option( 'slim_seo' ) ?: [];
 		$settings       = [
-			'enable_edit_robots' => 0,
-			'custom_robots'      => '',
+			'robots_txt_editable' => 0,
+			'robots_txt_content'  => '',
 		];
 
 		foreach ( $settings as $setting_name => $setting_value ) {
@@ -64,9 +64,9 @@ class Settings {
 			return false;
 		}
 
-		$option                       = get_option( 'slim_seo', [] );
-		$option['enable_edit_robots'] = 1;
-		$option['custom_robots']      = $data;
+		$option                        = get_option( 'slim_seo', [] );
+		$option['robots_txt_editable'] = 1;
+		$option['robots_txt_content']  = $data;
 
 		return update_option( 'slim_seo', $option );
 	}
