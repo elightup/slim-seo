@@ -25,8 +25,6 @@ class Robots {
 		add_action( 'template_redirect', [ $this, 'set_header_noindex' ] );
 		add_filter( 'loginout', [ $this, 'set_link_nofollow' ] );
 		add_filter( 'register', [ $this, 'set_link_nofollow' ] );
-
-		add_filter( 'robots_txt', [ $this, 'add_to_robots_txt' ] );
 	}
 
 	public function modify_robots( array $robots ): array {
@@ -63,7 +61,7 @@ class Robots {
 		}
 
 		// Do not index comment pages.
-		if ( is_singular() && get_query_var('cpage' ) ) {
+		if ( is_singular() && get_query_var( 'cpage' ) ) {
 			return false;
 		}
 
@@ -128,17 +126,6 @@ class Robots {
 
 	public function set_link_nofollow( $link ) {
 		return str_replace( '<a ', '<a rel="nofollow" ', $link );
-	}
-
-	public function add_to_robots_txt( string $output ): string {
-		$content  = "Disallow: /?s=\n";
-		$content .= "Disallow: /page/*/?s=\n";
-		$content .= "Disallow: /search/\n";
-
-		$content = apply_filters( 'slim_seo_robots_txt', $content );
-		$output  = str_replace( 'Allow:', "{$content}Allow:", $output );
-
-		return $output;
 	}
 
 	private function get_author_value(): bool {
