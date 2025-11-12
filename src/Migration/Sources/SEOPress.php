@@ -3,7 +3,7 @@ namespace SlimSEO\Migration\Sources;
 
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
-use SlimSEO\Robots\Settings as RobotsSettings;
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
 
 class SEOPress extends Source {
 	protected $constant = 'SEOPRESS_VERSION';
@@ -137,6 +137,6 @@ class SEOPress extends Source {
 			return false;
 		}
 
-		return RobotsSettings::migrate( $option[ $robots_setting_name ] ?? '' );
+		return RobotsTxtSettings::migrate( $option[ $robots_setting_name ] ?? '' );
 	}
 }

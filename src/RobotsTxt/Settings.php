@@ -1,19 +1,24 @@
 <?php
-namespace SlimSEO\Robots;
+namespace SlimSEO\RobotsTxt;
 
 use SlimSEO\Helpers\Assets;
 
 class Settings {
-	public function __construct() {
+	private $loader;
+
+	public function __construct( Loader $loader ) {
+		$this->loader = $loader;
+
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
 		add_filter( 'slim_seo_option', [ $this, 'save' ], 10, 2 );
 	}
 
 	public function enqueue(): void {
 		Assets::enqueue_build_js( 'robots', 'SSRobots', [
-			'settingsName' => 'slim_seo',
-			'settings'     => self::list(),
-			'fileExists'   => file_exists( ABSPATH . 'robots.txt' ),
+			'settingsName'     => 'slim_seo',
+			'settings'         => self::list(),
+			'fileExists'       => file_exists( ABSPATH . 'robots.txt' ),
+			'defaultRobotsTXT' => $this->loader->default_robots_txt(),
 		] );
 	}
 
@@ -26,17 +31,9 @@ class Settings {
 	public static function list(): array {
 		$saved_settings = get_option( 'slim_seo' ) ?: [];
 		$settings       = [
-			'robots_txt_editable' => 0,
-			'robots_txt_content'  => '',
+			'robots_txt_editable' => $saved_settings['robots_txt_editable'] ?? 0,
+			'robots_txt_content'  => $saved_settings['robots_txt_content'] ?? '',
 		];
-
-		foreach ( $settings as $setting_name => $setting_value ) {
-			if ( ! isset( $saved_settings[ $setting_name ] ) ) {
-				continue;
-			}
-
-			$settings[ $setting_name ] = -1 !== $saved_settings[ $setting_name ] ? $saved_settings[ $setting_name ] : 0;
-		}
 
 		return $settings;
 	}

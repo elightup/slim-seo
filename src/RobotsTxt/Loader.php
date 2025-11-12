@@ -1,5 +1,5 @@
 <?php
-namespace SlimSEO\Robots;
+namespace SlimSEO\RobotsTxt;
 
 use SlimSEO\Settings\Settings as CommonSettings;
 
@@ -12,7 +12,7 @@ class Loader {
 
 	public function setup(): void {
 		if ( is_admin() ) {
-			new Settings();
+			new Settings( $this );
 		}
 
 		add_filter( 'robots_txt', [ $this, 'robots_txt' ], 9999 );
@@ -20,15 +20,15 @@ class Loader {
 
 	public function robots_txt( string $output ): string {
 		if ( ! Settings::get( 'robots_txt_editable' ) ) {
-			return $this->default_robots_txt( $output );
+			return $this->slim_seo_robots_txt( $output );
 		}
 
 		$robots_txt_content = Settings::get( 'robots_txt_content' );
 
-		return $robots_txt_content ?: $this->default_robots_txt( $output );
+		return $robots_txt_content ?: $this->slim_seo_robots_txt( $output );
 	}
 
-	private function default_robots_txt( string $output ): string {
+	private function slim_seo_robots_txt( string $output ): string {
 		if ( $this->settings->is_feature_active( 'meta_robots' ) ) {
 			$content  = "Disallow: /?s=\n";
 			$content .= "Disallow: /page/*/?s=\n";
@@ -43,5 +43,16 @@ class Loader {
 		}
 
 		return $output;
+	}
+
+	public function default_robots_txt(): string {
+		remove_filter( 'robots_txt', [ $this, 'robots_txt' ], 9999 );
+		ob_start();
+		do_robots();
+		header( 'Content-Type: text/html; charset=utf-8' );
+		$content = $this->slim_seo_robots_txt( ob_get_clean() );
+		add_filter( 'robots_txt', [ $this, 'robots_txt' ], 9999 );
+
+		return $content;
 	}
 }

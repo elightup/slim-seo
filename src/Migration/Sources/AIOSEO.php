@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\Migration\Sources;
 
-use SlimSEO\Robots\Settings as RobotsSettings;
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
 use AIOSEO\Plugin\Common;
 
 class AIOSEO extends Source {
@@ -147,7 +147,7 @@ class AIOSEO extends Source {
 		do_robots();
 		$data = ob_get_clean();
 
-		return RobotsSettings::migrate( $data );
+		return RobotsTxtSettings::migrate( $data );
 	}
 }
 

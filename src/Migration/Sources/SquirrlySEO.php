@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\Migration\Sources;
 
-use SlimSEO\Robots\Settings as RobotsSettings;
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
 
 class SquirrlySEO extends Source {
 	protected $constant = 'SQ_VERSION';
@@ -106,6 +106,6 @@ class SquirrlySEO extends Source {
 		$robots_permission = \SQ_Classes_Helpers_Tools::getOption( 'sq_robots_permission' );
 		$robots_permission = ! empty( $robots_permission ) ? implode( PHP_EOL, (array) $robots_permission ) : '';
 
-		return RobotsSettings::migrate( $robots_permission );
+		return RobotsTxtSettings::migrate( $robots_permission );
 	}
 }

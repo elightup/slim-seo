@@ -1,7 +1,7 @@
 <?php
 namespace SlimSEO\Migration\Sources;
 
-use SlimSEO\Robots\Settings as RobotsSettings;
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
 
 class SEOFramework extends Source {
 	protected $constant = 'THE_SEO_FRAMEWORK_VERSION';
@@ -56,6 +56,6 @@ class SEOFramework extends Source {
 		$data = preg_replace( '/^#.*$/m', '', $data );
 		$data = preg_replace( "/\n{2,}/", "\n\n", trim( $data ) );
 
-		return RobotsSettings::migrate( $data );
+		return RobotsTxtSettings::migrate( $data );
 	}
 }
