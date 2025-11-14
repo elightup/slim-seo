@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\Migration\Sources;
 
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
 use AIOSEO\Plugin\Common;
 
 class AIOSEO extends Source {
@@ -127,6 +128,26 @@ class AIOSEO extends Source {
 		];
 
 		return strtr( $text, $variables );
+	}
+
+	public function migrate_robots(): bool {
+		$option = get_option( 'aioseo_options', '' );
+
+		if ( empty( $option ) ) {
+			return false;
+		}
+
+		$option = json_decode( $option, true );
+
+		if ( empty( $option['tools']['robots']['enable'] ) ) {
+			return false;
+		}
+
+		ob_start();
+		do_robots();
+		$data = ob_get_clean();
+
+		return RobotsTxtSettings::migrate( $data );
 	}
 }
 

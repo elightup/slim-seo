@@ -1,9 +1,11 @@
 <?php
 namespace SlimSEO\Migration\Sources;
 
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
+
 class SquirrlySEO extends Source {
 	protected $constant = 'SQ_VERSION';
-	private $object = 'post';
+	private $object     = 'post';
 	private $post;
 	private $term;
 
@@ -13,7 +15,7 @@ class SquirrlySEO extends Source {
 
 	protected function before_migrate_term( $term_id ) {
 		$this->object = 'term';
-		$this->term = $this->before_migrate( $term_id );
+		$this->term   = $this->before_migrate( $term_id );
 	}
 
 	private function before_migrate( $object_id ) {
@@ -21,11 +23,12 @@ class SquirrlySEO extends Source {
 		$table = $wpdb->prefix . _SQ_DB_;
 
 		$link = get_permalink( $object_id );
-		if( 'term' === $this->object ) {
+
+		if ( 'term' === $this->object ) {
 			$link = get_term_link( $object_id );
 		}
 
-		$seo = $wpdb->get_var( $wpdb->prepare( "SELECT seo FROM `$table` WHERE `url` = %s", $link ) );
+		$seo = $wpdb->get_var( $wpdb->prepare( "SELECT seo FROM `$table` WHERE `url` = %s", $link ) ); // phpcs:ignore
 		return \SQ_Classes_ObjController::getDomain( 'SQ_Models_Domain_Sq', maybe_unserialize( $seo ) );
 	}
 
@@ -93,5 +96,16 @@ class SquirrlySEO extends Source {
 		];
 
 		return strtr( $text, $variables );
+	}
+
+	public function migrate_robots(): bool {
+		if ( ! class_exists( '\SQ_Classes_Helpers_Tools' ) || empty( \SQ_Classes_Helpers_Tools::getOption( 'sq_auto_robots' ) ) ) {
+			return false;
+		}
+
+		$robots_permission = \SQ_Classes_Helpers_Tools::getOption( 'sq_robots_permission' );
+		$robots_permission = ! empty( $robots_permission ) ? implode( PHP_EOL, (array) $robots_permission ) : '';
+
+		return RobotsTxtSettings::migrate( $robots_permission );
 	}
 }

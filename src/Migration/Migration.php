@@ -24,6 +24,7 @@ class Migration {
 		add_action( 'wp_ajax_ss_migrate_posts', [ $this, 'migrate_posts' ] );
 		add_action( 'wp_ajax_ss_migrate_terms', [ $this, 'migrate_terms' ] );
 		add_action( 'wp_ajax_ss_migrate_redirects', [ $this, 'migrate_redirects' ] );
+		add_action( 'wp_ajax_ss_migrate_robots', [ $this, 'migrate_robots' ] );
 	}
 
 	public function prepare_migration(): void {
@@ -139,6 +140,23 @@ class Migration {
 		wp_send_json_success( [
 			// Translators: %d is the number of migrated redirects.
 			'message' => sprintf( __( 'Migrated %d redirects...', 'slim-seo' ), $count ),
+		] );
+	}
+
+	public function migrate_robots() {
+		session_start();
+		$source_id = sanitize_text_field( $_SESSION['source_id'] ?? '' );
+		$this->set_source( $source_id );
+		$success = $this->source->migrate_robots();
+
+		if ( ! $success ) {
+			wp_send_json_success( [
+				'message' => '',
+			] );
+		}
+
+		wp_send_json_success( [
+			'message' => __( 'Migrated custom robots.txt...', 'slim-seo' ),
 		] );
 	}
 

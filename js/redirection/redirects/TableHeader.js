@@ -1,4 +1,4 @@
-import { TextTooltip } from '../helper/misc';
+import { TextTooltip } from '../../helper/Tooltip';
 
 const TableHeader = ( { className, text, tooltip, type, orderBy, setOrderBy, order, setOrder } ) => {
 	const sorting = e => {

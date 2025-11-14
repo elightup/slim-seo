@@ -1,5 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import { Tooltip } from '../helper/misc';
 import TableHeader from './TableHeader';
 
 const Header = ( { orderBy, setOrderBy, order, setOrder, isCheckAll, checkAll } ) => {

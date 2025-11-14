@@ -1,6 +1,7 @@
 import { RawHTML, useReducer, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { Tooltip, fetcher } from '../helper/misc';
+import { Tooltip } from '../../helper/Tooltip';
+import { fetcher } from '../helper/misc';
 
 const Settings = () => {
 	const { settings, settingsName } = SSRedirection;

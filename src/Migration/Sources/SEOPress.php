@@ -3,10 +3,15 @@ namespace SlimSEO\Migration\Sources;
 
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
 
 class SEOPress extends Source {
 	protected $constant = 'SEOPRESS_VERSION';
 	private $context;
+
+	private function is_pro(): bool {
+		return defined( 'SEOPRESS_PRO_VERSION' );
+	}
 
 	protected function before_migrate_post( $post_id ) {
 		$this->context = seopress_get_service( 'ContextPage' )->buildContextWithCurrentId( $post_id )->getContext();
@@ -109,5 +114,29 @@ class SEOPress extends Source {
 		}
 
 		return $count;
+	}
+
+	public function migrate_robots(): bool {
+		if ( ! $this->is_pro() ) {
+			return false;
+		}
+
+		$option_name         = 'seopress_pro_option_name';
+		$enable_setting_name = 'seopress_robots_enable';
+		$robots_setting_name = 'seopress_robots_file';
+
+		if ( is_multisite() ) {
+			$option_name         = 'seopress_pro_mu_option_name';
+			$enable_setting_name = 'seopress_mu_robots_enable';
+			$robots_setting_name = 'seopress_mu_robots_file';
+		}
+
+		$option = get_option( $option_name ) ?: [];
+
+		if ( empty( $option[ $enable_setting_name ] ) ) {
+			return false;
+		}
+
+		return RobotsTxtSettings::migrate( $option[ $robots_setting_name ] ?? '' );
 	}
 }

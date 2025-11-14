@@ -4,6 +4,7 @@ namespace SlimSEO\Migration\Sources;
 use RankMath\Helper as RMHelper;
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use SlimSEO\Redirection\Helper as RedirectionHelper;
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
 
 class RankMath extends Source {
 	protected $constant = 'RANK_MATH_VERSION';
@@ -161,6 +162,12 @@ class RankMath extends Source {
 		}
 
 		return $count;
+	}
+
+	public function migrate_robots(): bool {
+		$general_option = get_option( 'rank-math-options-general' ) ?: [];
+
+		return RobotsTxtSettings::migrate( $general_option['robots_txt_content'] ?? '' );
 	}
 
 	private function replace_with_slim_seo_variables( string $text, string $type = 'post' ): string {

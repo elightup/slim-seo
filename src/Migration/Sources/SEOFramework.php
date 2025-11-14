@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Migration\Sources;
 
+use SlimSEO\RobotsTxt\Settings as RobotsTxtSettings;
+
 class SEOFramework extends Source {
 	protected $constant = 'THE_SEO_FRAMEWORK_VERSION';
 
@@ -43,5 +45,17 @@ class SEOFramework extends Source {
 
 	private function get_term( $term_id ) {
 		return get_term_meta( $term_id, 'autodescription-term-settings', true );
+	}
+
+	public function migrate_robots(): bool {
+		if ( ! class_exists( '\The_SEO_Framework\RobotsTXT\Main' ) ) {
+			return false;
+		}
+
+		$data = \The_SEO_Framework\RobotsTXT\Main::get_robots_txt();
+		$data = preg_replace( '/^#.*$/m', '', $data );
+		$data = preg_replace( "/\n{2,}/", "\n\n", trim( $data ) );
+
+		return RobotsTxtSettings::migrate( $data );
 	}
 }
