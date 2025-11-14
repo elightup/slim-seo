@@ -20,15 +20,15 @@ class Loader {
 
 	public function robots_txt( string $output ): string {
 		if ( ! Settings::get( 'robots_txt_editable' ) ) {
-			return $this->slim_seo_robots_txt( $output );
+			return $this->get_default_content( $output );
 		}
 
-		$robots_txt_content = Settings::get( 'robots_txt_content' );
+		$content = Settings::get( 'robots_txt_content' );
 
-		return $robots_txt_content ?: $this->slim_seo_robots_txt( $output );
+		return $content ?: $this->get_default_content( $output );
 	}
 
-	private function slim_seo_robots_txt( string $output ): string {
+	private function get_default_content( string $output ): string {
 		if ( $this->settings->is_feature_active( 'meta_robots' ) ) {
 			$content  = "Disallow: /?s=\n";
 			$content .= "Disallow: /page/*/?s=\n";
@@ -45,12 +45,12 @@ class Loader {
 		return $output;
 	}
 
-	public function default_robots_txt(): string {
+	public function load_default_robots_txt_content(): string {
 		remove_filter( 'robots_txt', [ $this, 'robots_txt' ], 9999 );
 		ob_start();
 		do_robots();
 		header( 'Content-Type: text/html; charset=utf-8' );
-		$content = $this->slim_seo_robots_txt( ob_get_clean() );
+		$content = $this->get_default_content( ob_get_clean() );
 		add_filter( 'robots_txt', [ $this, 'robots_txt' ], 9999 );
 
 		return $content;

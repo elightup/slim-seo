@@ -15,25 +15,24 @@ class Settings {
 
 	public function enqueue(): void {
 		Assets::enqueue_build_js( 'robots', 'SSRobots', [
-			'settingsName'     => 'slim_seo',
-			'settings'         => self::list(),
-			'fileExists'       => file_exists( ABSPATH . 'robots.txt' ),
-			'defaultRobotsTXT' => $this->loader->default_robots_txt(),
+			'settings'     => self::list(),
+			'fileExists'   => file_exists( ABSPATH . 'robots.txt' ),
+			'defaultValue' => $this->loader->load_default_robots_txt_content(),
 		] );
 	}
 
 	public function save( array $option, array $data ): array {
-		if ( ! empty( $data['robots_txt_editable'] ) ) {
-			$option['robots_txt_editable'] = 1;
-		} else {
+		if ( empty( $data['robots_txt_editable'] ) ) {
 			$option['robots_txt_editable'] = 0;
 			$option['robots_txt_content']  = '';
+		} else {
+			$option['robots_txt_editable'] = 1;
 		}
 
 		return $option;
 	}
 
-	public static function list(): array {
+	private static function list(): array {
 		$saved_settings = get_option( 'slim_seo' ) ?: [];
 		$settings       = [
 			'robots_txt_editable' => $saved_settings['robots_txt_editable'] ?? 0,
