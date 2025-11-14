@@ -25,8 +25,8 @@ const App = () => {
 						<div className="ef-control">
 							<div className="ef-control__label" />
 							<div className="ef-control__input">
-								<textarea className="large-text" rows="10" name={ `${ settingsName }[robots_txt_content]` } defaultValue={ settings[ 'robots_txt_content' ] } placeholder={ SSRobots.defaultRobotsTXT } />
-								<p className="description">{ __( 'Enter content for the robots.txt file. Leave empty to let the plugin handle the content automatically.', 'slim-seo' ) }</p>
+								<textarea className="large-text" rows="10" name={ `${ settingsName }[robots_txt_content]` } defaultValue={ settings[ 'robots_txt_content' ] ? settings[ 'robots_txt_content' ] : SSRobots.defaultRobotsTXT } />
+								<p className="description">{ __( 'Enter custom content for the robots.txt file. The default value is what WordPress and Slim SEO already do for you.', 'slim-seo' ) }</p>
 							</div>
 						</div>
 					)

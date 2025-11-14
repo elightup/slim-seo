@@ -23,7 +23,12 @@ class Settings {
 	}
 
 	public function save( array $option, array $data ): array {
-		$option['robots_txt_editable'] = empty( $data['robots_txt_editable'] ) ? 0 : 1;
+		if ( ! empty( $data['robots_txt_editable'] ) ) {
+			$option['robots_txt_editable'] = 1;
+		} else {
+			$option['robots_txt_editable'] = 0;
+			$option['robots_txt_content']  = '';
+		}
 
 		return $option;
 	}
