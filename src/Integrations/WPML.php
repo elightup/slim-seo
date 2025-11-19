@@ -1,4 +1,10 @@
 <?php
+/**
+ * WPML integration
+ *
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+ */
+
 namespace SlimSEO\Integrations;
 
 use WP_Post;
@@ -14,7 +20,6 @@ class WPML {
 	public function setup(): void {
 		$this->setup_sitemap_hooks();
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		do_action( 'wpml_multilingual_options', 'slim_seo' );
 		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'adjust_fields' ] );
 	}
@@ -33,7 +38,7 @@ class WPML {
 		$home_url     = home_url( '/' );
 
 		foreach ( $languages as $language ) {
-			$url = apply_filters( 'wpml_permalink', $home_url, $language, true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$url = apply_filters( 'wpml_permalink', $home_url, $language, true );
 			if ( ! $url || $url === $home_url ) {
 				continue;
 			}
@@ -51,12 +56,12 @@ class WPML {
 
 		$current_language = apply_filters( 'wpml_current_language', null );
 		foreach ( $languages as $language ) {
-			do_action( 'wpml_switch_language', $language );         // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			do_action( 'wpml_switch_language', $language );
 			$url = get_post_type_archive_link( $post_type );
-			do_action( 'wpml_switch_language', $current_language ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			do_action( 'wpml_switch_language', $current_language );
 
 			// TODO: Uncomment this when WPML is fixed.
-			// $url = apply_filters( 'wpml_permalink', $archive_url, $language, true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			// $url = apply_filters( 'wpml_permalink', $archive_url, $language, true );
 			if ( ! $url || $url === $archive_url ) {
 				continue;
 			}
@@ -71,6 +76,7 @@ class WPML {
 		$languages    = $this->get_languages();
 		$translations = [];
 
+		$current_language = apply_filters( 'wpml_current_language', null );
 		foreach ( $languages as $language ) {
 			$translated_id = apply_filters( 'wpml_object_id', $object_id, $type, true, $language );
 			if ( ! $translated_id ) {
@@ -90,7 +96,7 @@ class WPML {
 	}
 
 	private function get_languages(): array {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+
 		return array_keys( apply_filters( 'wpml_active_languages', [], [ 'skip_missing' => true ] ) );
 	}
 
