@@ -25,11 +25,11 @@ class WPML {
 	}
 
 	private function get_post_translations( WP_Post $post ): array {
-		return $this->get_translations( get_permalink( $post ), $post->ID, 'post', $post->post_type );
+		return $this->get_translations( $post->ID, 'post', $post->post_type );
 	}
 
 	private function get_term_translations( WP_Term $term ): array {
-		return $this->get_translations( get_term_link( $term ), $term->term_id, 'term', $term->taxonomy );
+		return $this->get_translations( $term->term_id, 'term', $term->taxonomy );
 	}
 
 	private function get_homepage_translations(): array {
@@ -54,41 +54,47 @@ class WPML {
 		$translations = [];
 		$archive_url  = get_post_type_archive_link( $post_type );
 
+		$default_language = $this->get_default_language();
 		$current_language = apply_filters( 'wpml_current_language', null );
+
 		foreach ( $languages as $language ) {
 			do_action( 'wpml_switch_language', $language );
 			$url = get_post_type_archive_link( $post_type );
-			do_action( 'wpml_switch_language', $current_language );
-
-			// TODO: Uncomment this when WPML is fixed.
-			// $url = apply_filters( 'wpml_permalink', $archive_url, $language, true );
-			if ( ! $url || $url === $archive_url ) {
+			if ( ! $url || ( $url === $archive_url && $language !== $default_language ) ) {
 				continue;
 			}
-			$translation    = compact( 'language', 'url' );
+			$translation = compact( 'language', 'url' );
+			do_action( 'wpml_switch_language', $current_language );
+
 			$translations[] = $translation;
 		}
 
 		return $translations;
 	}
 
-	private function get_translations( string $url, int $object_id, string $object_type, string $type ): array {
+	private function get_translations( int $object_id, string $object_type, string $type ): array {
 		$languages    = $this->get_languages();
 		$translations = [];
 
+		$default_language = $this->get_default_language();
 		$current_language = apply_filters( 'wpml_current_language', null );
+
 		foreach ( $languages as $language ) {
 			$translated_id = apply_filters( 'wpml_object_id', $object_id, $type, true, $language );
-			if ( ! $translated_id ) {
+			if ( ! $translated_id || ( $object_id === $translated_id && $language !== $default_language ) ) {
 				continue;
 			}
+
+			do_action( 'wpml_switch_language', $language );
 			$translation = [
 				'language' => $language,
-				'url'      => apply_filters( 'wpml_permalink', $url, $language, true ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				'url'      => $object_type === 'post' ? get_permalink( $translated_id ) : get_term_link( $translated_id ),
 			];
 			if ( $object_type === 'post' ) {
 				$translation['lastmod'] = get_post_modified_time( 'c', true, $translated_id );
 			}
+			do_action( 'wpml_switch_language', $current_language );
+
 			$translations[] = $translation;
 		}
 
@@ -96,7 +102,6 @@ class WPML {
 	}
 
 	private function get_languages(): array {
-
 		return array_keys( apply_filters( 'wpml_active_languages', [], [ 'skip_missing' => true ] ) );
 	}
 
