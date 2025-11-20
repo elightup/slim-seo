@@ -33,18 +33,22 @@ class WPML {
 	}
 
 	private function get_homepage_translations(): array {
-		$languages    = $this->get_languages();
-		$translations = [];
-		$home_url     = home_url( '/' );
+		$languages        = $this->get_languages();
+		$translations     = [];
+		$base_url         = home_url( '/' );
+		$current_language = apply_filters( 'wpml_current_language', null );
 
 		foreach ( $languages as $language ) {
-			$url = apply_filters( 'wpml_permalink', $home_url, $language, true );
-			if ( ! $url || $url === $home_url ) {
+			do_action( 'wpml_switch_language', $language );
+			$url = home_url( '/' );
+			if ( ! $url || ( $url === $base_url && $language !== $current_language ) ) {
 				continue;
 			}
 			$translation    = compact( 'language', 'url' );
 			$translations[] = $translation;
 		}
+
+		do_action( 'wpml_switch_language', $current_language );
 
 		return $translations;
 	}
@@ -52,51 +56,53 @@ class WPML {
 	private function get_post_type_archive_translations( string $post_type ): array {
 		$languages    = $this->get_languages();
 		$translations = [];
-		$archive_url  = get_post_type_archive_link( $post_type );
+		$base_url     = get_post_type_archive_link( $post_type );
 
-		$default_language = $this->get_default_language();
 		$current_language = apply_filters( 'wpml_current_language', null );
 
 		foreach ( $languages as $language ) {
 			do_action( 'wpml_switch_language', $language );
 			$url = get_post_type_archive_link( $post_type );
-			if ( ! $url || ( $url === $archive_url && $language !== $default_language ) ) {
+			if ( ! $url || ( $url === $base_url && $language !== $current_language ) ) {
 				continue;
 			}
-			$translation = compact( 'language', 'url' );
-			do_action( 'wpml_switch_language', $current_language );
-
+			$translation    = compact( 'language', 'url' );
 			$translations[] = $translation;
 		}
+
+		do_action( 'wpml_switch_language', $current_language );
 
 		return $translations;
 	}
 
 	private function get_translations( int $object_id, string $object_type, string $type ): array {
-		$languages    = $this->get_languages();
-		$translations = [];
-
-		$default_language = $this->get_default_language();
+		$languages        = $this->get_languages();
+		$translations     = [];
 		$current_language = apply_filters( 'wpml_current_language', null );
 
 		foreach ( $languages as $language ) {
+			do_action( 'wpml_switch_language', $language );
+
 			$translated_id = apply_filters( 'wpml_object_id', $object_id, $type, true, $language );
-			if ( ! $translated_id || ( $object_id === $translated_id && $language !== $default_language ) ) {
+			if ( ! $translated_id || ( $object_id === $translated_id && $language !== $current_language ) ) {
 				continue;
 			}
 
-			do_action( 'wpml_switch_language', $language );
-			$translation = [
-				'language' => $language,
-				'url'      => $object_type === 'post' ? get_permalink( $translated_id ) : get_term_link( $translated_id ),
-			];
+			$url = $object_type === 'post' ? get_permalink( $translated_id ) : get_term_link( $translated_id );
+			if ( ! $url || ! is_string( $url ) ) {
+				continue;
+			}
+
+			$translation = compact( 'language', 'url' );
+
 			if ( $object_type === 'post' ) {
 				$translation['lastmod'] = get_post_modified_time( 'c', true, $translated_id );
 			}
-			do_action( 'wpml_switch_language', $current_language );
 
 			$translations[] = $translation;
 		}
+
+		do_action( 'wpml_switch_language', $current_language );
 
 		return $translations;
 	}
