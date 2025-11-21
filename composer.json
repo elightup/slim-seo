@@ -55,7 +55,8 @@
       "echo Deleting .git dirs...",
       "rm -rf vendor/**/**/.git"
     ],
-    "phpcs": "phpcs > phpcs.txt",
+    "phpcs": "phpcs --standard=phpcs.xml > phpcs.txt",
+    "phpcbf": "phpcbf --standard=phpcs.xml",
     "phpstan": "phpstan --memory-limit=2048M > phpstan.txt"
   }
 }

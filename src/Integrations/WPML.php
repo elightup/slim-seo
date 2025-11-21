@@ -1,8 +1,16 @@
 <?php
+/**
+ * WPML integration
+ *
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+ */
+
 namespace SlimSEO\Integrations;
 
 use WP_Post;
 use WP_Term;
+use WP_Query;
+use WPML\Settings\LanguageNegotiation;
 
 class WPML {
 	use MultilingualSitemapTrait;
@@ -14,32 +22,39 @@ class WPML {
 	public function setup(): void {
 		$this->setup_sitemap_hooks();
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		do_action( 'wpml_multilingual_options', 'slim_seo' );
 		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'adjust_fields' ] );
+
+		if ( ! LanguageNegotiation::isDomain() ) {
+			add_action( 'parse_query', [ $this, 'remove_sitemap_from_non_default_language' ] );
+		}
 	}
 
 	private function get_post_translations( WP_Post $post ): array {
-		return $this->get_translations( get_permalink( $post ), $post->ID, 'post', $post->post_type );
+		return $this->get_translations( $post->ID, 'post', $post->post_type );
 	}
 
 	private function get_term_translations( WP_Term $term ): array {
-		return $this->get_translations( get_term_link( $term ), $term->term_id, 'term', $term->taxonomy );
+		return $this->get_translations( $term->term_id, 'term', $term->taxonomy );
 	}
 
 	private function get_homepage_translations(): array {
-		$languages    = $this->get_languages();
-		$translations = [];
-		$home_url     = home_url( '/' );
+		$languages        = $this->get_languages();
+		$translations     = [];
+		$base_url         = home_url( '/' );
+		$current_language = apply_filters( 'wpml_current_language', null );
 
 		foreach ( $languages as $language ) {
-			$url = apply_filters( 'wpml_permalink', $home_url, $language, true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-			if ( ! $url || $url === $home_url ) {
+			do_action( 'wpml_switch_language', $language );
+			$url = home_url( '/' );
+			if ( ! $url || ( $url === $base_url && $language !== $current_language ) ) {
 				continue;
 			}
 			$translation    = compact( 'language', 'url' );
 			$translations[] = $translation;
 		}
+
+		do_action( 'wpml_switch_language', $current_language );
 
 		return $translations;
 	}
@@ -47,50 +62,58 @@ class WPML {
 	private function get_post_type_archive_translations( string $post_type ): array {
 		$languages    = $this->get_languages();
 		$translations = [];
-		$archive_url  = get_post_type_archive_link( $post_type );
+		$base_url     = get_post_type_archive_link( $post_type );
 
 		$current_language = apply_filters( 'wpml_current_language', null );
-		foreach ( $languages as $language ) {
-			do_action( 'wpml_switch_language', $language );         // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-			$url = get_post_type_archive_link( $post_type );
-			do_action( 'wpml_switch_language', $current_language ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
-			// TODO: Uncomment this when WPML is fixed.
-			// $url = apply_filters( 'wpml_permalink', $archive_url, $language, true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-			if ( ! $url || $url === $archive_url ) {
+		foreach ( $languages as $language ) {
+			do_action( 'wpml_switch_language', $language );
+			$url = get_post_type_archive_link( $post_type );
+			if ( ! $url || ( $url === $base_url && $language !== $current_language ) ) {
 				continue;
 			}
 			$translation    = compact( 'language', 'url' );
 			$translations[] = $translation;
 		}
 
+		do_action( 'wpml_switch_language', $current_language );
+
 		return $translations;
 	}
 
-	private function get_translations( string $url, int $object_id, string $object_type, string $type ): array {
-		$languages    = $this->get_languages();
-		$translations = [];
+	private function get_translations( int $object_id, string $object_type, string $type ): array {
+		$languages        = $this->get_languages();
+		$translations     = [];
+		$current_language = apply_filters( 'wpml_current_language', null );
 
 		foreach ( $languages as $language ) {
+			do_action( 'wpml_switch_language', $language );
+
 			$translated_id = apply_filters( 'wpml_object_id', $object_id, $type, true, $language );
-			if ( ! $translated_id ) {
+			if ( ! $translated_id || ( $object_id === $translated_id && $language !== $current_language ) ) {
 				continue;
 			}
-			$translation = [
-				'language' => $language,
-				'url'      => apply_filters( 'wpml_permalink', $url, $language, true ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-			];
+
+			$url = $object_type === 'post' ? get_permalink( $translated_id ) : get_term_link( $translated_id );
+			if ( ! $url || ! is_string( $url ) ) {
+				continue;
+			}
+
+			$translation = compact( 'language', 'url' );
+
 			if ( $object_type === 'post' ) {
 				$translation['lastmod'] = get_post_modified_time( 'c', true, $translated_id );
 			}
+
 			$translations[] = $translation;
 		}
+
+		do_action( 'wpml_switch_language', $current_language );
 
 		return $translations;
 	}
 
 	private function get_languages(): array {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		return array_keys( apply_filters( 'wpml_active_languages', [], [ 'skip_missing' => true ] ) );
 	}
 
@@ -108,5 +131,22 @@ class WPML {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Removes the sitemap query var on non-default languages to avoid generating
+	 * wrong sitemaps for non-default languages like /de/sitemap.xml.
+	 * This will only run when the language URL format is not per domain.
+	 *
+	 * @param WP_Query $query The WordPress query object.
+	 */
+	public function remove_sitemap_from_non_default_language( WP_Query $query ): void {
+		$current_language = apply_filters( 'wpml_current_language', null );
+		if ( $current_language === $this->get_default_language() || ! $query->get( 'ss_sitemap' ) ) {
+			return;
+		}
+		unset( $query->query_vars['ss_sitemap'] );
+		$query->set_404();
+		status_header( 404 );
 	}
 }
