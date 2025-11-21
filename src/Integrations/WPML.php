@@ -9,6 +9,8 @@ namespace SlimSEO\Integrations;
 
 use WP_Post;
 use WP_Term;
+use WP_Query;
+use WPML\Settings\LanguageNegotiation;
 
 class WPML {
 	use MultilingualSitemapTrait;
@@ -22,6 +24,10 @@ class WPML {
 
 		do_action( 'wpml_multilingual_options', 'slim_seo' );
 		add_filter( 'wpml_tm_adjust_translation_fields', [ $this, 'adjust_fields' ] );
+
+		if ( ! LanguageNegotiation::isDomain() ) {
+			add_action( 'parse_query', [ $this, 'remove_sitemap_from_non_default_language' ] );
+		}
 	}
 
 	private function get_post_translations( WP_Post $post ): array {
@@ -125,5 +131,22 @@ class WPML {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Removes the sitemap query var on non-default languages to avoid generating
+	 * wrong sitemaps for non-default languages like /de/sitemap.xml.
+	 * This will only run when the language URL format is not per domain.
+	 *
+	 * @param WP_Query $query The WordPress query object.
+	 */
+	public function remove_sitemap_from_non_default_language( WP_Query $query ): void {
+		$current_language = apply_filters( 'wpml_current_language', null );
+		if ( $current_language === $this->get_default_language() || ! $query->get( 'ss_sitemap' ) ) {
+			return;
+		}
+		unset( $query->query_vars['ss_sitemap'] );
+		$query->set_404();
+		status_header( 404 );
 	}
 }
