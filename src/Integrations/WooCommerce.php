@@ -2,7 +2,7 @@
 namespace SlimSEO\Integrations;
 
 use WP_Post;
-
+use Automattic\WooCommerce\Enums\ProductStockStatus;
 class WooCommerce {
 	private $tags = [
 		'product:price:amount',
@@ -26,6 +26,39 @@ class WooCommerce {
 		add_filter( 'slim_seo_allowed_shortcodes', [ $this, 'exclude_shortcodes' ] );
 
 		add_filter( 'slim_seo_no_post_content', [ $this, 'no_post_content' ], 1, 2 );
+
+		add_filter( 'slim_seo_sitemap_post_type_query_args', [ $this, 'exclude_products_by_visibility' ] );
+	}
+
+	public function exclude_products_by_visibility( array $query_args ): array {
+		if ( $query_args['post_type'] !== 'product' ) {
+			return $query_args;
+		}
+
+		$visibility_terms  = wc_get_product_visibility_term_ids();
+		$not_in            = [ $visibility_terms['exclude-from-catalog'] ];
+
+		// Hide out of stock products.
+		if ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) ) {
+			$not_in[] = $visibility_terms[ ProductStockStatus::OUT_OF_STOCK ];
+		}
+
+		if ( empty( $not_in ) ) {
+			return $query_args;
+		}
+
+		if ( empty( $query_args['tax_query'] ) ) {
+			$query_args['tax_query'] = [];
+		}
+		$query_args['tax_query']['relation'] = 'AND';
+		$query_args['tax_query'][] = [
+			'taxonomy' => 'product_visibility',
+			'field'    => 'term_taxonomy_id',
+			'terms'    => $not_in,
+			'operator' => 'NOT IN',
+		];
+
+		return $query_args;
 	}
 
 	public function process(): void {
