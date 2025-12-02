@@ -14,6 +14,12 @@ abstract class Base {
 		'noindex'        => 0,
 	];
 
+	protected $quick_edit = [
+		'title'          => '',
+		'description'    => '',
+		'noindex'        => 0,
+	];
+
 	public function enqueue(): void {
 		wp_enqueue_media();
 
@@ -36,6 +42,7 @@ abstract class Base {
 		// Do not erase existing data when quick editing.
 		if ( isset( $_POST['action'] ) && $_POST['action'] === 'inline-save' ) { // phpcs:ignore
 			$existing_data = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
+			$data          = array_intersect_key( $data, $this->quick_edit );
 			$data          = array_merge( $existing_data, $data );
 		}
 
