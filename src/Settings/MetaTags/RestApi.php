@@ -36,7 +36,7 @@ class RestApi {
 	}
 
 	public function has_permission(): bool {
-		return current_user_can( 'manage_options' );
+		return current_user_can( 'edit_posts' );
 	}
 
 	public function get_option(): array {
