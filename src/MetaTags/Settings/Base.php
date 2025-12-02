@@ -36,6 +36,10 @@ abstract class Base {
 		// Do not erase existing data when quick editing.
 		if ( isset( $_POST['action'] ) && $_POST['action'] === 'inline-save' ) { // phpcs:ignore
 			$existing_data = get_metadata( $this->object_type, $object_id, 'slim_seo', true ) ?: [];
+
+			unset( $data['facebook_image'] );
+			unset( $data['twitter_image'] );
+			unset( $data['canonical'] );
 			$data          = array_merge( $existing_data, $data );
 		}
 
