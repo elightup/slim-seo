@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.8.3
+Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 4.7.3
+Stable tag: 4.8.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -169,6 +169,20 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.8.0 - 2025-12-04 =
+
+**Highlights:**
+
+This version allows you to edit the content of the `robots.txt` file in the Tools tab. It also add migrations for `robots.txt` from other SEO plugins.
+
+**Other changes:**
+
+- Fix editors can't see settings for Facebook/Twitter images
+- Exclude WooCommerce products by visibility in sitemaps
+- Fix quick edit loses Facebook/Twitter images
+- WPML integration: fix generating sitemaps for non-default languages & fix getting URLs for posts #248
+- Fix compatibility with WP Extended Pro (disable blog module)
 
 = 4.7.3 - 2025-11-07 =
 
