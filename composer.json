@@ -30,31 +30,11 @@
     "php": ">=7.2"
   },
   "config": {
-    "allow-plugins": true
-  },
-  "extra": {
-    "dev-files": {
-      "/": [
-        "tests/",
-
-        ".gitignore",
-
-        "composer.*",
-        "phpcs.xml",
-        "phpunit.xml",
-        "slim-twig.php"
-      ]
-    }
+    "allow-plugins": true,
+    "prepend-autoloader": false,
+    "sort-packages": true
   },
   "scripts": {
-    "post-update-cmd": [
-      "echo Deleting .git dirs...",
-      "rm -rf vendor/**/**/.git"
-    ],
-    "post-install-cmd": [
-      "echo Deleting .git dirs...",
-      "rm -rf vendor/**/**/.git"
-    ],
     "phpcs": "phpcs --standard=phpcs.xml > phpcs.txt",
     "phpcbf": "phpcbf --standard=phpcs.xml",
     "phpstan": "phpstan --memory-limit=2048M > phpstan.txt"

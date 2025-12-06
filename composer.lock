@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22b2089a9ad06b3b423db439c0900d7f",
+    "content-hash": "35ee6476623cb1d1baca6af680606c6a",
     "packages": [
         {
             "name": "elightup/slim-seo-common",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/slim-seo-common.git",
-                "reference": "5033b1bbc10f29f50de95d3c6574e0d863cdf2bf"
+                "reference": "b6b5b2d5baabc0963986e56cc2e4706cfb453c72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/5033b1bbc10f29f50de95d3c6574e0d863cdf2bf",
-                "reference": "5033b1bbc10f29f50de95d3c6574e0d863cdf2bf",
+                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/b6b5b2d5baabc0963986e56cc2e4706cfb453c72",
+                "reference": "b6b5b2d5baabc0963986e56cc2e4706cfb453c72",
                 "shasum": ""
             },
             "default-branch": true,
@@ -37,7 +37,7 @@
                 "issues": "https://github.com/elightup/slim-seo-common/issues",
                 "source": "https://github.com/elightup/slim-seo-common/tree/master"
             },
-            "time": "2025-09-24T02:57:39+00:00"
+            "time": "2025-12-06T01:59:21+00:00"
         },
         {
             "name": "elightup/slim-twig",
@@ -45,12 +45,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/slim-twig.git",
-                "reference": "c5ced434e08cb5d29175d17718ecc4562165f8cb"
+                "reference": "72ed78e558406a6d9069802c89cb75b0802781bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/c5ced434e08cb5d29175d17718ecc4562165f8cb",
-                "reference": "c5ced434e08cb5d29175d17718ecc4562165f8cb",
+                "url": "https://api.github.com/repos/elightup/slim-twig/zipball/72ed78e558406a6d9069802c89cb75b0802781bd",
+                "reference": "72ed78e558406a6d9069802c89cb75b0802781bd",
                 "shasum": ""
             },
             "require-dev": {
@@ -68,7 +68,7 @@
                 "issues": "https://github.com/elightup/slim-twig/issues",
                 "source": "https://github.com/elightup/slim-twig/tree/master"
             },
-            "time": "2025-06-23T02:58:23+00:00"
+            "time": "2025-12-06T01:50:30+00:00"
         }
     ],
     "packages-dev": [],
