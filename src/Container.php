@@ -118,6 +118,7 @@ class Container {
 		);
 
 		$services['the_events_calendar'] = new Integrations\TheEventsCalendar;
+		$services['generateblocks'] = new Integrations\GenerateBlocks;
 	}
 
 	public function init() {
