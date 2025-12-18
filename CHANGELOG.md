@@ -1,3 +1,7 @@
+### 4.8.1 - 2025-12-18
+
+- Add basic support for GenerateBlocks (container, text, headline)
+
 ### 4.8.0 - 2025-12-04
 
 **Highlights:**
