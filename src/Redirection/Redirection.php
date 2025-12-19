@@ -100,7 +100,7 @@ class Redirection {
 				return;
 			}
 
-			$to = Helper::url_valid( $to ) ? $to : home_url( $to );
+			$to = Helper::url_valid( $to ) ? $to : Helper::home_url( $to );
 
 			// phpcs:ignore
 			wp_redirect( $to, $status, 'Slim SEO' );

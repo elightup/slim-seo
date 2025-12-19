@@ -19,6 +19,8 @@ class TranslatePress {
 		$this->settings      = $trp->get_component( 'settings' );
 
 		$this->setup_sitemap_hooks();
+
+		add_filter( 'slim_seo_redirection_home_url', [ $this, 'home_url' ], 10, 2 );
 	}
 
 	private function get_post_translations( WP_Post $post ): array {
@@ -38,12 +40,12 @@ class TranslatePress {
 	}
 
 	private function get_translations( string $url, ?WP_Post $post = null ): array {
-		$languages = $this->get_languages();
+		$languages    = $this->get_languages();
 		$translations = [];
 
 		foreach ( $languages as $language ) {
 			$translated_url = $this->get_url( $url, $language );
-			$translation = [
+			$translation    = [
 				'language' => $language,
 				'url'      => $translated_url,
 			];
@@ -70,5 +72,15 @@ class TranslatePress {
 		$settings = $this->settings->get_settings();
 
 		return $settings['default-language'];
+	}
+
+	public function home_url( string $home_url, string $path ): string {
+		$home_url = untrailingslashit( set_url_scheme( get_option( 'home' ), is_ssl() ? 'https' : 'http' ) );
+
+		if ( $path ) {
+			return $home_url . '/' . $path;
+		}
+
+		return $home_url;
 	}
 }
