@@ -1,3 +1,8 @@
+### 4.8.2 - 2025-12-20
+
+- Fix error when updating Free version first and Pro version at <= 1.7.0 due to load order in Composer
+- Fix conflict between redirect and TranslatePress
+
 ### 4.8.1 - 2025-12-18
 
 - Add basic support for GenerateBlocks (container, text, headline)
