@@ -49,6 +49,9 @@ class Migration {
 
 	private function set_source( string $source_id ): void {
 		$this->source = Factory::make( $source_id );
+		if ( empty( $this->source ) ) {
+			wp_send_json_error( __( 'Platforms selected error', 'slim-seo' ), 400 );
+		}
 	}
 
 	private function check_activation( string $source_id ): void {
