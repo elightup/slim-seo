@@ -31,7 +31,6 @@
   },
   "config": {
     "allow-plugins": true,
-    "prepend-autoloader": false,
     "sort-packages": true
   },
   "scripts": {
