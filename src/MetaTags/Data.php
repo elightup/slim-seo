@@ -56,14 +56,7 @@ class Data {
 
 	private function get_author_data(): array {
 		if ( is_author() ) {
-			$author_id = get_query_var( 'author' );
-
-			if ( ! $author_id ) {
-				$author_nicename = get_query_var( 'author_name' );
-				$author = get_user_by( 'slug', $author_nicename );
-				$author_id = $author->ID;
-			}
-
+			$author_id = get_the_author_meta( 'ID' );
 			return empty( $author_id ) ? [] : $this->get_user( $author_id );
 		}
 
