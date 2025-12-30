@@ -5,7 +5,7 @@ import { Component } from '@wordpress/element';
 const defaultSettings = [
 	{
 		id    : 'title',
-		title : __( 'Title', 'slim-seo' ),
+		title : __( 'Title attribute', 'slim-seo' ),
 		type  : 'TextControl'
 	},
 	{
