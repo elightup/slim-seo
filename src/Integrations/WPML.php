@@ -11,6 +11,7 @@ use WP_Post;
 use WP_Term;
 use WP_Query;
 use WPML\Settings\LanguageNegotiation;
+use SlimSEO\Helpers\Data as HelpersData;
 
 class WPML {
 	use MultilingualSitemapTrait;
@@ -28,6 +29,8 @@ class WPML {
 		if ( ! LanguageNegotiation::isDomain() ) {
 			add_action( 'parse_query', [ $this, 'remove_sitemap_from_non_default_language' ] );
 		}
+
+		add_filter( 'slim_seo_redirection_home_url', [ HelpersData::class, 'multilanguage_home_url' ], 10, 2 );
 	}
 
 	private function get_post_translations( WP_Post $post ): array {

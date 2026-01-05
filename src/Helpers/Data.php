@@ -53,4 +53,14 @@ class Data {
 	public static function has_static_homepage(): bool {
 		return get_option( 'show_on_front' ) === 'page' && get_option( 'page_on_front' );
 	}
+
+	public static function multilanguage_home_url( string $home_url, string $path ): string {
+		$home_url = untrailingslashit( set_url_scheme( get_option( 'home' ), is_ssl() ? 'https' : 'http' ) );
+
+		if ( $path ) {
+			return $home_url . '/' . $path;
+		}
+
+		return $home_url;
+	}
 }
