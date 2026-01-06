@@ -56,7 +56,7 @@ class Data {
 
 	private function get_author_data(): array {
 		if ( is_author() ) {
-			$author_id = get_the_author_meta( 'ID' );
+			$author_id = QueriedObject::get_id();
 			return empty( $author_id ) ? [] : $this->get_user( $author_id );
 		}
 
