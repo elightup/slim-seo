@@ -55,6 +55,11 @@ class Data {
 	}
 
 	private function get_author_data(): array {
+		if ( is_author() ) {
+			$author_id = QueriedObject::get_id();
+			return empty( $author_id ) ? [] : $this->get_user( $author_id );
+		}
+
 		$post = get_post( $this->post_id ?: QueriedObject::get_id() );
 		return empty( $post ) ? [] : $this->get_user( $post->post_author );
 	}
