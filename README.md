@@ -88,6 +88,7 @@ However, Slim SEO is perfectly suitable for users who prefer simplicity or do no
 If you like this plugin, you might also like our other WordPress products:
 
 - [Meta Box](https://metabox.io) - A powerful WordPress plugin for creating custom post types and custom fields.
+- [Falcon](https://wpfalcon.pro) - A lightweight companion for making WordPress faster, cleaner, and more secure.
 - [GretaThemes](https://gretathemes.com) - Free and premium WordPress themes that clean, simple and just work.
 - [Auto Listings](https://wpautolistings.com) - A car sale and dealership plugin for WordPress.
 

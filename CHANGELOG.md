@@ -1,3 +1,9 @@
+### 4.8.3 - 2026-01-06
+
+- Fix link attributes modal CSS horizontal issue
+- Fix meta tags for author page
+- Fix conflict between redirect and WPML
+
 ### 4.8.2 - 2025-12-20
 
 - Fix error when updating Free version first and Pro version at <= 1.7.0 due to load order in Composer
