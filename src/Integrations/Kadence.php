@@ -49,7 +49,7 @@ class Kadence {
 	}
 
 	public function allowed_blocks( array $blocks ): array {
-		$blocks = array_merge( $blocks, [
+		return array_merge( $blocks, [
 			'kadence/advancedheading',
 			'kadence/advancedtext',
 			'kadence/infobox',
@@ -57,8 +57,6 @@ class Kadence {
 			'kadence/icon',
 			'kadence/rowlayout',
 		] );
-
-		return $blocks;
 	}
 
 }
