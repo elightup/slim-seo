@@ -49,14 +49,16 @@ class Kadence {
 	}
 
 	public function allowed_blocks( array $blocks ): array {
-		return [
+		$blocks = array_merge( $blocks, [
 			'kadence/advancedheading',
 			'kadence/advancedtext',
 			'kadence/infobox',
 			'kadence/iconlist',
 			'kadence/icon',
 			'kadence/rowlayout',
-		];
+		] );
+
+		return $blocks;
 	}
 
 }
