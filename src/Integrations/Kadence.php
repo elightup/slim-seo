@@ -15,6 +15,7 @@ class Kadence {
 	public function setup(): void {
 		add_filter( 'slim_seo_post_types', [ $this, 'remove_post_types' ] );
 		add_filter( 'slim_seo_skipped_shortcodes', [ $this, 'skip_shortcodes' ] );
+		add_filter( 'slim_seo_allowed_blocks', [ $this, 'allowed_blocks' ] );
 	}
 
 	public function remove_post_types( array $post_types ): array {
@@ -44,4 +45,14 @@ class Kadence {
 			'kadence_element',
 		] );
 	}
+
+	public function allowed_blocks( array $blocks ): array {
+		return array_merge( $blocks, [
+			'kadence/advancedheading',
+			'kadence/advancedtext',
+			'kadence/infobox',
+			'kadence/rowlayout',
+		] );
+	}
+
 }
