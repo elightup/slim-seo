@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\Integrations;
 
-use WP_Post;
-
 class Kadence {
 	public function is_active(): bool {
 		return defined( 'KADENCE_VERSION' )
@@ -53,8 +51,6 @@ class Kadence {
 			'kadence/advancedheading',
 			'kadence/advancedtext',
 			'kadence/infobox',
-			'kadence/iconlist',
-			'kadence/icon',
 			'kadence/rowlayout',
 		] );
 	}
