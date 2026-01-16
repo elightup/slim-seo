@@ -3,10 +3,20 @@ import { addQueryArgs } from '@wordpress/url';
 
 let apiCache = {};
 
-export const request = async ( apiName, data = {}, method = 'POST', cache = true ) => {
+export const request = async ( apiName, data = {}, params = {} ) => {
+	const {
+		method = 'POST',
+		cache = true,
+		delay = 0
+	} = params;
+
 	const cacheKey = JSON.stringify( { apiName, data, method } );
 	if ( cache && apiCache[ cacheKey ] ) {
 		return apiCache[ cacheKey ];
+	}
+
+	if ( delay > 0 ) {
+		await new Promise( resolve => setTimeout( resolve, delay ) );
 	}
 
 	let options;
@@ -23,7 +33,10 @@ export const request = async ( apiName, data = {}, method = 'POST', cache = true
 	}
 
 	const result = await apiFetch( options );
-	apiCache[ cacheKey ] = result;
+	if ( cache ) {
+		apiCache[ cacheKey ] = result;
+	}
+
 	return result;
 };
 

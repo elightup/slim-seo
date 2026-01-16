@@ -2,6 +2,7 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
+import { Button } from "@wordpress/components";
 import { isBlockEditor, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
@@ -10,6 +11,8 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
+	let [ updateAI, setUpdateAI ] = useState( 0 );
+	let [ previousMetaAI, setPreviousMetaAI ] = useState( '' );
 	const inputRef = useRef();
 	let contentEditor;
 
@@ -63,6 +66,15 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 
 		requestUpdate();
 	};
+
+	const generateAI = () => {
+		setUpdateAI( prev => prev + 1 )
+		request( 'meta-tags/preview/post-description', { ID: ss.id, content: contentRef.current, AI: true, updateAI: updateAI, previousMetaAI: previousMetaAI }, { cache: false, delay: 1000 } ).then( response => {
+				setPreview( response );
+				setPlaceholder( response );
+				setPreviousMetaAI( response );
+		} );
+	}
 
 	// Trigger refresh preview and placeholder when anything change.
 	// Use debounce technique to avoid sending too many requests.
@@ -124,6 +136,7 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
+				<Button icon="welcome-write-blog" className="ss-select-image ss-select-textarea" onClick={ generateAI } />
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>

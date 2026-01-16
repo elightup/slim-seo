@@ -52,7 +52,6 @@ class Preview {
 
 	public function can_edit_post( WP_REST_Request $request ): bool {
 		$post_id = (int) $request->get_param('ID');
-
 		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
 	}
 
@@ -173,10 +172,16 @@ class Preview {
 			];
 		}
 
-		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
-		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 		$content = (string) $request->get_param( 'content' ); // Live content
 		$content = Data::get_post_content( $id, $content );
+
+		$ai      = $request->get_param( 'AI' );
+		if ( $ai && ! empty( $content ) ) {
+			return [ $this->generate_by_AI( $content, (int) $request->get_param( 'updateAI'), (string) $request->get_param( 'previousMetaAI') ) ];
+		}
+
+		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
+		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 
 		$data         = [];
 		$data['post'] = array_filter( [
@@ -184,12 +189,73 @@ class Preview {
 			'content'          => $content,
 			'auto_description' => Helper::truncate( $excerpt ?: $content ),
 		] );
-		$data         = array_filter( $data );
-
+		$data    = array_filter( $data );
 		$default = $this->get_default_post_description( $id );
 		$preview = Helper::render( $text ?: $default, $id, 0, $data );
 
 		return compact( 'preview', 'default' );
+	}
+
+	private function generate_by_AI( string $content, int $count, string $previousMetaAI ): string {
+		$slim_seo    = get_option( 'slim_seo' ) ?: [];
+		$chatgpt_key = $slim_seo['chatgpt_key'];
+
+		if ( ! $chatgpt_key ) {
+			return __( 'You need to provide a ChatGPT API key!', 'slim-seo' );
+		}
+
+		// Check if client generate multi times
+		if ( $count > 1 && ! empty( $previousMetaAI ) ) {
+			$prompt = 'You are an SEO expert. Rewrite the meta description below to be different in wording but keep the same meaning, SEO intent, and accuracy. No quotes, no emojis, active voice, max 160 characters.';
+
+			$ai_content = "Original post content:\n{$content}\n\nPrevious meta description:\n{$previousMetaAI}";
+		} else {
+			$prompt = 'You are an SEO expert. Read the provided content and generate a clear, engaging meta description. No quotes, no emojis, active voice, max 160 characters.';
+
+			$ai_content = $content;
+		}
+
+		$api_url = "https://api.openai.com/v1/responses";
+		$body    = json_encode( [
+			"model" => "gpt-4.1-mini",
+			"temperature" => 1.2, // This setting for AI generate different result each times
+			"input" => [
+				[
+					"role" => "system",
+					"content" => $prompt,
+				],
+				[
+					"role" => "user",
+					"content" => $ai_content,
+				],
+			],
+		] );
+
+		$headers = [
+			'Content-Type'  => 'application/json',
+			'Authorization' => 'Bearer ' . $chatgpt_key,
+		];
+
+		$response = wp_remote_post( $api_url, [
+			'headers'   => $headers,
+			'body'      => $body,
+			'method'    => 'POST',
+			'timeout'   => 45,
+			'sslverify' => true
+		] );
+
+		if ( is_wp_error( $response ) ) {
+			return sprintf( __( 'API error: %s', 'slim-seo' ), $response->get_error_message() );
+		}
+
+		$response = wp_remote_retrieve_body( $response );
+		$result   = json_decode( $response, true );
+
+		if ( isset( $result['error'] ) ) {
+			return sprintf( __( 'API error: %s', 'slim-seo' ), $result['error']['message'] );
+		}
+
+		return $result['status'] === 'completed' && isset( $result['output'][0]['content'][0]['text'] ) ? Helper::truncate( $result['output'][0]['content'][0]['text'] ) : __( 'Could not retrieve content from the API.', 'slim-seo' );
 	}
 
 	private function get_default_post_description( int $post_id ): string {

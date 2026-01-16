@@ -73,7 +73,7 @@
 	&:has(.ss-inserter) > input {
 		padding-right: 36px;
 	}
-	&:has(.ss-select-image) > input {
+	&:has(.ss-select-image) > input, textarea {
 		padding-right: calc(36px + 25px);
 	}
 }
@@ -111,6 +111,9 @@
 	&:focus:not(:disabled) {
 		box-shadow: none;
 	}
+}
+.ef-control .ss-select-textarea {
+	height: max-content;
 }
 
 .ss-modal-overlay {
