@@ -33,7 +33,7 @@ class Helper {
 		remove_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ] );
 
 		// Replace HTML tags with spaces.
-		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
+		$text = preg_replace( '@<(script|style|pre)[^>]*?>.*?</\\1>@si', '', $text );
 		$text = preg_replace( '@<[^>]*?>@s', ' ', $text );
 
 		// Remove extra white spaces.
