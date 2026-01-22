@@ -177,7 +177,10 @@ class Preview {
 
 		$ai      = $request->get_param( 'AI' );
 		if ( $ai && ! empty( $content ) ) {
-			return [ $this->generate_by_AI( $content, (int) $request->get_param( 'updateAI'), (string) $request->get_param( 'previousMetaAI') ) ];
+			return [
+				'preview' => $this->generate_by_AI( $content, (int) $request->get_param( 'updateAI'), (string) $request->get_param( 'previousMetaAI') ),
+				'default' => '',
+			];
 		}
 
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
@@ -198,9 +201,9 @@ class Preview {
 
 	private function generate_by_AI( string $content, int $count, string $previousMetaAI ): string {
 		$slim_seo    = get_option( 'slim_seo' ) ?: [];
-		$chatgpt_key = $slim_seo['chatgpt_key'];
+		$chatgpt_key = $slim_seo['chatgpt_key'] ?? '';
 
-		if ( ! $chatgpt_key ) {
+		if ( empty( $chatgpt_key ) ) {
 			return __( 'You need to provide a ChatGPT API key!', 'slim-seo' );
 		}
 
@@ -216,7 +219,7 @@ class Preview {
 		}
 
 		$api_url = "https://api.openai.com/v1/responses";
-		$body    = json_encode( [
+		$body    = wp_json_encode( [
 			"model" => "gpt-4.1-mini",
 			"temperature" => 1.2, // This setting for AI generate different result each times
 			"input" => [
@@ -236,26 +239,39 @@ class Preview {
 			'Authorization' => 'Bearer ' . $chatgpt_key,
 		];
 
-		$response = wp_remote_post( $api_url, [
+		$response = wp_safe_remote_post( $api_url, [
 			'headers'   => $headers,
 			'body'      => $body,
 			'method'    => 'POST',
 			'timeout'   => 45,
-			'sslverify' => true
+			'sslverify' => true,
 		] );
 
 		if ( is_wp_error( $response ) ) {
 			return sprintf( __( 'API error: %s', 'slim-seo' ), $response->get_error_message() );
 		}
 
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( $code < 200 || $code >= 300 ) {
+			return sprintf( __( 'API error (HTTP %d)', 'slim-seo' ), $code );
+		}
+
 		$response = wp_remote_retrieve_body( $response );
 		$result   = json_decode( $response, true );
+
+		if ( ! is_array( $result ) ) {
+			return __( 'Invalid response from the AI service.', 'slim-seo' );
+		}
 
 		if ( isset( $result['error'] ) ) {
 			return sprintf( __( 'API error: %s', 'slim-seo' ), $result['error']['message'] );
 		}
 
-		return $result['status'] === 'completed' && isset( $result['output'][0]['content'][0]['text'] ) ? Helper::truncate( $result['output'][0]['content'][0]['text'] ) : __( 'Could not retrieve content from the API.', 'slim-seo' );
+		if ( isset( $result['status'], $result['output'][0]['content'][0]['text'] ) && $result['status'] === 'completed' ) {
+			return Helper::truncate( $result['output'][0]['content'][0]['text'] );
+		}
+
+		return __( 'Could not retrieve content from the API.', 'slim-seo' );
 	}
 
 	private function get_default_post_description( int $post_id ): string {

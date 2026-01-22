@@ -46,11 +46,11 @@
 <h3><?php esc_attr_e( 'ChatGPT API key', 'slim-seo' ); ?></h3>
 <div class="ef-control">
 	<div class="ef-control__label">
-		<label for="chatgpt"><?php esc_html_e( 'Key:', 'slim-seo' ); ?></label>
+		<label for="ss-chatgpt-key"><?php esc_html_e( 'Key:', 'slim-seo' ); ?></label>
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">
-			<input type="text" name="slim_seo[chatgpt_key]" id="ss-chatgpt-key" autocomplete="autocomplete_off_facebook_app"  value="<?php echo esc_attr( $data['chatgpt_key'] ); ?>">
+			<input type="text" name="slim_seo[chatgpt_key]" id="ss-chatgpt-key" autocomplete="autocomplete_off_facebook_app"  value="<?php echo esc_attr( $data['chatgpt_key'] ?? '' ); ?>">
 		</div>
 	</div>
 </div>

@@ -68,12 +68,27 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	};
 
 	const generateAI = () => {
-		setUpdateAI( prev => prev + 1 )
-		request( 'meta-tags/preview/post-description', { ID: ss.id, content: contentRef.current, AI: true, updateAI: updateAI, previousMetaAI: previousMetaAI }, { cache: false, delay: 1000 } ).then( response => {
-				setPreview( response );
-				setPlaceholder( response );
-				setPreviousMetaAI( response );
-		} );
+		setUpdateAI( prev => {
+			const next = prev + 1;
+
+			request(
+				'meta-tags/preview/post-description',
+				{
+					ID: ss.id,
+					content: contentRef.current,
+					AI: true,
+					updateAI: next,
+					previousMetaAI: previousMetaAI
+				},
+				{ cache: false, delay: 1000 }
+			).then( response => {
+				setPreview( response.preview );
+				setPlaceholder( response.preview );
+				setPreviousMetaAI( response.preview );
+			} );
+
+			return next;
+		});
 	}
 
 	// Trigger refresh preview and placeholder when anything change.
@@ -136,7 +151,7 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
-				<Button icon="welcome-write-blog" className="ss-select-image ss-select-textarea" onClick={ generateAI } />
+				<Button icon="welcome-write-blog" className="ss-select-image ss-select-textarea" onClick={ generateAI } aria-label={ __( 'Generate meta description with AI', 'slim-seo' ) } />
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>

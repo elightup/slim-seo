@@ -73,7 +73,7 @@
 	&:has(.ss-inserter) > input {
 		padding-right: 36px;
 	}
-	&:has(.ss-select-image) > input, textarea {
+	&:has(.ss-select-image) > input, &:has(.ss-select-image) > textarea {
 		padding-right: calc(36px + 25px);
 	}
 }
