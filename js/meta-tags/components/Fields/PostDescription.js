@@ -1,8 +1,8 @@
 import { Control } from "@elightup/form";
+import { Button } from "@wordpress/components";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { Button } from "@wordpress/components";
 import { isBlockEditor, request } from "../../functions";
 import PropInserter from "./PropInserter";
 
@@ -11,8 +11,8 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	let [ updateAI, setUpdateAI ] = useState( 0 );
-	let [ previousMetaAI, setPreviousMetaAI ] = useState( '' );
+	let [ updateByAICount, setUpdateByAICount ] = useState( 0 );
+	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
 	const inputRef = useRef();
 	let contentEditor;
 
@@ -67,8 +67,8 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 		requestUpdate();
 	};
 
-	const generateAI = () => {
-		setUpdateAI( prev => {
+	const generateWithAI = () => {
+		setUpdateByAICount( prev => {
 			const next = prev + 1;
 
 			request(
@@ -77,19 +77,19 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 					ID: ss.id,
 					content: contentRef.current,
 					AI: true,
-					updateAI: next,
-					previousMetaAI: previousMetaAI
+					update_count: next,
+					previous_value: previousMetaByAI
 				},
 				{ cache: false, delay: 1000 }
 			).then( response => {
+				setValue( response.preview );
 				setPreview( response.preview );
-				setPlaceholder( response.preview );
-				setPreviousMetaAI( response.preview );
+				setPreviousMetaByAI( response.preview );
 			} );
 
 			return next;
-		});
-	}
+		} );
+	};
 
 	// Trigger refresh preview and placeholder when anything change.
 	// Use debounce technique to avoid sending too many requests.
@@ -151,7 +151,7 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
-				<Button icon="welcome-write-blog" className="ss-select-image ss-select-textarea" onClick={ generateAI } aria-label={ __( 'Generate meta description with AI', 'slim-seo' ) } />
+				<Button icon="welcome-write-blog" className="ss-select-image ss-select-textarea" onClick={ generateWithAI } aria-label={ __( 'Generate meta description with AI', 'slim-seo' ) } />
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>

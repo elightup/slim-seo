@@ -40,7 +40,7 @@ class RestApi {
 	}
 
 	public function get_option(): array {
-		$exclude = array_fill_keys( [
+		$exclude = array_flip( [
 			'auto_redirection',
 			'enable_404_logs',
 			'footer_code',
@@ -53,7 +53,7 @@ class RestApi {
 			'twitter_site',
 			'default_linkedin_image',
 			'wp_pattern_category',
-		], '' );
+		] );
 		return array_diff_key( get_option( 'slim_seo', [] ), $exclude );
 	}
 

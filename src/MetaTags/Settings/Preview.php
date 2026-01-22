@@ -51,7 +51,7 @@ class Preview {
 	}
 
 	public function can_edit_post( WP_REST_Request $request ): bool {
-		$post_id = (int) $request->get_param('ID');
+		$post_id = (int) $request->get_param( 'ID' );
 		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
 	}
 
@@ -175,10 +175,14 @@ class Preview {
 		$content = (string) $request->get_param( 'content' ); // Live content
 		$content = Data::get_post_content( $id, $content );
 
-		$ai      = $request->get_param( 'AI' );
-		if ( $ai && ! empty( $content ) ) {
+		if ( $request->get_param( 'AI' ) && ! empty( $content ) ) {
+			$preview = $this->generate_with_AI(
+				$content,
+				(int) $request->get_param( 'update_count' ),
+				(string) $request->get_param( 'previous_value' )
+			);
 			return [
-				'preview' => $this->generate_by_AI( $content, (int) $request->get_param( 'updateAI'), (string) $request->get_param( 'previousMetaAI') ),
+				'preview' => $preview,
 				'default' => '',
 			];
 		}
@@ -192,51 +196,90 @@ class Preview {
 			'content'          => $content,
 			'auto_description' => Helper::truncate( $excerpt ?: $content ),
 		] );
-		$data    = array_filter( $data );
-		$default = $this->get_default_post_description( $id );
-		$preview = Helper::render( $text ?: $default, $id, 0, $data );
+		$data         = array_filter( $data );
+		$default      = $this->get_default_post_description( $id );
+		$preview      = Helper::render( $text ?: $default, $id, 0, $data );
 
 		return compact( 'preview', 'default' );
 	}
 
-	private function generate_by_AI( string $content, int $count, string $previousMetaAI ): string {
+	private function generate_with_AI( string $content, int $update_count, string $previous_value ): string {
 		$slim_seo    = get_option( 'slim_seo' ) ?: [];
-		$chatgpt_key = $slim_seo['chatgpt_key'] ?? '';
+		$openai_key = $slim_seo['openai_key'] ?? '';
 
-		if ( empty( $chatgpt_key ) ) {
+		if ( empty( $openai_key ) ) {
 			return __( 'You need to provide a ChatGPT API key!', 'slim-seo' );
 		}
 
-		// Check if client generate multi times
-		if ( $count > 1 && ! empty( $previousMetaAI ) ) {
-			$prompt = 'You are an SEO expert. Rewrite the meta description below to be different in wording but keep the same meaning, SEO intent, and accuracy. No quotes, no emojis, active voice, max 160 characters.';
+		// Preprocess content: strip HTML, normalize whitespace, limit length
+		$ai_content = wp_strip_all_tags( $content );
+		$ai_content = preg_replace( '/\s+/', ' ', $ai_content );
+		$ai_content = trim( $ai_content );
 
-			$ai_content = "Original post content:\n{$content}\n\nPrevious meta description:\n{$previousMetaAI}";
-		} else {
-			$prompt = 'You are an SEO expert. Read the provided content and generate a clear, engaging meta description. No quotes, no emojis, active voice, max 160 characters.';
-
-			$ai_content = $content;
+		$max_chars = 8000;
+		if ( strlen( $ai_content ) > $max_chars ) {
+			$ai_content = substr( $ai_content, 0, $max_chars );
 		}
 
-		$api_url = "https://api.openai.com/v1/responses";
+		$site_language = get_bloginfo( 'language' ); // e.g. en-US, vi, fr-FR
+
+		// Base prompt (used for both generate & rewrite)
+		$base_prompt = <<<PROMPT
+	You are a professional SEO assistant for WordPress websites.
+
+	Your task:
+	- Read the provided page content
+	- Detect the primary language used
+	- Write exactly ONE meta description in the SAME language
+
+	Meta description requirements:
+	- Clear, natural, and engaging
+	- Suitable for Google search results
+	- Active voice
+	- Between 140 and 160 characters
+	- Faithful to the actual content
+
+	Strict rules:
+	- Do NOT use emojis
+	- Do NOT use quotation marks
+	- Do NOT add information not present in the content
+	- Avoid keyword stuffing or unnatural repetition
+
+	Output rules:
+	- Return ONLY the meta description text
+	- No explanations, no extra lines
+
+	Site language hint: {$site_language}
+	PROMPT;
+
+		// Regenerate (rewrite) logic
+		if ( $update_count > 1 && $previous_value ) {
+			$prompt = $base_prompt . "\n\nRewrite rules:\n- Keep the same meaning and SEO intent\n- Use different wording\n- Do NOT repeat sentence structure from the previous meta description";
+
+			$ai_content = "Page content:\n{$ai_content}\n\nPrevious meta description:\n{$previous_value}";
+		} else {
+			$prompt   = $base_prompt;
+		}
+
+		$api_url = 'https://api.openai.com/v1/responses';
 		$body    = wp_json_encode( [
-			"model" => "gpt-4.1-mini",
-			"temperature" => 1.2, // This setting for AI generate different result each times
-			"input" => [
+			'model'       => 'gpt-4.1-mini',
+			'temperature' => 0.5, // Stable & SEO-safe
+			'input'       => [
 				[
-					"role" => "system",
-					"content" => $prompt,
+					'role'    => 'system',
+					'content' => $prompt,
 				],
 				[
-					"role" => "user",
-					"content" => $ai_content,
+					'role'    => 'user',
+					'content' => $ai_content,
 				],
 			],
 		] );
 
 		$headers = [
 			'Content-Type'  => 'application/json',
-			'Authorization' => 'Bearer ' . $chatgpt_key,
+			'Authorization' => 'Bearer ' . $openai_key,
 		];
 
 		$response = wp_safe_remote_post( $api_url, [
@@ -268,7 +311,10 @@ class Preview {
 		}
 
 		if ( isset( $result['status'], $result['output'][0]['content'][0]['text'] ) && $result['status'] === 'completed' ) {
-			return Helper::truncate( $result['output'][0]['content'][0]['text'] );
+			$description = trim( $result['output'][0]['content'][0]['text'] );
+
+			// Final safety truncation
+			return $description;
 		}
 
 		return __( 'Could not retrieve content from the API.', 'slim-seo' );

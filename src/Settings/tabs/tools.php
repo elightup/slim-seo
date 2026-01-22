@@ -6,6 +6,24 @@
 
 <div id="ss-robots"></div>
 
+<h3><?php esc_attr_e( 'OpenAI Integration', 'slim-seo' ); ?></h3>
+<p>
+	<?php
+	// Translators: %s: OpenAI API key creation URL.
+	echo wp_kses_post( sprintf( __( 'Add your OpenAI API key to unlock AI features in Slim SEO. If you don\'t have an API key, you can <a href="%s" target="_blank">create one here</a>.', 'slim-seo' ), 'https://platform.openai.com/settings/organization/api-keys' ) );
+	?>
+</p>
+<div class="ef-control">
+	<div class="ef-control__label">
+		<label for="ss-openai-key"><?php esc_html_e( 'API key:', 'slim-seo' ); ?></label>
+	</div>
+	<div class="ef-control__input">
+		<div class="ss-input-wrapper">
+			<input type="text" name="slim_seo[openai_key]" id="ss-openai-key" value="<?php echo esc_attr( $data['openai_key'] ?? '' ); ?>">
+		</div>
+	</div>
+</div>
+
 <h3><?php esc_attr_e( 'Migrate SEO Data', 'slim-seo' ); ?></h3>
 <p><?php esc_html_e( 'Use the drop down below to choose which plugin you wish to import SEO data from.', 'slim-seo' ); ?></p>
 <p><strong><?php esc_attr_e( 'Before performing an import, we strongly recommend that you make a backup of your site.', 'slim-seo' ); ?></strong></p>
@@ -39,18 +57,6 @@
 			<div id="redirects-status"></div>
 			<div id="robots-status"></div>
 			<div id="done-status"></div>
-		</div>
-	</div>
-</div>
-
-<h3><?php esc_attr_e( 'ChatGPT API key', 'slim-seo' ); ?></h3>
-<div class="ef-control">
-	<div class="ef-control__label">
-		<label for="ss-chatgpt-key"><?php esc_html_e( 'Key:', 'slim-seo' ); ?></label>
-	</div>
-	<div class="ef-control__input">
-		<div class="ss-input-wrapper">
-			<input type="text" name="slim_seo[chatgpt_key]" id="ss-chatgpt-key" autocomplete="autocomplete_off_facebook_app"  value="<?php echo esc_attr( $data['chatgpt_key'] ?? '' ); ?>">
 		</div>
 	</div>
 </div>
