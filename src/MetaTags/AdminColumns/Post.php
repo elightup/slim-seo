@@ -20,7 +20,14 @@ class Post extends Base {
 	 * The value of meta tags will be applied with filters to make them work in the back end.
 	 */
 	public function render( $column, $post_id ): void {
-		$post_id = (int) $post_id;
+		$post_id       = (int) $post_id;
+		$custom_output = apply_filters( 'slim_seo_custom_column_output', '', $column, $post_id, 'post' );
+
+		if ( $custom_output ) {
+			echo $custom_output; // phpcs:ignore
+
+			return;
+		}
 
 		switch ( $column ) {
 			case 'meta_title':

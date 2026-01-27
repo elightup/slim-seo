@@ -20,7 +20,12 @@ class Term extends Base {
 	 * The value of meta tags will be applied with filters to make them work in the back end.
 	 */
 	public function render( $output, $column, $term_id ) {
-		$term_id = (int) $term_id;
+		$term_id       = (int) $term_id;
+		$custom_output = apply_filters( 'slim_seo_custom_column_output', '', $column, $term_id, 'term' );
+
+		if ( $custom_output ) {
+			return $custom_output;
+		}
 
 		switch ( $column ) {
 			case 'meta_title':
