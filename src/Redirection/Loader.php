@@ -11,6 +11,7 @@ class Loader {
 
 		if ( is_admin() ) {
 			new Settings( $this->db_log );
+			new Post( $this->db_redirects );
 		} else {
 			new Redirection( $this->db_redirects );
 			new Redirection404( $this->db_log );

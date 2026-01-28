@@ -43,16 +43,7 @@ class Settings {
 			'csvSampleData'      => Helper::csv_sample_data(),
 			'isLog404TableExist' => $this->db_log->table_exists(),
 			'permalinkUrl'       => admin_url( 'options-permalink.php' ),
-			'defaultRedirect'    => [
-				'id'               => 0,
-				'type'             => 301,
-				'condition'        => 'exact-match',
-				'from'             => '',
-				'to'               => '',
-				'note'             => '',
-				'enable'           => 1,
-				'ignoreParameters' => 0,
-			],
+			'defaultRedirect'    => Helper::default_redirect(),
 		] );
 
 		do_action( 'slim_seo_redirection_enqueue' );

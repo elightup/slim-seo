@@ -273,6 +273,15 @@
 	}
 }
 
+.ssr-post-form {
+	margin-top: -10px!important;
+
+	#ss-to,
+	#ss-note {
+		width: 100%;
+	}
+}
+
 @keyframes ss-spin {
 	0% {
 		transform: rotate(0deg);
