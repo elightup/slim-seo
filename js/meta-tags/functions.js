@@ -48,3 +48,38 @@ export const normalize = html => !html ? '' : html
 	.trim();
 
 export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
+
+export const generateMetaWithAI = ( {
+	type,
+	title = '',
+	content = '',
+	updateCount,
+	previousMetaByAI,
+	setValue,
+	setPreview,
+	setPreviousMetaByAI,
+	setIsGenerating,
+} ) => {
+	setIsGenerating( true );
+
+	request(
+		'meta-tags/ai/generate-meta',
+		{
+			title: title,
+			content,
+			update_count: updateCount,
+			previous_value: previousMetaByAI,
+			type,
+		},
+		{ cache: false, delay: 1000 }
+	).then( response => {
+		setValue( response );
+		setPreview?.( response );
+		setPreviousMetaByAI?.( response );
+	} ).catch( error => {
+		console.error( 'AI generation failed:', error );
+	} ).finally( () => {
+		setIsGenerating( false );
+	} );
+};
+

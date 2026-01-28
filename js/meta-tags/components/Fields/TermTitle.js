@@ -1,17 +1,23 @@
 import { Control } from "@elightup/form";
 import { useEffect, useRef, useState } from "@wordpress/element";
+import { Button, Spinner } from '@wordpress/components';
 import { __, sprintf } from "@wordpress/i18n";
-import { request } from "../../functions";
+import { request, generateMetaWithAI } from "../../functions";
 import PropInserter from "./PropInserter";
 
 const wpTitle = document.querySelector( '#name' );
 const getTitle = () => wpTitle.value;
+const wpDescription = document.querySelector( '#description' );
+const getDescription = () => wpDescription.value;
 
-export default ( { id, std = '', max = 60, ...rest } ) => {
+export default ( { id, std = '', features, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( '' );
 	let [ placeholder, setPlaceholder ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
+	let [ updateByAICount, setUpdateByAICount ] = useState( 0 );
+	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
+	const [ isGenerating, setIsGenerating ] = useState( false );
 	const titleRef = useRef( getTitle() );
 	const inputRef = useRef();
 
@@ -50,6 +56,26 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 		requestUpdate();
 	};
 
+	const onGenerateWithAI = () => {
+		setUpdateByAICount( prev => {
+			const next = prev + 1;
+
+			generateMetaWithAI( {
+				type: 'term-title',
+				title: titleRef.current,
+				content: getDescription(),
+				updateCount: next,
+				previousMetaByAI,
+				setValue,
+				setPreview,
+				setPreviousMetaByAI,
+				setIsGenerating,
+			} );
+
+			return next;
+		} );
+	};
+
 	// Trigger refresh preview and placeholder when anything change.
 	// Use debounce technique to avoid sending too many requests.
 	useEffect( () => {
@@ -77,13 +103,19 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 					id={ id }
 					name={ id }
 					value={ value }
-					placeholder={ placeholder }
+					placeholder={ isGenerating ? __( 'Generating with AI...', 'slim-seo' ) : placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
+				{ features.openai &&
+					<Button className={ `ss-ai ss-select-image ss-select-textarea ss-inserter ${ isGenerating ? 'is-generating' : '' } ` } onClick={ onGenerateWithAI } label={ __( 'Generate with AI', 'slim-seo' ) } showTooltip={ true }	disabled={ isGenerating } >
+						<span class="dashicons dashicons-superhero ss-ai-icon"></span>
+						{ isGenerating && <Spinner /> }
+					</Button>
+				}
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>

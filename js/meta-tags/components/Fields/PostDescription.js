@@ -1,18 +1,19 @@
 import { Control } from "@elightup/form";
-import { Button } from "@wordpress/components";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useRef, useState } from "@wordpress/element";
+import { Button, Spinner } from '@wordpress/components';
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, request } from "../../functions";
+import { isBlockEditor, request, generateMetaWithAI } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
+const PostDescription = ( { id, std = '', features, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
 	let [ updateByAICount, setUpdateByAICount ] = useState( 0 );
 	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
+	const [ isGenerating, setIsGenerating ] = useState( false );
 	const inputRef = useRef();
 	let contentEditor;
 
@@ -67,24 +68,18 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 		requestUpdate();
 	};
 
-	const generateWithAI = () => {
+	const onGenerateWithAI = () => {
 		setUpdateByAICount( prev => {
 			const next = prev + 1;
 
-			request(
-				'meta-tags/preview/post-description',
-				{
-					ID: ss.id,
-					content: contentRef.current,
-					AI: true,
-					update_count: next,
-					previous_value: previousMetaByAI
-				},
-				{ cache: false, delay: 1000 }
-			).then( response => {
-				setValue( response.preview );
-				setPreview( response.preview );
-				setPreviousMetaByAI( response.preview );
+			generateMetaWithAI( {
+				content: contentRef.current,
+				updateCount: next,
+				previousMetaByAI,
+				setValue,
+				setPreview,
+				setPreviousMetaByAI,
+				setIsGenerating,
 			} );
 
 			return next;
@@ -144,14 +139,20 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 					name={ id }
 					rows="3"
 					value={ value }
-					placeholder={ placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 					ref={ inputRef }
+					placeholder={ isGenerating ? __( 'Generating with AI...', 'slim-seo' ) : placeholder }
+					disabled={ isGenerating }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
-				<Button icon="welcome-write-blog" className="ss-select-image ss-select-textarea" onClick={ generateWithAI } aria-label={ __( 'Generate meta description with AI', 'slim-seo' ) } />
+				{ features.openai &&
+					<Button className={ `ss-ai ss-select-image ss-select-textarea ${ isGenerating ? 'is-generating' : '' } ` } onClick={ onGenerateWithAI } label={ __( 'Generate with AI', 'slim-seo' ) } showTooltip={ true } disabled={ isGenerating } >
+						<span class="dashicons dashicons-superhero ss-ai-icon"></span>
+						{ isGenerating && <Spinner /> }
+					</Button>
+				}
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>
