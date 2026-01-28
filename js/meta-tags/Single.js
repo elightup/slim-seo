@@ -11,37 +11,39 @@ import TwitterImage from './components/Fields/TwitterImage';
 import { request } from "./functions";
 
 const Single = () => {
-	const [ social, setSocial ] = useState( {
+	const [ features, setFeatures ] = useState( {
 		facebook: false,
 		twitter: false,
 	} );
 
 	useEffect( () => {
 		request( 'meta-tags/option' ).then( response => {
-			let features = [ 'open_graph', 'twitter_cards' ];
+			let params = [ 'open_graph', 'twitter_cards' ];
 			if ( response?.features && Array.isArray( response.features ) ) {
-				features = response.features;
+				params = response.features;
 			}
 
-			setSocial( {
-				facebook: features.includes( 'open_graph' ),
-				twitter: features.includes( 'twitter_cards' ),
+			setFeatures( {
+				facebook: params.includes( 'open_graph' ),
+				twitter: params.includes( 'twitter_cards' ),
+				openai: response.openai,
 			} );
 		} );
 	}, [] );
 
-	return document.querySelector( '#edittag' ) ? <Term social={ social } /> : <Post social={ social } />;
+	return document.querySelector( '#edittag' ) ? <Term features={ features } /> : <Post features={ features } />;
 };
 
-const Post = ( { social } ) => (
+const Post = ( { features } ) => (
 	<>
-		<PostTitle id="slim_seo[title]" std={ ss.data.title } />
+		<PostTitle id="slim_seo[title]" std={ ss.data.title } features={ features } />
 		<PostDescription
 			id="slim_seo[description]"
 			std={ ss.data.description }
+			features={ features }
 		/>
 		{
-			social.facebook &&
+			features.facebook &&
 			<FacebookImage
 				id="slim_seo[facebook_image]"
 				std={ ss.data.facebook_image }
@@ -49,7 +51,7 @@ const Post = ( { social } ) => (
 			/>
 		}
 		{
-			social.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
+			features.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
 		}
 		<Text id="slim_seo[canonical]" label={ __( 'Canonical URL', 'slim-seo' ) } std={ ss.data.canonical } />
 		<Checkbox
@@ -61,19 +63,20 @@ const Post = ( { social } ) => (
 	</>
 );
 
-const Term = ( { social } ) => (
+const Term = ( { features } ) => (
 	<>
 		<h2>{ __( 'Search Engine Optimization', 'slim-seo' ) }</h2>
-		<TermTitle id="slim_seo[title]" std={ ss.data.title } />
+		<TermTitle id="slim_seo[title]" std={ ss.data.title } features={ features } />
 		<TermDescription
 			id="slim_seo[description]"
 			std={ ss.data.description }
+			features={ features }
 		/>
 		{
-			social.facebook && <FacebookImage id="slim_seo[facebook_image]" std={ ss.data.facebook_image } />
+			features.facebook && <FacebookImage id="slim_seo[facebook_image]" std={ ss.data.facebook_image } />
 		}
 		{
-			social.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
+			features.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
 		}
 		<Text id="slim_seo[canonical]" label={ __( 'Canonical URL', 'slim-seo' ) } std={ ss.data.canonical } />
 		<Checkbox

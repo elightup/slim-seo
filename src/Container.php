@@ -22,6 +22,7 @@ class Container {
 		$services['meta_title']       = new MetaTags\Title;
 		$services['meta_description'] = new MetaTags\Description;
 		$services['meta_robots']      = new MetaTags\Robots( $services['canonical_url'] );
+		$services['ai']               = new MetaTags\AI;
 
 		$services['settings_post']    = new MetaTags\Settings\Post;
 		$services['settings_term']    = new MetaTags\Settings\Term;

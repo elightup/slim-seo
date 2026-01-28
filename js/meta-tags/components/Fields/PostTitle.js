@@ -1,18 +1,32 @@
 import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useRef, useState } from "@wordpress/element";
+import { Button, Spinner } from '@wordpress/components';
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, request } from "../../functions";
+import { isBlockEditor, request, generateMetaWithAI } from "../../functions";
 import PropInserter from "./PropInserter";
 
-const wpTitle = document.querySelector( '#title' );
-const getTitle = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
-
-export default ( { id, std = '', max = 60, ...rest } ) => {
+const PostTitle = ( { id, std = '', features, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( '' );
 	let [ placeholder, setPlaceholder ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
+	let [ updateByAICount, setUpdateByAICount ] = useState( 0 );
+	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
+	const [ isGenerating, setIsGenerating ] = useState( false );
+
+	let contentEditor;
+	const wpTitle = document.querySelector( '#title' );
+	const wpContent = document.querySelector( '#content' );
+	const getTitle = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
+
+	const getContent = () => {
+		if ( isBlockEditor ) {
+			return wp.data.select( 'core/editor' ).getEditedPostContent();
+		}
+		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
+	};
+
 	const titleRef = useRef( getTitle() );
 	const inputRef = useRef();
 
@@ -51,6 +65,26 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 		requestUpdate();
 	};
 
+	const onGenerateWithAI = () => {
+		setUpdateByAICount( prev => {
+			const next = prev + 1;
+
+			generateMetaWithAI( {
+				type: 'post-title',
+				title: titleRef.current,
+				content: getContent(),
+				updateCount: next,
+				previousMetaByAI,
+				setValue,
+				setPreview,
+				setPreviousMetaByAI,
+				setIsGenerating,
+			} );
+
+			return next;
+		} );
+	};
+
 	// Trigger refresh preview and placeholder when anything change.
 	// Use debounce technique to avoid sending too many requests.
 	useEffect( () => {
@@ -62,8 +96,19 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 	useEffect( () => {
 		if ( isBlockEditor ) {
 			subscribe( handleTitleChange );
-		} else if ( wpTitle ) {
-			wpTitle.addEventListener( 'input', handleTitleChange );
+		} else {
+			if ( wpTitle ) {
+				wpTitle.addEventListener( 'input', handleTitleChange );
+			}
+
+			if ( wpContent ) {
+				jQuery( document ).on( 'tinymce-editor-init', ( event, editor ) => {
+					if ( editor.id !== 'content' ) {
+						return;
+					}
+					contentEditor = editor;
+				} );
+			}
 		}
 
 		return () => {
@@ -86,15 +131,23 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 					id={ id }
 					name={ id }
 					value={ value }
-					placeholder={ placeholder }
+					placeholder={ isGenerating ? __( 'Generating with AI...', 'slim-seo' ) : placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
+				{ features.openai &&
+					<Button className={ `ss-ai ss-select-image ss-select-textarea ${ isGenerating ? 'is-generating' : '' } ` } onClick={ onGenerateWithAI } label={ __( 'Generate with AI', 'slim-seo' ) } showTooltip={ true }	disabled={ isGenerating } >
+						<span class="dashicons dashicons-superhero ss-ai-icon"></span>
+						{ isGenerating && <Spinner /> }
+					</Button>
+				}
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>
 	);
 };
+
+export default PostTitle;
