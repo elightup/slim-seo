@@ -61,4 +61,16 @@ class Redirects {
 
 		Helper::purge_cache();
 	}
+
+	public function find_by_from_url( string $from ): array {
+		foreach ( $this->redirects as $id => $redirect ) {
+			if ( 'exact-match' === $redirect['condition'] && $redirect['from'] === $from ) {
+				return array_merge( [
+					'id' => $id,
+				], $redirect );
+			}
+		}
+
+		return [];
+	}
 }

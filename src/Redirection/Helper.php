@@ -157,4 +157,17 @@ class Helper {
 			],
 		];
 	}
+
+	public static function default_redirect(): array {
+		return [
+			'id'               => 0,
+			'type'             => 301,
+			'condition'        => 'exact-match',
+			'from'             => '',
+			'to'               => '',
+			'note'             => '',
+			'enable'           => 1,
+			'ignoreParameters' => 0,
+		];
+	}
 }
