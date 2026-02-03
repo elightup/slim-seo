@@ -107,7 +107,7 @@ const TermDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 				{
-					features.openai &&
+					features.ai &&
 					<AIButton onClick={ generateWithAI } isGenerating={ isGenerating } />
 				}
 				<PropInserter onInsert={ handleInsertVariables } />

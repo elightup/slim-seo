@@ -11,22 +11,14 @@ import TwitterImage from './components/Fields/TwitterImage';
 import { request } from "./functions";
 
 const Single = () => {
-	const [ features, setFeatures ] = useState( {
-		facebook: false,
-		twitter: false,
-	} );
-
+	const [ features, setFeatures ] = useState( {} );
 	useEffect( () => {
 		request( 'meta-tags/option' ).then( response => {
-			let params = [ 'open_graph', 'twitter_cards' ];
-			if ( response?.features && Array.isArray( response.features ) ) {
-				params = response.features;
-			}
-
+			const features = Array.isArray( response?.features ) ? response.features : [];
 			setFeatures( {
-				facebook: params.includes( 'open_graph' ),
-				twitter: params.includes( 'twitter_cards' ),
-				openai: response.openai,
+				facebook: features.length === 0 || features.includes( 'open_graph' ),
+				twitter: features.length === 0 || features.includes( 'twitter_cards' ),
+				ai: !!response.openai_key,
 			} );
 		} );
 	}, [] );

@@ -139,7 +139,7 @@ const PostTitle = ( { id, std = '', features, max = 60, ...rest } ) => {
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 				{
-					features.openai &&
+					features.ai &&
 					<AIButton onClick={ generateWithAI } isGenerating={ isGenerating } />
 				}
 				<PropInserter onInsert={ handleInsertVariables } />
