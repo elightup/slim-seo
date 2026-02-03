@@ -50,7 +50,7 @@ export const normalize = html => !html ? '' : html
 export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
 
 export const generateMetaWithAI = ( {
-	type,
+	type = 'title',
 	title = '',
 	content = '',
 	updateCount,

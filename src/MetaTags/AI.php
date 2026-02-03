@@ -26,8 +26,7 @@ class AI {
 	public function generate( WP_REST_Request $request ): string {
 		$title          = (string) $request->get_param( 'title' );
 		$content        = (string) $request->get_param( 'content' );
-		$type           = (string) ( $request->get_param( 'type' ) ?? 'post-description' );
-		$update_count   = (int) ( $request->get_param( 'update_count' ) ?? 1 );
+		$update_count   = (int) $request->get_param( 'update_count' );
 		$previous_value = (string) $request->get_param( 'previous_value' );
 		$site_language  = get_bloginfo( 'language' ); // e.g. en-US, vi, fr-FR
 
@@ -41,7 +40,7 @@ class AI {
 			$content = substr( $content, 0, $max_chars );
 		}
 
-		return str_contains( $type, 'description' )
+		return $request->get_param( 'type' ) === 'description'
 			? $this->generate_description( $content, $update_count, $previous_value, $site_language )
 			: $this->generate_title( $content, $update_count, $previous_value, $site_language, $title );
 	}
@@ -170,7 +169,7 @@ class AI {
 		$response = wp_safe_remote_post( 'https://api.openai.com/v1/responses', [
 			'headers' => [
 				'Content-Type'  => 'application/json',
-				'Authorization' => 'Bearer ' . $openai_key,
+				'Authorization' => "Bearer $openai_key",
 			],
 			'body'    => $body,
 			'timeout' => 45,

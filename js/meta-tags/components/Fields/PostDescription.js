@@ -73,6 +73,7 @@ const PostDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 			const next = prev + 1;
 
 			generateMetaWithAI( {
+				type: 'description',
 				content: contentRef.current,
 				updateCount: next,
 				previousMetaByAI,

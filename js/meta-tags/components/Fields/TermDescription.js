@@ -59,7 +59,7 @@ const TermDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 			const next = prev + 1;
 
 			generateMetaWithAI( {
-				type: 'term-description',
+				type: 'description',
 				content: descriptionRef.current,
 				updateCount: next,
 				previousMetaByAI,

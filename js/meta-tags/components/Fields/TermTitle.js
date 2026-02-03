@@ -61,7 +61,6 @@ export default ( { id, std = '', features, max = 60, ...rest } ) => {
 			const next = prev + 1;
 
 			generateMetaWithAI( {
-				type: 'term-title',
 				title: titleRef.current,
 				content: getDescription(),
 				updateCount: next,

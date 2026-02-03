@@ -70,7 +70,6 @@ const PostTitle = ( { id, std = '', features, max = 60, ...rest } ) => {
 			const next = prev + 1;
 
 			generateMetaWithAI( {
-				type: 'post-title',
 				title: titleRef.current,
 				content: getContent(),
 				updateCount: next,
