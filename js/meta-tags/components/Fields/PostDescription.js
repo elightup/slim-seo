@@ -21,7 +21,7 @@ const PostDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 	const wpContent = document.querySelector( '#content' );
 	const getContent = () => {
 		if ( isBlockEditor ) {
-			return wp.data.select( 'core/editor' ).getEditedPostContent();
+			return select( 'core/editor' ).getEditedPostContent();
 		}
 		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
 	};
@@ -139,11 +139,11 @@ const PostDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 					name={ id }
 					rows="3"
 					value={ value }
+					placeholder={ placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 					ref={ inputRef }
-					placeholder={ placeholder }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
 				{

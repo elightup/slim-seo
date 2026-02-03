@@ -18,11 +18,11 @@ const PostTitle = ( { id, std = '', features, max = 60, ...rest } ) => {
 	let contentEditor;
 	const wpTitle = document.querySelector( '#title' );
 	const wpContent = document.querySelector( '#content' );
-	const getTitle = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
 
+	const getTitle   = () => isBlockEditor ? select( 'core/editor' ).getEditedPostAttribute( 'title' ) : ( wpTitle ? wpTitle.value : '' );
 	const getContent = () => {
 		if ( isBlockEditor ) {
-			return wp.data.select( 'core/editor' ).getEditedPostContent();
+			return select( 'core/editor' ).getEditedPostContent();
 		}
 		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
 	};

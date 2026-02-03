@@ -65,7 +65,7 @@ export const generateMetaWithAI = ( {
 	request(
 		'meta-tags/ai/generate-meta',
 		{
-			title: title,
+			title,
 			content,
 			update_count: updateCount,
 			previous_value: previousMetaByAI,
