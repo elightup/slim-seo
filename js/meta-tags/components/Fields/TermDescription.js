@@ -1,8 +1,8 @@
 import { Control } from "@elightup/form";
 import { useEffect, useRef, useState } from "@wordpress/element";
-import { Button, Spinner } from '@wordpress/components';
 import { __, sprintf } from "@wordpress/i18n";
-import { request, generateMetaWithAI } from "../../functions";
+import { generateMetaWithAI, request } from "../../functions";
+import AIButton from "./AIButton";
 import PropInserter from "./PropInserter";
 
 const wpDescription = document.querySelector( '#description' );
@@ -54,7 +54,7 @@ const TermDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 		requestUpdate();
 	};
 
-	const onGenerateWithAI = () => {
+	const generateWithAI = () => {
 		setUpdateByAICount( prev => {
 			const next = prev + 1;
 
@@ -99,18 +99,16 @@ const TermDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 					name={ id }
 					rows="3"
 					value={ value }
-					placeholder={ isGenerating ? __( 'Generating with AI...', 'slim-seo' ) : placeholder }
+					placeholder={ placeholder }
 					onChange={ handleChange }
 					onFocus={ handleFocus }
 					onBlur={ handleBlur }
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
-				{ features.openai &&
-					<Button className={ `ss-ai ss-select-image ss-select-textarea ss-inserter ${ isGenerating ? 'is-generating' : '' } ` } onClick={ onGenerateWithAI } label={ __( 'Generate with AI', 'slim-seo' ) } showTooltip={ true } disabled={ isGenerating } >
-						<span class="dashicons dashicons-superhero ss-ai-icon"></span>
-						{ isGenerating && <Spinner /> }
-					</Button>
+				{
+					features.openai &&
+					<AIButton onClick={ generateWithAI } isGenerating={ isGenerating } />
 				}
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>

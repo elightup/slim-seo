@@ -76,22 +76,26 @@
 	&:has(.ss-select-image) > input, &:has(.ss-select-image) > textarea {
 		padding-right: calc(36px + 25px);
 	}
+}
 
-	.ss-ai.is-generating {
-		.ss-ai-icon {
-			animation: ss-ai-pulse-color 1.2s infinite ease-in-out;
-		}
+.ss-ai-icon.ss-ai-icon {
+	width: 16px;
+	height: 16px;
+	fill: none;
+
+	.ss-is-generating & {
+		animation: ss-ai-pulse-color 1.2s infinite ease-in-out;
 	}
 }
 
 @keyframes ss-ai-pulse-color {
 	0% {
 		opacity: 1;
-		color: #2271b1; /* WP blue */
+		color: #2271b1; // WP blue
 	}
 	50% {
 		opacity: 0.4;
-		color: #ffb900; /* WP yellow */
+		color: #ffb900; // WP yellow
 	}
 	100% {
 		opacity: 1;
