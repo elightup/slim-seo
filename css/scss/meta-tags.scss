@@ -78,14 +78,13 @@
 	}
 }
 
-.ss-ai-icon.ss-ai-icon {
+.ss-ai-button svg {
 	width: 16px;
 	height: 16px;
 	fill: none;
-
-	.ss-is-generating & {
-		animation: ss-ai-pulse-color 1.2s infinite ease-in-out;
-	}
+}
+.ss-ai-button--generating svg {
+	animation: ss-ai-pulse-color 1.2s infinite ease-in-out;
 }
 
 @keyframes ss-ai-pulse-color {
@@ -267,6 +266,10 @@
 		right: 25px;
 	}
 
+	.ss-ai-button {
+		top: 4px;
+	}
+
 	.ef-control__label {
 		font-weight: 600;
 		font-size: 14px;
@@ -311,6 +314,10 @@
 
 		.ss-select-image {
 			right: calc(5% + 10px + 25px);
+		}
+
+		.ss-ai-button {
+			top: 8px;
 		}
 	}
 

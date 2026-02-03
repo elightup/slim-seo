@@ -3,13 +3,13 @@ import { __ } from "@wordpress/i18n";
 
 export default ( { onClick, isGenerating = false } ) => (
 	<Button
-		className={ `ss-select-image ss-select-textarea ${ isGenerating ? 'ss-is-generating' : '' } ` }
+		className={ `ss-ai-button ss-select-image ss-select-textarea ${ isGenerating ? 'ss-ai-button--generating' : '' } ` }
 		onClick={ onClick }
 		label={ __( 'Generate with AI', 'slim-seo' ) }
 		showTooltip={ true }
 		disabled={ isGenerating }
 	>
-		<Icon className="ss-ai-icon" icon={
+		<Icon icon={
 			// https://hugeicons.com/icon/magic-wand-05 (stroke 2px, currentColor, copy JSX)
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" color="currentColor" fill="none">
 				<path d="M16.6917 9.80279L18.4834 8.01108C19.1722 7.32225 19.1722 6.20545 18.4834 5.51662C17.7946 4.82779 16.6777 4.82779 15.9889 5.51662L14.1972 7.30833M16.6917 9.80279L6.01108 20.4834C5.32225 21.1722 4.20545 21.1722 3.51662 20.4834C2.82779 19.7946 2.82779 18.6777 3.51662 17.9889L14.1972 7.30833M16.6917 9.80279L14.1972 7.30833" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
