@@ -63,7 +63,7 @@ export const generateMetaWithAI = ( {
 	setIsGenerating( true );
 
 	request(
-		'meta-tags/ai/generate-meta',
+		'meta-tags/ai/meta',
 		{
 			title,
 			content,
