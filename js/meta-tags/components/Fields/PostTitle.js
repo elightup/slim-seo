@@ -11,7 +11,6 @@ const PostTitle = ( { id, std = '', features, max = 60, ...rest } ) => {
 	let [ preview, setPreview ] = useState( '' );
 	let [ placeholder, setPlaceholder ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	let [ updateByAICount, setUpdateByAICount ] = useState( 0 );
 	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
 
@@ -66,21 +65,25 @@ const PostTitle = ( { id, std = '', features, max = 60, ...rest } ) => {
 	};
 
 	const generateWithAI = () => {
-		setUpdateByAICount( prev => {
-			const next = prev + 1;
+		setIsGenerating( true );
+		generateMetaWithAI( {
+			title: titleRef.current,
+			content: getContent(),
+			previousMetaByAI,
+		} ).then( response => {
+			if ( ! response || response.status !== 'success' ) {
+				alert( response?.result || __( 'AI generation failed.', 'slim-seo' ) );
+				return;
+			}
 
-			generateMetaWithAI( {
-				title: titleRef.current,
-				content: getContent(),
-				updateCount: next,
-				previousMetaByAI,
-				setValue,
-				setPreview,
-				setPreviousMetaByAI,
-				setIsGenerating,
-			} );
-
-			return next;
+			const value = response.result;
+			setValue( value );
+			setPreview?.( value );
+			setPreviousMetaByAI?.( value );
+		} ).catch( error => {
+			alert( __( 'AI request failed:', 'slim-seo' ) );
+		} ).finally( () => {
+			setIsGenerating( false );
 		} );
 	};
 

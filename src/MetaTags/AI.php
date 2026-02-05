@@ -23,11 +23,10 @@ class AI {
 		return current_user_can( 'edit_posts' );
 	}
 
-	public function generate( WP_REST_Request $request ): string {
+	public function generate( WP_REST_Request $request ): array {
 		$title          = (string) $request->get_param( 'title' );
 		$content        = (string) $request->get_param( 'content' );
-		$update_count   = (int) $request->get_param( 'update_count' );
-		$previous_value = (string) $request->get_param( 'previous_value' );
+		$previous_value = (string) $request->get_param( 'previousMetaByAI' );
 		$site_language  = get_bloginfo( 'language' ); // e.g. en-US, vi, fr-FR
 
 		// Preprocess content: strip HTML, normalize whitespace, limit length
@@ -41,11 +40,11 @@ class AI {
 		}
 
 		return $request->get_param( 'type' ) === 'description'
-			? $this->generate_description( $content, $update_count, $previous_value, $site_language )
-			: $this->generate_title( $content, $update_count, $previous_value, $site_language, $title );
+			? $this->generate_description( $content, $previous_value, $site_language )
+			: $this->generate_title( $content, $previous_value, $site_language, $title );
 	}
 
-	private function generate_title( string $content, int $update_count, string $previous_value, string $site_language, string $title ): string {
+	private function generate_title( string $content, string $previous_value, string $site_language, string $title ): array {
 		$prompt = <<<PROMPT
 			You are a professional SEO assistant for WordPress websites.
 
@@ -86,7 +85,7 @@ class AI {
 			"Content:\n{$content}";
 
 		// Regenerate (rewrite) logic
-		if ( $update_count > 1 && $previous_value ) {
+		if ( $previous_value ) {
 			$prompt  .= "\n\n" . $this->get_rewrite_rule();
 			$content .= "\n\nPrevious meta title:\n{$previous_value}";
 		}
@@ -94,7 +93,7 @@ class AI {
 		return $this->call_openai( $prompt, $content );
 	}
 
-	private function generate_description( string $content, int $update_count, string $previous_value, string $site_language ): string {
+	private function generate_description( string $content, string $previous_value, string $site_language ): array {
 		$prompt = <<<PROMPT
 			You are a professional SEO assistant for WordPress websites.
 
@@ -126,7 +125,7 @@ class AI {
 		$content = "Content:\n{$content}";
 
 		// Regenerate (rewrite) logic
-		if ( $update_count > 1 && $previous_value ) {
+		if ( $previous_value ) {
 			$prompt  .= "\n\n" . $this->get_rewrite_rule();
 			$content .= "\n\nPrevious meta description:\n{$previous_value}";
 		}
@@ -143,12 +142,12 @@ class AI {
 		RULE;
 	}
 
-	private function call_openai( string $prompt, string $content ): string {
+	private function call_openai( string $prompt, string $content ): array {
 		$slim_seo   = get_option( 'slim_seo' ) ?: [];
 		$openai_key = $slim_seo['openai_key'] ?? '';
 
 		if ( empty( $openai_key ) ) {
-			return __( 'You need to provide a ChatGPT API key!', 'slim-seo' );
+			return $this->ai_return( __( 'You need to provide a ChatGPT API key!', 'slim-seo' ), 'warning' );
 		}
 
 		$body = wp_json_encode( [
@@ -175,31 +174,46 @@ class AI {
 			'timeout' => 45,
 		] );
 
+		// 1 Network error
 		if ( is_wp_error( $response ) ) {
-			return __( 'API request failed.', 'slim-seo' );
+			return $this->ai_return( __( 'API request failed.', 'slim-seo' ) );
 		}
 
+		// 2 HTTP error
 		$code = wp_remote_retrieve_response_code( $response );
 		if ( $code < 200 || $code >= 300 ) {
-			return sprintf( __( 'API error (HTTP %d)', 'slim-seo' ), $code );
+			return $this->ai_return( sprintf( __( 'API error (HTTP %d)', 'slim-seo' ), $code ) );
 		}
 
-		$result = json_decode( wp_remote_retrieve_body( $response ), true );
+		// 3 Decode JSON
+		$body   = wp_remote_retrieve_body( $response );
+		$result = json_decode( $body, true );
+
 		if ( ! is_array( $result ) ) {
-			return __( 'Invalid response from the AI service.', 'slim-seo' );
+			return $this->ai_return( __( 'Invalid response from the AI service.', 'slim-seo' ) );
 		}
 
-		if ( isset( $result['error'] ) ) {
-			return sprintf( __( 'API error: %s', 'slim-seo' ), $result['error']['message'] );
+		// 4 OpenAI error
+		if ( isset( $result['error']['message'] ) ) {
+			return $this->ai_return( sprintf( __( 'API error: %s', 'slim-seo' ), $result['error']['message'] ) );
 		}
 
-		if ( isset( $result['status'], $result['output'][0]['content'][0]['text'] ) && $result['status'] === 'completed' ) {
-			$description = trim( $result['output'][0]['content'][0]['text'] );
-
-			// Final safety truncation
-			return $description;
+		// 5 Success
+		if (
+			isset( $result['status'], $result['output'][0]['content'][0]['text'] ) &&
+			$result['status'] === 'completed'
+		) {
+			return $this->ai_return( trim( $result['output'][0]['content'][0]['text'] ), 'success' );
 		}
 
-		return __( 'Could not retrieve content from the AI service.', 'slim-seo' );
+		return $this->ai_return( __( 'Could not retrieve content from the AI service.', 'slim-seo' ) );
 	}
+
+	private function ai_return( string $message, string $status = 'error' ): array {
+		return [
+			'status' => $status,
+			'result' => $message,
+		];
+	}
+
 }

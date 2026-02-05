@@ -13,7 +13,6 @@ const TermDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
-	let [ updateByAICount, setUpdateByAICount ] = useState( 0 );
 	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
 	const descriptionRef = useRef( getDescription() );
@@ -55,21 +54,25 @@ const TermDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 	};
 
 	const generateWithAI = () => {
-		setUpdateByAICount( prev => {
-			const next = prev + 1;
+		setIsGenerating( true );
+		generateMetaWithAI( {
+			type: 'description',
+			content: descriptionRef.current,
+			previousMetaByAI,
+		} ).then( response => {
+			if ( ! response || response.status !== 'success' ) {
+				alert( response?.result || __( 'AI generation failed.', 'slim-seo' ) );
+				return;
+			}
 
-			generateMetaWithAI( {
-				type: 'description',
-				content: descriptionRef.current,
-				updateCount: next,
-				previousMetaByAI,
-				setValue,
-				setPreview,
-				setPreviousMetaByAI,
-				setIsGenerating,
-			} );
-
-			return next;
+			const value = response.result;
+			setValue( value );
+			setPreview?.( value );
+			setPreviousMetaByAI?.( value );
+		} ).catch( error => {
+			alert( __( 'AI request failed:', 'slim-seo' ) );
+		} ).finally( () => {
+			setIsGenerating( false );
 		} );
 	};
 
