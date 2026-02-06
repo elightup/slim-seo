@@ -261,7 +261,7 @@
 					inputs.submit.val( wpLinkL10n.update );
 
 					// Slim SEO - Begin: set inputs' values from the link.
-					let rel = linkNode.attr( 'rel' );
+					let rel = linkNode.attr( 'rel' ) || '';
 					inputs.nofollow.prop( 'checked', rel.includes( 'nofollow' ) );
 					inputs.sponsored.prop( 'checked', rel.includes( 'sponsored' ) );
 					inputs.ugc.prop( 'checked', rel.includes( 'ugc' ) );
