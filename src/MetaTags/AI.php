@@ -5,14 +5,12 @@ use WP_REST_Server;
 use WP_REST_Request;
 
 class AI {
-	const ROUTE_PREFIX = 'meta-tags/ai/';
-
 	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
 	public function register_routes(): void {
-		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'meta', [
+		register_rest_route( 'slim-seo', 'meta-tags/ai', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'generate' ],
 			'permission_callback' => [ $this, 'can_edit_post' ],
