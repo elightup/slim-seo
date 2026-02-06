@@ -44,8 +44,7 @@ class AI {
 	}
 
 	private function generate_title( string $content, string $previous_value, string $title ): array {
-		$site_language = get_bloginfo( 'language' );
-		$prompt        = <<<PROMPT
+		$prompt = <<<'PROMPT'
 			You are a professional SEO assistant for WordPress websites.
 
 			Your task:
@@ -76,8 +75,6 @@ class AI {
 			Output rules:
 			- Return ONLY the meta title text
 			- No explanations, no extra lines
-
-			Site language hint: {$site_language}
 		PROMPT;
 
 		$content =
@@ -90,12 +87,11 @@ class AI {
 			$content .= "\n\nPrevious meta title:\n{$previous_value}";
 		}
 
-		return $this->call_openai( $prompt, $content );
+		return $this->request( $prompt, $content );
 	}
 
 	private function generate_description( string $content, string $previous_value ): array {
-		$site_language = get_bloginfo( 'language' );
-		$prompt        = <<<PROMPT
+		$prompt = <<<'PROMPT'
 			You are a professional SEO assistant for WordPress websites.
 
 			Your task:
@@ -119,8 +115,6 @@ class AI {
 			Output rules:
 			- Return ONLY the meta description text
 			- No explanations, no extra lines
-
-			Site language hint: {$site_language}
 		PROMPT;
 
 		$content = "Content:\n{$content}";
@@ -131,7 +125,7 @@ class AI {
 			$content .= "\n\nPrevious meta description:\n{$previous_value}";
 		}
 
-		return $this->call_openai( $prompt, $content );
+		return $this->request( $prompt, $content );
 	}
 
 	private function get_rewrite_rule(): string {
@@ -143,12 +137,12 @@ class AI {
 		RULE;
 	}
 
-	private function call_openai( string $prompt, string $content ): array {
+	private function request( string $prompt, string $content ): array {
 		$slim_seo   = get_option( 'slim_seo' ) ?: [];
 		$openai_key = $slim_seo['openai_key'] ?? '';
 
 		if ( empty( $openai_key ) ) {
-			return $this->ai_return( __( 'You need to provide a ChatGPT API key!', 'slim-seo' ), 'warning' );
+			return $this->response( __( 'You need to provide an OpenAI API key!', 'slim-seo' ) );
 		}
 
 		$body = wp_json_encode( [
@@ -177,7 +171,7 @@ class AI {
 
 		// 1. Network error
 		if ( is_wp_error( $response ) ) {
-			return $this->ai_return( sprintf( __( 'Connection error: %s', 'slim-seo' ), $response->get_error_message() ) );
+			return $this->response( sprintf( __( 'Connection error: %s', 'slim-seo' ), $response->get_error_message() ) );
 		}
 
 		$status_code = wp_remote_retrieve_response_code( $response );
@@ -190,27 +184,27 @@ class AI {
 
 			switch ( $status_code ) {
 				case 401:
-					return $this->ai_return( __( 'Invalid API Key. Please check your settings.', 'slim-seo' ) );
+					return $this->response( __( 'Invalid API Key. Please check your settings.', 'slim-seo' ) );
 				case 429:
-					return $this->ai_return( __( 'Rate limit exceeded or insufficient quota. Please try again later.', 'slim-seo' ) );
+					return $this->response( __( 'Rate limit exceeded or insufficient quota. Please try again later.', 'slim-seo' ) );
 				case 500:
 				case 503:
-					return $this->ai_return( __( 'OpenAI server is currently overloaded. Please wait a moment.', 'slim-seo' ) );
+					return $this->response( __( 'OpenAI server is currently overloaded. Please wait a moment.', 'slim-seo' ) );
 				default:
-					return $this->ai_return( sprintf( __( 'OpenAI API error (%1$s): %2$s', 'slim-seo' ), $status_code, $error_message ) );
+					return $this->response( sprintf( __( 'OpenAI API error (%1$s): %2$s', 'slim-seo' ), $status_code, $error_message ) );
 			}
 		}
 
 		// 3. Invalid response
 		if ( empty( $result['output'][0]['content'][0]['text'] ) ) {
-			return $this->ai_return( __( 'Invalid response from OpenAI API.', 'slim-seo' ) );
+			return $this->response( __( 'Invalid response from OpenAI API.', 'slim-seo' ) );
 		}
 
 		// 4. Success
-		return $this->ai_return( trim( $result['output'][0]['content'][0]['text'] ), 'success' );
+		return $this->response( trim( $result['output'][0]['content'][0]['text'] ), 'success' );
 	}
 
-	private function ai_return( string $message, string $status = 'error' ): array {
+	private function response( string $message, string $status = 'error' ): array {
 		return compact( 'message', 'status' );
 	}
 }
