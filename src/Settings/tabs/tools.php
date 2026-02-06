@@ -19,7 +19,7 @@
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">
-			<input type="text" name="slim_seo[openai_key]" id="ss-openai-key" value="<?php echo esc_attr( $data['openai_key'] ?? '' ); ?>">
+			<input type="<?php echo esc_attr( empty( $data['openai_key'] ) ? 'text' : 'password' ); ?>" name="slim_seo[openai_key]" id="ss-openai-key" value="<?php echo esc_attr( $data['openai_key'] ?? '' ); ?>">
 		</div>
 	</div>
 </div>
