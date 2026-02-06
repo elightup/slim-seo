@@ -35,3 +35,4 @@ export const normalize = html => !html ? '' : html
 	.trim();
 
 export const isBlockEditor = document.body.classList.contains( 'block-editor-page' );
+export const generateMetaWithAI = params => request( 'meta-tags/ai', params, 'POST', false );

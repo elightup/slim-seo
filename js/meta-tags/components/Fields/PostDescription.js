@@ -2,14 +2,17 @@ import { Control } from "@elightup/form";
 import { select, subscribe, unsubscribe } from "@wordpress/data";
 import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { isBlockEditor, request } from "../../functions";
+import { generateMetaWithAI, isBlockEditor, request } from "../../functions";
+import AIButton from "./AIButton";
 import PropInserter from "./PropInserter";
 
-const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
+const PostDescription = ( { id, std = '', features, min = 50, max = 160, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( std );
 	let [ placeholder, setPlaceholder ] = useState( std );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
+	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
+	const [ isGenerating, setIsGenerating ] = useState( false );
 	const inputRef = useRef();
 	let contentEditor;
 
@@ -17,7 +20,7 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 	const wpContent = document.querySelector( '#content' );
 	const getContent = () => {
 		if ( isBlockEditor ) {
-			return wp.data.select( 'core/editor' ).getEditedPostContent();
+			return select( 'core/editor' ).getEditedPostContent();
 		}
 		return contentEditor && !contentEditor.isHidden() ? contentEditor.getContent() : ( wpContent ? wpContent.value : '' );
 	};
@@ -62,6 +65,28 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 		contentRef.current = content;
 
 		requestUpdate();
+	};
+
+	const generateWithAI = () => {
+		setIsGenerating( true );
+		generateMetaWithAI( {
+			type: 'description',
+			content: contentRef.current,
+			previousMetaByAI,
+		} )
+			.then( response => {
+				if ( response?.status !== 'success' ) {
+					alert( response?.message || __( 'Failed to generate the meta description with AI.', 'slim-seo' ) );
+					return;
+				}
+
+				const value = response.message;
+				setValue( value );
+				setPreview?.( value );
+				setPreviousMetaByAI?.( value );
+			} )
+			.catch( () => alert( __( 'Failed to generate the meta description with AI.', 'slim-seo' ) ) )
+			.finally( () => setIsGenerating( false ) );
 	};
 
 	// Trigger refresh preview and placeholder when anything change.
@@ -124,6 +149,10 @@ const PostDescription = ( { id, std = '', min = 50, max = 160, ...rest } ) => {
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
+				{
+					features.ai &&
+					<AIButton onClick={ generateWithAI } isGenerating={ isGenerating } />
+				}
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>

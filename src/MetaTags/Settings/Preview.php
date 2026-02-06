@@ -51,8 +51,7 @@ class Preview {
 	}
 
 	public function can_edit_post( WP_REST_Request $request ): bool {
-		$post_id = (int) $request->get_param('ID');
-
+		$post_id = (int) $request->get_param( 'ID' );
 		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
 	}
 
@@ -173,10 +172,11 @@ class Preview {
 			];
 		}
 
-		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
-		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 		$content = (string) $request->get_param( 'content' ); // Live content
 		$content = Data::get_post_content( $id, $content );
+
+		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
+		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 
 		$data         = [];
 		$data['post'] = array_filter( [
@@ -185,9 +185,8 @@ class Preview {
 			'auto_description' => Helper::truncate( $excerpt ?: $content ),
 		] );
 		$data         = array_filter( $data );
-
-		$default = $this->get_default_post_description( $id );
-		$preview = Helper::render( $text ?: $default, $id, 0, $data );
+		$default      = $this->get_default_post_description( $id );
+		$preview      = Helper::render( $text ?: $default, $id, 0, $data );
 
 		return compact( 'preview', 'default' );
 	}

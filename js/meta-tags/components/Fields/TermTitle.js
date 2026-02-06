@@ -1,17 +1,22 @@
 import { Control } from "@elightup/form";
 import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { request } from "../../functions";
+import { generateMetaWithAI, request } from "../../functions";
+import AIButton from "./AIButton";
 import PropInserter from "./PropInserter";
 
 const wpTitle = document.querySelector( '#name' );
 const getTitle = () => wpTitle.value;
+const wpDescription = document.querySelector( '#description' );
+const getDescription = () => wpDescription.value;
 
-export default ( { id, std = '', max = 60, ...rest } ) => {
+export default ( { id, std = '', features, max = 60, ...rest } ) => {
 	let [ value, setValue ] = useState( std );
 	let [ preview, setPreview ] = useState( '' );
 	let [ placeholder, setPlaceholder ] = useState( '' );
 	let [ updateCount, setUpdateCount ] = useState( 0 );
+	let [ previousMetaByAI, setPreviousMetaByAI ] = useState( '' );
+	const [ isGenerating, setIsGenerating ] = useState( false );
 	const titleRef = useRef( getTitle() );
 	const inputRef = useRef();
 
@@ -50,6 +55,28 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 		requestUpdate();
 	};
 
+	const generateWithAI = () => {
+		setIsGenerating( true );
+		generateMetaWithAI( {
+			title: titleRef.current,
+			content: getDescription(),
+			previousMetaByAI,
+		} )
+			.then( response => {
+				if ( response?.status !== 'success' ) {
+					alert( response?.message || __( 'Failed to generate the meta title with AI.', 'slim-seo' ) );
+					return;
+				}
+
+				const value = response.message;
+				setValue( value );
+				setPreview?.( value );
+				setPreviousMetaByAI?.( value );
+			} )
+			.catch( () => alert( __( 'Failed to generate the meta title with AI.', 'slim-seo' ) ) )
+			.finally( () => setIsGenerating( false ) );
+	};
+
 	// Trigger refresh preview and placeholder when anything change.
 	// Use debounce technique to avoid sending too many requests.
 	useEffect( () => {
@@ -84,6 +111,10 @@ export default ( { id, std = '', max = 60, ...rest } ) => {
 					ref={ inputRef }
 				/>
 				{ preview && <div className="ss-preview">{ sprintf( __( 'Preview: %s', 'slim-seo' ), preview ) }</div> }
+				{
+					features.ai &&
+					<AIButton onClick={ generateWithAI } isGenerating={ isGenerating } />
+				}
 				<PropInserter onInsert={ handleInsertVariables } />
 			</div>
 		</Control>
