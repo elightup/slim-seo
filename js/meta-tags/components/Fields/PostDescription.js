@@ -73,21 +73,20 @@ const PostDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 			type: 'description',
 			content: contentRef.current,
 			previousMetaByAI,
-		} ).then( response => {
-			if ( ! response || response.status !== 'success' ) {
-				alert( response?.result || __( 'AI generation failed.', 'slim-seo' ) );
-				return;
-			}
+		} )
+			.then( response => {
+				if ( response?.status !== 'success' ) {
+					alert( response?.message || __( 'Failed to generate the meta description with AI.', 'slim-seo' ) );
+					return;
+				}
 
-			const value = response.result;
-			setValue( value );
-			setPreview?.( value );
-			setPreviousMetaByAI?.( value );
-		} ).catch( error => {
-			alert( __( 'AI request failed:', 'slim-seo' ) );
-		} ).finally( () => {
-			setIsGenerating( false );
-		} );
+				const value = response.message;
+				setValue( value );
+				setPreview?.( value );
+				setPreviousMetaByAI?.( value );
+			} )
+			.catch( () => alert( __( 'Failed to generate the meta description with AI.', 'slim-seo' ) ) )
+			.finally( () => setIsGenerating( false ) );
 	};
 
 	// Trigger refresh preview and placeholder when anything change.

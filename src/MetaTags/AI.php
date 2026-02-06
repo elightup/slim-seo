@@ -27,7 +27,6 @@ class AI {
 		$title          = (string) $request->get_param( 'title' );
 		$content        = (string) $request->get_param( 'content' );
 		$previous_value = (string) $request->get_param( 'previousMetaByAI' );
-		$site_language  = get_bloginfo( 'language' ); // e.g. en-US, vi, fr-FR
 
 		// Preprocess content: strip HTML, normalize whitespace, limit length
 		$content = wp_strip_all_tags( $content );
@@ -40,12 +39,13 @@ class AI {
 		}
 
 		return $request->get_param( 'type' ) === 'description'
-			? $this->generate_description( $content, $previous_value, $site_language )
-			: $this->generate_title( $content, $previous_value, $site_language, $title );
+			? $this->generate_description( $content, $previous_value )
+			: $this->generate_title( $content, $previous_value, $title );
 	}
 
-	private function generate_title( string $content, string $previous_value, string $site_language, string $title ): array {
-		$prompt = <<<PROMPT
+	private function generate_title( string $content, string $previous_value, string $title ): array {
+		$site_language = get_bloginfo( 'language' );
+		$prompt        = <<<PROMPT
 			You are a professional SEO assistant for WordPress websites.
 
 			Your task:
@@ -93,8 +93,9 @@ class AI {
 		return $this->call_openai( $prompt, $content );
 	}
 
-	private function generate_description( string $content, string $previous_value, string $site_language ): array {
-		$prompt = <<<PROMPT
+	private function generate_description( string $content, string $previous_value ): array {
+		$site_language = get_bloginfo( 'language' );
+		$prompt        = <<<PROMPT
 			You are a professional SEO assistant for WordPress websites.
 
 			Your task:
@@ -174,46 +175,42 @@ class AI {
 			'timeout' => 45,
 		] );
 
-		// 1 Network error
+		// 1. Network error
 		if ( is_wp_error( $response ) ) {
-			return $this->ai_return( __( 'API request failed.', 'slim-seo' ) );
+			return $this->ai_return( sprintf( __( 'Connection error: %s', 'slim-seo' ), $response->get_error_message() ) );
 		}
 
-		// 2 HTTP error
-		$code = wp_remote_retrieve_response_code( $response );
-		if ( $code < 200 || $code >= 300 ) {
-			return $this->ai_return( sprintf( __( 'API error (HTTP %d)', 'slim-seo' ), $code ) );
+		$status_code = wp_remote_retrieve_response_code( $response );
+		$body        = wp_remote_retrieve_body( $response );
+		$result      = json_decode( $body, true );
+
+		// 2. OpenAI API error
+		if ( $status_code !== 200 ) {
+			$error_message = $result['error']['message'] ?? __( 'Unknown.', 'slim-seo' );
+
+			switch ( $status_code ) {
+				case 401:
+					return $this->ai_return( __( 'Invalid API Key. Please check your settings.', 'slim-seo' ) );
+				case 429:
+					return $this->ai_return( __( 'Rate limit exceeded or insufficient quota. Please try again later.', 'slim-seo' ) );
+				case 500:
+				case 503:
+					return $this->ai_return( __( 'OpenAI server is currently overloaded. Please wait a moment.', 'slim-seo' ) );
+				default:
+					return $this->ai_return( sprintf( __( 'OpenAI API error (%1$s): %2$s', 'slim-seo' ), $status_code, $error_message ) );
+			}
 		}
 
-		// 3 Decode JSON
-		$body   = wp_remote_retrieve_body( $response );
-		$result = json_decode( $body, true );
-
-		if ( ! is_array( $result ) ) {
-			return $this->ai_return( __( 'Invalid response from the AI service.', 'slim-seo' ) );
+		// 3. Invalid response
+		if ( empty( $result['output'][0]['content'][0]['text'] ) ) {
+			return $this->ai_return( __( 'Invalid response from OpenAI API.', 'slim-seo' ) );
 		}
 
-		// 4 OpenAI error
-		if ( isset( $result['error']['message'] ) ) {
-			return $this->ai_return( sprintf( __( 'API error: %s', 'slim-seo' ), $result['error']['message'] ) );
-		}
-
-		// 5 Success
-		if (
-			isset( $result['status'], $result['output'][0]['content'][0]['text'] ) &&
-			$result['status'] === 'completed'
-		) {
-			return $this->ai_return( trim( $result['output'][0]['content'][0]['text'] ), 'success' );
-		}
-
-		return $this->ai_return( __( 'Could not retrieve content from the AI service.', 'slim-seo' ) );
+		// 4. Success
+		return $this->ai_return( trim( $result['output'][0]['content'][0]['text'] ), 'success' );
 	}
 
 	private function ai_return( string $message, string $status = 'error' ): array {
-		return [
-			'status' => $status,
-			'result' => $message,
-		];
+		return compact( 'message', 'status' );
 	}
-
 }
