@@ -33,7 +33,7 @@
 		<label for="source"><?php esc_html_e( 'Migrate SEO data from:', 'slim-seo' ); ?></label>
 	</div>
 	<div class="ef-control__input">
-		<div class="ss-input-wrapper" style="display: flex;">
+		<div class="ss-input-wrapper migration-handler">
 			<select name="source" id="source">
 				<optgroup value="meta" label="<?php esc_html_e( 'SEO plugins', 'slim-seo' ); ?>">
 					<?php $sources = SlimSEO\Helpers\Data::get_migration_sources( 'meta' ) ?>
