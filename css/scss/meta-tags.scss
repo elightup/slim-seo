@@ -78,13 +78,10 @@
 	}
 	&.migration-handler {
 		display: flex;
+		gap: 8px;
 
 		&.hidden {
 			display: none;
-		}
-
-		#source {
-			margin-right: 8px;
 		}
 	}
 }
