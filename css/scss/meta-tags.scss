@@ -76,6 +76,14 @@
 	&:has(.ss-select-image) > input, &:has(.ss-select-image) > textarea {
 		padding-right: calc(36px + 25px);
 	}
+	&.migration-handler {
+		display: flex;
+		gap: 8px;
+
+		&.hidden {
+			display: none;
+		}
+	}
 }
 
 .ss-ai-button svg {
