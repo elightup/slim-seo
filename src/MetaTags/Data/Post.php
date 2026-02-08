@@ -24,7 +24,7 @@ class Post {
 			return '';
 		}
 
-		$data  = [
+		$data   = [
 			'title'         => $this->post->post_title,
 			'excerpt'       => $this->post->post_excerpt,
 			'date'          => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_date_gmt ) ),
@@ -40,7 +40,7 @@ class Post {
 	}
 
 	private function get_auto_description(): string {
-		return Helper::truncate( $this->post->post_excerpt  ?: $this->get_content() );
+		return Helper::truncate( $this->post->post_excerpt ?: $this->get_content() );
 	}
 
 	private function get_thumbnail() {
@@ -79,6 +79,10 @@ class Post {
 	}
 
 	private function get_post_terms( string $taxonomy ): array {
+		$terms = apply_filters( 'slim_seo_meta_tags_post_terms', [], $this->post->ID, $taxonomy );
+		if ( ! empty( $terms ) ) {
+			return $terms;
+		}
 		$terms = get_the_terms( $this->post, $taxonomy );
 		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
 	}
