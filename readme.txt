@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
-Tested up to: 6.9
+Tested up to: 6.9.1
 Requires PHP: 7.2
-Stable tag: 4.8.3
+Stable tag: 4.9.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,6 +170,19 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.0 - 2026-02-09 =
+
+**Highlights:**
+
+This version allows you to use your own OpenAI API key to generate meta titles and descriptions seamlessly in WordPress. It supports both posts and terms, and allows you to regenerate meta tags if needed. For more details, please see [this blog post](https://wpslimseo.com/introducing-ai-integration/) and the [documentation](https://docs.wpslimseo.com/slim-seo/ai/).
+
+**Other changes:**
+
+- Add support for custom WooCommerce attributes: showing list of WooCommerce attributes in the dynamic variable list, and respect attribute terms order set in admin.
+- Add support for Kadence blocks
+- Fix undefined rel property when add link with link attributes in classic editor
+- Remove content of `<pre>` when normalizing for meta tags
 
 = 4.8.3 - 2026-01-06 =
 
