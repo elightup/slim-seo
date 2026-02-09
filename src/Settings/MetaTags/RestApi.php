@@ -54,7 +54,13 @@ class RestApi {
 			'default_linkedin_image',
 			'wp_pattern_category',
 		] );
-		return array_diff_key( get_option( 'slim_seo', [] ), $exclude );
+		$option = get_option( 'slim_seo', [] );
+		$option = array_diff_key( $option, $exclude );
+
+		// Don't expose the OpenAI key to the client.
+		$option['openai_key'] = ! empty( $option['openai_key'] );
+
+		return $option;
 	}
 
 	public function get_variables(): array {
