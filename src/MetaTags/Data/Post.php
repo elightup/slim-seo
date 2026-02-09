@@ -24,7 +24,7 @@ class Post {
 			return '';
 		}
 
-		$data  = [
+		$data   = [
 			'title'         => $this->post->post_title,
 			'excerpt'       => $this->post->post_excerpt,
 			'date'          => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_date_gmt ) ),
@@ -40,7 +40,7 @@ class Post {
 	}
 
 	private function get_auto_description(): string {
-		return Helper::truncate( $this->post->post_excerpt  ?: $this->get_content() );
+		return Helper::truncate( $this->post->post_excerpt ?: $this->get_content() );
 	}
 
 	private function get_thumbnail() {
@@ -68,9 +68,13 @@ class Post {
 	}
 
 	private function get_tax(): array {
-		$post_tax   = [];
+		$post_tax = [];
+
+		/**
+		 * Get all taxonomies for meta tags.
+		 * Don't use eLightUp\SlimSEO\Common\Helpers\Data::get_taxonomies() because it doesn't include non-public taxonomies like WooCommerce product attributes.
+		 */
 		$taxonomies = Helper::get_taxonomies();
-		unset( $taxonomies['category'], $taxonomies['post_tag'] );
 		foreach ( $taxonomies as $taxonomy ) {
 			$post_tax[ $this->normalize( $taxonomy['slug'] ) ] = $this->get_post_terms( $taxonomy['slug'] );
 		}
@@ -79,6 +83,14 @@ class Post {
 	}
 
 	private function get_post_terms( string $taxonomy ): array {
+		/**
+		 * Allow to short-circuit getting the terms for the post's taxonomy.
+		 * @see \SlimSEO\Integrations\WooCommerce::change_post_terms()
+		 */
+		$terms = apply_filters( 'slim_seo_meta_tags_post_terms', [], $this->post->ID, $taxonomy );
+		if ( ! empty( $terms ) ) {
+			return $terms;
+		}
 		$terms = get_the_terms( $this->post, $taxonomy );
 		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
 	}

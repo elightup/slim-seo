@@ -28,6 +28,7 @@ class WooCommerce {
 		add_filter( 'slim_seo_no_post_content', [ $this, 'no_post_content' ], 1, 2 );
 
 		add_filter( 'slim_seo_sitemap_post_type_query_args', [ $this, 'exclude_products_by_visibility' ] );
+		add_filter( 'slim_seo_meta_tags_post_terms', [ $this, 'change_post_terms' ], 10, 3 );
 	}
 
 	public function exclude_products_by_visibility( array $query_args ): array {
@@ -35,8 +36,8 @@ class WooCommerce {
 			return $query_args;
 		}
 
-		$visibility_terms  = wc_get_product_visibility_term_ids();
-		$not_in            = [ $visibility_terms['exclude-from-catalog'] ];
+		$visibility_terms = wc_get_product_visibility_term_ids();
+		$not_in           = [ $visibility_terms['exclude-from-catalog'] ];
 
 		// Hide out of stock products.
 		if ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) ) {
@@ -51,7 +52,7 @@ class WooCommerce {
 			$query_args['tax_query'] = [];
 		}
 		$query_args['tax_query']['relation'] = 'AND';
-		$query_args['tax_query'][] = [
+		$query_args['tax_query'][]           = [
 			'taxonomy' => 'product_visibility',
 			'field'    => 'term_taxonomy_id',
 			'terms'    => $not_in,
@@ -59,6 +60,42 @@ class WooCommerce {
 		];
 
 		return $query_args;
+	}
+
+	public function change_post_terms( array $terms, int $post_id, string $taxonomy ): array {
+		if ( ! taxonomy_is_product_attribute( $taxonomy ) ) {
+			return $terms;
+		}
+
+		$attribute_id = wc_attribute_taxonomy_id_by_name( $taxonomy );
+		$attribute    = wc_get_attribute( $attribute_id );
+
+		if ( ! $attribute ) {
+			return $terms;
+		}
+
+		$args = [
+			'orderby' => 'name',
+			'order'   => 'ASC',
+		];
+
+		switch ( $attribute->order_by ) {
+			case 'menu_order':
+				$args['orderby']  = 'meta_value_num';
+				$args['meta_key'] = 'order';
+				break;
+
+			case 'name_num':
+				$args['orderby'] = 'name_num';
+				break;
+
+			case 'id':
+				$args['orderby'] = 'term_id';
+				break;
+		}
+
+		$terms = wc_get_product_terms( $post_id, $taxonomy, $args );
+		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
 	}
 
 	public function process(): void {
