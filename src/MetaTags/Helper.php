@@ -104,8 +104,10 @@ class Helper {
 		self::$allowed_blocks = apply_filters( 'slim_seo_allowed_blocks', self::$allowed_blocks );
 	}
 
-	public static function get_taxonomies() {
+	public static function get_taxonomies(): array {
 		$unsupported = [
+			'category',
+			'post_tag',
 			'wp_theme',
 			'wp_template_part_area',
 			'wp_pattern_category',

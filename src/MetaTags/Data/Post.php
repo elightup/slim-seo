@@ -70,7 +70,6 @@ class Post {
 	private function get_tax(): array {
 		$post_tax   = [];
 		$taxonomies = Helper::get_taxonomies();
-		unset( $taxonomies['category'], $taxonomies['post_tag'] );
 		foreach ( $taxonomies as $taxonomy ) {
 			$post_tax[ $this->normalize( $taxonomy['slug'] ) ] = $this->get_post_terms( $taxonomy['slug'] );
 		}

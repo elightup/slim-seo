@@ -58,11 +58,7 @@ class RestApi {
 	}
 
 	public function get_variables(): array {
-		$taxonomies = Helper::get_taxonomies();
-		$taxonomies = array_filter( $taxonomies, function ( $taxonomy ) {
-			return ! in_array( $taxonomy['slug'], [ 'category', 'post_tag' ], true );
-		} );
-
+		$taxonomies       = Helper::get_taxonomies();
 		$taxonomy_options = [];
 		foreach ( $taxonomies as $taxonomy ) {
 			$key                                   = $this->normalize( $taxonomy['slug'] );
