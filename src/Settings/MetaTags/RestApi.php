@@ -58,6 +58,10 @@ class RestApi {
 	}
 
 	public function get_variables(): array {
+		/**
+		 * Get all taxonomies for meta tags.
+		 * Don't use eLightUp\SlimSEO\Common\Helpers\Data::get_taxonomies() because it doesn't include non-public taxonomies like WooCommerce product attributes.
+		 */
 		$taxonomies       = Helper::get_taxonomies();
 		$taxonomy_options = [];
 		foreach ( $taxonomies as $taxonomy ) {
@@ -137,7 +141,7 @@ class RestApi {
 		return apply_filters( 'slim_seo_variables', $variables );
 	}
 
-	public function get_image_variables() {
+	public function get_image_variables(): array {
 		$variables = [
 			[
 				'label'   => __( 'Post', 'slim-seo' ),

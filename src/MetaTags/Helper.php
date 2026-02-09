@@ -104,6 +104,10 @@ class Helper {
 		self::$allowed_blocks = apply_filters( 'slim_seo_allowed_blocks', self::$allowed_blocks );
 	}
 
+	/**
+	 * Get all taxonomies for meta tags.
+	 * Don't use eLightUp\SlimSEO\Common\Helpers\Data::get_taxonomies() because it doesn't include non-public taxonomies like WooCommerce product attributes.
+	 */
 	public static function get_taxonomies(): array {
 		$unsupported = [
 			'category',
