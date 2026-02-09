@@ -88,10 +88,12 @@ class Settings {
 		}
 	}
 
-	private function sanitize( $option, $data ) {
+	private function sanitize( $option, $data ): array {
 		$option = array_merge( $this->defaults, $option );
 
 		$this->meta_tags->sanitize( $option, $data );
+
+		$option['openai_key'] = empty( $option['openai_key'] ) ? '' : sanitize_text_field( $option['openai_key'] );
 
 		return array_filter( $option );
 	}
