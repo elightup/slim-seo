@@ -25,6 +25,7 @@ class AI {
 		$title          = (string) $request->get_param( 'title' );
 		$content        = (string) $request->get_param( 'content' );
 		$previous_value = (string) $request->get_param( 'previousMetaByAI' );
+		$type           = $request->get_param( 'type' ) === 'description' ? 'description' : 'title';
 
 		// Preprocess content: strip HTML, normalize whitespace, limit length
 		$content = wp_strip_all_tags( $content );
@@ -36,7 +37,15 @@ class AI {
 			$content = substr( $content, 0, $max_chars );
 		}
 
-		return $request->get_param( 'type' ) === 'description'
+		if ( $type === 'description' && empty( $content ) ) {
+			return $this->response( __( 'Content is required to generate meta description.', 'slim-seo' ) );
+		}
+
+		if ( $type === 'title' && ( empty( $title ) || empty( $content ) ) ) {
+			return $this->response( __( 'Title and content are required to generate meta title.', 'slim-seo' ) );
+		}
+
+		return $type === 'description'
 			? $this->generate_description( $content, $previous_value )
 			: $this->generate_title( $content, $previous_value, $title );
 	}
