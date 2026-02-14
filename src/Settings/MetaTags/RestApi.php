@@ -72,7 +72,7 @@ class RestApi {
 		$taxonomy_options = [];
 		foreach ( $taxonomies as $taxonomy ) {
 			$key                                   = $this->normalize( $taxonomy['slug'] );
-			$taxonomy_options[ "post.tax.{$key}" ] = $taxonomy['name'];
+			$taxonomy_options[ "post.tax.{$key}" ] = "{$taxonomy['name']} ({$taxonomy['slug']})";
 		}
 
 		$variables   = [];
