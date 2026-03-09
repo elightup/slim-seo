@@ -1,13 +1,10 @@
-import { createRoot } from '@wordpress/element';
-import { useReducer, useState } from '@wordpress/element';
-import { Button } from '@wordpress/components';
+import { createRoot, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tooltip } from '../helper/Tooltip';
 import ToInput from './redirects/ToInput';
 
 const Post = () => {
 	const [ redirect, setRedirect ] = useState( SSRedirection.redirect );
-	const [ showAdvancedOptions, toggleAdvancedOptions ] = useReducer( onOrOff => !onOrOff, false );
 
 	const handleChange = key => e => {
 		const value = e.target.type === 'checkbox' ? Number( e.target.checked ) : ( 'note' === key ? e.target.value : e.target.value.trim() );
@@ -31,7 +28,7 @@ const Post = () => {
 							{ redirect.type == 410 && <p className='description'><small>{ __( '410 means the content is gone and no longer available. It can be deleted permanently. In this case, we need to return the 410 status instead of redirect. If you want to show an alternative page for this content, please consider a 3xx redirect.', 'slim-seo' ) }</small></p> }
 						</td>
 					</tr>
-					
+
 					{
 						redirect.type != 410 && (
 							<tr>
@@ -64,29 +61,16 @@ const Post = () => {
 						<th scope='row'></th>
 						<td>
 							<label className='ss-toggle'>
+								<input type='checkbox' name='slim_seo_redirect[ignoreParameters]' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
+								<div className='ss-toggle__switch'></div>
+								<span className='ss-toggle__label'>{ __( 'Ignore query string parameters', 'slim-seo' ) }</span>
+							</label>
+							<br /><br />
+							<label className='ss-toggle'>
 								<input type='checkbox' name='slim_seo_redirect[enable]' value='1' checked={ !!redirect.enable } onChange={ handleChange( 'enable' ) } />
 								<div className='ss-toggle__switch'></div>
 								<span className='ss-toggle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
 							</label>
-						</td>
-					</tr>
-
-					<tr>
-						<th scope='row'></th>
-						<td>
-							<Button className='button-link' onClick={ toggleAdvancedOptions }>{ __( 'Advanced options', 'slim-seo' ) }</Button>
-
-							{
-								showAdvancedOptions && (
-									<div>									
-										<label className='ss-toggle'>
-											<input type='checkbox' name='slim_seo_redirect[ignoreParameters]' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
-											<div className='ss-toggle__switch'></div>
-											<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
-										</label>
-									</div>
-								)
-							}
 						</td>
 					</tr>
 				</tbody>
