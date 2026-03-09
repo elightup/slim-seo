@@ -54,7 +54,7 @@ class Helper {
 			$url = sanitize_url( $url ); // phpcs:ignore
 		}
 
-		$url = html_entity_decode( $url );
+		$url = html_entity_decode( $url, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8' );
 		$url = str_replace( self::home_url(), '', $url );
 		$url = $ltrim ? ltrim( $url, '/' ) : $url;
 		$url = $rtrim ? rtrim( $url, '/' ) : $url;
