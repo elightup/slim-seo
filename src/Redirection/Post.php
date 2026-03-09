@@ -68,39 +68,41 @@ class Post {
 	}
 
 	public function save( int $post_id ): void {
-		if ( ! check_ajax_referer( 'save', 'ss_redirection_nonce', false ) || empty( $_POST ) ) {
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+		if ( ! check_ajax_referer( 'save', 'ss_redirection_nonce', false ) ) {
 			return;
 		}
 
 		$redirect = isset( $_POST['slim_seo_redirect'] ) ? wp_unslash( $_POST['slim_seo_redirect'] ) : []; // phpcs:ignore
-
 		if ( empty( $redirect ) ) {
 			return;
 		}
 
-		$from           = get_permalink( $post_id );
-		$old_redirect   = $this->db_redirects->find_by_from_url( Helper::normalize_url( $from, false ) );
-		$redirect['id'] = $old_redirect['id'] ?? 0;
+		$redirect = wp_parse_args( $redirect, Helper::default_redirect() );
 
-		if ( 410 === intval( $redirect['type'] ) ) {
+		$redirect['type']             = (int) $redirect['type'];
+		$redirect['condition']        = 'exact-match';
+		$redirect['from']             = get_permalink( $post_id );
+		$redirect['note']             = sanitize_text_field( $redirect['note'] );
+		$redirect['enable']           = (int) ! empty( $redirect['enable'] );
+		$redirect['ignoreParameters'] = (int) ! empty( $redirect['ignoreParameters'] );
+
+		$old_redirect   = $this->db_redirects->find_by_from_url( Helper::normalize_url( $redirect['from'], false ) );
+		$redirect['id'] = $old_redirect['id'] ?? '';
+
+		if ( 410 === $redirect['type'] ) {
 			$redirect['to'] = '';
 		} elseif ( empty( $redirect['to'] ) ) {
-			if ( ! empty( $redirect['id'] ) ) {
+			if ( $redirect['id'] ) {
 				$this->db_redirects->delete( [ $redirect['id'] ] );
 			}
 
 			return;
 		}
 
-		$this->db_redirects->update( array_merge(
-			[
-				'from'             => $from,
-				'condition'        => 'exact-match',
-				'enable'           => 0,
-				'ignoreParameters' => 0,
-			],
-			$redirect
-		) );
+		$this->db_redirects->update( $redirect );
 	}
 
 	public function columns( array $columns ): array {
