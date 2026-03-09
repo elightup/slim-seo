@@ -61,6 +61,10 @@ export default ( { id, std = '', features, max = 60, ...rest } ) => {
 			title: titleRef.current,
 			content: getDescription(),
 			previousMetaByAI,
+			object: {
+				type: 'term',
+				ID: ss.id
+			}
 		} )
 			.then( response => {
 				if ( response?.status !== 'success' ) {

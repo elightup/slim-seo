@@ -59,6 +59,10 @@ const TermDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 			type: 'description',
 			content: descriptionRef.current,
 			previousMetaByAI,
+			object: {
+				type: 'term',
+				ID: ss.id
+			}
 		} )
 			.then( response => {
 				if ( response?.status !== 'success' ) {

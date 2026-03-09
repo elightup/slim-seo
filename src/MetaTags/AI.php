@@ -25,7 +25,16 @@ class AI {
 		$title          = (string) $request->get_param( 'title' );
 		$content        = (string) $request->get_param( 'content' );
 		$previous_value = (string) $request->get_param( 'previousMetaByAI' );
+		$object         = (array) $request->get_param( 'object' );
 		$type           = $request->get_param( 'type' ) === 'description' ? 'description' : 'title';
+
+		if ( 'post' === ( $object['type'] ?? '' ) ) {
+			$post = get_post( $object['ID'] );
+
+			if ( $post ) {
+				$content = apply_filters( 'slim_seo_post_content', $content, $post );
+			}
+		}
 
 		// Preprocess content: strip HTML, normalize whitespace, limit length
 		$content = wp_strip_all_tags( $content );

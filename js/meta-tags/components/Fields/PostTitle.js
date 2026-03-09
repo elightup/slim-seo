@@ -70,6 +70,10 @@ const PostTitle = ( { id, std = '', features, max = 60, ...rest } ) => {
 			title: titleRef.current,
 			content: getContent(),
 			previousMetaByAI,
+			object: {
+				type: 'post',
+				ID: ss.id
+			}
 		} )
 			.then( response => {
 				if ( response?.status !== 'success' ) {
