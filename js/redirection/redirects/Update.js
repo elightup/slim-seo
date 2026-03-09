@@ -1,5 +1,5 @@
-import { Button, Modal } from '@wordpress/components';
-import { useEffect, useReducer, useState } from '@wordpress/element';
+import { Modal } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Tooltip } from '../../helper/Tooltip';
 import { fetcher, useApi } from '../helper/misc';
@@ -9,7 +9,6 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 	const [ redirect, setRedirect ] = useState( {} );
 	const [ isProcessing, setIsProcessing ] = useState( false );
 	const [ warningMessage, setWarningMessage ] = useState( '' );
-	const [ showAdvancedOptions, toggleAdvancedOptions ] = useReducer( onOrOff => !onOrOff, false );
 	const [ showModal, setShowModal ] = useState( false );
 	const { result: redirects, mutate } = useApi( 'redirects', {}, { returnMutate: true } );
 
@@ -133,27 +132,19 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 
 						<div className='ssr-modal-field'>
 							<label className='ss-toggle'>
+								<input type='checkbox' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
+								<div className='ss-toggle__switch'></div>
+								<span className='ss-toggle__label'>{ __( 'Ignore query string parameters', 'slim-seo' ) }</span>
+							</label>
+						</div>
+
+						<div className='ssr-modal-field'>
+							<label className='ss-toggle'>
 								<input type='checkbox' value='1' checked={ !!redirect.enable } onChange={ handleChange( 'enable' ) } />
 								<div className='ss-toggle__switch'></div>
 								<span className='ss-toggle__label'>{ __( 'Enable', 'slim-seo' ) }</span>
 							</label>
 						</div>
-
-						<div className='ssr-modal-field'>
-							<Button className='button-link' onClick={ toggleAdvancedOptions }>{ __( 'Advanced options', 'slim-seo' ) }</Button>
-						</div>
-
-						{
-							showAdvancedOptions && (
-								<div className='ssr-modal-field'>
-									<label className='ss-toggle'>
-										<input type='checkbox' value='1' checked={ !!redirect.ignoreParameters } onChange={ handleChange( 'ignoreParameters' ) } />
-										<div className='ss-toggle__switch'></div>
-										<span className='ss-toggle__label'>{ __( 'Ignore parameters', 'slim-seo' ) }</span>
-									</label>
-								</div>
-							)
-						}
 
 						<button className='button button-primary' onClick={ submit } disabled={ isProcessing }>{ title }</button>
 

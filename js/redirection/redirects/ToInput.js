@@ -2,7 +2,7 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { fetcher } from '../helper/misc';
 
-const ToInput = ( { value, setRedirect } ) => {
+const ToInput = ( { value, setRedirect, name = '' } ) => {
 	const [ url, setUrl ] = useState( value );
 	const [ suggestions, setSuggestions ] = useState( [] );
 	const [ isDropdownVisible, setDropdownVisible ] = useState( false );
@@ -49,6 +49,7 @@ const ToInput = ( { value, setRedirect } ) => {
 			<input
 				id='ss-to'
 				type='text'
+				name={ name }
 				value={ url }
 				onChange={ handleInputChange }
 				onKeyDown={ handleKeyDown }
