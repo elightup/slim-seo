@@ -84,14 +84,12 @@ class Post {
 
 		if ( 410 === intval( $redirect['type'] ) ) {
 			$redirect['to'] = '';
-		} else {
-			if ( empty( $redirect['to'] ) ) {
-				if ( ! empty( $redirect['id'] ) ) {
-					$this->db_redirects->delete( [ $redirect['id'] ] );
-				}
-
-				return;
+		} elseif ( empty( $redirect['to'] ) ) {
+			if ( ! empty( $redirect['id'] ) ) {
+				$this->db_redirects->delete( [ $redirect['id'] ] );
 			}
+
+			return;
 		}
 
 		$this->db_redirects->update( array_merge(
