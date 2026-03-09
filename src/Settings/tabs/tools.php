@@ -49,7 +49,7 @@
 					<?php endforeach ?>
 				</optgroup>
 			</select>
-			<button type="button" class="button button-primary" id="process"><?php esc_html_e( 'Migrate', 'slim-seo' ); ?></button>
+			<button type="button" class="button" id="process"><?php esc_html_e( 'Migrate', 'slim-seo' ); ?></button>
 		</div>
 		<div class="migration-status">
 			<div id="posts-status"></div>

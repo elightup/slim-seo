@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/slim-seo-common.git",
-                "reference": "a8ed60c7b90c2c422491c7a98ce76c67669e437c"
+                "reference": "aa51af7eb8146aaf66e5f4a1f03ef26db34d84ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/a8ed60c7b90c2c422491c7a98ce76c67669e437c",
-                "reference": "a8ed60c7b90c2c422491c7a98ce76c67669e437c",
+                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/aa51af7eb8146aaf66e5f4a1f03ef26db34d84ed",
+                "reference": "aa51af7eb8146aaf66e5f4a1f03ef26db34d84ed",
                 "shasum": ""
             },
             "default-branch": true,
@@ -37,7 +37,7 @@
                 "issues": "https://github.com/elightup/slim-seo-common/issues",
                 "source": "https://github.com/elightup/slim-seo-common/tree/master"
             },
-            "time": "2025-12-10T08:09:42+00:00"
+            "time": "2026-03-09T08:50:04+00:00"
         },
         {
             "name": "elightup/slim-twig",
