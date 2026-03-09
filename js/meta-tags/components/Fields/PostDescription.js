@@ -73,6 +73,10 @@ const PostDescription = ( { id, std = '', features, min = 50, max = 160, ...rest
 			type: 'description',
 			content: contentRef.current,
 			previousMetaByAI,
+			object: {
+				type: 'post',
+				ID: ss.id
+			}
 		} )
 			.then( response => {
 				if ( response?.status !== 'success' ) {
