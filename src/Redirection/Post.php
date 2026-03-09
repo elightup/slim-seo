@@ -5,6 +5,7 @@ use SlimSEO\Helpers\Assets;
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
 use eLightUp\SlimSEO\Common\Assets as CommonAssets;
 use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
+use SlimSEO\Helpers\UI;
 
 class Post {
 	protected $db_redirects;
@@ -106,7 +107,7 @@ class Post {
 	}
 
 	public function columns( array $columns ): array {
-		$columns['redirect'] = esc_html__( 'Redirected', 'slim-seo' );
+		$columns['redirect'] = esc_html__( 'Redirect', 'slim-seo' );
 
 		return $columns;
 	}
@@ -118,13 +119,13 @@ class Post {
 
 		$redirect = $this->db_redirects->find_by_from_url( Helper::normalize_url( get_permalink( $post_id ), false ) );
 
-		if ( empty( $redirect ) ) {
+		if ( empty( $redirect ) || empty( $redirect['enable'] ) ) {
 			return;
 		}
 
 		$to = $redirect['to'];
 		$to = Helper::url_valid( $to ) ? $to : Helper::home_url( $to );
 
-		echo ! empty( $redirect ) && ! empty( $redirect['enable'] ) ? '<span class="ss-success" title="' . esc_url( $to ) . '"></span>' : '<span class="ss-danger"></span>';
+		UI::tooltip( $to, '<span class="ss-success"></span>', 'top' );
 	}
 }
