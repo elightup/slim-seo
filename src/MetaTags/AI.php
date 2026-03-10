@@ -29,11 +29,7 @@ class AI {
 		$type           = $request->get_param( 'type' ) === 'description' ? 'description' : 'title';
 
 		if ( 'post' === ( $object['type'] ?? '' ) ) {
-			$post = get_post( $object['ID'] );
-
-			if ( $post ) {
-				$content = apply_filters( 'slim_seo_post_content', $content, $post );
-			}
+			$content = Data::get_post_content( $object['ID'] ?? 0, $content );
 		}
 
 		// Preprocess content: strip HTML, normalize whitespace, limit length
