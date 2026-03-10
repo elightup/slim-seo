@@ -15,12 +15,16 @@ abstract class Base {
 	];
 
 	protected $quick_edit = [
-		'title'          => '',
-		'description'    => '',
-		'noindex'        => 0,
+		'title'       => '',
+		'description' => '',
+		'noindex'     => 0,
 	];
 
 	public function enqueue(): void {
+		if ( $this->hide_from_search_results() ) {
+			return;
+		}
+
 		wp_enqueue_media();
 
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/meta-tags.css' ) );
@@ -73,6 +77,10 @@ abstract class Base {
 		$data = is_array( $data ) && ! empty( $data ) ? $data : [];
 
 		return array_merge( $this->defaults, $data );
+	}
+
+	protected function hide_from_search_results(): bool {
+		return false;
 	}
 
 	abstract public function get_types(): array;

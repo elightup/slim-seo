@@ -2,6 +2,7 @@
 namespace SlimSEO\MetaTags\AdminColumns;
 
 use SlimSEO\Helpers\UI;
+use SlimSEO\Helpers\Option;
 
 class Post extends Base {
 	protected $object_type = 'post';
@@ -10,6 +11,10 @@ class Post extends Base {
 		parent::setup_admin();
 
 		foreach ( $this->types as $type ) {
+			if ( (bool) Option::get( "{$type}.noindex", false ) ) {
+				continue;
+			}
+
 			add_filter( "manage_{$type}_posts_columns", [ $this, 'columns' ] );
 			add_action( "manage_{$type}_posts_custom_column", [ $this, 'render' ], 10, 2 );
 		}
@@ -55,5 +60,11 @@ class Post extends Base {
 	protected function is_screen(): bool {
 		$screen = get_current_screen();
 		return $screen->base === 'edit' && in_array( $screen->post_type, $this->types, true );
+	}
+
+	protected function hide_from_search_results(): bool {
+		$screen = get_current_screen();
+
+		return ( $screen->base ?? '' ) === 'edit' ? (bool) Option::get( "{$screen->post_type}.noindex", false ) : false;
 	}
 }

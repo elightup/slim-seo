@@ -2,6 +2,7 @@
 namespace SlimSEO\MetaTags\AdminColumns;
 
 use SlimSEO\Helpers\UI;
+use SlimSEO\Helpers\Option;
 
 class Term extends Base {
 	protected $object_type = 'term';
@@ -10,6 +11,10 @@ class Term extends Base {
 		parent::setup_admin();
 
 		foreach ( $this->types as $type ) {
+			if ( (bool) Option::get( "{$type}.noindex", false ) ) {
+				continue;
+			}
+
 			add_filter( "manage_edit-{$type}_columns", [ $this, 'columns' ] );
 			add_filter( "manage_{$type}_custom_column", [ $this, 'render' ], 10, 3 );
 		}
@@ -56,5 +61,11 @@ class Term extends Base {
 	protected function is_screen(): bool {
 		$screen = get_current_screen();
 		return $screen->base === 'edit-tags' && in_array( $screen->taxonomy, $this->types, true );
+	}
+
+	protected function hide_from_search_results(): bool {
+		$screen = get_current_screen();
+
+		return ( $screen->base ?? '' ) === 'edit-tags' ? (bool) Option::get( "{$screen->taxonomy}.noindex", false ) : false;
 	}
 }

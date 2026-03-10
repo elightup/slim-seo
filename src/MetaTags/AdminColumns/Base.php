@@ -43,7 +43,7 @@ abstract class Base {
 	}
 
 	public function enqueue() {
-		if ( ! $this->is_screen() ) {
+		if ( ! $this->is_screen() || $this->hide_from_search_results() ) {
 			return;
 		}
 
@@ -53,6 +53,10 @@ abstract class Base {
 	}
 
 	public function columns( $columns ) {
+		if ( $this->hide_from_search_results() ) {
+			return $columns;
+		}
+
 		$columns['meta_title']       = esc_html__( 'Meta title', 'slim-seo' );
 		$columns['meta_description'] = esc_html__( 'Meta desc.', 'slim-seo' );
 		$columns['index']            = esc_html__( 'Index', 'slim-seo' );
@@ -61,7 +65,7 @@ abstract class Base {
 	}
 
 	public function output_quick_edit_fields( $column ) {
-		if ( 'meta_title' !== $column || ! $this->is_screen() ) {
+		if ( 'meta_title' !== $column || ! $this->is_screen() || $this->hide_from_search_results() ) {
 			return;
 		}
 		wp_nonce_field( 'save', 'ss_nonce' );
@@ -94,7 +98,7 @@ abstract class Base {
 	}
 
 	public function output_bulk_edit_fields( $column ) {
-		if ( 'meta_title' !== $column || ! $this->is_screen() ) {
+		if ( 'meta_title' !== $column || ! $this->is_screen() || $this->hide_from_search_results() ) {
 			return;
 		}
 		wp_nonce_field( 'save', 'ss_nonce' );
@@ -165,6 +169,10 @@ abstract class Base {
 				update_metadata( $this->object_type, $id, 'slim_seo', $data );
 			}
 		}
+	}
+
+	protected function hide_from_search_results(): bool {
+		return false;
 	}
 
 	abstract protected function is_screen(): bool;

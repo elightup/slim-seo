@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags\Settings;
 
+use SlimSEO\Helpers\Option;
+
 class Term extends Base {
 	public function setup(): void {
 		$this->object_type = 'term';
@@ -36,5 +38,11 @@ class Term extends Base {
 
 	protected function get_object_id(): int {
 		return (int) filter_input( INPUT_GET, 'tag_ID', FILTER_SANITIZE_NUMBER_INT );
+	}
+
+	protected function hide_from_search_results(): bool {
+		$term = get_term( $this->get_object_id() );
+
+		return ! empty( $term->taxonomy ) ? (bool) Option::get( "{$term->taxonomy}.noindex", false ) : false;
 	}
 }
