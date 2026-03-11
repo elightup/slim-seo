@@ -15,12 +15,16 @@ abstract class Base {
 	];
 
 	protected $quick_edit = [
-		'title'          => '',
-		'description'    => '',
-		'noindex'        => 0,
+		'title'       => '',
+		'description' => '',
+		'noindex'     => 0,
 	];
 
 	public function enqueue(): void {
+		if ( ! $this->is_screen() ) {
+			return;
+		}
+
 		wp_enqueue_media();
 
 		wp_enqueue_style( 'slim-seo-meta-tags', SLIM_SEO_URL . 'css/meta-tags.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/meta-tags.css' ) );
@@ -77,4 +81,5 @@ abstract class Base {
 
 	abstract public function get_types(): array;
 	abstract protected function get_object_id(): int;
+	abstract protected function is_screen(): bool;
 }
