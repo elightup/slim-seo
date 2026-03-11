@@ -28,13 +28,23 @@ class Term extends Base {
 	}
 
 	public function get_types(): array {
+		$option     = get_option( 'slim_seo', [] );
 		$taxonomies = get_taxonomies( [ 'public' => true ] );
 		$taxonomies = apply_filters( 'slim_seo_meta_box_taxonomies', $taxonomies );
+		$taxonomies = array_filter( $taxonomies, function ( $taxonomy ) use ( $option ) {
+			return empty( $option[ $taxonomy ]['noindex'] );
+		} );
 
 		return $taxonomies;
 	}
 
 	protected function get_object_id(): int {
 		return (int) filter_input( INPUT_GET, 'tag_ID', FILTER_SANITIZE_NUMBER_INT );
+	}
+
+	protected function is_screen(): bool {
+		$screen = get_current_screen();
+
+		return in_array( $screen->taxonomy, $this->get_types(), true );
 	}
 }
