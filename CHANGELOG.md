@@ -1,3 +1,10 @@
+### 4.9.1 - 2026-03-12
+
+- Make AI integration works with page builder plugins
+- Add per-page redirection
+- Improve Divi integration, allowing `divi/placeholder` block
+- Add slug next to taxonomy names in meta tags dropdown
+
 ### 4.9.0 - 2026-02-09
 
 **Highlights:**
