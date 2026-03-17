@@ -27,6 +27,7 @@ const PostType = ( { id, postType, option, optionArchive, social } ) => {
 				defaultMetas={ ss.defaultPostMetas.single }
 				social={ social }
 				facebookImageInstruction={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
+				twitterImageInstruction={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
 			/>
 		}
 		{ !noindex &&

@@ -26,7 +26,7 @@
 	<?php if ( $this->is_feature_active( 'twitter_cards' ) ) : ?>
 		<div class="ef-control">
 			<div class="ef-control__label">
-				<label for="ss-default-twitter-image"><?php esc_html_e( 'Twitter image', 'slim-seo' ); ?></label>
+				<label for="ss-default-twitter-image"><?php esc_html_e( 'X image', 'slim-seo' ); ?></label>
 			</div>
 			<div class="ef-control__input">
 				<div class="ss-input-wrapper">
@@ -44,7 +44,7 @@
 <?php endif; ?>
 
 <h3><?php esc_attr_e( 'Social Media Analytics', 'slim-seo' ); ?></h3>
-<p><?php esc_html_e( 'If you are using Facebook or Twitter analytic tools, enter the details below. Omitting them has no effect on how a shared web page appears on a Facebook timeline or Twitter feed.', 'slim-seo' ); ?></p>
+<p><?php esc_html_e( 'If you are using Facebook or X analytic tools, enter the details below. Omitting them has no effect on how a shared web page appears on a Facebook timeline or X feed.', 'slim-seo' ); ?></p>
 
 <div class="ef-control">
 	<div class="ef-control__label">
@@ -59,7 +59,7 @@
 
 <div class="ef-control">
 	<div class="ef-control__label">
-		<label for="ss-twitter-site"><?php esc_html_e( 'Twitter site', 'slim-seo' ); ?></label>
+		<label for="ss-twitter-site"><?php esc_html_e( 'X site', 'slim-seo' ); ?></label>
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">

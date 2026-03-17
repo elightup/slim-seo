@@ -43,7 +43,12 @@ const Post = ( { features } ) => (
 			/>
 		}
 		{
-			features.twitter && <TwitterImage id="slim_seo[twitter_image]" std={ ss.data.twitter_image } />
+			features.twitter &&
+			<TwitterImage
+				id="slim_seo[twitter_image]"
+				std={ ss.data.twitter_image }
+				description={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
+			/>
 		}
 		<Text id="slim_seo[canonical]" label={ __( 'Canonical URL', 'slim-seo' ) } std={ ss.data.canonical } />
 		<Checkbox

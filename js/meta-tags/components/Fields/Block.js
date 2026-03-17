@@ -10,6 +10,7 @@ export default ( {
 	label,
 	social,
 	facebookImageInstruction = '',
+	twitterImageInstruction = '',
 } ) => (
 	<>
 		<h3>{ label }</h3>
@@ -36,6 +37,7 @@ export default ( {
 			<TwitterImage
 				id={ `${ baseName }[twitter_image]` }
 				std={ option.twitter_image || '' }
+				description={ twitterImageInstruction }
 			/>
 		}
 	</>
