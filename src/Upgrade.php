@@ -16,7 +16,7 @@ class Upgrade {
 		update_option( 'slim_seo_db_version', SLIM_SEO_DB_VER );
 	}
 
-	private function upgrade_to_v1() {
+	private function upgrade_to_v1(): void {
 		// Upgrade data for homepage settings.
 		$option        = get_option( 'slim_seo' ) ?: [];
 		$home_settings = array_filter( [
