@@ -15,6 +15,7 @@ module.exports = {
 			"redirection-post": './js/redirection/Post.js', // Redirection post app.
 			robots: './js/robots/App.js', // Robots app.
 			"link-attributes": './js/link-attributes/block-editor/index.js', // Link attributes in Block Editor
+			"settings-ai": './js/settings-ai.js', // AI settings
 		},
 		output: {
 			path: path.resolve( __dirname, 'js/build' ),
