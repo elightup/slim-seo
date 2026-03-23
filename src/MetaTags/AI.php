@@ -20,10 +20,32 @@ class AI {
 			'callback'            => [ $this, 'generate' ],
 			'permission_callback' => [ $this, 'can_edit_post' ],
 		] );
+
+		register_rest_route( 'slim-seo', 'ai/models', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_models' ],
+			'permission_callback' => [ $this, 'can_edit_post' ],
+		] );
 	}
 
 	public function can_edit_post(): bool {
 		return current_user_can( 'edit_posts' );
+	}
+
+	public function get_models( WP_REST_Request $request ): array {
+		if ( ! wp_verify_nonce( $request->get_header( 'X-WP-Nonce' ), 'slim_seo_ai_settings' ) ) {
+			return [];
+		}
+
+		$provider = $request->get_param( 'provider' ) ?: 'openai';
+
+		$provider_class = $this->get_provider_class( $provider );
+		if ( ! $provider_class ) {
+			return [];
+		}
+
+		$provider_obj = new $provider_class();
+		return $provider_obj->get_models();
 	}
 
 	public function generate( WP_REST_Request $request ): array {

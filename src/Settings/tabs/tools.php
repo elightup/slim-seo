@@ -15,8 +15,13 @@
 </p>
 <div class="ef-control">
 	<div class="ef-control__label">
-		<label for="ss-ai-provider"><?php esc_html_e( 'Provider:', 'slim-seo' ); ?></label>
+		<label for="ss-ai-provider"><?php esc_html_e( 'Provider', 'slim-seo' ); ?></label>
 	</div>
+	<div class="ef-control__label">
+		<label for="ss-ai-model"><?php esc_html_e( 'Model', 'slim-seo' ); ?></label>
+	</div>
+</div>
+<div class="ef-control">
 	<div class="ef-control__input">
 		<select name="slim_seo[ai_provider]" id="ss-ai-provider">
 			<option value="openai" <?php selected( $data['ai_provider'] ?? 'openai', 'openai' ); ?>><?php esc_html_e( 'OpenAI', 'slim-seo' ); ?></option>
@@ -24,13 +29,6 @@
 			<option value="anthropic" <?php selected( $data['ai_provider'] ?? '', 'anthropic' ); ?>><?php esc_html_e( 'Anthropic (Claude)', 'slim-seo' ); ?></option>
 			<option value="openrouter" <?php selected( $data['ai_provider'] ?? '', 'openrouter' ); ?>><?php esc_html_e( 'OpenRouter', 'slim-seo' ); ?></option>
 		</select>
-	</div>
-</div>
-<div class="ef-control">
-	<div class="ef-control__label">
-		<label for="ss-ai-model"><?php esc_html_e( 'Model:', 'slim-seo' ); ?></label>
-	</div>
-	<div class="ef-control__input">
 		<select name="slim_seo[ai_model]" id="ss-ai-model">
 			<option value=""><?php esc_html_e( 'Select a provider first', 'slim-seo' ); ?></option>
 		</select>
@@ -38,7 +36,7 @@
 </div>
 <div class="ef-control">
 	<div class="ef-control__label">
-		<label for="ss-ai-api-key"><?php esc_html_e( 'API key:', 'slim-seo' ); ?></label>
+		<label for="ss-ai-api-key"><?php esc_html_e( 'API key', 'slim-seo' ); ?></label>
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">

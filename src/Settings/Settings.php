@@ -71,9 +71,9 @@ class Settings {
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
 
-		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/build/settings-ai.js', [], filemtime( SLIM_SEO_DIR . '/js/build/settings-ai.js' ), true );
+		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/settings-ai.js', [], filemtime( SLIM_SEO_DIR . '/js/settings-ai.js' ), true );
 		wp_localize_script( 'slim-seo-settings-ai', 'ssAiSettings', [
-			'model' => $data['ai_model'] ?? '',
+			'nonce' => wp_create_nonce( 'slim_seo_ai_settings' ),
 		] );
 
 		do_action( 'slim_seo_settings_enqueue' );
@@ -101,7 +101,6 @@ class Settings {
 
 		$this->meta_tags->sanitize( $option, $data );
 
-		$option['openai_key']  = empty( $option['openai_key'] ) ? '' : sanitize_text_field( $option['openai_key'] );
 		$option['ai_provider'] = in_array( $option['ai_provider'], [ 'openai', 'google', 'anthropic', 'openrouter' ], true ) ? $option['ai_provider'] : 'openai';
 		$option['ai_model']    = sanitize_text_field( $option['ai_model'] ?? '' );
 		$option['ai_api_key']  = sanitize_text_field( $option['ai_api_key'] ?? '' );
