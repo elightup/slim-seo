@@ -73,6 +73,11 @@
     const savedProvider = providerSelect.value || 'openai';
     populateModels(savedProvider);
 
+    // Select saved model after populating
+    if (window.ssAiSettings && window.ssAiSettings.model) {
+        modelSelect.value = window.ssAiSettings.model;
+    }
+
     // Handle provider change
     providerSelect.addEventListener('change', function() {
         populateModels(this.value);

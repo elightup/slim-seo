@@ -72,6 +72,9 @@ class Settings {
 		] );
 
 		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/build/settings-ai.js', [], filemtime( SLIM_SEO_DIR . '/js/build/settings-ai.js' ), true );
+		wp_localize_script( 'slim-seo-settings-ai', 'ssAiSettings', [
+			'model' => $data['ai_model'] ?? '',
+		] );
 
 		do_action( 'slim_seo_settings_enqueue' );
 	}
