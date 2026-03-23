@@ -1,9 +1,47 @@
+## OS
 .DS_Store
 Thumbs.db
 
+## Editor
+.vscode
+.cursor
+
+## Git
 .git
 .github
+.gitattributes
+.gitignore
+
+## PHP
+composer.*
+phpcs.*
+phpunit.*
+phpstan.*
+
+## JS
 node_modules
+package.json
+package-lock.json
+pnpm-lock.yaml
+webpack.config.js
+esbuild.js
+
+## Markdown
+*.md
+
+## Special files and folders
+.distignore
+tests
+bin
+docs
+
+## WordPress
+*.po
+*.pot
+
+## Other files
+## @developers: add your own files here
+apps.webpack.config.js
 
 css/scss/
 
@@ -12,16 +50,5 @@ js/link-attributes/block-editor/
 js/meta-tags/
 js/redirection/
 js/redirection.js.LICENSE.txt
-
-.distignore
-.gitignore
-apps.webpack.config.js
-composer.*
-package-lock.json
-package.json
-phpcs.xml
-phpstan.neon.dist
-pnpm-lock.yaml
-*.md
 
 *.zip
