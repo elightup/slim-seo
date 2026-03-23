@@ -87,5 +87,3 @@
 <?php do_action( 'slim_seo_tools_tab_content' ); ?>
 
 <?php submit_button( __( 'Save Changes', 'slim-seo' ) ); ?>
-
-<?php wp_enqueue_script( 'slim-seo-settings-ai' ); ?>

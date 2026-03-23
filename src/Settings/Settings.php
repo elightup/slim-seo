@@ -71,6 +71,8 @@ class Settings {
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
 
+		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/build/settings-ai.js', [], filemtime( SLIM_SEO_DIR . '/js/build/settings-ai.js' ), true );
+
 		do_action( 'slim_seo_settings_enqueue' );
 	}
 
