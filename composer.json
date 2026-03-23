@@ -34,8 +34,8 @@
     "sort-packages": true
   },
   "scripts": {
-    "phpcs": "phpcs --standard=phpcs.xml > phpcs.txt",
+    "phpcs": "phpcs --standard=phpcs.xml",
     "phpcbf": "phpcbf --standard=phpcs.xml",
-    "phpstan": "phpstan --memory-limit=2048M > phpstan.txt"
+    "phpstan": "phpstan --memory-limit=2048M"
   }
 }
