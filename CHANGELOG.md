@@ -1,3 +1,8 @@
+### 4.9.2 - 2026-03-23
+
+- Update X image instruction
+- Remove admin columns and SEO settings meta box if "Hide from search results" for the post type/taxonomy is ON
+
 ### 4.9.1 - 2026-03-12
 
 - Make AI integration works with page builder plugins

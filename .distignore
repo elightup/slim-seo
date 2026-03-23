@@ -16,13 +16,12 @@ js/redirection.js.LICENSE.txt
 .distignore
 .gitignore
 apps.webpack.config.js
-composer.json
-composer.lock
+composer.*
 package-lock.json
 package.json
 phpcs.xml
 phpstan.neon.dist
 pnpm-lock.yaml
-README.md
+*.md
 
 *.zip

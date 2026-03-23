@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.9.4
 Requires PHP: 7.2
-Stable tag: 4.9.1
+Stable tag: 4.9.2
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,6 +170,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.2 - 2026-03-23 =
+
+- Update X image instruction
+- Remove admin columns and SEO settings meta box if "Hide from search results" for the post type/taxonomy is ON
 
 = 4.9.1 - 2026-03-12 =
 
