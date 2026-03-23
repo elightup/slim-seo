@@ -33,4 +33,17 @@ class Upgrade {
 
 		update_option( 'slim_seo', $option );
 	}
+
+	private function upgrade_to_v2(): void {
+		$option = get_option( 'slim_seo' ) ?: [];
+
+		// If old openai_key exists and new ai_api_key doesn't
+		if ( ! empty( $option['openai_key'] ) && empty( $option['ai_api_key'] ) ) {
+			$option['ai_api_key']  = $option['openai_key'];
+			$option['ai_provider'] = 'openai';
+			$option['ai_model']    = 'gpt-4.1-mini';
+
+			update_option( 'slim_seo', $option );
+		}
+	}
 }
