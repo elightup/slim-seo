@@ -12,6 +12,9 @@ class Settings {
 		'default_twitter_image'  => '',
 		'facebook_app_id'        => '',
 		'twitter_site'           => '',
+		'ai_provider'            => 'openai',
+		'ai_model'               => 'gpt-4.1-mini',
+		'ai_api_key'             => '',
 		'features'               => [
 			'meta_title',
 			'meta_description',
@@ -93,7 +96,10 @@ class Settings {
 
 		$this->meta_tags->sanitize( $option, $data );
 
-		$option['openai_key'] = empty( $option['openai_key'] ) ? '' : sanitize_text_field( $option['openai_key'] );
+		$option['openai_key']  = empty( $option['openai_key'] ) ? '' : sanitize_text_field( $option['openai_key'] );
+		$option['ai_provider'] = in_array( $option['ai_provider'], [ 'openai', 'google', 'anthropic', 'openrouter' ], true ) ? $option['ai_provider'] : 'openai';
+		$option['ai_model']    = sanitize_text_field( $option['ai_model'] ?? '' );
+		$option['ai_api_key']  = sanitize_text_field( $option['ai_api_key'] ?? '' );
 
 		return array_filter( $option );
 	}
