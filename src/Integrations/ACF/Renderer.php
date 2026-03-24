@@ -28,8 +28,8 @@ class Renderer {
 		}
 
 		if ( 'repeater' === $field['type'] ) {
-			$value = (array) $value;
-			$value = reset( $value );
+			$value         = (array) $value;
+			$value         = reset( $value );
 			$field['type'] = 'group';
 
 			$value = $this->parse_field_value( $value, $field );
@@ -38,7 +38,7 @@ class Renderer {
 
 			// Flexible content can have multi blocks, each block can have multi values, we need to get first value in each block
 			foreach ( $value as $data ) {
-				if( ! array_key_exists( $data['acf_fc_layout'], $return_value ) ) {
+				if ( ! array_key_exists( $data['acf_fc_layout'], $return_value ) ) {
 					$return_value[ $data['acf_fc_layout'] ] = $data;
 				}
 			}

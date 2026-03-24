@@ -33,7 +33,7 @@ define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
 define( 'SLIM_SEO_REDIRECTS', 'ss_redirects' );
 define( 'SLIM_SEO_DELETE_404_LOGS_ACTION', 'delete_404_logs' );
 define( 'SLIM_SEO_VER', '4.9.2' );
-define( 'SLIM_SEO_DB_VER', 1 );
+define( 'SLIM_SEO_DB_VER', 2 );
 
 require __DIR__ . '/vendor/autoload.php';
 

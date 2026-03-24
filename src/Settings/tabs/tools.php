@@ -6,20 +6,33 @@
 
 <div id="ss-robots"></div>
 
-<h3><?php esc_attr_e( 'OpenAI Integration', 'slim-seo' ); ?></h3>
+<h3><?php esc_attr_e( 'AI Integration', 'slim-seo' ); ?></h3>
 <p>
-	<?php
-	// Translators: %s: OpenAI API key creation URL.
-	echo wp_kses_post( sprintf( __( 'Add your OpenAI API key to unlock AI features in Slim SEO. If you don\'t have an API key, you can <a href="%s" target="_blank">create one here</a>.', 'slim-seo' ), 'https://platform.openai.com/settings/organization/api-keys' ) );
-	?>
+	<?php esc_html_e( 'Select an AI provider and add your API key to unlock AI features in Slim SEO.', 'slim-seo' ); ?>
 </p>
 <div class="ef-control">
 	<div class="ef-control__label">
-		<label for="ss-openai-key"><?php esc_html_e( 'API key:', 'slim-seo' ); ?></label>
+		<label for="ss-ai-provider"><?php esc_html_e( 'Provider', 'slim-seo' ); ?></label>
+	</div>
+	<div class="ef-control__input" style="display: flex; gap: 8px">
+		<select name="slim_seo[ai_provider]" id="ss-ai-provider">
+			<option value="openai" <?php selected( $data['ai_provider'] ?? 'openai', 'openai' ); ?>><?php esc_html_e( 'OpenAI', 'slim-seo' ); ?></option>
+			<option value="google" <?php selected( $data['ai_provider'] ?? '', 'google' ); ?>><?php esc_html_e( 'Google (Gemini)', 'slim-seo' ); ?></option>
+			<option value="anthropic" <?php selected( $data['ai_provider'] ?? '', 'anthropic' ); ?>><?php esc_html_e( 'Anthropic (Claude)', 'slim-seo' ); ?></option>
+			<option value="openrouter" <?php selected( $data['ai_provider'] ?? '', 'openrouter' ); ?>><?php esc_html_e( 'OpenRouter', 'slim-seo' ); ?></option>
+		</select>
+		<select name="slim_seo[ai_model]" id="ss-ai-model">
+			<option value=""><?php esc_html_e( 'Select a provider first', 'slim-seo' ); ?></option>
+		</select>
+	</div>
+</div>
+<div class="ef-control">
+	<div class="ef-control__label">
+		<label for="ss-ai-api-key"><?php esc_html_e( 'API key', 'slim-seo' ); ?></label>
 	</div>
 	<div class="ef-control__input">
 		<div class="ss-input-wrapper">
-			<input type="<?php echo esc_attr( empty( $data['openai_key'] ) ? 'text' : 'password' ); ?>" name="slim_seo[openai_key]" id="ss-openai-key" value="<?php echo esc_attr( $data['openai_key'] ?? '' ); ?>">
+			<input type="<?php echo esc_attr( empty( $data['ai_api_key'] ) ? 'text' : 'password' ); ?>" name="slim_seo[ai_api_key]" id="ss-ai-api-key" value="<?php echo esc_attr( $data['ai_api_key'] ?? '' ); ?>">
 		</div>
 	</div>
 </div>

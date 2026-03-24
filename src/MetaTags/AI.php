@@ -3,6 +3,11 @@ namespace SlimSEO\MetaTags;
 
 use WP_REST_Server;
 use WP_REST_Request;
+use SlimSEO\MetaTags\AiProviders\ProviderInterface;
+use SlimSEO\MetaTags\AiProviders\OpenAI;
+use SlimSEO\MetaTags\AiProviders\Google;
+use SlimSEO\MetaTags\AiProviders\Anthropic;
+use SlimSEO\MetaTags\AiProviders\OpenRouter;
 
 class AI {
 	public function setup(): void {
@@ -13,12 +18,30 @@ class AI {
 		register_rest_route( 'slim-seo', 'meta-tags/ai', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'generate' ],
-			'permission_callback' => [ $this, 'can_edit_post' ],
+			'permission_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
+		] );
+
+		register_rest_route( 'slim-seo', 'ai/models', [
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_models' ],
+			'permission_callback' => function () {
+				return current_user_can( 'manage_options' );
+			},
 		] );
 	}
 
-	public function can_edit_post(): bool {
-		return current_user_can( 'edit_posts' );
+	public function get_models( WP_REST_Request $request ): array {
+		$provider = $request->get_param( 'provider' ) ?: 'openai';
+
+		$provider_class = $this->get_provider_class( $provider );
+		if ( ! $provider_class ) {
+			return [];
+		}
+
+		$provider_obj = new $provider_class();
+		return $provider_obj->get_models();
 	}
 
 	public function generate( WP_REST_Request $request ): array {
@@ -57,37 +80,37 @@ class AI {
 
 	private function generate_title( string $content, string $previous_value, string $title ): array {
 		$prompt = <<<'PROMPT'
-			You are a professional SEO assistant for WordPress websites.
+You are a professional SEO assistant for WordPress websites.
 
-			Your task:
-			- Read the title and content
-			- Understand the main topic and search intent
-			- Write exactly ONE SEO-friendly meta title in the SAME language
+Your task:
+- Read the title and content
+- Understand the main topic and search intent
+- Write exactly ONE SEO-friendly meta title in the SAME language
 
-			How to use the provided data:
-			- Use the title as a topic hint
-			- Use the content to validate accuracy and intent
-			- Improve clarity and search appeal when necessary
-			- Do NOT simply rewrite or paraphrase the title
+How to use the provided data:
+- Use the title as a topic hint
+- Use the content to validate accuracy and intent
+- Improve clarity and search appeal when necessary
+- Do NOT simply rewrite or paraphrase the title
 
-			Meta title requirements:
-			- Clear, concise, and compelling
-			- Accurately reflects the content
-			- Natural wording, not clickbait
-			- Suitable for Google search results
-			- Between 50 and 60 characters
+Meta title requirements:
+- Clear, concise, and compelling
+- Accurately reflects the content
+- Natural wording, not clickbait
+- Suitable for Google search results
+- Between 50 and 60 characters
 
-			Strict rules:
-			- Do NOT use emojis
-			- Do NOT use quotation marks
-			- Do NOT use separators such as |, -, or :
-			- Do NOT add information not present in the title and content
-			- Avoid keyword stuffing or unnatural repetition
+Strict rules:
+- Do NOT use emojis
+- Do NOT use quotation marks
+- Do NOT use separators such as |, -, or :
+- Do NOT add information not present in the title and content
+- Avoid keyword stuffing or unnatural repetition
 
-			Output rules:
-			- Return ONLY the meta title text
-			- No explanations, no extra lines
-		PROMPT;
+Output rules:
+- Return ONLY the meta title text
+- No explanations, no extra lines
+PROMPT;
 
 		$content =
 			"Title:\n{$title}\n\n" .
@@ -104,30 +127,30 @@ class AI {
 
 	private function generate_description( string $content, string $previous_value ): array {
 		$prompt = <<<'PROMPT'
-			You are a professional SEO assistant for WordPress websites.
+You are a professional SEO assistant for WordPress websites.
 
-			Your task:
-			- Read the provided content
-			- Understand the main topic and search intent
-			- Write exactly ONE meta description in the SAME language
+Your task:
+- Read the provided content
+- Understand the main topic and search intent
+- Write exactly ONE meta description in the SAME language
 
-			Meta description requirements:
-			- Clear, natural, and engaging
-			- Accurately reflects the content
-			- Suitable for Google search results
-			- Active voice
-			- Between 140 and 160 characters
+Meta description requirements:
+- Clear, natural, and engaging
+- Accurately reflects the content
+- Suitable for Google search results
+- Active voice
+- Between 140 and 160 characters
 
-			Strict rules:
-			- Do NOT use emojis
-			- Do NOT use quotation marks
-			- Do NOT add information not present in the content
-			- Avoid keyword stuffing or unnatural repetition
+Strict rules:
+- Do NOT use emojis
+- Do NOT use quotation marks
+- Do NOT add information not present in the content
+- Avoid keyword stuffing or unnatural repetition
 
-			Output rules:
-			- Return ONLY the meta description text
-			- No explanations, no extra lines
-		PROMPT;
+Output rules:
+- Return ONLY the meta description text
+- No explanations, no extra lines
+PROMPT;
 
 		$content = "Content:\n{$content}";
 
@@ -142,47 +165,78 @@ class AI {
 
 	private function get_rewrite_rule(): string {
 		return <<<'RULE'
-		Rewrite rules:
-		- Keep the same meaning and SEO intent
-		- Use different wording
-		- Do NOT repeat wording from the previous value
-		RULE;
+Rewrite rules:
+- Keep the same meaning and SEO intent
+- Use different wording
+- Do NOT repeat wording from the previous value
+RULE;
 	}
 
 	private function request( string $prompt, string $content ): array {
-		$slim_seo   = get_option( 'slim_seo' ) ?: [];
-		$openai_key = $slim_seo['openai_key'] ?? '';
+		$settings = get_option( 'slim_seo' ) ?: [];
+		$provider = $settings['ai_provider'] ?? 'openai';
+		$model    = $settings['ai_model'] ?? '';
+		$api_key  = $settings['ai_api_key'] ?? '';
 
-		if ( empty( $openai_key ) ) {
-			return $this->response( __( 'You need to provide an OpenAI API key!', 'slim-seo' ) );
+		if ( empty( $api_key ) ) {
+			return $this->response( __( 'Please provide an API key in settings.', 'slim-seo' ) );
 		}
 
-		$body = wp_json_encode( [
-			'model'       => 'gpt-4.1-mini',
-			'temperature' => 0.5, // Stable & SEO-safe
-			'input'       => [
-				[
-					'role'    => 'system',
-					'content' => $prompt,
-				],
-				[
-					'role'    => 'user',
-					'content' => $content,
-				],
-			],
-		] );
+		$provider_class = $this->get_provider_class( $provider );
+		if ( ! $provider_class ) {
+			return $this->response( __( 'Invalid provider selected.', 'slim-seo' ) );
+		}
 
-		$response = wp_safe_remote_post( 'https://api.openai.com/v1/responses', [
-			'headers' => [
-				'Content-Type'  => 'application/json',
-				'Authorization' => "Bearer $openai_key",
-			],
-			'body'    => $body,
+		$provider_obj = new $provider_class();
+
+		// Validate model - use default if empty
+		if ( empty( $model ) ) {
+			$models = $provider_obj->get_models();
+			$model  = $models[0]['value'] ?? '';
+		}
+
+		if ( empty( $model ) ) {
+			return $this->response( __( 'No models available for the selected provider.', 'slim-seo' ) );
+		}
+
+		// Apply filter to allow customization
+		$model = apply_filters( 'slim_seo_ai_model', $model, $provider );
+
+		// Build request
+		$url     = $provider_obj->get_api_url();
+		$headers = $provider_obj->get_headers( $api_key );
+
+		// Google needs model in URL
+		if ( $provider === 'google' ) {
+			$url = str_replace( '{model}', $model, $url );
+		}
+
+		$body = $provider_obj->build_request_body( $prompt, $content, $model );
+
+		// Make request
+		$response = wp_safe_remote_post( $url, [
+			'headers' => $headers,
+			'body'    => wp_json_encode( $body ),
 			'timeout' => 45,
 		] );
 
-		// 1. Network error
+		return $this->handle_response( $response, $provider_obj );
+	}
+
+	private function get_provider_class( string $provider ): ?string {
+		$providers = [
+			'openai'     => OpenAI::class,
+			'google'     => Google::class,
+			'anthropic'  => Anthropic::class,
+			'openrouter' => OpenRouter::class,
+		];
+
+		return $providers[ $provider ] ?? null;
+	}
+
+	private function handle_response( $response, ProviderInterface $provider ): array {
 		if ( is_wp_error( $response ) ) {
+			// translators: %s: Error message.
 			return $this->response( sprintf( __( 'Connection error: %s', 'slim-seo' ), $response->get_error_message() ) );
 		}
 
@@ -190,30 +244,36 @@ class AI {
 		$body        = wp_remote_retrieve_body( $response );
 		$result      = json_decode( $body, true );
 
-		// 2. OpenAI API error
+		// Check for API errors
 		if ( $status_code !== 200 ) {
-			$error_message = $result['error']['message'] ?? __( 'Unknown.', 'slim-seo' );
-
-			switch ( $status_code ) {
-				case 401:
-					return $this->response( __( 'Invalid API Key. Please check your settings.', 'slim-seo' ) );
-				case 429:
-					return $this->response( __( 'Rate limit exceeded or insufficient quota. Please try again later.', 'slim-seo' ) );
-				case 500:
-				case 503:
-					return $this->response( __( 'OpenAI server is currently overloaded. Please wait a moment.', 'slim-seo' ) );
-				default:
-					return $this->response( sprintf( __( 'OpenAI API error (%1$s): %2$s', 'slim-seo' ), $status_code, $error_message ) );
-			}
+			return $this->handle_api_error( $status_code, $result );
 		}
 
-		// 3. Invalid response
-		if ( empty( $result['output'][0]['content'][0]['text'] ) ) {
-			return $this->response( __( 'Invalid response from OpenAI API.', 'slim-seo' ) );
+		// Parse response using provider
+		$text = $provider->parse_response( $result );
+		if ( empty( $text ) ) {
+			return $this->response( __( 'Invalid response from AI provider.', 'slim-seo' ) );
 		}
 
-		// 4. Success
-		return $this->response( trim( $result['output'][0]['content'][0]['text'] ), 'success' );
+		return $this->response( trim( $text ), 'success' );
+	}
+
+	private function handle_api_error( int $status_code, array $result ): array {
+		$error_message = $result['error']['message'] ?? $result['error'] ?? __( 'Unknown error', 'slim-seo' );
+
+		switch ( $status_code ) {
+			case 401:
+				return $this->response( __( 'Invalid API Key. Please check your settings.', 'slim-seo' ) );
+			case 429:
+				return $this->response( __( 'Rate limit exceeded. Please try again later.', 'slim-seo' ) );
+			case 500:
+			case 502:
+			case 503:
+				return $this->response( __( 'AI server is currently overloaded. Please wait a moment.', 'slim-seo' ) );
+			default:
+				// translators: %1$s: HTTP status code, %2$s: Error message.
+				return $this->response( sprintf( __( 'API error (%1$s): %2$s', 'slim-seo' ), $status_code, $error_message ) );
+		}
 	}
 
 	private function response( string $message, string $status = 'error' ): array {

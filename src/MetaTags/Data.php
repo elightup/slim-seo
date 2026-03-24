@@ -102,7 +102,7 @@ class Data {
 	 * Get post content with filters for page builders to modify the content.
 	 * Also has a filter to skip the content for certain pages, like WooCommerce checkout, cart, account, etc.
 	 *
-	 * @param int $post_id Post ID.
+	 * @param int    $post_id Post ID.
 	 * @param string $content Optional. Custom post content, used for live preview when the new content is not saved yet.
 	 * @return string
 	 */

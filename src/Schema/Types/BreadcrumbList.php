@@ -26,7 +26,7 @@ class BreadcrumbList extends Base {
 				'name'     => $link['text'],
 				'item'     => $link['url'],
 			];
-			$position++;
+			++$position;
 		}
 
 		$current_page = $this->source->get_current_page();
