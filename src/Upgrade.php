@@ -8,16 +8,9 @@ class Upgrade {
 			return;
 		}
 
-		$upgrades = [
-			1 => 'upgrade_to_v1',
-			2 => 'upgrade_to_v2',
-		];
-
 		for ( $i = $version + 1; $i <= SLIM_SEO_DB_VER; $i++ ) {
-			$method = $upgrades[ $i ] ?? null;
-			if ( $method && method_exists( $this, $method ) ) {
-				$this->$method();
-			}
+			$method = "upgrade_to_v{$i}";
+			$this->$method(); // phpcs:ignore WordPress.NamingConventions.ValidFunctionName
 		}
 
 		update_option( 'slim_seo_db_version', SLIM_SEO_DB_VER );
@@ -43,14 +36,16 @@ class Upgrade {
 	private function upgrade_to_v2(): void {
 		$option = get_option( 'slim_seo' ) ?: [];
 
-		if ( ! empty( $option['openai_key'] ) && empty( $option['ai_api_key'] ) ) {
-			$option['ai_api_key']  = $option['openai_key'];
-			$option['ai_provider'] = 'openai';
-			$option['ai_model']    = 'gpt-4.1-mini';
-
-			unset( $option['openai_key'] );
-
-			update_option( 'slim_seo', $option );
+		if ( empty( $option['openai_key'] ) || ! empty( $option['ai_api_key'] ) ) {
+			return;
 		}
+
+		$option['ai_api_key']  = $option['openai_key'];
+		$option['ai_provider'] = 'openai';
+		$option['ai_model']    = 'gpt-4.1-mini';
+
+		unset( $option['openai_key'] );
+
+		update_option( 'slim_seo', $option );
 	}
 }
