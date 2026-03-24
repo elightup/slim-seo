@@ -8,21 +8,13 @@
 
 <h3><?php esc_attr_e( 'AI Integration', 'slim-seo' ); ?></h3>
 <p>
-	<?php
-	// Translators: %s: URL to get API keys.
-	echo wp_kses_post( sprintf( __( 'Select an AI provider and add your API key to unlock AI features in Slim SEO. <a href="%s" target="_blank">Get API keys</a>.', 'slim-seo' ), 'https://slimseo/docs/ai-settings/' ) );
-	?>
+	<?php esc_html_e( 'Select an AI provider and add your API key to unlock AI features in Slim SEO.', 'slim-seo' ); ?>
 </p>
 <div class="ef-control">
 	<div class="ef-control__label">
 		<label for="ss-ai-provider"><?php esc_html_e( 'Provider', 'slim-seo' ); ?></label>
 	</div>
-	<div class="ef-control__label">
-		<label for="ss-ai-model"><?php esc_html_e( 'Model', 'slim-seo' ); ?></label>
-	</div>
-</div>
-<div class="ef-control">
-	<div class="ef-control__input">
+	<div class="ef-control__input" style="display: flex; gap: 8px">
 		<select name="slim_seo[ai_provider]" id="ss-ai-provider">
 			<option value="openai" <?php selected( $data['ai_provider'] ?? 'openai', 'openai' ); ?>><?php esc_html_e( 'OpenAI', 'slim-seo' ); ?></option>
 			<option value="google" <?php selected( $data['ai_provider'] ?? '', 'google' ); ?>><?php esc_html_e( 'Google (Gemini)', 'slim-seo' ); ?></option>

@@ -73,7 +73,9 @@ class Settings {
 
 		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/settings-ai.js', [], filemtime( SLIM_SEO_DIR . '/js/settings-ai.js' ), true );
 		wp_localize_script( 'slim-seo-settings-ai', 'ssAiSettings', [
-			'nonce' => wp_create_nonce( 'slim_seo_ai_settings' ),
+			'text'  => [
+				'noModelsAvailable' => __( 'No models available', 'slim-seo' ),
+			],
 		] );
 
 		do_action( 'slim_seo_settings_enqueue' );

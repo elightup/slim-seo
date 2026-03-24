@@ -18,25 +18,21 @@ class AI {
 		register_rest_route( 'slim-seo', 'meta-tags/ai', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'generate' ],
-			'permission_callback' => [ $this, 'can_edit_post' ],
+			'permission_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
 		] );
 
 		register_rest_route( 'slim-seo', 'ai/models', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_models' ],
-			'permission_callback' => [ $this, 'can_edit_post' ],
+			'permission_callback' => function() {
+				return current_user_can( 'manage_options' );
+			},
 		] );
 	}
 
-	public function can_edit_post(): bool {
-		return current_user_can( 'edit_posts' );
-	}
-
 	public function get_models( WP_REST_Request $request ): array {
-		if ( ! wp_verify_nonce( $request->get_header( 'X-WP-Nonce' ), 'slim_seo_ai_settings' ) ) {
-			return [];
-		}
-
 		$provider = $request->get_param( 'provider' ) ?: 'openai';
 
 		$provider_class = $this->get_provider_class( $provider );
