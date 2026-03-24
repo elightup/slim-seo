@@ -178,11 +178,6 @@ RULE;
 		$model    = $settings['ai_model'] ?? '';
 		$api_key  = $settings['ai_api_key'] ?? '';
 
-		// Backward compatibility: check old openai_key
-		if ( empty( $api_key ) ) {
-			$api_key = $settings['openai_key'] ?? '';
-		}
-
 		if ( empty( $api_key ) ) {
 			return $this->response( __( 'Please provide an API key in settings.', 'slim-seo' ) );
 		}
