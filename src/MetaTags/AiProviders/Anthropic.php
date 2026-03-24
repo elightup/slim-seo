@@ -14,11 +14,7 @@ class Anthropic implements ProviderInterface {
 		];
 	}
 
-	public function build_request_body(
-		string $prompt,
-		string $content,
-		string $model
-	): array {
+	public function build_request_body( string $prompt, string $content, string $model ): array {
 		return [
 			'model'       => $model,
 			'max_tokens'  => 1024,
@@ -40,16 +36,16 @@ class Anthropic implements ProviderInterface {
 	public function get_models(): array {
 		return [
 			[
-				'value' => 'claude-sonnet-4-20250514',
-				'label' => 'Claude Sonnet 4 (Latest)',
+				'value' => 'claude-opus-4-6',
+				'label' => 'Claude Opus 4.6',
 			],
 			[
-				'value' => 'claude-3-5-sonnet-20240620',
-				'label' => 'Claude 3.5 Sonnet',
+				'value' => 'claude-sonnet-4-6',
+				'label' => 'Claude Sonnet 4.6',
 			],
 			[
-				'value' => 'claude-3-5-haiku-20240620',
-				'label' => 'Claude 3.5 Haiku',
+				'value' => 'claude-haiku-4-5',
+				'label' => 'Claude Haiku 4.5',
 			],
 		];
 	}

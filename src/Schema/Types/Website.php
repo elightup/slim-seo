@@ -9,7 +9,7 @@ class Website extends Base {
 			'url'         => $this->url,
 			'name'        => get_bloginfo( 'name' ),
 			'description' => get_bloginfo( 'description' ),
-			'inLanguage'  => get_bloginfo( 'language' )
+			'inLanguage'  => get_bloginfo( 'language' ),
 		];
 
 		return $schema;

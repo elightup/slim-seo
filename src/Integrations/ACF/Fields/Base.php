@@ -5,7 +5,7 @@ class Base {
 	protected $field;
 
 	public function __construct( array $field, $default_value ) {
-		$this->field          = $field;
+		$this->field = $field;
 
 		// Only get the 1st item.
 		$this->field['value'] = is_array( $this->field['value'] ) ? reset( $this->field['value'] ) : ( $this->field['value'] ?: $default_value );

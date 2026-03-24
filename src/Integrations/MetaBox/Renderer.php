@@ -5,8 +5,8 @@ use SlimSEO\Helpers\Arr;
 
 class Renderer {
 	private $meta_box;
-	private $post_id = 0;
-	private $term_id = 0;
+	private $post_id       = 0;
+	private $term_id       = 0;
 	private $not_supported = [ 'background', 'fieldset_text', 'text_list', 'sidebar' ];
 
 	public function __construct( $meta_box, int $post_id, int $term_id ) {

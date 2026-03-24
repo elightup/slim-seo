@@ -41,7 +41,7 @@ trait MultilingualSitemapTrait {
 		echo $hreflang_links; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Google requires each translation to be in a separate <url> element with all the hreflang links.
-		$translations = array_filter( $translations, function( array $translation ) use ( $url ): bool {
+		$translations = array_filter( $translations, function ( array $translation ) use ( $url ): bool {
 			return $translation['url'] !== $url;
 		} );
 		if ( empty( $translations ) ) {

@@ -37,24 +37,88 @@ class OpenRouter implements ProviderInterface {
 	public function get_models(): array {
 		return [
 			[
+				'value' => 'openai/gpt-5.4',
+				'label' => 'OpenAI: GPT-5.4',
+			],
+			[
+				'value' => 'openai/gpt-5.4-mini',
+				'label' => 'OpenAI: GPT-5.4 Mini',
+			],
+			[
+				'value' => 'openai/gpt-5.4-nano',
+				'label' => 'OpenAI: GPT-5.4 Nano',
+			],
+			[
+				'value' => 'openai/gpt-5',
+				'label' => 'OpenAI: GPT-5',
+			],
+			[
+				'value' => 'openai/gpt-5-mini',
+				'label' => 'OpenAI: GPT-5 Mini',
+			],
+			[
+				'value' => 'openai/gpt-5-nano',
+				'label' => 'OpenAI: GPT-5 Nano',
+			],
+			[
+				'value' => 'openai/gpt-4.1',
+				'label' => 'OpenAI: GPT-4.1',
+			],
+			[
 				'value' => 'openai/gpt-4.1-mini',
-				'label' => 'GPT-4.1 Mini',
+				'label' => 'OpenAI: GPT-4.1 Mini',
+			],
+			[
+				'value' => 'openai/gpt-4.1-nano',
+				'label' => 'OpenAI: GPT-4.1 Nano',
+			],
+			[
+				'value' => 'openai/gpt-4o',
+				'label' => 'OpenAI: GPT-4o',
 			],
 			[
 				'value' => 'openai/gpt-4o-mini',
-				'label' => 'GPT-4o Mini',
+				'label' => 'OpenAI: GPT-4o Mini',
 			],
 			[
-				'value' => 'anthropic/claude-3.5-sonnet-20240620',
-				'label' => 'Claude 3.5 Sonnet',
+				'value' => 'anthropic/claude-opus-4-6',
+				'label' => 'Anthropic: Claude Opus 4.6',
 			],
 			[
-				'value' => 'google/gemini-2.0-flash-exp',
-				'label' => 'Gemini 2.0 Flash',
+				'value' => 'anthropic/claude-sonnet-4.6',
+				'label' => 'Anthropic: Claude Sonnet 4.6',
 			],
 			[
-				'value' => 'meta/llama-3.3-70b-instruct',
-				'label' => 'Llama 3.3 70B',
+				'value' => 'anthropic/claude-haiku-4-5',
+				'label' => 'Anthropic: Claude Haiku 4.5',
+			],
+			[
+				'value' => 'google/gemini-3.1-pro-preview',
+				'label' => 'Google: Gemini 3.1 Pro Preview',
+			],
+			[
+				'value' => 'google/gemini-3.1-flash-preview',
+				'label' => 'Google: Gemini 3.1 Flash Preview',
+			],
+			[
+				'value' => 'google/gemini-3.1-flash-lite-preview',
+				'label' => 'Google: Gemini 3.1 Flash Lite Preview',
+			],
+			[
+				'value' => 'google/gemini-2.5-pro',
+				'label' => 'Google: Gemini 2.5 Pro',
+			],
+			[
+				'value' => 'google/gemini-2.5-flash',
+				'label' => 'Google: Gemini 2.5 Flash',
+			],
+			[
+				'value' => 'google/gemini-2.5-flash-lite',
+				'label' => 'Google: Gemini 2.5 Flash Lite',
+			],
+			[
+				'value' => 'deepseek/deepseek-v3.2',
+				'label' => 'DeepSeek: DeepSeek V3.2',
 			],
 		];
 	}

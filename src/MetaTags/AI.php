@@ -18,7 +18,7 @@ class AI {
 		register_rest_route( 'slim-seo', 'meta-tags/ai', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'generate' ],
-			'permission_callback' => function() {
+			'permission_callback' => function () {
 				return current_user_can( 'edit_posts' );
 			},
 		] );
@@ -26,7 +26,7 @@ class AI {
 		register_rest_route( 'slim-seo', 'ai/models', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_models' ],
-			'permission_callback' => function() {
+			'permission_callback' => function () {
 				return current_user_can( 'manage_options' );
 			},
 		] );
@@ -211,10 +211,9 @@ RULE;
 		$url     = $provider_obj->get_api_url();
 		$headers = $provider_obj->get_headers( $api_key );
 
-		// Google needs API key in URL
+		// Google needs model in URL
 		if ( $provider === 'google' ) {
-			$url     = $url . '?key=' . $api_key;
-			$headers = []; // No auth header for Google
+			$url = str_replace( '{model}', $model, $url );
 		}
 
 		$body = $provider_obj->build_request_body( $prompt, $content, $model );
