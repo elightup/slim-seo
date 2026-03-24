@@ -43,8 +43,7 @@
 
 	function init() {
 		const provider = providerSelect.value || 'openai';
-		const savedModel = modelSelect.value;
-		fetchModels( provider, savedModel );
+		fetchModels( provider, i18n.model );
 	}
 
 	providerSelect.addEventListener( 'change', e => fetchModels( e.target.value, '' ) );

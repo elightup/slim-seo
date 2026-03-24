@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Settings;
 
+use SlimSEO\Helpers\Option;
+
 class Settings {
 	private $meta_tags;
 
@@ -73,6 +75,7 @@ class Settings {
 
 		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/settings-ai.js', [], filemtime( SLIM_SEO_DIR . '/js/settings-ai.js' ), true );
 		wp_localize_script( 'slim-seo-settings-ai', 'ssAiSettings', [
+			'model' => Option::get( 'ai_model' ),
 			'text'  => [
 				'noModelsAvailable' => __( 'No models available', 'slim-seo' ),
 			],
