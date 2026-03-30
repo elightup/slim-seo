@@ -18,7 +18,7 @@ const Single = () => {
 			setFeatures( {
 				facebook: features.length === 0 || features.includes( 'open_graph' ),
 				twitter: features.length === 0 || features.includes( 'twitter_cards' ),
-				ai: !!response.openai_key,
+				ai: !!response.ai_api_key,
 			} );
 		} );
 	}, [] );
