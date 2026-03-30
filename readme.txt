@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.9.4
 Requires PHP: 7.4
-Stable tag: 4.9.3
+Stable tag: 4.9.4
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,6 +170,10 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.4 - 2026-03-30 =
+
+- Fix not showing magic wand icon for generating meta title and description with AI
 
 = 4.9.3 - 2026-03-30 =
 

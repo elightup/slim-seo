@@ -1,3 +1,7 @@
+### 4.9.4 - 2026-03-30
+
+- Fix not showing magic wand icon for generating meta title and description with AI
+
 ### 4.9.3 - 2026-03-30
 
 - Add more providers and models for AI integration. Now supports Anthropic (Claude), Google (Gemini), OpenAI (GPT) and OpenRouter.
