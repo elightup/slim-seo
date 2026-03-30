@@ -1,3 +1,8 @@
+### 4.9.3 - 2026-03-30
+
+- Add more providers and models for AI integration. Now supports Anthropic (Claude), Google (Gemini), OpenAI (GPT) and OpenRouter.
+- Fix HTML entities are encoded in schemas
+
 ### 4.9.2 - 2026-03-23
 
 - Update X image instruction

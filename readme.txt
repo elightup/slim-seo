@@ -4,8 +4,8 @@ Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.9.4
-Requires PHP: 7.2
-Stable tag: 4.9.2
+Requires PHP: 7.4
+Stable tag: 4.9.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,6 +170,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.3 - 2026-03-30 =
+
+- Add more providers and models for AI integration. Now supports Anthropic (Claude), Google (Gemini), OpenAI (GPT) and OpenRouter.
+- Fix HTML entities are encoded in schemas
 
 = 4.9.2 - 2026-03-23 =
 
