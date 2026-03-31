@@ -15,9 +15,8 @@ class OpenAI implements ProviderInterface {
 
 	public function build_request_body( string $prompt, string $content, string $model ): array {
 		return [
-			'model'       => $model,
-			'temperature' => 0.5,
-			'input'       => [
+			'model' => $model,
+			'input' => [
 				[
 					'role'    => 'system',
 					'content' => $prompt,
@@ -31,7 +30,23 @@ class OpenAI implements ProviderInterface {
 	}
 
 	public function parse_response( array $response ): string {
-		return $response['output'][0]['content'][0]['text'] ?? '';
+		if ( empty( $response['output'] ) || ! is_array( $response['output'] ) ) {
+			return '';
+		}
+
+		$texts = [];
+		foreach ( $response['output'] as $item ) {
+			if ( empty( $item['content'] ) || ! is_array( $item['content'] ) ) {
+				continue;
+			}
+			foreach ( $item['content'] as $content ) {
+				if ( isset( $content['type'] ) && $content['type'] === 'output_text' ) {
+					$texts[] = $content['text'] ?? '';
+				}
+			}
+		}
+
+		return implode( ' ', $texts );
 	}
 
 	public function get_models(): array {
