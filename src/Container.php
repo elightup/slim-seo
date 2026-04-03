@@ -60,6 +60,8 @@ class Container {
 
 		$services['no_category_base'] = new NoCategoryBase;
 
+		$services['primary_term'] = new PrimaryTerm;
+
 		// Admin only.
 		if ( is_admin() ) {
 			$services['link_attributes']    = new LinkAttributes;

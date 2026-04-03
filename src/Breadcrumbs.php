@@ -197,12 +197,15 @@ class Breadcrumbs {
 
 		// Add terms.
 		$terms = get_the_terms( $post, $this->args['taxonomy'] );
+
 		if ( ! is_array( $terms ) ) {
 			return;
 		}
 
 		// Parse only first term and add its ancestors.
 		$term = reset( $terms );
+		$term = apply_filters( 'slim_seo_breadcrumbs_term', $term, $post->ID );
+
 		$this->add_term_ancestors( $term );
 		$this->add_link( get_term_link( $term ), $term->name );
 	}
