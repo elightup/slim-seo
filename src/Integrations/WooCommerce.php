@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\Integrations;
 
-use WP_Post;
-use Automattic\WooCommerce\Enums\ProductStockStatus;
 class WooCommerce {
 	private $tags = [
 		'product:price:amount',
@@ -41,7 +39,10 @@ class WooCommerce {
 
 		// Hide out of stock products.
 		if ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) ) {
-			$not_in[] = $visibility_terms[ ProductStockStatus::OUT_OF_STOCK ];
+			$status = class_exists( '\Automattic\WooCommerce\Enums\ProductStockStatus' )
+				? \Automattic\WooCommerce\Enums\ProductStockStatus::OUT_OF_STOCK
+				: 'outofstock';
+			$not_in[] = $visibility_terms[ $status ];
 		}
 
 		if ( empty( $not_in ) ) {
