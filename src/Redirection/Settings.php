@@ -55,6 +55,7 @@ class Settings {
 			'force_trailing_slash',
 			'auto_redirection',
 			'enable_404_logs',
+			'disable_for_single_posts',
 		];
 
 		foreach ( $checkboxes as $checkbox ) {
@@ -74,13 +75,14 @@ class Settings {
 	public static function list(): array {
 		$saved_settings = get_option( 'slim_seo' ) ?: [];
 		$settings       = [
-			'force_trailing_slash' => 0,
-			'auto_redirection'     => 1,
-			'redirect_www'         => '',
-			'enable_404_logs'      => 0,
-			'auto_delete_404_logs' => 30,
-			'redirect_404_to'      => '',
-			'redirect_404_to_url'  => '',
+			'force_trailing_slash'     => 0,
+			'auto_redirection'         => 1,
+			'redirect_www'             => '',
+			'enable_404_logs'          => 0,
+			'auto_delete_404_logs'     => 30,
+			'redirect_404_to'          => '',
+			'redirect_404_to_url'      => '',
+			'disable_for_single_posts' => 0,
 		];
 
 		foreach ( $settings as $setting_name => $setting_value ) {
