@@ -147,6 +147,10 @@
 	height: max-content;
 }
 
+body.modal-open {
+	overflow: hidden;
+}
+
 .ss-modal-overlay {
 	position: fixed;
 	top: 0;
@@ -194,6 +198,73 @@
 .ss-modal__close {
 	font-size: 16px;
 	cursor: pointer;
+}
+
+.ss-bulk-ai-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	#ss-bulk-ai-show-log {
+		background: none;
+		border: none;
+		box-shadow: none;
+
+		&:hover,
+		&:focus {
+			background: none;
+			border: none;
+			box-shadow: none;
+		}
+	}
+}
+
+#ss-bulk-ai-progress {
+	margin-top: 8px;
+}
+
+.ss-bulk-ai-modal {
+	width: 720px;
+	max-width: 90vw;
+	max-height: 80vh;
+	display: flex;
+	flex-direction: column;
+
+	#ss-bulk-ai-log {
+		flex: 1;
+		overflow-y: auto;
+		max-height: 60vh;
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 13px;
+		}
+
+		th {
+			text-align: left;
+			padding: 8px 10px;
+			font-weight: 600;
+			position: sticky;
+			top: 0;
+			background: #fff;
+			box-shadow: inset 0 -2px 0 #ddd;
+
+			&:nth-child(3) {
+				width: 20%;
+			}
+		}
+
+		td {
+			padding: 6px 10px;
+			border-bottom: 1px solid #f0f0f0;
+			vertical-align: top;
+		}
+
+		tr:last-child td {
+			border-bottom: none;
+		}
+	}
 }
 
 .ss-dropdown {

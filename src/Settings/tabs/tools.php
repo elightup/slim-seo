@@ -37,6 +37,104 @@
 	</div>
 </div>
 
+<h3><?php esc_attr_e( 'Bulk Generate with AI', 'slim-seo' ); ?></h3>
+<p><?php esc_html_e( 'Automatically generate meta titles and descriptions for all your content using AI. Select which content to process and click Generate.', 'slim-seo' ); ?></p>
+
+	<div class="ef-control">
+		<div class="ef-control__label">
+			<label><?php esc_html_e( 'Content to process', 'slim-seo' ); ?></label>
+		</div>
+		<div class="ef-control__input">
+			<?php
+			$public_post_types = get_post_types( [ 'public' => true ], 'objects' );
+			unset( $public_post_types['attachment'] );
+			foreach ( $public_post_types as $pt ) :
+				?>
+				<label style="display:block;margin:4px 0;">
+					<input type="checkbox" name="ss_bulk_post_types[]" value="<?php echo esc_attr( $pt->name ); ?>" <?php checked( in_array( $pt->name, [ 'post', 'page' ], true ) ); ?> />
+					<?php echo esc_html( $pt->labels->singular_name ); ?>
+				</label>
+			<?php endforeach; ?>
+		</div>
+	</div>
+
+	<div class="ef-control">
+		<div class="ef-control__label">
+			<label><?php esc_html_e( 'Taxonomies', 'slim-seo' ); ?></label>
+		</div>
+		<div class="ef-control__input">
+			<?php
+			$public_taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
+			foreach ( $public_taxonomies as $tax ) :
+				?>
+				<label style="display:block;margin:4px 0;">
+					<input type="checkbox" name="ss_bulk_taxonomies[]" value="<?php echo esc_attr( $tax->name ); ?>" />
+					<?php echo esc_html( $tax->labels->singular_name ); ?>
+				</label>
+			<?php endforeach; ?>
+		</div>
+	</div>
+
+	<div class="ef-control">
+		<div class="ef-control__label">
+			<label><?php esc_html_e( 'Items per batch', 'slim-seo' ); ?></label>
+		</div>
+		<div class="ef-control__input">
+			<div class="ss-input-wrapper">
+				<input type="number" name="ss_bulk_batch_size" value="3" min="1" max="10" style="max-width:80px;">
+			</div>
+			<p class="description"><?php esc_html_e( 'How many items to process at a time (1-10). Lower values are slower but more reliable.', 'slim-seo' ); ?></p>
+		</div>
+	</div>
+
+	<div class="ef-control">
+		<div class="ef-control__label">
+			<label><?php esc_html_e( 'Overwrite', 'slim-seo' ); ?></label>
+		</div>
+		<div class="ef-control__input">
+			<label style="display:block;margin:4px 0;">
+				<input type="checkbox" name="ss_bulk_skip_title" value="1" checked />
+				<?php esc_html_e( 'Keep existing meta titles (only generate for empty ones)', 'slim-seo' ); ?>
+			</label>
+			<label style="display:block;margin:4px 0;">
+				<input type="checkbox" name="ss_bulk_skip_description" value="1" checked />
+				<?php esc_html_e( 'Keep existing meta descriptions (only generate for empty ones)', 'slim-seo' ); ?>
+			</label>
+		</div>
+	</div>
+
+	<div class="ef-control">
+		<div class="ef-control__label"></div>
+		<div class="ef-control__input">
+			<div class="ss-bulk-ai-actions">
+				<button type="button" class="button" id="ss-bulk-ai-start"><?php esc_html_e( 'Generate', 'slim-seo' ); ?></button>
+				<button type="button" class="button button-link" id="ss-bulk-ai-show-log" style="display:none"><?php esc_html_e( 'Show Logs', 'slim-seo' ); ?></button>
+			</div>
+			<div id="ss-bulk-ai-progress"></div>
+		</div>
+	</div>
+
+	<div id="ss-bulk-ai-log-overlay" class="ss-modal-overlay" style="display:none"></div>
+	<div id="ss-bulk-ai-log-modal" class="ss-modal-body ss-bulk-ai-modal" style="display:none">
+		<div class="ss-modal-heading">
+			<span><?php esc_html_e( 'Generation Logs', 'slim-seo' ); ?></span>
+			<span class="ss-modal__close" id="ss-bulk-ai-close-log">&times;</span>
+		</div>
+		<div id="ss-bulk-ai-log" role="log">
+			<table>
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'Time', 'slim-seo' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'slim-seo' ); ?></th>
+						<th><?php esc_html_e( 'Item', 'slim-seo' ); ?></th>
+						<th><?php esc_html_e( 'Message', 'slim-seo' ); ?></th>
+					</tr>
+				</thead>
+				<tbody id="ss-bulk-ai-log-body"></tbody>
+			</table>
+		</div>
+	</div>
+
 <h3><?php esc_attr_e( 'Migrate SEO Data', 'slim-seo' ); ?></h3>
 <p><?php esc_html_e( 'Use the drop down below to choose which plugin you wish to import SEO data from.', 'slim-seo' ); ?></p>
 <p><strong><?php esc_attr_e( 'Before performing an import, we strongly recommend that you make a backup of your site.', 'slim-seo' ); ?></strong></p>
