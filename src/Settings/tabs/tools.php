@@ -38,7 +38,7 @@
 </div>
 
 <h3><?php esc_attr_e( 'Bulk Generate with AI', 'slim-seo' ); ?></h3>
-<p><?php esc_html_e( 'Automatically generate meta titles and descriptions for all your content using AI. Select which content to process and click Generate.', 'slim-seo' ); ?></p>
+<p><?php esc_html_e( 'Automatically generate meta titles and descriptions for all your post types and taxonomies using AI.', 'slim-seo' ); ?></p>
 
 <div class="ss-bulk-ai-settings">
 	<div class="ef-control">
