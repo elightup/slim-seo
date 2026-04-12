@@ -8,6 +8,12 @@
 		return;
 	}
 
+	/**
+	 * Renders model options into the model select and restores the saved value when present.
+	 *
+	 * @param {Array<{value: string, label: string}>} models     Options returned from the REST API.
+	 * @param {string}                                 savedModel Model id to select after populate; empty skips.
+	 */
 	function populateModels( models, savedModel ) {
 		modelSelect.innerHTML = '';
 
@@ -31,6 +37,12 @@
 		}
 	}
 
+	/**
+	 * Loads models for a provider and updates the model dropdown.
+	 *
+	 * @param {string} provider Provider slug (e.g. openai).
+	 * @param {string} savedModel Model id to preserve after fetch; may be empty.
+	 */
 	function fetchModels( provider, savedModel ) {
 		wp.apiFetch( {
 			path: `/slim-seo/ai/models?provider=${ encodeURIComponent( provider ) }`,
@@ -41,6 +53,9 @@
 		} );
 	}
 
+	/**
+	 * Initializes the model list from the current provider on page load.
+	 */
 	function init() {
 		const provider = providerSelect.value || 'openai';
 		fetchModels( provider, i18n.model );
@@ -67,14 +82,26 @@
 	const buttonLabel = bulkButton.textContent;
 	const bulk = i18n.bulk;
 
-	const print = ( el, text ) => el.innerHTML = `<p>${ text }</p>`;
+	/**
+	 * Writes a single paragraph of HTML into a bulk-generation status element.
+	 *
+	 * @param {HTMLElement} element Target container (e.g. progress area).
+	 * @param {string}      text    Message to show.
+	 */
+	const print = ( element, text ) => element.innerHTML = `<p>${ text }</p>`;
 
+	/**
+	 * Shows the bulk generation log modal and overlay.
+	 */
 	function openLogModal() {
 		logModal.style.display = '';
 		logOverlay.style.display = '';
 		document.body.classList.add( 'modal-open' );
 	}
 
+	/**
+	 * Hides the bulk generation log modal and overlay.
+	 */
 	function closeLogModal() {
 		logModal.style.display = 'none';
 		logOverlay.style.display = 'none';
@@ -85,61 +112,74 @@
 	logOverlay.addEventListener( 'click', closeLogModal );
 	showLogBtn.addEventListener( 'click', openLogModal );
 
+	/**
+	 * Appends one log row to the bulk generation log table.
+	 *
+	 * @param {{time?: string, level?: string, ref?: string, message?: string}} entry Log line fields from the REST response or client.
+	 */
 	function appendLog( entry ) {
-		const lvl = ( entry.level || 'INFO' ).toUpperCase();
-		const cls = lvl === 'ERROR' ? 'ss-danger' : lvl === 'OK' ? 'ss-success' : lvl === 'SKIP' ? 'ss-warning' : '';
-		const tr = document.createElement( 'tr' );
-		tr.className = cls;
-		[ entry.time, lvl, entry.ref, entry.message ].forEach( val => {
-			const td = document.createElement( 'td' );
-			td.textContent = val || '';
-			tr.appendChild( td );
+		const level = ( entry.level || 'INFO' ).toUpperCase();
+		const rowClassName = level === 'ERROR' ? 'ss-danger' : level === 'OK' ? 'ss-success' : level === 'SKIP' ? 'ss-warning' : '';
+		const tableRow = document.createElement( 'tr' );
+		tableRow.className = rowClassName;
+		[ entry.time, level, entry.ref, entry.message ].forEach( columnValue => {
+			const tableCell = document.createElement( 'td' );
+			tableCell.textContent = columnValue || '';
+			tableRow.appendChild( tableCell );
 		} );
-		logBody.appendChild( tr );
+		logBody.appendChild( tableRow );
 	}
 
+	/**
+	 * Reads bulk tool form fields into the request body shape expected by the chunk endpoint.
+	 *
+	 * @returns {{post_types: string[], taxonomies: string[], batch_size: number, skip_title: boolean, skip_description: boolean}} Payload for one chunk request.
+	 */
 	function readPayload() {
-		const pt = [];
-		document.querySelectorAll( "input[name='ss_bulk_post_types[]']:checked" ).forEach( el => pt.push( el.value ) );
-		const tx = [];
-		document.querySelectorAll( "input[name='ss_bulk_taxonomies[]']:checked" ).forEach( el => tx.push( el.value ) );
+		const selectedPostTypes = [];
+		document.querySelectorAll( "input[name='ss_bulk_post_types[]']:checked" ).forEach( input => selectedPostTypes.push( input.value ) );
+		const selectedTaxonomies = [];
+		document.querySelectorAll( "input[name='ss_bulk_taxonomies[]']:checked" ).forEach( input => selectedTaxonomies.push( input.value ) );
 		let batch = parseInt( document.querySelector( "input[name='ss_bulk_batch_size']" )?.value || '3', 10 );
 		batch = Math.max( 1, Math.min( 10, batch ) );
 
 		return {
-			post_types: pt,
-			taxonomies: tx,
+			post_types: selectedPostTypes,
+			taxonomies: selectedTaxonomies,
 			batch_size: batch,
 			skip_title: !! document.querySelector( "input[name='ss_bulk_skip_title']" )?.checked,
 			skip_description: !! document.querySelector( "input[name='ss_bulk_skip_description']" )?.checked,
 		};
 	}
 
+	/**
+	 * Posts one bulk-AI chunk, updates state and log UI, then recurses until the run is done or errors.
+	 */
 	async function runStep() {
 		if ( ! state.running ) {
 			return;
 		}
 
-		const body = Object.assign( {}, readPayload(), { phase: state.phase, offset: state.offset } );
+		const requestBody = Object.assign( {}, readPayload(), { phase: state.phase, offset: state.offset } );
 
 		try {
-			const d = await wp.apiFetch( {
+			const response = await wp.apiFetch( {
 				path: '/slim-seo/bulk-ai/chunk',
 				method: 'POST',
-				data: body,
+				data: requestBody,
 			} );
 
-			( d.log_entries || [] ).forEach( appendLog );
+			( response.log_entries || [] ).forEach( appendLog );
 
-			if ( d.batch_stats ) {
-				state.totalAi += d.batch_stats.ai_calls || 0;
-				state.totalErr += d.batch_stats.errors || 0;
+			if ( response.batch_stats ) {
+				state.totalAi += response.batch_stats.ai_calls || 0;
+				state.totalErr += response.batch_stats.errors || 0;
 			}
 
-			state.phase = d.next_phase;
-			state.offset = d.next_offset;
+			state.phase = response.next_phase;
+			state.offset = response.next_offset;
 
-			if ( d.done ) {
+			if ( response.done ) {
 				print( progressEl, bulk.done + ' ' + bulk.generated + ': ' + state.totalAi + ( state.totalErr ? ', ' + bulk.errors + ': ' + state.totalErr : '' ) );
 				stop();
 			} else {
@@ -151,6 +191,9 @@
 		}
 	}
 
+	/**
+	 * Ends a bulk generation run and restores the start button.
+	 */
 	function stop() {
 		state.running = false;
 		bulkButton.disabled = false;
@@ -162,8 +205,8 @@
 			return;
 		}
 
-		const pts = document.querySelectorAll( "input[name='ss_bulk_post_types[]']:checked" ).length;
-		state.phase = pts ? 'posts' : 'terms';
+		const checkedPostTypeCount = document.querySelectorAll( "input[name='ss_bulk_post_types[]']:checked" ).length;
+		state.phase = checkedPostTypeCount ? 'posts' : 'terms';
 		state.offset = 0;
 		state.running = true;
 		state.totalAi = 0;
