@@ -1,0 +1,116 @@
+// Log modal shell; kept in this bundle so bulk AI does not depend on meta-tags.css.
+.ss-modal-overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.ss-modal-body {
+	padding: 15px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 11;
+	min-width: 330px;
+	border-radius: 4px;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	background: #ffffff;
+	opacity: 1;
+	transform: translate(-50%, -50%) scale(1);
+	transform-origin: center;
+	animation: zoom 0.25s;
+}
+
+@keyframes zoom {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(0.7);
+	}
+}
+
+.ss-modal-heading {
+	margin: 0 0 15px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #ddd;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 14px;
+}
+
+.ss-modal__close {
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.ss-bulk-ai-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	#ss-bulk-ai-show-log {
+		background: none;
+		border: none;
+		box-shadow: none;
+
+		&:hover,
+		&:focus {
+			background: none;
+			border: none;
+			box-shadow: none;
+		}
+	}
+}
+
+#ss-bulk-ai-progress {
+	margin-top: 8px;
+}
+
+.ss-bulk-ai-modal {
+	width: 720px;
+	max-width: 90vw;
+	max-height: 80vh;
+	display: flex;
+	flex-direction: column;
+
+	#ss-bulk-ai-log {
+		flex: 1;
+		overflow-y: auto;
+		max-height: 60vh;
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 13px;
+		}
+
+		th {
+			text-align: left;
+			padding: 8px 10px;
+			font-weight: 600;
+			position: sticky;
+			top: 0;
+			background: #fff;
+			box-shadow: inset 0 -2px 0 #ddd;
+
+			&:nth-child(3) {
+				width: 20%;
+			}
+		}
+
+		td {
+			padding: 6px 10px;
+			border-bottom: 1px solid #f0f0f0;
+			vertical-align: top;
+		}
+
+		tr:last-child td {
+			border-bottom: none;
+		}
+	}
+}

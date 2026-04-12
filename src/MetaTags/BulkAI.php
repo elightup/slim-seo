@@ -15,6 +15,11 @@ class BulkAI {
 
 	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 10 );
+	}
+
+	public function enqueue(): void {
+		wp_enqueue_style( 'slim-seo-bulk-ai', SLIM_SEO_URL . 'css/bulk-ai.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . '/css/bulk-ai.css' ) );
 	}
 
 	public function register_routes(): void {
