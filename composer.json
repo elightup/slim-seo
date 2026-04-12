@@ -5,7 +5,6 @@
     "wordpress",
     "wordpress-plugin",
     "seo",
-    "search engine",
     "search engine optimization"
   ],
   "description": "A fast & automated WordPress SEO plugin",
@@ -15,7 +14,7 @@
     {
       "name": "Tran Ngoc Tuan Anh",
       "email": "anhtnt@elightup.com",
-      "homepage": "https://wpslimseo.com",
+      "homepage": "https://deluxeblogtips.com",
       "role": "Developer"
     }
   ],
@@ -26,8 +25,8 @@
   },
   "require": {
     "elightup/slim-twig": "dev-master",
-    "elightup/slim-seo-common": "dev-master",
-    "php": ">=7.2"
+    "elightup/slim-seo-common": "^1",
+    "php": ">=7.4"
   },
   "config": {
     "allow-plugins": true,
