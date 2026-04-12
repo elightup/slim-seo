@@ -1,0 +1,10 @@
+name: opencode-review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_call:
+
+jobs:
+  call-workflow:
+    uses: wpmetabox/meta-box/.github/workflows/opencode-review.yml@master
