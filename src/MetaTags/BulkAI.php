@@ -9,9 +9,10 @@ use WP_Query;
 use WP_Term;
 
 class BulkAI {
-	private const REST_NS   = 'slim-seo';
-	private const BATCH     = 3;
-	private const MAX_BATCH = 10;
+	private const REST_NS = 'slim-seo';
+
+	/** Upper bound for batch size after filtering (avoids excessive load per request). */
+	private const MAX_BATCH = 50;
 
 	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
@@ -38,12 +39,6 @@ class BulkAI {
 					'default' => 0,
 					'minimum' => 0,
 				],
-				'batch_size'       => [
-					'type'    => 'integer',
-					'default' => self::BATCH,
-					'minimum' => 1,
-					'maximum' => self::MAX_BATCH,
-				],
 				'post_types'       => [
 					'type'    => 'array',
 					'default' => [],
@@ -67,6 +62,17 @@ class BulkAI {
 	}
 
 	/**
+	 * Number of items to process per chunk. Not exposed in the UI; override with the `slim_seo_bulk_ai_batch_size` filter.
+	 *
+	 * @return int Between 1 and self::MAX_BATCH (inclusive).
+	 */
+	private function get_effective_batch_size(): int {
+		$batch_size = (int) apply_filters( 'slim_seo_bulk_ai_batch_size', 10 );
+
+		return max( 1, min( self::MAX_BATCH, $batch_size ) );
+	}
+
+	/**
 	 * Process a single chunk of bulk AI generation.
 	 *
 	 * @return WP_REST_Response|WP_Error
@@ -74,7 +80,7 @@ class BulkAI {
 	public function process_chunk( WP_REST_Request $request ) {
 		$t0 = microtime( true );
 
-		$batch  = min( self::MAX_BATCH, max( 1, (int) $request->get_param( 'batch_size' ) ) );
+		$batch = $this->get_effective_batch_size();
 		$offset = max( 0, (int) $request->get_param( 'offset' ) );
 		$phase  = in_array( $request->get_param( 'phase' ), [ 'posts', 'terms' ], true )
 			? $request->get_param( 'phase' )

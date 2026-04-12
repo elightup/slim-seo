@@ -40,19 +40,20 @@
 <h3><?php esc_attr_e( 'Bulk Generate with AI', 'slim-seo' ); ?></h3>
 <p><?php esc_html_e( 'Automatically generate meta titles and descriptions for all your content using AI. Select which content to process and click Generate.', 'slim-seo' ); ?></p>
 
+<div class="ss-bulk-ai-settings">
 	<div class="ef-control">
 		<div class="ef-control__label">
-			<label><?php esc_html_e( 'Content to process', 'slim-seo' ); ?></label>
+			<label><?php esc_html_e( 'Post Types', 'slim-seo' ); ?></label>
 		</div>
 		<div class="ef-control__input">
 			<?php
-			$public_post_types = get_post_types( [ 'public' => true ], 'objects' );
-			unset( $public_post_types['attachment'] );
-			foreach ( $public_post_types as $pt ) :
+			$post_types = eLightUp\SlimSEO\Common\Helpers\Data::get_post_types();
+			unset( $post_types['attachment'] );
+			foreach ( $post_types as $post_type ) :
 				?>
-				<label style="display:block;margin:4px 0;">
-					<input type="checkbox" name="ss_bulk_post_types[]" value="<?php echo esc_attr( $pt->name ); ?>" <?php checked( in_array( $pt->name, [ 'post', 'page' ], true ) ); ?> />
-					<?php echo esc_html( $pt->labels->singular_name ); ?>
+				<label>
+					<input type="checkbox" name="ss_bulk_post_types[]" value="<?php echo esc_attr( $post_type->name ); ?>" <?php checked( in_array( $post_type->name, [ 'post', 'page' ], true ) ); ?> />
+					<?php echo esc_html( $post_type->labels->singular_name ); ?>
 				</label>
 			<?php endforeach; ?>
 		</div>
@@ -67,7 +68,7 @@
 			$public_taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
 			foreach ( $public_taxonomies as $tax ) :
 				?>
-				<label style="display:block;margin:4px 0;">
+				<label>
 					<input type="checkbox" name="ss_bulk_taxonomies[]" value="<?php echo esc_attr( $tax->name ); ?>" />
 					<?php echo esc_html( $tax->labels->singular_name ); ?>
 				</label>
@@ -77,26 +78,14 @@
 
 	<div class="ef-control">
 		<div class="ef-control__label">
-			<label><?php esc_html_e( 'Items per batch', 'slim-seo' ); ?></label>
-		</div>
-		<div class="ef-control__input">
-			<div class="ss-input-wrapper">
-				<input type="number" name="ss_bulk_batch_size" value="3" min="1" max="10" style="max-width:80px;">
-			</div>
-			<p class="description"><?php esc_html_e( 'How many items to process at a time (1-10). Lower values are slower but more reliable.', 'slim-seo' ); ?></p>
-		</div>
-	</div>
-
-	<div class="ef-control">
-		<div class="ef-control__label">
 			<label><?php esc_html_e( 'Overwrite', 'slim-seo' ); ?></label>
 		</div>
 		<div class="ef-control__input">
-			<label style="display:block;margin:4px 0;">
+			<label>
 				<input type="checkbox" name="ss_bulk_skip_title" value="1" checked />
 				<?php esc_html_e( 'Keep existing meta titles (only generate for empty ones)', 'slim-seo' ); ?>
 			</label>
-			<label style="display:block;margin:4px 0;">
+			<label>
 				<input type="checkbox" name="ss_bulk_skip_description" value="1" checked />
 				<?php esc_html_e( 'Keep existing meta descriptions (only generate for empty ones)', 'slim-seo' ); ?>
 			</label>
@@ -134,6 +123,7 @@
 			</table>
 		</div>
 	</div>
+</div>
 
 <h3><?php esc_attr_e( 'Migrate SEO Data', 'slim-seo' ); ?></h3>
 <p><?php esc_html_e( 'Use the drop down below to choose which plugin you wish to import SEO data from.', 'slim-seo' ); ?></p>

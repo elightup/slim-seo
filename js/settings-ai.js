@@ -133,20 +133,17 @@
 	/**
 	 * Reads bulk tool form fields into the request body shape expected by the chunk endpoint.
 	 *
-	 * @returns {{post_types: string[], taxonomies: string[], batch_size: number, skip_title: boolean, skip_description: boolean}} Payload for one chunk request.
+	 * @returns {{post_types: string[], taxonomies: string[], skip_title: boolean, skip_description: boolean}} Payload for one chunk request.
 	 */
 	function readPayload() {
 		const selectedPostTypes = [];
 		document.querySelectorAll( "input[name='ss_bulk_post_types[]']:checked" ).forEach( input => selectedPostTypes.push( input.value ) );
 		const selectedTaxonomies = [];
 		document.querySelectorAll( "input[name='ss_bulk_taxonomies[]']:checked" ).forEach( input => selectedTaxonomies.push( input.value ) );
-		let batch = parseInt( document.querySelector( "input[name='ss_bulk_batch_size']" )?.value || '3', 10 );
-		batch = Math.max( 1, Math.min( 10, batch ) );
 
 		return {
 			post_types: selectedPostTypes,
 			taxonomies: selectedTaxonomies,
-			batch_size: batch,
 			skip_title: !! document.querySelector( "input[name='ss_bulk_skip_title']" )?.checked,
 			skip_description: !! document.querySelector( "input[name='ss_bulk_skip_description']" )?.checked,
 		};
