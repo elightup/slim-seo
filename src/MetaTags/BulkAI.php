@@ -26,9 +26,7 @@ class BulkAI {
 		register_rest_route( self::REST_NS, 'bulk-ai/chunk', [
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [ $this, 'process_chunk' ],
-			'permission_callback' => function () {
-				return current_user_can( 'manage_options' );
-			},
+			'permission_callback' => fn () => current_user_can( 'manage_options' ),
 			'args'                => [
 				'phase'            => [
 					'type'    => 'string',
@@ -174,7 +172,7 @@ class BulkAI {
 	}
 
 	private function process_posts_phase( array $post_types, int $batch, int $offset, bool $skip_title, bool $skip_description, array $entries, array $batch_stats ): array {
-		$q = new WP_Query( [
+		$query = new WP_Query( [
 			'post_type'              => $post_types,
 			'post_status'            => 'any',
 			'posts_per_page'         => $batch,
@@ -187,7 +185,7 @@ class BulkAI {
 			'update_post_term_cache' => false,
 		] );
 
-		if ( ! $q->have_posts() ) {
+		if ( ! $query->have_posts() ) {
 			$this->push_entry( $entries, 'info', 'batch', 'System', __( 'No more posts to process.', 'slim-seo' ) );
 			return [
 				'entries'     => $entries,
@@ -197,7 +195,7 @@ class BulkAI {
 			];
 		}
 
-		$ids = array_map( 'intval', $q->posts );
+		$ids = array_map( 'intval', $query->posts );
 
 		foreach ( $ids as $post_id ) {
 			$piece = $this->process_post( $post_id, $skip_title, $skip_description );
@@ -232,10 +230,6 @@ class BulkAI {
 				'count'       => 0,
 			];
 		}
-
-		$term_ids = array_map( function ( $t ) {
-			return (int) $t->term_id;
-		}, $terms );
 
 		foreach ( $terms as $term ) {
 			$piece = $this->process_term( $term, $skip_title, $skip_description );
