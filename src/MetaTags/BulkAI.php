@@ -100,59 +100,121 @@ class BulkAI {
 			);
 		}
 
-		// Defensive: callers with only taxonomies may still send phase=posts; normalize so the main branch can stay simple.
-		if ( 'posts' === $phase && empty( $post_types ) && ! empty( $taxonomies ) ) {
+		// If we start in 'posts' with none selected, skip straight to terms — the early guard above ensures taxonomies is non-empty here.
+		if ( 'posts' === $phase && empty( $post_types ) ) {
 			$phase  = 'terms';
 			$offset = 0;
 		}
 
-		$entries     = [];
-		$batch_stats = $this->empty_batch_stats();
-		$next_phase  = $phase;
-		$next_offset = $offset;
-		$done        = true;
-
-		if ( 'posts' === $phase && ! empty( $post_types ) ) {
-			$result = $this->process_posts_phase( $post_types, $batch, $offset, $skip_title, $skip_description, $entries, $batch_stats );
-
-			$entries     = $result['entries'];
-			$batch_stats = $result['batch_stats'];
-
-			if ( $result['has_more'] ) {
-				$next_phase  = 'posts';
-				$next_offset = $offset + $result['count'];
-				$done        = false;
-			} elseif ( ! empty( $taxonomies ) ) {
-				$this->push_entry( $entries, 'info', 'batch', 'System', __( 'All posts done. Now processing taxonomies...', 'slim-seo' ) );
-				$next_phase  = 'terms';
-				$next_offset = 0;
-				$done        = false;
-			}
-		} elseif ( 'terms' === $phase && ! empty( $taxonomies ) ) {
-			$result = $this->process_terms_phase( $taxonomies, $batch, $offset, $skip_title, $skip_description, $entries, $batch_stats );
-
-			$entries     = $result['entries'];
-			$batch_stats = $result['batch_stats'];
-
-			if ( $result['has_more'] ) {
-				$next_phase  = 'terms';
-				$next_offset = $offset + $result['count'];
-				$done        = false;
-			}
+		if ( 'posts' === $phase ) {
+			$outcome = $this->run_posts_chunk( $post_types, $taxonomies, $batch, $offset, $skip_title, $skip_description );
 		}
 
-		$elapsed_ms = (int) round( ( microtime( true ) - $t0 ) * 1000 );
+		if ( 'terms' === $phase ) {
+			$outcome = $this->run_terms_chunk( $taxonomies, $batch, $offset, $skip_title, $skip_description );
+		}
 
 		return new WP_REST_Response( [
-			'done'        => $done,
-			'next_phase'  => $next_phase,
-			'next_offset' => $next_offset,
-			'elapsed_ms'  => $elapsed_ms,
-			'batch_stats' => $batch_stats,
-			'log_entries' => $entries,
+			'done'        => $outcome['done'],
+			'next_phase'  => $outcome['next_phase'],
+			'next_offset' => $outcome['next_offset'],
+			'elapsed_ms'  => (int) round( ( microtime( true ) - $t0 ) * 1000 ),
+			'batch_stats' => $outcome['batch_stats'],
+			'log_entries' => $outcome['entries'],
 		] );
 	}
 
+	/**
+	 * Run one chunk of the posts phase and decide where the next chunk (if any) should resume.
+	 *
+	 * @param array $post_types The post types to process.
+	 * @param array $taxonomies The taxonomies to process.
+	 * @param int   $batch The batch size.
+	 * @param int   $offset The offset.
+	 * @param bool  $skip_title Whether to skip the title.
+	 * @param bool  $skip_description Whether to skip the description.
+	 * @return array The result of the posts phase.
+	 */
+	private function run_posts_chunk( array $post_types, array $taxonomies, int $batch, int $offset, bool $skip_title, bool $skip_description ): array {
+		$result = $this->process_posts_phase( $post_types, $batch, $offset, $skip_title, $skip_description, [], $this->empty_batch_stats() );
+
+		if ( $result['has_more'] ) {
+			return [
+				'entries'     => $result['entries'],
+				'batch_stats' => $result['batch_stats'],
+				'next_phase'  => 'posts',
+				'next_offset' => $offset + $result['count'],
+				'done'        => false,
+			];
+		}
+
+		if ( empty( $taxonomies ) ) {
+			return [
+				'entries'     => $result['entries'],
+				'batch_stats' => $result['batch_stats'],
+				'next_phase'  => 'posts',
+				'next_offset' => $offset,
+				'done'        => true,
+			];
+		}
+
+		// Posts finished but taxonomies remain — hand off to the terms phase on the next chunk.
+		$entries = $result['entries'];
+		$this->push_entry( $entries, 'info', 'batch', 'System', __( 'All posts done. Now processing taxonomies...', 'slim-seo' ) );
+
+		return [
+			'entries'     => $entries,
+			'batch_stats' => $result['batch_stats'],
+			'next_phase'  => 'terms',
+			'next_offset' => 0,
+			'done'        => false,
+		];
+	}
+
+	/**
+	 * Run one chunk of the terms phase and decide where the next chunk (if any) should resume.
+	 *
+	 * @param array $taxonomies The taxonomies to process.
+	 * @param int   $batch The batch size.
+	 * @param int   $offset The offset.
+	 * @param bool  $skip_title Whether to skip the title.
+	 * @param bool  $skip_description Whether to skip the description.
+	 * @return array The result of the terms phase.
+	 */
+	private function run_terms_chunk( array $taxonomies, int $batch, int $offset, bool $skip_title, bool $skip_description ): array {
+		if ( empty( $taxonomies ) ) {
+			return [
+				'entries'     => [],
+				'batch_stats' => $this->empty_batch_stats(),
+				'next_phase'  => 'terms',
+				'next_offset' => $offset,
+				'done'        => true,
+			];
+		}
+
+		$result = $this->process_terms_phase( $taxonomies, $batch, $offset, $skip_title, $skip_description, [], $this->empty_batch_stats() );
+
+		return [
+			'entries'     => $result['entries'],
+			'batch_stats' => $result['batch_stats'],
+			'next_phase'  => 'terms',
+			'next_offset' => $result['has_more'] ? $offset + $result['count'] : $offset,
+			'done'        => ! $result['has_more'],
+		];
+	}
+
+	/**
+	 * Process a chunk of posts.
+	 *
+	 * @param array $post_types The post types to process.
+	 * @param int   $batch The batch size.
+	 * @param int   $offset The offset.
+	 * @param bool  $skip_title Whether to skip the title.
+	 * @param bool  $skip_description Whether to skip the description.
+	 * @param array $entries The entries.
+	 * @param array $batch_stats The batch stats.
+	 * @return array The result of the posts phase.
+	 */
 	private function process_posts_phase( array $post_types, int $batch, int $offset, bool $skip_title, bool $skip_description, array $entries, array $batch_stats ): array {
 		$query = new WP_Query( [
 			'post_type'              => $post_types,
@@ -193,6 +255,18 @@ class BulkAI {
 		];
 	}
 
+	/**
+	 * Process a chunk of terms.
+	 *
+	 * @param array $taxonomies The taxonomies to process.
+	 * @param int   $batch The batch size.
+	 * @param int   $offset The offset.
+	 * @param bool  $skip_title Whether to skip the title.
+	 * @param bool  $skip_description Whether to skip the description.
+	 * @param array $entries The entries.
+	 * @param array $batch_stats The batch stats.
+	 * @return array The result of the terms phase.
+	 */
 	private function process_terms_phase( array $taxonomies, int $batch, int $offset, bool $skip_title, bool $skip_description, array $entries, array $batch_stats ): array {
 		$terms = get_terms( [
 			'taxonomy'   => $taxonomies,
@@ -227,6 +301,14 @@ class BulkAI {
 		];
 	}
 
+	/**
+	 * Process a single post.
+	 *
+	 * @param int  $post_id The post ID.
+	 * @param bool $skip_title Whether to skip the title.
+	 * @param bool $skip_description Whether to skip the description.
+	 * @return array The result of the post phase.
+	 */
 	private function process_post( int $post_id, bool $skip_title, bool $skip_description ): array {
 		$entries = [];
 		$stats   = $this->empty_batch_stats();
@@ -330,6 +412,14 @@ class BulkAI {
 		];
 	}
 
+	/**
+	 * Process a single term.
+	 *
+	 * @param WP_Term $term The term.
+	 * @param bool    $skip_title Whether to skip the title.
+	 * @param bool    $skip_description Whether to skip the description.
+	 * @return array The result of the term phase.
+	 */
 	private function process_term( WP_Term $term, bool $skip_title, bool $skip_description ): array {
 		$entries = [];
 		$stats   = $this->empty_batch_stats();
@@ -430,10 +520,22 @@ class BulkAI {
 		];
 	}
 
+	/**
+	 * Get the previous meta.
+	 *
+	 * @param bool   $skip_existing Whether to skip the existing meta.
+	 * @param string $existing The existing meta.
+	 * @return string The previous meta.
+	 */
 	private function previous_meta( bool $skip_existing, string $existing ): string {
 		return $skip_existing ? '' : $existing;
 	}
 
+	/**
+	 * Get the empty batch stats.
+	 *
+	 * @return array The empty batch stats.
+	 */
 	private function empty_batch_stats(): array {
 		return [
 			'ai_calls'      => 0,
@@ -443,6 +545,12 @@ class BulkAI {
 		];
 	}
 
+	/**
+	 * Merge the batch stats.
+	 *
+	 * @param array $into The into array.
+	 * @param array $add The add array.
+	 */
 	private function merge_batch_stats( array &$into, array $add ): void {
 		foreach ( $add as $k => $v ) {
 			if ( isset( $into[ $k ] ) ) {
@@ -451,6 +559,17 @@ class BulkAI {
 		}
 	}
 
+	/**
+	 * Push an entry to the entries array.
+	 *
+	 * @param array  $entries The entries array.
+	 * @param string $level The level.
+	 * @param string $scope The scope.
+	 * @param string $ref The ref.
+	 * @param string $message The message.
+	 * @param array  $meta Optional. The meta array.
+	 * @return void
+	 */
 	private function push_entry( array &$entries, string $level, string $scope, string $ref, string $message, array $meta = [] ): void {
 		$row = [
 			'time'    => current_time( 'H:i:s' ),
