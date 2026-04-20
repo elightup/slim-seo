@@ -100,23 +100,17 @@ class BulkAI {
 			);
 		}
 
+		// Defensive: callers with only taxonomies may still send phase=posts; normalize so the main branch can stay simple.
+		if ( 'posts' === $phase && empty( $post_types ) && ! empty( $taxonomies ) ) {
+			$phase  = 'terms';
+			$offset = 0;
+		}
+
 		$entries     = [];
 		$batch_stats = $this->empty_batch_stats();
 		$next_phase  = $phase;
 		$next_offset = $offset;
 		$done        = true;
-
-		$this->push_entry(
-			$entries,
-			'info',
-			'batch',
-			'System',
-			sprintf(
-				/* translators: %d: batch size */
-				__( 'Processing next %d items...', 'slim-seo' ),
-				$batch
-			)
-		);
 
 		if ( 'posts' === $phase && ! empty( $post_types ) ) {
 			$result = $this->process_posts_phase( $post_types, $batch, $offset, $skip_title, $skip_description, $entries, $batch_stats );
@@ -125,8 +119,8 @@ class BulkAI {
 			$batch_stats = $result['batch_stats'];
 
 			if ( $result['has_more'] ) {
-				$next_offset = $offset + $result['count'];
 				$next_phase  = 'posts';
+				$next_offset = $offset + $result['count'];
 				$done        = false;
 			} elseif ( ! empty( $taxonomies ) ) {
 				$this->push_entry( $entries, 'info', 'batch', 'System', __( 'All posts done. Now processing taxonomies...', 'slim-seo' ) );
@@ -141,31 +135,13 @@ class BulkAI {
 			$batch_stats = $result['batch_stats'];
 
 			if ( $result['has_more'] ) {
-				$next_offset = $offset + $result['count'];
 				$next_phase  = 'terms';
+				$next_offset = $offset + $result['count'];
 				$done        = false;
 			}
-		} elseif ( 'posts' === $phase && empty( $post_types ) && ! empty( $taxonomies ) ) {
-			$this->push_entry( $entries, 'info', 'batch', 'System', __( 'Processing taxonomies...', 'slim-seo' ) );
-			$next_phase  = 'terms';
-			$next_offset = 0;
-			$done        = false;
 		}
 
 		$elapsed_ms = (int) round( ( microtime( true ) - $t0 ) * 1000 );
-
-		$this->push_entry(
-			$entries,
-			'info',
-			'batch',
-			'System',
-			sprintf(
-				/* translators: 1: items generated, 2: items skipped */
-				__( 'Batch complete. Generated: %1$d, skipped: %2$d.', 'slim-seo' ),
-				$batch_stats['ai_calls'],
-				$batch_stats['skipped_steps']
-			)
-		);
 
 		return new WP_REST_Response( [
 			'done'        => $done,

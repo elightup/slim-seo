@@ -78,9 +78,19 @@
 		return;
 	}
 
-	let state = { phase: 'posts', offset: 0, running: false, totalAi: 0, totalErr: 0 };
+	let state = { phase: 'posts', offset: 0, running: false, totalAi: 0, totalSkipped: 0, totalErr: 0 };
 	const buttonLabel = bulkButton.textContent;
 	const bulk = i18n.bulk;
+
+	/**
+	 * Formats the final run summary using the server-localized template.
+	 *
+	 * @returns {string} Human-readable summary (e.g. "Generated: 3, skipped: 1, errors: 0").
+	 */
+	const formatSummary = () => bulk.summary
+		.replace( '%1$d', state.totalAi )
+		.replace( '%2$d', state.totalSkipped )
+		.replace( '%3$d', state.totalErr );
 
 	/**
 	 * Writes a single paragraph of HTML into a bulk-generation status element.
@@ -170,6 +180,7 @@
 
 			if ( response.batch_stats ) {
 				state.totalAi += response.batch_stats.ai_calls || 0;
+				state.totalSkipped += response.batch_stats.skipped_steps || 0;
 				state.totalErr += response.batch_stats.errors || 0;
 			}
 
@@ -177,7 +188,9 @@
 			state.offset = response.next_offset;
 
 			if ( response.done ) {
-				print( progressEl, bulk.done + ' ' + bulk.generated + ': ' + state.totalAi + ( state.totalErr ? ', ' + bulk.errors + ': ' + state.totalErr : '' ) );
+				const summary = formatSummary();
+				print( progressEl, summary );
+				appendLog( { time: new Date().toLocaleTimeString( [], { hour12: false } ), level: 'INFO', ref: 'System', message: summary } );
 				stop();
 			} else {
 				await runStep();
@@ -207,6 +220,7 @@
 		state.offset = 0;
 		state.running = true;
 		state.totalAi = 0;
+		state.totalSkipped = 0;
 		state.totalErr = 0;
 
 		logBody.innerHTML = '';
