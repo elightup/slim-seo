@@ -84,7 +84,7 @@ class Settings {
 				'restFail' => __( 'Something went wrong. Please try again or check your server error log.', 'slim-seo' ),
 				'started'  => __( 'Started generation', 'slim-seo' ),
 				/* translators: %1$d: number of generated items, %2$d: number of skipped items, %3$d: number of errors */
-				'summary'  => __( 'Generated: %1$d, skipped: %2$d, errors: %3$d', 'slim-seo' ),
+				'summary'  => __( 'Processed: %1$d, skipped: %2$d, errors: %3$d', 'slim-seo' ),
 			],
 		] );
 
