@@ -13,6 +13,7 @@ const Settings = () => {
 	const [ deleteLog404Table, toggleDeleteLog404Table ] = useReducer( onOrOff => !onOrOff, false );
 	const [ redirect404To, setRedirect404To ] = useState( settings[ 'redirect_404_to' ] );
 	const [ redirect404ToURL, setRedirect404ToURL ] = useState( settings[ 'redirect_404_to_url' ] );
+	const [ disableForSinglePosts, toggleDisableForSinglePosts ] = useReducer( onOrOff => !onOrOff, !!settings['disable_for_single_posts'] );
 
 	const deleteAllRedirects = e => {
 		e.preventDefault();
@@ -153,6 +154,19 @@ const Settings = () => {
 						</th>
 						<td>
 							<button id="ss-delete-all-redirects" className='button button-link-delete' onClick={ deleteAllRedirects }>{ __( 'Delete', 'slim-seo' ) }</button>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label htmlFor="ss-disable-for-single-posts">{ __( 'Disable for single posts', 'slim-seo' ) }</label>
+							<Tooltip content={ __( 'Disable redirection settings on the single post edit page.', 'slim-seo' ) } />
+						</th>
+						<td>
+							<label className='ss-toggle'>
+								<input id='ss-disable-for-single-posts' type='checkbox' name={ `${ settingsName }[disable_for_single_posts]` } value='1' checked={ disableForSinglePosts } onChange={ toggleDisableForSinglePosts } />
+								<div className='ss-toggle__switch'></div>
+							</label>
 						</td>
 					</tr>
 				</tbody>

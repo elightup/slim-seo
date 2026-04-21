@@ -4,23 +4,22 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35ee6476623cb1d1baca6af680606c6a",
+    "content-hash": "f994a5b86e6e1158c3bcda1306b9484c",
     "packages": [
         {
             "name": "elightup/slim-seo-common",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/slim-seo-common.git",
-                "reference": "aa51af7eb8146aaf66e5f4a1f03ef26db34d84ed"
+                "reference": "7892c84895598d39079cab19e8d7debc76add50c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/aa51af7eb8146aaf66e5f4a1f03ef26db34d84ed",
-                "reference": "aa51af7eb8146aaf66e5f4a1f03ef26db34d84ed",
+                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/7892c84895598d39079cab19e8d7debc76add50c",
+                "reference": "7892c84895598d39079cab19e8d7debc76add50c",
                 "shasum": ""
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -35,9 +34,9 @@
             "homepage": "https://wpslimseo.com",
             "support": {
                 "issues": "https://github.com/elightup/slim-seo-common/issues",
-                "source": "https://github.com/elightup/slim-seo-common/tree/master"
+                "source": "https://github.com/elightup/slim-seo-common/tree/1.0.0"
             },
-            "time": "2026-03-09T08:50:04+00:00"
+            "time": "2026-04-12T18:10:07+00:00"
         },
         {
             "name": "elightup/slim-twig",
@@ -75,13 +74,12 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "elightup/slim-seo-common": 20,
         "elightup/slim-twig": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2"
+        "php": ">=7.4"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"
