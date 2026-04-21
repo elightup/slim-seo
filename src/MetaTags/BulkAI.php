@@ -107,7 +107,7 @@ class BulkAI {
 		}
 
 		if ( 'posts' === $phase ) {
-			$outcome = $this->run_posts_chunk( $post_types, $taxonomies, $batch, $offset, $skip_title, $skip_description );
+			$outcome = $this->run_posts_chunk( $post_types, $batch, $offset, $skip_title, $skip_description );
 		}
 
 		if ( 'terms' === $phase ) {
@@ -128,45 +128,20 @@ class BulkAI {
 	 * Run one chunk of the posts phase and decide where the next chunk (if any) should resume.
 	 *
 	 * @param array $post_types The post types to process.
-	 * @param array $taxonomies The taxonomies to process.
 	 * @param int   $batch The batch size.
 	 * @param int   $offset The offset.
 	 * @param bool  $skip_title Whether to skip the title.
 	 * @param bool  $skip_description Whether to skip the description.
 	 * @return array The result of the posts phase.
 	 */
-	private function run_posts_chunk( array $post_types, array $taxonomies, int $batch, int $offset, bool $skip_title, bool $skip_description ): array {
+	private function run_posts_chunk( array $post_types, int $batch, int $offset, bool $skip_title, bool $skip_description ): array {
 		$result = $this->process_posts_phase( $post_types, $batch, $offset, $skip_title, $skip_description, [], $this->empty_batch_stats() );
 
-		if ( $result['has_more'] ) {
-			return [
-				'entries'     => $result['entries'],
-				'batch_stats' => $result['batch_stats'],
-				'next_phase'  => 'posts',
-				'next_offset' => $offset + $result['count'],
-				'done'        => false,
-			];
-		}
-
-		if ( empty( $taxonomies ) ) {
-			return [
-				'entries'     => $result['entries'],
-				'batch_stats' => $result['batch_stats'],
-				'next_phase'  => 'posts',
-				'next_offset' => $offset,
-				'done'        => true,
-			];
-		}
-
-		// Posts finished but taxonomies remain — hand off to the terms phase on the next chunk.
-		$entries = $result['entries'];
-		$this->push_entry( $entries, 'info', 'batch', 'System', __( 'All posts done. Now processing taxonomies...', 'slim-seo' ) );
-
 		return [
-			'entries'     => $entries,
+			'entries'     => $result['entries'],
 			'batch_stats' => $result['batch_stats'],
-			'next_phase'  => 'terms',
-			'next_offset' => 0,
+			'next_phase'  => $result['has_more'] ? 'posts' : 'terms',
+			'next_offset' => $result['has_more'] ? $offset + $result['count'] : 0,
 			'done'        => false,
 		];
 	}
