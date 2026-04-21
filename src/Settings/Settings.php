@@ -73,11 +73,18 @@ class Settings {
 			'preProcessText' => __( 'Starting...', 'slim-seo' ),
 		] );
 
-		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/settings-ai.js', [], filemtime( SLIM_SEO_DIR . '/js/settings-ai.js' ), true );
+		wp_enqueue_script( 'slim-seo-settings-ai', SLIM_SEO_URL . 'js/settings-ai.js', [ 'wp-api-fetch' ], filemtime( SLIM_SEO_DIR . '/js/settings-ai.js' ), true );
 		wp_localize_script( 'slim-seo-settings-ai', 'ssAiSettings', [
 			'model' => Option::get( 'ai_model' ),
 			'text'  => [
 				'noModelsAvailable' => __( 'No models available', 'slim-seo' ),
+			],
+			'bulk'  => [
+				'running'  => __( 'Generating...', 'slim-seo' ),
+				'restFail' => __( 'Something went wrong. Please try again or check your server error log.', 'slim-seo' ),
+				'started'  => __( 'Started generation', 'slim-seo' ),
+				/* translators: %1$d: number of generated items, %2$d: number of skipped items, %3$d: number of errors */
+				'summary'  => __( 'Processed: %1$d, skipped: %2$d, errors: %3$d', 'slim-seo' ),
 			],
 		] );
 
