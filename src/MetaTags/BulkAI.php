@@ -16,7 +16,7 @@ class BulkAI {
 
 	public function setup(): void {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
-		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ], 10 );
+		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
 	}
 
 	public function enqueue(): void {
@@ -291,21 +291,21 @@ class BulkAI {
 			$this->push_entry( $entries, 'error', 'post', (string) $post_id, __( 'Post not found, skipping.', 'slim-seo' ) );
 			return [
 				'entries' => $entries,
-				'stats' => $stats,
+				'stats'   => $stats,
 			];
 		}
 
 		$stats['items_touched'] = 1;
-		$title = get_the_title( $post );
-		$data  = get_post_meta( $post_id, 'slim_seo', true );
-		$data  = is_array( $data ) ? $data : [];
-		$orig  = $data;
+		$title                  = get_the_title( $post );
+		$data                   = get_post_meta( $post_id, 'slim_seo', true );
+		$data                   = is_array( $data ) ? $data : [];
+		$orig                   = $data;
 
 		$ai = new AI();
 
 		// Generate title.
 		if ( $skip_title && ! empty( $orig['title'] ) ) {
-			++$stats['skipped_steps'];
+			++$stats['skipped'];
 			$this->push_entry( $entries, 'skip', 'post', $title, __( 'Title already exists, skipped.', 'slim-seo' ) );
 		} else {
 			$req = new WP_REST_Request( 'POST' );
@@ -313,33 +313,34 @@ class BulkAI {
 			$req->set_param( 'content', '' );
 			$req->set_param( 'object', [
 				'type' => 'post',
-				'ID' => $post_id,
+				'ID'   => $post_id,
 			] );
 			$req->set_param( 'type', 'title' );
 			$req->set_param( 'previousMetaByAI', $this->previous_meta( $skip_title, $orig['title'] ?? '' ) );
 			$res = $ai->generate( $req );
-			++$stats['ai_calls'];
 
-			if ( ( $res['status'] ?? '' ) !== 'success' ) {
-				++$stats['errors'];
-				$this->push_entry( $entries, 'error', 'post', $title, sprintf(
-					/* translators: %s: error message */
-					__( 'Could not generate title: %s', 'slim-seo' ),
-					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
-				) );
-			} else {
+			$status = $res['status'] ?? '';
+			if ( $status === 'success' ) {
+				++$stats['success'];
 				$data['title'] = $res['message'];
 				$this->push_entry( $entries, 'ok', 'post', $title, sprintf(
 					/* translators: %s: generated title */
 					__( 'Title: %s', 'slim-seo' ),
 					$res['message']
 				) );
+			} else {
+				++$stats['errors'];
+				$this->push_entry( $entries, 'error', 'post', $title, sprintf(
+					/* translators: %s: error message */
+					__( 'Could not generate title: %s', 'slim-seo' ),
+					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
+				) );
 			}
 		}
 
 		// Generate description.
 		if ( $skip_description && ! empty( $orig['description'] ) ) {
-			++$stats['skipped_steps'];
+			++$stats['skipped'];
 			$this->push_entry( $entries, 'skip', 'post', $title, __( 'Description already exists, skipped.', 'slim-seo' ) );
 		} else {
 			$req = new WP_REST_Request( 'POST' );
@@ -347,26 +348,27 @@ class BulkAI {
 			$req->set_param( 'content', '' );
 			$req->set_param( 'object', [
 				'type' => 'post',
-				'ID' => $post_id,
+				'ID'   => $post_id,
 			] );
 			$req->set_param( 'type', 'description' );
 			$req->set_param( 'previousMetaByAI', $this->previous_meta( $skip_description, $orig['description'] ?? '' ) );
 			$res = $ai->generate( $req );
-			++$stats['ai_calls'];
 
-			if ( ( $res['status'] ?? '' ) !== 'success' ) {
-				++$stats['errors'];
-				$this->push_entry( $entries, 'error', 'post', $title, sprintf(
-					/* translators: %s: error message */
-					__( 'Could not generate description: %s', 'slim-seo' ),
-					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
-				) );
-			} else {
+			$status = $res['status'] ?? '';
+			if ( $status === 'success' ) {
+				++$stats['success'];
 				$data['description'] = $res['message'];
 				$this->push_entry( $entries, 'ok', 'post', $title, sprintf(
 					/* translators: %s: generated description */
 					__( 'Description: %s', 'slim-seo' ),
 					$res['message']
+				) );
+			} else {
+				++$stats['errors'];
+				$this->push_entry( $entries, 'error', 'post', $title, sprintf(
+					/* translators: %s: error message */
+					__( 'Could not generate description: %s', 'slim-seo' ),
+					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
 				) );
 			}
 		}
@@ -380,7 +382,7 @@ class BulkAI {
 
 		return [
 			'entries' => $entries,
-			'stats' => $stats,
+			'stats'   => $stats,
 		];
 	}
 
@@ -413,7 +415,7 @@ class BulkAI {
 
 		// Generate title.
 		if ( $skip_title && ! empty( $orig['title'] ) ) {
-			++$stats['skipped_steps'];
+			++$stats['skipped'];
 			$this->push_entry( $entries, 'skip', 'term', $term->name, __( 'Title already exists, skipped.', 'slim-seo' ) );
 		} else {
 			$req = new WP_REST_Request( 'POST' );
@@ -421,33 +423,33 @@ class BulkAI {
 			$req->set_param( 'content', $content );
 			$req->set_param( 'object', [
 				'type' => 'term',
-				'ID' => $term_id,
+				'ID'   => $term_id,
 			] );
 			$req->set_param( 'type', 'title' );
 			$req->set_param( 'previousMetaByAI', $this->previous_meta( $skip_title, $orig['title'] ?? '' ) );
 			$res = $ai->generate( $req );
-			++$stats['ai_calls'];
 
-			if ( ( $res['status'] ?? '' ) !== 'success' ) {
-				++$stats['errors'];
-				$this->push_entry( $entries, 'error', 'term', $term->name, sprintf(
-					/* translators: %s: error message */
-					__( 'Could not generate title: %s', 'slim-seo' ),
-					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
-				) );
-			} else {
+			$status = $res['status'] ?? '';
+			if ( $status === 'success' ) {
 				$data['title'] = $res['message'];
 				$this->push_entry( $entries, 'ok', 'term', $term->name, sprintf(
 					/* translators: %s: generated title */
 					__( 'Title: %s', 'slim-seo' ),
 					$res['message']
 				) );
+			} else {
+				++$stats['errors'];
+				$this->push_entry( $entries, 'error', 'term', $term->name, sprintf(
+					/* translators: %s: error message */
+					__( 'Could not generate title: %s', 'slim-seo' ),
+					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
+				) );
 			}
 		}
 
 		// Generate description.
 		if ( $skip_description && ! empty( $orig['description'] ) ) {
-			++$stats['skipped_steps'];
+			++$stats['skipped'];
 			$this->push_entry( $entries, 'skip', 'term', $term->name, __( 'Description already exists, skipped.', 'slim-seo' ) );
 		} else {
 			$req = new WP_REST_Request( 'POST' );
@@ -455,26 +457,26 @@ class BulkAI {
 			$req->set_param( 'content', $content );
 			$req->set_param( 'object', [
 				'type' => 'term',
-				'ID' => $term_id,
+				'ID'   => $term_id,
 			] );
 			$req->set_param( 'type', 'description' );
 			$req->set_param( 'previousMetaByAI', $this->previous_meta( $skip_description, $orig['description'] ?? '' ) );
 			$res = $ai->generate( $req );
-			++$stats['ai_calls'];
 
-			if ( ( $res['status'] ?? '' ) !== 'success' ) {
-				++$stats['errors'];
-				$this->push_entry( $entries, 'error', 'term', $term->name, sprintf(
-					/* translators: %s: error message */
-					__( 'Could not generate description: %s', 'slim-seo' ),
-					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
-				) );
-			} else {
+			$status = $res['status'] ?? '';
+			if ( $status === 'success' ) {
 				$data['description'] = $res['message'];
 				$this->push_entry( $entries, 'ok', 'term', $term->name, sprintf(
 					/* translators: %s: generated description */
 					__( 'Description: %s', 'slim-seo' ),
 					$res['message']
+				) );
+			} else {
+				++$stats['errors'];
+				$this->push_entry( $entries, 'error', 'term', $term->name, sprintf(
+					/* translators: %s: error message */
+					__( 'Could not generate description: %s', 'slim-seo' ),
+					$res['message'] ?? __( 'Unknown error', 'slim-seo' )
 				) );
 			}
 		}
@@ -488,7 +490,7 @@ class BulkAI {
 
 		return [
 			'entries' => $entries,
-			'stats' => $stats,
+			'stats'   => $stats,
 		];
 	}
 
@@ -510,8 +512,8 @@ class BulkAI {
 	 */
 	private function empty_batch_stats(): array {
 		return [
-			'ai_calls'      => 0,
-			'skipped_steps' => 0,
+			'success'       => 0,
+			'skipped'       => 0,
 			'errors'        => 0,
 			'items_touched' => 0,
 		];

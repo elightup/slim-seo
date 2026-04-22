@@ -78,7 +78,7 @@
 		return;
 	}
 
-	let state = { phase: 'posts', offset: 0, running: false, totalAi: 0, totalSkipped: 0, totalErr: 0 };
+	let state = { phase: 'posts', offset: 0, running: false, totalSuccess: 0, totalSkipped: 0, totalErr: 0 };
 	const buttonLabel = bulkButton.textContent;
 	const bulk = i18n.bulk;
 
@@ -88,7 +88,7 @@
 	 * @returns {string} Human-readable summary (e.g. "Generated: 3, skipped: 1, errors: 0").
 	 */
 	const formatSummary = () => bulk.summary
-		.replace( '%1$d', state.totalAi )
+		.replace( '%1$d', state.totalSuccess + state.totalSkipped + state.totalErr )
 		.replace( '%2$d', state.totalSkipped )
 		.replace( '%3$d', state.totalErr );
 
@@ -179,8 +179,8 @@
 			( response.log_entries || [] ).forEach( appendLog );
 
 			if ( response.batch_stats ) {
-				state.totalAi += response.batch_stats.ai_calls || 0;
-				state.totalSkipped += response.batch_stats.skipped_steps || 0;
+				state.totalSuccess += response.batch_stats.success || 0;
+				state.totalSkipped += response.batch_stats.skipped || 0;
 				state.totalErr += response.batch_stats.errors || 0;
 			}
 
@@ -219,7 +219,7 @@
 		state.phase = checkedPostTypeCount ? 'posts' : 'terms';
 		state.offset = 0;
 		state.running = true;
-		state.totalAi = 0;
+		state.totalSuccess = 0;
 		state.totalSkipped = 0;
 		state.totalErr = 0;
 
