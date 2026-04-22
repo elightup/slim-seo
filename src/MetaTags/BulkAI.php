@@ -80,7 +80,6 @@ class BulkAI {
 	public function process_chunk( WP_REST_Request $request ) {
 		$t0 = microtime( true );
 
-		$batch = $this->get_effective_batch_size();
 		$offset = max( 0, (int) $request->get_param( 'offset' ) );
 		$phase  = in_array( $request->get_param( 'phase' ), [ 'posts', 'terms' ], true )
 			? $request->get_param( 'phase' )
@@ -107,11 +106,11 @@ class BulkAI {
 		}
 
 		if ( 'posts' === $phase ) {
-			$outcome = $this->run_posts_chunk( $post_types, $batch, $offset, $skip_title, $skip_description );
+			$outcome = $this->run_posts_chunk( $post_types, $offset, $skip_title, $skip_description );
 		}
 
 		if ( 'terms' === $phase ) {
-			$outcome = $this->run_terms_chunk( $taxonomies, $batch, $offset, $skip_title, $skip_description );
+			$outcome = $this->run_terms_chunk( $taxonomies, $offset, $skip_title, $skip_description );
 		}
 
 		return new WP_REST_Response( [
@@ -128,14 +127,13 @@ class BulkAI {
 	 * Run one chunk of the posts phase and decide where the next chunk (if any) should resume.
 	 *
 	 * @param array $post_types The post types to process.
-	 * @param int   $batch The batch size.
 	 * @param int   $offset The offset.
 	 * @param bool  $skip_title Whether to skip the title.
 	 * @param bool  $skip_description Whether to skip the description.
 	 * @return array The result of the posts phase.
 	 */
-	private function run_posts_chunk( array $post_types, int $batch, int $offset, bool $skip_title, bool $skip_description ): array {
-		$result = $this->process_posts_phase( $post_types, $batch, $offset, $skip_title, $skip_description, [], $this->empty_batch_stats() );
+	private function run_posts_chunk( array $post_types, int $offset, bool $skip_title, bool $skip_description ): array {
+		$result = $this->process_posts_phase( $post_types, $offset, $skip_title, $skip_description, [], $this->empty_batch_stats() );
 
 		return [
 			'entries'     => $result['entries'],
@@ -150,13 +148,12 @@ class BulkAI {
 	 * Run one chunk of the terms phase and decide where the next chunk (if any) should resume.
 	 *
 	 * @param array $taxonomies The taxonomies to process.
-	 * @param int   $batch The batch size.
 	 * @param int   $offset The offset.
 	 * @param bool  $skip_title Whether to skip the title.
 	 * @param bool  $skip_description Whether to skip the description.
 	 * @return array The result of the terms phase.
 	 */
-	private function run_terms_chunk( array $taxonomies, int $batch, int $offset, bool $skip_title, bool $skip_description ): array {
+	private function run_terms_chunk( array $taxonomies, int $offset, bool $skip_title, bool $skip_description ): array {
 		if ( empty( $taxonomies ) ) {
 			return [
 				'entries'     => [],
@@ -167,7 +164,7 @@ class BulkAI {
 			];
 		}
 
-		$result = $this->process_terms_phase( $taxonomies, $batch, $offset, $skip_title, $skip_description, [], $this->empty_batch_stats() );
+		$result = $this->process_terms_phase( $taxonomies, $offset, $skip_title, $skip_description, [], $this->empty_batch_stats() );
 
 		return [
 			'entries'     => $result['entries'],
@@ -182,7 +179,6 @@ class BulkAI {
 	 * Process a chunk of posts.
 	 *
 	 * @param array $post_types The post types to process.
-	 * @param int   $batch The batch size.
 	 * @param int   $offset The offset.
 	 * @param bool  $skip_title Whether to skip the title.
 	 * @param bool  $skip_description Whether to skip the description.
@@ -190,7 +186,8 @@ class BulkAI {
 	 * @param array $batch_stats The batch stats.
 	 * @return array The result of the posts phase.
 	 */
-	private function process_posts_phase( array $post_types, int $batch, int $offset, bool $skip_title, bool $skip_description, array $entries, array $batch_stats ): array {
+	private function process_posts_phase( array $post_types, int $offset, bool $skip_title, bool $skip_description, array $entries, array $batch_stats ): array {
+		$batch = $this->get_effective_batch_size();
 		$query = new WP_Query( [
 			'post_type'              => $post_types,
 			'post_status'            => 'any',
@@ -234,7 +231,6 @@ class BulkAI {
 	 * Process a chunk of terms.
 	 *
 	 * @param array $taxonomies The taxonomies to process.
-	 * @param int   $batch The batch size.
 	 * @param int   $offset The offset.
 	 * @param bool  $skip_title Whether to skip the title.
 	 * @param bool  $skip_description Whether to skip the description.
@@ -242,7 +238,8 @@ class BulkAI {
 	 * @param array $batch_stats The batch stats.
 	 * @return array The result of the terms phase.
 	 */
-	private function process_terms_phase( array $taxonomies, int $batch, int $offset, bool $skip_title, bool $skip_description, array $entries, array $batch_stats ): array {
+	private function process_terms_phase( array $taxonomies, int $offset, bool $skip_title, bool $skip_description, array $entries, array $batch_stats ): array {
+		$batch = $this->get_effective_batch_size();
 		$terms = get_terms( [
 			'taxonomy'   => $taxonomies,
 			'hide_empty' => false,
