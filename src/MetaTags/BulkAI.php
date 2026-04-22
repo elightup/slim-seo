@@ -295,11 +295,10 @@ class BulkAI {
 			];
 		}
 
-		$stats['items_touched'] = 1;
-		$title                  = get_the_title( $post );
-		$data                   = get_post_meta( $post_id, 'slim_seo', true );
-		$data                   = is_array( $data ) ? $data : [];
-		$orig                   = $data;
+		$title = get_the_title( $post );
+		$data  = get_post_meta( $post_id, 'slim_seo', true );
+		$data  = is_array( $data ) ? $data : [];
+		$orig  = $data;
 
 		$ai = new AI();
 
@@ -398,8 +397,6 @@ class BulkAI {
 		$entries = [];
 		$stats   = $this->empty_batch_stats();
 		$term_id = (int) $term->term_id;
-
-		$stats['items_touched'] = 1;
 
 		$data = get_term_meta( $term_id, 'slim_seo', true );
 		$data = is_array( $data ) ? $data : [];
@@ -512,10 +509,9 @@ class BulkAI {
 	 */
 	private function empty_batch_stats(): array {
 		return [
-			'success'       => 0,
-			'skipped'       => 0,
-			'errors'        => 0,
-			'items_touched' => 0,
+			'success' => 0,
+			'skipped' => 0,
+			'errors'  => 0,
 		];
 	}
 
