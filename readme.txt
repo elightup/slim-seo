@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.9.4
 Requires PHP: 7.4
-Stable tag: 4.9.4
+Stable tag: 4.9.5
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,6 +170,14 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.5 - 2026-04-22 =
+
+- Add bulk AI generation for meta titles and descriptions. Credit to Taylor Drayson (tdrayson).
+- Remove old CSS variables to avoid conflict with upcoming WordPress 7
+- Add settings for disable redirection settings on single post edit page
+- Add support WooCommerce < 9.8
+- Remove temperature and add checks for get response for OpenAI & OpenRouter
 
 = 4.9.4 - 2026-03-30 =
 

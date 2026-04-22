@@ -1,3 +1,11 @@
+### 4.9.5 - 2026-04-22
+
+- Add bulk AI generation for meta titles and descriptions. Credit to Taylor Drayson (tdrayson).
+- Remove old CSS variables to avoid conflict with upcoming WordPress 7
+- Add settings for disable redirection settings on single post edit page
+- Add support WooCommerce < 9.8
+- Remove temperature and add checks for get response for OpenAI & OpenRouter
+
 ### 4.9.4 - 2026-03-30
 
 - Fix not showing magic wand icon for generating meta title and description with AI
