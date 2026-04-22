@@ -54,6 +54,7 @@
 				<label>
 					<input type="checkbox" name="ss_bulk_post_types[]" value="<?php echo esc_attr( $post_type->name ); ?>" <?php checked( in_array( $post_type->name, [ 'post', 'page' ], true ) ); ?> />
 					<?php echo esc_html( $post_type->labels->singular_name ); ?>
+					(<?php echo esc_html( $post_type->name ); ?>)
 				</label>
 			<?php endforeach; ?>
 		</div>
@@ -71,6 +72,7 @@
 				<label>
 					<input type="checkbox" name="ss_bulk_taxonomies[]" value="<?php echo esc_attr( $tax->name ); ?>" />
 					<?php echo esc_html( $tax->labels->singular_name ); ?>
+					(<?php echo esc_html( $tax->name ); ?>)
 				</label>
 			<?php endforeach; ?>
 		</div>
