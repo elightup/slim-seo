@@ -1,3 +1,8 @@
+### 4.9.6 - 2026-05-04
+
+- Add filter `slim_seo_redirection_skip` to allow preventing redirection. See [docs](https://docs.wpslimseo.com/slim-seo/redirection/#hooks) for usage.
+- Prevent XSS vulnerability in schema output
+
 ### 4.9.5 - 2026-04-22
 
 - Add bulk AI generation for meta titles and descriptions. Credit to Taylor Drayson (tdrayson).

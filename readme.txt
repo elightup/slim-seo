@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 5.9
 Tested up to: 6.9.4
 Requires PHP: 7.4
-Stable tag: 4.9.5
+Stable tag: 4.9.6
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -170,6 +170,11 @@ Add the following constant in your `wp-config.php` file:
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.6 - 2026-05-04 =
+
+- Add filter `slim_seo_redirection_skip` to allow preventing redirection. See [docs](https://docs.wpslimseo.com/slim-seo/redirection/#hooks) for usage.
+- Prevent XSS vulnerability in schema output
 
 = 4.9.5 - 2026-04-22 =
 
