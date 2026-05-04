@@ -29,6 +29,10 @@ class Redirection {
 		$request_url = Helper::normalize_url( $request_url );
 		$request_url = strtolower( $request_url );
 
+		if ( apply_filters( 'slim_seo_redirection_skip', false, $request_url ) ) {
+			return;
+		}
+
 		foreach ( $redirects as $redirect ) {
 			if ( empty( $redirect['enable'] ) ) {
 				continue;
