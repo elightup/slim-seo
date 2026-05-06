@@ -20,12 +20,29 @@ class Divi {
 	}
 
 	private function get_builder_content( WP_Post $post ): ?string {
-		// If the post is built with Divi, then strips all shortcodes, but keep the content.
-		if ( get_post_meta( $post->ID, '_et_builder_version', true ) ) {
-			return preg_replace( '~\[/?[^\]]+?/?\]~s', '', $post->post_content );
+		if ( ! $this->build_with_divi( $post->ID ) ) {
+			return null;
 		}
 
-		return null;
+		$content = $post->post_content;
+
+		if ( ! $this->is_divi_5( $post->ID ) ) {
+			$content = $this->remove_shortcodes( $content );
+		}
+
+		return $content;
+	}
+
+	private function build_with_divi( int $post_id ): bool {
+		return get_post_meta( $post_id, '_et_pb_use_builder', true );
+	}
+
+	private function is_divi_5( int $post_id ): bool {
+		return get_post_meta( $post_id, '_et_pb_use_divi_5', true );
+	}
+
+	private function remove_shortcodes( string $content ): string {
+		return preg_replace( '~\[/?[^\]]+?/?\]~s', '', $content );
 	}
 
 	public function remove_post_types( array $post_types ): array {
@@ -46,6 +63,6 @@ class Divi {
 	}
 
 	public function allowed_blocks( array $blocks ): array {
-		return array_merge( $blocks, [ 'divi/placeholder' ] );
+		return array_merge( $blocks, [ 'divi/placeholder', 'divi/text', 'divi/section', 'divi/row', 'divi/column' ] );
 	}
 }
