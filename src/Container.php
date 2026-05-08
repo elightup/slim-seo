@@ -5,9 +5,9 @@ use eLightUp\SlimSEO\Common\Settings\Page as SettingsPage;
 use eLightUp\SlimSEO\Common\Settings\Post as SettingsPost;
 
 class Container {
-	private $services = [];
+	private array $services = [];
 
-	public function register_services() {
+	public function register_services(): void {
 		// Shortcut.
 		$services = &$this->services;
 
@@ -123,7 +123,7 @@ class Container {
 		$services['generateblocks']      = new Integrations\GenerateBlocks;
 	}
 
-	public function init() {
+	public function init(): void {
 		do_action( 'slim_seo_init', $this );
 
 		SettingsPage::setup();
@@ -151,7 +151,11 @@ class Container {
 	/**
 	 * Developers: use this function to disable the services you don't want.
 	 */
-	public function disable( $id ) {
+	public function disable( string $id ): void {
 		unset( $this->services[ $id ] );
+	}
+
+	public function get_service( string $id ): object {
+		return $this->services[ $id ] ?? null;
 	}
 }
