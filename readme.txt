@@ -165,6 +165,10 @@ Add the following constant in your `wp-config.php` file:
 
 `define( 'SLIM_SEO_DELETE_DATA', true );`
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Slim SEO plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/9e5fc363-b8e1-4ee5-b1a2-622135c4457a). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 == Screenshots ==
 
 == Upgrade Notice ==
