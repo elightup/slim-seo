@@ -1,3 +1,7 @@
+### 4.9.7 - 2026-05-13
+
+- Fix compatibility with Divi 5
+
 ### 4.9.6 - 2026-05-04
 
 - Add filter `slim_seo_redirection_skip` to allow preventing redirection. See [docs](https://docs.wpslimseo.com/slim-seo/redirection/#hooks) for usage.
