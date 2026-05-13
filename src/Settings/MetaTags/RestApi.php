@@ -131,8 +131,10 @@ class RestApi {
 		$variables[] = [
 			'label'   => __( 'Site', 'slim-seo' ),
 			'options' => [
-				'site.title'       => __( 'Site title', 'slim-seo' ),
-				'site.description' => __( 'Site description', 'slim-seo' ),
+				'site.title'          => __( 'Site title', 'slim-seo' ),
+				'site.description'    => __( 'Site description', 'slim-seo' ),
+				'site.facebook_image' => __( 'Default Facebook image', 'slim-seo' ),
+				'site.twitter_image'  => __( 'Default X image', 'slim-seo' ),
 			],
 		];
 		$variables[] = [
@@ -154,6 +156,13 @@ class RestApi {
 				'label'   => __( 'Post', 'slim-seo' ),
 				'options' => [
 					'post.thumbnail' => __( 'Post thumbnail', 'slim-seo' ),
+				],
+			],
+			[
+				'label'   => __( 'Site', 'slim-seo' ),
+				'options' => [
+					'site.facebook_image' => __( 'Default Facebook image', 'slim-seo' ),
+					'site.twitter_image'  => __( 'Default X image', 'slim-seo' ),
 				],
 			],
 		];
