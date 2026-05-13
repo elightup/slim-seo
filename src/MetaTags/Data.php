@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimSEO\Helpers\Option;
 use WP_Post_Type;
 class Data {
 	private $data = [];
@@ -78,8 +79,10 @@ class Data {
 
 	private function get_site_data() {
 		return [
-			'title'       => get_bloginfo( 'name' ),
-			'description' => get_bloginfo( 'description' ),
+			'title'          => get_bloginfo( 'name' ),
+			'description'    => get_bloginfo( 'description' ),
+			'facebook_image' => Option::get( 'default_facebook_image', '' ),
+			'twitter_image'  => Option::get( 'default_twitter_image', '' ),
 		];
 	}
 
