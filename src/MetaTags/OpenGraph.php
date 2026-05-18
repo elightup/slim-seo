@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use WP_Post;
 use SlimSEO\Helpers\Option;
 
 class OpenGraph {
@@ -103,11 +104,13 @@ class OpenGraph {
 	}
 
 	private function get_article_published_time(): string {
-		return is_singular() && ! is_front_page() ? wp_date( 'c', strtotime( get_queried_object()->post_date_gmt ) ) : '';
+		$post = get_queried_object();
+		return is_singular() && ! is_front_page() && ( $post instanceof WP_Post ) ? wp_date( 'c', strtotime( $post->post_date_gmt ) ) : '';
 	}
 
 	private function get_article_modified_time(): string {
-		return is_singular() && ! is_front_page() ? wp_date( 'c', strtotime( get_queried_object()->post_modified_gmt ) ) : '';
+		$post = get_queried_object();
+		return is_singular() && ! is_front_page() && ( $post instanceof WP_Post ) ? wp_date( 'c', strtotime( $post->post_modified_gmt ) ) : '';
 	}
 
 	private function get_updated_time(): string {

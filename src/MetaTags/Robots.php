@@ -3,6 +3,7 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
+use WP_Post;
 use WP_Term;
 use SlimSEO\Helpers\Option;
 
@@ -56,7 +57,8 @@ class Robots {
 		}
 
 		// Do not index private posts.
-		if ( is_singular() && 'private' === get_queried_object()->post_status ) {
+		$post = get_queried_object();
+		if ( is_singular() && ( $post instanceof WP_Post ) && 'private' === $post->post_status ) {
 			return false;
 		}
 

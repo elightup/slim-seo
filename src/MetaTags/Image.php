@@ -3,6 +3,7 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
+use WP_Post;
 use WP_Term;
 use SlimSEO\Helpers\Images;
 use SlimSEO\Helpers\Option;
@@ -37,7 +38,7 @@ class Image {
 		// Get from settings.
 		$option = get_option( 'slim_seo', [] );
 		$post   = $this->get_queried_object();
-		if ( empty( $post ) ) {
+		if ( ! ( $post instanceof WP_Post ) ) {
 			return [];
 		}
 		if ( isset( $option[ $post->post_type ][ $this->meta_key ] ) ) {

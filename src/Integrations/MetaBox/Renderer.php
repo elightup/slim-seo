@@ -2,6 +2,7 @@
 namespace SlimSEO\Integrations\MetaBox;
 
 use SlimSEO\Helpers\Arr;
+use WP_Post;
 
 class Renderer {
 	private $meta_box;
@@ -68,7 +69,11 @@ class Renderer {
 
 		// User.
 		if ( $object_type === 'user' ) {
-			return is_author() ? get_queried_object_id() : ( get_queried_object()->post_author ?? 0 );
+			if ( is_author() ) {
+				return get_queried_object_id();
+			}
+			$post = get_queried_object();
+			return ( $post instanceof WP_Post ) ? $post->post_author : 0;
 		}
 
 		// Settings pages.

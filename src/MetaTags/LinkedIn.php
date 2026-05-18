@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use WP_Post;
+
 class LinkedIn {
 	public function is_active(): bool {
 		return apply_filters( 'slim_seo_linkedin_tags', false );
@@ -21,13 +23,18 @@ class LinkedIn {
 			return;
 		}
 
-		$author = get_the_author_meta( 'display_name', get_queried_object()->post_author );
+		$post = get_queried_object();
+		if ( ! ( $post instanceof WP_Post ) ) {
+			return;
+		}
+
+		$author = get_the_author_meta( 'display_name', $post->post_author );
 		$author = apply_filters( 'slim_seo_linkedin_author', $author, get_queried_object_id() );
 		if ( $author ) {
 			echo '<meta name="author" content="' . esc_attr( $author ) . '">', "\n";
 		}
 
-		$date = wp_date( 'c', strtotime( get_queried_object()->post_date_gmt ) );
+		$date = wp_date( 'c', strtotime( $post->post_date_gmt ) );
 		$date = apply_filters( 'slim_seo_linkedin_date', $date, get_queried_object_id() );
 		if ( $date ) {
 			echo '<meta name="date" content="' . esc_attr( $date ) . '">', "\n";

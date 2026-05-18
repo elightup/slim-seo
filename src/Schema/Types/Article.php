@@ -1,9 +1,15 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
+use WP_Post;
+
 class Article extends Base {
 	public function generate() {
-		$post   = get_queried_object();
+		$post = get_queried_object();
+		if ( ! ( $post instanceof WP_Post ) ) {
+			return [];
+		}
+
 		$schema = [
 			'@type'         => 'Article',
 			'@id'           => $this->id,

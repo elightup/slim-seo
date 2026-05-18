@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
+use WP_Post;
+
 class WebPage extends Base {
 	public $title;
 	public $description;
@@ -28,8 +30,11 @@ class WebPage extends Base {
 		}
 
 		if ( is_singular() ) {
-			$schema['datePublished'] = wp_date( 'c', strtotime( get_queried_object()->post_date_gmt ) );
-			$schema['dateModified']  = wp_date( 'c', strtotime( get_queried_object()->post_modified_gmt ) );
+			$post = get_queried_object();
+			if ( $post instanceof WP_Post ) {
+				$schema['datePublished'] = wp_date( 'c', strtotime( $post->post_date_gmt ) );
+				$schema['dateModified']  = wp_date( 'c', strtotime( $post->post_modified_gmt ) );
+			}
 		}
 
 		return $schema;
