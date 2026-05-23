@@ -1,13 +1,11 @@
 import { useState } from '@wordpress/element';
+import { Icon, dragHandle } from "@wordpress/icons";
 import { getFullURL, fetcher } from '../helper/misc';
 import { __ } from '@wordpress/i18n';
-import { useSortable } from '@dnd-kit/sortable';
 import Update from './Update';
 
 const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, updateRedirects, isDragEnabled } ) => {
 	const [ redirect, setRedirect ] = useState( redirectItem );
-	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable( { id: redirect.id, disabled: ! isDragEnabled } );
-	const style = transform ? { transform: `translate3d(${ transform.x }px, ${ transform.y }px, 0)`, transition } : undefined;
 
 	const checkboxChange = e => {
 		if ( !e.target.checked ) {
@@ -44,11 +42,11 @@ const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, upd
 	};
 
 	return (
-		<tr ref={ setNodeRef } style={ style } className={ isDragging ? 'ss-redirect__dragging' : '' }>
+		<tr className='ss-redirect'>
 			{
 				isDragEnabled && (
-					<td className='ss-redirect__drag-handle' { ...attributes } { ...listeners } title={ __( 'Drag to reorder', 'slim-seo' ) }>
-						<span className='ss-redirect-drag-icon'>⠿</span>
+					<td className='ss-redirect__drag-handle' title={ __( 'Drag to reorder', 'slim-seo' ) }>
+						<Icon icon={ dragHandle } />
 					</td>
 				)
 			}

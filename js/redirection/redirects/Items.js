@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { DndContext, closestCenter,	KeyboardSensor,	PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { ReactSortable } from 'react-sortablejs';
 import { fetcher, useApi } from '../helper/misc';
 import Header from './Header';
 import Item from './Item';
@@ -31,11 +30,6 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 		prevRedirectsCount.current = count;
 	}, [ redirects?.length ] );
 
-	const sensors = useSensors(
-		useSensor( PointerSensor ),
-		useSensor( KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates } )
-	);
-
 	const deleteRedirects = ( ids = [] ) => {
 		fetcher( 'delete_redirects', { ids }, 'POST' ).then( () => {
 			mutate(
@@ -56,22 +50,6 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 			} ),
 			{ revalidate: false }
 		);
-	};
-
-	const handleDragEnd = event => {
-		const { active, over } = event;
-
-		if ( ! over || active.id === over.id ) {
-			return;
-		}
-
-		const oldIndex = redirects.findIndex( r => r.id === active.id );
-		const newIndex = redirects.findIndex( r => r.id === over.id );
-		const reordered = arrayMove( redirects, oldIndex, newIndex );
-
-		mutate( reordered, { revalidate: false } );
-
-		fetcher( 'reorder_redirects', { ids: reordered.map( r => r.id ) }, 'POST' );
 	};
 
 	useEffect( () => {
@@ -138,52 +116,78 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 	}
 
 	const displayedRedirects = filteredRedirects.slice( offset, offset + limit );
-	const sortableIds = isDragEnabled ? displayedRedirects.map( r => r.id ) : [];
+
+	const handleDragEnd = event => {
+		if ( event.oldIndex === event.newIndex ) {
+			return;
+		}
+
+		const activeId = displayedRedirects[ event.oldIndex ]?.id;
+		const overId = displayedRedirects[ event.newIndex ]?.id;
+		const oldIndex = redirects.findIndex( r => r.id === activeId );
+		const newIndex = redirects.findIndex( r => r.id === overId );
+		const reordered = [ ...redirects ];
+		const movedItem = reordered.splice( oldIndex, 1 )[0];
+
+		reordered.splice( newIndex, 0, movedItem );
+		
+		mutate( reordered, { revalidate: false } );
+
+		fetcher( 'reorder_redirects', { ids: reordered.map( r => r.id ) }, 'POST' );
+	};
 
 	return (
 		<>
-			<DndContext sensors={ sensors } collisionDetection={ closestCenter } onDragEnd={ isDragEnabled ? handleDragEnd : undefined }>
-				<table className='ss-table'>
-					<thead>
-						<Header
-							orderBy={ orderBy }
-							setOrderBy={ setOrderBy }
-							order={ order }
-							setOrder={ setOrder }
-							isCheckAll={ isCheckAll }
-							checkAll={ checkAll }
-							isDragEnabled={ isDragEnabled } />
-					</thead>
+			<table className='ss-table'>
+				<thead>
+					<Header
+						orderBy={ orderBy }
+						setOrderBy={ setOrderBy }
+						order={ order }
+						setOrder={ setOrder }
+						isCheckAll={ isCheckAll }
+						checkAll={ checkAll }
+						isDragEnabled={ isDragEnabled } />
+				</thead>
 
-					<SortableContext items={ sortableIds } strategy={ verticalListSortingStrategy }>
-						<tbody>
-							{
-								displayedRedirects.map( redirect => (
-									<Item
-										key={ redirect.id }
-										redirectItem={ redirect }
-										checkedList={ checkedList }
-										setCheckedList={ setCheckedList }
-										deleteRedirects={ deleteRedirects }
-										updateRedirects={ updateRedirects }
-										isDragEnabled={ isDragEnabled } />
-								) )
-							}
-						</tbody>
-					</SortableContext>
+				<ReactSortable
+					group={ {
+						name: 'redirects',
+						pull: true,
+						put: true,
+					} }
+					animation={ 200 }
+					list={ displayedRedirects }
+					setList={ () => {} }
+					onEnd={ handleDragEnd }
+					handle=".ss-redirect__drag-handle"
+					tag="tbody"
+				>
+					{
+						displayedRedirects.map( redirect => (
+							<Item
+								key={ redirect.id }
+								redirectItem={ redirect }
+								checkedList={ checkedList }
+								setCheckedList={ setCheckedList }
+								deleteRedirects={ deleteRedirects }
+								updateRedirects={ updateRedirects }
+								isDragEnabled={ isDragEnabled } />
+						) )
+					}
+				</ReactSortable>
 
-					<tfoot>
-						<Header
-							orderBy={ orderBy }
-							setOrderBy={ setOrderBy }
-							order={ order }
-							setOrder={ setOrder }
-							isCheckAll={ isCheckAll }
-							checkAll={ checkAll }
-							isDragEnabled={ isDragEnabled } />
-					</tfoot>
-				</table>
-			</DndContext>
+				<tfoot>
+					<Header
+						orderBy={ orderBy }
+						setOrderBy={ setOrderBy }
+						order={ order }
+						setOrder={ setOrder }
+						isCheckAll={ isCheckAll }
+						checkAll={ checkAll }
+						isDragEnabled={ isDragEnabled } />
+				</tfoot>
+			</table>
 
 			<div className='ss-redirects-footer'>
 				<Limit limit={ limit } setLimit={ setLimit } total={ filteredRedirects.length } setOffset={ setOffset } setIsCheckAll={ setIsCheckAll } setCheckedList={ setCheckedList } />

@@ -85,27 +85,21 @@
 }
 
 .ss-redirect__drag-handle {
-	width: 20px;
-	cursor: grab;
-	color: var(--ss-color-gray);
 	text-align: center;
-	padding: 8px 4px;
-	user-select: none;
-
-	&:hover {
-		color: var(--ss-color-primary);
+	
+	svg {
+		opacity: 0;
+		visibility: hidden;
+		cursor: grab;
+		width: 16px;
+		height: 16px;
+		fill: var(--color-gray);
 	}
 }
 
-.ss-redirect-drag-icon {
-	font-size: 18px;
-	line-height: 1;
-	display: block;
-}
-
-.ss-redirect__dragging {
-	opacity: 0.5;
-	background: var(--ss-color-lighter);
+.ss-redirect:hover .ss-redirect__drag-handle svg {
+	opacity: 1;
+	visibility: visible;
 }
 
 .ss-redirect__checkbox {
