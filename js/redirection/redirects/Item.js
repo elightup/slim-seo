@@ -1,10 +1,13 @@
 import { useState } from '@wordpress/element';
 import { getFullURL, fetcher } from '../helper/misc';
 import { __ } from '@wordpress/i18n';
+import { useSortable } from '@dnd-kit/sortable';
 import Update from './Update';
 
-const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, updateRedirects } ) => {
+const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, updateRedirects, isDragEnabled } ) => {
 	const [ redirect, setRedirect ] = useState( redirectItem );
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable( { id: redirect.id, disabled: ! isDragEnabled } );
+	const style = transform ? { transform: `translate3d(${ transform.x }px, ${ transform.y }px, 0)`, transition } : undefined;
 
 	const checkboxChange = e => {
 		if ( !e.target.checked ) {
@@ -19,7 +22,7 @@ const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, upd
 
 		setRedirect( newRedirect );
 
-		fetcher( 'update_redirect', { redirect: newRedirect }, 'POST' ).then( result => updateRedirects( newRedirect ) );
+		fetcher( 'update_redirect', { redirect: newRedirect }, 'POST' ).then( () => updateRedirects( newRedirect ) );
 	};
 
 	const updateRedirect = redirect => {
@@ -41,7 +44,14 @@ const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, upd
 	};
 
 	return (
-		<tr>
+		<tr ref={ setNodeRef } style={ style } className={ isDragging ? 'ss-redirect__dragging' : '' }>
+			{
+				isDragEnabled && (
+					<td className='ss-redirect__drag-handle' { ...attributes } { ...listeners } title={ __( 'Drag to reorder', 'slim-seo' ) }>
+						<span className='ss-redirect-drag-icon'>⠿</span>
+					</td>
+				)
+			}
 			<td className='ss-redirect__checkbox'>
 				<input type='checkbox' value={ redirect.id } checked={ checkedList.includes( redirect.id ) } onChange={ checkboxChange } />
 			</td>

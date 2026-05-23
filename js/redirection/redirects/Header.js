@@ -1,9 +1,10 @@
 import { __ } from '@wordpress/i18n';
 import TableHeader from './TableHeader';
 
-const Header = ( { orderBy, setOrderBy, order, setOrder, isCheckAll, checkAll } ) => {
+const Header = ( { orderBy, setOrderBy, order, setOrder, isCheckAll, checkAll, isDragEnabled } ) => {
 	return (
 		<tr>
+			{ isDragEnabled && <th className='ss-redirect__drag-handle'></th> }
 			<th className='ss-redirect__checkbox'><input type='checkbox' checked={ isCheckAll } onChange={ checkAll } /></th>
 			<TableHeader
 				className='ss-redirect__type'
