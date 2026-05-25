@@ -26,10 +26,16 @@ class Redirects {
 		$redirect['from'] = Helper::normalize_url( $redirect['from'], false );
 		$redirect['to']   = Helper::normalize_url( $redirect['to'], true, true, false );
 		$redirect['note'] = sanitize_text_field( $redirect['note'] );
-		$id               = (string) ( empty( $redirect['id'] ) ? uniqid() : $redirect['id'] );
+		$is_new           = empty( $redirect['id'] );
+		$id               = (string) ( $is_new ? uniqid() : $redirect['id'] );
 
 		unset( $redirect['id'] );
-		$this->redirects[ $id ] = $redirect;
+
+		if ( $is_new ) {
+			$this->redirects = [ $id => $redirect ] + $this->redirects;
+		} else {
+			$this->redirects[ $id ] = $redirect;
+		}
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
 
@@ -56,6 +62,28 @@ class Redirects {
 
 	public function update_all( array $redirects ) {
 		$this->redirects = $redirects;
+
+		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
+
+		Helper::purge_cache();
+	}
+
+	public function reorder( array $ids ) {
+		$reordered = [];
+
+		foreach ( $ids as $id ) {
+			if ( isset( $this->redirects[ $id ] ) ) {
+				$reordered[ $id ] = $this->redirects[ $id ];
+			}
+		}
+
+		foreach ( $this->redirects as $id => $redirect ) {
+			if ( ! isset( $reordered[ $id ] ) ) {
+				$reordered[ $id ] = $redirect;
+			}
+		}
+
+		$this->redirects = $reordered;
 
 		update_option( SLIM_SEO_REDIRECTS, $this->redirects );
 

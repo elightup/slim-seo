@@ -39,6 +39,12 @@ class Redirects extends Base {
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 
+		register_rest_route( 'slim-seo-redirection', 'reorder_redirects', [
+			'methods'             => WP_REST_Server::EDITABLE,
+			'callback'            => [ $this, 'reorder_redirects' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+		] );
+
 		register_rest_route( 'slim-seo-redirection', 'posts', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_posts' ],
@@ -53,7 +59,7 @@ class Redirects extends Base {
 
 			return $redirect;
 		}, array_keys( $redirects ), $redirects );
-		$redirects = array_reverse( $redirects );
+
 		return $redirects;
 	}
 
@@ -79,6 +85,18 @@ class Redirects extends Base {
 		}
 
 		$this->db_redirects->delete( $ids );
+
+		return true;
+	}
+
+	public function reorder_redirects( WP_REST_Request $request ): bool {
+		$ids = $request->get_param( 'ids' );
+
+		if ( ! is_array( $ids ) ) {
+			return false;
+		}
+
+		$this->db_redirects->reorder( $ids );
 
 		return true;
 	}

@@ -84,6 +84,24 @@
 	}
 }
 
+.ss-redirect__drag-handle {
+	text-align: center;
+	
+	svg {
+		opacity: 0;
+		visibility: hidden;
+		cursor: grab;
+		width: 16px;
+		height: 16px;
+		fill: var(--color-gray);
+	}
+}
+
+.ss-redirect:hover .ss-redirect__drag-handle svg {
+	opacity: 1;
+	visibility: visible;
+}
+
 .ss-redirect__checkbox {
 	width: 20px;
 }
