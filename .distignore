@@ -22,7 +22,7 @@ phpstan.*
 node_modules
 package.json
 package-lock.json
-pnpm-lock.yaml
+pnpm-*.yaml
 webpack.config.js
 esbuild.js
 
