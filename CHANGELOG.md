@@ -1,3 +1,9 @@
+### 4.9.8 - 2026-06-02
+
+- Add drag & drop support for redirect reordering
+- Add default social image variables to select for meta tags
+- Fix: import only active redirects from SEOPress
+
 ### 4.9.7 - 2026-05-13
 
 - Fix compatibility with Divi 5
