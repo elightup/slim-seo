@@ -62,6 +62,7 @@ Slim SEO automatically adds structured data to the website via JSON-LD which mak
 - [Integrations](https://docs.wpslimseo.com/slim-seo/integrations/) with many plugins, including page builders
 - [Import and export](https://docs.wpslimseo.com/slim-seo/import-export/) data or migrate data from popular SEO plugins
 - Auto redirect if post slug changed
+- [Developer hook examples](docs/developer-hooks.md) for customizing meta tags, schema, sitemaps, and robots.txt
 
 ## Slim SEO Pro
 
