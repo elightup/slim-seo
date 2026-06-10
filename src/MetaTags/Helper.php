@@ -75,6 +75,7 @@ class Helper {
 			'gravityview',
 			'civicrm',
 			'contact-form-7',
+			'fluent_cart_customer_profile',
 
 			// Filter everything.
 			'fe_widget',
