@@ -15,41 +15,38 @@ class Redirects extends Base {
 	}
 
 	public function register_routes() {
-		register_rest_route( 'slim-seo-redirection', 'redirects', [
+		$args = [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_redirects' ],
 			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+			'show_in_index'       => false,
+		];
 
-		register_rest_route( 'slim-seo-redirection', 'exists', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'exists' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'redirects', array_merge( $args, [
+			'callback' => [ $this, 'get_redirects' ],
+		] ) );
 
-		register_rest_route( 'slim-seo-redirection', 'update_redirect', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'update_redirect' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'exists', array_merge( $args, [
+			'callback' => [ $this, 'exists' ],
+		] ) );
 
-		register_rest_route( 'slim-seo-redirection', 'delete_redirects', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'delete_redirects' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'update_redirect', array_merge( $args, [
+			'methods'  => WP_REST_Server::EDITABLE,
+			'callback' => [ $this, 'update_redirect' ],
+		] ) );
 
-		register_rest_route( 'slim-seo-redirection', 'reorder_redirects', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'reorder_redirects' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'delete_redirects', array_merge( $args, [
+			'methods'  => WP_REST_Server::EDITABLE,
+			'callback' => [ $this, 'delete_redirects' ],
+		] ) );
 
-		register_rest_route( 'slim-seo-redirection', 'posts', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_posts' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'reorder_redirects', array_merge( $args, [
+			'methods'  => WP_REST_Server::EDITABLE,
+			'callback' => [ $this, 'reorder_redirects' ],
+		] ) );
+
+		register_rest_route( 'slim-seo-redirection', 'posts', array_merge( $args, [
+			'callback' => [ $this, 'get_posts' ],
+		] ) );
 	}
 
 	public function get_redirects(): array {

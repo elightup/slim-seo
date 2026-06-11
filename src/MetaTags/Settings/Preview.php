@@ -22,24 +22,28 @@ class Preview {
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_title' ],
 			'permission_callback' => [ $this, 'can_edit_post' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'term-title', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_title' ],
 			'permission_callback' => [ $this, 'can_edit_term' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'post-description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_description' ],
 			'permission_callback' => [ $this, 'can_edit_post' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'term-description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_description' ],
 			'permission_callback' => [ $this, 'can_edit_term' ],
+			'show_in_index'       => false,
 		] );
 
 		// Render text for homepage title and description.
@@ -47,6 +51,7 @@ class Preview {
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_homepage_text' ],
 			'permission_callback' => [ $this, 'can_edit_homepage' ],
+			'show_in_index'       => false,
 		] );
 	}
 

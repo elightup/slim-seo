@@ -10,29 +10,26 @@ class RestApi {
 	}
 
 	public function register_routes(): void {
-		register_rest_route( 'slim-seo', 'meta-tags/option', [
+		$args = [
 			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+			'show_in_index'       => false,
+		];
+		register_rest_route( 'slim-seo', 'meta-tags/option', array_merge( $args, [
+			'callback' => [ $this, 'get_option' ],
+		] ) );
 
-		register_rest_route( 'slim-seo', 'meta-tags/variables', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_variables' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo', 'meta-tags/variables', array_merge( $args, [
+			'callback' => [ $this, 'get_variables' ],
+		] ) );
 
-		register_rest_route( 'slim-seo', 'meta-tags/image_variables', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_image_variables' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo', 'meta-tags/image_variables', array_merge( $args, [
+			'callback' => [ $this, 'get_image_variables' ],
+		] ) );
 
-		register_rest_route( 'slim-seo', 'meta-tags/meta_keys', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_meta_keys' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo', 'meta-tags/meta_keys', array_merge( $args, [
+			'callback' => [ $this, 'get_meta_keys' ],
+		] ) );
 	}
 
 	public function has_permission(): bool {

@@ -25,6 +25,7 @@ class BulkAI {
 
 	public function register_routes(): void {
 		register_rest_route( self::REST_NS, 'bulk-ai/chunk', [
+			'show_in_index'       => false,
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [ $this, 'process_chunk' ],
 			'permission_callback' => fn () => current_user_can( 'manage_options' ),

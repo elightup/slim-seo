@@ -19,18 +19,21 @@ class ExportImport extends Base {
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'export' ],
 			'permission_callback' => [ $this, 'has_permission' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo-redirection', 'import', [
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [ $this, 'import' ],
 			'permission_callback' => [ $this, 'has_permission' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo-redirection', 'sample', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'sample' ],
 			'permission_callback' => [ $this, 'has_permission' ],
+			'show_in_index'       => false,
 		] );
 	}
 

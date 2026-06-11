@@ -16,6 +16,7 @@ class AI {
 
 	public function register_routes(): void {
 		register_rest_route( 'slim-seo', 'meta-tags/ai', [
+			'show_in_index'       => false,
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'generate' ],
 			'permission_callback' => function () {
@@ -24,6 +25,7 @@ class AI {
 		] );
 
 		register_rest_route( 'slim-seo', 'ai/models', [
+			'show_in_index'       => false,
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'get_models' ],
 			'permission_callback' => function () {
