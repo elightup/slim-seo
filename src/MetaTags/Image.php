@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags;
 defined( 'ABSPATH' ) || die;
 
 use WP_Term;
+use WP_Post;
 use SlimSEO\Helpers\Images;
 use SlimSEO\Helpers\Option;
 
@@ -37,22 +38,15 @@ class Image {
 		// Get from settings.
 		$option = get_option( 'slim_seo', [] );
 		$post   = $this->get_queried_object();
-		if ( empty( $post ) ) {
+		if ( ! ( $post instanceof WP_Post ) ) {
 			return [];
 		}
 		if ( isset( $option[ $post->post_type ][ $this->meta_key ] ) ) {
 			return $this->get_from_settings( $option[ $post->post_type ][ $this->meta_key ] );
 		}
 
-		// Get from thumbnail or content.
-		$images = Images::get_post_images( $this->get_queried_object() );
-		if ( empty( $images ) ) {
-			return [];
-		}
-
-		$first_image = reset( $images );
-		$method      = is_numeric( $first_image ) ? 'get_data' : 'get_data_from_url';
-		return $this->$method( $first_image );
+		// Get from thumbnail.
+		return has_post_thumbnail() ? $this->get_data( get_post_thumbnail_id() ) : [];
 	}
 
 	private function get_term_value(): array {

@@ -26,8 +26,8 @@ const PostType = ( { id, postType, option, optionArchive, social } ) => {
 				label={ sprintf( __( 'Singular %s', 'slim-seo' ), postType.labels.singular_name.toLowerCase() ) }
 				defaultMetas={ ss.defaultPostMetas.single }
 				social={ social }
-				facebookImageInstruction={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
-				twitterImageInstruction={ __( 'Leave empty to use the featured image or the first image in the post content.', 'slim-seo' ) }
+				facebookImageInstruction={ __( 'Leave empty to use the featured image.', 'slim-seo' ) }
+				twitterImageInstruction={ __( 'Leave empty to use the featured image.', 'slim-seo' ) }
 			/>
 		}
 		{ !noindex &&
