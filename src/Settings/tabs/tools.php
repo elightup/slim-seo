@@ -21,9 +21,8 @@
 			<option value="anthropic" <?php selected( $data['ai_provider'] ?? '', 'anthropic' ); ?>><?php esc_html_e( 'Anthropic (Claude)', 'slim-seo' ); ?></option>
 			<option value="openrouter" <?php selected( $data['ai_provider'] ?? '', 'openrouter' ); ?>><?php esc_html_e( 'OpenRouter', 'slim-seo' ); ?></option>
 		</select>
-		<select name="slim_seo[ai_model]" id="ss-ai-model">
-			<option value=""><?php esc_html_e( 'Select a provider first', 'slim-seo' ); ?></option>
-		</select>
+		<input type="text" name="slim_seo[ai_model]" id="ss-ai-model" list="ss-ai-model-list" value="<?php echo esc_attr( $data['ai_model'] ?? '' ); ?>" placeholder="<?php esc_attr_e( 'Select or enter a model name', 'slim-seo' ); ?>" autocomplete="off" />
+		<datalist id="ss-ai-model-list"></datalist>
 	</div>
 </div>
 <div class="ef-control">

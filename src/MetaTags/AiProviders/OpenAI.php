@@ -49,52 +49,23 @@ class OpenAI implements ProviderInterface {
 		return implode( ' ', $texts );
 	}
 
+	/**
+	 * @link https://developers.openai.com/api/docs/models/all
+	 */
 	public function get_models(): array {
 		return [
-			[
-				'value' => 'gpt-5.4',
-				'label' => 'GPT-5.4',
-			],
-			[
-				'value' => 'gpt-5.4-mini',
-				'label' => 'GPT-5.4 Mini',
-			],
-			[
-				'value' => 'gpt-5.4-nano',
-				'label' => 'GPT-5.4 Nano',
-			],
-			[
-				'value' => 'gpt-5',
-				'label' => 'GPT-5',
-			],
-			[
-				'value' => 'gpt-5-mini',
-				'label' => 'GPT-5 Mini',
-			],
-			[
-				'value' => 'gpt-5-nano',
-				'label' => 'GPT-5 Nano',
-			],
-			[
-				'value' => 'gpt-4.1',
-				'label' => 'GPT-4.1',
-			],
-			[
-				'value' => 'gpt-4.1-mini',
-				'label' => 'GPT-4.1 Mini',
-			],
-			[
-				'value' => 'gpt-4.1-nano',
-				'label' => 'GPT-4.1 Nano',
-			],
-			[
-				'value' => 'gpt-4o',
-				'label' => 'GPT-4o',
-			],
-			[
-				'value' => 'gpt-4o-mini',
-				'label' => 'GPT-4o Mini',
-			],
+			'gpt-5.5',
+			'gpt-5.4',
+			'gpt-5.4-mini',
+			'gpt-5.4-nano',
+			'gpt-5',
+			'gpt-5-mini',
+			'gpt-5-nano',
+			'gpt-4.1',
+			'gpt-4.1-mini',
+			'gpt-4.1-nano',
+			'gpt-4o',
+			'gpt-4o-mini',
 		];
 	}
 }

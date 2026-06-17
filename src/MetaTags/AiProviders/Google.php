@@ -39,32 +39,18 @@ class Google implements ProviderInterface {
 		return $response['candidates'][0]['content']['parts'][0]['text'] ?? '';
 	}
 
+	/**
+	 * @link https://ai.google.dev/gemini-api/docs/models
+	 */
 	public function get_models(): array {
 		return [
-			[
-				'value' => 'gemini-3.1-pro-preview',
-				'label' => 'Gemini 3.1 Pro Preview',
-			],
-			[
-				'value' => 'gemini-3.1-flash-preview',
-				'label' => 'Gemini 3.1 Flash Preview',
-			],
-			[
-				'value' => 'gemini-3.1-flash-lite-preview',
-				'label' => 'Gemini 3.1 Flash Lite Preview',
-			],
-			[
-				'value' => 'gemini-2.5-pro',
-				'label' => 'Gemini 2.5 Pro',
-			],
-			[
-				'value' => 'gemini-2.5-flash',
-				'label' => 'Gemini 2.5 Flash',
-			],
-			[
-				'value' => 'gemini-2.5-flash-lite',
-				'label' => 'Gemini 2.5 Flash Lite',
-			],
+			'gemini-3.5-flash',
+			'gemini-3.1-pro-preview',
+			'gemini-3.1-flash-preview',
+			'gemini-3.1-flash-lite',
+			'gemini-2.5-pro',
+			'gemini-2.5-flash',
+			'gemini-2.5-flash-lite',
 		];
 	}
 }
