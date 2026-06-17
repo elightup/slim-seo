@@ -2,45 +2,37 @@
 	'use strict';
 
 	const providerSelect = document.getElementById( 'ss-ai-provider' );
-	const modelSelect = document.getElementById( 'ss-ai-model' );
+	const modelInput = document.getElementById( 'ss-ai-model' );
+	const modelList = document.getElementById( 'ss-ai-model-list' );
 
-	if ( !providerSelect || !modelSelect ) {
+	if ( ! providerSelect || ! modelInput || ! modelList ) {
 		return;
 	}
 
 	/**
-	 * Renders model options into the model select and restores the saved value when present.
+	 * Renders model suggestions into the datalist and restores the saved value when present.
 	 *
-	 * @param {Array<{value: string, label: string}>} models     Options returned from the REST API.
-	 * @param {string}                                 savedModel Model id to select after populate; empty skips.
+	 * @param {string[]} models     Model ids returned from the REST API.
+	 * @param {string}   savedModel Model id to restore as input value; empty skips.
 	 */
 	function populateModels( models, savedModel ) {
-		modelSelect.innerHTML = '';
-
-		if ( models.length === 0 ) {
-			const option = document.createElement( 'option' );
-			option.value = '';
-			option.textContent = i18n.text.noModelsAvailable;
-			modelSelect.appendChild( option );
-			return;
-		}
+		modelList.innerHTML = '';
 
 		models.forEach( function( model ) {
 			const option = document.createElement( 'option' );
-			option.value = model.value;
-			option.textContent = model.label;
-			modelSelect.appendChild( option );
+			option.value = model;
+			modelList.appendChild( option );
 		} );
 
 		if ( savedModel ) {
-			modelSelect.value = savedModel;
+			modelInput.value = savedModel;
 		}
 	}
 
 	/**
-	 * Loads models for a provider and updates the model dropdown.
+	 * Loads model suggestions for a provider and updates the datalist.
 	 *
-	 * @param {string} provider Provider slug (e.g. openai).
+	 * @param {string} provider   Provider slug (e.g. openai).
 	 * @param {string} savedModel Model id to preserve after fetch; may be empty.
 	 */
 	function fetchModels( provider, savedModel ) {

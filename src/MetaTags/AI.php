@@ -200,7 +200,7 @@ RULE;
 		// Validate model - use default if empty
 		if ( empty( $model ) ) {
 			$models = $provider_obj->get_models();
-			$model  = $models[0]['value'] ?? '';
+			$model  = $models[0] ?? '';
 		}
 
 		if ( empty( $model ) ) {
