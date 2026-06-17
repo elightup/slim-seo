@@ -13,7 +13,7 @@ class Renderer {
 	}
 
 	public function __get( $name ) {
-		$field = $this->field_objects[ $name ] ?: null;
+		$field = $this->field_objects[ $name ] ?? null;
 
 		if ( ! $field ) {
 			return null;
