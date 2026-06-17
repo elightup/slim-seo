@@ -30,6 +30,7 @@ $features = [
 	// Translators: %s: link to the docs.
 	'redirection'      => [ __( 'Redirection', 'slim-seo' ), sprintf( __( '<a href="%s" target="_blank">Create redirects</a> for broken pages, unimportant pages, or old URLs to existing working URLs.', 'slim-seo' ), 'https://docs.wpslimseo.com/slim-seo/redirection/?utm_source=settings_page&utm_medium=link&utm_campaign=slim_seo' ) ],
 	'no_category_base' => [ __( 'No category base', 'slim-seo' ), sprintf( __( 'Remove /category/ from your category link (e.g: yoursite.com/category/slim-seo/ to yoursite.com/slim-seo/).', 'slim-seo' ) ) ],
+	'primary_term'     => [ __( 'Primary term', 'slim-seo' ), sprintf( __( 'Allow to set primary term.', 'slim-seo' ) ) ],
 ];
 ?>
 

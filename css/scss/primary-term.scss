@@ -1,0 +1,39 @@
+@use 'components/variables';
+
+.categorydiv ul.categorychecklist li>label {
+	display: inline;
+}
+
+.ss-primary-term {
+	float: right;
+	font-size: 12px;
+	text-decoration: none;
+	color: var(--ss-color-gray);
+
+	&:hover {
+		color: var(--ss-color-primary);
+	}
+
+	&--active {
+		font-weight: bold;
+		color: var(--ss-color-primary);
+	}
+}
+
+.ss-primary-term-wrapper {
+    margin-top: 10px;
+    border-top: 1px solid var(--ss-color-gray);;
+    padding-top: 10px;
+}
+
+.ss-primary-term-label {
+    display: flex;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.ss-primary-term-select {
+	width: 100%;
+}

@@ -32,6 +32,7 @@ class Settings {
 			'schema',
 			'redirection',
 			'no_category_base',
+			'primary_term',
 		],
 	];
 
@@ -124,8 +125,12 @@ class Settings {
 
 		// Set features OFF by default
 		if ( empty( $option['features'] ) ) {
-			$features_off = [ 'no_category_base' ];
-			$features     = array_diff( $features, $features_off );
+			$features_off = [
+				'no_category_base',
+				'primary_term',
+			];
+
+			$features = array_diff( $features, $features_off );
 		}
 
 		return in_array( $feature, $features, true ) || ! in_array( $feature, $defaults, true );
