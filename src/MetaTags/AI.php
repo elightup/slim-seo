@@ -54,7 +54,13 @@ class AI {
 		$type           = $request->get_param( 'type' ) === 'description' ? 'description' : 'title';
 
 		if ( 'post' === ( $object['type'] ?? '' ) ) {
-			$content = Data::get_post_content( $object['ID'] ?? 0, $content );
+			$post_id = (int) ( $object['ID'] ?? 0 );
+
+			if ( $post_id <= 0 || ! current_user_can( 'edit_post', $post_id ) ) {
+				return $this->response( __( 'You are not allowed to generate meta tags for this post.', 'slim-seo' ) );
+			}
+
+			$content = Data::get_post_content( $post_id, $content );
 		}
 
 		// Preprocess content: strip HTML, normalize whitespace, limit length
