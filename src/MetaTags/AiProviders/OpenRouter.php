@@ -9,8 +9,15 @@ class OpenRouter extends OpenAI {
 		return 'https://openrouter.ai/api/v1/responses';
 	}
 
+	/**
+	 * @link https://openrouter.ai/models?input_modalities=text&categories=marketing/seo
+	 */
 	public function get_models(): array {
 		return [
+			[
+				'value' => 'openai/gpt-5.5',
+				'label' => 'OpenAI: GPT-5.5',
+			],
 			[
 				'value' => 'openai/gpt-5.4',
 				'label' => 'OpenAI: GPT-5.4',

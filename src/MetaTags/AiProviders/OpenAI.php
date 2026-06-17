@@ -49,8 +49,15 @@ class OpenAI implements ProviderInterface {
 		return implode( ' ', $texts );
 	}
 
+	/**
+	 * @link https://developers.openai.com/api/docs/models/all
+	 */
 	public function get_models(): array {
 		return [
+			[
+				'value' => 'gpt-5.5',
+				'label' => 'GPT-5.5',
+			],
 			[
 				'value' => 'gpt-5.4',
 				'label' => 'GPT-5.4',

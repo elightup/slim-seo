@@ -33,11 +33,22 @@ class Anthropic implements ProviderInterface {
 		return $response['content'][0]['text'] ?? '';
 	}
 
+	/**
+	 * @link https://platform.claude.com/docs/en/about-claude/models/overview
+	 */
 	public function get_models(): array {
 		return [
 			[
-				'value' => 'claude-opus-4-6',
-				'label' => 'Claude Opus 4.6',
+				'value' => 'claude-fable-5',
+				'label' => 'Claude Fable 5',
+			],
+			[
+				'value' => 'claude-mythos-5',
+				'label' => 'Claude Mythos 5',
+			],
+			[
+				'value' => 'claude-opus-4-8',
+				'label' => 'Claude Opus 4.8',
 			],
 			[
 				'value' => 'claude-sonnet-4-6',
