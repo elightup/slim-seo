@@ -1,3 +1,11 @@
+### 4.9.9 - 2026-06-18
+
+- Replace AI model select with a single input that accepts suggestions or free text
+- Fix unauthorized content disclosure in AI meta tags endpoint
+- Fix undefined array key warning in ACF Renderer
+- Simplify social image fallback to featured image only
+- Fix incompatibility with Fluent Cart
+
 ### 4.9.8 - 2026-06-02
 
 - Add drag & drop support for redirect reordering
