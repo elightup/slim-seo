@@ -66,6 +66,8 @@ const List = () => {
 			</div>
 
 			<Items searchKeyword={ searchKeyword } redirectType={ redirectType } executeBulkAction={ executeBulkAction } setExecuteBulkAction={ setExecuteBulkAction } />
+
+			{ SSRedirection?.deleted_url ? <Update redirectToEdit={ { from: SSRedirection.deleted_url } } preOpenModal={ true } /> : '' }
 		</>
 	);
 };

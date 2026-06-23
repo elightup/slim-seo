@@ -32,7 +32,7 @@ class Settings {
 
 		wp_enqueue_style( 'slim-seo-redirection', SLIM_SEO_URL . 'css/redirection.css', [ 'wp-components' ], filemtime( SLIM_SEO_DIR . 'css/redirection.css' ) );
 
-		Assets::enqueue_build_js( 'redirection', 'SSRedirection', [
+		$data = [
 			'rest'               => untrailingslashit( rest_url() ),
 			'nonce'              => wp_create_nonce( 'wp_rest' ),
 			'homeURL'            => untrailingslashit( home_url() ),
@@ -44,7 +44,21 @@ class Settings {
 			'isLog404TableExist' => $this->db_log->table_exists(),
 			'permalinkUrl'       => admin_url( 'options-permalink.php' ),
 			'defaultRedirect'    => Helper::default_redirect(),
-		] );
+		];
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$deleted_url_index = isset( $_GET['deleted_url_index'] ) ? (int) $_GET['deleted_url_index'] : -1;
+
+		if ( $deleted_url_index >= 0 ) {
+			$deleted_url = DeletedURLNotification::get_url( $deleted_url_index );
+
+			if ( $deleted_url ) {
+				$data['deleted_url'] = $deleted_url;
+				$data['settingsURL'] = admin_url( 'options-general.php?page=slim-seo#redirection' );
+			}
+		}
+
+		Assets::enqueue_build_js( 'redirection', 'SSRedirection', $data );
 
 		do_action( 'slim_seo_redirection_enqueue' );
 		do_action( 'slim_seo_redirection_enqueue_settings' );
@@ -56,6 +70,7 @@ class Settings {
 			'auto_redirection',
 			'enable_404_logs',
 			'disable_for_single_posts',
+			'enable_deleted_url_notifications',
 		];
 
 		foreach ( $checkboxes as $checkbox ) {
@@ -75,14 +90,15 @@ class Settings {
 	public static function list(): array {
 		$saved_settings = get_option( 'slim_seo' ) ?: [];
 		$settings       = [
-			'force_trailing_slash'     => 0,
-			'auto_redirection'         => 1,
-			'redirect_www'             => '',
-			'enable_404_logs'          => 0,
-			'auto_delete_404_logs'     => 30,
-			'redirect_404_to'          => '',
-			'redirect_404_to_url'      => '',
-			'disable_for_single_posts' => 0,
+			'force_trailing_slash'             => 0,
+			'auto_redirection'                 => 1,
+			'redirect_www'                     => '',
+			'enable_404_logs'                  => 0,
+			'auto_delete_404_logs'             => 30,
+			'redirect_404_to'                  => '',
+			'redirect_404_to_url'              => '',
+			'disable_for_single_posts'         => 0,
+			'enable_deleted_url_notifications' => 0,
 		];
 
 		foreach ( $settings as $setting_name => $setting_value ) {
