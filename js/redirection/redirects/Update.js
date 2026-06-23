@@ -5,7 +5,7 @@ import { Tooltip } from '../../helper/Tooltip';
 import { fetcher, useApi } from '../helper/misc';
 import ToInput from './ToInput';
 
-const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) => {
+const Update = ( { redirectToEdit = {}, children, linkClassName, callback, preOpenModal = false } ) => {
 	const [ redirect, setRedirect ] = useState( {} );
 	const [ isProcessing, setIsProcessing ] = useState( false );
 	const [ warningMessage, setWarningMessage ] = useState( '' );
@@ -18,12 +18,18 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 		e.preventDefault();
 		setShowModal( true );
 	};
+
 	const closeModal = () => setShowModal( false );
 
 	const updateRedirect = () => {
 		setWarningMessage( '' );
 
 		fetcher( 'update_redirect', { redirect }, 'POST' ).then( id => {
+			if ( preOpenModal ) {
+				window.location = SSRedirection.settingsURL;
+				return;
+			}
+
 			setShowModal( false );
 			setIsProcessing( false );
 
@@ -80,9 +86,15 @@ const Update = ( { redirectToEdit = {}, children, linkClassName, callback } ) =>
 		setRedirect( { ...SSRedirection.defaultRedirect, ...redirectToEdit } );
 	}, [ redirectToEdit ] );
 
+	useEffect( () => {
+		if ( preOpenModal ) {
+			setShowModal( true );
+		}
+	}, [ preOpenModal ] );
+
 	return (
 		<>
-			<a href='#' className={ linkClassName } onClick={ openModal } title={ title }>{ children ? children : title }</a>
+			{ ! preOpenModal && <a href='#' className={ linkClassName } onClick={ openModal } title={ title }>{ children ? children : title }</a> }
 
 			{
 				showModal && (
