@@ -25,10 +25,7 @@ class Divi {
 		}
 
 		$content = $post->post_content;
-
-		if ( ! $this->is_divi_5( $post->ID ) ) {
-			$content = $this->remove_shortcodes( $content );
-		}
+		$content = $this->remove_shortcodes( $content, $post->ID );
 
 		return $content;
 	}
@@ -41,8 +38,8 @@ class Divi {
 		return get_post_meta( $post_id, '_et_pb_use_divi_5', true );
 	}
 
-	private function remove_shortcodes( string $content ): string {
-		return preg_replace( '~\[/?[^\]]+?/?\]~s', '', $content );
+	private function remove_shortcodes( string $content, int $post_id ): string {
+		return $this->is_divi_5( $post_id ) ? preg_replace( '/\[(?:mbdi_field|mbdi_cloneable)\b[^\]]*].*?\[\/(?:mbdi_field|mbdi_cloneable)]/is', '', $content ) : preg_replace( '~\[/?[^\]]+?/?\]~s', '', $content );
 	}
 
 	public function remove_post_types( array $post_types ): array {
