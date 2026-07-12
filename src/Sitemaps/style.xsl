@@ -7,7 +7,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes"/>
 <xsl:template match="/">
-	<html xmlns="http://www.w3.org/1999/xhtml">
+	<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
 		<title>XML Sitemap</title>
 		<meta charset="utf-8" />
@@ -16,66 +16,61 @@
 				box-sizing: border-box;
 			}
 			body {
-				font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-			    font-size: 14px;
+				font-family: system-ui, sans-serif;
+			    font-size: .875rem;
 			    line-height: 1.6;
-			    color: #495057;
-			    background: #f5f7fb;
-			    margin: 0;
+			    color: oklch(0.439 0 0);
+			    margin: 0 1rem;
 			    text-align: center;
 			}
 			main {
-				margin: 45px auto;
+				margin: 3rem auto;
 				display: inline-block;
 				text-align: left;
-				max-width: 800px;
-			}
-			table {
-				font-size: 14px;
+				max-width: 48rem;
 			}
 			h1 {
 				text-align: center;
-				line-height: 1.1;
+				line-height: 1;
 				font-weight: 600;
 			}
 			.list {
-				border: 1px solid rgba(0, 40, 100, .12);
-				border-radius: 4px;
-				background: #fff;
-				box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+				border: 1px solid oklch(0.922 0 0);
+				border-radius: .25rem;
 			}
 			a {
 				text-decoration: none;
-				color: #495057;
-				transition: color .2s;
+				color: inherit;
 			}
 			a:hover {
-				color: #9aa0ac;
+				text-decoration: underline;
 			}
 			table {
 				border-collapse: collapse;
+				font-size: inherit;
 			}
 			tr:first-child {
-			    border-bottom: 2px solid rgba(0, 40, 100, .12);
+			    border-bottom: 2px solid oklch(0.922 0 0);
 			    background: none;
 			}
 			tr:nth-child(2n) {
-			    background: rgba(0, 0, 0, .03);
+			    background: oklch(0.97 0 0);
 			}
 			th,
 			td {
-			    padding: .6em 1em;
-			    color: #9aa0ac;
+			    padding: .5rem 1rem;
 			}
 			th {
 				text-align: left;
-				font-size: 12px;
+				font-size: .75rem; 
 				font-weight: normal;
 				text-transform: uppercase;
 			}
 			.info {
-				margin-top: 15px;
-				color: #9aa0ac;
+				margin-top: 1rem;
+			}
+			.info a {
+				text-decoration: underline;
 			}
 		</style>
 	</head>
