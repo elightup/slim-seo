@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 6.6
-Tested up to: 7.0
+Tested up to: 7.0.1
 Requires PHP: 7.4
-Stable tag: 4.9.9
+Stable tag: 4.9.10
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -174,6 +174,11 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.10 - 2026-07-14 =
+
+- Fix conflict with Meta Box modules not outputting in Divi 5
+- Improve sitemap accessibility and use Tailwind v4 neutral palette
 
 = 4.9.9 - 2026-06-18 =
 

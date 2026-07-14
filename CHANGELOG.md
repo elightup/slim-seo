@@ -1,3 +1,8 @@
+### 4.9.10 - 2026-07-14
+
+- Fix conflict with Meta Box modules not outputting in Divi 5
+- Improve sitemap accessibility and use Tailwind v4 neutral palette
+
 ### 4.9.9 - 2026-06-18
 
 - Replace AI model select with a single input that accepts suggestions or free text
