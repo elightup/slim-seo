@@ -5,33 +5,37 @@ class DeletedURLNotification {
 	const DELETED_URLS_OPTION_NAME = 'ss_redirection_deleted_urls';
 
 	public function __construct() {
-		add_action( 'wp_trash_post', [ $this, 'trash_post' ] );
+		add_action( 'wp_trash_post', [ $this, 'remove_post' ] );
+		add_action( 'before_delete_post', [ $this, 'remove_post' ] );
 		add_action( 'pre_delete_term', [ $this, 'delete_term' ] );
 		add_action( 'post_updated', [ $this, 'post_updated' ], 10, 3 );
-
 		add_action( 'admin_notices', [ $this, 'notifications' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'wp_ajax_slim_seo_redirection_dismiss_deleted_url_notification', [ $this, 'dismiss' ] );
 	}
 
-	public function trash_post( int $post_id ): void {
+	public function remove_post( int $post_id ): void {
 		$post = get_post( $post_id );
 
 		if ( ! $post || 'publish' !== $post->post_status ) {
 			return;
 		}
 
-		self::add( get_permalink( $post_id ) );
+		$type = get_post_type_object( $post->post_type )?->labels->singular_name ?? __( 'post', 'slim-seo' );
+
+		self::add( get_permalink( $post_id ), $type );
 	}
 
 	public function delete_term( int $term_id ): void {
-		$link = get_term_link( $term_id );
+		$term = get_term( $term_id );
 
-		if ( is_wp_error( $link ) ) {
+		if ( ! $term || is_wp_error( $term ) ) {
 			return;
 		}
 
-		self::add( $link, 'term' );
+		$type = get_taxonomy( $term->taxonomy )?->labels->singular_name ?? __( 'term', 'slim-seo' );
+
+		self::add( get_term_link( $term ), $type );
 	}
 
 	public function post_updated( int $post_id, $post_after, $post_before ): void {
@@ -62,7 +66,7 @@ class DeletedURLNotification {
 					printf(
 						wp_kses_post(
 							/* translators: 1: content type, 2: deleted URL, 3: redirect URL, 4: link text. */
-							__( 'A %1$s has been moved to trash. You may redirect <code>%2$s</code> to <a href="%3$s">%4$s</a>.', 'slim-seo' )
+							__( 'The %1$s at <code>%2$s</code> has been removed. You may redirect it to <a href="%3$s">%4$s</a>.', 'slim-seo' )
 						),
 						esc_html( $url_data['type'] ),
 						esc_html( $url_data['url'] ),
@@ -104,7 +108,7 @@ class DeletedURLNotification {
 	}
 
 	private static function update( array $urls ): void {
-		update_option( self::DELETED_URLS_OPTION_NAME, $urls );
+		update_option( self::DELETED_URLS_OPTION_NAME, $urls, false );
 	}
 
 	private static function add( string $url, string $type = 'post' ): void {
@@ -125,21 +129,24 @@ class DeletedURLNotification {
 	}
 
 	public static function delete_url( string $url ): void {
-		$urls  = self::list();
-		$found = false;
+		$urls = self::list();
 
-		foreach ( $urls as $url_index => $url_data ) {
-			if ( $url_data['url'] === $url ) {
-				unset( $urls[ $url_index ] );
-
-				$found = true;
-
-				break;
-			}
+		if ( empty( $urls ) ) {
+			return;
 		}
 
-		if ( $found ) {
+		$url_normalized = Helper::normalize_url( $url );
+
+		foreach ( $urls as $url_index => $url_data ) {
+			if ( Helper::normalize_url( $url_data['url'] ) !== $url_normalized ) {
+				continue;
+			}
+
+			unset( $urls[ $url_index ] );
+
 			self::update( $urls );
+
+			return;
 		}
 	}
 
