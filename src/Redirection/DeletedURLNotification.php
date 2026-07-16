@@ -5,8 +5,8 @@ class DeletedURLNotification {
 	const DELETED_URLS_OPTION_NAME = 'ss_redirection_deleted_urls';
 
 	public function __construct() {
-		add_action( 'wp_trash_post', [ $this, 'remove_post' ] );
-		add_action( 'before_delete_post', [ $this, 'remove_post' ] );
+		add_action( 'wp_trash_post', [ $this, 'delete_post' ] );
+		add_action( 'before_delete_post', [ $this, 'delete_post' ] );
 		add_action( 'pre_delete_term', [ $this, 'delete_term' ] );
 		add_action( 'post_updated', [ $this, 'post_updated' ], 10, 3 );
 		add_action( 'admin_notices', [ $this, 'notifications' ] );
@@ -14,14 +14,15 @@ class DeletedURLNotification {
 		add_action( 'wp_ajax_slim_seo_redirection_dismiss_deleted_url_notification', [ $this, 'dismiss' ] );
 	}
 
-	public function remove_post( int $post_id ): void {
+	public function delete_post( int $post_id ): void {
 		$post = get_post( $post_id );
 
 		if ( ! $post || 'publish' !== $post->post_status ) {
 			return;
 		}
 
-		$type = get_post_type_object( $post->post_type )?->labels->singular_name ?? __( 'post', 'slim-seo' );
+		$post_type_object = get_post_type_object( $post->post_type );
+		$type             = $post_type_object && ! empty( $post_type_object->labels->singular_name ) ? $post_type_object->labels->singular_name : __( 'post', 'slim-seo' );
 
 		self::add( get_permalink( $post_id ), $type );
 	}
@@ -33,7 +34,8 @@ class DeletedURLNotification {
 			return;
 		}
 
-		$type = get_taxonomy( $term->taxonomy )?->labels->singular_name ?? __( 'term', 'slim-seo' );
+		$taxonomy = get_taxonomy( $term->taxonomy );
+		$type     = $taxonomy && ! empty( $taxonomy->labels->singular_name ) ? $taxonomy->labels->singular_name : __( 'term', 'slim-seo' );
 
 		self::add( get_term_link( $term ), $type );
 	}
@@ -66,7 +68,7 @@ class DeletedURLNotification {
 					printf(
 						wp_kses_post(
 							/* translators: 1: content type, 2: deleted URL, 3: redirect URL, 4: link text. */
-							__( 'The %1$s at <code>%2$s</code> has been removed. You may redirect it to <a href="%3$s">%4$s</a>.', 'slim-seo' )
+							__( 'The %1$s at <code>%2$s</code> has been deleted. You may redirect it to <a href="%3$s">%4$s</a>.', 'slim-seo' )
 						),
 						esc_html( $url_data['type'] ),
 						esc_html( $url_data['url'] ),
