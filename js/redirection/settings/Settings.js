@@ -14,6 +14,7 @@ const Settings = () => {
 	const [ redirect404To, setRedirect404To ] = useState( settings[ 'redirect_404_to' ] );
 	const [ redirect404ToURL, setRedirect404ToURL ] = useState( settings[ 'redirect_404_to_url' ] );
 	const [ disableForSinglePosts, toggleDisableForSinglePosts ] = useReducer( onOrOff => !onOrOff, !!settings['disable_for_single_posts'] );
+	const [ enableDeletedURLNotifications, toggleEnableDeletedURLNotifications ] = useReducer( onOrOff => !onOrOff, !!settings['enable_deleted_url_notifications'] );
 
 	const deleteAllRedirects = e => {
 		e.preventDefault();
@@ -165,6 +166,19 @@ const Settings = () => {
 						<td>
 							<label className='ss-toggle'>
 								<input id='ss-disable-for-single-posts' type='checkbox' name={ `${ settingsName }[disable_for_single_posts]` } value='1' checked={ disableForSinglePosts } onChange={ toggleDisableForSinglePosts } />
+								<div className='ss-toggle__switch'></div>
+							</label>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label htmlFor="ss-enable-deleted-url-notifications">{ __( 'Deleted URL Notifications', 'slim-seo' ) }</label>
+							<Tooltip content={ __( 'Get notified when content is deleted, so you can create redirects and avoid 404 errors. Supports posts, pages, custom post types, categories, tags, and taxonomy terms.', 'slim-seo' ) } />
+						</th>
+						<td>
+							<label className='ss-toggle'>
+								<input id='ss-enable-deleted-url-notifications' type='checkbox' name={ `${ settingsName }[enable_deleted_url_notifications]` } value='1' checked={ enableDeletedURLNotifications } onChange={ toggleEnableDeletedURLNotifications } />
 								<div className='ss-toggle__switch'></div>
 							</label>
 						</td>

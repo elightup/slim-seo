@@ -4,6 +4,9 @@ namespace SlimSEO\Redirection\Api;
 use WP_REST_Server;
 use WP_REST_Request;
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Redirection\Settings;
+use SlimSEO\Redirection\Helper;
+use SlimSEO\Redirection\DeletedURLNotification;
 use SlimSEO\Helpers\Data as DataHelpers;
 
 class Redirects extends Base {
@@ -68,8 +71,13 @@ class Redirects extends Base {
 
 	public function update_redirect( WP_REST_Request $request ): string {
 		$redirect = $request->get_param( 'redirect' );
+		$id       = $this->db_redirects->update( $redirect );
 
-		return $this->db_redirects->update( $redirect );
+		if ( ! empty( $redirect['from'] ) && $id && Settings::get( 'enable_deleted_url_notifications' ) ) {
+			DeletedURLNotification::delete_url( Helper::url_valid( $redirect['from'] ) ? $redirect['from'] : Helper::home_url( $redirect['from'] ) );
+		}
+
+		return $id;
 	}
 
 	public function delete_redirects( WP_REST_Request $request ): bool {

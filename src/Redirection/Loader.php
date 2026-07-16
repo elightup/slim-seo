@@ -15,6 +15,10 @@ class Loader {
 			if ( ! Settings::get( 'disable_for_single_posts' ) ) {
 				new Post( $this->db_redirects );
 			}
+
+			if ( Settings::get( 'enable_deleted_url_notifications' ) ) {
+				new DeletedURLNotification();
+			}
 		} else {
 			new Redirection( $this->db_redirects );
 			new Redirection404( $this->db_log );

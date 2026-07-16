@@ -41,6 +41,7 @@ class RestApi {
 			'auto_redirection',
 			'enable_404_logs',
 			'disable_for_single_posts',
+			'enable_deleted_url_notifications',
 			'footer_code',
 			'force_trailing_slash',
 			'header_code',
