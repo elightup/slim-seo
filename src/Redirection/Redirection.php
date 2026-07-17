@@ -27,7 +27,6 @@ class Redirection {
 		$request_uri = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @phpcs:ignore.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
-		$request_url = strtolower( $request_url );
 
 		if ( apply_filters( 'slim_seo_redirection_skip', false, $request_url ) ) {
 			return;
@@ -201,7 +200,6 @@ class Redirection {
 		$request_uri = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
-		$request_url = strtolower( $request_url );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$post_id = (int) $wpdb->get_var(
