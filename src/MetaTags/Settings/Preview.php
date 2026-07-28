@@ -57,7 +57,7 @@ class Preview {
 
 	public function can_edit_post( WP_REST_Request $request ): bool {
 		$post_id = (int) $request->get_param( 'ID' );
-		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
+		return $post_id && current_user_can( 'edit_post', $post_id );
 	}
 
 	public function can_edit_homepage(): bool {
