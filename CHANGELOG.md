@@ -1,3 +1,10 @@
+### 4.9.11 - 2026-07-28
+
+- Add deleted URL notifications for redirection (#285)
+- Remove redundant strtolower on request URL in redirection
+- Fix contributor arbitrary post-meta disclosure in preview routes. Credit Shivamani Vastrala. (#288)
+- Align inserter button to the center of the input box
+
 ### 4.9.10 - 2026-07-14
 
 - Fix conflict with Meta Box modules not outputting in Divi 5
