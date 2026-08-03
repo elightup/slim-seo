@@ -126,6 +126,10 @@ abstract class Base {
 			wp_send_json_error();
 		}
 
+		if ( ! $this->can_edit( $id ) ) {
+			wp_send_json_error( [], 403 );
+		}
+
 		$data = get_metadata( $this->object_type, $id, 'slim_seo', true ) ?: [];
 		$data = array_merge( [
 			'title'       => '',
@@ -168,4 +172,9 @@ abstract class Base {
 	}
 
 	abstract protected function is_screen(): bool;
+
+	protected function can_edit( int $id ): bool {
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown
+		return $this->object_type === 'term' ? current_user_can( 'edit_term', $id ) : current_user_can( 'edit_post', $id );
+	}
 }

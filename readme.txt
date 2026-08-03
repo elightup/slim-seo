@@ -109,7 +109,7 @@ If you like this plugin, you might also like our other WordPress products:
 
 == Installation ==
 
-Before installing, please note that the plugin requires PHP >= 7.2.
+Before installing, please note that the plugin requires PHP >= 7.4.
 
 1. Go to Plugins > Add New.
 2. Search for "Slim SEO".
