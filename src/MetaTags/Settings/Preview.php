@@ -57,7 +57,17 @@ class Preview {
 
 	public function can_edit_post( WP_REST_Request $request ): bool {
 		$post_id = (int) $request->get_param( 'ID' );
-		return $post_id && current_user_can( 'edit_post', $post_id );
+		if ( ! $post_id ) {
+			return false;
+		}
+
+		if ( current_user_can( 'edit_post', $post_id ) ) {
+			return true;
+		}
+
+		// Contributor previewing their own published post (post_author cannot be spoofed).
+		$post = get_post( $post_id );
+		return $post && 'publish' === $post->post_status && (int) $post->post_author === get_current_user_id();
 	}
 
 	public function can_edit_homepage(): bool {
