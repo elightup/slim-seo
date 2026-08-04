@@ -65,9 +65,10 @@ class Preview {
 			return true;
 		}
 
-		// Contributor previewing their own published post (post_author cannot be spoofed).
-		$post = get_post( $post_id );
-		return $post && 'publish' === $post->post_status && (int) $post->post_author === get_current_user_id();
+		// Contributor previewing their own published post. post_author = 0 must not match a guest's user ID 0.
+		$user_id = get_current_user_id();
+		$post    = get_post( $post_id );
+		return $post && $user_id > 0 && 'publish' === $post->post_status && (int) $post->post_author === $user_id;
 	}
 
 	public function can_edit_homepage(): bool {
