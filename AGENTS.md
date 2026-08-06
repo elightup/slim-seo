@@ -47,7 +47,7 @@ pnpm start
 ## Code Style Guidelines
 
 ### General
-- **Minimum PHP version**: 7.2
+- **Minimum PHP version**: 7.4
 - **Minimum WordPress version**: 6.5
 - **Coding standards**: WordPress Coding Standards (via phpcs.xml)
 - **Text domain**: `slim-seo` (for i18n)

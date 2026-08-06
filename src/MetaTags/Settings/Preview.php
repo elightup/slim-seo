@@ -57,7 +57,18 @@ class Preview {
 
 	public function can_edit_post( WP_REST_Request $request ): bool {
 		$post_id = (int) $request->get_param( 'ID' );
-		return $post_id && current_user_can( 'edit_post', $post_id );
+		if ( ! $post_id ) {
+			return false;
+		}
+
+		if ( current_user_can( 'edit_post', $post_id ) ) {
+			return true;
+		}
+
+		// Contributor previewing their own published post. Require a logged-in user (post_author = 0 must not match guest ID 0) with the base edit capability (subscriber authors excluded).
+		$user_id = get_current_user_id();
+		$post    = get_post( $post_id );
+		return $post && $user_id > 0 && current_user_can( 'edit_posts' ) && 'publish' === $post->post_status && (int) $post->post_author === $user_id;
 	}
 
 	public function can_edit_homepage(): bool {
