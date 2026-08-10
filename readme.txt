@@ -3,7 +3,7 @@ Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 6.6
-Tested up to: 7.0.2
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 4.9.11
 License: GPL v3
