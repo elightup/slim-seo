@@ -1,13 +1,14 @@
 <?php
 namespace SlimSEO;
 
+use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
 use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
 
 class PrimaryTerm {
 	const META_PREFIX = '_slim_seo_primary_term_';
 
-	public function setup(): void {
+	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'init', [ $this, 'register_meta' ] );
 		add_action( 'save_post', [ $this, 'save' ] );
@@ -27,7 +28,7 @@ class PrimaryTerm {
 			return;
 		}
 
-		$post_id         = get_the_ID();
+		$post_id         = (int) ( $_GET['post'] ?? 0 );
 		$taxonomies      = $this->get_taxonomies( $screen->post_type );
 		$taxonomies_data = [];
 
@@ -48,22 +49,18 @@ class PrimaryTerm {
 
 		wp_enqueue_style( 'slim-seo-primary-term', SLIM_SEO_URL . 'css/primary-term.css', [], filemtime( SLIM_SEO_DIR . 'css/primary-term.css' ) );
 
-		$js_file_type = $screen->is_block_editor() ? 'block' : 'classic';
-		$dependencies = [];
-
 		if ( $screen->is_block_editor() ) {
-			$dependencies = [ 'wp-data', 'wp-element', 'wp-hooks', 'wp-compose' ];
+			Assets::enqueue_build_js( 'primary-term-block', 'ssPrimaryTerm', $params );
 		} else {
-			$dependencies      = [ 'jquery' ];
 			$params['setText'] = __( 'Set primary', 'slim-seo' );
 			$params['nonce']   = wp_create_nonce( 'save' );
-		}
 
-		wp_enqueue_script( 'slim-seo-primary-term', SLIM_SEO_URL . "js/build/primary-term-{$js_file_type}.js", $dependencies, filemtime( SLIM_SEO_DIR . "js/build/primary-term-{$js_file_type}.js" ), true );
-		wp_localize_script( 'slim-seo-primary-term', 'ssPrimaryTerm', $params );
+			wp_enqueue_script( 'slim-seo-primary-term', SLIM_SEO_URL . 'js/primary-term/classic-editor.js', [ 'jquery' ], filemtime( SLIM_SEO_DIR . 'js/primary-term/classic-editor.js' ), true );
+			wp_localize_script( 'slim-seo-primary-term', 'ssPrimaryTerm', $params );
+		}
 	}
 
-	public function register_meta() {
+	public function register_meta(): void {
 		$taxonomies = $this->get_taxonomies();
 
 		foreach ( $taxonomies as $taxonomy ) {
@@ -75,28 +72,30 @@ class PrimaryTerm {
 					'type'          => 'integer',
 					'default'       => 0,
 					'show_in_rest'  => true,
-					'auth_callback' => function () {
-						return current_user_can( 'edit_posts' );
-					},
+					'auth_callback' => [ $this, 'can_edit_post' ],
 				] );
 			}
 		}
 	}
 
 	public function save( int $post_id ): void {
-		if ( ! check_ajax_referer( 'save', 'ss_primary_term_nonce', false ) || empty( $_POST ) ) {
+		if (
+			empty( $_POST['ss_primary_term_nonce'] )
+			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ss_primary_term_nonce'] ) ), 'save' )
+			|| ! $this->can_user_edit( $post_id )
+		) {
 			return;
 		}
 
-		$taxonomies = $this->get_taxonomies( isset( $_POST['post_type'] ) ? sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) : '' );
+		$taxonomies = $this->get_taxonomies( get_post_type( $post_id ) );
 
 		foreach ( $taxonomies as $taxonomy ) {
 			$meta_key = self::META_PREFIX . $taxonomy;
 
-			if ( ! empty( $_POST[ $meta_key ] ) ) {
-				update_post_meta( $post_id, $meta_key, (int) $_POST[ $meta_key ] );
-			} else {
+			if ( empty( $_POST[ $meta_key ] ) ) {
 				delete_post_meta( $post_id, $meta_key );
+			} else {
+				update_post_meta( $post_id, $meta_key, (int) $_POST[ $meta_key ] );
 			}
 		}
 	}
@@ -151,7 +150,7 @@ class PrimaryTerm {
 		$structure    = $rewrite_data['structure'];
 		$placeholder  = '%' . $taxonomy . '%';
 
-		if ( false === strpos( $structure, $placeholder ) ) {
+		if ( ! str_contains( $structure, $placeholder ) ) {
 			return $permalink;
 		}
 
@@ -175,7 +174,7 @@ class PrimaryTerm {
 	private function get_term_path( \WP_Term $term, string $taxonomy ): string {
 		$taxonomy_object = get_taxonomy( $taxonomy );
 
-		if ( ! $taxonomy_object->rewrite['hierarchical'] ?? false ) {
+		if ( empty( $taxonomy_object->rewrite['hierarchical'] ) ) {
 			return $term->slug;
 		}
 
@@ -203,12 +202,15 @@ class PrimaryTerm {
 			return $permalink;
 		}
 
-		usort( $terms, fn( $a, $b ) => $a->term_id - $b->term_id );
+		foreach ( $terms as $term ) {
+			$current_path = $this->get_term_path( $term, $taxonomy );
 
-		$default_term = $terms[0];
-		$default_path = $this->get_term_path( $default_term, $taxonomy );
+			if ( str_contains( $permalink, '/' . $current_path . '/' ) ) {
+				return str_replace( '/' . $current_path . '/', '/' . $term_path . '/', $permalink );
+			}
+		}
 
-		return str_replace( '/' . $default_path . '/', '/' . $term_path . '/', $permalink );
+		return $permalink;
 	}
 
 	public function breadcrumbs_term( \WP_Term $term, int $post_id ): \WP_Term {
@@ -222,8 +224,14 @@ class PrimaryTerm {
 	}
 
 	public static function get_primary_term_id( int $post_id, string $taxonomy ): int {
-		$primary_id = get_post_meta( $post_id, self::META_PREFIX . $taxonomy, true );
+		return (int) get_post_meta( $post_id, self::META_PREFIX . $taxonomy, true );
+	}
 
-		return $primary_id ? (int) $primary_id : 0;
+	public function can_edit_post( bool $allowed, string $meta_key, int $post_id ): bool {
+		return $this->can_user_edit( $post_id );
+	}
+
+	private function can_user_edit( int $post_id ): bool {
+		return $post_id && current_user_can( 'edit_post', $post_id ) && current_user_can( 'read_post', $post_id );
 	}
 }

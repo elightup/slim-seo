@@ -27,7 +27,6 @@ class Settings {
 			'schema',
 			'redirection',
 			'no_category_base',
-			'primary_term',
 		],
 	];
 
@@ -108,7 +107,6 @@ class Settings {
 		if ( empty( $option['features'] ) ) {
 			$features_off = [
 				'no_category_base',
-				'primary_term',
 			];
 
 			$features = array_diff( $features, $features_off );
