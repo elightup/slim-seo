@@ -28,7 +28,7 @@ class PrimaryTerm {
 			return;
 		}
 
-		$post_id         = (int) ( $_GET['post'] ?? 0 );
+		$post_id         = (int) ( $_GET['post'] ?? 0 ); // phpcs:ignore
 		$taxonomies      = $this->get_taxonomies( $screen->post_type );
 		$taxonomies_data = [];
 
