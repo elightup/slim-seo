@@ -26,7 +26,7 @@ trait Context {
 			$queried = get_queried_object();
 
 			// WooCommerce shop, queried object return page, not post type
-			if ( $queried instanceof \WP_Post && is_shop() ) {
+			if ( $queried instanceof \WP_Post && function_exists( 'is_shop' ) && is_shop() ) {
 				QueriedObject::set( $queried );
 				QueriedObject::set_id( $queried->ID );
 
