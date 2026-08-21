@@ -29,10 +29,6 @@ trait Context {
 				return '';
 			}
 
-			if ( $page instanceof \WP_Post && ( ! function_exists( 'is_shop' ) || ! is_shop() ) ) {
-				return '';
-			}
-
 			if ( $page instanceof \WP_Post_Type ) {
 				$page = Data::get_post_type_archive_page( $page->name );
 
