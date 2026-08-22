@@ -4,6 +4,8 @@ namespace SlimSEO;
 use SlimSEO\Helpers\Assets;
 use SlimSEO\Helpers\Data;
 use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
+use WP_Term;
+use WP_Post;
 
 class PrimaryTerm {
 	const META_PREFIX = '_slim_seo_primary_term_';
@@ -112,8 +114,8 @@ class PrimaryTerm {
 		return array_keys( $taxonomies );
 	}
 
-	private function get_supported_rewrite_post_types(): array {
-		$supported_rewrite_post_types = [
+	private function get_rewrite_data(): array {
+		$data = [
 			'post' => [
 				'taxonomy'  => 'category',
 				'structure' => get_option( 'permalink_structure', '' ),
@@ -121,48 +123,42 @@ class PrimaryTerm {
 		];
 
 		if ( defined( 'WC_PLUGIN_FILE' ) ) {
-			$supported_rewrite_post_types['product'] = [
+			$data['product'] = [
 				'taxonomy'  => 'product_cat',
 				'structure' => get_option( 'woocommerce_permalinks', [] )['product_base'] ?? '',
 			];
 		}
 
-		$supported_rewrite_post_types = apply_filters( 'slim_seo_primary_term_supported_rewrite_post_types', $supported_rewrite_post_types );
-
-		return $supported_rewrite_post_types;
+		return apply_filters( 'slim_seo_primary_term_rewrite', $data );
 	}
 
 	public function filter_permalink( string $permalink, $post ): string {
 		$post = get_post( $post );
-
 		if ( ! $post ) {
 			return $permalink;
 		}
 
-		$supported_rewrite_post_types = $this->get_supported_rewrite_post_types();
-
-		if ( ! isset( $supported_rewrite_post_types[ $post->post_type ] ) ) {
+		$rewrite = $this->get_rewrite_data();
+		if ( ! isset( $rewrite[ $post->post_type ] ) ) {
 			return $permalink;
 		}
 
-		$rewrite_data = $supported_rewrite_post_types[ $post->post_type ];
+		$rewrite_data = $rewrite[ $post->post_type ];
 		$taxonomy     = $rewrite_data['taxonomy'];
 		$structure    = $rewrite_data['structure'];
-		$placeholder  = '%' . $taxonomy . '%';
+		$placeholder  = "%$taxonomy%";
 
 		if ( ! str_contains( $structure, $placeholder ) ) {
 			return $permalink;
 		}
 
 		$primary_id = self::get_primary_term_id( $post->ID, $taxonomy );
-
 		if ( ! $primary_id ) {
 			return $permalink;
 		}
 
 		$primary_term = get_term( $primary_id, $taxonomy );
-
-		if ( ! $primary_term || is_wp_error( $primary_term ) ) {
+		if ( ! ( $primary_term instanceof WP_Term ) ) {
 			return $permalink;
 		}
 
@@ -171,9 +167,8 @@ class PrimaryTerm {
 		return $this->replace_term_in_permalink( $permalink, $taxonomy, $term_path, $post );
 	}
 
-	private function get_term_path( \WP_Term $term, string $taxonomy ): string {
+	private function get_term_path( WP_Term $term, string $taxonomy ): string {
 		$taxonomy_object = get_taxonomy( $taxonomy );
-
 		if ( empty( $taxonomy_object->rewrite['hierarchical'] ) ) {
 			return $term->slug;
 		}
@@ -184,8 +179,7 @@ class PrimaryTerm {
 
 		foreach ( $ancestors as $ancestor_id ) {
 			$ancestor = get_term( $ancestor_id, $taxonomy );
-
-			if ( $ancestor && ! is_wp_error( $ancestor ) ) {
+			if ( $ancestor instanceof WP_Term ) {
 				$slugs[] = $ancestor->slug;
 			}
 		}
@@ -195,29 +189,31 @@ class PrimaryTerm {
 		return implode( '/', $slugs );
 	}
 
-	private function replace_term_in_permalink( string $permalink, string $taxonomy, string $term_path, \WP_Post $post ): string {
+	private function replace_term_in_permalink( string $permalink, string $taxonomy, string $term_path, WP_Post $post ): string {
 		$terms = get_the_terms( $post->ID, $taxonomy );
-
 		if ( ! $terms || is_wp_error( $terms ) ) {
 			return $permalink;
 		}
 
 		foreach ( $terms as $term ) {
 			$current_path = $this->get_term_path( $term, $taxonomy );
-
-			if ( str_contains( $permalink, '/' . $current_path . '/' ) ) {
-				return str_replace( '/' . $current_path . '/', '/' . $term_path . '/', $permalink );
+			if ( str_contains( $permalink, "/$current_path/" ) ) {
+				return str_replace( "/$current_path/", "/$term_path/", $permalink );
 			}
 		}
 
 		return $permalink;
 	}
 
-	public function breadcrumbs_term( \WP_Term $term, int $post_id ): \WP_Term {
+	public function breadcrumbs_term( WP_Term $term, int $post_id ): WP_Term {
 		$primary_id = self::get_primary_term_id( $post_id, $term->taxonomy );
+		if ( ! $primary_id ) {
+			return $term;
+		}
 
-		if ( $primary_id ) {
-			$term = get_term( $primary_id, $term->taxonomy );
+		$primary_term = get_term( $primary_id, $term->taxonomy );
+		if ( $primary_term instanceof WP_Term ) {
+			$term = $primary_term;
 		}
 
 		return $term;
@@ -232,6 +228,6 @@ class PrimaryTerm {
 	}
 
 	private function can_user_edit( int $post_id ): bool {
-		return $post_id && current_user_can( 'edit_post', $post_id ) && current_user_can( 'read_post', $post_id );
+		return $post_id && current_user_can( 'edit_post', $post_id );
 	}
 }

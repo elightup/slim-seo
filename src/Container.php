@@ -145,6 +145,7 @@ class Container {
 			$service->setup();
 		}
 
+		// Features with no settings.
 		new PrimaryTerm;
 	}
 
