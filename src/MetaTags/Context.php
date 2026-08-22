@@ -23,15 +23,23 @@ trait Context {
 		// If a page is set as the post type archive (like WooCommerce shop), then get value from that page.
 		// Otherwise get from the post type archive settings.
 		if ( is_post_type_archive() ) {
-			$post_type_object = get_queried_object();
-			$archive_page     = Data::get_post_type_archive_page( $post_type_object->name );
+			$page = get_queried_object();
 
-			if ( ! $archive_page ) {
-				return $this->get_post_type_archive_value();
+			if ( ! ( $page instanceof \WP_Post_Type || $page instanceof \WP_Post ) ) {
+				return '';
 			}
 
-			QueriedObject::set( $archive_page );
-			QueriedObject::set_id( $archive_page->ID );
+			if ( $page instanceof \WP_Post_Type ) {
+				$page = Data::get_post_type_archive_page( $page->name );
+
+				if ( ! $page ) {
+					return $this->get_post_type_archive_value();
+				}
+			}
+
+			QueriedObject::set( $page );
+			QueriedObject::set_id( $page->ID );
+
 			return $this->get_singular_value();
 		}
 
