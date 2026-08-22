@@ -1,5 +1,6 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { ReactSortable } from 'react-sortablejs';
 import { fetcher, useApi } from '../helper/misc';
 import Header from './Header';
 import Item from './Item';
@@ -15,16 +16,25 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 	const [ order, setOrder ] = useState( 'DESC' );
 	const [ remountPaginate, setRemountPaginate ] = useState( 0 );
 	const { result: redirects, mutate } = useApi( 'redirects', {}, { returnMutate: true } );
+	const prevRedirectsCount = useRef( 0 );
+	const isDragEnabled = ! orderBy;
+
+	useEffect( () => {
+		const count = redirects?.length ?? 0;
+
+		if ( count > prevRedirectsCount.current ) {
+			setOffset( 0 );
+			setRemountPaginate( Date.now() );
+		}
+
+		prevRedirectsCount.current = count;
+	}, [ redirects?.length ] );
 
 	const deleteRedirects = ( ids = [] ) => {
-		fetcher( 'delete_redirects', { ids }, 'POST' ).then( result => {
+		fetcher( 'delete_redirects', { ids }, 'POST' ).then( () => {
 			mutate(
-				redirects.filter( r => {
-					return ! ids.includes( r.id );
-				} ),
-				{
-					revalidate: false
-				}
+				redirects.filter( r => ! ids.includes( r.id ) ),
+				{ revalidate: false }
 			);
 		} );
 	};
@@ -38,9 +48,7 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 
 				return r;
 			} ),
-			{
-				revalidate: false
-			}
+			{ revalidate: false }
 		);
 	};
 
@@ -106,7 +114,28 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 	if ( !filteredRedirects.length ) {
 		return <span>{ __( 'No redirects found.', 'slim-seo' ) }</span>;
 	}
-	
+
+	const displayedRedirects = filteredRedirects.slice( offset, offset + limit );
+
+	const handleDragEnd = event => {
+		if ( event.oldIndex === event.newIndex ) {
+			return;
+		}
+
+		const activeId = displayedRedirects[ event.oldIndex ]?.id;
+		const overId = displayedRedirects[ event.newIndex ]?.id;
+		const oldIndex = redirects.findIndex( r => r.id === activeId );
+		const newIndex = redirects.findIndex( r => r.id === overId );
+		const reordered = [ ...redirects ];
+		const movedItem = reordered.splice( oldIndex, 1 )[0];
+
+		reordered.splice( newIndex, 0, movedItem );
+		
+		mutate( reordered, { revalidate: false } );
+
+		fetcher( 'reorder_redirects', { ids: reordered.map( r => r.id ) }, 'POST' );
+	};
+
 	return (
 		<>
 			<table className='ss-table'>
@@ -117,12 +146,36 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 						order={ order }
 						setOrder={ setOrder }
 						isCheckAll={ isCheckAll }
-						checkAll={ checkAll } />
+						checkAll={ checkAll }
+						isDragEnabled={ isDragEnabled } />
 				</thead>
 
-				<tbody>
-					{ filteredRedirects.slice( offset, offset + limit ).map( redirect => <Item key={ redirect.id } redirectItem={ redirect } checkedList={ checkedList } setCheckedList={ setCheckedList } deleteRedirects={ deleteRedirects } updateRedirects={ updateRedirects } /> ) }
-				</tbody>
+				<ReactSortable
+					group={ {
+						name: 'redirects',
+						pull: true,
+						put: true,
+					} }
+					animation={ 200 }
+					list={ displayedRedirects }
+					setList={ () => {} }
+					onEnd={ handleDragEnd }
+					handle=".ss-redirect__drag-handle"
+					tag="tbody"
+				>
+					{
+						displayedRedirects.map( redirect => (
+							<Item
+								key={ redirect.id }
+								redirectItem={ redirect }
+								checkedList={ checkedList }
+								setCheckedList={ setCheckedList }
+								deleteRedirects={ deleteRedirects }
+								updateRedirects={ updateRedirects }
+								isDragEnabled={ isDragEnabled } />
+						) )
+					}
+				</ReactSortable>
 
 				<tfoot>
 					<Header
@@ -131,14 +184,15 @@ const Items = ( { searchKeyword, redirectType, executeBulkAction, setExecuteBulk
 						order={ order }
 						setOrder={ setOrder }
 						isCheckAll={ isCheckAll }
-						checkAll={ checkAll } />
+						checkAll={ checkAll }
+						isDragEnabled={ isDragEnabled } />
 				</tfoot>
 			</table>
 
 			<div className='ss-redirects-footer'>
 				<Limit limit={ limit } setLimit={ setLimit } total={ filteredRedirects.length } setOffset={ setOffset } setIsCheckAll={ setIsCheckAll } setCheckedList={ setCheckedList } />
 				<Paginate key={ remountPaginate } totalRows={ filteredRedirects.length } limit={ limit } offset={ offset } setOffset={ setOffset } setIsCheckAll={ setIsCheckAll } setCheckedList={ setCheckedList } />
-			</div>			
+			</div>
 		</>
 	);
 };

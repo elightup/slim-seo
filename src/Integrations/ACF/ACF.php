@@ -35,7 +35,7 @@ class ACF {
 			$field_objects = $this->get_term_field_objects( get_queried_object_id() );
 		} else {
 			// Fallback to get post field objects from the current post.
-			$post_id = is_singular() ? get_queried_object_id() : (int) get_the_ID();
+			$post_id       = is_singular() ? get_queried_object_id() : (int) get_the_ID();
 			$field_objects = $this->get_post_field_objects( $post_id );
 		}
 

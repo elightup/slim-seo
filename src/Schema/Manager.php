@@ -45,6 +45,18 @@ class Manager {
 			return;
 		}
 
+		// Do not encode HTML entities (&, <, >, ', ")
+		// which are auto encoded by WordPress functions (get_bloginfo(), wp_get_document_title(), etc.
+		$graph = map_deep( $graph, function ( $value ) {
+			if ( ! is_string( $value ) ) {
+				return $value;
+			}
+
+			$value = html_entity_decode( $value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8' );
+
+			return wp_strip_all_tags( $value );
+		} );
+
 		$schema = [
 			'@context' => 'https://schema.org',
 			'@graph'   => $graph,

@@ -11,8 +11,8 @@ class SenseiLMS {
 	}
 
 	/**
-	 * Don't parse AffiliateWP shortcodes for meta description.
-	 * @link https://affiliatewp.com/doc-categories/shortcodes/
+	 * Don't parse Sensei LMS shortcodes for meta description.
+	 * @link https://senseilms.com/documentation/shortcodes/
 	 */
 	public function skip_shortcodes( $shortcodes ) {
 		$shortcodes = array_merge( $shortcodes, [

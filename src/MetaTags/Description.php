@@ -73,7 +73,7 @@ class Description {
 
 		$post_type = get_post_type( $post_id );
 
-		// Use post type settings if avaiable, then fallback to the post auto description
+		// Use post type settings if available, then fallback to the post auto description
 		return Option::get( "$post_type.description", self::DEFAULTS['post'] );
 	}
 
@@ -106,7 +106,7 @@ class Description {
 			return '';
 		}
 
-		// Use taxonomy settings if avaiable, then fallback to the term auto description
+		// Use taxonomy settings if available, then fallback to the term auto description
 		return Option::get( "{$term->taxonomy}.description", self::DEFAULTS['term'] );
 	}
 
@@ -124,7 +124,7 @@ class Description {
 	}
 
 	private function get_author_value(): string {
-		// Use author settings if avaiable, then fallback to the author auto description
+		// Use author settings if available, then fallback to the author auto description
 		return Option::get( 'author.description', self::DEFAULTS['author'] );
 	}
 

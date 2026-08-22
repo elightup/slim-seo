@@ -76,8 +76,11 @@ class OpenGraph {
 		return $this->get_image_attribute( 'alt' );
 	}
 
-	private function get_image_attribute( $key ) {
-		$image = $this->image_obj->get_value() ?: $this->get_default_image();
+	private function get_image_attribute( string $key ) {
+		static $image = null;
+		if ( $image === null ) {
+			$image = $this->image_obj->get_value() ?: $this->get_default_image();
+		}
 		return $image[ $key ] ?? null;
 	}
 

@@ -19,29 +19,23 @@ class Log404 extends Base {
 			return;
 		}
 
-		register_rest_route( 'slim-seo-redirection', 'records/total', [
+		$args = [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'total' ],
 			'permission_callback' => [ $this, 'has_permission' ],
-		] );
-
-		register_rest_route( 'slim-seo-redirection', 'records/list', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'list' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
-
-		register_rest_route( 'slim-seo-redirection', 'records/delete', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'delete' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
-
-		register_rest_route( 'slim-seo-redirection', 'records/delete-all', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'delete_all' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+			'show_in_index'       => false,
+		];
+		register_rest_route( 'slim-seo-redirection', 'records/total', array_merge( $args, [
+			'callback' => [ $this, 'total' ],
+		] ) );
+		register_rest_route( 'slim-seo-redirection', 'records/list', array_merge( $args, [
+			'callback' => [ $this, 'list' ],
+		] ) );
+		register_rest_route( 'slim-seo-redirection', 'records/delete', array_merge( $args, [
+			'callback' => [ $this, 'delete' ],
+		] ) );
+		register_rest_route( 'slim-seo-redirection', 'records/delete-all', array_merge( $args, [
+			'callback' => [ $this, 'delete_all' ],
+		] ) );
 	}
 
 	public function total(): int {

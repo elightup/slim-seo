@@ -2,10 +2,10 @@
 Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
-Requires at least: 5.9
-Tested up to: 6.9.4
-Requires PHP: 7.2
-Stable tag: 4.9.1
+Requires at least: 6.6
+Tested up to: 7.0
+Requires PHP: 7.4
+Stable tag: 4.9.11
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -109,7 +109,7 @@ If you like this plugin, you might also like our other WordPress products:
 
 == Installation ==
 
-Before installing, please note that the plugin requires PHP >= 7.2.
+Before installing, please note that the plugin requires PHP >= 7.4.
 
 1. Go to Plugins > Add New.
 2. Search for "Slim SEO".
@@ -165,11 +165,72 @@ Add the following constant in your `wp-config.php` file:
 
 `define( 'SLIM_SEO_DELETE_DATA', true );`
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Slim SEO plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/9e5fc363-b8e1-4ee5-b1a2-622135c4457a). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 == Screenshots ==
 
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.9.11 - 2026-07-28 =
+
+- Add deleted URL notifications for redirection (#285)
+- Remove redundant strtolower on request URL in redirection
+- Fix contributor arbitrary post-meta disclosure in preview routes. Credit Shivamani Vastrala. (#288)
+- Align inserter button to the center of the input box
+
+= 4.9.10 - 2026-07-14 =
+
+- Fix conflict with Meta Box modules not outputting in Divi 5
+- Improve sitemap accessibility and use Tailwind v4 neutral palette
+
+= 4.9.9 - 2026-06-18 =
+
+- Replace AI model select with a single input that accepts suggestions or free text
+- Fix unauthorized content disclosure in AI meta tags endpoint
+- Fix undefined array key warning in ACF Renderer
+- Simplify social image fallback to featured image only
+- Fix incompatibility with Fluent Cart
+
+= 4.9.8 - 2026-06-02 =
+
+- Add drag & drop support for redirect reordering
+- Add default social image variables to select for meta tags
+- Fix: import only active redirects from SEOPress
+
+= 4.9.7 - 2026-05-13 =
+
+- Fix compatibility with Divi 5
+
+= 4.9.6 - 2026-05-04 =
+
+- Add filter `slim_seo_redirection_skip` to allow preventing redirection. See [docs](https://docs.wpslimseo.com/slim-seo/redirection/#hooks) for usage.
+- Prevent XSS vulnerability in schema output
+
+= 4.9.5 - 2026-04-22 =
+
+- Add bulk AI generation for meta titles and descriptions. Credit to Taylor Drayson (tdrayson).
+- Remove old CSS variables to avoid conflict with upcoming WordPress 7
+- Add settings for disable redirection settings on single post edit page
+- Add support WooCommerce < 9.8
+- Remove temperature and add checks for get response for OpenAI & OpenRouter
+
+= 4.9.4 - 2026-03-30 =
+
+- Fix not showing magic wand icon for generating meta title and description with AI
+
+= 4.9.3 - 2026-03-30 =
+
+- Add more providers and models for AI integration. Now supports Anthropic (Claude), Google (Gemini), OpenAI (GPT) and OpenRouter.
+- Fix HTML entities are encoded in schemas
+
+= 4.9.2 - 2026-03-23 =
+
+- Update X image instruction
+- Remove admin columns and SEO settings meta box if "Hide from search results" for the post type/taxonomy is ON
 
 = 4.9.1 - 2026-03-12 =
 

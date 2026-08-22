@@ -12,8 +12,8 @@ class UltimateMember {
 		Hook $hook,
 		Robots $robots
 	) {
-		$this->hook          = $hook;
-		$this->robots        = $robots;
+		$this->hook   = $hook;
+		$this->robots = $robots;
 	}
 
 	public function is_active(): bool {

@@ -54,5 +54,4 @@ class Kadence {
 			'kadence/rowlayout',
 		] );
 	}
-
 }

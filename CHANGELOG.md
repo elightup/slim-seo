@@ -1,3 +1,60 @@
+### 4.9.11 - 2026-07-28
+
+- Add deleted URL notifications for redirection (#285)
+- Remove redundant strtolower on request URL in redirection
+- Fix contributor arbitrary post-meta disclosure in preview routes. Credit Shivamani Vastrala. (#288)
+- Align inserter button to the center of the input box
+
+### 4.9.10 - 2026-07-14
+
+- Fix conflict with Meta Box modules not outputting in Divi 5
+- Improve sitemap accessibility and use Tailwind v4 neutral palette
+
+### 4.9.9 - 2026-06-18
+
+- Replace AI model select with a single input that accepts suggestions or free text
+- Fix unauthorized content disclosure in AI meta tags endpoint
+- Fix undefined array key warning in ACF Renderer
+- Simplify social image fallback to featured image only
+- Fix incompatibility with Fluent Cart
+
+### 4.9.8 - 2026-06-02
+
+- Add drag & drop support for redirect reordering
+- Add default social image variables to select for meta tags
+- Fix: import only active redirects from SEOPress
+
+### 4.9.7 - 2026-05-13
+
+- Fix compatibility with Divi 5
+
+### 4.9.6 - 2026-05-04
+
+- Add filter `slim_seo_redirection_skip` to allow preventing redirection. See [docs](https://docs.wpslimseo.com/slim-seo/redirection/#hooks) for usage.
+- Prevent XSS vulnerability in schema output
+
+### 4.9.5 - 2026-04-22
+
+- Add bulk AI generation for meta titles and descriptions. Credit to Taylor Drayson (tdrayson).
+- Remove old CSS variables to avoid conflict with upcoming WordPress 7
+- Add settings for disable redirection settings on single post edit page
+- Add support WooCommerce < 9.8
+- Remove temperature and add checks for get response for OpenAI & OpenRouter
+
+### 4.9.4 - 2026-03-30
+
+- Fix not showing magic wand icon for generating meta title and description with AI
+
+### 4.9.3 - 2026-03-30
+
+- Add more providers and models for AI integration. Now supports Anthropic (Claude), Google (Gemini), OpenAI (GPT) and OpenRouter.
+- Fix HTML entities are encoded in schemas
+
+### 4.9.2 - 2026-03-23
+
+- Update X image instruction
+- Remove admin columns and SEO settings meta box if "Hide from search results" for the post type/taxonomy is ON
+
 ### 4.9.1 - 2026-03-12
 
 - Make AI integration works with page builder plugins

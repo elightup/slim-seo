@@ -22,24 +22,28 @@ class Preview {
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_title' ],
 			'permission_callback' => [ $this, 'can_edit_post' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'term-title', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_title' ],
 			'permission_callback' => [ $this, 'can_edit_term' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'post-description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_post_description' ],
 			'permission_callback' => [ $this, 'can_edit_post' ],
+			'show_in_index'       => false,
 		] );
 
 		register_rest_route( 'slim-seo', self::ROUTE_PREFIX . 'term-description', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_term_description' ],
 			'permission_callback' => [ $this, 'can_edit_term' ],
+			'show_in_index'       => false,
 		] );
 
 		// Render text for homepage title and description.
@@ -47,12 +51,24 @@ class Preview {
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'render_homepage_text' ],
 			'permission_callback' => [ $this, 'can_edit_homepage' ],
+			'show_in_index'       => false,
 		] );
 	}
 
 	public function can_edit_post( WP_REST_Request $request ): bool {
 		$post_id = (int) $request->get_param( 'ID' );
-		return $post_id && current_user_can( 'edit_posts' ) && current_user_can( 'read_post', $post_id );
+		if ( ! $post_id ) {
+			return false;
+		}
+
+		if ( current_user_can( 'edit_post', $post_id ) ) {
+			return true;
+		}
+
+		// Contributor previewing their own published post. Require a logged-in user (post_author = 0 must not match guest ID 0) with the base edit capability (subscriber authors excluded).
+		$user_id = get_current_user_id();
+		$post    = get_post( $post_id );
+		return $post && $user_id > 0 && current_user_can( 'edit_posts' ) && 'publish' === $post->post_status && (int) $post->post_author === $user_id;
 	}
 
 	public function can_edit_homepage(): bool {

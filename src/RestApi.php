@@ -40,7 +40,7 @@ class RestApi {
 			],
 		];
 
-		$args_post = $args_term = $args;
+		$args_post                                     = $args_term = $args;
 		$args_post['show_in_rest']['prepare_callback'] = [ $this, 'prepare_value_for_post' ];
 		$args_term['show_in_rest']['prepare_callback'] = [ $this, 'prepare_value_for_term' ];
 
@@ -58,7 +58,7 @@ class RestApi {
 			'title'       => $this->title->get_rendered_singular_value( $post->ID ),
 			'description' => $this->description->get_rendered_singular_value( $post->ID ),
 		];
-		$value = array_merge( (array) $value, $parsed_value );
+		$value        = array_merge( (array) $value, $parsed_value );
 
 		// Let WordPress prepare the value first. It will auto format the value as defined in the schema.
 		$value = (array) WP_REST_Meta_Fields::prepare_value( $value, $request, $args );

@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || die ?>
 
 <?php if ( $this->is_feature_active( 'open_graph' ) || $this->is_feature_active( 'twitter_cards' ) ) : ?>
-	<h3><?php esc_attr_e( 'Default Social Images', 'slim-seo' ); ?></h3>
+	<h3><?php esc_html_e( 'Default Social Images', 'slim-seo' ); ?></h3>
 	<p><?php esc_html_e( 'These images are used when the post/page being shared does not have featured image or social images set up.', 'slim-seo' ); ?></p>
 
 	<?php if ( $this->is_feature_active( 'open_graph' ) ) : ?>
@@ -43,7 +43,7 @@
 	<?php endif; ?>
 <?php endif; ?>
 
-<h3><?php esc_attr_e( 'Social Media Analytics', 'slim-seo' ); ?></h3>
+<h3><?php esc_html_e( 'Social Media Analytics', 'slim-seo' ); ?></h3>
 <p><?php esc_html_e( 'If you are using Facebook or X analytic tools, enter the details below. Omitting them has no effect on how a shared web page appears on a Facebook timeline or X feed.', 'slim-seo' ); ?></p>
 
 <div class="ef-control">

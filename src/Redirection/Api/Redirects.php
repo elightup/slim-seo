@@ -4,6 +4,9 @@ namespace SlimSEO\Redirection\Api;
 use WP_REST_Server;
 use WP_REST_Request;
 use SlimSEO\Redirection\Database\Redirects as DbRedirects;
+use SlimSEO\Redirection\Settings;
+use SlimSEO\Redirection\Helper;
+use SlimSEO\Redirection\DeletedURLNotification;
 use SlimSEO\Helpers\Data as DataHelpers;
 
 class Redirects extends Base {
@@ -15,35 +18,38 @@ class Redirects extends Base {
 	}
 
 	public function register_routes() {
-		register_rest_route( 'slim-seo-redirection', 'redirects', [
+		$args = [
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_redirects' ],
 			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+			'show_in_index'       => false,
+		];
 
-		register_rest_route( 'slim-seo-redirection', 'exists', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'exists' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'redirects', array_merge( $args, [
+			'callback' => [ $this, 'get_redirects' ],
+		] ) );
 
-		register_rest_route( 'slim-seo-redirection', 'update_redirect', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'update_redirect' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'exists', array_merge( $args, [
+			'callback' => [ $this, 'exists' ],
+		] ) );
 
-		register_rest_route( 'slim-seo-redirection', 'delete_redirects', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'delete_redirects' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'update_redirect', array_merge( $args, [
+			'methods'  => WP_REST_Server::EDITABLE,
+			'callback' => [ $this, 'update_redirect' ],
+		] ) );
 
-		register_rest_route( 'slim-seo-redirection', 'posts', [
-			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => [ $this, 'get_posts' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo-redirection', 'delete_redirects', array_merge( $args, [
+			'methods'  => WP_REST_Server::EDITABLE,
+			'callback' => [ $this, 'delete_redirects' ],
+		] ) );
+
+		register_rest_route( 'slim-seo-redirection', 'reorder_redirects', array_merge( $args, [
+			'methods'  => WP_REST_Server::EDITABLE,
+			'callback' => [ $this, 'reorder_redirects' ],
+		] ) );
+
+		register_rest_route( 'slim-seo-redirection', 'posts', array_merge( $args, [
+			'callback' => [ $this, 'get_posts' ],
+		] ) );
 	}
 
 	public function get_redirects(): array {
@@ -53,7 +59,7 @@ class Redirects extends Base {
 
 			return $redirect;
 		}, array_keys( $redirects ), $redirects );
-		$redirects = array_reverse( $redirects );
+
 		return $redirects;
 	}
 
@@ -65,8 +71,13 @@ class Redirects extends Base {
 
 	public function update_redirect( WP_REST_Request $request ): string {
 		$redirect = $request->get_param( 'redirect' );
+		$id       = $this->db_redirects->update( $redirect );
 
-		return $this->db_redirects->update( $redirect );
+		if ( ! empty( $redirect['from'] ) && $id && Settings::get( 'enable_deleted_url_notifications' ) ) {
+			DeletedURLNotification::delete_url( Helper::url_valid( $redirect['from'] ) ? $redirect['from'] : Helper::home_url( $redirect['from'] ) );
+		}
+
+		return $id;
 	}
 
 	public function delete_redirects( WP_REST_Request $request ): bool {
@@ -79,6 +90,18 @@ class Redirects extends Base {
 		}
 
 		$this->db_redirects->delete( $ids );
+
+		return true;
+	}
+
+	public function reorder_redirects( WP_REST_Request $request ): bool {
+		$ids = $request->get_param( 'ids' );
+
+		if ( ! is_array( $ids ) ) {
+			return false;
+		}
+
+		$this->db_redirects->reorder( $ids );
 
 		return true;
 	}

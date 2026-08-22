@@ -24,7 +24,7 @@ class Term {
 			return '';
 		}
 
-		$data  =  [
+		$data = [
 			'name'             => $this->term->name,
 			'description'      => $this->term->description,
 			'auto_description' => Helper::truncate( $this->term->description ),

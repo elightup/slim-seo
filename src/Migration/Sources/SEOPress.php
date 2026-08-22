@@ -97,6 +97,12 @@ class SEOPress extends Source {
 		$redirect_types = RedirectionHelper::redirect_types();
 
 		foreach ( $posts as $post ) {
+			$redirections_param = get_post_meta( $post->ID, '_seopress_redirections_param', true );
+
+			if ( empty( $redirections_param ) ) {
+				continue;
+			}
+
 			$type     = get_post_meta( $post->ID, '_seopress_redirections_type', true );
 			$redirect = [
 				'type'             => isset( $redirect_types[ $type ] ) ? $type : 301,
@@ -105,7 +111,7 @@ class SEOPress extends Source {
 				'to'               => get_post_meta( $post->ID, '_seopress_redirections_value', true ),
 				'note'             => '',
 				'enable'           => get_post_meta( $post->ID, '_seopress_redirections_enabled', true ) && 'publish' === $post->post_status ? 1 : 0,
-				'ignoreParameters' => 'exact_match' === get_post_meta( $post->ID, '_seopress_redirections_param', true ) ? 0 : 1,
+				'ignoreParameters' => 'exact_match' === $redirections_param ? 0 : 1,
 			];
 
 			$db_redirects->update( $redirect );

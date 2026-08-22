@@ -1,9 +1,10 @@
 import { useState } from '@wordpress/element';
+import { Icon, dragHandle } from "@wordpress/icons";
 import { getFullURL, fetcher } from '../helper/misc';
 import { __ } from '@wordpress/i18n';
 import Update from './Update';
 
-const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, updateRedirects } ) => {
+const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, updateRedirects, isDragEnabled } ) => {
 	const [ redirect, setRedirect ] = useState( redirectItem );
 
 	const checkboxChange = e => {
@@ -19,7 +20,7 @@ const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, upd
 
 		setRedirect( newRedirect );
 
-		fetcher( 'update_redirect', { redirect: newRedirect }, 'POST' ).then( result => updateRedirects( newRedirect ) );
+		fetcher( 'update_redirect', { redirect: newRedirect }, 'POST' ).then( () => updateRedirects( newRedirect ) );
 	};
 
 	const updateRedirect = redirect => {
@@ -41,7 +42,14 @@ const Item = ( { redirectItem, checkedList, setCheckedList, deleteRedirects, upd
 	};
 
 	return (
-		<tr>
+		<tr className='ss-redirect'>
+			{
+				isDragEnabled && (
+					<td className='ss-redirect__drag-handle' title={ __( 'Drag to reorder', 'slim-seo' ) }>
+						<Icon icon={ dragHandle } />
+					</td>
+				)
+			}
 			<td className='ss-redirect__checkbox'>
 				<input type='checkbox' value={ redirect.id } checked={ checkedList.includes( redirect.id ) } onChange={ checkboxChange } />
 			</td>

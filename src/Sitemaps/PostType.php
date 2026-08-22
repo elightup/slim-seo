@@ -27,7 +27,7 @@ class PostType {
 			'update_post_term_cache' => false,
 
 			'order'                  => 'DESC',
-			'orderyby'               => 'date',
+			'orderby'                => 'date',
 
 			// Set 1000 to compatible with News sitemap structure.
 			'posts_per_page'         => 1000, // @codingStandardsIgnoreLine.

@@ -10,29 +10,26 @@ class RestApi {
 	}
 
 	public function register_routes(): void {
-		register_rest_route( 'slim-seo', 'meta-tags/option', [
+		$args = [
 			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_option' ],
 			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+			'show_in_index'       => false,
+		];
+		register_rest_route( 'slim-seo', 'meta-tags/option', array_merge( $args, [
+			'callback' => [ $this, 'get_option' ],
+		] ) );
 
-		register_rest_route( 'slim-seo', 'meta-tags/variables', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_variables' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo', 'meta-tags/variables', array_merge( $args, [
+			'callback' => [ $this, 'get_variables' ],
+		] ) );
 
-		register_rest_route( 'slim-seo', 'meta-tags/image_variables', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_image_variables' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo', 'meta-tags/image_variables', array_merge( $args, [
+			'callback' => [ $this, 'get_image_variables' ],
+		] ) );
 
-		register_rest_route( 'slim-seo', 'meta-tags/meta_keys', [
-			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'get_meta_keys' ],
-			'permission_callback' => [ $this, 'has_permission' ],
-		] );
+		register_rest_route( 'slim-seo', 'meta-tags/meta_keys', array_merge( $args, [
+			'callback' => [ $this, 'get_meta_keys' ],
+		] ) );
 	}
 
 	public function has_permission(): bool {
@@ -43,6 +40,8 @@ class RestApi {
 		$exclude = array_flip( [
 			'auto_redirection',
 			'enable_404_logs',
+			'disable_for_single_posts',
+			'enable_deleted_url_notifications',
 			'footer_code',
 			'force_trailing_slash',
 			'header_code',
@@ -54,11 +53,11 @@ class RestApi {
 			'default_linkedin_image',
 			'wp_pattern_category',
 		] );
-		$option = get_option( 'slim_seo', [] );
-		$option = array_diff_key( $option, $exclude );
+		$option  = get_option( 'slim_seo', [] );
+		$option  = array_diff_key( $option, $exclude );
 
-		// Don't expose the OpenAI key to the client.
-		$option['openai_key'] = ! empty( $option['openai_key'] );
+		// Don't expose the API key to the client.
+		$option['ai_api_key'] = ! empty( $option['ai_api_key'] );
 
 		return $option;
 	}
@@ -130,8 +129,10 @@ class RestApi {
 		$variables[] = [
 			'label'   => __( 'Site', 'slim-seo' ),
 			'options' => [
-				'site.title'       => __( 'Site title', 'slim-seo' ),
-				'site.description' => __( 'Site description', 'slim-seo' ),
+				'site.title'          => __( 'Site title', 'slim-seo' ),
+				'site.description'    => __( 'Site description', 'slim-seo' ),
+				'site.facebook_image' => __( 'Default Facebook image', 'slim-seo' ),
+				'site.twitter_image'  => __( 'Default X image', 'slim-seo' ),
 			],
 		];
 		$variables[] = [
@@ -155,6 +156,13 @@ class RestApi {
 					'post.thumbnail' => __( 'Post thumbnail', 'slim-seo' ),
 				],
 			],
+			[
+				'label'   => __( 'Site', 'slim-seo' ),
+				'options' => [
+					'site.facebook_image' => __( 'Default Facebook image', 'slim-seo' ),
+					'site.twitter_image'  => __( 'Default X image', 'slim-seo' ),
+				],
+			],
 		];
 		return apply_filters( 'slim_seo_image_variables', $variables );
 	}
@@ -163,6 +171,7 @@ class RestApi {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$meta_keys = $wpdb->get_col( "SELECT DISTINCT meta_key FROM $wpdb->postmeta ORDER BY meta_key" );
+		$meta_keys = array_filter( $meta_keys, fn( $meta_key ) => ! is_protected_meta( $meta_key, 'post' ) );
 		$meta_keys = $this->exclude_defaults( $meta_keys );
 		$options   = [];
 		foreach ( $meta_keys as $meta_key ) {

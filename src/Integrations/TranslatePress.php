@@ -7,6 +7,7 @@ use SlimSEO\Helpers\Data as HelpersData;
 
 class TranslatePress {
 	use MultilingualSitemapTrait;
+
 	private $url_converter;
 	private $settings;
 

@@ -1,6 +1,7 @@
 <?php
 namespace SlimSEO\MetaTags;
 
+use SlimSEO\Helpers\Option;
 use WP_Post_Type;
 class Data {
 	private $data = [];
@@ -50,7 +51,7 @@ class Data {
 		];
 	}
 
-	private function get_user_data() {
+	private function get_user_data(): array {
 		return $this->get_user( get_current_user_id() );
 	}
 
@@ -64,7 +65,7 @@ class Data {
 		return empty( $post ) ? [] : $this->get_user( $post->post_author );
 	}
 
-	private function get_user( $user_id ) {
+	private function get_user( $user_id ): array {
 		$user = get_userdata( $user_id );
 		if ( ! $user ) {
 			return [];
@@ -78,8 +79,10 @@ class Data {
 
 	private function get_site_data() {
 		return [
-			'title'       => get_bloginfo( 'name' ),
-			'description' => get_bloginfo( 'description' ),
+			'title'          => get_bloginfo( 'name' ),
+			'description'    => get_bloginfo( 'description' ),
+			'facebook_image' => Option::get( 'default_facebook_image', '' ),
+			'twitter_image'  => Option::get( 'default_twitter_image', '' ),
 		];
 	}
 
@@ -102,7 +105,7 @@ class Data {
 	 * Get post content with filters for page builders to modify the content.
 	 * Also has a filter to skip the content for certain pages, like WooCommerce checkout, cart, account, etc.
 	 *
-	 * @param int $post_id Post ID.
+	 * @param int    $post_id Post ID.
 	 * @param string $content Optional. Custom post content, used for live preview when the new content is not saved yet.
 	 * @return string
 	 */
