@@ -3,7 +3,6 @@ Thumbs.db
 
 *.swp
 .idea
-.commandcode
 
 node_modules
 vendor
