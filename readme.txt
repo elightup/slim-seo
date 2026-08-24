@@ -1,4 +1,4 @@
-=== Slim SEO - AI SEO Plugin, Lightweight & Fast ===
+=== Slim SEO - AI SEO Plugin, Lightweight, Fast & Automated ===
 Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
@@ -13,7 +13,7 @@ An AI SEO plugin for WordPress that's lightweight and fast. Automatically genera
 
 == Description ==
 
-### An AI SEO Plugin That's Lightweight & Fast
+### An AI SEO Plugin That's Lightweight, Fast & Automated
 
 Currently there are many SEO plugins for WordPress in the market. But these plugins often have too many options and are very complicated for ordinary users. Access to their configuration section, you will easily get lost in a maze of explanations and options that you sometimes don't understand. Besides, there are ads!
 

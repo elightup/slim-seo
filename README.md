@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/wordpress/plugin/v/slim-seo.svg)](https://wpslimseo.com)
 ![WordPress Plugin Last Updated](https://img.shields.io/wordpress/plugin/last-updated/slim-seo)
 
-# Slim SEO - AI SEO Plugin, Lightweight & Fast
+# Slim SEO - AI SEO Plugin, Lightweight, Fast & Automated
 
 Currently there are many SEO plugins for WordPress in the market. But these plugins often have too many options and are very complicated for ordinary users. Access to their configuration section, you will easily get lost in a maze of explanations and options that you sometimes don't understand. Besides, there are ads!
 
