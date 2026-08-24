@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "elightup/slim-seo-common",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/slim-seo-common.git",
-                "reference": "7892c84895598d39079cab19e8d7debc76add50c"
+                "reference": "aa3c2712a92df6cbb8ddc45b7cda385e6e86ad8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/7892c84895598d39079cab19e8d7debc76add50c",
-                "reference": "7892c84895598d39079cab19e8d7debc76add50c",
+                "url": "https://api.github.com/repos/elightup/slim-seo-common/zipball/aa3c2712a92df6cbb8ddc45b7cda385e6e86ad8d",
+                "reference": "aa3c2712a92df6cbb8ddc45b7cda385e6e86ad8d",
                 "shasum": ""
             },
             "type": "library",
@@ -34,9 +34,9 @@
             "homepage": "https://wpslimseo.com",
             "support": {
                 "issues": "https://github.com/elightup/slim-seo-common/issues",
-                "source": "https://github.com/elightup/slim-seo-common/tree/1.0.0"
+                "source": "https://github.com/elightup/slim-seo-common/tree/1.0.2"
             },
-            "time": "2026-04-12T18:10:07+00:00"
+            "time": "2026-08-24T09:01:53+00:00"
         },
         {
             "name": "elightup/slim-twig",
