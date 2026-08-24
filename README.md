@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/wordpress/plugin/v/slim-seo.svg)](https://wpslimseo.com)
 ![WordPress Plugin Last Updated](https://img.shields.io/wordpress/plugin/last-updated/slim-seo)
 
-# Slim SEO - A Fast & Automated SEO Plugin For WordPress
+# Slim SEO - AI SEO Plugin, Lightweight & Fast
 
 Currently there are many SEO plugins for WordPress in the market. But these plugins often have too many options and are very complicated for ordinary users. Access to their configuration section, you will easily get lost in a maze of explanations and options that you sometimes don't understand. Besides, there are ads!
 
@@ -22,7 +22,17 @@ So what does Slim SEO do?
 
 Slim SEO helps you do the following jobs automatically:
 
-### 1. Meta Tags
+### 1. AI-Powered Meta Tags
+
+Slim SEO integrates AI to help you write SEO-friendly meta titles and descriptions faster and better. No more staring at a blank field or guessing what to write.
+
+- **Generate with AI**: a magic wand button in the meta title and description fields on the post and term edit screens. Click it and the plugin writes SEO-optimized titles and descriptions for you, based on your content and in the same language.
+- **Bulk generation**: generate or rewrite meta titles and descriptions for hundreds of posts and terms in one go, right from the Tools tab. Choose which post types and taxonomies to process, and decide whether to keep existing values.
+- **Your preferred AI provider**: works with OpenAI (GPT), Google (Gemini), Anthropic (Claude) and OpenRouter. Bring your own API key and pick any model you like.
+
+Read more about [AI integration](https://docs.wpslimseo.com/slim-seo/ai/).
+
+### 2. Meta Tags
 
 The following meta tags are auto-generated and optimized for the best SEO scores.
 
@@ -33,29 +43,29 @@ The following meta tags are auto-generated and optimized for the best SEO scores
 - [Twitter Card Tags](https://wpslimseo.com/docs/twitter-card-tags/): share your posts on Twitter beautifully.
 - LinkedIn meta tags
 
-### 2. [XML Sitemap](https://wpslimseo.com/docs/xml-sitemap/)
+### 3. [XML Sitemap](https://wpslimseo.com/docs/xml-sitemap/)
 
 Slim SEO automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
 Besides the normal XML sitemap, Slim SEO also includes sitemaps for images and Google news.
 
-### 3. [Breadcrumbs](https://wpslimseo.com/docs/breadcrumbs/)
+### 4. [Breadcrumbs](https://wpslimseo.com/docs/breadcrumbs/)
 
 The plugin allows you to output a breadcrumb trail on your website easily. It automatically fetches the information from the current post and output a hierarchy for you. You can also style the breadcrumbs to match your theme style.
 
-### 4. [Schema (Structured Data)](https://wpslimseo.com/docs/schema/)
+### 5. [Schema (Structured Data)](https://wpslimseo.com/docs/schema/)
 
 Schema is a way that describes structured data for search engines. Based on the data provided, search engines can show the content in the search results page in a more appealing way.
 
 Slim SEO automatically adds structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-### 5. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
+### 6. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
 
 - Setting up redirection rules easily
 - Auto redirect non-www to www and vice versa
 - 404 link monitoring
 
-### 6. And many more
+### 7. And many more
 
 - [Inserting Google Analytics, Facebook pixel or any code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
 - Auto prevent scraping content from [RSS feed](https://docs.wpslimseo.com/slim-seo/rss-feed/)

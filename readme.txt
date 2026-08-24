@@ -1,19 +1,19 @@
-=== Slim SEO - A Fast & Automated SEO Plugin For WordPress ===
+=== Slim SEO - AI SEO Plugin, Lightweight & Fast ===
 Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 6.6
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.9.11
+Stable tag: 4.10.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A full-featured SEO plugin for WordPress that's lightweight, blazing fast with minimum configuration. No bloats and just works!
+An AI SEO plugin for WordPress that's lightweight and fast. Automatically generates meta tags, sitemaps, schemas and more with no bloat.
 
 == Description ==
 
-### A Fast & Automated SEO Plugin For WordPress
+### An AI SEO Plugin That's Lightweight & Fast
 
 Currently there are many SEO plugins for WordPress in the market. But these plugins often have too many options and are very complicated for ordinary users. Access to their configuration section, you will easily get lost in a maze of explanations and options that you sometimes don't understand. Besides, there are ads!
 
@@ -35,7 +35,17 @@ So what does Slim SEO do?
 
 Slim SEO helps you do the following jobs automatically:
 
-#### 1. Meta Tags
+#### 1. AI-Powered Meta Tags
+
+Slim SEO integrates AI to help you write SEO-friendly meta titles and descriptions faster and better. No more staring at a blank field or guessing what to write.
+
+- **Generate with AI**: a magic wand button in the meta title and description fields on the post and term edit screens. Click it and the plugin writes SEO-optimized titles and descriptions for you, based on your content and in the same language.
+- **Bulk generation**: generate or rewrite meta titles and descriptions for hundreds of posts and terms in one go, right from the Tools tab. Choose which post types and taxonomies to process, and decide whether to keep existing values.
+- **Your preferred AI provider**: works with OpenAI (GPT), Google (Gemini), Anthropic (Claude) and OpenRouter. Bring your own API key and pick any model you like.
+
+Read more about [AI integration](https://docs.wpslimseo.com/slim-seo/ai/).
+
+#### 2. Meta Tags
 
 The following meta tags are auto-generated and optimized for the best SEO scores.
 
@@ -46,29 +56,29 @@ The following meta tags are auto-generated and optimized for the best SEO scores
 - [Twitter Card Tags](https://docs.wpslimseo.com/slim-seo/twitter-card-tags/): share your posts on Twitter beautifully.
 - LinkedIn meta tags
 
-#### 2. [XML Sitemap](https://docs.wpslimseo.com/slim-seo/xml-sitemap/)
+#### 3. [XML Sitemap](https://docs.wpslimseo.com/slim-seo/xml-sitemap/)
 
 Slim SEO automatically generates XML sitemap (at `domain.com/sitemap.xml`) to submit to search engines. With XML sitemaps, your website are indexed fast and completely.
 
 Besides the normal XML sitemap, Slim SEO also includes sitemaps for images and Google news.
 
-#### 3. [Breadcrumbs](https://docs.wpslimseo.com/slim-seo/breadcrumbs/)
+#### 4. [Breadcrumbs](https://docs.wpslimseo.com/slim-seo/breadcrumbs/)
 
 The plugin allows you to output a breadcrumb trail on your website easily. It automatically fetches the information from the current post and output a hierarchy for you. You can also style the breadcrumbs to match your theme style.
 
-#### 4. [Schema (Structured Data)](https://docs.wpslimseo.com/slim-seo/schema/)
+#### 5. [Schema (Structured Data)](https://docs.wpslimseo.com/slim-seo/schema/)
 
 Schema is a way that describes structured data for search engines. Based on the data provided, search engines can show the content in the search results page in a more appealing way.
 
 Slim SEO automatically adds the some structured data to the website via JSON-LD which makes your website more SEO-friendly. Not only schemas are created by the plugin, there are also meaningful connections between them. For example, an article (single post) is the main entity of the current webpage. Slim SEO does that all without any configuration.
 
-#### 5. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
+#### 6. [Redirection](https://docs.wpslimseo.com/slim-seo/redirection/)
 
 - Setting up redirection rules easily
 - Auto redirect non-www to www and vice versa
 - 404 link monitoring
 
-#### 6. And many more
+#### 7. And many more
 
 - [Inserting Google Analytics, Facebook pixel or any code to the header or footer](https://docs.wpslimseo.com/slim-seo/header-footer-code/) of the site
 - Auto prevent scraping content from [RSS feed](https://docs.wpslimseo.com/slim-seo/rss-feed/)
@@ -174,6 +184,17 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.10.0 - 2026-08-24 =
+
+**Highlights:**
+
+Add support for primary term: select a primary category/taxonomy term for a post, which is used for permalink and breadcrumbs. For more details, please see [this blog post](https://wpslimseo.com/set-primary-term/) and the [documentation](https://docs.wpslimseo.com/slim-seo/primary-term/).
+
+**Other changes:**
+
+- Fix `BreadcrumbList` warning on WooCommerce shop page due to missing the trailing slash in the URL
+- Fix contributor arbitrary post-meta disclosure in quick edit and meta keys route
 
 = 4.9.11 - 2026-07-28 =
 

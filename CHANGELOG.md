@@ -1,3 +1,14 @@
+### 4.10.0 - 2026-08-24
+
+**Highlights:**
+
+Add support for primary term: select a primary category/taxonomy term for a post, which is used for permalink and breadcrumbs. For more details, please see [this blog post](https://wpslimseo.com/set-primary-term/) and the [documentation](https://docs.wpslimseo.com/slim-seo/primary-term/).
+
+**Other changes:**
+
+- Fix `BreadcrumbList` warning on WooCommerce shop page due to missing the trailing slash in the URL
+- Fix contributor arbitrary post-meta disclosure in quick edit and meta keys route
+
 ### 4.9.11 - 2026-07-28
 
 - Add deleted URL notifications for redirection (#285)
