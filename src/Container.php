@@ -147,6 +147,7 @@ class Container {
 
 		// Features with no settings.
 		new PrimaryTerm;
+		new Abilities;
 	}
 
 	/**
