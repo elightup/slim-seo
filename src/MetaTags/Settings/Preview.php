@@ -75,8 +75,20 @@ class Preview {
 		return current_user_can( 'manage_options' );
 	}
 
-	public function can_edit_term(): bool {
-		return current_user_can( 'edit_posts' );
+	public function can_edit_term( WP_REST_Request $request ): bool {
+		$term_id = (int) $request->get_param( 'ID' );
+
+		if ( ! $term_id ) {
+			return false;
+		}
+
+		$term = get_term( $term_id );
+
+		if ( ! ( $term instanceof WP_Term ) ) {
+			return false;
+		}
+
+		return current_user_can( 'edit_term', $term_id );
 	}
 
 	public function render_post_title( WP_REST_Request $request ): array {

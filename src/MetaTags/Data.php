@@ -123,4 +123,16 @@ class Data {
 
 		return (string) apply_filters( 'slim_seo_post_content', $content, $post );
 	}
+
+	public static function get_term_content( int $term_id = 0, string $content = '' ): string {
+		$term = get_term( $term_id );
+
+		if ( empty( $term ) || is_wp_error( $term ) ) {
+			return '';
+		}
+
+		$content = $content ?: $term->description;
+
+		return (string) apply_filters( 'slim_seo_term_content', $content, $term );
+	}
 }

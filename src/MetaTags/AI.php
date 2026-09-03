@@ -52,8 +52,9 @@ class AI {
 		$previous_value = (string) $request->get_param( 'previousMetaByAI' );
 		$object         = (array) $request->get_param( 'object' );
 		$type           = $request->get_param( 'type' ) === 'description' ? 'description' : 'title';
+		$object_type    = $object['type'] ?? '';
 
-		if ( 'post' === ( $object['type'] ?? '' ) ) {
+		if ( 'post' === $object_type ) {
 			$post_id = (int) ( $object['ID'] ?? 0 );
 
 			if ( $post_id <= 0 || ! current_user_can( 'edit_post', $post_id ) ) {
@@ -61,6 +62,16 @@ class AI {
 			}
 
 			$content = Data::get_post_content( $post_id, $content );
+		} elseif ( 'term' === $object_type ) {
+			$term_id = (int) ( $object['ID'] ?? 0 );
+
+			if ( $term_id <= 0 || ! current_user_can( 'edit_term', $term_id ) ) {
+				return $this->response( __( 'You are not allowed to generate meta tags for this term.', 'slim-seo' ) );
+			}
+
+			$content = Data::get_term_content( $term_id, $content );
+		} else {
+			return $this->response( __( 'Invalid object type.', 'slim-seo' ) );
 		}
 
 		// Preprocess content: strip HTML, normalize whitespace, limit length
