@@ -1,3 +1,7 @@
+### 4.10.1 - 2026-09-07
+
+- Fix REST API authorization for term meta tags
+
 ### 4.10.0 - 2026-08-24
 
 **Highlights:**

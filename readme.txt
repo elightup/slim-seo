@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.10.0
+Stable tag: 4.10.1
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -184,6 +184,10 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.10.1 - 2026-09-07 =
+
+- Fix REST API authorization for term meta tags
 
 = 4.10.0 - 2026-08-24 =
 
