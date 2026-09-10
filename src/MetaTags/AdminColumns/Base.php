@@ -5,6 +5,7 @@ use SlimSEO\MetaTags\Settings\Base as Settings;
 use SlimSEO\MetaTags\Title;
 use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Robots;
+use SlimSEO\Helpers\UI;
 
 abstract class Base {
 	protected $settings;
@@ -13,8 +14,6 @@ abstract class Base {
 	protected $robots;
 	protected $object_type;
 	protected $types;
-	protected $manual_indicator = '<span class="ss-manual-content"></span>';
-
 	public function __construct( Settings $settings, Title $title, Description $description, Robots $robots ) {
 		$this->settings    = $settings;
 		$this->title       = $title;
@@ -172,6 +171,19 @@ abstract class Base {
 	}
 
 	abstract protected function is_screen(): bool;
+
+	protected function render_meta_value( string $value, bool $is_manual, string $tooltip ): void {
+		if ( $is_manual ) {
+			UI::tooltip( $tooltip, $this->get_manual_indicator(), 'top' );
+		}
+
+		UI::tooltip( $value, "<span class='ss-meta-content'>$value</span>", 'top' );
+	}
+
+	protected function get_manual_indicator(): string {
+		// Lucide "text-cursor" (ISC): https://lucide.dev/icons/text-cursor
+		return '<span class="ss-manual-content" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="10" height="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M17 22h-1a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h1"/><path d="M7 22h1a4 4 0 0 0 4-4v-1"/><path d="M7 2h1a4 4 0 0 1 4 4v1"/></svg></span>';
+	}
 
 	protected function can_edit( int $id ): bool {
 		// phpcs:ignore WordPress.WP.Capabilities.Unknown

@@ -1,8 +1,6 @@
 <?php
 namespace SlimSEO\MetaTags\AdminColumns;
 
-use SlimSEO\Helpers\UI;
-
 class Post extends Base {
 	protected $object_type = 'post';
 
@@ -32,17 +30,11 @@ class Post extends Base {
 		switch ( $column ) {
 			case 'meta_title':
 				$title = $this->title->get_rendered_singular_value( $post_id );
-				if ( $this->title->check_is_manual() ) {
-					UI::tooltip( __( 'Manual title', 'slim-seo' ), $this->manual_indicator, 'top' );
-				}
-				UI::tooltip( $title, "<span class='ss-meta-content'>$title</span>", 'top' );
+				$this->render_meta_value( $title, $this->title->check_is_manual(), __( 'Manual title', 'slim-seo' ) );
 				break;
 			case 'meta_description':
 				$description = $this->description->get_rendered_singular_value( $post_id );
-				if ( $this->description->check_is_manual() ) {
-					UI::tooltip( __( 'Manual description', 'slim-seo' ), $this->manual_indicator, 'top' );
-				}
-				UI::tooltip( $description, "<span class='ss-meta-content'>$description</span>", 'top' );
+				$this->render_meta_value( $description, $this->description->check_is_manual(), __( 'Manual description', 'slim-seo' ) );
 				break;
 			case 'index':
 				$noindex = $this->robots->get_singular_value( $post_id );

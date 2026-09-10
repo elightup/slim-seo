@@ -2,10 +2,10 @@
 namespace SlimSEO\Helpers;
 
 class UI {
-	public static function tooltip( string $content, string $icon = '<span class="dashicons dashicons-editor-help"></span>', string $placement = 'right' ) {
+	public static function tooltip( string $content, string $icon = '<span class="dashicons dashicons-editor-help"></span>', string $placement = 'right' ): void {
 		static $output_script = false;
 
-		echo '<span class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '">', wp_kses_post( $icon ), '</span>';
+		echo '<span class="ss-tooltip" data-tippy-content="', esc_attr( $content ), '">', wp_kses( $icon, self::get_icon_allowed_html() ), '</span>';
 
 		if ( $output_script === true ) {
 			return;
@@ -19,6 +19,34 @@ class UI {
 			animation: 'fade'
 		} );" );
 		$output_script = true;
+	}
+
+	private static function get_icon_allowed_html(): array {
+		return [
+			'span' => [
+				'class'       => true,
+				'aria-hidden' => true,
+			],
+			'svg'  => [
+				'class'           => true,
+				'xmlns'           => true,
+				'viewbox'         => true,
+				'width'           => true,
+				'height'          => true,
+				'fill'            => true,
+				'stroke'          => true,
+				'stroke-width'    => true,
+				'stroke-linecap'  => true,
+				'stroke-linejoin' => true,
+				'aria-hidden'     => true,
+				'focusable'       => true,
+				'role'            => true,
+			],
+			'path' => [
+				'd'    => true,
+				'fill' => true,
+			],
+		];
 	}
 
 	public static function toggle( string $name, string $value, bool $checked, string $title = '' ): void {

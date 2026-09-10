@@ -23,17 +23,22 @@
 
 	.ss-tooltip:nth-of-type(1) {
 		position: absolute;
-		left: -2px;
+		left: -6px;
 		top: 8px;
 	}
 }
 
 .ss-manual-content {
-	display: inline-block;
-	background: #fe9a00;
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 3px 2px;
+	background: #ddd;
+	border-radius: 2px;
+
+	svg {
+		display: block;
+	}
 }
 
 /* WooCommerce */
