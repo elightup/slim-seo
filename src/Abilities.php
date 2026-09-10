@@ -1,10 +1,15 @@
 <?php
 namespace SlimSEO;
 
+use WP_Error;
 use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
+use SlimSEO\Helpers\Data;
+use SlimSEO\MetaTags\Helper;
+use SlimSEO\MetaTags\Title;
+use SlimSEO\MetaTags\Description;
 
 class Abilities {
-	public function __construct() {
+	public function setup(): void {
 		if ( ! function_exists( 'wp_register_ability' ) ) {
 			return;
 		}
@@ -25,85 +30,6 @@ class Abilities {
 	}
 
 	public function register_abilities(): void {
-		$this->register_post_abilities();
-		$this->register_term_abilities();
-	}
-
-	public function get_post( array $input ): array {
-		$id = $this->resolve_post_id( $input );
-
-		if ( ! $id ) {
-			return [];
-		}
-
-		return $this->normalize_data( $this->get_data( 'post', $id ) );
-	}
-
-	public function update_post( array $input ): array {
-		$id = $this->resolve_post_id( $input );
-
-		if ( ! $id ) {
-			return [ 'success' => false ];
-		}
-
-		$data = $this->get_data( 'post', $id );
-		$data = $this->sanitize_data( $data, $input );
-
-		$this->update_data( 'post', $id, $data );
-
-		return [ 'success' => true ];
-	}
-
-	public function get_term( array $input ): array {
-		$id = $this->resolve_term_id( $input );
-
-		if ( ! $id ) {
-			return [];
-		}
-
-		return $this->normalize_data( $this->get_data( 'term', $id ) );
-	}
-
-	public function update_term( array $input ): array {
-		$id = $this->resolve_term_id( $input );
-
-		if ( ! $id ) {
-			return [ 'success' => false ];
-		}
-
-		$data = $this->get_data( 'term', $id );
-		$data = $this->sanitize_data( $data, $input );
-
-		$this->update_data( 'term', $id, $data );
-
-		return [ 'success' => true ];
-	}
-
-	private function check_permission( array $input, string $object_type, string $action ): bool {
-		$object_id = 'post' === $object_type ? $this->resolve_post_id( $input ) : $this->resolve_term_id( $input );
-
-		if ( ! $object_id ) {
-			return false;
-		}
-
-		$cap = $this->map_capability( $object_type, $action );
-
-		return current_user_can( $cap, $object_id );
-	}
-
-	private function map_capability( string $object_type, string $action ): string {
-		$is_read = 'get' === $action;
-
-		switch ( $object_type ) {
-			case 'term':
-				return $is_read ? 'assign_term' : 'edit_term';
-			case 'post':
-			default:
-				return $is_read ? 'read_post' : 'edit_post';
-		}
-	}
-
-	private function register_post_abilities(): void {
 		$schema = $this->get_schema();
 
 		wp_register_ability( 'slim-seo/get-post-seo', [
@@ -130,27 +56,30 @@ class Abilities {
 			],
 			'output_schema'       => $schema,
 			'meta'                => [
-				'annotations' => [
+				'show_in_rest' => true,
+				'annotations'  => [
 					'readonly'      => true,
 					'destructive'   => false,
 					'openWorldHint' => false,
 				],
-				'mcp'         => [
+				'mcp'          => [
 					'public' => true,
 					'type'   => 'tool',
 				],
 			],
 			'permission_callback' => function ( $input ) {
-				return $this->check_permission( $input, 'post', 'get' );
+				return $this->check_permission( $input, 'post' );
 			},
-			'execute_callback'    => [ $this, 'get_post' ],
+			'execute_callback'    => function ( array $input ): array {
+				return $this->get_data( $input, 'post' );
+			},
 		] );
 
 		wp_register_ability( 'slim-seo/update-post-seo', [
 			'category'            => 'slim-seo',
 			'label'               => __( 'Update post SEO data', 'slim-seo' ),
 			'description'         => __( 'Update SEO meta tags for a post. Provide id, slug, or title. Only provided fields are updated; others remain unchanged.', 'slim-seo' ),
-			'input_schema'        => $this->get_post_update_schema(),
+			'input_schema'        => $this->get_update_schema( 'post' ),
 			'output_schema'       => [
 				'type'                 => 'object',
 				'properties'           => [
@@ -162,25 +91,24 @@ class Abilities {
 				'additionalProperties' => false,
 			],
 			'meta'                => [
-				'annotations' => [
+				'show_in_rest' => true,
+				'annotations'  => [
 					'readonly'    => false,
 					'destructive' => false,
 					'idempotent'  => true,
 				],
-				'mcp'         => [
+				'mcp'          => [
 					'public' => true,
 					'type'   => 'tool',
 				],
 			],
 			'permission_callback' => function ( $input ) {
-				return $this->check_permission( $input, 'post', 'update' );
+				return $this->check_permission( $input, 'post' );
 			},
-			'execute_callback'    => [ $this, 'update_post' ],
+			'execute_callback'    => function ( array $input ): array {
+				return $this->update_data( $input, 'post' );
+			},
 		] );
-	}
-
-	private function register_term_abilities(): void {
-		$schema = $this->get_schema();
 
 		wp_register_ability( 'slim-seo/get-term-seo', [
 			'category'            => 'slim-seo',
@@ -189,44 +117,51 @@ class Abilities {
 			'input_schema'        => [
 				'type'                 => 'object',
 				'properties'           => [
-					'id'   => [
+					'id'       => [
 						'type'        => 'integer',
 						'description' => __( 'The term ID.', 'slim-seo' ),
 					],
-					'slug' => [
+					'slug'     => [
 						'type'        => 'string',
 						'description' => __( 'The term slug.', 'slim-seo' ),
 					],
-					'name' => [
+					'name'     => [
 						'type'        => 'string',
 						'description' => __( 'The term name.', 'slim-seo' ),
+					],
+					'taxonomy' => [
+						'type'        => 'string',
+						'description' => __( 'The taxonomy (e.g. category, post_tag). Recommended when using slug or name to avoid ambiguity.', 'slim-seo' ),
 					],
 				],
 				'additionalProperties' => false,
 			],
 			'output_schema'       => $schema,
 			'meta'                => [
-				'annotations' => [
+				'show_in_rest' => true,
+				'annotations'  => [
 					'readonly'      => true,
 					'destructive'   => false,
 					'openWorldHint' => false,
 				],
-				'mcp'         => [
+				'mcp'          => [
 					'public' => true,
 					'type'   => 'tool',
 				],
 			],
 			'permission_callback' => function ( $input ) {
-				return $this->check_permission( $input, 'term', 'get' );
+				return $this->check_permission( $input, 'term' );
 			},
-			'execute_callback'    => [ $this, 'get_term' ],
+			'execute_callback'    => function ( array $input ): array {
+				return $this->get_data( $input, 'term' );
+			},
 		] );
 
 		wp_register_ability( 'slim-seo/update-term-seo', [
 			'category'            => 'slim-seo',
 			'label'               => __( 'Update term SEO data', 'slim-seo' ),
 			'description'         => __( 'Update SEO meta tags for a taxonomy term. Provide id, slug, or name. Only provided fields are updated; others remain unchanged.', 'slim-seo' ),
-			'input_schema'        => $this->get_term_update_schema(),
+			'input_schema'        => $this->get_update_schema( 'term' ),
 			'output_schema'       => [
 				'type'                 => 'object',
 				'properties'           => [
@@ -238,120 +173,244 @@ class Abilities {
 				'additionalProperties' => false,
 			],
 			'meta'                => [
-				'annotations' => [
+				'show_in_rest' => true,
+				'annotations'  => [
 					'readonly'    => false,
 					'destructive' => false,
 					'idempotent'  => true,
 				],
-				'mcp'         => [
+				'mcp'          => [
 					'public' => true,
 					'type'   => 'tool',
 				],
 			],
 			'permission_callback' => function ( $input ) {
-				return $this->check_permission( $input, 'term', 'update' );
+				return $this->check_permission( $input, 'term' );
 			},
-			'execute_callback'    => [ $this, 'update_term' ],
+			'execute_callback'    => function ( array $input ): array {
+				return $this->update_data( $input, 'term' );
+			},
+		] );
+
+		unset( $schema['properties']['canonical'] );
+
+		wp_register_ability( 'slim-seo/get-settings', [
+			'category'            => 'slim-seo',
+			'label'               => __( 'Get SEO settings', 'slim-seo' ),
+			'description'         => __( 'Retrieve global SEO settings (homepage, post types, taxonomies, archives). Returns title, description, and noindex for each context.', 'slim-seo' ),
+			'input_schema'        => [
+				'type'                 => 'object',
+				'properties'           => [
+					'context' => [
+						'type'        => 'string',
+						'description' => __( 'The settings context to retrieve. Use "home" for homepage, a post type slug (e.g. "post", "page") for post types, a post type slug suffixed with "_archive" (e.g. "movie_archive") for archives, or a taxonomy slug (e.g. "category", "post_tag") for taxonomies.', 'slim-seo' ),
+					],
+				],
+				'additionalProperties' => false,
+			],
+			'output_schema'       => $schema,
+			'meta'                => [
+				'show_in_rest' => true,
+				'annotations'  => [
+					'readonly'      => true,
+					'destructive'   => false,
+					'openWorldHint' => false,
+				],
+				'mcp'          => [
+					'public' => true,
+					'type'   => 'tool',
+				],
+			],
+			'permission_callback' => function ( $input ) {
+				return $this->check_permission( $input, 'settings' );
+			},
+			'execute_callback'    => function ( array $input ): array {
+				return $this->get_data( $input, 'settings' );
+			},
+		] );
+
+		wp_register_ability( 'slim-seo/update-settings', [
+			'category'            => 'slim-seo',
+			'label'               => __( 'Update SEO settings', 'slim-seo' ),
+			'description'         => __( 'Update global SEO settings. Only provided fields are updated.', 'slim-seo' ),
+			'input_schema'        => $this->get_update_schema( 'settings' ),
+			'output_schema'       => [
+				'type'                 => 'object',
+				'properties'           => [
+					'success' => [
+						'type'        => 'boolean',
+						'description' => __( 'Whether the settings were saved.', 'slim-seo' ),
+					],
+				],
+				'additionalProperties' => false,
+			],
+			'meta'                => [
+				'show_in_rest' => true,
+				'annotations'  => [
+					'readonly'    => false,
+					'destructive' => false,
+					'idempotent'  => true,
+				],
+				'mcp'          => [
+					'public' => true,
+					'type'   => 'tool',
+				],
+			],
+			'permission_callback' => function ( $input ) {
+				return $this->check_permission( $input, 'settings' );
+			},
+			'execute_callback'    => function ( array $input ): array {
+				return $this->update_data( $input, 'settings' );
+			},
 		] );
 	}
 
-	private function get_schema(): array {
-		return [
-			'type'                 => 'object',
-			'properties'           => [
-				'title'          => [
-					'type'        => 'string',
-					'description' => __( 'Meta title.', 'slim-seo' ),
-				],
-				'description'    => [
-					'type'        => 'string',
-					'description' => __( 'Meta description.', 'slim-seo' ),
-				],
-				'facebook_image' => [
-					'type'        => 'string',
-					'description' => __( 'Open Graph image URL.', 'slim-seo' ),
-				],
-				'twitter_image'  => [
-					'type'        => 'string',
-					'description' => __( 'Twitter card image URL.', 'slim-seo' ),
-				],
-				'canonical'      => [
-					'type'        => 'string',
-					'description' => __( 'Canonical URL.', 'slim-seo' ),
-				],
-				'noindex'        => [
-					'type'        => 'boolean',
-					'description' => __( 'noindex.', 'slim-seo' ),
-				],
-			],
-			'additionalProperties' => false,
-		];
+	private function get_context_type( string $context ): string {
+		if ( empty( $context ) ) {
+			return '';
+		}
+
+		if ( in_array( $context, [ 'home', 'author' ], true ) ) {
+			return $context;
+		}
+
+		$post_types = Data::get_meta_box_post_types();
+
+		if ( in_array( $context, $post_types, true ) ) {
+			return 'post';
+		}
+
+		$taxonomies = array_keys( CommonHelpersData::get_taxonomies() );
+
+		if ( in_array( $context, $taxonomies, true ) ) {
+			return 'term';
+		}
+
+		$archives = array_map( fn( $post_type ) => "{$post_type}_archive", $post_types );
+
+		if ( in_array( $context, $archives, true ) ) {
+			return 'post_archive';
+		}
+
+		return '';
 	}
 
-	private function get_post_update_schema(): array {
-		$properties               = $this->get_schema()['properties'];
-		$properties['id']         = [
-			'type'        => 'integer',
-			'description' => __( 'The post ID.', 'slim-seo' ),
-		];
-		$properties['slug']       = [
-			'type'        => 'string',
-			'description' => __( 'The post slug.', 'slim-seo' ),
-		];
-		$properties['post_title'] = [
-			'type'        => 'string',
-			'description' => __( 'The post title.', 'slim-seo' ),
-		];
+	private function get_data( array $input, string $object_type ): array|WP_Error {
+		if ( 'settings' === $object_type ) {
+			$context      = sanitize_key( wp_unslash( $input['context'] ?? '' ) );
+			$context_type = $this->get_context_type( $context );
 
-		return [
-			'type'                 => 'object',
-			'properties'           => $properties,
-			'additionalProperties' => false,
-		];
+			if ( empty( $context_type ) ) {
+				return new WP_Error(
+					'slim_seo_abilities_invalid_context',
+					__( 'Invalid settings context.', 'slim-seo' )
+				);
+			}
+
+			$settings = $this->get_object_data( 'settings' );
+			$data     = $settings[ $context ] ?? [];
+			$data     = ! empty( $data ) ? $data : $this->get_default_data( $context_type );
+
+			return $this->normalize_data( $data, 0, $object_type );
+		}
+
+		$id = 'post' === $object_type ? $this->resolve_post_id( $input ) : $this->resolve_term_id( $input );
+
+		if ( ! $id ) {
+			return new WP_Error(
+				'slim_seo_abilities_object_not_found',
+				/* translators: %s: object type (post or term) */
+				sprintf( __( 'The specified %s does not exist.', 'slim-seo' ), $object_type )
+			);
+		}
+
+		$data = $this->get_object_data( $object_type, $id );
+		$data = ! empty( $data ) ? $data : $this->get_default_data( $object_type );
+
+		return $this->normalize_data( $data, $id, $object_type );
 	}
 
-	private function get_term_update_schema(): array {
-		$properties         = $this->get_schema()['properties'];
-		$properties['id']   = [
-			'type'        => 'integer',
-			'description' => __( 'The term ID.', 'slim-seo' ),
-		];
-		$properties['slug'] = [
-			'type'        => 'string',
-			'description' => __( 'The term slug.', 'slim-seo' ),
-		];
-		$properties['name'] = [
-			'type'        => 'string',
-			'description' => __( 'The term name.', 'slim-seo' ),
-		];
+	private function update_data( array $input, string $object_type ): array|WP_Error {
+		if ( 'settings' === $object_type ) {
+			$context      = sanitize_key( wp_unslash( $input['context'] ?? '' ) );
+			$context_type = $this->get_context_type( $context );
 
-		return [
-			'type'                 => 'object',
-			'properties'           => $properties,
-			'additionalProperties' => false,
-		];
+			if ( empty( $context_type ) ) {
+				return new WP_Error(
+					'slim_seo_abilities_invalid_context',
+					__( 'Invalid settings context.', 'slim-seo' )
+				);
+			}
+
+			$settings = $this->get_object_data( 'settings' );
+			$data     = $this->sanitize_data( $settings[ $context ] ?? [], $input, 'settings' );
+
+			if ( empty( $data ) ) {
+				unset( $settings[ $context ] );
+			} else {
+				$settings[ $context ] = $data;
+			}
+
+			$this->update_object_data( 'settings', 0, $settings );
+
+			return [ 'success' => true ];
+		}
+
+		$id = 'post' === $object_type ? $this->resolve_post_id( $input ) : $this->resolve_term_id( $input );
+
+		if ( ! $id ) {
+			return new WP_Error(
+				'slim_seo_abilities_object_not_found',
+				/* translators: %s: object type (post or term) */
+				sprintf( __( 'The specified %s does not exist.', 'slim-seo' ), $object_type )
+			);
+		}
+
+		$data = $this->get_object_data( $object_type, $id );
+		$data = $this->sanitize_data( $data, $input );
+
+		$this->update_object_data( $object_type, $id, $data );
+
+		return [ 'success' => true ];
+	}
+
+	private function check_permission( array $input, string $object_type ): bool {
+		if ( 'settings' === $object_type ) {
+			return current_user_can( 'manage_options' );
+		}
+
+		$object_id = 'post' === $object_type ? $this->resolve_post_id( $input ) : $this->resolve_term_id( $input );
+
+		if ( ! $object_id ) {
+			return false;
+		}
+
+		$cap = 'post' === $object_type ? 'edit_post' : 'edit_term';
+
+		return current_user_can( $cap, $object_id );
 	}
 
 	private function resolve_post_id( array $input ): int {
 		if ( ! empty( $input['id'] ) ) {
-			return (int) $input['id'];
-		} elseif ( ! empty( $input['slug'] ) ) {
-			$field = 'name';
-			$value = sanitize_title( $input['slug'] );
+			$post = get_post( (int) $input['id'] );
+
+			return $post ? $post->ID : 0;
+		}
+
+		if ( ! empty( $input['slug'] ) ) {
+			$args = [ 'name' => sanitize_title( wp_unslash( $input['slug'] ) ) ];
 		} elseif ( ! empty( $input['post_title'] ) ) {
-			$field = 'title';
-			$value = sanitize_text_field( $input['post_title'] );
+			$args = [ 'title' => sanitize_text_field( wp_unslash( $input['post_title'] ) ) ];
 		} else {
 			return 0;
 		}
 
-		$posts = get_posts( [
-			'post_type'      => array_keys( CommonHelpersData::get_post_types() ),
-			$field           => $value,
+		$posts = get_posts( array_merge( $args, [
+			'post_type'      => Data::get_meta_box_post_types(),
 			'post_status'    => 'publish',
 			'posts_per_page' => 1,
 			'fields'         => 'ids',
-		] );
+		] ) );
 
 		if ( is_wp_error( $posts ) || empty( $posts ) || empty( $posts[0] ) ) {
 			return 0;
@@ -362,23 +421,28 @@ class Abilities {
 
 	private function resolve_term_id( array $input ): int {
 		if ( ! empty( $input['id'] ) ) {
-			return (int) $input['id'];
-		} elseif ( ! empty( $input['slug'] ) ) {
-			$field = 'slug';
-			$value = sanitize_title( $input['slug'] );
+			$term = get_term( (int) $input['id'] );
+
+			return ( $term && ! is_wp_error( $term ) ) ? $term->term_id : 0;
+		}
+
+		if ( ! empty( $input['slug'] ) ) {
+			$args = [ 'slug' => sanitize_title( wp_unslash( $input['slug'] ) ) ];
 		} elseif ( ! empty( $input['name'] ) ) {
-			$field = 'name';
-			$value = sanitize_text_field( $input['name'] );
+			$args = [ 'name' => sanitize_text_field( wp_unslash( $input['name'] ) ) ];
 		} else {
 			return 0;
 		}
 
-		$terms = get_terms( [
-			$field       => $value,
+		if ( ! empty( $input['taxonomy'] ) ) {
+			$args['taxonomy'] = sanitize_key( wp_unslash( $input['taxonomy'] ) );
+		}
+
+		$terms = get_terms( array_merge( $args, [
 			'hide_empty' => false,
 			'number'     => 1,
 			'fields'     => 'ids',
-		] );
+		] ) );
 
 		if ( is_wp_error( $terms ) || empty( $terms ) || empty( $terms[0] ) ) {
 			return 0;
@@ -387,27 +451,170 @@ class Abilities {
 		return $terms[0];
 	}
 
-	private function get_data( string $object_type, int $object_id ): array {
-		return get_metadata( $object_type, $object_id, 'slim_seo', true ) ?: [];
+	private function get_schema( bool $detailed = true ): array {
+		$fields = [
+			'title'          => __( 'Meta title.', 'slim-seo' ),
+			'description'    => __( 'Meta description.', 'slim-seo' ),
+			'facebook_image' => __( 'Open Graph image URL.', 'slim-seo' ),
+			'x_image'        => __( 'X image URL.', 'slim-seo' ),
+			'canonical'      => __( 'Canonical URL.', 'slim-seo' ),
+		];
+
+		$properties = [];
+
+		foreach ( $fields as $key => $description ) {
+			$property = [
+				'type'        => $detailed ? 'object' : 'string',
+				'description' => $description,
+			];
+
+			if ( $detailed ) {
+				$property['properties']           = [
+					'raw'      => [
+						'type'        => 'string',
+						'description' => __( 'Raw value with dynamic variables.', 'slim-seo' ),
+					],
+					'rendered' => [
+						'type'        => 'string',
+						'description' => __( 'Rendered value with variables replaced.', 'slim-seo' ),
+					],
+				];
+				$property['additionalProperties'] = false;
+			}
+
+			$properties[ $key ] = $property;
+		}
+
+		$properties['noindex'] = [
+			'type'        => 'boolean',
+			'description' => __( 'Whether the post/page should be excluded from search engines.', 'slim-seo' ),
+		];
+
+		return $detailed
+			? [
+				'type'                 => 'object',
+				'properties'           => $properties,
+				'additionalProperties' => false,
+			]
+			: $properties;
 	}
 
-	private function update_data( string $object_type, int $object_id, array $data ): void {
-		update_metadata( $object_type, $object_id, 'slim_seo', $data );
-	}
+	private function get_update_schema( string $object_type = 'post' ): array {
+		$properties = $this->get_schema( false );
 
-	private function normalize_data( array $data ): array {
+		switch ( $object_type ) {
+			case 'term':
+				$properties = array_merge( $properties, [
+					'id'       => [
+						'type'        => 'integer',
+						'description' => __( 'The term ID.', 'slim-seo' ),
+					],
+					'slug'     => [
+						'type'        => 'string',
+						'description' => __( 'The term slug.', 'slim-seo' ),
+					],
+					'name'     => [
+						'type'        => 'string',
+						'description' => __( 'The term name.', 'slim-seo' ),
+					],
+					'taxonomy' => [
+						'type'        => 'string',
+						'description' => __( 'The taxonomy (e.g. category, post_tag). Recommended when using slug or name to avoid ambiguity.', 'slim-seo' ),
+					],
+				] );
+				break;
+			case 'settings':
+				unset( $properties['canonical'] );
+
+				$properties = array_merge( $properties, [
+					'context' => [
+						'type'        => 'string',
+						'description' => __( 'The settings context to update. Use "home" for homepage, a post type slug (e.g. "post", "page") for post types, a post type slug suffixed with "_archive" (e.g. "movie_archive") for archives, or a taxonomy slug (e.g. "category", "post_tag") for taxonomies.', 'slim-seo' ),
+					],
+				] );
+				break;
+			default:
+				$properties = array_merge( $properties, [
+					'id'         => [
+						'type'        => 'integer',
+						'description' => __( 'The post ID.', 'slim-seo' ),
+					],
+					'slug'       => [
+						'type'        => 'string',
+						'description' => __( 'The post slug.', 'slim-seo' ),
+					],
+					'post_title' => [
+						'type'        => 'string',
+						'description' => __( 'The post title.', 'slim-seo' ),
+					],
+				] );
+				break;
+		}
+
 		return [
-			'title'          => $data['title'] ?? '',
-			'description'    => $data['description'] ?? '',
-			'facebook_image' => $data['facebook_image'] ?? '',
-			'twitter_image'  => $data['twitter_image'] ?? '',
-			'canonical'      => $data['canonical'] ?? '',
-			'noindex'        => $data['noindex'] ?? false,
+			'type'                 => 'object',
+			'properties'           => $properties,
+			'additionalProperties' => false,
 		];
 	}
 
-	private function sanitize_data( array $data, array $input ): array {
-		$fields = [ 'title', 'description', 'facebook_image', 'twitter_image', 'canonical' ];
+	private function get_object_data( string $object_type, int $object_id = 0 ): array {
+		if ( 'settings' === $object_type ) {
+			return get_option( 'slim_seo', [] );
+		}
+
+		return get_metadata( $object_type, $object_id, 'slim_seo', true ) ?: [];
+	}
+
+	private function update_object_data( string $object_type, int $object_id = 0, array $data = [] ): void {
+		if ( 'settings' === $object_type ) {
+			update_option( 'slim_seo', $data );
+
+			return;
+		}
+
+		update_metadata( $object_type, $object_id, 'slim_seo', $data );
+	}
+
+	private function get_default_data( string $object_type ): array {
+		return [
+			'title'       => Title::DEFAULTS[ $object_type ] ?? '',
+			'description' => Description::DEFAULTS[ $object_type ] ?? '',
+		];
+	}
+
+	private function normalize_data( array $data, int $object_id = 0, string $object_type = 'post' ): array {
+		$data = [
+			'title'          => $this->render_field( $data['title'] ?? '', $object_id, $object_type ),
+			'description'    => $this->render_field( $data['description'] ?? '', $object_id, $object_type ),
+			'facebook_image' => $this->render_field( $data['facebook_image'] ?? '', $object_id, $object_type ),
+			'x_image'        => $this->render_field( $data['twitter_image'] ?? '', $object_id, $object_type ),
+			'noindex'        => (int) ( $data['noindex'] ?? 0 ),
+		];
+
+		if ( 'settings' !== $object_type ) {
+			$data['canonical'] = $this->render_field( $data['canonical'] ?? '', $object_id, $object_type );
+		}
+
+		return $data;
+	}
+
+	private function render_field( string $value, int $object_id, string $object_type ): array {
+		$post_id = 'post' === $object_type ? $object_id : 0;
+		$term_id = 'term' === $object_type ? $object_id : 0;
+
+		return [
+			'raw'      => $value,
+			'rendered' => Helper::render( $value, $post_id, $term_id ),
+		];
+	}
+
+	private function sanitize_data( array $data, array $input, string $object_type = 'post' ): array {
+		$fields = [ 'title', 'description', 'facebook_image' ];
+
+		if ( 'settings' !== $object_type ) {
+			$fields[] = 'canonical';
+		}
 
 		foreach ( $fields as $field ) {
 			if ( ! isset( $input[ $field ] ) ) {
@@ -417,10 +624,14 @@ class Abilities {
 			$data[ $field ] = sanitize_text_field( $input[ $field ] );
 		}
 
+		if ( isset( $input['x_image'] ) ) {
+			$data['twitter_image'] = sanitize_text_field( $input['x_image'] );
+		}
+
 		if ( isset( $input['noindex'] ) ) {
 			$data['noindex'] = $input['noindex'] ? 1 : 0;
 		}
 
-		return $data;
+		return array_filter( $data );
 	}
 }

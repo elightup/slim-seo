@@ -59,6 +59,8 @@ class Container {
 
 		$services['no_category_base'] = new NoCategoryBase;
 
+		$services['abilities'] = new Abilities;
+
 		// Admin only.
 		if ( is_admin() ) {
 			$services['link_attributes']    = new LinkAttributes;
@@ -147,7 +149,6 @@ class Container {
 
 		// Features with no settings.
 		new PrimaryTerm;
-		new Abilities;
 	}
 
 	/**
