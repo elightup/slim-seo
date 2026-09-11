@@ -24,6 +24,11 @@ class Settings {
 
 	public function get_default_content(): void {
 		check_ajax_referer( 'slim_seo_robots_txt_default', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error();
+		}
+
 		wp_send_json_success( $this->loader->load_default_robots_txt_content() );
 	}
 
