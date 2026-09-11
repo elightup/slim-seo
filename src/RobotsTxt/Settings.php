@@ -10,15 +10,21 @@ class Settings {
 		$this->loader = $loader;
 
 		add_action( 'admin_print_styles-settings_page_slim-seo', [ $this, 'enqueue' ] );
+		add_action( 'wp_ajax_slim_seo_robots_txt_default', [ $this, 'get_default_content' ] );
 		add_filter( 'slim_seo_option', [ $this, 'save' ], 10, 2 );
 	}
 
 	public function enqueue(): void {
 		Assets::enqueue_build_js( 'robots', 'SSRobots', [
-			'settings'     => self::list(),
-			'fileExists'   => file_exists( ABSPATH . 'robots.txt' ),
-			'defaultValue' => $this->loader->load_default_robots_txt_content(),
+			'settings'   => self::list(),
+			'fileExists' => file_exists( ABSPATH . 'robots.txt' ),
+			'nonce'      => wp_create_nonce( 'slim_seo_robots_txt_default' ),
 		] );
+	}
+
+	public function get_default_content(): void {
+		check_ajax_referer( 'slim_seo_robots_txt_default', 'nonce' );
+		wp_send_json_success( $this->loader->load_default_robots_txt_content() );
 	}
 
 	public function save( array $option, array $data ): array {

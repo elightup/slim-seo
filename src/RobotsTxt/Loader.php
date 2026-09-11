@@ -49,7 +49,6 @@ class Loader {
 		remove_filter( 'robots_txt', [ $this, 'robots_txt' ], 9999 );
 		ob_start();
 		do_robots();
-		header( 'Content-Type: text/html; charset=utf-8' );
 		$content = $this->get_default_content( ob_get_clean() );
 		add_filter( 'robots_txt', [ $this, 'robots_txt' ], 9999 );
 
