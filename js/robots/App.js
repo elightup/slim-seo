@@ -16,7 +16,7 @@ const App = () => {
 		fetch( `${ajaxurl}?action=slim_seo_robots_txt_default&nonce=${SSRobots.nonce}` )
 			.then( r => r.json() )
 			.then( r => {
-				if ( isMounted ) {
+				if ( r.success && isMounted ) {
 					setDefaultValue( r.data );
 				}
 			} )
