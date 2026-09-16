@@ -1,10 +1,12 @@
 <?php
 namespace SlimSEO\Abilities;
 
-use WP_Error;
-
 abstract class Base {
 	public function setup() {
+		if ( ! function_exists( 'wp_register_ability' ) ) {
+			return;
+		}
+
 		add_action( 'wp_abilities_api_init', [ $this, 'register_abilities' ] );
 	}
 
