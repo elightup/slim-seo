@@ -127,6 +127,10 @@ class Term extends Base {
 	}
 
 	private function resolve_term_id( array $input ): void {
+		if ( $this->object_id ) {
+			return;
+		}
+
 		if ( ! empty( $input['id'] ) ) {
 			$term = get_term( (int) $input['id'] );
 
