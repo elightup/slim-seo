@@ -30,6 +30,8 @@ class Container {
 		$services['settings_preview'] = new MetaTags\Settings\Preview;
 
 		$services['abilities_meta_tags_settings'] = new MetaTags\Abilities\Settings;
+		$services['abilities_meta_tags_homepage'] = new MetaTags\Abilities\Homepage;
+		$services['abilities_meta_tags_archive']  = new MetaTags\Abilities\Archive;
 		$services['abilities_meta_tags_post']     = new MetaTags\Abilities\Post;
 		$services['abilities_meta_tags_term']     = new MetaTags\Abilities\Term;
 
