@@ -15,6 +15,8 @@ class Container {
 
 		$services['upgrade'] = new Upgrade;
 
+		$services['abilities'] = new Abilities\Abilities;
+
 		$services['meta_tags_hook']   = new MetaTags\Hook;
 		$services['canonical_url']    = new MetaTags\CanonicalUrl;
 		$services['meta_title']       = new MetaTags\Title;
@@ -26,6 +28,12 @@ class Container {
 		$services['settings_post']    = new MetaTags\Settings\Post;
 		$services['settings_term']    = new MetaTags\Settings\Term;
 		$services['settings_preview'] = new MetaTags\Settings\Preview;
+
+		$services['abilities_meta_tags_settings'] = new MetaTags\Abilities\Settings;
+		$services['abilities_meta_tags_homepage'] = new MetaTags\Abilities\Homepage;
+		$services['abilities_meta_tags_archive']  = new MetaTags\Abilities\Archive;
+		$services['abilities_meta_tags_post']     = new MetaTags\Abilities\Post;
+		$services['abilities_meta_tags_term']     = new MetaTags\Abilities\Term;
 
 		$services['sitemaps']   = new Sitemaps\Manager;
 		$services['images_alt'] = new ImagesAlt;
