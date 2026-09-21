@@ -36,11 +36,11 @@ abstract class Base {
 	}
 
 	public function save( int $object_id ): void {
-		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) || empty( $_POST ) ) {
+		if ( ! check_ajax_referer( 'save', 'ss_nonce', false ) || empty( $_POST ) || ! isset( $_POST['slim_seo'] ) ) {
 			return;
 		}
 
-		$data = isset( $_POST['slim_seo'] ) ? wp_unslash( $_POST['slim_seo'] ) : []; // phpcs:ignore
+		$data = wp_unslash( $_POST['slim_seo'] ); // phpcs:ignore
 		$data = array_merge( $this->defaults, $data );
 
 		// Do not erase existing data when quick editing.
