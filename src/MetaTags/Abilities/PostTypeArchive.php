@@ -4,20 +4,20 @@ namespace SlimSEO\MetaTags\Abilities;
 use WP_Error;
 use SlimSEO\Helpers\Data;
 
-class Archive extends Settings {
+class PostTypeArchive extends Settings {
 	protected $has_noindex = false;
 
 	protected function ability_config(): array {
 		return [
-			'slug'               => 'archive',
-			'get_label'          => __( 'Get archive meta tags', 'slim-seo' ),
-			'get_description'    => __( 'Retrieve meta tags for the archive (title, description and social images).', 'slim-seo' ),
-			'update_label'       => __( 'Update archive meta tags', 'slim-seo' ),
-			'update_description' => __( 'Update meta tags for the archive. Only provided fields are updated.', 'slim-seo' ),
+			'slug'               => 'post-type-archive',
+			'get_label'          => __( 'Get post type archive meta tags', 'slim-seo' ),
+			'get_description'    => __( 'Retrieve meta tags for a post type archive (title, description and social images).', 'slim-seo' ),
+			'update_label'       => __( 'Update post type archive meta tags', 'slim-seo' ),
+			'update_description' => __( 'Update meta tags for a post type archive. Only provided fields are updated.', 'slim-seo' ),
 		];
 	}
 
-	protected function resolve_context( array $input ) {
+	protected function resolve_input( array $input ) {
 		if ( $this->context_type ) {
 			return null;
 		}

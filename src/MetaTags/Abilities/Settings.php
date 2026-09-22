@@ -4,6 +4,8 @@ namespace SlimSEO\MetaTags\Abilities;
 use WP_Error;
 use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
 use SlimSEO\Helpers\Data;
+use SlimSEO\MetaTags\Title;
+use SlimSEO\MetaTags\Description;
 
 class Settings extends Base {
 	protected $object_type   = 'settings';
@@ -21,7 +23,7 @@ class Settings extends Base {
 		];
 	}
 
-	protected function resolve_context( array $input ) {
+	protected function resolve_input( array $input ) {
 		if ( $this->context_type ) {
 			return null;
 		}
@@ -73,28 +75,33 @@ class Settings extends Base {
 		return [ 'context' ];
 	}
 
-	protected function get_data( array $input ) {
-		$error = $this->resolve_context( $input );
-
-		if ( $error ) {
-			return $error;
-		}
-
-		$settings = $this->get_object_data();
-		$data     = $settings[ $this->context ] ?? [];
-		$data     = ! empty( $data ) ? $data : $this->default_data( $this->context_type );
-
-		return $this->normalize_data( $data, $this->context_type );
+	protected function get_default(): array {
+		return [
+			'title'       => Title::DEFAULTS[ $this->context_type ] ?? '',
+			'description' => Description::DEFAULTS[ $this->context_type ] ?? '',
+		];
 	}
 
-	protected function update_data( array $input ) {
-		$error = $this->resolve_context( $input );
+	public function get_data( array $input ) {
+		$error = $this->resolve_input( $input );
 
 		if ( $error ) {
 			return $error;
 		}
 
-		$settings = $this->get_object_data();
+		$settings = $this->get_settings();
+
+		return $this->normalize_data( $settings[ $this->context ] ?? [] );
+	}
+
+	public function update_data( array $input ) {
+		$error = $this->resolve_input( $input );
+
+		if ( $error ) {
+			return $error;
+		}
+
+		$settings = $this->get_settings();
 		$data     = $this->sanitize_data( $settings[ $this->context ] ?? [], $input );
 
 		if ( empty( $data ) ) {
@@ -106,9 +113,5 @@ class Settings extends Base {
 		update_option( 'slim_seo', $settings );
 
 		return [ 'success' => true ];
-	}
-
-	protected function get_object_data(): array {
-		return get_option( 'slim_seo', [] ) ?: [];
 	}
 }

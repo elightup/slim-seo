@@ -29,11 +29,11 @@ class Container {
 		$services['settings_term']    = new MetaTags\Settings\Term;
 		$services['settings_preview'] = new MetaTags\Settings\Preview;
 
-		$services['abilities_meta_tags_settings'] = new MetaTags\Abilities\Settings;
-		$services['abilities_meta_tags_homepage'] = new MetaTags\Abilities\Homepage;
-		$services['abilities_meta_tags_archive']  = new MetaTags\Abilities\Archive;
-		$services['abilities_meta_tags_post']     = new MetaTags\Abilities\Post;
-		$services['abilities_meta_tags_term']     = new MetaTags\Abilities\Term;
+		$services['meta_tags_abilities_settings']          = new MetaTags\Abilities\Settings;
+		$services['meta_tags_abilities_homepage']          = new MetaTags\Abilities\Homepage;
+		$services['meta_tags_abilities_post_type_archive'] = new MetaTags\Abilities\PostTypeArchive;
+		$services['meta_tags_abilities_post']              = new MetaTags\Abilities\Post;
+		$services['meta_tags_abilities_term']              = new MetaTags\Abilities\Term;
 
 		$services['sitemaps']   = new Sitemaps\Manager;
 		$services['images_alt'] = new ImagesAlt;

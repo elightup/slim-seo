@@ -3,8 +3,6 @@ namespace SlimSEO\MetaTags\Abilities;
 
 use SlimSEO\Abilities\Base as AbilitiesBase;
 use SlimSEO\MetaTags\Helper as MetaTagsHelper;
-use SlimSEO\MetaTags\Title;
-use SlimSEO\MetaTags\Description;
 
 abstract class Base extends AbilitiesBase {
 	protected $object_type   = 'post';
@@ -22,12 +20,8 @@ abstract class Base extends AbilitiesBase {
 			'input_schema'        => $this->input_schema(),
 			'output_schema'       => $this->output_schema(),
 			'meta'                => $this->meta(),
-			'permission_callback' => function ( array $input ) {
-				return $this->check_permission( $input );
-			},
-			'execute_callback'    => function ( array $input ) {
-				return $this->get_data( $input );
-			},
+			'permission_callback' => [ $this, 'check_permission' ],
+			'execute_callback'    => [ $this, 'get_data' ],
 		] );
 
 		wp_register_ability( "slim-seo/update-{$config['slug']}-meta-tags", [
@@ -37,18 +31,35 @@ abstract class Base extends AbilitiesBase {
 			'input_schema'        => $this->input_schema( false ),
 			'output_schema'       => $this->success_schema(),
 			'meta'                => $this->meta( false ),
-			'permission_callback' => function ( array $input ) {
-				return $this->check_permission( $input );
-			},
-			'execute_callback'    => function ( array $input ) {
-				return $this->update_data( $input );
-			},
+			'permission_callback' => [ $this, 'check_permission' ],
+			'execute_callback'    => [ $this, 'update_data' ],
 		] );
 	}
 
 	abstract protected function ability_config(): array;
-	abstract protected function get_data( array $input );
-	abstract protected function update_data( array $input );
+	abstract protected function resolve_input( array $input );
+
+	public function get_data( array $input ) {
+		$error = $this->resolve_input( $input );
+
+		if ( $error ) {
+			return $error;
+		}
+
+		return $this->normalize_data( $this->get_object_data() );
+	}
+
+	public function update_data( array $input ) {
+		$error = $this->resolve_input( $input );
+
+		if ( $error ) {
+			return $error;
+		}
+
+		$this->update_object_data( $input );
+
+		return [ 'success' => true ];
+	}
 
 	protected function output_schema( bool $detailed = true ): array {
 		$fields = [
@@ -118,13 +129,8 @@ abstract class Base extends AbilitiesBase {
 		}
 	}
 
-	protected function default_data( string $type = '' ): array {
-		$type = $type ? $type : $this->object_type;
-
-		return [
-			'title'       => $type ? ( Title::DEFAULTS[ $type ] ?? '' ) : '',
-			'description' => $type ? ( Description::DEFAULTS[ $type ] ?? '' ) : '',
-		];
+	protected function get_settings(): array {
+		return get_option( 'slim_seo', [] ) ?: [];
 	}
 
 	private function render_field( string $value ): array {
@@ -137,17 +143,21 @@ abstract class Base extends AbilitiesBase {
 		];
 	}
 
-	protected function normalize_data( array $data, string $type = '' ): array {
-		$default_data = $this->default_data( $type );
-		$new_data     = [
-			'title'          => $this->render_field( $data['title'] ?? $default_data['title'] ),
-			'description'    => $this->render_field( $data['description'] ?? $default_data['description'] ),
-			'facebook_image' => $this->render_field( $data['facebook_image'] ?? '' ),
-			'x_image'        => $this->render_field( $data['twitter_image'] ?? '' ),
+	protected function get_default(): array {
+		return [];
+	}
+
+	protected function normalize_data( array $data ): array {
+		$default  = $this->get_default();
+		$new_data = [
+			'title'          => $this->render_field( $data['title'] ?? $default['title'] ?? '' ),
+			'description'    => $this->render_field( $data['description'] ?? $default['description'] ?? '' ),
+			'facebook_image' => $this->render_field( $data['facebook_image'] ?? $default['facebook_image'] ?? '' ),
+			'x_image'        => $this->render_field( $data['twitter_image'] ?? $default['twitter_image'] ?? '' ),
 		];
 
 		if ( $this->has_noindex ) {
-			$new_data['noindex'] = (bool) ( $data['noindex'] ?? 0 );
+			$new_data['noindex'] = (bool) ( $data['noindex'] ?? $default['noindex'] ?? 0 );
 		}
 
 		if ( $this->has_canonical ) {

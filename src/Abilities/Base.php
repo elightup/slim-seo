@@ -12,7 +12,7 @@ abstract class Base {
 
 	public function register_abilities(): void {}
 
-	protected function check_permission( array $input ) {
+	public function check_permission( array $input ) {
 		return current_user_can( 'manage_options' );
 	}
 

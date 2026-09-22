@@ -3,6 +3,8 @@ namespace SlimSEO\MetaTags\Abilities;
 
 use WP_Error;
 use SlimSEO\Helpers\Data;
+use SlimSEO\MetaTags\Title;
+use SlimSEO\MetaTags\Description;
 
 class Post extends Base {
 	protected function ability_config(): array {
@@ -15,8 +17,8 @@ class Post extends Base {
 		];
 	}
 
-	protected function check_permission( array $input ) {
-		$error = $this->resolve_post_id( $input );
+	public function check_permission( array $input ) {
+		$error = $this->resolve_input( $input );
 
 		if ( $error ) {
 			return $error;
@@ -25,7 +27,7 @@ class Post extends Base {
 		return current_user_can( 'edit_post', $this->object_id );
 	}
 
-	private function resolve_post_id( array $input ) {
+	protected function resolve_input( array $input ) {
 		if ( $this->object_id ) {
 			return null;
 		}
@@ -64,6 +66,19 @@ class Post extends Base {
 		return null;
 	}
 
+	protected function get_default(): array {
+		$post_type = get_post_type( $this->object_id );
+		$settings  = $this->get_settings();
+
+		return array_merge(
+			[
+				'title'       => Title::DEFAULTS[ $this->object_type ] ?? '',
+				'description' => Description::DEFAULTS[ $this->object_type ] ?? '',
+			],
+			$settings[ $post_type ] ?? []
+		);
+	}
+
 	protected function input_props(): array {
 		return [
 			'id'         => [
@@ -79,30 +94,5 @@ class Post extends Base {
 				'description' => __( 'The post title.', 'slim-seo' ),
 			],
 		];
-	}
-
-	protected function get_data( array $input ) {
-		$error = $this->resolve_post_id( $input );
-
-		if ( $error ) {
-			return $error;
-		}
-
-		$data = $this->get_object_data();
-		$data = ! empty( $data ) ? $data : $this->default_data();
-
-		return $this->normalize_data( $data );
-	}
-
-	protected function update_data( array $input ) {
-		$error = $this->resolve_post_id( $input );
-
-		if ( $error ) {
-			return $error;
-		}
-
-		$this->update_object_data( $input );
-
-		return [ 'success' => true ];
 	}
 }

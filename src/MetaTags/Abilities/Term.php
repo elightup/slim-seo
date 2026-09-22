@@ -2,6 +2,8 @@
 namespace SlimSEO\MetaTags\Abilities;
 
 use WP_Error;
+use SlimSEO\MetaTags\Title;
+use SlimSEO\MetaTags\Description;
 
 class Term extends Base {
 	protected $object_type = 'term';
@@ -16,8 +18,8 @@ class Term extends Base {
 		];
 	}
 
-	protected function check_permission( array $input ) {
-		$error = $this->resolve_term_id( $input );
+	public function check_permission( array $input ) {
+		$error = $this->resolve_input( $input );
 
 		if ( $error ) {
 			return $error;
@@ -26,7 +28,7 @@ class Term extends Base {
 		return current_user_can( 'edit_term', $this->object_id );
 	}
 
-	private function resolve_term_id( array $input ) {
+	protected function resolve_input( array $input ) {
 		if ( $this->object_id ) {
 			return null;
 		}
@@ -34,9 +36,8 @@ class Term extends Base {
 		$error = new WP_Error( 'slim_seo_abilities_term_not_found', __( 'The specified term does not exist.', 'slim-seo' ) );
 
 		if ( ! empty( $input['id'] ) ) {
-			$term = get_term( (int) $input['id'] );
-
-			$this->object_id = ( $term && ! is_wp_error( $term ) ) ? $term->term_id : 0;
+			$term            = get_term( (int) $input['id'] );
+			$this->object_id = $term && ! is_wp_error( $term ) ? $term->term_id : 0;
 
 			return $this->object_id ? null : $error;
 		}
@@ -68,6 +69,22 @@ class Term extends Base {
 		return null;
 	}
 
+	protected function get_default(): array {
+		$default = [
+			'title'       => Title::DEFAULTS[ $this->object_type ] ?? '',
+			'description' => Description::DEFAULTS[ $this->object_type ] ?? '',
+		];
+		$term    = get_term( $this->object_id );
+
+		if ( ! $term || is_wp_error( $term ) ) {
+			return $default;
+		}
+
+		$settings = $this->get_settings();
+
+		return array_merge( $default, $settings[ $term->taxonomy ] ?? [] );
+	}
+
 	protected function input_props(): array {
 		return [
 			'id'       => [
@@ -87,30 +104,5 @@ class Term extends Base {
 				'description' => __( 'The taxonomy (e.g. category, post_tag). Recommended when using slug or name to avoid ambiguity.', 'slim-seo' ),
 			],
 		];
-	}
-
-	protected function get_data( array $input ) {
-		$error = $this->resolve_term_id( $input );
-
-		if ( $error ) {
-			return $error;
-		}
-
-		$data = $this->get_object_data();
-		$data = ! empty( $data ) ? $data : $this->default_data();
-
-		return $this->normalize_data( $data );
-	}
-
-	protected function update_data( array $input ) {
-		$error = $this->resolve_term_id( $input );
-
-		if ( $error ) {
-			return $error;
-		}
-
-		$this->update_object_data( $input );
-
-		return [ 'success' => true ];
 	}
 }
