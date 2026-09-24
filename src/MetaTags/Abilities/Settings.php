@@ -24,9 +24,7 @@ class Settings extends Base {
 	}
 
 	protected function resolve_input( array $input ) {
-		if ( $this->context_type ) {
-			return null;
-		}
+		$this->reset_state();
 
 		$context = sanitize_key( wp_unslash( $input['context'] ?? '' ) );
 		$error   = new WP_Error( 'slim_seo_abilities_invalid_context', __( 'Invalid settings context.', 'slim-seo' ) );
@@ -113,5 +111,11 @@ class Settings extends Base {
 		update_option( 'slim_seo', $settings );
 
 		return [ 'success' => true ];
+	}
+
+	protected function reset_state(): void {
+		parent::reset_state();
+
+		$this->context = $this->context_type = ''; // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found
 	}
 }

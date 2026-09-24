@@ -2,7 +2,7 @@
 namespace SlimSEO\Abilities;
 
 abstract class Base {
-	public function setup() {
+	public function setup(): void {
 		if ( ! function_exists( 'wp_register_ability' ) ) {
 			return;
 		}
@@ -10,7 +10,7 @@ abstract class Base {
 		add_action( 'wp_abilities_api_init', [ $this, 'register_abilities' ] );
 	}
 
-	public function register_abilities(): void {}
+	abstract public function register_abilities(): void;
 
 	public function check_permission( array $input ) {
 		return current_user_can( 'manage_options' );
@@ -44,14 +44,19 @@ abstract class Base {
 		return [];
 	}
 
-	protected function meta( bool $readonly = true ): array {
+	protected function meta( bool $is_readonly = true ): array {
+		$annotations = [
+			'readonly'    => $is_readonly,
+			'destructive' => false,
+		];
+
+		if ( ! $is_readonly ) {
+			$annotations['idempotent'] = true;
+		}
+
 		return [
 			'show_in_rest' => true,
-			'annotations'  => [
-				'readonly'    => $readonly,
-				'destructive' => false,
-				'idempotent'  => ! $readonly,
-			],
+			'annotations'  => $annotations,
 			'mcp'          => [
 				'public'        => true,
 				'type'          => 'tool',

@@ -29,9 +29,7 @@ class Term extends Base {
 	}
 
 	protected function resolve_input( array $input ) {
-		if ( $this->object_id ) {
-			return null;
-		}
+		$this->reset_state();
 
 		$error = new WP_Error( 'slim_seo_abilities_term_not_found', __( 'The specified term does not exist.', 'slim-seo' ) );
 
@@ -71,8 +69,8 @@ class Term extends Base {
 
 	protected function get_default(): array {
 		$default = [
-			'title'       => Title::DEFAULTS[ $this->object_type ] ?? '',
-			'description' => Description::DEFAULTS[ $this->object_type ] ?? '',
+			'title'       => Title::DEFAULTS[ $this->object_type ],
+			'description' => Description::DEFAULTS[ $this->object_type ],
 		];
 		$term    = get_term( $this->object_id );
 

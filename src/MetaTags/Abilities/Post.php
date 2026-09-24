@@ -28,9 +28,7 @@ class Post extends Base {
 	}
 
 	protected function resolve_input( array $input ) {
-		if ( $this->object_id ) {
-			return null;
-		}
+		$this->reset_state();
 
 		$error = new WP_Error( 'slim_seo_abilities_post_not_found', __( 'The specified post does not exist.', 'slim-seo' ) );
 
@@ -72,8 +70,8 @@ class Post extends Base {
 
 		return array_merge(
 			[
-				'title'       => Title::DEFAULTS[ $this->object_type ] ?? '',
-				'description' => Description::DEFAULTS[ $this->object_type ] ?? '',
+				'title'       => Title::DEFAULTS[ $this->object_type ],
+				'description' => Description::DEFAULTS[ $this->object_type ],
 			],
 			$settings[ $post_type ] ?? []
 		);

@@ -147,6 +147,10 @@ abstract class Base extends AbilitiesBase {
 		return [];
 	}
 
+	protected function reset_state(): void {
+		$this->object_id = 0;
+	}
+
 	protected function normalize_data( array $data ): array {
 		$default  = $this->get_default();
 		$new_data = [
@@ -190,6 +194,6 @@ abstract class Base extends AbilitiesBase {
 			$data['noindex'] = $input['noindex'] ? 1 : 0;
 		}
 
-		return array_filter( $data, fn( $v ) => '' !== $v && null !== $v );
+		return array_filter( $data );
 	}
 }
