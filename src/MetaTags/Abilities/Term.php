@@ -21,11 +21,7 @@ class Term extends Base {
 	public function check_permission( array $input ) {
 		$error = $this->resolve_input( $input );
 
-		if ( $error ) {
-			return $error;
-		}
-
-		return current_user_can( 'edit_term', $this->object_id );
+		return $error ?: current_user_can( 'edit_term', $this->object_id );
 	}
 
 	protected function resolve_input( array $input ) {
@@ -53,9 +49,10 @@ class Term extends Base {
 		}
 
 		$terms = get_terms( array_merge( $args, [
-			'hide_empty' => false,
-			'number'     => 1,
-			'fields'     => 'ids',
+			'hide_empty'             => false,
+			'number'                 => 1,
+			'fields'                 => 'ids',
+			'update_term_meta_cache' => false,
 		] ) );
 
 		if ( is_wp_error( $terms ) || empty( $terms ) || empty( $terms[0] ) ) {

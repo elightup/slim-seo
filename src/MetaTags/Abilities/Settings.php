@@ -82,13 +82,7 @@ class Settings extends Base {
 	public function get_data( array $input ) {
 		$error = $this->resolve_input( $input );
 
-		if ( $error ) {
-			return $error;
-		}
-
-		$settings = $this->get_settings();
-
-		return $this->normalize_data( $settings[ $this->context ] ?? [] );
+		return $error ?: $this->normalize_data( $this->get_settings()[ $this->context ] ?? [] );
 	}
 
 	public function update_data( array $input ) {
@@ -109,7 +103,7 @@ class Settings extends Base {
 
 		update_option( 'slim_seo', $settings );
 
-		return [ 'success' => true ];
+		return true;
 	}
 
 	protected function reset_state(): void {

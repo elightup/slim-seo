@@ -42,11 +42,7 @@ abstract class Base extends AbilitiesBase {
 	public function get_data( array $input ) {
 		$error = $this->resolve_input( $input );
 
-		if ( $error ) {
-			return $error;
-		}
-
-		return $this->normalize_data( $this->get_object_data() );
+		return $error ?: $this->normalize_data( $this->get_object_data() );
 	}
 
 	public function update_data( array $input ) {
@@ -58,7 +54,7 @@ abstract class Base extends AbilitiesBase {
 
 		$this->update_object_data( $input );
 
-		return [ 'success' => true ];
+		return true;
 	}
 
 	protected function output_schema( bool $detailed = true ): array {

@@ -20,11 +20,7 @@ class Post extends Base {
 	public function check_permission( array $input ) {
 		$error = $this->resolve_input( $input );
 
-		if ( $error ) {
-			return $error;
-		}
-
-		return current_user_can( 'edit_post', $this->object_id );
+		return $error ?: current_user_can( 'edit_post', $this->object_id );
 	}
 
 	protected function resolve_input( array $input ) {
@@ -49,10 +45,13 @@ class Post extends Base {
 		}
 
 		$posts = get_posts( array_merge( $args, [
-			'post_type'      => Data::get_meta_box_post_types(),
-			'post_status'    => 'any',
-			'posts_per_page' => 1,
-			'fields'         => 'ids',
+			'post_type'              => Data::get_meta_box_post_types(),
+			'post_status'            => 'any',
+			'posts_per_page'         => 1,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
 		] ) );
 
 		if ( empty( $posts ) ) {

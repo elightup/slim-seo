@@ -65,14 +65,8 @@ abstract class Base {
 
 	protected function success_schema(): array {
 		return [
-			'type'                 => 'object',
-			'properties'           => [
-				'success' => [
-					'type'        => 'boolean',
-					'description' => __( 'Whether the data was saved.', 'slim-seo' ),
-				],
-			],
-			'additionalProperties' => false,
+			'type'        => 'boolean',
+			'description' => __( 'Whether the data was saved.', 'slim-seo' ),
 		];
 	}
 }
