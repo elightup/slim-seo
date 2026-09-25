@@ -2,7 +2,7 @@
 namespace SlimSEO\MetaTags\Abilities;
 
 use WP_Error;
-use SlimSEO\Helpers\Data;
+use eLightUp\SlimSEO\Common\Helpers\Data as CommonHelpersData;
 
 class PostTypeArchive extends Settings {
 	protected $has_noindex = false;
@@ -27,11 +27,12 @@ class PostTypeArchive extends Settings {
 			return $error;
 		}
 
-		$post_types = Data::get_meta_box_post_types();
-		$archives   = array_filter( array_map( function ( $post_type ) {
-			$obj = get_post_type_object( $post_type );
-			return $obj && $obj->has_archive ? "{$post_type}_archive" : null;
-		}, $post_types ) );
+		$archives = [];
+		foreach ( CommonHelpersData::get_post_types() as $name => $post_type ) {
+			if ( $post_type->has_archive ) {
+				$archives[] = "{$name}_archive";
+			}
+		}
 
 		if ( ! in_array( $context, $archives, true ) ) {
 			return $error;
