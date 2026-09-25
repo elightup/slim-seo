@@ -40,9 +40,7 @@ abstract class Base {
 		return $schema;
 	}
 
-	protected function output_schema( bool $detailed = true ): array {
-		return [];
-	}
+	abstract protected function output_schema( bool $detailed = true ): array;
 
 	protected function meta( bool $is_readonly = true ): array {
 		$annotations = [

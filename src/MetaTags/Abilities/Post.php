@@ -55,7 +55,7 @@ class Post extends Base {
 			'fields'         => 'ids',
 		] ) );
 
-		if ( is_wp_error( $posts ) || empty( $posts ) || empty( $posts[0] ) ) {
+		if ( empty( $posts ) ) {
 			return $error;
 		}
 

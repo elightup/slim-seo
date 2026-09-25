@@ -8,7 +8,6 @@ use SlimSEO\MetaTags\Title;
 use SlimSEO\MetaTags\Description;
 
 class Settings extends Base {
-	protected $object_type   = 'settings';
 	protected $has_canonical = false;
 	protected $context       = '';
 	protected $context_type  = '';
@@ -116,6 +115,7 @@ class Settings extends Base {
 	protected function reset_state(): void {
 		parent::reset_state();
 
-		$this->context = $this->context_type = ''; // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found
+		$this->context      = '';
+		$this->context_type = '';
 	}
 }

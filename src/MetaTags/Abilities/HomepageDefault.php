@@ -17,7 +17,8 @@ class HomepageDefault extends Settings {
 	protected function resolve_input( array $input ) {
 		$this->reset_state();
 
-		$this->context = $this->context_type = 'home'; // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found
+		$this->context      = 'home';
+		$this->context_type = 'home';
 
 		return null;
 	}

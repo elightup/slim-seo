@@ -32,8 +32,4 @@ class HomepageStatic extends Post {
 	protected function input_props(): array {
 		return [];
 	}
-
-	protected function input_props_required(): array {
-		return [];
-	}
 }
