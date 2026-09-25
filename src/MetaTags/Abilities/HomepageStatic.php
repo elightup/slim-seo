@@ -1,6 +1,8 @@
 <?php
 namespace SlimSEO\MetaTags\Abilities;
 
+use WP_Error;
+
 class HomepageStatic extends Post {
 	protected function ability_config(): array {
 		return [
@@ -15,7 +17,14 @@ class HomepageStatic extends Post {
 	protected function resolve_input( array $input ) {
 		$this->reset_state();
 
-		$this->object_id = (int) get_option( 'page_on_front' ); // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found
+		$page_id = (int) get_option( 'page_on_front' );
+		$page    = $page_id ? get_post( $page_id ) : null;
+
+		if ( ! $page ) {
+			return new WP_Error( 'slim_seo_abilities_homepage_not_found', __( 'The homepage does not exist.', 'slim-seo' ) );
+		}
+
+		$this->object_id = $page->ID;
 
 		return null;
 	}

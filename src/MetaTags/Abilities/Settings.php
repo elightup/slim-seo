@@ -64,7 +64,7 @@ class Settings extends Base {
 		return [
 			'context' => [
 				'type'        => 'string',
-				'description' => __( 'The settings context to retrieve. Use a post type slug (e.g. "post", "page") for post types, a taxonomy slug (e.g. "category", "post_tag") for taxonomies, "author" for author.', 'slim-seo' ),
+				'description' => __( 'The settings context to get or update. Use a post type slug (e.g. "post", "page") for post types, a taxonomy slug (e.g. "category", "post_tag") for taxonomies, "author" for author.', 'slim-seo' ),
 			],
 		];
 	}

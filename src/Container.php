@@ -29,15 +29,8 @@ class Container {
 		$services['settings_term']    = new MetaTags\Settings\Term;
 		$services['settings_preview'] = new MetaTags\Settings\Preview;
 
-		$page_id = 0;
-
-		if ( 'page' === get_option( 'show_on_front' ) ) {
-			$page_id = (int) get_option( 'page_on_front' );
-			$page_id = $page_id && get_post( $page_id ) ? $page_id : 0;
-		}
-
 		$services['meta_tags_abilities_settings']          = new MetaTags\Abilities\Settings;
-		$services['meta_tags_abilities_homepage']          = $page_id ? new MetaTags\Abilities\HomepageStatic : new MetaTags\Abilities\HomepageDefault;
+		$services['meta_tags_abilities_homepage']          = Helpers\Data::has_static_homepage() ? new MetaTags\Abilities\HomepageStatic : new MetaTags\Abilities\HomepageDefault;
 		$services['meta_tags_abilities_post_type_archive'] = new MetaTags\Abilities\PostTypeArchive;
 		$services['meta_tags_abilities_post']              = new MetaTags\Abilities\Post;
 		$services['meta_tags_abilities_term']              = new MetaTags\Abilities\Term;
