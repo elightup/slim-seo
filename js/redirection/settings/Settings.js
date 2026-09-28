@@ -8,6 +8,7 @@ const Settings = () => {
 	const [ forceTrailingSlash, toggleForceTrailingSlash ] = useReducer( onOrOff => !onOrOff, !!settings['force_trailing_slash'] );
 	const [ autoRedirection, toggleAutoRedirection ] = useReducer( onOrOff => !onOrOff, !!settings['auto_redirection'] );
 	const [ redirectWWW, setRedirectWWW ] = useState( settings[ 'redirect_www' ] );
+	const [ caseSensitive, toggleCaseSensitive ] = useReducer( onOrOff => !onOrOff, !!settings['case_sensitive'] );
 	const [ enable404Logs, toggleEnable404Logs ] = useReducer( onOrOff => !onOrOff, !!settings[ 'enable_404_logs' ] );
 	const [ autoDelete404Logs, setAutoDelete404Logs ] = useState( settings[ 'auto_delete_404_logs' ] );
 	const [ deleteLog404Table, toggleDeleteLog404Table ] = useReducer( onOrOff => !onOrOff, false );
@@ -82,6 +83,19 @@ const Settings = () => {
 								<option value='www-to-non'>{ __( 'www to non-www', 'slim-seo' ) }</option>
 								<option value='non-to-www'>{ __( 'non-www to www', 'slim-seo' ) }</option>
 							</select>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label htmlFor="ss-case-sensitive">{ __( 'Case sensitive', 'slim-seo' ) }</label>
+							<Tooltip content={ __( 'When enabled, URL matching will be case sensitive.', 'slim-seo' ) } />
+						</th>
+						<td>
+							<label className='ss-toggle'>
+								<input id='ss-case-sensitive' type='checkbox' name={ `${ settingsName }[case_sensitive]` } value='1' checked={ caseSensitive } onChange={ toggleCaseSensitive } />
+								<div className='ss-toggle__switch'></div>
+							</label>
 						</td>
 					</tr>
 

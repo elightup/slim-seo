@@ -23,10 +23,12 @@ class Redirection {
 			return;
 		}
 
-		$http_host   = $_SERVER['HTTP_HOST'] ?? ''; // @phpcs:ignore.
-		$request_uri = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @phpcs:ignore.
-		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
-		$request_url = Helper::normalize_url( $request_url );
+		$http_host      = $_SERVER['HTTP_HOST'] ?? ''; // @phpcs:ignore.
+		$request_uri    = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @phpcs:ignore.
+		$request_url    = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
+		$request_url    = Helper::normalize_url( $request_url );
+		$case_sensitive = Settings::get( 'case_sensitive' );
+		$request_url    = $case_sensitive ? $request_url : strtolower( $request_url );
 
 		if ( apply_filters( 'slim_seo_redirection_skip', false, $request_url ) ) {
 			return;
@@ -45,6 +47,7 @@ class Redirection {
 			}
 
 			$from            = Helper::normalize_url( $redirect['from'], false );
+			$from            = $case_sensitive || 'regex' === $redirect['condition'] ? $from : strtolower( $from );
 			$to              = $redirect['to'];
 			$should_redirect = false;
 
@@ -52,7 +55,7 @@ class Redirection {
 				case 'regex':
 					$from  = str_replace( '\/', '/', $from );
 					$from  = str_replace( '/', '\/', $from );
-					$regex = '/' . $from . '/i';
+					$regex = '/' . $from . '/' . ( $case_sensitive ? '' : 'i' );
 
 					if ( preg_match( $regex, $current_url ) ) {
 						$to              = preg_replace( $regex, $to, $current_url );
@@ -62,21 +65,21 @@ class Redirection {
 					break;
 
 				case 'contain':
-					if ( false !== stripos( $current_url, $from ) ) {
+					if ( str_contains( $current_url, $from ) ) {
 						$should_redirect = true;
 					}
 
 					break;
 
 				case 'start-with':
-					if ( 0 === stripos( $current_url, $from ) ) {
+					if ( str_starts_with( $current_url, $from ) ) {
 						$should_redirect = true;
 					}
 
 					break;
 
 				case 'end-with':
-					if ( ( strlen( $current_url ) - strlen( $from ) ) === stripos( $current_url, $from ) ) {
+					if ( str_ends_with( $current_url, $from ) ) {
 						$should_redirect = true;
 					}
 
@@ -200,10 +203,12 @@ class Redirection {
 		$request_uri = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$post_id = (int) $wpdb->get_var(
-			$wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_ss_old_permalink' AND meta_value = %s", $request_url )
+		$post_id     = (int) $wpdb->get_var( // phpcs: ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+				"SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_ss_old_permalink' AND " .
+				( Settings::get( 'case_sensitive' ) ? 'meta_value = %s' : 'LOWER( meta_value ) = LOWER( %s )' ), // // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$request_url
+			)
 		);
 
 		if ( empty( $post_id ) ) {
