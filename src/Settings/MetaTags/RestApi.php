@@ -39,7 +39,7 @@ class RestApi {
 	public function get_option(): array {
 		$exclude = array_flip( [
 			'auto_redirection',
-			'ignore_case',
+			'case_sensitive',
 			'enable_404_logs',
 			'disable_for_single_posts',
 			'enable_deleted_url_notifications',
