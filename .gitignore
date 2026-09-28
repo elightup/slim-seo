@@ -3,6 +3,7 @@ Thumbs.db
 
 *.swp
 .idea
+.cursor
 
 node_modules
 vendor
