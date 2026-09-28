@@ -3,9 +3,9 @@ Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 6.6
-Tested up to: 7.1
+Tested up to: 7.1.2
 Requires PHP: 7.4
-Stable tag: 4.10.1
+Stable tag: 4.11.0
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -184,6 +184,18 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.11.0 - 2026-09-28 =
+
+**Highlights:**
+
+Add WordPress Abilities API integration for SEO data that lets you connect AI agents to your site and manage your SEO with AI. For more details, please see [this blog post](https://wpslimseo.com/abilities/) and the [documentation](https://docs.wpslimseo.com/slim-seo/abilities/).
+
+**Other changes:**
+- Add case-insensitive URL matching for redirections
+- Fix bulk edit wiping all Slim SEO meta except first post
+- Fix PHP headers sent warning when viewing the settings page with edit robots.txt feature enabled
+- Change indicator for manual title & description to avoid confusion with indicators of length
 
 = 4.10.1 - 2026-09-07 =
 

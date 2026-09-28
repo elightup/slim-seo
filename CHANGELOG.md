@@ -1,3 +1,15 @@
+### 4.11.0 - 2026-09-28
+
+**Highlights:**
+
+Add WordPress Abilities API integration for SEO data that lets you connect AI agents to your site and manage your SEO with AI. For more details, please see [this blog post](https://wpslimseo.com/abilities/) and the [documentation](https://docs.wpslimseo.com/slim-seo/abilities/).
+
+**Other changes:**
+- Add case-insensitive URL matching for redirections
+- Fix bulk edit wiping all Slim SEO meta except first post
+- Fix PHP headers sent warning when viewing the settings page with edit robots.txt feature enabled
+- Change indicator for manual title & description to avoid confusion with indicators of length
+
 ### 4.10.1 - 2026-09-07
 
 - Fix REST API authorization for term meta tags
