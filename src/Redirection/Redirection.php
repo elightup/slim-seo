@@ -27,6 +27,8 @@ class Redirection {
 		$request_uri = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @phpcs:ignore.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
+		$ignore_case = Settings::get( 'ignore_case' );
+		$request_url = $ignore_case ? strtolower( $request_url ) : $request_url;
 
 		if ( apply_filters( 'slim_seo_redirection_skip', false, $request_url ) ) {
 			return;
@@ -45,6 +47,7 @@ class Redirection {
 			}
 
 			$from            = Helper::normalize_url( $redirect['from'], false );
+			$from            = $ignore_case && 'regex' !== $redirect['condition'] ? strtolower( $from ) : $from;
 			$to              = $redirect['to'];
 			$should_redirect = false;
 
@@ -62,21 +65,21 @@ class Redirection {
 					break;
 
 				case 'contain':
-					if ( false !== stripos( $current_url, $from ) ) {
+					if ( false !== strpos( $current_url, $from ) ) {
 						$should_redirect = true;
 					}
 
 					break;
 
 				case 'start-with':
-					if ( 0 === stripos( $current_url, $from ) ) {
+					if ( 0 === strpos( $current_url, $from ) ) {
 						$should_redirect = true;
 					}
 
 					break;
 
 				case 'end-with':
-					if ( ( strlen( $current_url ) - strlen( $from ) ) === stripos( $current_url, $from ) ) {
+					if ( ( strlen( $current_url ) - strlen( $from ) ) === strpos( $current_url, $from ) ) {
 						$should_redirect = true;
 					}
 
@@ -200,10 +203,12 @@ class Redirection {
 		$request_uri = $_SERVER['REQUEST_URI'] ?? ''; // @codingStandardsIgnoreLine.
 		$request_url = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url = Helper::normalize_url( $request_url );
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$post_id = (int) $wpdb->get_var(
-			$wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_ss_old_permalink' AND meta_value = %s", $request_url )
+		$post_id     = (int) $wpdb->get_var( // phpcs: ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+				"SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_ss_old_permalink' AND " .
+				( Settings::get( 'ignore_case' ) ? 'LOWER( meta_value ) = LOWER( %s )' : 'meta_value = %s' ), // // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$request_url
+			)
 		);
 
 		if ( empty( $post_id ) ) {

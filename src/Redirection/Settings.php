@@ -68,6 +68,7 @@ class Settings {
 		$checkboxes = [
 			'force_trailing_slash',
 			'auto_redirection',
+			'ignore_case',
 			'enable_404_logs',
 			'disable_for_single_posts',
 			'enable_deleted_url_notifications',
@@ -93,6 +94,7 @@ class Settings {
 			'force_trailing_slash'             => 0,
 			'auto_redirection'                 => 1,
 			'redirect_www'                     => '',
+			'ignore_case'                      => 0,
 			'enable_404_logs'                  => 0,
 			'auto_delete_404_logs'             => 30,
 			'redirect_404_to'                  => '',
