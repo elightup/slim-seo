@@ -12,7 +12,7 @@ abstract class Base {
 
 	abstract public function register_abilities(): void;
 
-	public function check_permission( array $input ) {
+	public function check_permission( ?array $input = null ) {
 		return current_user_can( 'manage_options' );
 	}
 
@@ -25,15 +25,18 @@ abstract class Base {
 	}
 
 	protected function input_schema( bool $get = true ): array {
-		$schema = [
-			'type'                 => 'object',
-			'properties'           => $get ? $this->input_props() : array_merge( $this->output_schema( false ), $this->input_props() ),
+		$properties = $get ? $this->input_props() : array_merge( $this->output_schema( false ), $this->input_props() );
+		$schema     = [
+			'type'                 => [ 'object', 'null' ],
+			// Empty array encodes as JSON [] which breaks object schemas; use stdClass for {}.
+			'properties'           => $properties ?: new \stdClass(),
 			'additionalProperties' => false,
 		];
 
 		$required = $this->input_props_required();
 
 		if ( $required ) {
+			$schema['type']     = 'object';
 			$schema['required'] = $required;
 		}
 

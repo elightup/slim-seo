@@ -79,13 +79,15 @@ class Settings extends Base {
 		];
 	}
 
-	public function get_data( array $input ) {
+	public function get_data( ?array $input = null ) {
+		$input = $input ?? [];
 		$error = $this->resolve_input( $input );
 
 		return $error ?: $this->normalize_data( $this->get_settings()[ $this->context ] ?? [] );
 	}
 
-	public function update_data( array $input ) {
+	public function update_data( ?array $input = null ) {
+		$input = $input ?? [];
 		$error = $this->resolve_input( $input );
 
 		if ( $error ) {

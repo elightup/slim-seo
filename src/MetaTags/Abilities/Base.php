@@ -39,13 +39,15 @@ abstract class Base extends AbilitiesBase {
 	abstract protected function ability_config(): array;
 	abstract protected function resolve_input( array $input );
 
-	public function get_data( array $input ) {
+	public function get_data( ?array $input = null ) {
+		$input = $input ?? [];
 		$error = $this->resolve_input( $input );
 
 		return $error ?: $this->normalize_data( $this->get_object_data() );
 	}
 
-	public function update_data( array $input ) {
+	public function update_data( ?array $input = null ) {
+		$input = $input ?? [];
 		$error = $this->resolve_input( $input );
 
 		if ( $error ) {

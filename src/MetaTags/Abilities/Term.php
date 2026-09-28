@@ -18,8 +18,8 @@ class Term extends Base {
 		];
 	}
 
-	public function check_permission( array $input ) {
-		$error = $this->resolve_input( $input );
+	public function check_permission( ?array $input = null ) {
+		$error = $this->resolve_input( $input ?? [] );
 
 		return $error ?: current_user_can( 'edit_term', $this->object_id );
 	}
