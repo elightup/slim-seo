@@ -70,10 +70,14 @@ class Data {
 		if ( ! $user ) {
 			return [];
 		}
+
+		// User bio is editable by Subscribers; never execute shortcodes from it.
+		$description = strip_shortcodes( (string) $user->description );
+
 		return [
 			'display_name'     => $user->display_name,
-			'description'      => $user->description,
-			'auto_description' => Helper::truncate( $user->description ),
+			'description'      => $description,
+			'auto_description' => Helper::truncate( $description ),
 		];
 	}
 
