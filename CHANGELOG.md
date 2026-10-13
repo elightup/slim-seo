@@ -1,3 +1,7 @@
+### 4.11.2 - 2026-10-13
+
+- Fix canonical URL for paginated front page.
+
 ### 4.11.1 - 2026-10-13
 
 - Fix arbitrary shortcode execution via user biographical info.
