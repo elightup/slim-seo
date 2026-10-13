@@ -44,7 +44,7 @@ class CanonicalUrl {
 			return $url;
 		}
 		if ( get_option( 'permalink_structure' ) ) {
-			$url = trailingslashit( $url ) . user_trailingslashit( $page, 'single_paged' );
+			$url = trailingslashit( $url ) . ( is_front_page() ? user_trailingslashit( $GLOBALS['wp_rewrite']->pagination_base . '/' . $page, 'paged' ) : user_trailingslashit( $page, 'single_paged' ) );
 		} else {
 			$url = add_query_arg( 'page', $page, $url );
 		}
