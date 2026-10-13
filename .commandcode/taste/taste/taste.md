@@ -8,3 +8,4 @@
 - After substantial changes, expects a full re-review that also verifies whether previously reported issues are actually resolved and updates the same review file. Confidence: 0.7
 - Values consistent naming across related APIs and flags names that are inconsistent or easily confused between similar operations. Confidence: 0.6
 - In admin UI, prefers minimal, low-visual-weight indicators (e.g., small gray pin/icon) over text chips or badges that consume column space or look clickable, and prioritizes keeping content columns wide. Confidence: 0.65
+- For SEO meta titles, wants them short, attractive, and search-optimized — explicitly asked for a "ngắn gọn, hấp dẫn và tối ưu cho SEO" meta title when editing a post. Confidence: 0.6
