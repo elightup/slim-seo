@@ -382,7 +382,7 @@ function LinkControl ({
 
 	const handleSelectSuggestion = (suggestion, _value = {}) => {
 		setIsEditingLink(false)
-		onChange({ ..._value, ...suggestion })
+		onChange({ ..._value, ...suggestion, title: '' })
 
 		doAction('ss-link-format-link-added', {
 			...value,
@@ -494,23 +494,17 @@ function LinkControl ({
 								suggestion={ suggestion }
 								index={ index }
 								onClick={ () => {
-									let title = suggestion.title
-									if (isNaN(parseInt(suggestion.id))) {
-										// Manually override the title with the selected text.
-										title = selectedText
-									}
-
 									stopEditing()
 									onChange({
 										...value,
 										...suggestion,
-										title
+										title: ''
 									})
 
 									doAction('ss-link-format-link-added', {
 										...value,
 										...suggestion,
-										title
+										title: ''
 									})
 								} }
 								isSelected={ index === selectedSuggestion }
