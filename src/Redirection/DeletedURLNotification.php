@@ -83,11 +83,11 @@ class DeletedURLNotification {
 	}
 
 	public function enqueue(): void {
-		if ( ! $this->has_permission() ) {
+		if ( ! $this->has_permission() || empty( self::list() ) ) {
 			return;
 		}
 
-		wp_enqueue_script( 'slim-seo-redirection-deleted-url-notification', SLIM_SEO_URL . 'js/redirection/deleted-url-notification.js', [], filemtime( SLIM_SEO_DIR . 'js/redirection/deleted-url-notification.js' ), true );
+		wp_enqueue_script( 'slim-seo-redirection-deleted-url-notification', SLIM_SEO_URL . 'js/deleted-url-notification.js', [], filemtime( SLIM_SEO_DIR . 'js/deleted-url-notification.js' ), true );
 		wp_localize_script( 'slim-seo-redirection-deleted-url-notification', 'SSRedirectionDeletedURLNotification', [ 'nonce' => wp_create_nonce( 'slim_seo_dismiss_deleted_url_notification' ) ] );
 	}
 
