@@ -1,4 +1,4 @@
-### 4.12.3 - 2026-10-15
+### 4.11.3 - 2026-10-15
 
 - Make the link title attribute empty by default in the block editor (#298)
 - Fix missing deleted-URL notification script in plugin zip.

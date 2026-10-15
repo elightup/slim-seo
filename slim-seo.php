@@ -5,7 +5,7 @@
  * Description: AI SEO Plugin, Lightweight, Fast & Automated
  * Author:      Slim SEO
  * Author URI:  https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
- * Version:     4.12.3
+ * Version:     4.11.3
  * License:     GPL v3
  *
  * Copyright (C) 2010-2025 Tran Ngoc Tuan Anh. All rights reserved.
