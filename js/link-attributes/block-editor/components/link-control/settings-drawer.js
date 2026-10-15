@@ -35,27 +35,25 @@ class LinkControlSettingsDrawer extends Component {
 		super(props)
 
 		this.state = {
-			textValue : props.value.title
+			textValue : (props.value && props.value.title) || ''
 		}
 	}
 
-	componentDidUpdate (prevProps, prevState) {
-		if (prevState.textValue !== this.state.textValue) {
-			return
-		}
+	componentDidUpdate (prevProps) {
+		const prevTitle = (prevProps.value && prevProps.value.title) || ''
+		const nextTitle = (this.props.value && this.props.value.title) || ''
 
-		if (prevProps.value.title !== this.props.value.title) {
-			return
-		}
-
-		if (prevProps.value.title !== prevState.textValue) {
-			this.setState({ textValue: prevProps.value.title })
+		// Sync when parent resets/changes title (e.g. selecting a new link).
+		if (prevTitle !== nextTitle && this.state.textValue !== nextTitle) {
+			this.setState({ textValue: nextTitle })
 		}
 	}
 
 	componentWillUnmount () {
-		// If we don't have any title or if the title hasn't changed, let's return early since this prop change is unnecessary.
-		if (!this.state.textValue || (this.state.textValue === this.props.value.title)) {
+		const currentTitle = (this.props.value && this.props.value.title) || ''
+
+		// Skip if already committed (including intentional empty after reset).
+		if (this.state.textValue === currentTitle) {
 			return
 		}
 
