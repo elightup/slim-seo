@@ -40,6 +40,11 @@
 	}
 	.block-editor-link-control__setting {
 		padding: 0;
+		margin-bottom: 8px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
 	}
 	input.block-editor-url-input__input {
 		font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
@@ -95,6 +100,8 @@
 		padding: 8px;
 	}
 	.block-editor-link-control__setting.ss-link-title {
+		margin-bottom: 16px;
+
 		input {
 			border: 1px solid #ddd;
 			border-radius: 2px;

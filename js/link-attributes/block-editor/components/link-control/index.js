@@ -381,14 +381,11 @@ function LinkControl ({
 	}
 
 	const handleSelectSuggestion = (suggestion, _value = {}) => {
-		setIsEditingLink(false)
-		onChange({ ..._value, ...suggestion })
+		stopEditing()
 
-		doAction('ss-link-format-link-added', {
-			...value,
-			...suggestion,
-			title : null
-		})
+		const nextValue = { ..._value, ...suggestion, title: '' }
+		onChange(nextValue)
+		doAction('ss-link-format-link-added', nextValue)
 	}
 
 	// Render Components
@@ -494,24 +491,7 @@ function LinkControl ({
 								suggestion={ suggestion }
 								index={ index }
 								onClick={ () => {
-									let title = suggestion.title
-									if (isNaN(parseInt(suggestion.id))) {
-										// Manually override the title with the selected text.
-										title = selectedText
-									}
-
-									stopEditing()
-									onChange({
-										...value,
-										...suggestion,
-										title
-									})
-
-									doAction('ss-link-format-link-added', {
-										...value,
-										...suggestion,
-										title
-									})
+									handleSelectSuggestion(suggestion, value)
 								} }
 								isSelected={ index === selectedSuggestion }
 								isURL={ directLinkEntryTypes.includes(
@@ -552,7 +532,6 @@ function LinkControl ({
 							await handleOnCreate(inputValue)
 						} else {
 							handleSelectSuggestion(suggestion, value)
-							stopEditing()
 						}
 					} }
 					renderSuggestions={
