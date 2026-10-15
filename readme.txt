@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.11.2
+Stable tag: 4.11.3
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -185,12 +185,14 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 
 == Changelog ==
 
+= 4.12.3 - 2026-10-15 =
+
+- Make the link title attribute empty by default in the block editor (#298)
+- Fix missing deleted-URL notification script in plugin zip.
+
 = 4.11.2 - 2026-10-13 =
 
 - Fix canonical URL for paginated front page.
-
-= 4.11.1 - 2026-10-13 =
-
 - Fix arbitrary shortcode execution via user biographical info.
 
 = 4.11.0 - 2026-09-28 =

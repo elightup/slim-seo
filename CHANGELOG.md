@@ -1,9 +1,11 @@
+### 4.12.3 - 2026-10-15
+
+- Make the link title attribute empty by default in the block editor (#298)
+- Fix missing deleted-URL notification script in plugin zip.
+
 ### 4.11.2 - 2026-10-13
 
 - Fix canonical URL for paginated front page.
-
-### 4.11.1 - 2026-10-13
-
 - Fix arbitrary shortcode execution via user biographical info.
 
 ### 4.11.0 - 2026-09-28
