@@ -11,7 +11,7 @@ abstract class Base {
 	public function __construct( $context = null, $url = null ) {
 		$this->url     = $url ?: $this->get_current_url();
 		$this->context = $context ?: $this->get_type();
-		$this->id      = $this->url . '#' . $this->context;
+		$this->id      = trailingslashit( $this->url ) . '#' . $this->context;
 	}
 
 	public function is_active() {
