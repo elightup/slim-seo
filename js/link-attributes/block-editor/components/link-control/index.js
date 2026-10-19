@@ -383,7 +383,13 @@ function LinkControl ({
 	const handleSelectSuggestion = (suggestion, _value = {}) => {
 		stopEditing()
 
-		const nextValue = { ..._value, ...suggestion, title: '' }
+		// Keep the HTML title attribute empty. Pass suggestion.title as text for collapsed inserts.
+		const nextValue = {
+			..._value,
+			...suggestion,
+			title : '',
+			text  : suggestion.title || '',
+		}
 		onChange(nextValue)
 		doAction('ss-link-format-link-added', nextValue)
 	}
@@ -560,9 +566,9 @@ function LinkControl ({
 								className="block-editor-link-control__search-item-title"
 								href={ value.url }
 							>
-								{ (value && value.title) || displayURL }
+								{ (value && (value.text || value.title)) || displayURL }
 							</ExternalLink>
-							{ value && value.title && (
+							{ value && (value.text || value.title) && (
 								<span className="block-editor-link-control__search-item-info">
 									{ displayURL }
 								</span>

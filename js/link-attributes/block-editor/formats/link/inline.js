@@ -135,7 +135,7 @@ function InlineLinkUI ({
 		})
 
 		if (isCollapsed(value) && !isActive) {
-			const newText = nextValue.title || newUrl
+			const newText = nextValue.text || nextValue.title || newUrl
 			const toInsert = applyFormat(
 				create({ text: newText }),
 				format,
