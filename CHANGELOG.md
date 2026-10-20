@@ -1,3 +1,8 @@
+### 4.11.4 - 2026-10-20
+
+- Use post title as link text when inserting without a selection
+- Fix schema @id URL consistency on search results pages
+
 ### 4.11.3 - 2026-10-15
 
 - Make the link title attribute empty by default in the block editor (#298)
