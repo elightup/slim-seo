@@ -27,6 +27,7 @@ class Redirection {
 		$request_uri    = rawurldecode( $_SERVER['REQUEST_URI'] ?? '' ); // @phpcs:ignore.
 		$request_url    = ( Helper::is_ssl() ? 'https' : 'http' ) . "://{$http_host}{$request_uri}";
 		$request_url    = Helper::normalize_url( $request_url );
+		$original_url   = $request_url;
 		$case_sensitive = Settings::get( 'case_sensitive' );
 		$request_url    = $case_sensitive ? $request_url : strtolower( $request_url );
 
@@ -39,7 +40,8 @@ class Redirection {
 				continue;
 			}
 
-			$current_url = $request_url;
+			$is_regex    = 'regex' === $redirect['condition'];
+			$current_url = $is_regex ? $original_url : $request_url;
 
 			if ( ! empty( $redirect['ignoreParameters'] ) ) {
 				$url_parts   = explode( '?', $current_url );
@@ -47,7 +49,7 @@ class Redirection {
 			}
 
 			$from            = Helper::normalize_url( $redirect['from'], false );
-			$from            = $case_sensitive || 'regex' === $redirect['condition'] ? $from : strtolower( $from );
+			$from            = $case_sensitive || $is_regex ? $from : strtolower( $from );
 			$to              = $redirect['to'];
 			$should_redirect = false;
 
