@@ -18,10 +18,10 @@
 		"swr": "^2.5.1"
 	},
 	"devDependencies": {
-		"@wordpress/icons": "^17.0.0",
-		"@wordpress/scripts": "^36.0.0",
+		"@wordpress/icons": "^19.0.0",
+		"@wordpress/scripts": "^37.0.0",
 		"classnames": "^2.5.1",
-		"sass": "^1.105.1",
+		"sass": "^1.106.1",
 		"svgo": "^3.3.5"
 	}
 }
