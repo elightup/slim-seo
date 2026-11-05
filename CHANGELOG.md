@@ -1,3 +1,7 @@
+### 4.11.5 - 2026-11-05
+
+- Fix regex redirects lowercasing query parameters.
+
 ### 4.11.4 - 2026-10-20
 
 - Use post title as link text when inserting without a selection
