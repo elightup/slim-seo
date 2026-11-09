@@ -67,17 +67,16 @@ class Data {
 
 	private function get_user( $user_id ): array {
 		$user = get_userdata( $user_id );
-
 		if ( ! $user ) {
 			return [];
 		}
 
-		// User profile fields are editable by Subscribers; remove square brackets so Helper::normalize() cannot run shortcodes.
-		$pattern     = [ '[', ']', '&#91;', '&#93;' ];
-		$description = str_replace( $pattern, '', wp_strip_all_tags( (string) $user->description ) );
+		// Subscribers can edit these fields. Remove square brackets, so that Helper::normalize() cannot run shortcodes.
+		$brackets    = [ '[', ']', '&#91;', '&#93;' ];
+		$description = str_replace( $brackets, '', wp_strip_all_tags( (string) $user->description ) );
 
 		return [
-			'display_name'     => str_replace( $pattern, '', (string) $user->display_name ),
+			'display_name'     => str_replace( $brackets, '', (string) $user->display_name ),
 			'description'      => $description,
 			'auto_description' => Helper::truncate( $description ),
 		];
