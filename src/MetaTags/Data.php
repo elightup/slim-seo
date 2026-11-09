@@ -71,11 +71,12 @@ class Data {
 			return [];
 		}
 
-		// User bio is editable by Subscribers; never execute shortcodes from it.
-		$description = strip_shortcodes( (string) $user->description );
+		// Subscribers can edit these fields. Remove square brackets, so that Helper::normalize() cannot run shortcodes.
+		$brackets    = [ '[', ']', '&#91;', '&#93;' ];
+		$description = str_replace( $brackets, '', wp_strip_all_tags( (string) $user->description ) );
 
 		return [
-			'display_name'     => $user->display_name,
+			'display_name'     => str_replace( $brackets, '', (string) $user->display_name ),
 			'description'      => $description,
 			'auto_description' => Helper::truncate( $description ),
 		];
