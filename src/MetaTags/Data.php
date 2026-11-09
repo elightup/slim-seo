@@ -71,14 +71,41 @@ class Data {
 			return [];
 		}
 
-		// User bio is editable by Subscribers; never execute shortcodes from it.
-		$description = strip_shortcodes( (string) $user->description );
+		$display_name = $this->sanitize_user_field( (string) $user->display_name );
+		$description  = $this->sanitize_user_field( (string) $user->description );
 
 		return [
-			'display_name'     => $user->display_name,
+			'display_name'     => $display_name,
 			'description'      => $description,
 			'auto_description' => Helper::truncate( $description ),
 		];
+	}
+
+	private function sanitize_user_field( string $text ): string {
+		global $shortcode_tags;
+
+		// User profile fields are editable by Subscribers; strip HTML tags, dynamic variables, and shortcodes so they never execute.
+		$text     = (string) preg_replace( '@<(script|style|pre)[^>]*?>.*?</\\1>@si', '', $text );
+		$text     = (string) preg_replace( '@<[^>]*?>@s', ' ', $text );
+		$has_tags = ! empty( $shortcode_tags ) && is_array( $shortcode_tags );
+		$pattern  = $has_tags ? '/' . get_shortcode_regex() . '/s' : '';
+		$unclosed = $has_tags
+			? '/\[+(?:' . implode( '|', array_map( 'preg_quote', array_keys( $shortcode_tags ) ) ) . ')(?![\w-])[^\]]*\]?/s'
+			: '';
+
+		do {
+			$prev = $text;
+			$text = (string) preg_replace( '#{{.*?}}#s', ' ', $text );
+			$text = unescape_invalid_shortcodes( $text );
+			$text = strip_shortcodes( $text );
+
+			if ( $has_tags ) {
+				$text = (string) preg_replace( $pattern, '', $text );
+				$text = (string) preg_replace( $unclosed, '', $text );
+			}
+		} while ( $text !== $prev );
+
+		return trim( (string) preg_replace( '/\s+/', ' ', $text ) );
 	}
 
 	private function get_site_data() {
