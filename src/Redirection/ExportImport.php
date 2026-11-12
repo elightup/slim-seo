@@ -77,7 +77,7 @@ class ExportImport extends Base {
 			return false;
 		}
 
-		$header = str_getcsv( $rows[0] );
+		$header = str_getcsv( $rows[0], ',', '"', '\\' );
 
 		/**
 		 * Return if
@@ -106,7 +106,7 @@ class ExportImport extends Base {
 				'note',
 				'enable',
 				'ignoreParameters',
-			], str_getcsv( $rows[ $i ] ) );
+			], str_getcsv( $rows[ $i ], ',', '"', '\\' ) );
 
 			if ( $this->db_redirects->exists( $redirect['from'] ) ) {
 				continue;
