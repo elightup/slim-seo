@@ -8,6 +8,7 @@ jobs:
   php:
     uses: wpmetabox/meta-box/.github/workflows/php-compat.yml@master
     with:
+      composer: true
       php_min: "7.4"
   phpunit:
     uses: wpmetabox/meta-box/.github/workflows/phpunit.yml@master
