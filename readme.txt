@@ -185,6 +185,10 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 
 == Changelog ==
 
+= Unreleased =
+
+- Polylang: Replace wildcard `*` with an allowlist of translatable meta tag fields at `init` priority 99. Post types or taxonomies registered after `init` priority 99 are not included by default; use the `slim_seo_polylang_translatable_fields` filter to add custom fields if needed.
+
 = 4.11.6 - 2026-11-13 =
 
 - Fix shortcode execution via user bio and display name (#302)

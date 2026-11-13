@@ -8,7 +8,7 @@ use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
 
 class Manager {
-	private $defaults = [
+	public const DEFAULTS = [
 		'title'          => '',
 		'description'    => '',
 		'facebook_image' => '',
@@ -33,7 +33,7 @@ class Manager {
 	}
 
 	private function get_home_data(): array {
-		return array_merge( $this->defaults, [
+		return array_merge( self::DEFAULTS, [
 			'link'        => get_home_url(),
 			'name'        => get_the_title( get_option( 'page_on_front' ) ),
 			'title'       => Title::DEFAULTS['home'],
@@ -42,7 +42,7 @@ class Manager {
 		] );
 	}
 
-	private function get_content_items(): array {
+	public static function get_content_items(): array {
 		$taxonomies = array_keys( array_filter( CommonHelpersData::get_taxonomies() ) );
 		$post_types = array_keys( array_filter( CommonHelpersData::get_post_types() ) );
 
@@ -62,7 +62,7 @@ class Manager {
 	}
 
 	public function sanitize( array &$option, array $data ): void {
-		$items = $this->get_content_items();
+		$items = self::get_content_items();
 		foreach ( $items as $item ) {
 			if ( empty( $data[ $item ] ) || ! is_array( $data[ $item ] ) || empty( $option[ $item ] ) || ! is_array( $option[ $item ] ) ) {
 				unset( $option[ $item ] );
@@ -79,12 +79,11 @@ class Manager {
 	}
 
 	private function sanitize_item( array $data ): array {
-		$data = array_merge( $this->defaults, $data );
+		$data = array_merge( self::DEFAULTS, $data );
 
-		$data['title']          = sanitize_text_field( $data['title'] );
-		$data['description']    = sanitize_text_field( $data['description'] );
-		$data['facebook_image'] = sanitize_text_field( $data['facebook_image'] );
-		$data['twitter_image']  = sanitize_text_field( $data['twitter_image'] );
+		foreach ( array_keys( self::DEFAULTS ) as $key ) {
+			$data[ $key ] = sanitize_text_field( $data[ $key ] );
+		}
 
 		return array_filter( $data );
 	}

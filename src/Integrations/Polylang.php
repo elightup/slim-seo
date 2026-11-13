@@ -1,9 +1,11 @@
 <?php
 namespace SlimSEO\Integrations;
 
+use PLL_Language;
+use PLL_Translate_Option;
+use SlimSEO\Settings\MetaTags\Manager;
 use WP_Post;
 use WP_Term;
-use PLL_Language;
 
 class Polylang {
 	use MultilingualSitemapTrait;
@@ -18,15 +20,41 @@ class Polylang {
 		add_filter( 'slim_seo_sitemap_post_ignore', [ $this, 'ignore_translations' ], 10, 2 );
 		add_action( 'slim_seo_settings_enqueue', [ $this, 'add_language_for_js' ] );
 
-		// Register translatable options
-		new \PLL_Translate_Option(
+		add_action( 'init', [ $this, 'register_translatable_options' ], 99 );
+	}
+
+	public function register_translatable_options(): void {
+		if ( ! class_exists( PLL_Translate_Option::class ) ) {
+			return;
+		}
+
+		new PLL_Translate_Option(
 			'slim_seo',
-			[
-				'*' => 1, // Translate all fields
-			],
+			$this->get_translatable_fields(),
 			[
 				'context' => 'Slim SEO',
 			]
+		);
+	}
+
+	/**
+	 * Returns the option keys that are allowed for translation.
+	 *
+	 * Only human-readable content fields are listed. Machine settings (feature
+	 * flags, API keys, code snippets, numeric flags) must never be registered:
+	 * Polylang replaces registered values per language and lists them in the
+	 * string translations table, which would change behavior per language and
+	 * expose credentials.
+	 */
+	private function get_translatable_fields(): array {
+		$fields = array_fill_keys( array_keys( Manager::DEFAULTS ), 1 );
+
+		return apply_filters(
+			'slim_seo_polylang_translatable_fields',
+			[
+				'default_facebook_image' => 1,
+				'default_twitter_image'  => 1,
+			] + array_fill_keys( Manager::get_content_items(), $fields )
 		);
 	}
 
