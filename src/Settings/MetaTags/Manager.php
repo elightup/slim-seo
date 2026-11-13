@@ -8,12 +8,18 @@ use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
 
 class Manager {
-	private $defaults = [
-		'title'          => '',
-		'description'    => '',
-		'facebook_image' => '',
-		'twitter_image'  => '',
+	public const FIELD_KEYS = [
+		'title',
+		'description',
+		'facebook_image',
+		'twitter_image',
 	];
+
+	private $defaults;
+
+	public function __construct() {
+		$this->defaults = array_fill_keys( self::FIELD_KEYS, '' );
+	}
 
 	public function enqueue(): void {
 		wp_enqueue_media();
@@ -42,7 +48,7 @@ class Manager {
 		] );
 	}
 
-	private function get_content_items(): array {
+	public static function get_content_items(): array {
 		$taxonomies = array_keys( array_filter( CommonHelpersData::get_taxonomies() ) );
 		$post_types = array_keys( array_filter( CommonHelpersData::get_post_types() ) );
 
@@ -62,7 +68,7 @@ class Manager {
 	}
 
 	public function sanitize( array &$option, array $data ): void {
-		$items = $this->get_content_items();
+		$items = self::get_content_items();
 		foreach ( $items as $item ) {
 			if ( empty( $data[ $item ] ) || ! is_array( $data[ $item ] ) || empty( $option[ $item ] ) || ! is_array( $option[ $item ] ) ) {
 				unset( $option[ $item ] );
@@ -81,10 +87,9 @@ class Manager {
 	private function sanitize_item( array $data ): array {
 		$data = array_merge( $this->defaults, $data );
 
-		$data['title']          = sanitize_text_field( $data['title'] );
-		$data['description']    = sanitize_text_field( $data['description'] );
-		$data['facebook_image'] = sanitize_text_field( $data['facebook_image'] );
-		$data['twitter_image']  = sanitize_text_field( $data['twitter_image'] );
+		foreach ( self::FIELD_KEYS as $key ) {
+			$data[ $key ] = sanitize_text_field( $data[ $key ] );
+		}
 
 		return array_filter( $data );
 	}
