@@ -1,12 +1,14 @@
 <?php
 /**
- * Plugin Name: Slim SEO
- * Plugin URI:  https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
- * Description: AI SEO Plugin, Lightweight, Fast & Automated
- * Author:      Slim SEO
- * Author URI:  https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
- * Version:     4.11.5
- * License:     GPL v3
+ * Plugin Name:       Slim SEO
+ * Plugin URI:        https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
+ * Description:       AI SEO Plugin, Lightweight, Fast & Automated
+ * Author:            Slim SEO
+ * Author URI:        https://wpslimseo.com/?utm_source=plugin_links&utm_medium=link&utm_campaign=slim_seo
+ * Version:           4.11.6
+ * Requires at least: 6.7
+ * Requires PHP:      7.4
+ * License:           GPL v3
  *
  * Copyright (C) 2010-2025 Tran Ngoc Tuan Anh. All rights reserved.
  *
@@ -32,7 +34,7 @@ define( 'SLIM_SEO_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SLIM_SEO_URL', plugin_dir_url( __FILE__ ) );
 define( 'SLIM_SEO_REDIRECTS', 'ss_redirects' );
 define( 'SLIM_SEO_DELETE_404_LOGS_ACTION', 'delete_404_logs' );
-define( 'SLIM_SEO_VER', '4.11.5' );
+define( 'SLIM_SEO_VER', '4.11.6' );
 define( 'SLIM_SEO_DB_VER', 2 );
 
 require __DIR__ . '/vendor/autoload.php';

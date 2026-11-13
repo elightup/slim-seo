@@ -2,10 +2,10 @@
 Contributors: elightup, rilwis, hungviet91, barcavn2, doanducanh
 Donate link: https://wpslimseo.com/products/slim-seo-pro/
 Tags: seo, schema, xml sitemap, redirection, header
-Requires at least: 6.6
+Requires at least: 6.7
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.11.5
+Stable tag: 4.11.6
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -184,6 +184,11 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 4.11.6 - 2026-11-13 =
+
+- Fix shortcode execution via user bio and display name (#302)
+- Fix PHP 8.4 deprecation warning when importing redirections
 
 = 4.11.5 - 2026-11-05 =
 

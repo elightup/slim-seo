@@ -1,3 +1,8 @@
+### 4.11.6 - 2026-11-13
+
+- Fix shortcode execution via user bio and display name (#302)
+- Fix PHP 8.4 deprecation warning when importing redirections
+
 ### 4.11.5 - 2026-11-05
 
 - Fix regex redirects lowercasing query parameters.
