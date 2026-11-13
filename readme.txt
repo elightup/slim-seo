@@ -185,6 +185,11 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 
 == Changelog ==
 
+= Unreleased =
+
+- Polylang: Only register content fields (title, description, social images) for translation instead of all options.
+- Polylang: Note: Obsolete strings previously registered in Polylang (e.g. AI API keys, custom code) can be cleaned up via Languages → Translations ("Clean strings translation database").
+
 = 4.11.6 - 2026-11-13 =
 
 - Fix shortcode execution via user bio and display name (#302)

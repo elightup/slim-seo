@@ -1,3 +1,8 @@
+### Unreleased
+
+- Polylang: Only register content fields (title, description, social images) for translation instead of all options.
+  - Note: Obsolete strings previously registered in Polylang (such as AI API keys or custom code) cannot be migrated/deleted automatically from the database because Polylang does not store option contexts in `polylang_mo`. Site owners should use the "Clean strings translation database" tool in **Languages → Translations** and rotate any sensitive API keys if they were previously entered.
+
 ### 4.11.6 - 2026-11-13
 
 - Fix shortcode execution via user bio and display name (#302)

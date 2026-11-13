@@ -10,8 +10,6 @@ use WP_Term;
 class Polylang {
 	use MultilingualSitemapTrait;
 
-	private $registered = false;
-
 	public function is_active(): bool {
 		return defined( 'POLYLANG_VERSION' );
 	}
@@ -22,20 +20,13 @@ class Polylang {
 		add_filter( 'slim_seo_sitemap_post_ignore', [ $this, 'ignore_translations' ], 10, 2 );
 		add_action( 'slim_seo_settings_enqueue', [ $this, 'add_language_for_js' ] );
 
-		// Post types and taxonomies must be registered before building the fields list, whatever the call site.
-		if ( did_action( 'wp_loaded' ) && ! doing_action( 'wp_loaded' ) ) {
-			$this->register_translatable_options();
-		} else {
-			add_action( 'wp_loaded', [ $this, 'register_translatable_options' ], PHP_INT_MAX );
-		}
+		add_action( 'init', [ $this, 'register_translatable_options' ], 99 );
 	}
 
 	public function register_translatable_options(): void {
-		if ( $this->registered || ! class_exists( PLL_Translate_Option::class ) ) {
+		if ( ! class_exists( PLL_Translate_Option::class ) ) {
 			return;
 		}
-
-		$this->registered = true;
 
 		new PLL_Translate_Option(
 			'slim_seo',
@@ -60,7 +51,6 @@ class Polylang {
 		$fields       = [
 			'default_facebook_image' => 1,
 			'default_twitter_image'  => 1,
-			'default_linkedin_image' => 1,
 		];
 
 		foreach ( Manager::get_content_items() as $item ) {
