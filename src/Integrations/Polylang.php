@@ -57,7 +57,7 @@ class Polylang {
 			$fields[ $item ] = $group_fields;
 		}
 
-		return $fields;
+		return apply_filters( 'slim_seo_polylang_translatable_fields', $fields );
 	}
 
 	public function query_all_translations( array $args ): array {
