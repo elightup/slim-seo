@@ -8,18 +8,12 @@ use SlimSEO\MetaTags\Description;
 use SlimSEO\MetaTags\Title;
 
 class Manager {
-	public const FIELD_KEYS = [
-		'title',
-		'description',
-		'facebook_image',
-		'twitter_image',
+	public const DEFAULTS = [
+		'title'          => '',
+		'description'    => '',
+		'facebook_image' => '',
+		'twitter_image'  => '',
 	];
-
-	private $defaults;
-
-	public function __construct() {
-		$this->defaults = array_fill_keys( self::FIELD_KEYS, '' );
-	}
 
 	public function enqueue(): void {
 		wp_enqueue_media();
@@ -39,7 +33,7 @@ class Manager {
 	}
 
 	private function get_home_data(): array {
-		return array_merge( $this->defaults, [
+		return array_merge( self::DEFAULTS, [
 			'link'        => get_home_url(),
 			'name'        => get_the_title( get_option( 'page_on_front' ) ),
 			'title'       => Title::DEFAULTS['home'],
@@ -85,9 +79,9 @@ class Manager {
 	}
 
 	private function sanitize_item( array $data ): array {
-		$data = array_merge( $this->defaults, $data );
+		$data = array_merge( self::DEFAULTS, $data );
 
-		foreach ( self::FIELD_KEYS as $key ) {
+		foreach ( array_keys( self::DEFAULTS ) as $key ) {
 			$data[ $key ] = sanitize_text_field( $data[ $key ] );
 		}
 

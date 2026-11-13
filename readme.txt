@@ -187,7 +187,7 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 
 = Unreleased =
 
-- Polylang: Only register human-readable content fields (title, description, social images) for translation instead of all options. Site-wide and technical settings (AI API key, header/footer code, Facebook App ID, Twitter site) are intentionally excluded from translation. Obsolete strings can be cleaned up via Languages → Translations ("Clean strings translation database").
+- Polylang: Replace wildcard `*` with an allowlist of translatable meta tag fields at `init` priority 99. Post types or taxonomies registered after `init` priority 99 are not included by default; use the `slim_seo_polylang_translatable_fields` filter to add custom fields if needed.
 
 = 4.11.6 - 2026-11-13 =
 

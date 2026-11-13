@@ -47,17 +47,15 @@ class Polylang {
 	 * expose credentials.
 	 */
 	private function get_translatable_fields(): array {
-		$group_fields = array_fill_keys( Manager::FIELD_KEYS, 1 );
-		$fields       = [
-			'default_facebook_image' => 1,
-			'default_twitter_image'  => 1,
-		];
+		$fields = array_fill_keys( array_keys( Manager::DEFAULTS ), 1 );
 
-		foreach ( Manager::get_content_items() as $item ) {
-			$fields[ $item ] = $group_fields;
-		}
-
-		return apply_filters( 'slim_seo_polylang_translatable_fields', $fields );
+		return apply_filters(
+			'slim_seo_polylang_translatable_fields',
+			[
+				'default_facebook_image' => 1,
+				'default_twitter_image'  => 1,
+			] + array_fill_keys( Manager::get_content_items(), $fields )
+		);
 	}
 
 	public function query_all_translations( array $args ): array {
