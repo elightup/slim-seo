@@ -1,7 +1,6 @@
 ### Unreleased
 
-- Polylang: Replace wildcard `*` with an allowlist of translatable meta tag fields at `init` priority 99. Post types or taxonomies registered after `init` priority 99 are not included by default; use the `slim_seo_polylang_translatable_fields` filter to add custom fields if needed.
-
+- Polylang: Replace wildcard `*` with an allowlist of translatable meta tag fields.
 - Note: Obsolete strings previously registered in Polylang cannot be migrated or removed automatically from the database because Polylang does not store option contexts in `polylang_mo`. Site owners should use the "Clean strings translation database" tool in **Languages → Translations** and rotate any sensitive API keys if they were previously entered.
 
 ### 4.11.6 - 2026-11-13
