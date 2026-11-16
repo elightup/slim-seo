@@ -18,12 +18,15 @@ class Polylang {
 		add_filter( 'slim_seo_sitemap_post_ignore', [ $this, 'ignore_translations' ], 10, 2 );
 		add_action( 'slim_seo_settings_enqueue', [ $this, 'add_language_for_js' ] );
 
-		// Register translatable options.
+		// Translate only content fields. Never register API keys, code snippets or features: Polylang shows them in plain text and changes them per language.
 		$fields = array_fill_keys( [ 'title', 'description', 'facebook_image', 'twitter_image' ], 1 );
 		$items  = array_keys( array_filter( get_option( 'slim_seo' ) ?: [], 'is_array' ) );
 		new \PLL_Translate_Option(
 			'slim_seo',
-			[ 'default_facebook_image' => 1, 'default_twitter_image' => 1 ] + array_fill_keys( $items, $fields ),
+			[
+				'default_facebook_image' => 1,
+				'default_twitter_image'  => 1,
+			] + array_fill_keys( $items, $fields ),
 			[ 'context' => 'Slim SEO' ]
 		);
 	}
