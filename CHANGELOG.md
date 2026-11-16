@@ -1,3 +1,8 @@
+### Unreleased
+
+- Polylang: Replace wildcard `*` with an allowlist of translatable meta tag fields.
+- Note: Obsolete strings previously registered in Polylang cannot be migrated or removed automatically from the database because Polylang does not store option contexts in `polylang_mo`. Site owners should use the "Clean strings translation database" tool in **Languages → Translations** and rotate any sensitive API keys if they were previously entered.
+
 ### 4.11.6 - 2026-11-13
 
 - Fix shortcode execution via user bio and display name (#302)
