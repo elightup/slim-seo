@@ -3,6 +3,7 @@ namespace SlimSEO\Sitemaps;
 
 use SlimSEO\Helpers\Data;
 use SlimSEO\Helpers\Images;
+use SlimSEO\Helpers\Videos;
 use WP_Post;
 
 class PostType {
@@ -35,7 +36,7 @@ class PostType {
 	}
 
 	public function output(): void {
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
+		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">', "\n";
 
 		if ( $this->page === 1 ) {
 			$this->output_homepage();
@@ -65,6 +66,7 @@ class PostType {
 
 			$this->output_news( $post );
 			$this->output_images( $post );
+			$this->output_videos( $post );
 
 			do_action( 'slim_seo_sitemap_post', $post );
 			echo "\t</url>\n";
@@ -139,6 +141,45 @@ class PostType {
 			echo "\t\t<image:image>\n";
 			echo "\t\t\t<image:loc>", esc_url( $image ), "</image:loc>\n";
 			echo "\t\t</image:image>\n";
+		}
+	}
+
+	private function output_videos( WP_Post $post ): void {
+		$videos = Videos::get_post_videos( $post );
+
+		foreach ( $videos as $video ) {
+			// Google requires thumbnail location
+			if ( empty( $video['thumbnail'] ) ) {
+				continue;
+			}
+
+			echo "\t\t<video:video>\n";
+
+			echo "\t\t\t<video:thumbnail_loc>",
+				esc_url( $video['thumbnail'] ),
+			"</video:thumbnail_loc>\n";
+
+			echo "\t\t\t<video:title>",
+				esc_html( $post->post_title ),
+			"</video:title>\n";
+
+			echo "\t\t\t<video:description>",
+				esc_html( wp_strip_all_tags( $post->post_excerpt ?: $post->post_title ) ),
+			"</video:description>\n";
+
+			if ( ! empty( $video['content_loc'] ) ) {
+				echo "\t\t\t<video:content_loc>",
+					esc_url( $video['content_loc'] ),
+				"</video:content_loc>\n";
+			}
+
+			if ( ! empty( $video['content_loc'] ) ) {
+				echo "\t\t\t<video:player_loc>",
+					esc_url( $video['content_loc'] ),
+				"</video:player_loc>\n";
+			}
+
+			echo "\t\t</video:video>\n";
 		}
 	}
 
