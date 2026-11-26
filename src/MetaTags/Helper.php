@@ -5,17 +5,16 @@ use SlimTwig\Renderer;
 use WP_Block_Type_Registry;
 use WP_Block_Type;
 use WP_Post;
+use WP_User;
+use WP_Term;
 
 class Helper {
-	private const BRACKETS = [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ];
-
 	private static $allowed_shortcodes = [];
 	private static $allowed_blocks     = [];
-	private static $allowed_posts      = [];
 
 	private static $ran = false;
 
-	public static function normalize( $text ): string {
+	public static function normalize( $text, bool $run_shortcodes = true ): string {
 		global $shortcode_tags;
 
 		// Get list of allowed shortcodes and blocks only once.
@@ -25,11 +24,13 @@ class Helper {
 		}
 
 		// Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
-		$shortcodes_bak = $shortcode_tags;
-		$shortcode_tags = self::$allowed_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$text           = do_shortcode( $text );
-		$shortcode_tags = $shortcodes_bak;                     // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$text           = self::strip_all_shortcodes( $text ); // Strip all non-parsed and escaped shortcodes.
+		if ( $run_shortcodes ) {
+			$shortcodes_bak = $shortcode_tags;
+			$shortcode_tags = self::$allowed_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$text           = do_shortcode( $text );
+			$shortcode_tags = $shortcodes_bak;           // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		}
+		$text = strip_shortcodes( $text ); // Strip all non-parsed shortcodes.
 
 		// Render blocks.
 		add_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ], 10, 2 );
@@ -139,7 +140,31 @@ class Helper {
 
 	public static function render( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
 		$text = str_contains( $text, '{{' ) ? self::render_dynamic_variables( $text, $post_id, $term_id, $data ) : $text;
-		return self::normalize( $text );
+		return self::normalize( $text, self::can_run_shortcodes( $post_id, $term_id ) );
+	}
+
+	/**
+	 * Run shortcodes only in content from trusted users (who can edit posts).
+	 * Low-privileged users can still create content, like bbPress topics, replies or topic tags.
+	 */
+	public static function can_run_shortcodes( int $post_id = 0, int $term_id = 0 ): bool {
+		if ( $post_id ) {
+			$object = get_post( $post_id );
+		} elseif ( $term_id ) {
+			$object = get_term( $term_id );
+		} else {
+			$object = QueriedObject::get();
+		}
+
+		if ( $object instanceof WP_Post ) {
+			$can = user_can( (int) $object->post_author, 'edit_posts' );
+		} elseif ( $object instanceof WP_User ) {
+			$can = user_can( $object, 'edit_posts' );
+		} else {
+			$can = ! $post_id && ! $term_id && ! ( $object instanceof WP_Term );
+		}
+
+		return (bool) apply_filters( 'slim_seo_can_run_shortcodes', $can, $object );
 	}
 
 	private static function render_dynamic_variables( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
@@ -168,34 +193,8 @@ class Helper {
 		return Renderer::render( $text, $render_data );
 	}
 
-	public static function truncate( string $text, int $max = 160 ): string {
-		$text = self::normalize( $text );
+	public static function truncate( string $text, int $max = 160, bool $run_shortcodes = true ): string {
+		$text = self::normalize( $text, $run_shortcodes );
 		return mb_substr( $text, 0, $max );
-	}
-
-	public static function can_execute_shortcodes( WP_Post $post ): bool {
-		if ( ! isset( self::$allowed_posts[ $post->ID ] ) ) {
-			self::$allowed_posts[ $post->ID ] = ! empty( $post->post_author ) && user_can( (int) $post->post_author, 'edit_posts' );
-		}
-
-		return self::$allowed_posts[ $post->ID ];
-	}
-
-	public static function sanitize_post_shortcodes( string $text, WP_Post $post ): string {
-		return self::can_execute_shortcodes( $post ) ? $text : self::strip_all_shortcodes( $text );
-	}
-
-	public static function strip_all_shortcodes( string $text ): string {
-		for ( $i = 0; $i < 5; $i++ ) {
-			$stripped = strip_shortcodes( $text );
-
-			if ( $stripped === $text ) {
-				return $text;
-			}
-
-			$text = $stripped;
-		}
-
-		return str_ireplace( self::BRACKETS, '', $text );
 	}
 }

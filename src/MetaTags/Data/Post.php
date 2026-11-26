@@ -4,7 +4,6 @@ namespace SlimSEO\MetaTags\Data;
 use SlimSEO\MetaTags\QueriedObject;
 use SlimSEO\MetaTags\Helper;
 use SlimSEO\MetaTags\Data;
-use WP_Term;
 
 class Post {
 	private $post;
@@ -26,6 +25,8 @@ class Post {
 		}
 
 		$data   = [
+			'title'         => $this->post->post_title,
+			'excerpt'       => $this->post->post_excerpt,
 			'date'          => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_date_gmt ) ),
 			'modified_date' => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_modified_gmt ) ),
 		];
@@ -34,20 +35,12 @@ class Post {
 		return $data[ $name ] ?? ( method_exists( $this, $method ) ? $this->$method() : '' );
 	}
 
-	private function get_title(): string {
-		return Helper::sanitize_post_shortcodes( (string) $this->post->post_title, $this->post );
-	}
-
-	private function get_excerpt(): string {
-		return Helper::sanitize_post_shortcodes( (string) $this->post->post_excerpt, $this->post );
-	}
-
 	private function get_content(): string {
 		return Data::get_post_content( $this->post->ID );
 	}
 
 	private function get_auto_description(): string {
-		return Helper::truncate( $this->get_excerpt() ?: $this->get_content() );
+		return Helper::truncate( $this->post->post_excerpt ?: $this->get_content(), 160, Helper::can_run_shortcodes( $this->post->ID ) );
 	}
 
 	private function get_thumbnail() {
@@ -64,16 +57,12 @@ class Post {
 
 	private function get_custom_field(): array {
 		$meta_values = get_post_meta( $this->post->ID ) ?: [];
-		$allow       = Helper::can_execute_shortcodes( $this->post );
 		$data        = [];
 		foreach ( $meta_values as $key => $value ) {
 			// Plugins like JetEngine can hook to "get_{$object_type}_metadata" to add its data from custom table
 			// which might not follow WordPress standards of auto serialization/unserialization for arrays
 			// so we will add a check to bypass invalid values here.
-			$value        = is_array( $value ) ? reset( $value ) : '';
-			$data[ $key ] = $allow ? $value : map_deep( $value, static function ( $item ) {
-				return is_string( $item ) ? Helper::strip_all_shortcodes( $item ) : $item;
-			} );
+			$data[ $key ] = is_array( $value ) ? reset( $value ) : '';
 		}
 		return $data;
 	}
@@ -104,12 +93,8 @@ class Post {
 			$terms = is_array( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 		}
 
-		return array_map(
-			static function ( $term ): string {
-				return Helper::strip_all_shortcodes( $term instanceof WP_Term ? $term->name : (string) $term );
-			},
-			(array) $terms
-		);
+		// Terms can be created by low-privileged users (like bbPress topic tags). Remove square brackets, so that Helper::normalize() cannot run shortcodes.
+		return str_replace( [ '[', ']' ], '', $terms );
 	}
 
 	private function normalize( string $key ): string {

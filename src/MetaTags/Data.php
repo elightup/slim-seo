@@ -72,11 +72,11 @@ class Data {
 		}
 
 		// Subscribers can edit these fields. Remove square brackets, so that Helper::normalize() cannot run shortcodes.
-		$brackets    = [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ];
-		$description = str_ireplace( $brackets, '', wp_strip_all_tags( (string) $user->description ) );
+		$brackets    = [ '[', ']', '&#91;', '&#93;' ];
+		$description = str_replace( $brackets, '', wp_strip_all_tags( (string) $user->description ) );
 
 		return [
-			'display_name'     => str_ireplace( $brackets, '', (string) $user->display_name ),
+			'display_name'     => str_replace( $brackets, '', (string) $user->display_name ),
 			'description'      => $description,
 			'auto_description' => Helper::truncate( $description ),
 		];
@@ -125,9 +125,8 @@ class Data {
 		}
 
 		$content = $content ?: $post->post_content;
-		$content = (string) apply_filters( 'slim_seo_post_content', $content, $post );
 
-		return Helper::sanitize_post_shortcodes( $content, $post );
+		return (string) apply_filters( 'slim_seo_post_content', $content, $post );
 	}
 
 	public static function get_term_content( int $term_id = 0, string $content = '' ): string {

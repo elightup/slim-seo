@@ -3,7 +3,6 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
-use WP_Post;
 use WP_Term;
 use SlimSEO\Helpers\Option;
 
@@ -63,9 +62,7 @@ class Title {
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
 			$this->is_manual = true;
-			$post            = get_post( $post_id );
-
-			return $post instanceof WP_Post ? Helper::sanitize_post_shortcodes( (string) $data['title'], $post ) : (string) $data['title'];
+			return $data['title'];
 		}
 
 		// For static frontpage: don't use page's settings, use WordPress default instead.
@@ -103,7 +100,7 @@ class Title {
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
 			$this->is_manual = true;
-			return Helper::strip_all_shortcodes( (string) $data['title'] );
+			return $data['title'];
 		}
 
 		$term = get_term( $term_id );

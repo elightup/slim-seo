@@ -3,7 +3,6 @@ namespace SlimSEO\MetaTags\Settings;
 
 use WP_REST_Server;
 use WP_REST_Request;
-use WP_Post;
 use WP_Term;
 use SlimSEO\Helpers\Option;
 use SlimSEO\MetaTags\Helper;
@@ -111,15 +110,10 @@ class Preview {
 
 		$text  = (string) $request->get_param( 'text' ); // Manual entered meta title
 		$title = (string) $request->get_param( 'title' ); // Live title
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			$text = Helper::strip_all_shortcodes( $text );
-		}
 
 		$data = [];
-		if ( 'post' === $object_type ) {
-			$post  = get_post( $id );
-			$title = $post instanceof WP_Post ? Helper::sanitize_post_shortcodes( $title, $post ) : $title;
-			$data  = [
+		if ( $object_type === 'post' ) {
+			$data = [
 				'post' => [
 					'title' => $title,
 				],
@@ -127,7 +121,7 @@ class Preview {
 		} else {
 			$data = [
 				'term' => [
-					'name' => Helper::strip_all_shortcodes( $title ),
+					'name' => $title,
 				],
 			];
 		}
@@ -174,16 +168,11 @@ class Preview {
 		}
 
 		$text        = (string) $request->get_param( 'text' ); // Manual entered meta description
-		$description = Helper::strip_all_shortcodes( (string) $request->get_param( 'description' ) ); // Live description
-
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			$text = Helper::strip_all_shortcodes( $text );
-		}
-
-		$data = [
+		$description = (string) $request->get_param( 'description' ); // Live description
+		$data        = [
 			'term' => [
 				'description'      => $description,
-				'auto_description' => Helper::truncate( $description ),
+				'auto_description' => Helper::truncate( $description, 160, false ),
 			],
 		];
 
@@ -216,17 +205,12 @@ class Preview {
 
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			$text = Helper::strip_all_shortcodes( $text );
-		}
-		$post    = get_post( $id );
-		$excerpt = $post instanceof WP_Post ? Helper::sanitize_post_shortcodes( $excerpt, $post ) : $excerpt;
 
 		$data         = [];
 		$data['post'] = array_filter( [
 			'excerpt'          => $excerpt,
 			'content'          => $content,
-			'auto_description' => Helper::truncate( $excerpt ?: $content ),
+			'auto_description' => Helper::truncate( $excerpt ?: $content, 160, Helper::can_run_shortcodes( $id ) ),
 		] );
 		$data         = array_filter( $data );
 		$default      = $this->get_default_post_description( $id );

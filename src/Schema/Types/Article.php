@@ -1,7 +1,6 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
-use SlimSEO\MetaTags\Data;
 use SlimSEO\MetaTags\Helper;
 
 class Article extends Base {
@@ -11,13 +10,13 @@ class Article extends Base {
 			'@type'         => 'Article',
 			'@id'           => $this->id,
 			'url'           => $this->url,
-			'headline'      => Helper::sanitize_post_shortcodes( (string) $post->post_title, $post ),
+			'headline'      => $post->post_title,
 			'datePublished' => wp_date( 'c', strtotime( $post->post_date_gmt ) ),
 			'dateModified'  => wp_date( 'c', strtotime( $post->post_modified_gmt ) ),
 			'commentCount'  => (int) $post->comment_count,
 		];
 
-		$content = Helper::normalize( Data::get_post_content( $post->ID ) );
+		$content = Helper::normalize( $post->post_content, Helper::can_run_shortcodes( $post->ID ) );
 
 		$schema['wordCount'] = str_word_count( $content );
 

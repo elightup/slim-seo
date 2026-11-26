@@ -22,7 +22,7 @@ class CanonicalUrl {
 		$url = $this->get_value();
 		$url = $this->add_pagination( $url );
 		$url = (string) apply_filters( 'slim_seo_canonical_url', $url, $this->get_queried_object_id() );
-		$url = Helper::render( Helper::strip_all_shortcodes( $url ) );
+		$url = Helper::render( $url );
 
 		return $url;
 	}

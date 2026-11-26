@@ -24,20 +24,12 @@ class Term {
 			return '';
 		}
 
-		$method = "get_$name";
+		$data = [
+			'name'             => $this->term->name,
+			'description'      => $this->term->description,
+			'auto_description' => Helper::truncate( $this->term->description, 160, false ),
+		];
 
-		return method_exists( $this, $method ) ? $this->$method() : '';
-	}
-
-	private function get_name(): string {
-		return Helper::strip_all_shortcodes( (string) $this->term->name );
-	}
-
-	private function get_description(): string {
-		return Helper::strip_all_shortcodes( (string) $this->term->description );
-	}
-
-	private function get_auto_description(): string {
-		return Helper::truncate( $this->get_description() );
+		return $data[ $name ] ?? '';
 	}
 }
