@@ -98,7 +98,7 @@ class Breadcrumbs {
 		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
-			$items[] = sprintf( $template, esc_url( $item['url'] ), esc_attr( $class ), $this->esc_text( (string) $item['text'] ), $i + 1 );
+			$items[] = sprintf( $template, esc_url( $item['url'] ), esc_attr( $class ), $this->esc_text( (string) $item['text'] ) );
 		}
 
 		// Current page.
