@@ -170,10 +170,12 @@ class Helper {
 		return mb_substr( $text, 0, $max );
 	}
 
+	public static function can_execute_shortcodes( WP_Post $post ): bool {
+		return ! empty( $post->post_author ) && user_can( (int) $post->post_author, 'edit_posts' );
+	}
+
 	public static function sanitize_post_shortcodes( string $text, WP_Post $post ): string {
-		return ! empty( $post->post_author ) && user_can( (int) $post->post_author, 'edit_posts' )
-			? $text
-			: self::strip_shortcode_syntax( $text );
+		return self::can_execute_shortcodes( $post ) ? $text : self::strip_shortcode_syntax( $text );
 	}
 
 	public static function strip_shortcode_syntax( string $text ): string {
@@ -181,13 +183,16 @@ class Helper {
 	}
 
 	public static function strip_all_shortcodes( string $text ): string {
-		$previous = '';
+		for ( $i = 0; $i < 5; $i++ ) {
+			$stripped = strip_shortcodes( $text );
 
-		while ( $text !== $previous ) {
-			$previous = $text;
-			$text     = strip_shortcodes( $text );
+			if ( $stripped === $text ) {
+				return $text;
+			}
+
+			$text = $stripped;
 		}
 
-		return $text;
+		return str_ireplace( [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ], '', $text );
 	}
 }

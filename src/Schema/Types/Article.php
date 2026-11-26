@@ -1,7 +1,6 @@
 <?php
 namespace SlimSEO\Schema\Types;
 
-use SlimSEO\MetaTags\Data;
 use SlimSEO\MetaTags\Helper;
 
 class Article extends Base {
@@ -17,7 +16,9 @@ class Article extends Base {
 			'commentCount'  => (int) $post->comment_count,
 		];
 
-		$content             = Helper::normalize( Data::get_post_content( $post->ID ) );
+		$content = do_shortcode( Helper::sanitize_post_shortcodes( (string) $post->post_content, $post ) );
+		$content = wp_strip_all_tags( $content );
+
 		$schema['wordCount'] = str_word_count( $content );
 
 		if ( 'post' === $post->post_type ) {

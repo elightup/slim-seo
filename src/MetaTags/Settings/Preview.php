@@ -127,7 +127,7 @@ class Preview {
 		} else {
 			$data = [
 				'term' => [
-					'name' => $title,
+					'name' => Helper::strip_all_shortcodes( $title ),
 				],
 			];
 		}
@@ -175,7 +175,13 @@ class Preview {
 
 		$text        = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$description = (string) $request->get_param( 'description' ); // Live description
-		$data        = [
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			$text        = Helper::strip_shortcode_syntax( $text );
+			$description = Helper::strip_shortcode_syntax( $description );
+		}
+
+		$data = [
 			'term' => [
 				'description'      => $description,
 				'auto_description' => Helper::truncate( $description ),

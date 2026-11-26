@@ -63,13 +63,14 @@ class Post {
 
 	private function get_custom_field(): array {
 		$meta_values = get_post_meta( $this->post->ID ) ?: [];
+		$allow       = Helper::can_execute_shortcodes( $this->post );
 		$data        = [];
 		foreach ( $meta_values as $key => $value ) {
 			// Plugins like JetEngine can hook to "get_{$object_type}_metadata" to add its data from custom table
 			// which might not follow WordPress standards of auto serialization/unserialization for arrays
 			// so we will add a check to bypass invalid values here.
 			$value        = is_array( $value ) ? reset( $value ) : '';
-			$data[ $key ] = is_string( $value ) ? Helper::sanitize_post_shortcodes( $value, $this->post ) : $value;
+			$data[ $key ] = ! $allow && is_string( $value ) ? Helper::strip_shortcode_syntax( $value ) : $value;
 		}
 		return $data;
 	}
@@ -95,11 +96,17 @@ class Post {
 		 * @see \SlimSEO\Integrations\WooCommerce::change_post_terms()
 		 */
 		$terms = apply_filters( 'slim_seo_meta_tags_post_terms', [], $this->post->ID, $taxonomy );
-		if ( ! empty( $terms ) ) {
-			return $terms;
+		if ( empty( $terms ) ) {
+			$terms = get_the_terms( $this->post, $taxonomy );
+			$terms = is_array( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 		}
-		$terms = get_the_terms( $this->post, $taxonomy );
-		return is_wp_error( $terms ) ? [] : wp_list_pluck( $terms, 'name' );
+
+		return array_map(
+			static function ( $term ): string {
+				return Helper::strip_all_shortcodes( (string) $term );
+			},
+			(array) $terms
+		);
 	}
 
 	private function normalize( string $key ): string {
