@@ -24,13 +24,20 @@ class Term {
 			return '';
 		}
 
-		$description = Helper::strip_all_shortcodes( (string) $this->term->description );
-		$data        = [
-			'name'             => Helper::strip_all_shortcodes( (string) $this->term->name ),
-			'description'      => $description,
-			'auto_description' => Helper::truncate( $description ),
-		];
+		$method = "get_$name";
 
-		return $data[ $name ] ?? '';
+		return method_exists( $this, $method ) ? $this->$method() : '';
+	}
+
+	private function get_name(): string {
+		return Helper::strip_all_shortcodes( (string) $this->term->name );
+	}
+
+	private function get_description(): string {
+		return Helper::strip_all_shortcodes( (string) $this->term->description );
+	}
+
+	private function get_auto_description(): string {
+		return Helper::truncate( $this->get_description() );
 	}
 }

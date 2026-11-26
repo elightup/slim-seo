@@ -177,11 +177,7 @@ class Helper {
 	}
 
 	public static function sanitize_post_shortcodes( string $text, WP_Post $post ): string {
-		return self::can_execute_shortcodes( $post ) ? $text : self::strip_shortcode_syntax( $text );
-	}
-
-	public static function strip_shortcode_syntax( string $text ): string {
-		return str_ireplace( self::BRACKETS, '', self::strip_all_shortcodes( $text ) );
+		return self::can_execute_shortcodes( $post ) ? $text : self::strip_all_shortcodes( $text );
 	}
 
 	public static function strip_all_shortcodes( string $text ): string {

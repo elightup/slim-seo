@@ -71,7 +71,7 @@ class Post {
 			// so we will add a check to bypass invalid values here.
 			$value        = is_array( $value ) ? reset( $value ) : '';
 			$data[ $key ] = $allow ? $value : map_deep( $value, static function ( $item ) {
-				return is_string( $item ) ? Helper::strip_shortcode_syntax( $item ) : $item;
+				return is_string( $item ) ? Helper::strip_all_shortcodes( $item ) : $item;
 			} );
 		}
 		return $data;

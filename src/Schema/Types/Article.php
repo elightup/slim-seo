@@ -16,8 +16,7 @@ class Article extends Base {
 			'commentCount'  => (int) $post->comment_count,
 		];
 
-		$content = do_shortcode( Helper::sanitize_post_shortcodes( (string) $post->post_content, $post ) );
-		$content = wp_strip_all_tags( $content );
+		$content = wp_strip_all_tags( Helper::strip_all_shortcodes( (string) $post->post_content ) );
 
 		$schema['wordCount'] = str_word_count( $content );
 

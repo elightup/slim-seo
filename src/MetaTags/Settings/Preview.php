@@ -112,7 +112,7 @@ class Preview {
 		$text  = (string) $request->get_param( 'text' ); // Manual entered meta title
 		$title = (string) $request->get_param( 'title' ); // Live title
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			$text = Helper::strip_shortcode_syntax( $text );
+			$text = Helper::strip_all_shortcodes( $text );
 		}
 
 		$data = [];
@@ -174,11 +174,10 @@ class Preview {
 		}
 
 		$text        = (string) $request->get_param( 'text' ); // Manual entered meta description
-		$description = (string) $request->get_param( 'description' ); // Live description
+		$description = Helper::strip_all_shortcodes( (string) $request->get_param( 'description' ) ); // Live description
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			$text        = Helper::strip_shortcode_syntax( $text );
-			$description = Helper::strip_shortcode_syntax( $description );
+			$text = Helper::strip_all_shortcodes( $text );
 		}
 
 		$data = [
@@ -218,7 +217,7 @@ class Preview {
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			$text = Helper::strip_shortcode_syntax( $text );
+			$text = Helper::strip_all_shortcodes( $text );
 		}
 		$post    = get_post( $id );
 		$excerpt = $post instanceof WP_Post ? Helper::sanitize_post_shortcodes( $excerpt, $post ) : $excerpt;

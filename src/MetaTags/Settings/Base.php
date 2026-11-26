@@ -2,6 +2,7 @@
 namespace SlimSEO\MetaTags\Settings;
 
 use SlimSEO\Helpers\Assets;
+use SlimSEO\MetaTags\Helper;
 
 abstract class Base {
 	protected $object_type;
@@ -64,6 +65,12 @@ abstract class Base {
 
 		$data['title']          = sanitize_text_field( $data['title'] );
 		$data['description']    = sanitize_text_field( $data['description'] );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			$data['title']       = Helper::strip_all_shortcodes( $data['title'] );
+			$data['description'] = Helper::strip_all_shortcodes( $data['description'] );
+		}
+
 		$data['facebook_image'] = sanitize_text_field( $data['facebook_image'] );
 		$data['twitter_image']  = sanitize_text_field( $data['twitter_image'] );
 		$data['canonical']      = sanitize_text_field( $data['canonical'] );
