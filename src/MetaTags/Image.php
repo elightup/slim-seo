@@ -89,7 +89,7 @@ class Image {
 
 	private function get_from_post_meta( string $meta_value ): array {
 		if ( ! filter_var( $meta_value, FILTER_VALIDATE_URL ) ) {
-			$meta_value = Helper::render( $meta_value );
+			$meta_value = Helper::render( Helper::strip_all_shortcodes( $meta_value ) );
 		}
 		return $this->get_data_from_url( $meta_value );
 	}

@@ -103,7 +103,7 @@ class Title {
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['title'] ) ) {
 			$this->is_manual = true;
-			return $data['title'];
+			return Helper::strip_all_shortcodes( (string) $data['title'] );
 		}
 
 		$term = get_term( $term_id );

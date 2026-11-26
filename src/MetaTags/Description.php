@@ -101,7 +101,7 @@ class Description {
 		$data    = get_term_meta( $term_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
-			return $data['description'];
+			return Helper::strip_all_shortcodes( (string) $data['description'] );
 		}
 
 		$term = get_term( $term_id );
