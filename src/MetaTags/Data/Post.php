@@ -25,8 +25,6 @@ class Post {
 		}
 
 		$data   = [
-			'title'         => $this->post->post_title,
-			'excerpt'       => $this->post->post_excerpt,
 			'date'          => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_date_gmt ) ),
 			'modified_date' => wp_date( get_option( 'date_format' ), strtotime( $this->post->post_modified_gmt ) ),
 		];
@@ -35,12 +33,20 @@ class Post {
 		return $data[ $name ] ?? ( method_exists( $this, $method ) ? $this->$method() : '' );
 	}
 
+	private function get_title(): string {
+		return Helper::sanitize_post_shortcodes( (string) $this->post->post_title, $this->post );
+	}
+
+	private function get_excerpt(): string {
+		return Helper::sanitize_post_shortcodes( (string) $this->post->post_excerpt, $this->post );
+	}
+
 	private function get_content(): string {
 		return Data::get_post_content( $this->post->ID );
 	}
 
 	private function get_auto_description(): string {
-		return Helper::truncate( $this->post->post_excerpt ?: $this->get_content() );
+		return Helper::truncate( $this->get_excerpt() ?: $this->get_content() );
 	}
 
 	private function get_thumbnail() {
@@ -62,7 +68,8 @@ class Post {
 			// Plugins like JetEngine can hook to "get_{$object_type}_metadata" to add its data from custom table
 			// which might not follow WordPress standards of auto serialization/unserialization for arrays
 			// so we will add a check to bypass invalid values here.
-			$data[ $key ] = is_array( $value ) ? reset( $value ) : '';
+			$value        = is_array( $value ) ? reset( $value ) : '';
+			$data[ $key ] = is_string( $value ) ? Helper::sanitize_post_shortcodes( $value, $this->post ) : $value;
 		}
 		return $data;
 	}

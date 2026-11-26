@@ -3,6 +3,7 @@ namespace SlimSEO\MetaTags\Settings;
 
 use WP_REST_Server;
 use WP_REST_Request;
+use WP_Post;
 use WP_Term;
 use SlimSEO\Helpers\Option;
 use SlimSEO\MetaTags\Helper;
@@ -110,10 +111,15 @@ class Preview {
 
 		$text  = (string) $request->get_param( 'text' ); // Manual entered meta title
 		$title = (string) $request->get_param( 'title' ); // Live title
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			$text = Helper::strip_shortcode_syntax( $text );
+		}
 
 		$data = [];
-		if ( $object_type === 'post' ) {
-			$data = [
+		if ( 'post' === $object_type ) {
+			$post  = get_post( $id );
+			$title = $post instanceof WP_Post ? Helper::sanitize_post_shortcodes( $title, $post ) : $title;
+			$data  = [
 				'post' => [
 					'title' => $title,
 				],
@@ -205,6 +211,11 @@ class Preview {
 
 		$text    = (string) $request->get_param( 'text' ); // Manual entered meta description
 		$excerpt = (string) $request->get_param( 'excerpt' ); // Live excerpt
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			$text = Helper::strip_shortcode_syntax( $text );
+		}
+		$post    = get_post( $id );
+		$excerpt = $post instanceof WP_Post ? Helper::sanitize_post_shortcodes( $excerpt, $post ) : $excerpt;
 
 		$data         = [];
 		$data['post'] = array_filter( [

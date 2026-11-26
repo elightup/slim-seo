@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags;
 use SlimTwig\Renderer;
 use WP_Block_Type_Registry;
 use WP_Block_Type;
+use WP_Post;
 
 class Helper {
 	private static $allowed_shortcodes = [];
@@ -25,7 +26,7 @@ class Helper {
 		$shortcode_tags = self::$allowed_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$text           = do_shortcode( $text );
 		$shortcode_tags = $shortcodes_bak;                     // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
+		$text           = self::strip_all_shortcodes( $text ); // Strip all non-parsed and escaped shortcodes.
 
 		// Render blocks.
 		add_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ], 10, 2 );
@@ -167,5 +168,26 @@ class Helper {
 	public static function truncate( string $text, int $max = 160 ): string {
 		$text = self::normalize( $text );
 		return mb_substr( $text, 0, $max );
+	}
+
+	public static function sanitize_post_shortcodes( string $text, WP_Post $post ): string {
+		return ! empty( $post->post_author ) && user_can( (int) $post->post_author, 'edit_posts' )
+			? $text
+			: self::strip_shortcode_syntax( $text );
+	}
+
+	public static function strip_shortcode_syntax( string $text ): string {
+		return str_ireplace( [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ], '', self::strip_all_shortcodes( $text ) );
+	}
+
+	public static function strip_all_shortcodes( string $text ): string {
+		$previous = '';
+
+		while ( $text !== $previous ) {
+			$previous = $text;
+			$text     = strip_shortcodes( $text );
+		}
+
+		return $text;
 	}
 }

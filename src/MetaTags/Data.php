@@ -125,8 +125,9 @@ class Data {
 		}
 
 		$content = $content ?: $post->post_content;
+		$content = (string) apply_filters( 'slim_seo_post_content', $content, $post );
 
-		return (string) apply_filters( 'slim_seo_post_content', $content, $post );
+		return Helper::sanitize_post_shortcodes( $content, $post );
 	}
 
 	public static function get_term_content( int $term_id = 0, string $content = '' ): string {

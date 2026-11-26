@@ -25,7 +25,7 @@ class Term {
 		}
 
 		$data = [
-			'name'             => $this->term->name,
+			'name'             => Helper::strip_all_shortcodes( (string) $this->term->name ),
 			'description'      => $this->term->description,
 			'auto_description' => Helper::truncate( $this->term->description ),
 		];
