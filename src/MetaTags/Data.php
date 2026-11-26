@@ -72,11 +72,11 @@ class Data {
 		}
 
 		// Subscribers can edit these fields. Remove square brackets, so that Helper::normalize() cannot run shortcodes.
-		$brackets    = [ '[', ']', '&#91;', '&#93;' ];
-		$description = str_replace( $brackets, '', wp_strip_all_tags( (string) $user->description ) );
+		$brackets    = [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ];
+		$description = str_ireplace( $brackets, '', wp_strip_all_tags( (string) $user->description ) );
 
 		return [
-			'display_name'     => str_replace( $brackets, '', (string) $user->display_name ),
+			'display_name'     => str_ireplace( $brackets, '', (string) $user->display_name ),
 			'description'      => $description,
 			'auto_description' => Helper::truncate( $description ),
 		];
