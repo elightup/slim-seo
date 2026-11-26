@@ -172,7 +172,7 @@ class Preview {
 		$data        = [
 			'term' => [
 				'description'      => $description,
-				'auto_description' => Helper::truncate( $description, 160, false ),
+				'auto_description' => Helper::truncate( $description ),
 			],
 		];
 

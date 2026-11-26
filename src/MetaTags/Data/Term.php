@@ -25,9 +25,10 @@ class Term {
 		}
 
 		$data = [
-			'name'             => $this->term->name,
+			// Low-privileged users can create terms (like bbPress topic tags). Remove square brackets, so that Helper::normalize() cannot run shortcodes.
+			'name'             => str_replace( [ '[', ']' ], '', $this->term->name ),
 			'description'      => $this->term->description,
-			'auto_description' => Helper::truncate( $this->term->description, 160, false ),
+			'auto_description' => Helper::truncate( $this->term->description ),
 		];
 
 		return $data[ $name ] ?? '';

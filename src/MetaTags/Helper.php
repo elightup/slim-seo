@@ -6,7 +6,6 @@ use WP_Block_Type_Registry;
 use WP_Block_Type;
 use WP_Post;
 use WP_User;
-use WP_Term;
 
 class Helper {
 	private static $allowed_shortcodes = [];
@@ -145,7 +144,9 @@ class Helper {
 
 	/**
 	 * Run shortcodes only in content from trusted users (who can edit posts).
-	 * Low-privileged users can still create content, like bbPress topics, replies or topic tags.
+	 * Low-privileged users can still create content, like bbPress topics or replies.
+	 * Terms have no author: their meta and descriptions are written by users who can edit terms,
+	 * and term names (which low-privileged users can create, like bbPress topic tags) have square brackets removed.
 	 */
 	public static function can_run_shortcodes( int $post_id = 0, int $term_id = 0 ): bool {
 		if ( $post_id ) {
@@ -161,7 +162,7 @@ class Helper {
 		} elseif ( $object instanceof WP_User ) {
 			$can = user_can( $object, 'edit_posts' );
 		} else {
-			$can = ! $post_id && ! $term_id && ! ( $object instanceof WP_Term );
+			$can = ! $post_id; // A post that doesn't exist is not trusted.
 		}
 
 		return (bool) apply_filters( 'slim_seo_can_run_shortcodes', $can, $object );
