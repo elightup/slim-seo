@@ -121,7 +121,7 @@ class Preview {
 		} else {
 			$data = [
 				'term' => [
-					'name' => $title,
+					'name' => str_replace( [ '[', ']' ], '', $title ), // Same as Data\Term.
 				],
 			];
 		}

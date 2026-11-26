@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags\Data;
 use SlimSEO\MetaTags\QueriedObject;
 use SlimSEO\MetaTags\Helper;
 use SlimSEO\MetaTags\Data;
+use WP_Term;
 
 class Post {
 	private $post;
@@ -90,11 +91,12 @@ class Post {
 		$terms = apply_filters( 'slim_seo_meta_tags_post_terms', [], $this->post->ID, $taxonomy );
 		if ( empty( $terms ) ) {
 			$terms = get_the_terms( $this->post, $taxonomy );
-			$terms = is_array( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 		}
+		$terms = is_array( $terms ) ? $terms : [];
+		$names = array_map( fn( $term ) => $term instanceof WP_Term ? $term->name : (string) $term, $terms );
 
 		// Terms can be created by low-privileged users (like bbPress topic tags). Remove square brackets, so that Helper::normalize() cannot run shortcodes.
-		return str_replace( [ '[', ']' ], '', $terms );
+		return str_replace( [ '[', ']' ], '', $names );
 	}
 
 	private function normalize( string $key ): string {
