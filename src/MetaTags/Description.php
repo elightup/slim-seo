@@ -3,6 +3,7 @@ namespace SlimSEO\MetaTags;
 
 defined( 'ABSPATH' ) || die;
 
+use WP_Post;
 use WP_Term;
 use SlimSEO\Helpers\Option;
 
@@ -68,7 +69,9 @@ class Description {
 		$data = get_post_meta( $post_id, 'slim_seo', true );
 		if ( ! empty( $data['description'] ) ) {
 			$this->is_manual = true;
-			return $data['description'];
+			$post            = get_post( $post_id );
+
+			return $post instanceof WP_Post ? Helper::sanitize_post_shortcodes( (string) $data['description'], $post ) : (string) $data['description'];
 		}
 
 		$post_type = get_post_type( $post_id );

@@ -4,6 +4,7 @@ namespace SlimSEO\MetaTags\Data;
 use SlimSEO\MetaTags\QueriedObject;
 use SlimSEO\MetaTags\Helper;
 use SlimSEO\MetaTags\Data;
+use WP_Term;
 
 class Post {
 	private $post;
@@ -105,7 +106,7 @@ class Post {
 
 		return array_map(
 			static function ( $term ): string {
-				return Helper::strip_all_shortcodes( (string) $term );
+				return Helper::strip_all_shortcodes( $term instanceof WP_Term ? $term->name : (string) $term );
 			},
 			(array) $terms
 		);

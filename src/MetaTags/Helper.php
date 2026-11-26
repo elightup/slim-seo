@@ -11,6 +11,7 @@ class Helper {
 
 	private static $allowed_shortcodes = [];
 	private static $allowed_blocks     = [];
+	private static $allowed_posts      = [];
 
 	private static $ran = false;
 
@@ -173,7 +174,11 @@ class Helper {
 	}
 
 	public static function can_execute_shortcodes( WP_Post $post ): bool {
-		return ! empty( $post->post_author ) && user_can( (int) $post->post_author, 'edit_posts' );
+		if ( ! isset( self::$allowed_posts[ $post->ID ] ) ) {
+			self::$allowed_posts[ $post->ID ] = ! empty( $post->post_author ) && user_can( (int) $post->post_author, 'edit_posts' );
+		}
+
+		return self::$allowed_posts[ $post->ID ];
 	}
 
 	public static function sanitize_post_shortcodes( string $text, WP_Post $post ): string {
