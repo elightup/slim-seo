@@ -7,6 +7,8 @@ use WP_Block_Type;
 use WP_Post;
 
 class Helper {
+	private const BRACKETS = [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ];
+
 	private static $allowed_shortcodes = [];
 	private static $allowed_blocks     = [];
 
@@ -179,7 +181,7 @@ class Helper {
 	}
 
 	public static function strip_shortcode_syntax( string $text ): string {
-		return str_ireplace( [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ], '', self::strip_all_shortcodes( $text ) );
+		return str_ireplace( self::BRACKETS, '', self::strip_all_shortcodes( $text ) );
 	}
 
 	public static function strip_all_shortcodes( string $text ): string {
@@ -193,6 +195,6 @@ class Helper {
 			$text = $stripped;
 		}
 
-		return str_ireplace( [ '[', ']', '&#91;', '&#93;', '&#x5b;', '&#x5d;' ], '', $text );
+		return str_ireplace( self::BRACKETS, '', $text );
 	}
 }

@@ -24,10 +24,11 @@ class Term {
 			return '';
 		}
 
-		$data = [
+		$description = Helper::strip_all_shortcodes( (string) $this->term->description );
+		$data        = [
 			'name'             => Helper::strip_all_shortcodes( (string) $this->term->name ),
-			'description'      => $this->term->description,
-			'auto_description' => Helper::truncate( $this->term->description ),
+			'description'      => $description,
+			'auto_description' => Helper::truncate( $description ),
 		];
 
 		return $data[ $name ] ?? '';
