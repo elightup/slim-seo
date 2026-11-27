@@ -98,7 +98,7 @@ class Breadcrumbs {
 		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
-			$items[] = sprintf( $template, esc_url( $item['url'] ), esc_attr( $class ), esc_html( $item['text'] ), $i + 1 );
+			$items[] = sprintf( $template, esc_url( $item['url'] ), esc_attr( $class ), esc_html( $item['text'] ) );
 		}
 
 		// Current page.
@@ -110,7 +110,8 @@ class Breadcrumbs {
 		$output .= implode( " <span class='breadcrumbs__separator' aria-hidden='true'>{$sep}</span> ", $items );
 		$output .= '</nav>';
 
-		return $output;
+		// Encode [ and ] so a later do_shortcode() pass (the_content, widget_block_content) cannot run shortcodes from breadcrumb texts.
+		return str_replace( [ '[', ']' ], [ '&#91;', '&#93;' ], $output );
 	}
 
 	public function get_links(): array {
