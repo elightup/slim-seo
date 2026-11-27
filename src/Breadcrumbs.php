@@ -98,27 +98,20 @@ class Breadcrumbs {
 		$template = '<a href="%s" class="breadcrumb%s">%s</a>';
 		foreach ( $links as $i => $item ) {
 			$class   = 0 === $i ? ' breadcrumb--first' : '';
-			$items[] = sprintf( $template, esc_url( $item['url'] ), esc_attr( $class ), $this->esc_text( (string) $item['text'] ) );
+			$items[] = sprintf( $template, esc_url( $item['url'] ), esc_attr( $class ), esc_html( $item['text'] ) );
 		}
 
 		// Current page.
 		if ( 'true' === $this->args['display_current'] ) {
-			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', $this->esc_text( (string) $this->current ) );
+			$items[] = sprintf( '<span class="breadcrumb breadcrumb--last" aria-current="page">%s</span>', esc_html( $this->current ) );
 		}
 
 		$sep     = esc_html( $this->args['separator'] );
 		$output .= implode( " <span class='breadcrumbs__separator' aria-hidden='true'>{$sep}</span> ", $items );
 		$output .= '</nav>';
 
-		return $output;
-	}
-
-	/**
-	 * Escape breadcrumb text and encode square brackets, so a later do_shortcode() pass
-	 * (e.g. on "the_content" or "widget_block_content") can't run shortcodes from it.
-	 */
-	private function esc_text( string $text ): string {
-		return str_replace( [ '[', ']' ], [ '&#91;', '&#93;' ], esc_html( $text ) );
+		// Encode [ and ] so a later do_shortcode() pass (the_content, widget_block_content) cannot run shortcodes from breadcrumb texts.
+		return str_replace( [ '[', ']' ], [ '&#91;', '&#93;' ], $output );
 	}
 
 	public function get_links(): array {
