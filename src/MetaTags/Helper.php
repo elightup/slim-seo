@@ -4,6 +4,8 @@ namespace SlimSEO\MetaTags;
 use SlimTwig\Renderer;
 use WP_Block_Type_Registry;
 use WP_Block_Type;
+use WP_Post;
+use WP_User;
 
 class Helper {
 	private static $allowed_shortcodes = [];
@@ -11,7 +13,7 @@ class Helper {
 
 	private static $ran = false;
 
-	public static function normalize( $text ): string {
+	public static function normalize( $text, bool $run_shortcodes = true ): string {
 		global $shortcode_tags;
 
 		// Get list of allowed shortcodes and blocks only once.
@@ -21,11 +23,13 @@ class Helper {
 		}
 
 		// Parse shortcodes. Works with posts that have shortcodes in the content (using page builders like Divi).
-		$shortcodes_bak = $shortcode_tags;
-		$shortcode_tags = self::$allowed_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$text           = do_shortcode( $text );
-		$shortcode_tags = $shortcodes_bak;                     // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$text           = strip_shortcodes( $text );  // Strip all non-parsed shortcodes.
+		if ( $run_shortcodes ) {
+			$shortcodes_bak = $shortcode_tags;
+			$shortcode_tags = self::$allowed_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$text           = do_shortcode( $text );
+			$shortcode_tags = $shortcodes_bak;           // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		}
+		$text = strip_shortcodes( $text ); // Strip all non-parsed shortcodes.
 
 		// Render blocks.
 		add_filter( 'pre_render_block', [ __CLASS__, 'maybe_skip_block' ], 10, 2 );
@@ -135,7 +139,33 @@ class Helper {
 
 	public static function render( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
 		$text = str_contains( $text, '{{' ) ? self::render_dynamic_variables( $text, $post_id, $term_id, $data ) : $text;
-		return self::normalize( $text );
+		return self::normalize( $text, self::can_run_shortcodes( $post_id, $term_id ) );
+	}
+
+	/**
+	 * Run shortcodes only in content from trusted users (who can edit posts).
+	 * Low-privileged users can still create content, like bbPress topics or replies.
+	 * Terms have no author: their meta and descriptions are written by users who can edit terms,
+	 * and term names (which low-privileged users can create, like bbPress topic tags) have square brackets removed.
+	 */
+	public static function can_run_shortcodes( int $post_id = 0, int $term_id = 0 ): bool {
+		if ( $post_id ) {
+			$object = get_post( $post_id );
+		} elseif ( $term_id ) {
+			$object = get_term( $term_id );
+		} else {
+			$object = QueriedObject::get();
+		}
+
+		if ( $object instanceof WP_Post ) {
+			$can = user_can( (int) $object->post_author, 'edit_posts' );
+		} elseif ( $object instanceof WP_User ) {
+			$can = user_can( $object, 'edit_posts' );
+		} else {
+			$can = ! $post_id; // A post that doesn't exist is not trusted.
+		}
+
+		return (bool) apply_filters( 'slim_seo_can_run_shortcodes', $can, $object );
 	}
 
 	private static function render_dynamic_variables( string $text, int $post_id = 0, int $term_id = 0, array $data = [] ): string {
@@ -164,8 +194,8 @@ class Helper {
 		return Renderer::render( $text, $render_data );
 	}
 
-	public static function truncate( string $text, int $max = 160 ): string {
-		$text = self::normalize( $text );
+	public static function truncate( string $text, int $max = 160, bool $run_shortcodes = true ): string {
+		$text = self::normalize( $text, $run_shortcodes );
 		return mb_substr( $text, 0, $max );
 	}
 }

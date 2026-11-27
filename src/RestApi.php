@@ -64,7 +64,7 @@ class RestApi {
 		$value = (array) WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
 
 		// Render dynamic variables.
-		$value = array_map( [ Helper::class, 'render' ], $value );
+		$value = array_map( fn( $item ) => is_string( $item ) ? Helper::render( $item, $post->ID ) : $item, $value );
 
 		return $value;
 	}
@@ -74,7 +74,8 @@ class RestApi {
 		$value = (array) WP_REST_Meta_Fields::prepare_value( $value, $request, $args );
 
 		// Render dynamic variables.
-		$value = array_map( [ Helper::class, 'render' ], $value );
+		$term_id = (int) $request['id'];
+		$value   = array_map( fn( $item ) => is_string( $item ) ? Helper::render( $item, 0, $term_id ) : $item, $value );
 
 		return $value;
 	}

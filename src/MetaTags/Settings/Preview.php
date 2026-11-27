@@ -121,7 +121,7 @@ class Preview {
 		} else {
 			$data = [
 				'term' => [
-					'name' => $title,
+					'name' => str_replace( [ '[', ']' ], '', $title ), // Same as Data\Term.
 				],
 			];
 		}
@@ -172,7 +172,7 @@ class Preview {
 		$data        = [
 			'term' => [
 				'description'      => $description,
-				'auto_description' => Helper::truncate( $description ),
+				'auto_description' => Helper::truncate( $description, 160, Helper::can_run_shortcodes( 0, $id ) ),
 			],
 		];
 
@@ -210,7 +210,7 @@ class Preview {
 		$data['post'] = array_filter( [
 			'excerpt'          => $excerpt,
 			'content'          => $content,
-			'auto_description' => Helper::truncate( $excerpt ?: $content ),
+			'auto_description' => Helper::truncate( $excerpt ?: $content, 160, Helper::can_run_shortcodes( $id ) ),
 		] );
 		$data         = array_filter( $data );
 		$default      = $this->get_default_post_description( $id );
