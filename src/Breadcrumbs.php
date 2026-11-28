@@ -110,8 +110,8 @@ class Breadcrumbs {
 		$output .= implode( " <span class='breadcrumbs__separator' aria-hidden='true'>{$sep}</span> ", $items );
 		$output .= '</nav>';
 
-		// Encode [ and ] so a later do_shortcode() pass (the_content, widget_block_content) cannot run shortcodes from breadcrumb texts.
-		return str_replace( [ '[', ']' ], [ '&#91;', '&#93;' ], $output );
+		// Encode [ and ] with hex entities so a later do_shortcode() pass cannot run shortcodes from breadcrumb texts (unescape_invalid_shortcodes() only reverts decimal entities).
+		return str_replace( [ '[', ']' ], [ '&#x5B;', '&#x5D;' ], $output );
 	}
 
 	public function get_links(): array {

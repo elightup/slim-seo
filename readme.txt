@@ -5,7 +5,7 @@ Tags: seo, schema, xml sitemap, redirection, header
 Requires at least: 6.7
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.11.6
+Stable tag: 4.11.7
 License: GPL v3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -185,12 +185,11 @@ Please report security bugs found in the source code of the Slim SEO plugin thro
 
 == Changelog ==
 
-= Unreleased =
+= 4.11.7 - 2026-11-28 =
 
-- Polylang: Replace wildcard `*` with an allowlist of translatable meta tag fields.
-- Note: Obsolete strings previously registered in Polylang cannot be migrated or removed automatically from the database because Polylang does not store option contexts in `polylang_mo`. Site owners should use the "Clean strings translation database" tool in **Languages → Translations** and rotate any sensitive API keys if they were previously entered.
-- Fix shortcode execution via the search query and other texts in the breadcrumbs block.
-- Note: Shortcodes in breadcrumb texts (e.g. `[year]` in a page title) are no longer executed and are now displayed as plain text.
+- Fix shortcodes from untrusted content running in meta tags (#304)
+- Fix shortcodes from the search query running in breadcrumbs (#305). Shortcodes in breadcrumb texts (e.g. `[year]` in a page title) now show as plain text.
+- Translate only meta tag fields with Polylang, not all settings (#303). To remove old strings, use **Languages → Translations → Clean strings translation database**. If you entered API keys before, rotate them.
 
 = 4.11.6 - 2026-11-13 =
 
